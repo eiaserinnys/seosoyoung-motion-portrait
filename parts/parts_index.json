@@ -484,10 +484,10 @@
     "label": "오른쪽 측후두부",
     "file": "parts/side-cranium-right.png",
     "bbox": [
-      629,
-      165,
-      173,
-      355
+      502,
+      20,
+      330,
+      521
     ],
     "reference": "left_45_ref_720.png"
   },
@@ -496,10 +496,10 @@
     "label": "왼쪽 측후두부",
     "file": "parts/side-cranium-left.png",
     "bbox": [
-      215,
-      183,
-      184,
-      334
+      182,
+      20,
+      321,
+      521
     ],
     "reference": "right_45_ref_720.png"
   }

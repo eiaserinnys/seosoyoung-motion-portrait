@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {bindRig,deform3D} from '../bundle/rig.mjs';
+import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
 import {hairLift,hairWorld,sideWorld} from '../bundle/hair-shell.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
@@ -40,7 +40,7 @@ for(const side of ['left','right']){
  const yaw=side==='left'?-50:50,p={...base,ParamAngleX:yaw};
  const id='ear-'+side,[x,y,w]=mesh(id).bbox;
  const width=q=>Math.abs(point(id,[x+w,y+50],q)[0]-point(id,[x,y+50],q)[0]);
- assert(width(p)<width({...p,CorrHairOcclusion:0}),'far ear narrows');checks++;
+ assert(opacity(mesh(id),p,{hidden:new Set()})<opacity(mesh(id),{...p,CorrHairOcclusion:0},{hidden:new Set()}),'far ear occlusion control');checks++;
  const nearPose={...p,ParamAngleX:-yaw};
  assert(width(nearPose)>width(p),'near ear remains wider');checks++;
 }

@@ -1,3 +1,6 @@
+import './test_stereo.mjs';
+import {craniumFacing,domeSection} from '../bundle/hair-surface.mjs';
+import {DOME} from '../bundle/dome-data.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -36,17 +39,26 @@ test('45 degree chin reaches the measured target',()=>{
  }
 });
 
-test('cranium unfolds only on the near side, with both parts in the atlas',()=>{
+test('opaque cranium emerges geometrically from the near horizon',()=>{
  for(const side of ['left','right']){
   const m=mesh('side-cranium-'+side);assert(m&&m.triangles.length>0);
-  assert.equal(opacity(m,base,state),0);
   const nearYaw=side==='right'?-45:45;
-  assert.equal(opacity(m,{...base,ParamAngleX:nearYaw,CorrTurn:1},state),1);
-  assert.equal(opacity(m,{...base,ParamAngleX:-nearYaw,CorrTurn:1},state),0);
-  const [x,y,w]=m.bbox;
-  const width=p=>deform3D(m,[x+w,y+100],p)[0]-deform3D(m,[x,y+100],p)[0];
-  assert(width({...base,ParamAngleX:nearYaw,CorrTurn:1})>width(base));
+  for(const yaw of [0,-nearYaw,nearYaw]){
+   const p={...base,ParamAngleX:yaw,CorrTurn:1};
+   assert.equal(opacity(m,p,state),1);
+   assert(m.positions.every(q=>Number.isFinite(craniumFacing(q,p))));
+   const visible=m.positions.filter(q=>craniumFacing(q,p)>1e-6).length;
+   assert(yaw===nearYaw?visible>0:visible===0,`${side} ${yaw}: ${visible}`);
+   // The two-degree overlap folds onto the horizon at rest; actual raster
+   // occlusion is checked independently in the browser.
+  }
  }
+});
+test('lower skull fits the ear attachment and measured 45-degree silhouette together',()=>{
+ const {rx,rz,cz}=domeSection(465);
+ assert(Math.abs(cz+rz*Math.sqrt(1-(DOME.lower.attachmentX/rx)**2)-DOME.lower.attachmentZ)<1e-8);
+ assert(Math.abs((Math.hypot(rx,rz)-cz)/Math.sqrt(2)-DOME.lower.extent45)<1e-8);
+ assert(rx<domeSection(330).rx);
 });
 
 test('all sampled cheek and jaw edges match independent SAM 3 targets at 45 degrees',()=>{

@@ -7,7 +7,7 @@ ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'sam3_masks/references'
 SPECS={
  'left-crown':('left_45_ref_720.png',(30,0,680,550),'hair',None,[(50,5,660,540)]),
- 'right-crown':('right_45_ref_720.png',(30,0,680,550),'hair',None,[(50,5,660,540)]),
+ 'right-crown':('right_45_ref_720.png',(30,0,680,550),'hair',[(180,200,1),(350,80,1),(100,330,1),(370,470,0)],None),
  'left-face':('left_45_ref_720.png',(130,200,555,620),'face of anime girl excluding ears neck and hair',[(280,490,1),(370,500,1),(270,570,1),(500,430,0),(360,650,0)],[(150,210,480,605)]),
  'right-face':('right_45_ref_720.png',(240,200,585,620),'face of anime girl excluding ears neck and hair',[(450,490,1),(350,500,1),(430,570,1),(220,430,0),(360,650,0)],[(265,210,565,605)]),
  'right-cranium':('left_45_ref_720.png',(430,120,675,505),'brown hair on side and back of head behind ear',[(580,310,1),(570,380,1),(570,450,1),(500,430,0),(650,480,0)],[(460,130,650,500)]),

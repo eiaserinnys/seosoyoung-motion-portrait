@@ -1,3 +1,5 @@
+import {featureWorld} from './face-features.mjs';
+import {BEADS,beadWorld} from './stereo-attachments.mjs';
 import {outlineWorld,applyOutline} from './face-outline.mjs';
 import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './geometry.mjs';
 import {hairWorld,fringeWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
@@ -31,10 +33,17 @@ export function deform3D(mesh,point,parameters) {
     const u=clamp((680-y)/110,0,1),weight=u*u*(3-2*u),upper=clamp((1536-y)/960,0,1);
     return [x+headDx*weight+p.ParamBodyAngleX*upper*(1-weight),y+headDy*weight-p.ParamBreath*4*upper*(1-weight),-20];
   }
+  const feature=id.startsWith('eye-')||id==='closed-eyes-v1'||id==='nose-detail'||id.startsWith('mouth');
+  if(feature&&correction(p,'CorrOutline')>0){
+    const weight=correction(p,'CorrOutline'),target=featureWorld(id,[x,y],p);
+    if(weight===1)return target;
+    const original=deform3D(mesh,point,{...parameters,CorrOutline:0});
+    return original.map((v,i)=>v+(target[i]-v)*weight);
+  }
   if(id.startsWith('tail-')) {
-    const left=id.includes('-left-'),root=mesh.deformer.pivot;
-    const anchor=hairWorld(root,p),dx=x-root[0],dy=y-root[1];
-    const s=clamp((y-498)/635,0,1),sagW=s**.62;
+    const left=id.includes('-left-'),root=BEADS[left?'left':'right'].front;
+    const anchor=beadWorld(left?'left':'right',p),dx=x-root[0],dy=y-root[1];
+    const s=clamp((y-root[1])/635,0,1),sagW=s**.62;
     const outward=clamp((left?root[0]-x:x-root[0])/95,0,1);
     const weight=clamp(.42*outward*(1-.55*s)+sagW,0,1);
     const a=radians(p.ParamHairSide*(4.2*weight+3.4*s*s)-p.ParamAngleZ*.35*weight);
@@ -43,7 +52,7 @@ export function deform3D(mesh,point,parameters) {
     const inward=(left?1:-1)*(lift*.22+Math.abs(p.ParamHairSide)*6)*weight;
     return [anchor[0]+dx*Math.cos(a)-dy*Math.sin(a)+inward,anchor[1]+dx*Math.sin(a)+dy*Math.cos(a)+sag,anchor[2]-s*35];
   }
-  if(id.startsWith('side-cranium'))return craniumWorld([x,y],id.endsWith('left')?'left':'right',p);
+  if(id.startsWith('side-cranium'))return craniumWorld(point,id.endsWith('left')?'left':'right',p);
   if(id.startsWith('back-hair')) {
     x+=p.ParamHairBack*12*clamp((y-120)/500,0,1)**2;
     return backWorld([x,y],p);
@@ -84,7 +93,7 @@ export function opacity(mesh,p,state) {
   if(id.startsWith('side-cranium'))return craniumWeight(id.endsWith('left')?'left':'right',p);
   if(id.startsWith('ear-')){
     const far=p.ParamAngleX*(id.endsWith('left')?-1:1)*correction(p,'CorrTurn');
-    const t=clamp(far/25,0,1);return 1-t*t*(3-2*t);
+    const t=clamp(far/25,0,1);return 1-t*t*(3-2*t)*clamp(correction(p,'CorrHairOcclusion')/.8,0,1);
   }
   if(state.bangs&&id.startsWith('bangs'))return 0;
   if(state.outfit==='shirt'&&id==='sweater')return 0;

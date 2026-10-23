@@ -89,8 +89,8 @@
     ],
     "upscale": 1,
     "num_masks_returned": 1,
-    "score": 0.9492225646972656,
-    "area_px": 32,
+    "score": 0.9376136660575867,
+    "area_px": 164982,
     "source": "right_45_ref_720.png",
     "sha256": "aca2914a95a3deb0ad0f3a838922af7cf6a10ea8f73751ac898c97b468d49640",
     "endpoint": "fal-ai/sam-3/image"

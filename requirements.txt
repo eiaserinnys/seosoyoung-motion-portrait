@@ -3,3 +3,5 @@ Pillow==12.3.0
 requests==2.32.3
 playwright==1.63.0
 opencv-python-headless==5.0.0.93
+triangle==20250106
+shapely==2.1.2

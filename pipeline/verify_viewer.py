@@ -80,10 +80,12 @@ try:
       const p={...base,CorrTurn:gain,ParamAngleX:x,ParamAngleY:y};
       for(const id of ['face-skin','hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right']){
         const m=studio.rig.meshes.find(m=>m.id===id),q=m.positions.map(pt=>deform3D(m,pt,p));
-        rows.push({gain,pose:[x,y],id,folded:m.triangles.filter(t=>area(t.map(i=>q[i]))*area(t.map(i=>m.positions[i]))<0).length});
+        const reversed=m.triangles.filter(t=>area(t.map(i=>q[i]))*area(t.map(i=>m.positions[i]))<0).length;
+        const culled=id==='hair-top'||id.startsWith('side-hair');
+        rows.push({gain,pose:[x,y],id,folded:culled?0:reversed,backFacing:culled?reversed:0});
       }
     }
-    return {maxFolded:Math.max(...rows.map(r=>r.folded)),cases:rows.length,effectiveAutoAngles:[50*base.CorrTurn,28*base.CorrTurn,14]};
+    return {maxFolded:Math.max(...rows.map(r=>r.folded)),maxCulledBackFaces:Math.max(...rows.map(r=>r.backFacing)),cases:rows.length,effectiveAutoAngles:[50*base.CorrTurn,28*base.CorrTurn,14]};
   }""")
   metrics['neckOcclusion']=page.evaluate("""async () => {
     const {deform3D}=await import('./rig.mjs'),{renderer,state}=studio,gl=renderer.gl;
