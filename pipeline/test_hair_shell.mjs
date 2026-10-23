@@ -10,7 +10,7 @@ const point=(id,xy,p)=>deform3D(mesh(id),xy,p);
 const near=(a,b)=>assert(Math.max(...a.map((x,i)=>Math.abs(x-b[i])))<1e-8);
 let checks=0;
 for(const [yaw,pitch] of [[0,0],[-25,0],[25,0],[-50,0],[50,0],[0,-20],[0,20]]){
- const p={...base,ParamAngleX:yaw,ParamAngleY:pitch};
+ const p={...base,CorrOutline:0,ParamAngleX:yaw,ParamAngleY:pitch};
  for(const xy of [[330,530],[502,552],[502,617]]){
   near(point('face-skin',xy,p),artWorld(correctedLift(xy,0,p),p));checks++;
  }

@@ -44,11 +44,13 @@ node pipeline/test_sphere_3d.mjs
 node pipeline/test_corrections.mjs
 node pipeline/test_attachment.mjs
 node pipeline/test_hair_shell.mjs
+node --test pipeline/test_outline.mjs
 node --test tests/head-turn.test.mjs
 .venv/bin/python pipeline/verify_viewer.py
+.venv/bin/python pipeline/verify_outline.py
 ```
 
-Stage 2 reconstructs the 40 cropped RGBA parts from `source/character/` and the cached masks in `sam3_masks/`. Restoration uses deterministic pixel interpolation and alpha geometry; it does not call an external generative inpainting service. Stage 3 produces the paired 2048-square atlases, front/back sphere textures, meshes and rig data under `bundle/assets/`.
+Stage 2 reconstructs the 40 cropped RGBA parts from `source/character/` and the cached masks in `sam3_masks/`. Restoration uses deterministic pixel interpolation and alpha geometry; it does not call an external generative inpainting service. Stage 3 adds two independently segmented 45° cranium parts, fits the dome and face outlines from cached masks, and produces the paired 2048-square atlases, front/back sphere textures, meshes and rig data under `bundle/assets/`.
 
 The optional `stage1_sam3_segment.py` uses the existing cached masks without network calls. Generating a missing mask calls the paid fal.ai SAM 3 endpoint and requires `FAL_KEY` in the environment. No credentials are included. Keep all masks to reproduce the provided build offline.
 

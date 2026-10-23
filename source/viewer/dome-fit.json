@@ -1,0 +1,14 @@
+{
+  "cx": 502,
+  "cy": 399.4051366499359,
+  "rx": 282.42134906874395,
+  "ry": 366.60492357615595,
+  "sampleCount": 129,
+  "rmsPixels": 11.113189547149716,
+  "maxPixels": 23.258735927988454,
+  "sources": [
+    "sam3_masks/hair-crown-all_mask.png",
+    "sam3_masks/references/left-crown.png",
+    "sam3_masks/references/left-cranium.png"
+  ]
+}

@@ -12,6 +12,7 @@ SOURCE = ROOT / 'source/character'
 SIZE = 2048
 GROUPS = [
  ('PartHairBack','뒷머리',[('back-hair-center',100),('back-hair-left',110),('back-hair-right',120)]),
+ ('PartCranium','측후두부',[('side-cranium-left',260),('side-cranium-right',270)]),
  ('PartNeckAndBody','목과 의상',[('neck',200),('upper-body-short-sleeve',210),('skirt',220),('sweater',230),('necklace',240)]),
  ('PartEar','귀',[('ear-left',280),('ear-right',290)]),
  ('PartFace','얼굴',[('face-skin',300)]),
@@ -99,6 +100,8 @@ def build_head_surface(parts, assets, originals=None):
 
 
 def build():
+    from build_cranium import build as build_cranium
+    build_cranium()
     parts=json.loads((ROOT/'parts/parts_index.json').read_text())
     manifest=json.loads((SOURCE/'manifest.json').read_text()); clothing=json.loads((SOURCE/'clothing.json').read_text())
     old={p['id']:p for p in manifest['leaves']+manifest['expressions']+clothing['parts']}
@@ -111,11 +114,14 @@ def build():
         key=p['id'];box=boxes[key];x,y,w,h=p['bbox']
         im=Image.open(ROOT/p['file']).convert('RGBA')
         if im.size!=(w,h):raise ValueError(key+' bbox mismatch')
-        src=old[key];bounds=src['stageBounds']
-        full=Image.new('RGBA',(1024,1536))
-        raw=Image.open(SOURCE/src['src']).convert('RGBA').resize((bounds['width'],bounds['height']),Image.Resampling.LANCZOS)
-        full.paste(raw,(bounds['x'],bounds['y']))
-        original=full.crop((x,y,x+w,y+h))
+        if key.startswith('side-cranium'):
+            original=im.copy()
+        else:
+            src=old[key];bounds=src['stageBounds']
+            full=Image.new('RGBA',(1024,1536))
+            raw=Image.open(SOURCE/src['src']).convert('RGBA').resize((bounds['width'],bounds['height']),Image.Resampling.LANCZOS)
+            full.paste(raw,(bounds['x'],bounds['y']))
+            original=full.crop((x,y,x+w,y+h))
         if key=='upper-body-short-sleeve':
             alpha=original.getchannel('A')
             alpha.putdata([round(a*max(0,min(1,(y+i//w-680)/12))) for i,a in enumerate(alpha.tobytes())])

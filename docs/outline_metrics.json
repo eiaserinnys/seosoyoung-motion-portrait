@@ -1,0 +1,92 @@
+[
+  {
+    "gain": 0.65,
+    "yaw": -50,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 0,
+    "nearCraniumPixels": 8899,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 0.65,
+    "yaw": -25,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 624,
+    "nearCraniumPixels": 4637,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 0.65,
+    "yaw": 0,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": null,
+    "nearCraniumPixels": 0,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 0.65,
+    "yaw": 25,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 493,
+    "nearCraniumPixels": 3613,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 0.65,
+    "yaw": 50,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 0,
+    "nearCraniumPixels": 6629,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 1,
+    "yaw": -50,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 0,
+    "nearCraniumPixels": 6702,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 1,
+    "yaw": -25,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 0,
+    "nearCraniumPixels": 7489,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 1,
+    "yaw": 0,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": null,
+    "nearCraniumPixels": 0,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 1,
+    "yaw": 25,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 0,
+    "nearCraniumPixels": 5734,
+    "farCraniumPixels": 0
+  },
+  {
+    "gain": 1,
+    "yaw": 50,
+    "earOverlap": 0,
+    "farBackOutsidePixels": 0,
+    "farEarPixels": 0,
+    "nearCraniumPixels": 3711,
+    "farCraniumPixels": 0
+  }
+]

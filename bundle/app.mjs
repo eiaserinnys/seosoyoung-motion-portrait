@@ -61,7 +61,7 @@ async function main(){
   }
   const redraw=()=>renderer.render(p,state);
   document.addEventListener('click',redraw);document.addEventListener('input',redraw);window.addEventListener('resize',redraw);
-  choose('face-skin');sync();redraw();$('status').textContent='40 파츠 / 준비됨';requestAnimationFrame(frame);
+  choose('face-skin');sync();redraw();$('status').textContent=rig.meshes.length+' 파츠 / 준비됨';requestAnimationFrame(frame);
   window.studio={rig,p,state,renderer,choose,setPose,setCorrection,sync,ready:true};
 }
 main().catch(error=>{$('status').textContent=error.message;console.error(error);});
