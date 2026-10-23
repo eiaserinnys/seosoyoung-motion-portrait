@@ -1,5 +1,5 @@
 import {deform3D,opacity,bindRig} from './rig.mjs';
-import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R} from './geometry.mjs';
+import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction} from './geometry.mjs';
 export class Renderer {
   constructor(canvas,overlay,rig,images) {
     bindRig(rig);this.shell={...makeSphereMesh(rig.geometry.head.radius),id:'head-surface',surface:true,masks:[]};this.canvas=canvas;this.overlay=overlay;this.rig=rig;this.images=images;
@@ -62,7 +62,10 @@ export class Renderer {
       wire(mesh,this.draw(mesh,p,alpha));
     }
     gl.enable(gl.DEPTH_TEST);gl.enable(gl.CULL_FACE);
-    if(state.mode!=='solo'||state.surfaceOnly){gl.depthMask(!!state.surfaceOnly);texture(state.before?3:2);this.draw(this.shell,p,state.mode==='dim'?.18:1);texture(state.before?1:0);gl.depthMask(true);}
+    // The preserved illustration contour owns the corrected silhouette. The full
+    // sphere is an inspection/reference surface, not a second opaque hairstyle.
+    const shellAlpha=state.surfaceOnly?1:1-correction(p,'CorrJaw');
+    if((state.mode!=='solo'||state.surfaceOnly)&&shellAlpha>0){gl.depthMask(!!state.surfaceOnly);texture(state.before?3:2);this.draw(this.shell,p,shellAlpha*(state.mode==='dim'?.18:1));texture(state.before?1:0);gl.depthMask(true);}
     // ArtMesh layers are two-sided illustration ribbons, unlike the closed backing sphere.
     gl.disable(gl.CULL_FACE);
     let currentMask=null;

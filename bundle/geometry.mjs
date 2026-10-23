@@ -22,15 +22,14 @@ function rollAtNeck(local,roll) {
   return q.map((v,i)=>v+pivot[i]+(i<2?HEAD_CENTER[i]:0));
 }
 export function headWorld(local,p) {
-  return rollAtNeck(rotateXYZ(local,p.ParamAngleX,p.ParamAngleY,0),p.ParamAngleZ);
+  const gain=correction(p,'CorrTurn');
+  return rollAtNeck(rotateXYZ(local,p.ParamAngleX*gain,p.ParamAngleY*gain,0),p.ParamAngleZ);
 }
 export const projectWorld=point=>point.slice(0,2);
 // Inside the disk: exact front sphere. Outside: a vertical strip extending from its rim.
 // The extension retains the original artwork coordinates and rotates with its attachment.
 export function liftHead([x,y],relief=0,back=false) {
   const dx=x-HEAD_CENTER[0],dy=y-HEAD_CENTER[1],radius=HEAD_RADIUS+relief;
-  const anchorX=clamp(dx,-radius,radius),edgeY=Math.sqrt(Math.max(0,radius*radius-anchorX*anchorX));
-  const anchorY=clamp(dy,-edgeY,edgeY);
   const z=Math.sqrt(Math.max(0,radius*radius-dx*dx-dy*dy));
   return [dx,dy,back?-z:z];
 }
@@ -43,16 +42,27 @@ export const correction=(p,key)=>p[key]??CORRECTION_PRESETS.recommended[key];
 // A tunable art surface; the diagnostic head sphere itself stays rigid and unchanged.
 export function correctedLift([x,y],relief,p,back=false) {
   const r=HEAD_RADIUS,ry=r*correction(p,'CorrVertical'),rz=r*correction(p,'CorrDepth');
-  const q=liftEllipsoid([x,y],{center:HEAD_CENTER,radii:[r,ry,rz],relief});
+  const lift=([xx,yy])=>{
+    const q=liftEllipsoid([xx,yy],{center:HEAD_CENTER,radii:[r,ry,rz],relief});
+    // Extend the outer cap along its tangent, rather than a square-root cliff.
+    // XY stays in the artist's rest pose; all attached parts share this depth.
+    const rho=Math.hypot((xx-HEAD_CENTER[0])/r,(yy-HEAD_CENTER[1])/ry),join=.60;
+    if(rho>join){
+      const h=Math.sqrt(1-join*join),depth=rz*(h-(rho-join)*join/h)+relief;
+      q[2]+=(depth-q[2])*correction(p,'CorrJaw');
+    }
+    return q;
+  };
+  const q=lift([x,y]);
   const join=490,weight=correction(p,'CorrJaw')*clamp((y-join)/45,0,1);
   // A vertical ribbon starts before the south pole. Its original XY contour is retained.
-  const ribbon=liftEllipsoid([x,join],{center:HEAD_CENTER,radii:[r,ry,rz],relief});
+  const ribbon=lift([x,join]);
   q[2]+=(ribbon[2]-q[2])*weight;
   if(back)q[2]=-q[2];
   return q;
 }
 export function artWorld(local,p) {
-  const {ParamAngleX:x,ParamAngleY:y,ParamAngleZ:z}=p;
+  const gain=correction(p,'CorrTurn'),x=p.ParamAngleX*gain,y=p.ParamAngleY*gain,z=p.ParamAngleZ;
   const q=rotateXYZ(local,x,y,0),a=rotateXYZ(local,x,0,0),b=rotateXYZ(local,0,y,0);
   const w=correction(p,'CorrDiagonal')*Math.min(1,Math.abs(x/50*y/40));
   // Remove an adjustable fraction of the measured 3D XY interaction, before roll.
@@ -87,7 +97,8 @@ export function eyeWorld(local,side,p,factor=1) {
   const a=eyeballAngles(side,p,factor),f=eyeFrame(side,p);
   const q=rotateXYZ(local,(a.lon1-a.lon0)*180/Math.PI,-(a.lat1-a.lat0)*180/Math.PI,0);
   const oriented=[0,1,2].map(i=>f.right[i]*q[0]+f.down[i]*q[1]+f.normal[i]*q[2]);
-  const rotated=rotateXYZ(oriented,p.ParamAngleX,p.ParamAngleY,p.ParamAngleZ),root=eyeRootWorld(side,p);
+  const gain=correction(p,'CorrTurn');
+  const rotated=rotateXYZ(oriented,p.ParamAngleX*gain,p.ParamAngleY*gain,p.ParamAngleZ),root=eyeRootWorld(side,p);
   return root.map((v,i)=>v+rotated[i]);
 }
 export function eyeballVertex([x,y],side,kind,p) {

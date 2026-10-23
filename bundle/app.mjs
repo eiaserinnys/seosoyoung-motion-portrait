@@ -25,7 +25,7 @@ async function main(){
   }
   function setCorrection(name){Object.assign(p,CORRECTION_PRESETS[name]);sync();}
   for(const name of ['pure','recommended'])$('correction-'+name).onclick=()=>setCorrection(name);
-  function sync(){for(const [name,values]of Object.entries(CORRECTION_PRESETS))pressed('correction-'+name,Object.entries(values).every(([k,v])=>Math.abs(p[k]-v)<.00001));for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}$('angles').textContent=`X ${p.ParamAngleX.toFixed(0)}° / Y ${p.ParamAngleY.toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
+  function sync(){for(const [name,values]of Object.entries(CORRECTION_PRESETS))pressed('correction-'+name,Object.entries(values).every(([k,v])=>Math.abs(p[k]-v)<.00001));for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}$('angles').textContent=`X ${(p.ParamAngleX*p.CorrTurn).toFixed(0)}° / Y ${(p.ParamAngleY*p.CorrTurn).toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
   function pressed(id,value){$(id).setAttribute('aria-pressed',String(value));}
   function stopMotion(){state.auto=false;state.track=false;pressed('auto',false);pressed('track',false);}
   function setPose(x,y,z,name){stopMotion();p.ParamAngleX=x;p.ParamAngleY=y;p.ParamAngleZ=z;$('pose-label').textContent=name;sync();}

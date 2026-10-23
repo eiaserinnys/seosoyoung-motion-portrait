@@ -1,4 +1,4 @@
-import {clamp,radians,headWorld,liftHead,sphereWarp,eyeballVertex,correctedLift,artWorld,correction} from './geometry.mjs';
+import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './geometry.mjs';
 export {HEAD_CENTER,HEAD_RADIUS,LEFT_EYE_BALL,RIGHT_EYE_BALL,EYE_BALL_R,spherePoint,sphereWarp,eyeballAngles,headWorld,liftHead,eyeWorld,eyeCenter,rotateXYZ} from './geometry.mjs';
 export function interpolate(keys,value) {
   if(value<=keys[0].value)return keys[0].output;
@@ -43,7 +43,7 @@ export function deform3D(mesh,point,parameters) {
   }
   if(id.startsWith('back-hair')) {
     x+=p.ParamHairBack*12*clamp((y-120)/500,0,1)**2;
-    return headWorld(liftHead([x,y],-2,true),p);
+    return artWorld(correctedLift([x,y],-2,p),p);
   }
   let relief=0;
   if(id==='hair-top')relief=2;
@@ -69,8 +69,7 @@ export function deform3D(mesh,point,parameters) {
   }
   if(id.startsWith('side-hair'))x+=p.ParamHairSide*9*clamp((y-180)/400,0,1)**2;
   if(id.startsWith('bangs'))x+=p.ParamHairFront*9*clamp((y-100)/330,0,1)**2;
-  const hair=id==='hair-top'||id==='hairpin'||id.startsWith('bangs')||id.startsWith('side-hair');
-  return hair?headWorld(liftHead([x,y],relief),p):artWorld(correctedLift([x,y],relief,p),p);
+  return artWorld(correctedLift([x,y],relief,p),p);
 }
 export const deform=(mesh,point,p)=>deform3D(mesh,point,p).slice(0,2);
 export function opacity(mesh,p,state) {

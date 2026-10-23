@@ -71,6 +71,20 @@ try:
     const shirt=studio.rig.meshes.find(m=>m.id==='upper-body-short-sleeve');
     return {radiusError,eyeRadiusError,neckYawError,eyeLocalHeadLeak,bodyHeadLeak,sphereVertexCount:shell.positions.length,backHemisphere:shell.positions.some(q=>q[2]<-261),frontHemisphere:shell.positions.some(q=>q[2]>261),shirtOpacity:opacity(shirt,base,{...studio.state,outfit:'sweater'})};
   }""")
+  metrics['attachment']=page.evaluate("""async()=>{
+    const {deform3D}=await import('./rig.mjs'),{CORRECTION_PRESETS}=await import('./geometry.mjs');
+    const base={...Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
+    const area=([a,b,c])=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+    const rows=[];
+    for(const gain of [.65,1])for(const [x,y]of [[-50,-28],[-50,28],[50,-28],[50,28],[-25,0],[25,0]]){
+      const p={...base,CorrTurn:gain,ParamAngleX:x,ParamAngleY:y};
+      for(const id of ['face-skin','hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right']){
+        const m=studio.rig.meshes.find(m=>m.id===id),q=m.positions.map(pt=>deform3D(m,pt,p));
+        rows.push({gain,pose:[x,y],id,folded:m.triangles.filter(t=>area(t.map(i=>q[i]))*area(t.map(i=>m.positions[i]))<0).length});
+      }
+    }
+    return {maxFolded:Math.max(...rows.map(r=>r.folded)),cases:rows.length,effectiveAutoAngles:[50*base.CorrTurn,28*base.CorrTurn,14]};
+  }""")
   metrics['neckOcclusion']=page.evaluate("""async () => {
     const {deform3D}=await import('./rig.mjs'),{renderer,state}=studio,gl=renderer.gl;
     const base=Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),neck=studio.rig.meshes.find(m=>m.id==='neck');
@@ -121,6 +135,17 @@ try:
     pose(x,y,z);snap('viewer_correction_'+preset+'_'+name+'.png')
   metrics['correctionInput']=page.locator('#CorrDepth').evaluate('(e)=>{e.value=.73;e.dispatchEvent(new Event("input",{bubbles:true}));return studio.p.CorrDepth}')
   page.locator('#correction-recommended').click()
+  # A continuous yaw strip exposes silhouette dents hidden by individual pose checks.
+  from PIL import Image,ImageDraw
+  frames=[]
+  for yaw in [-50,-35,-25,0,25,35,50]:
+   pose(yaw,0)
+   target=ROOT/'debug'/f'viewer_yaw_{yaw}.png'
+   page.screenshot(path=str(target),clip={'x':510,'y':260,'width':360,'height':300})
+   frame=Image.open(target).convert('RGB');ImageDraw.Draw(frame).text((8,8),f'input {yaw} / rotation {yaw*.65:.1f}',fill='white');frames.append(frame)
+  strip=Image.new('RGB',(360*len(frames),300))
+  for i,frame in enumerate(frames):strip.paste(frame,(360*i,0))
+  strip.save(ROOT/'debug/viewer_yaw_sweep.png')
   page.locator('#reset').click();pose(0,0)
   page.locator('#after-crop').click();page.wait_for_function('document.getElementById("lightbox-image").complete');metrics['lightbox']=page.locator('#lightbox').evaluate('(e)=>e.open');page.keyboard.press('Escape')
   page.locator('#auto').click();before=page.evaluate('studio.p.ParamAngleX');page.wait_for_function('(v)=>Math.abs(studio.p.ParamAngleX-v)>.1',arg=before,timeout=5000);metrics['autoGaze']=page.evaluate('[studio.p.ParamEyeBallX,studio.p.ParamEyeBallY]');page.locator('#reset').click()
@@ -133,6 +158,7 @@ try:
   print(json.dumps({k:v for k,v in metrics.items() if k not in ['clipping','neckOcclusion','featureVisibility']},ensure_ascii=False))
   assert metrics['surfaceComparison']['changedPixels']>0
   assert metrics['correctionInput']==.73
+  assert metrics['attachment']['maxFolded']==0
   assert all(r['pixels']>0 for r in metrics['featureVisibility'])
   assert metrics['maxSphereRasterDrift']<=1 and metrics['maxSphereRollSizeDrift']<=1
   g=metrics['geometry'];assert g['radiusError']<1e-9 and g['eyeRadiusError']<1e-9 and g['neckYawError']==0 and g['eyeLocalHeadLeak']==0 and g['bodyHeadLeak']==0 and g['frontHemisphere'] and g['backHemisphere'] and g['shirtOpacity']==0
