@@ -62,6 +62,20 @@
       "min": 0,
       "max": 1,
       "step": 0.01
+    },
+    {
+      "id": "CorrHairDepth",
+      "label": "두상 외피 깊이",
+      "min": 0.4,
+      "max": 1.2,
+      "step": 0.01
+    },
+    {
+      "id": "CorrHairOcclusion",
+      "label": "먼 쪽 가림",
+      "min": 0,
+      "max": 1,
+      "step": 0.01
     }
   ],
   "presets": {
@@ -74,7 +88,9 @@
       "CorrJaw": 0,
       "CorrFarEye": 0,
       "CorrDiagonal": 0,
-      "CorrTurn": 1
+      "CorrTurn": 1,
+      "CorrHairDepth": 1,
+      "CorrHairOcclusion": 0.8
     },
     "recommended": {
       "CorrDepth": 0.55,
@@ -85,7 +101,9 @@
       "CorrJaw": 1,
       "CorrFarEye": 0.18,
       "CorrDiagonal": 0.65,
-      "CorrTurn": 0.65
+      "CorrTurn": 0.65,
+      "CorrHairDepth": 1,
+      "CorrHairOcclusion": 0.8
     }
   }
 }

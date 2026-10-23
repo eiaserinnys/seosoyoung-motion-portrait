@@ -24,7 +24,7 @@ try:
    page.evaluate('([x,y,z,grid,outfit,bangs])=>{studio.setPose(x,y,z,"3D 구면");Object.assign(studio.state,{grid,outfit,bangs,wire:false,before:false});for(const id of ["grid","bangs","wire"])document.getElementById(id).setAttribute("aria-pressed",String(studio.state[id]));for(const id of ["shirt","sweater"])document.getElementById(id).setAttribute("aria-pressed",String(outfit===id));studio.renderer.render(studio.p,studio.state)}',[x,y,z,grid,outfit,bangs])
   def snap(name):
    page.screenshot(path=str(ROOT/'debug'/name),full_page=True)
-  for name,x,y in [('front',0,0),('turn_left_25',-25,0),('turn_right_25',25,0),('pitch_up_20',0,20),('pitch_down_20',0,-20)]:
+  for name,x,y in [('front',0,0),('turn_left_25',-25,0),('turn_right_25',25,0),('turn_left_50',-50,0),('turn_right_50',50,0),('pitch_up_20',0,20),('pitch_down_20',0,-20)]:
    for grid in [False,True]:
     pose(x,y,grid=grid);snap('viewer_1440_'+name+('_grid' if grid else '')+'.png')
   pose(0,0,15,grid=True);snap('viewer_1440_neck_pivot_roll.png')
@@ -134,7 +134,29 @@ try:
    for name,x,y,z in [('front',0,0,0),('left',-25,0,0),('right',25,0,0),('up',0,20,0),('down',0,-20,0),('diagonal',-35,-20,-10)]:
     pose(x,y,z);snap('viewer_correction_'+preset+'_'+name+'.png')
   metrics['correctionInput']=page.locator('#CorrDepth').evaluate('(e)=>{e.value=.73;e.dispatchEvent(new Event("input",{bubbles:true}));return studio.p.CorrDepth}')
+  metrics['hairControlInput']=page.locator('#CorrHairDepth').evaluate('(e)=>{e.value=.8;e.dispatchEvent(new Event("input",{bubbles:true}));return studio.p.CorrHairDepth}')
+  metrics['occlusionControlInput']=page.locator('#CorrHairOcclusion').evaluate('(e)=>{e.value=.5;e.dispatchEvent(new Event("input",{bubbles:true}));return studio.p.CorrHairOcclusion}')
   page.locator('#correction-recommended').click()
+  for name,x in [('left',-50),('right',50)]:
+   page.evaluate('studio.p.CorrTurn=1;studio.sync()')
+   pose(x,-28);snap('viewer_hair_extreme_'+name+'.png')
+  page.locator('#correction-recommended').click()
+  metrics['hairShell']=page.evaluate("""() => {
+    const {renderer,state,p,rig}=studio,gl=renderer.gl,rows=[];
+    const read=(s)=>{renderer.render(p,s);const d=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);return d;};
+    const ids=new Set(rig.meshes.filter(m=>/^(back-hair|hair-top|side-hair|bangs)/.test(m.id)).map(m=>m.id));
+    for(const [x,y] of [[0,0],[-25,0],[25,0],[-50,0],[50,0],[0,-20],[0,20]]){
+      Object.assign(p,{ParamAngleX:x,ParamAngleY:y,ParamAngleZ:0});
+      const s={...state,mode:'all',wire:false,grid:false,hidden:new Set()},full=read(s);
+      const contribution=id=>{const hidden=read({...s,hidden:new Set([id])});let n=0;for(let i=0;i<full.length;i+=4)if(Math.abs(full[i]-hidden[i])+Math.abs(full[i+1]-hidden[i+1])+Math.abs(full[i+2]-hidden[i+2])>12)n++;return n;};
+      const crown=contribution('hair-top'),ears=['ear-left','ear-right'].map(contribution);
+      const hair=read({...s,mode:'solo',selectedIds:ids}),w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
+      let left=w,right=-1,top=h,bottom=-1;
+      for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(hair[(yy*w+xx)*4+3]>127){left=Math.min(left,xx);right=Math.max(right,xx);top=Math.min(top,h-1-yy);bottom=Math.max(bottom,h-1-yy);}
+      rows.push({pose:[x,y],crownPixels:crown,earPixels:ears,hairBounds:[left,top,right,bottom],hairWidth:right-left+1});
+    }return rows;
+  }""")
+  page.locator('#CorrHairDepth').scroll_into_view_if_needed();pose(0,0);snap('viewer_hair_controls.png')
   # A continuous yaw strip exposes silhouette dents hidden by individual pose checks.
   from PIL import Image,ImageDraw
   frames=[]
@@ -158,8 +180,10 @@ try:
   print(json.dumps({k:v for k,v in metrics.items() if k not in ['clipping','neckOcclusion','featureVisibility']},ensure_ascii=False))
   assert metrics['surfaceComparison']['changedPixels']>0
   assert metrics['correctionInput']==.73
+  assert metrics['hairControlInput']==.8 and metrics['occlusionControlInput']==.5
   assert metrics['attachment']['maxFolded']==0
-  assert all(r['pixels']>0 for r in metrics['featureVisibility'])
+  # Far ears are allowed to disappear behind the cheek in r10.
+  assert all(r['pixels']>0 for r in metrics['featureVisibility'] if not r['id'].startswith('ear-'))
   assert metrics['maxSphereRasterDrift']<=1 and metrics['maxSphereRollSizeDrift']<=1
   g=metrics['geometry'];assert g['radiusError']<1e-9 and g['eyeRadiusError']<1e-9 and g['neckYawError']==0 and g['eyeLocalHeadLeak']==0 and g['bodyHeadLeak']==0 and g['frontHemisphere'] and g['backHemisphere'] and g['shirtOpacity']==0
   # Raw attachment points are diagnostic; neck pixels outside the face are clipped at the cap.
