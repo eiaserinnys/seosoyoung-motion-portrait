@@ -40,7 +40,8 @@ const eyelid=rig.meshes.find(m=>m.id==='eye-left-sclera'),iris=rig.meshes.find(m
 const p={...normal,ParamAngleX:-25,CorrFarEye:0},p2={...p,CorrFarEye:.5};
 assert(eyeRootWorld('left',p)[2]<eyeRootWorld('right',p)[2],'compressed eye is farther from camera');checks++;
 assert.notDeepEqual(deform3D(eyelid,[370,438],p),deform3D(eyelid,[370,438],p2));checks++;
-near(deform3D(iris,[417,438],p),deform3D(iris,[417,438],p2),'eye compression never distorts child sphere');
+assert.notDeepEqual(deform3D(iris,[405,432.2],p),deform3D(iris,[405,432.2],p2),'iris shares the eyelid compression');checks++;
+near(deform3D(iris,[415.7,432.2],p),deform3D(iris,[415.7,432.2],p2),'compression preserves the measured eye pivot');
 console.log(JSON.stringify({status:'PASS',checks}));
 
 for(const roll of [-30,-15,15,30]){

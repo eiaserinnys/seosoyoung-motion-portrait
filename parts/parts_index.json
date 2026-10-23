@@ -478,5 +478,29 @@
       26
     ],
     "area_px": 82
+  },
+  {
+    "id": "side-cranium-right",
+    "label": "오른쪽 측후두부",
+    "file": "parts/side-cranium-right.png",
+    "bbox": [
+      502,
+      20,
+      330,
+      521
+    ],
+    "reference": "left_45_ref_720.png"
+  },
+  {
+    "id": "side-cranium-left",
+    "label": "왼쪽 측후두부",
+    "file": "parts/side-cranium-left.png",
+    "bbox": [
+      182,
+      20,
+      321,
+      521
+    ],
+    "reference": "right_45_ref_720.png"
   }
 ]

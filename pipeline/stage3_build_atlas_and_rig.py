@@ -4,6 +4,7 @@ import json
 import math
 import shutil
 import numpy as np
+from silhouette_mesh import silhouette_mesh
 from pathlib import Path
 from PIL import Image
 
@@ -12,6 +13,7 @@ SOURCE = ROOT / 'source/character'
 SIZE = 2048
 GROUPS = [
  ('PartHairBack','뒷머리',[('back-hair-center',100),('back-hair-left',110),('back-hair-right',120)]),
+ ('PartCranium','측후두부',[('side-cranium-left',260),('side-cranium-right',270)]),
  ('PartNeckAndBody','목과 의상',[('neck',200),('upper-body-short-sleeve',210),('skirt',220),('sweater',230),('necklace',240)]),
  ('PartEar','귀',[('ear-left',280),('ear-right',290)]),
  ('PartFace','얼굴',[('face-skin',300)]),
@@ -65,6 +67,34 @@ def mesh(im,bbox,atlas):
     return dict(positions=positions,uvs=uvs,triangles=triangles,grid=[cols,rows])
 
 
+def cranium_mesh(side,bbox,atlas):
+    dome=json.loads((ROOT/'source/viewer/dome-fit.json').read_text())
+    cols,rows=32,96;positions=[];uvs=[];triangles=[]
+    sign=1 if side=='right' else -1;ref=-sign*math.pi/4
+    for j in range(rows+1):
+        y=dome['cy']-dome['ry']+(540-dome['cy']+dome['ry'])*j/rows
+        cap=lambda yy:dome['rx']*math.sqrt(max(0,1-((yy-dome['cy'])/dome['ry'])**2))
+        yy=max(60,min(350,y));seams=dome['frontSeam'];k=min(len(seams)-2,int((yy-60)//2));a,b=seams[k:k+2];t=(yy-a[0])/(b[0]-a[0])
+        l=a[1]+(b[1]-a[1])*t;r=a[2]+(b[2]-a[2])*t;scale=cap(y)/cap(60) if y<60 else 1
+        front_rx=(r-l)/2*scale;front_cx=((r+l)/2-502)*scale
+        t=max(0,min(1,(y-350)/115));weight=t*t*(3-2*t)
+        rx=front_rx+(175-front_rx)*weight;cx=front_cx*(1-weight)
+        upper_depth=math.sqrt(max(1,2*cap(y)**2-front_rx**2));rz=upper_depth+(dome['lower']['rz']-upper_depth)*weight
+        extent=cap(y)-(cap(465)-dome['lower']['extent45'])*weight;cz=math.hypot(rx,rz)-math.sqrt(2)*extent
+        for i in range(cols+1):
+            longitude=sign*(math.radians(88)+math.radians(92)*i/cols)
+            x=502+(cx+rx*math.sin(longitude))*math.cos(ref)+(cz+rz*math.cos(longitude))*math.sin(ref)
+            positions.append([x,y,longitude])
+            px=max(.5,min(bbox[2]-.5,x-bbox[0]));py=max(.5,min(bbox[3]-.5,y-bbox[1]))
+            uvs.append([(atlas[0]+px)/SIZE,(atlas[1]+py)/SIZE])
+    for j in range(rows):
+        for i in range(cols):
+            a=j*(cols+1)+i;b=a+1;c=a+cols+1;d=c+1
+            # Orientation is handled by the analytic ellipsoid normal in the shader.
+            triangles.extend([[a,b,c],[b,d,c]])
+    return dict(positions=positions,uvs=uvs,triangles=triangles,grid=[cols,rows])
+
+
 def deformer_for(key):
     if key=='neck':return 'WarpNeck'
     if key in ['sweater','necklace','skirt','upper-body-short-sleeve']:return 'WarpBody'
@@ -99,6 +129,13 @@ def build_head_surface(parts, assets, originals=None):
 
 
 def build():
+    from prepare_front_hair import build as prepare_front_hair, fill_seam
+    from fit_dome import build as fit_dome
+    prepare_front_hair()
+    fit_dome()
+    fill_seam()
+    from build_cranium import build as build_cranium
+    build_cranium()
     parts=json.loads((ROOT/'parts/parts_index.json').read_text())
     manifest=json.loads((SOURCE/'manifest.json').read_text()); clothing=json.loads((SOURCE/'clothing.json').read_text())
     old={p['id']:p for p in manifest['leaves']+manifest['expressions']+clothing['parts']}
@@ -107,15 +144,20 @@ def build():
     after=Image.new('RGBA',(SIZE,SIZE));before=Image.new('RGBA',(SIZE,SIZE))
     mapping={key:(group,draw) for group,_,keys in GROUPS for key,draw in keys}
     meshes=[]; originals={}
+    seam_rows=json.loads((ROOT/'source/viewer/dome-fit.json').read_text())['frontSeam']
+    seams=[[(row[side],row[0]) for row in seam_rows] for side in [1,2]]
     for p in parts:
         key=p['id'];box=boxes[key];x,y,w,h=p['bbox']
         im=Image.open(ROOT/p['file']).convert('RGBA')
         if im.size!=(w,h):raise ValueError(key+' bbox mismatch')
-        src=old[key];bounds=src['stageBounds']
-        full=Image.new('RGBA',(1024,1536))
-        raw=Image.open(SOURCE/src['src']).convert('RGBA').resize((bounds['width'],bounds['height']),Image.Resampling.LANCZOS)
-        full.paste(raw,(bounds['x'],bounds['y']))
-        original=full.crop((x,y,x+w,y+h))
+        if key.startswith('side-cranium'):
+            original=im.copy()
+        else:
+            src=old[key];bounds=src['stageBounds']
+            full=Image.new('RGBA',(1024,1536))
+            raw=Image.open(SOURCE/src['src']).convert('RGBA').resize((bounds['width'],bounds['height']),Image.Resampling.LANCZOS)
+            full.paste(raw,(bounds['x'],bounds['y']))
+            original=full.crop((x,y,x+w,y+h))
         if key=='upper-body-short-sleeve':
             alpha=original.getchannel('A')
             alpha.putdata([round(a*max(0,min(1,(y+i//w-680)/12))) for i,a in enumerate(alpha.tobytes())])
@@ -126,7 +168,7 @@ def build():
         masks=[f"eye-{'left' if '-left-' in key else 'right'}-sclera"] if any(key.endswith('-'+s) for s in ['iris','pupil','highlight']) else []
         # Union topology preserves both versions with identical positions and UVs.
         union=im.copy();union.putalpha(Image.frombytes('L',im.size,bytes(max(a,b) for a,b in zip(im.getchannel('A').tobytes(),original.getchannel('A').tobytes()))))
-        meshes.append(dict(id=key,label=p.get('label',key),partId=group,drawOrder=draw,deformerId=deformer_for(key),bbox=p['bbox'],atlas=box,masks=masks,**mesh(union,p['bbox'],box)))
+        meshes.append(dict(id=key,label=p.get('label',key),partId=group,drawOrder=draw,deformerId=deformer_for(key),bbox=p['bbox'],atlas=box,masks=masks,**(cranium_mesh(key.split('-')[-1],p['bbox'],box) if key.startswith('side-cranium') else silhouette_mesh(union,p['bbox'],box,SIZE,[(306.5,544.2),(691.5,542.6),(379,465),(626,465)],seams if key=='hair-top' or key.startswith(('side-hair','back-hair')) else ()) if key.startswith(('ear-','tail-','side-hair','back-hair','bangs')) or key in ['hair-top','hairpin'] else mesh(union,p['bbox'],box))))
     after.save(assets/'texture_00.png');before.save(assets/'texture_before_00.png')
     build_head_surface(parts,assets)
     build_head_surface(parts,assets,originals)

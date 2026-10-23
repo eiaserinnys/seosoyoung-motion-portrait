@@ -1,0 +1,98 @@
+{
+  "left-face": {
+    "prompt": "face of anime girl excluding ears neck and hair",
+    "crop_box": [
+      130,
+      200,
+      555,
+      620
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9506272673606873,
+    "area_px": 65385,
+    "source": "left_45_ref_720.png",
+    "sha256": "6bc4c970c3468be124370602efa168f5f243b16d014fef8f1a9b69d6f3837f9a",
+    "endpoint": "fal-ai/sam-3/image"
+  },
+  "right-face": {
+    "prompt": "face of anime girl excluding ears neck and hair",
+    "crop_box": [
+      240,
+      200,
+      585,
+      620
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9664310812950134,
+    "area_px": 57999,
+    "source": "right_45_ref_720.png",
+    "sha256": "aca2914a95a3deb0ad0f3a838922af7cf6a10ea8f73751ac898c97b468d49640",
+    "endpoint": "fal-ai/sam-3/image"
+  },
+  "right-cranium": {
+    "prompt": "brown hair on side and back of head behind ear",
+    "crop_box": [
+      430,
+      120,
+      675,
+      505
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9622571468353271,
+    "area_px": 40484,
+    "source": "left_45_ref_720.png",
+    "sha256": "6bc4c970c3468be124370602efa168f5f243b16d014fef8f1a9b69d6f3837f9a",
+    "endpoint": "fal-ai/sam-3/image"
+  },
+  "left-cranium": {
+    "prompt": "dark brown hair on side and back of head behind ear",
+    "crop_box": [
+      40,
+      120,
+      290,
+      550
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9542091488838196,
+    "area_px": 43569,
+    "source": "right_45_ref_720.png",
+    "sha256": "aca2914a95a3deb0ad0f3a838922af7cf6a10ea8f73751ac898c97b468d49640",
+    "endpoint": "fal-ai/sam-3/image"
+  },
+  "left-crown": {
+    "prompt": "hair",
+    "crop_box": [
+      30,
+      0,
+      680,
+      550
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9766157865524292,
+    "area_px": 158646,
+    "source": "left_45_ref_720.png",
+    "sha256": "6bc4c970c3468be124370602efa168f5f243b16d014fef8f1a9b69d6f3837f9a",
+    "endpoint": "fal-ai/sam-3/image"
+  },
+  "right-crown": {
+    "prompt": "hair",
+    "crop_box": [
+      30,
+      0,
+      680,
+      550
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9376136660575867,
+    "area_px": 164982,
+    "source": "right_45_ref_720.png",
+    "sha256": "aca2914a95a3deb0ad0f3a838922af7cf6a10ea8f73751ac898c97b468d49640",
+    "endpoint": "fal-ai/sam-3/image"
+  }
+}
