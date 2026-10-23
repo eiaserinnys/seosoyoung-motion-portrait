@@ -1,0 +1,482 @@
+[
+  {
+    "id": "back-hair-left",
+    "label": "화면 왼쪽 뒷머리",
+    "file": "parts/back-hair-left.png",
+    "bbox": [
+      192,
+      46,
+      221,
+      544
+    ],
+    "area_px": 32596
+  },
+  {
+    "id": "back-hair-right",
+    "label": "화면 오른쪽 뒷머리",
+    "file": "parts/back-hair-right.png",
+    "bbox": [
+      568,
+      44,
+      221,
+      546
+    ],
+    "area_px": 37185
+  },
+  {
+    "id": "back-hair-center",
+    "label": "중앙 뒷머리",
+    "file": "parts/back-hair-center.png",
+    "bbox": [
+      242,
+      2,
+      448,
+      574
+    ],
+    "area_px": 162832
+  },
+  {
+    "id": "neck",
+    "label": "목",
+    "file": "parts/neck.png",
+    "bbox": [
+      339,
+      531,
+      323,
+      247
+    ],
+    "area_px": 38376
+  },
+  {
+    "id": "ear-left",
+    "label": "화면 왼쪽 귀",
+    "file": "parts/ear-left.png",
+    "bbox": [
+      287,
+      407,
+      92,
+      116
+    ],
+    "area_px": 4406
+  },
+  {
+    "id": "ear-right",
+    "label": "화면 오른쪽 귀",
+    "file": "parts/ear-right.png",
+    "bbox": [
+      626,
+      407,
+      90,
+      115
+    ],
+    "area_px": 4258
+  },
+  {
+    "id": "face-skin",
+    "label": "얼굴 피부",
+    "file": "parts/face-skin.png",
+    "bbox": [
+      306,
+      218,
+      392,
+      408
+    ],
+    "area_px": 95284
+  },
+  {
+    "id": "eye-left-highlight",
+    "label": "화면 왼쪽 반사광",
+    "file": "parts/eye-left-highlight.png",
+    "bbox": [
+      402,
+      403,
+      30,
+      36
+    ],
+    "area_px": 174
+  },
+  {
+    "id": "eye-right-highlight",
+    "label": "화면 오른쪽 반사광",
+    "file": "parts/eye-right-highlight.png",
+    "bbox": [
+      571,
+      402,
+      30,
+      38
+    ],
+    "area_px": 193
+  },
+  {
+    "id": "eye-left-pupil",
+    "label": "화면 왼쪽 동공",
+    "file": "parts/eye-left-pupil.png",
+    "bbox": [
+      404,
+      417,
+      30,
+      38
+    ],
+    "area_px": 231
+  },
+  {
+    "id": "eye-right-pupil",
+    "label": "화면 오른쪽 동공",
+    "file": "parts/eye-right-pupil.png",
+    "bbox": [
+      571,
+      417,
+      29,
+      37
+    ],
+    "area_px": 220
+  },
+  {
+    "id": "eye-left-iris",
+    "label": "화면 왼쪽 홍채",
+    "file": "parts/eye-left-iris.png",
+    "bbox": [
+      380,
+      398,
+      74,
+      80
+    ],
+    "area_px": 2893
+  },
+  {
+    "id": "eye-right-iris",
+    "label": "화면 오른쪽 홍채",
+    "file": "parts/eye-right-iris.png",
+    "bbox": [
+      551,
+      397,
+      72,
+      80
+    ],
+    "area_px": 2831
+  },
+  {
+    "id": "eye-left-upper-lashes",
+    "label": "화면 왼쪽 위속눈썹",
+    "file": "parts/eye-left-upper-lashes.png",
+    "bbox": [
+      331,
+      375,
+      131,
+      90
+    ],
+    "area_px": 2232
+  },
+  {
+    "id": "eye-right-upper-lashes",
+    "label": "화면 오른쪽 위속눈썹",
+    "file": "parts/eye-right-upper-lashes.png",
+    "bbox": [
+      542,
+      372,
+      133,
+      92
+    ],
+    "area_px": 2191
+  },
+  {
+    "id": "eye-left-lower-line",
+    "label": "화면 왼쪽 아래선",
+    "file": "parts/eye-left-lower-line.png",
+    "bbox": [
+      354,
+      439,
+      85,
+      46
+    ],
+    "area_px": 213
+  },
+  {
+    "id": "eye-right-lower-line",
+    "label": "화면 오른쪽 아래선",
+    "file": "parts/eye-right-lower-line.png",
+    "bbox": [
+      565,
+      439,
+      82,
+      44
+    ],
+    "area_px": 228
+  },
+  {
+    "id": "eye-left-brow",
+    "label": "화면 왼쪽 눈썹",
+    "file": "parts/eye-left-brow.png",
+    "bbox": [
+      332,
+      331,
+      127,
+      47
+    ],
+    "area_px": 726
+  },
+  {
+    "id": "eye-right-brow",
+    "label": "화면 오른쪽 눈썹",
+    "file": "parts/eye-right-brow.png",
+    "bbox": [
+      538,
+      331,
+      128,
+      54
+    ],
+    "area_px": 647
+  },
+  {
+    "id": "eye-left-sclera",
+    "label": "화면 왼쪽 흰자와 잔여 눈 바탕",
+    "file": "parts/eye-left-sclera.png",
+    "bbox": [
+      358,
+      398,
+      96,
+      81
+    ],
+    "area_px": 4588
+  },
+  {
+    "id": "eye-right-sclera",
+    "label": "화면 오른쪽 흰자와 잔여 눈 바탕",
+    "file": "parts/eye-right-sclera.png",
+    "bbox": [
+      550,
+      397,
+      94,
+      81
+    ],
+    "area_px": 4468
+  },
+  {
+    "id": "nose-detail",
+    "label": "코",
+    "file": "parts/nose-detail.png",
+    "bbox": [
+      494,
+      478,
+      28,
+      38
+    ],
+    "area_px": 173
+  },
+  {
+    "id": "mouth-detail",
+    "label": "입",
+    "file": "parts/mouth-detail.png",
+    "bbox": [
+      481,
+      545,
+      47,
+      19
+    ],
+    "area_px": 87
+  },
+  {
+    "id": "tail-left-tie",
+    "label": "화면 왼쪽 머리끈",
+    "file": "parts/tail-left-tie.png",
+    "bbox": [
+      244,
+      499,
+      129,
+      89
+    ],
+    "area_px": 6120
+  },
+  {
+    "id": "tail-left-hair",
+    "label": "화면 왼쪽 묶음머리",
+    "file": "parts/tail-left-hair.png",
+    "bbox": [
+      146,
+      539,
+      251,
+      593
+    ],
+    "area_px": 73822
+  },
+  {
+    "id": "tail-right-tie",
+    "label": "화면 오른쪽 머리끈",
+    "file": "parts/tail-right-tie.png",
+    "bbox": [
+      625,
+      498,
+      129,
+      89
+    ],
+    "area_px": 6076
+  },
+  {
+    "id": "tail-right-hair",
+    "label": "화면 오른쪽 묶음머리",
+    "file": "parts/tail-right-hair.png",
+    "bbox": [
+      602,
+      539,
+      248,
+      604
+    ],
+    "area_px": 76556
+  },
+  {
+    "id": "hairpin",
+    "label": "토끼 머리핀",
+    "file": "parts/hairpin.png",
+    "bbox": [
+      646,
+      241,
+      57,
+      70
+    ],
+    "area_px": 1489
+  },
+  {
+    "id": "side-hair-left",
+    "label": "화면 왼쪽 옆머리",
+    "file": "parts/side-hair-left.png",
+    "bbox": [
+      192,
+      117,
+      216,
+      463
+    ],
+    "area_px": 32979
+  },
+  {
+    "id": "side-hair-right",
+    "label": "화면 오른쪽 옆머리",
+    "file": "parts/side-hair-right.png",
+    "bbox": [
+      594,
+      112,
+      194,
+      470
+    ],
+    "area_px": 28921
+  },
+  {
+    "id": "bangs-left",
+    "label": "화면 왼쪽 앞머리",
+    "file": "parts/bangs-left.png",
+    "bbox": [
+      309,
+      78,
+      205,
+      343
+    ],
+    "area_px": 43502
+  },
+  {
+    "id": "bangs-right",
+    "label": "화면 오른쪽 앞머리",
+    "file": "parts/bangs-right.png",
+    "bbox": [
+      489,
+      81,
+      194,
+      342
+    ],
+    "area_px": 34768
+  },
+  {
+    "id": "hair-top",
+    "label": "윗머리",
+    "file": "parts/hair-top.png",
+    "bbox": [
+      297,
+      3,
+      401,
+      242
+    ],
+    "area_px": 55838
+  },
+  {
+    "id": "upper-body-short-sleeve",
+    "label": "숏 슬리브 상반신",
+    "file": "parts/upper-body-short-sleeve.png",
+    "bbox": [
+      57,
+      675,
+      883,
+      861
+    ],
+    "area_px": 528805
+  },
+  {
+    "id": "necklace",
+    "label": "목걸이",
+    "file": "parts/necklace.png",
+    "bbox": [
+      409,
+      677,
+      188,
+      193
+    ],
+    "area_px": 2043
+  },
+  {
+    "id": "sweater",
+    "label": "스웨터",
+    "file": "parts/sweater.png",
+    "bbox": [
+      0,
+      693,
+      1024,
+      843
+    ],
+    "area_px": 589800
+  },
+  {
+    "id": "skirt",
+    "label": "치마",
+    "file": "parts/skirt.png",
+    "bbox": [
+      197,
+      1316,
+      616,
+      220
+    ],
+    "area_px": 95008
+  },
+  {
+    "id": "closed-eyes-v1",
+    "label": "closed-eyes-v1",
+    "file": "parts/closed-eyes-v1.png",
+    "bbox": [
+      335,
+      422,
+      329,
+      47
+    ],
+    "area_px": 2215
+  },
+  {
+    "id": "mouth-open-v1",
+    "label": "mouth-open-v1",
+    "file": "parts/mouth-open-v1.png",
+    "bbox": [
+      485,
+      542,
+      42,
+      26
+    ],
+    "area_px": 194
+  },
+  {
+    "id": "mouth-round-v1",
+    "label": "mouth-round-v1",
+    "file": "parts/mouth-round-v1.png",
+    "bbox": [
+      493,
+      543,
+      26,
+      26
+    ],
+    "area_px": 82
+  }
+]

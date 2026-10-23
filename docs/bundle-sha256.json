@@ -1,0 +1,16 @@
+{
+  "bundle/app.mjs": "17f8d58951b7bda4b2ca35ab9380e80d978ccc9cabfb2023da6463e7e1cb8908",
+  "bundle/assets/before_after_parts_comparison.png": "4ccfb72811ff2806779e1ae3635177f887825d9902a42aad4090f9d4b9a90376",
+  "bundle/assets/head-surface-before.png": "ca71d692270fc75456a9115118d9b0e8992f712b9c327e793a2e835ac9f2d5fe",
+  "bundle/assets/head-surface.png": "580fe1ebe7f39ce85841bd057d94b3f56782b4912d123d9789a44073709283da",
+  "bundle/assets/provenance.json": "ddaf71544bbd5f62bdea4b058bf2baac4b3702e5bf402bf9ae518123a4d95f5e",
+  "bundle/assets/sam3_masks_grid.png": "f208ee4ecd71cc47e0b4317d119e8d50113b57c844fc74f850fd42662f3afe15",
+  "bundle/assets/seosoyoung-rig.json": "454c819c0d2fb3cc0c1648e39e648ebb8a4932bf5aadc47fff21fafba525da2e",
+  "bundle/assets/texture_00.png": "ba7aa5de69b9ae8ad927117100787c1a789ae5cd2987cc5f938f208ce2bff5c2",
+  "bundle/assets/texture_before_00.png": "bcebcda9825d4511e10036abb6f8b63aedc96b722c667e6e0310f29708744654",
+  "bundle/geometry.mjs": "5ee9b1f28bce9fde28d73dd0fbaae1f2ad96d73861e76f5f13165aa70c092961",
+  "bundle/index.html": "3ea6052260a64358eb0a1b06591af74bd1d6df3faf94c7a823e62943385997a5",
+  "bundle/renderer.mjs": "fb8c7196193a46a53ed47f4e4b762f876bd7debc5c53f8aa7df40a956c7e1f77",
+  "bundle/rig.mjs": "81836f536e87eb0998f4cc6df33de72cbe26e35f29572df5e2e6cca868365a48",
+  "bundle/style.css": "249bd66cef80250f1c0946e4eced91e9517e8d7cdb896b8970fd4a1e7250f366"
+}

@@ -1,0 +1,399 @@
+{
+  "leaves": [
+    {
+      "id": "back-hair-left",
+      "label": "화면 왼쪽 뒷머리",
+      "src": "assets/back-hair-left-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 680
+      }
+    },
+    {
+      "id": "back-hair-right",
+      "label": "화면 오른쪽 뒷머리",
+      "src": "assets/back-hair-right-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 680
+      }
+    },
+    {
+      "id": "back-hair-center",
+      "label": "중앙 뒷머리",
+      "src": "assets/back-hair-residual-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 680
+      }
+    },
+    {
+      "id": "neck",
+      "label": "목",
+      "src": "assets/neck-final-v1.png",
+      "stageBounds": {
+        "x": 0,
+        "y": 576,
+        "width": 1024,
+        "height": 960
+      }
+    },
+    {
+      "id": "ear-left",
+      "label": "화면 왼쪽 귀",
+      "src": "assets/ears-left-final-v1.png",
+      "stageBounds": {
+        "x": 272,
+        "y": 224,
+        "width": 480,
+        "height": 416
+      }
+    },
+    {
+      "id": "ear-right",
+      "label": "화면 오른쪽 귀",
+      "src": "assets/ears-right-final-v1.png",
+      "stageBounds": {
+        "x": 272,
+        "y": 224,
+        "width": 480,
+        "height": 416
+      }
+    },
+    {
+      "id": "face-skin",
+      "label": "얼굴 피부",
+      "src": "assets/face-base-residual-final-v1.png",
+      "stageBounds": {
+        "x": 272,
+        "y": 224,
+        "width": 480,
+        "height": 416
+      }
+    },
+    {
+      "id": "eye-left-highlight",
+      "label": "화면 왼쪽 반사광",
+      "src": "assets/highlights-left-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-right-highlight",
+      "label": "화면 오른쪽 반사광",
+      "src": "assets/highlights-right-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-left-pupil",
+      "label": "화면 왼쪽 동공",
+      "src": "assets/pupil-left-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-right-pupil",
+      "label": "화면 오른쪽 동공",
+      "src": "assets/pupil-right-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-left-iris",
+      "label": "화면 왼쪽 홍채",
+      "src": "assets/iris-left-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-right-iris",
+      "label": "화면 오른쪽 홍채",
+      "src": "assets/iris-right-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-left-upper-lashes",
+      "label": "화면 왼쪽 위속눈썹",
+      "src": "assets/upper-lashes-left-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-right-upper-lashes",
+      "label": "화면 오른쪽 위속눈썹",
+      "src": "assets/upper-lashes-right-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-left-lower-line",
+      "label": "화면 왼쪽 아래선",
+      "src": "assets/lower-lines-left-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-right-lower-line",
+      "label": "화면 오른쪽 아래선",
+      "src": "assets/lower-lines-right-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-left-brow",
+      "label": "화면 왼쪽 눈썹",
+      "src": "assets/brows-left-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-right-brow",
+      "label": "화면 오른쪽 눈썹",
+      "src": "assets/brows-right-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-left-sclera",
+      "label": "화면 왼쪽 흰자와 잔여 눈 바탕",
+      "src": "assets/eyes-brows-residual-left-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "eye-right-sclera",
+      "label": "화면 오른쪽 흰자와 잔여 눈 바탕",
+      "src": "assets/eyes-brows-residual-right-final-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 330,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "nose-detail",
+      "label": "코",
+      "src": "assets/nose-v2.png",
+      "stageBounds": {
+        "x": 480,
+        "y": 468,
+        "width": 56,
+        "height": 56
+      }
+    },
+    {
+      "id": "mouth-detail",
+      "label": "입",
+      "src": "assets/mouth-v2.png",
+      "stageBounds": {
+        "x": 466,
+        "y": 530,
+        "width": 80,
+        "height": 48
+      }
+    },
+    {
+      "id": "tail-left-tie",
+      "label": "화면 왼쪽 머리끈",
+      "src": "assets/tie-image-left-final-v1.png",
+      "stageBounds": {
+        "x": 112,
+        "y": 496,
+        "width": 288,
+        "height": 656
+      }
+    },
+    {
+      "id": "tail-left-hair",
+      "label": "화면 왼쪽 묶음머리",
+      "src": "assets/tail-image-left-residual-final-v1.png",
+      "stageBounds": {
+        "x": 112,
+        "y": 496,
+        "width": 288,
+        "height": 656
+      }
+    },
+    {
+      "id": "tail-right-tie",
+      "label": "화면 오른쪽 머리끈",
+      "src": "assets/tie-image-right-final-v1.png",
+      "stageBounds": {
+        "x": 600,
+        "y": 496,
+        "width": 272,
+        "height": 656
+      }
+    },
+    {
+      "id": "tail-right-hair",
+      "label": "화면 오른쪽 묶음머리",
+      "src": "assets/tail-image-right-residual-final-v1.png",
+      "stageBounds": {
+        "x": 600,
+        "y": 496,
+        "width": 272,
+        "height": 656
+      }
+    },
+    {
+      "id": "hairpin",
+      "label": "토끼 머리핀",
+      "src": "assets/rabbit-pin-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 600
+      }
+    },
+    {
+      "id": "side-hair-left",
+      "label": "화면 왼쪽 옆머리",
+      "src": "assets/side-locks-left-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 600
+      }
+    },
+    {
+      "id": "side-hair-right",
+      "label": "화면 오른쪽 옆머리",
+      "src": "assets/side-locks-right-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 600
+      }
+    },
+    {
+      "id": "bangs-left",
+      "label": "화면 왼쪽 앞머리",
+      "src": "assets/bangs-left-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 600
+      }
+    },
+    {
+      "id": "bangs-right",
+      "label": "화면 오른쪽 앞머리",
+      "src": "assets/bangs-right-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 600
+      }
+    },
+    {
+      "id": "hair-top",
+      "label": "윗머리",
+      "src": "assets/hair-cap-residual-final-v1.png",
+      "stageBounds": {
+        "x": 192,
+        "y": 0,
+        "width": 608,
+        "height": 600
+      }
+    }
+  ],
+  "expressions": [
+    {
+      "id": "closed-eyes-v1",
+      "src": "assets/closed-eyes-v1.png",
+      "stageBounds": {
+        "x": 278,
+        "y": 352,
+        "width": 443,
+        "height": 156
+      }
+    },
+    {
+      "id": "mouth-open-v1",
+      "src": "assets/mouth-open-v1.png",
+      "stageBounds": {
+        "x": 466,
+        "y": 530,
+        "width": 80,
+        "height": 48
+      }
+    },
+    {
+      "id": "mouth-round-v1",
+      "src": "assets/mouth-round-v1.png",
+      "stageBounds": {
+        "x": 466,
+        "y": 530,
+        "width": 80,
+        "height": 48
+      }
+    }
+  ]
+}
