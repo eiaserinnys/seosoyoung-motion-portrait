@@ -8,3 +8,6 @@ __pycache__/
 *.can3
 *.rar
 *.zip
+private/
+*.json.gz
+*.npz
