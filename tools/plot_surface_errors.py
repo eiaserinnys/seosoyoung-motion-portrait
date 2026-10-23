@@ -21,3 +21,6 @@ for i,ax in enumerate(axs):
 axs[0].legend(loc='lower right',frameon=False)
 fig.suptitle('Face and features: 4 cardinal poses fitted, 20 other poses evaluated',fontsize=12)
 fig.tight_layout();fig.savefig(out,metadata={'Description':'Aggregate numerical errors only. No third-party geometry or artwork.'})
+
+if out.suffix.lower() == '.svg':
+ out.write_text('\n'.join(line.rstrip() for line in out.read_text().splitlines()) + '\n')
