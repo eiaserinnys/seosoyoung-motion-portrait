@@ -79,25 +79,22 @@ def deformer_for(key):
 
 
 def build_head_surface(parts, assets, originals=None):
-    """Bake a closed sphere skin from the existing skin and rear-hair layers."""
-    by_id={part['id']:part for part in parts}
-    back=Image.new('RGBA',(1024,1536),(65,43,35,255))
-    def overlay(canvas,key):
-        part=by_id[key];x,y,_,_=part['bbox']
-        image=originals[key] if originals is not None else Image.open(ROOT/part['file']).convert('RGBA')
-        canvas.alpha_composite(image,(x,y))
-    for key in ['back-hair-center','back-hair-left','back-hair-right','hair-top']:overlay(back,key)
-    front=back.copy();overlay(front,'face-skin')
+    """Hair-only backing with a soft open face and jaw; never bake skin into the rear."""
+    # Sample an unobstructed strip of our own crown drawing, not restored skin edges.
+    source=np.asarray(Image.open(SOURCE/'still.png').convert('RGBA'),dtype=np.float32)
     w,h=1024,512
     lon=np.linspace(-np.pi,np.pi,w,dtype=np.float32)[None,:]
     lat=np.linspace(-np.pi/2,np.pi/2,h,dtype=np.float32)[:,None]
-    px=502+262*np.cos(lat)*np.sin(lon)
-    py=np.broadcast_to(326+262*np.sin(lat),(h,w))
-    def sample(im):
-        data=np.asarray(im,dtype=np.float32);x=np.floor(px).astype(int);y=np.floor(py).astype(int)
-        wx=(px-x)[...,None];wy=(py-y)[...,None]
-        return (data[y,x]*(1-wx)+data[y,x+1]*wx)*(1-wy)+(data[y+1,x]*(1-wx)+data[y+1,x+1]*wx)*wy
-    rgba=np.where((np.cos(lon)>=0)[...,None],sample(front),sample(back))
+    px=np.broadcast_to(421+27*np.sin(lon*3),(h,w))
+    py=np.broadcast_to(150+(lat+np.pi/2)/np.pi*135,(h,w))
+    x=np.floor(px).astype(int);y=np.floor(py).astype(int)
+    wx=(px-x)[...,None];wy=(py-y)[...,None]
+    rgba=(source[y,x]*(1-wx)+source[y,x+1]*wx)*(1-wy)+(source[y+1,x]*(1-wx)+source[y+1,x+1]*wx)*wy
+    # Front below the hairline is an opening. Rear stops above the jaw, also in pitch.
+    front=np.clip((np.cos(lon)+.2)/.6,0,1)
+    limit=.45-.62*front
+    rgba[:,:,3]=255*np.clip((limit-lat)/.18,0,1)
+    rgba[:,:,:3]*=.86
     Image.fromarray(np.clip(rgba,0,255).astype(np.uint8)).save(assets/('head-surface-before.png' if originals is not None else 'head-surface.png'))
 
 
@@ -134,7 +131,7 @@ def build():
     build_head_surface(parts,assets)
     build_head_surface(parts,assets,originals)
     deformers=[]
-    structure=[('RotRoot',None,[502,1400]),('WarpBody','RotRoot',[502,850]),('WarpNeck','WarpBody',[502,650]),('WarpHead','WarpNeck',[502,435]),('RotHeadZ','WarpHead',[502,326]),('WarpFace','RotHeadZ',[502,435]),('WarpEyeL','WarpFace',[410,435]),('WarpEyeR','WarpFace',[590,435]),('WarpMouth','WarpFace',[502,552]),('WarpHairFront','RotHeadZ',[502,220]),('WarpHairSideL','RotHeadZ',[308,300]),('WarpHairSideR','RotHeadZ',[688,300]),('RotTailL','RotHeadZ',[352,504]),('RotTailR','RotHeadZ',[646,504]),('WarpHairBack','RotHeadZ',[502,220])]
+    structure=[('RotRoot',None,[502,1400]),('WarpBody','RotRoot',[502,850]),('WarpNeck','WarpBody',[502,650]),('WarpHead','WarpNeck',[502,435]),('RotHeadZ','WarpHead',[502,568]),('WarpFace','RotHeadZ',[502,435]),('WarpEyeL','WarpFace',[410,435]),('WarpEyeR','WarpFace',[590,435]),('WarpMouth','WarpFace',[502,552]),('WarpHairFront','RotHeadZ',[502,220]),('WarpHairSideL','RotHeadZ',[308,300]),('WarpHairSideR','RotHeadZ',[688,300]),('RotTailL','RotHeadZ',[352,504]),('RotTailR','RotHeadZ',[646,504]),('WarpHairBack','RotHeadZ',[502,220])]
     for key,parent,pivot in structure:
         channels = {
             'RotRoot': {}, 'WarpBody': {'ParamBreath': [0, 1], 'ParamBodyAngleX': [-10, 0, 10]},

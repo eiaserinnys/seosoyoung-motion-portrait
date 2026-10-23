@@ -1,17 +1,22 @@
-# 3D sphere validation
+# Rotation correction validation
 
-The grid uses complete latitude circles and longitude great circles in 3D. The outer ring is the orthographic silhouette of the same closed sphere. The browser check also renders the actual textured sphere alone and measures its alpha bounds, independently of that overlay ring.
+The yellow guide is a closed 3D sphere. Its diagnostic raster uses an opaque material to measure the geometry, independently of the hair backing's deliberately open face and jaw alpha. The child eye guide spheres remain rigid. Artwork corrections are independent of those guides.
 
-| Pose | Artwork | Sphere grid |
+| Pose | Pure sphere | Recommended correction |
 |:--|:--|:--|
-| Front | [Image](captures/viewer_1440_front.png) | [Image](captures/viewer_1440_front_grid.png) |
-| Yaw -25 | [Image](captures/viewer_1440_turn_left_25.png) | [Image](captures/viewer_1440_turn_left_25_grid.png) |
-| Yaw +25 | [Image](captures/viewer_1440_turn_right_25.png) | [Image](captures/viewer_1440_turn_right_25_grid.png) |
-| Pitch +20 | [Image](captures/viewer_1440_pitch_up_20.png) | [Image](captures/viewer_1440_pitch_up_20_grid.png) |
-| Pitch -20 | [Image](captures/viewer_1440_pitch_down_20.png) | [Image](captures/viewer_1440_pitch_down_20_grid.png) |
+| Front | [Image](captures/viewer_correction_pure_front.png) | [Image](captures/viewer_correction_recommended_front.png) |
+| Yaw -25 | [Image](captures/viewer_correction_pure_left.png) | [Image](captures/viewer_correction_recommended_left.png) |
+| Yaw +25 | [Image](captures/viewer_correction_pure_right.png) | [Image](captures/viewer_correction_recommended_right.png) |
+| Pitch +20 | [Image](captures/viewer_correction_pure_up.png) | [Image](captures/viewer_correction_recommended_up.png) |
+| Pitch -20 | [Image](captures/viewer_correction_pure_down.png) | [Image](captures/viewer_correction_recommended_down.png) |
+| Diagonal | [Image](captures/viewer_correction_pure_diagonal.png) | [Image](captures/viewer_correction_recommended_diagonal.png) |
 
-Combined extreme poses: [left](captures/viewer_1440_range_left.png), [right](captures/viewer_1440_range_right.png). Partial blink: [image](captures/viewer_1440_half_blink.png).
+The pure mode is an uncorrected geometric comparison, including its south-pole distortion. The recommended mode retains the jaw as a vertical ribbon, uses a shallow face and normal-aligned eye attachment, and exposes each authored adjustment as an independent control. The default coefficients are for this portrait, not parameters extracted from commercial models.
 
-The figures are local Chromium software-WebGL captures at 1440 by 900. The numerical checks are recorded in [viewer_metrics.json](viewer_metrics.json). Mesh rasterization can change the silhouette's boundary by one pixel, while the underlying sphere radius remains invariant within floating-point precision.
+## Regression evidence
 
-The rear texture is reconstructed from existing rear hair. Attached strips and gravity-driven tails intentionally extend beyond the spherical head's silhouette. This implementation validates the geometric hierarchy and interactive viewer; it is not a multi-view reconstruction of an anatomical head.
+[Metrics](viewer_metrics.json) report the actual composited pixel difference when ears, nose, mouth and ties are toggled at seven poses. Eye clipping is measured for 72 layer/pose/blink cases. Neck yaw displacement stays zero; neck cap pixels outside the face mask are tested separately from raw attachment point diagnostics. The head/eye radius error is measured in XYZ relative to the transformed center. Yaw/pitch preserve the head center. Roll fixes the neck joint and moves the head center along an arc without resizing the sphere. Diagnostic raster size varies by at most one pixel. [Neck-pivot roll](captures/viewer_1440_neck_pivot_roll.png).
+
+[Front grid](captures/viewer_1440_front_grid.png), [left grid](captures/viewer_1440_turn_left_25_grid.png), [right grid](captures/viewer_1440_turn_right_25_grid.png), [up grid](captures/viewer_1440_pitch_up_20_grid.png), [down grid](captures/viewer_1440_pitch_down_20_grid.png), [extreme left](captures/viewer_1440_range_left.png), [extreme right](captures/viewer_1440_range_right.png), [partial blink](captures/viewer_1440_half_blink.png), [narrow layout](captures/viewer_1024_narrow.png).
+
+Captures use Linux Chromium software WebGL at 1440 by 900 and 1024 by 768. The rear hair is reconstructed from an unobstructed crown strip of the supplied artwork. This is an illustration rig, not an anatomical multi-view reconstruction.

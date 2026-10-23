@@ -1,3 +1,4 @@
+import {CORRECTION_CONTROLS,CORRECTION_PRESETS} from './corrections.mjs';
 import {Renderer} from './renderer.mjs';
 import {Pendulum} from './rig.mjs';
 const $=id=>document.getElementById(id);
@@ -7,6 +8,7 @@ async function main(){
   const response=await fetch('./assets/seosoyoung-rig.json');if(!response.ok)throw Error('리그 로드 실패');const rig=await response.json();
   const images=await Promise.all(['texture_00.png','texture_before_00.png','head-surface.png','head-surface-before.png'].map(file=>loadImage('./assets/'+file)));
   const p=Object.fromEntries(rig.parameters.map(param=>[param.id,param.default]));
+  Object.assign(p,CORRECTION_PRESETS.recommended);
   const state={selected:'face-skin',selectedIds:new Set(['face-skin']),hidden:new Set(),mode:'all',before:false,bangs:false,outfit:'sweater',wire:false,grid:false,masks:false,auto:false,track:false,tab:'parts'};
   const renderer=new Renderer($('stage'),$('overlay'),rig,images);
   const inputs={};
@@ -16,7 +18,14 @@ async function main(){
     row.innerHTML=`<label for="${param.id}" title="${param.id}">${label[param.id.slice(5)]}</label><output for="${param.id}"></output><input id="${param.id}" aria-label="${param.id}" type="range" min="${param.min}" max="${param.max}" step="${param.max>2?.1:.01}" value="${param.default}">`;
     inputs[param.id]=row.querySelector('input');inputs[param.id].oninput=e=>{stopMotion();p[param.id]=+e.target.value;sync();};$('params').append(row);
   }
-  function sync(){for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}$('angles').textContent=`X ${p.ParamAngleX.toFixed(0)}° / Y ${p.ParamAngleY.toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
+  for(const param of CORRECTION_CONTROLS){
+    const row=document.createElement('div');row.className='param';
+    row.innerHTML=`<label for="${param.id}">${param.label}</label><output for="${param.id}"></output><input id="${param.id}" aria-label="${param.label}" type="range" min="${param.min}" max="${param.max}" step="${param.step}" value="${p[param.id]}">`;
+    inputs[param.id]=row.querySelector('input');inputs[param.id].oninput=e=>{p[param.id]=+e.target.value;sync();};$('corrections').append(row);
+  }
+  function setCorrection(name){Object.assign(p,CORRECTION_PRESETS[name]);sync();}
+  for(const name of ['pure','recommended'])$('correction-'+name).onclick=()=>setCorrection(name);
+  function sync(){for(const [name,values]of Object.entries(CORRECTION_PRESETS))pressed('correction-'+name,Object.entries(values).every(([k,v])=>Math.abs(p[k]-v)<.00001));for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}$('angles').textContent=`X ${p.ParamAngleX.toFixed(0)}° / Y ${p.ParamAngleY.toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
   function pressed(id,value){$(id).setAttribute('aria-pressed',String(value));}
   function stopMotion(){state.auto=false;state.track=false;pressed('auto',false);pressed('track',false);}
   function setPose(x,y,z,name){stopMotion();p.ParamAngleX=x;p.ParamAngleY=y;p.ParamAngleZ=z;$('pose-label').textContent=name;sync();}
@@ -53,6 +62,6 @@ async function main(){
   const redraw=()=>renderer.render(p,state);
   document.addEventListener('click',redraw);document.addEventListener('input',redraw);window.addEventListener('resize',redraw);
   choose('face-skin');sync();redraw();$('status').textContent='40 파츠 / 준비됨';requestAnimationFrame(frame);
-  window.studio={rig,p,state,renderer,choose,setPose,sync,ready:true};
+  window.studio={rig,p,state,renderer,choose,setPose,setCorrection,sync,ready:true};
 }
 main().catch(error=>{$('status').textContent=error.message;console.error(error);});
