@@ -69,7 +69,11 @@ export class Renderer {
     // ArtMesh layers are two-sided illustration ribbons, unlike the closed backing sphere.
     gl.disable(gl.CULL_FACE);
     let currentMask=null;
-    if(!state.surfaceOnly)for(const mesh of this.rig.meshes.filter(m=>!background(m))) {
+    // The face crop extends under the crown. Its unmodified r9 depth must not
+    // punch through the shallower north pole of the front hair artwork.
+    const frontHair=m=>m.id==='hair-top'||m.id.startsWith('bangs')||m.id==='hairpin';
+    const foreground=this.rig.meshes.filter(m=>!background(m)).sort((a,b)=>Number(frontHair(a))-Number(frontHair(b)));
+    if(!state.surfaceOnly)for(const mesh of foreground) {
       if(!visible(mesh))continue;
       const alpha=state.mode==='dim'&&!state.selectedIds.has(mesh.id)?.18:1;
       if(mesh.masks.length){
@@ -81,7 +85,8 @@ export class Renderer {
         }
         // An eye opening reveals the embedded child sphere through the skin surface.
         gl.disable(gl.DEPTH_TEST);gl.depthMask(false);
-      }else{gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
+      }else if(frontHair(mesh)){gl.disable(gl.DEPTH_TEST);gl.depthMask(false);}
+      else{gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
       wire(mesh,this.draw(mesh,p,alpha,{clip:mesh.masks.length>0,tint:state.masks&&mesh.id.endsWith('sclera')}));
     }
     gl.depthMask(true);gl.disable(gl.CULL_FACE);gl.disable(gl.DEPTH_TEST);

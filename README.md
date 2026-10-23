@@ -26,6 +26,8 @@ Each eye is a radius-54 sphere attached in head-local coordinates. Its local bas
 
 The neck stays stationary during pure yaw. Pitch and roll blend the hidden upper attachment into the body. One moving neck owns the skin above the collar; the shirt's duplicate upper neck is removed. Hair ties and hanging tails follow head attachment points and damped gravity motion.
 
+The hair cap shares the corrected face depth field at its forehead and cheek boundaries. Its upper surface reaches zero depth at the north pole and gains volume between the pole and forehead. Crown and rear artwork use the same depth sign, separated only by their layer relief. The trailing outer contour damps lateral displacement to retain volume during yaw; far ears and outer side strands narrow toward the cheek and receive a camera-depth occlusion bias. Front crown, bangs and the hairpin retain their illustration overlap order above the face crop. The two hair controls adjust upper volume and far-side occlusion without changing face geometry.
+
 This is a custom WebGL renderer and JSON format. It does not load or produce Cubism binary models.
 
 ## Rebuild
@@ -40,6 +42,8 @@ python3 -m venv .venv
 .venv/bin/python pipeline/stage3_build_viewer.py
 node pipeline/test_sphere_3d.mjs
 node pipeline/test_corrections.mjs
+node pipeline/test_attachment.mjs
+node pipeline/test_hair_shell.mjs
 node --test tests/head-turn.test.mjs
 .venv/bin/python pipeline/verify_viewer.py
 ```

@@ -1,28 +1,33 @@
-# Rotation correction validation
+# Hair shell rotation validation
 
-The yellow guide is a closed 3D sphere. Its diagnostic raster uses an opaque material to measure the geometry, independently of the hair backing's deliberately open face and jaw alpha. The child eye guide spheres remain rigid. Artwork corrections are independent of those guides.
+The r10 hair surface joins the unchanged face surface at the forehead and cheek. Crown and rear artwork share the same depth sign, with only a layer relief between them. The upper surface reaches zero depth at y=64. Its rounded pole transition avoids a square-root cliff in the sampled artwork mesh. The trailing outer contour retains volume during yaw; the far ear and outer side strands narrow toward the cheek and move behind it in camera depth.
 
-| Pose | Pure sphere | Recommended correction |
-|:--|:--|:--|
-| Front | [Image](captures/viewer_correction_pure_front.png) | [Image](captures/viewer_correction_recommended_front.png) |
-| Yaw -25 | [Image](captures/viewer_correction_pure_left.png) | [Image](captures/viewer_correction_recommended_left.png) |
-| Yaw +25 | [Image](captures/viewer_correction_pure_right.png) | [Image](captures/viewer_correction_recommended_right.png) |
-| Pitch +20 | [Image](captures/viewer_correction_pure_up.png) | [Image](captures/viewer_correction_recommended_up.png) |
-| Pitch -20 | [Image](captures/viewer_correction_pure_down.png) | [Image](captures/viewer_correction_recommended_down.png) |
-| Diagonal | [Image](captures/viewer_correction_pure_diagonal.png) | [Image](captures/viewer_correction_recommended_diagonal.png) |
+## Captures
 
-The pure mode is an uncorrected geometric comparison, including its south-pole distortion. The recommended mode retains the jaw as a vertical ribbon, uses a shallow face and normal-aligned eye attachment, and exposes each authored adjustment as an independent control. The default coefficients are for this portrait, not parameters extracted from commercial models.
+| Pose | Image |
+|:--|:--|
+| Front | [Front](captures/viewer_1440_front.png) |
+| Yaw -25 / +25 | [Left](captures/viewer_1440_turn_left_25.png), [right](captures/viewer_1440_turn_right_25.png) |
+| Yaw -50 / +50 | [Left](captures/viewer_1440_turn_left_50.png), [right](captures/viewer_1440_turn_right_50.png) |
+| Pitch -20 / +20 | [Down](captures/viewer_1440_pitch_down_20.png), [up](captures/viewer_1440_pitch_up_20.png) |
+| Gain 1, yaw -50 / +50, pitch -28 | [Left](captures/viewer_hair_extreme_left.png), [right](captures/viewer_hair_extreme_right.png) |
+| Continuous yaw | [Seven poses](captures/viewer_yaw_sweep.png) |
+| Hair controls | [Existing control rows](captures/viewer_hair_controls.png) |
+| Narrow layout | [1024 by 768](captures/viewer_1024_narrow.png) |
 
-## Shared attachment and preserved outline
+The yaw strip, right-50, down-20 and up-20 captures were opened and visually compared. The crown parting remains single, the cheek-side gap is closed, and the face crop no longer cuts a skin-colored strip through the front hair. Downward pitch expands the upper cap vertically; upward pitch compresses it. At positive yaw the right ear recedes while the left remains visible; the relationship reverses at negative yaw. The original face proportions and fixed neck remain intact.
 
-Previously, hair rotated on a deep sphere while the face used a shallow ellipsoid. At extreme poses, identical artwork coordinates separated by more than 80 pixels and outer hair triangles folded over themselves. Face, scalp, bangs, side hair, ears and tail roots now share one corrected attachment and rotation frame. Outside normalized radius 0.60, the illustrated surface continues along the cap tangent instead of falling down a square-root boundary. The contour-preservation control blends this extension and the jaw ribbon with the pure surface. At full preservation, the original hair layers own the visible outline; the opaque sphere reference backing fades out. The yellow diagnostic sphere remains a closed, rigid sphere.
+The default gain remains 0.65, so input yaw 50 and pitch 20 correspond to actual angles 32.5 and 13 degrees. The separate extreme captures use gain 1. The two new controls reuse the existing parameter-row component, font, spacing and panel scroll behavior; no new CSS dimensions or explanatory copy were added.
 
-The default rotation gain is 0.65. Auto inputs remain X 50, Y 28 and Z 14, while actual XYZ rotation amplitudes are 32.5, 18.2 and 14 degrees. The viewport reports the effective angles. The gain slider reaches 1.00, and the pure preset uses 1.00. This calibration retains the portrait's proportions while showing real depth, near/far-eye asymmetry and occlusion. [Continuous yaw comparison](captures/viewer_yaw_sweep.png) shows the outer silhouette and visible ears throughout the range. The recommended surface has no flipped triangles in 72 attachment/pose/gain cases, including gain 1.00 at all four extreme XY corners.
+## Verification
 
-## Regression evidence
+- `node pipeline/test_hair_shell.mjs`: 92 checks passed, including shared crown depth, exact cheek-boundary coordinates, north-pole depth, pitch exposure and preserved face geometry.
+- `node pipeline/test_attachment.mjs`: 200 part/pose/gain cases passed with no reversed triangles, including gain 1 at yaw +/-50 and pitch +/-28.
+- `node pipeline/test_corrections.mjs`: 401 checks passed for face corrections, embedded eye spheres, neck yaw independence and fixed roll pivot.
+- `node pipeline/test_sphere_3d.mjs`: closed sphere, rigid eyes and zero neck-yaw displacement passed.
+- `node --test tests/head-turn.test.mjs`: 12 tests passed.
+- `python3 pipeline/verify_viewer.py`: passed on Linux Chromium software WebGL. Both new inputs update their parameters, image enlargement and automatic motion work, eye clipping and neck masking pass, and neither 1440 by 900 nor 1024 by 768 overflows. Console errors, failed requests and WebGL errors are zero.
 
-[Metrics](viewer_metrics.json) report the actual composited pixel difference when ears, nose, mouth and ties are toggled at seven poses. Eye clipping is measured for 72 layer/pose/blink cases. Neck yaw displacement stays zero; neck cap pixels outside the face mask are tested separately from raw attachment point diagnostics. The head/eye radius error is measured in XYZ relative to the transformed center. Yaw/pitch preserve the head center. Roll fixes the neck joint and moves the head center along an arc without resizing the sphere. Diagnostic raster size varies by at most one pixel. [Neck-pivot roll](captures/viewer_1440_neck_pivot_roll.png).
+[Measured results](viewer_metrics.json) include hair bounds, visible ear contributions and the crown layer's pixel contribution. A single layer's contribution is affected by overlapping bangs and is not a measurement of total visible scalp area. Pitch exposure is also checked from the transformed upper-cap boundaries and the actual captures. The guide sphere remains rigid and independent of the artwork corrections.
 
-[Front grid](captures/viewer_1440_front_grid.png), [left grid](captures/viewer_1440_turn_left_25_grid.png), [right grid](captures/viewer_1440_turn_right_25_grid.png), [up grid](captures/viewer_1440_pitch_up_20_grid.png), [down grid](captures/viewer_1440_pitch_down_20_grid.png), [extreme left](captures/viewer_1440_range_left.png), [extreme right](captures/viewer_1440_range_right.png), [partial blink](captures/viewer_1440_half_blink.png), [narrow layout](captures/viewer_1024_narrow.png).
-
-Captures use Linux Chromium software WebGL at 1440 by 900 and 1024 by 768. The reference sphere's rear texture is reconstructed from an unobstructed crown strip of the supplied artwork. This is an illustration rig, not an anatomical multi-view reconstruction.
+The geometric tests were retained after the renderer-only overlap fix; the affected browser checks and captures were regenerated. Independent code review passed. These captures are the handoff for a separate UI/UX review, not its verdict.
