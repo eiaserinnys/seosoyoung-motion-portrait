@@ -1,0 +1,11 @@
+{
+  "character": "Seosoyoung",
+  "segmentation": "fal-ai/sam-3/image cached masks",
+  "restoration": "deterministic pixel interpolation and alpha geometry",
+  "externalGenerativeInpainting": false,
+  "sourceCanvas": [
+    1024,
+    1536
+  ],
+  "sphereSurface": "front skin and owned rear hair baked to equirectangular texture"
+}

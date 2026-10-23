@@ -1,0 +1,48 @@
+{
+  "parts": [
+    {
+      "id": "upper-body-short-sleeve",
+      "label": "숏 슬리브 상반신",
+      "src": "assets/upper-body-short-sleeve-v2.png",
+      "stageBounds": {
+        "x": 0,
+        "y": 576,
+        "width": 1024,
+        "height": 960
+      }
+    },
+    {
+      "id": "necklace",
+      "label": "목걸이",
+      "src": "assets/necklace-v1.png",
+      "stageBounds": {
+        "x": 0,
+        "y": 576,
+        "width": 1024,
+        "height": 960
+      }
+    },
+    {
+      "id": "sweater",
+      "label": "스웨터",
+      "src": "assets/sweater-v1.png",
+      "stageBounds": {
+        "x": 0,
+        "y": 576,
+        "width": 1024,
+        "height": 960
+      }
+    },
+    {
+      "id": "skirt",
+      "label": "치마",
+      "src": "assets/skirt-v1.png",
+      "stageBounds": {
+        "x": 0,
+        "y": 576,
+        "width": 1024,
+        "height": 960
+      }
+    }
+  ]
+}

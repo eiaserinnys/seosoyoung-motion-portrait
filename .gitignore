@@ -8,3 +8,8 @@ __pycache__/
 *.can3
 *.rar
 *.zip
+
+.venv/
+debug/
+inpainted/
+*.log

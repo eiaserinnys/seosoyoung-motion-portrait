@@ -1,0 +1,314 @@
+{
+  "hairpin": {
+    "prompt": "blue bunny hair clip ornament",
+    "crop_box": [
+      620,
+      220,
+      730,
+      330
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9340656995773315,
+    "area_px": 1274
+  },
+  "ear-right": {
+    "prompt": "human ear",
+    "crop_box": [
+      600,
+      380,
+      740,
+      550
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9500454068183899,
+    "area_px": 1541
+  },
+  "face-skin": {
+    "prompt": "anime girl face skin",
+    "crop_box": [
+      250,
+      180,
+      760,
+      640
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.923012912273407,
+    "area_px": 58725
+  },
+  "ear-left": {
+    "prompt": "human ear",
+    "crop_box": [
+      260,
+      380,
+      400,
+      550
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9595746994018555,
+    "area_px": 1894
+  },
+  "tail-left-tie": {
+    "prompt": "blue spherical hair tie beads",
+    "crop_box": [
+      220,
+      480,
+      395,
+      610
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9729228019714355,
+    "area_px": 5519
+  },
+  "eye-right-opening": {
+    "prompt": "anime eye eyeball",
+    "crop_box": [
+      535,
+      360,
+      685,
+      490
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9652220010757446,
+    "area_px": 5792
+  },
+  "tail-right-tie": {
+    "prompt": "blue spherical hair tie beads",
+    "crop_box": [
+      605,
+      480,
+      775,
+      610
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9678609371185303,
+    "area_px": 5302
+  },
+  "eye-left-opening": {
+    "prompt": "anime eye eyeball",
+    "crop_box": [
+      320,
+      360,
+      470,
+      490
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.96770179271698,
+    "area_px": 5856
+  },
+  "eye-left-iris": {
+    "prompt": "colorful iris of eye",
+    "crop_box": [
+      320,
+      360,
+      470,
+      490
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9333828091621399,
+    "area_px": 2996
+  },
+  "eye-right-iris": {
+    "prompt": "colorful iris of eye",
+    "crop_box": [
+      535,
+      360,
+      685,
+      490
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9714607000350952,
+    "area_px": 2873
+  },
+  "tail-left-hair": {
+    "prompt": "long twin tail ponytail hair",
+    "crop_box": [
+      130,
+      490,
+      410,
+      1150
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9769303202629089,
+    "area_px": 67908
+  },
+  "bangs-front": {
+    "prompt": "front bangs hair",
+    "crop_box": [
+      270,
+      60,
+      720,
+      440
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9458343982696533,
+    "area_px": 54597
+  },
+  "necklace": {
+    "prompt": "gold chain clover pendant necklace",
+    "crop_box": [
+      380,
+      660,
+      620,
+      890
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9883173108100891,
+    "area_px": 2259
+  },
+  "tail-right-hair": {
+    "prompt": "long twin tail ponytail hair",
+    "crop_box": [
+      590,
+      490,
+      860,
+      1150
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9718531370162964,
+    "area_px": 69893
+  },
+  "neck": {
+    "prompt": "neck and collarbone skin",
+    "crop_box": [
+      340,
+      560,
+      660,
+      800
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9448065161705017,
+    "area_px": 27501
+  },
+  "sweater": {
+    "prompt": "cream white cable knit sweater",
+    "crop_box": [
+      0,
+      680,
+      1024,
+      1536
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9883086085319519,
+    "area_px": 462839
+  },
+  "skirt": {
+    "prompt": "blue plaid pleated skirt",
+    "crop_box": [
+      180,
+      1300,
+      830,
+      1536
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9742105603218079,
+    "area_px": 75969
+  },
+  "eye-left-brow": {
+    "prompt": "eyebrow line",
+    "crop_box": [
+      320,
+      320,
+      470,
+      390
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9321424961090088,
+    "area_px": 292
+  },
+  "side-hair-left": {
+    "prompt": "side hair strands hanging down beside left cheek and ear",
+    "crop_box": [
+      180,
+      100,
+      430,
+      590
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9333990812301636,
+    "area_px": 20817
+  },
+  "hair-crown-all": {
+    "prompt": "upper hair crown and bangs and side locks",
+    "crop_box": [
+      180,
+      0,
+      810,
+      600
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9790805578231812,
+    "area_px": 154763
+  },
+  "side-hair-right": {
+    "prompt": "right side hair lock framing cheek",
+    "crop_box": [
+      580,
+      100,
+      800,
+      590
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9566554427146912,
+    "area_px": 36398
+  },
+  "eye-right-brow": {
+    "prompt": "eyebrow line",
+    "crop_box": [
+      530,
+      320,
+      675,
+      390
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.8944282531738281,
+    "area_px": 380
+  },
+  "eye-left-upper-lashes": {
+    "prompt": "dark upper eyelashes arch",
+    "crop_box": [
+      320,
+      365,
+      470,
+      470
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9470704197883606,
+    "area_px": 1672
+  },
+  "eye-right-upper-lashes": {
+    "prompt": "dark upper eyelashes arch",
+    "crop_box": [
+      535,
+      365,
+      680,
+      470
+    ],
+    "upscale": 2,
+    "num_masks_returned": 1,
+    "score": 0.9364568591117859,
+    "area_px": 930
+  }
+}

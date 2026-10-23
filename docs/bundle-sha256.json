@@ -1,0 +1,19 @@
+{
+  "app.mjs": "cd65aa2d116321000c99f0d5bb8db9d06af0e3abe8616360e1d39469ef88484b",
+  "assets/before_after_parts_comparison.png": "4ccfb72811ff2806779e1ae3635177f887825d9902a42aad4090f9d4b9a90376",
+  "assets/head-surface-before.png": "55ca56bb42eeef1766927766d7fc18e90899aa8d75763a472cc03068bf8b29b9",
+  "assets/head-surface.png": "55ca56bb42eeef1766927766d7fc18e90899aa8d75763a472cc03068bf8b29b9",
+  "assets/provenance.json": "ddaf71544bbd5f62bdea4b058bf2baac4b3702e5bf402bf9ae518123a4d95f5e",
+  "assets/sam3_masks_grid.png": "f208ee4ecd71cc47e0b4317d119e8d50113b57c844fc74f850fd42662f3afe15",
+  "assets/seosoyoung-rig.json": "3f1cf70ac79802906ad88d6d4404bf4c583df1039fcedecd3e2fea9092914b87",
+  "assets/texture_00.png": "ba7aa5de69b9ae8ad927117100787c1a789ae5cd2987cc5f938f208ce2bff5c2",
+  "assets/texture_before_00.png": "bcebcda9825d4511e10036abb6f8b63aedc96b722c667e6e0310f29708744654",
+  "corrections.mjs": "0bb70c46df87fd9a46559efa598774c9e10beabed258cae19b9dfafd849c4a44",
+  "geometry.mjs": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d",
+  "head-turn.mjs": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf",
+  "index.html": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
+  "og.png": "6c77ba2b2e6ce49606bba730ce9549e9eafcd08cd3722caa536d7c53692a8144",
+  "renderer.mjs": "ec72e359c790f7504c03e2e8a7ba83ae47a1a422838d53a5ebc36fe81da0345a",
+  "rig.mjs": "a150f54f85a589a4b5a3b7e92b37e9aabd07dcf9ef475816d0cb46fc695bf195",
+  "style.css": "631a46373275cbe1aa0f2f8ffd4dbebaa971e7551dc388ed8ab77bf844dec1e0"
+}
