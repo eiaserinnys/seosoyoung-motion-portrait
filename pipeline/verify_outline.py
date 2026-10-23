@@ -25,6 +25,14 @@ try:
       const full=read({}),near=yaw<0?'right':'left',far=yaw<0?'left':'right';
       const contribution=id=>{const hidden=read({hidden:new Set([id])});let n=0;for(let i=0;i<full.length;i+=4)if(diff(full,hidden,i)>12)n++;return n;};
       const identification=read({identify:'ear-'+near});
+      let foreheadSideHairPixels=0;
+      if((gain===.65&&Math.abs(yaw)===50)||(gain===1&&Math.abs(yaw)===45)){
+        const hair=read({identify:'side-hair-'+near}),{scale,ox,oy}=renderer.view;
+        for(let sy=Math.ceil(oy+280*scale);sy<oy+365*scale;sy++)for(let sx=0;sx<w;sx++){
+          const x=(sx-ox)/scale;
+          if((yaw<0?x<535:x>469)&&hair[((h-1-sy)*w+sx)*4]>200)foreheadSideHairPixels++;
+        }
+      }
       let nearEarPixels=0;for(let i=0;i<identification.length;i+=4)if(identification[i]>200)nearEarPixels++;
       const side=solo(['side-hair-'+far,'face-skin']);
       const back=solo(['back-hair-'+far]),lowerBack=solo(['back-hair-'+far,'back-hair-center']);
@@ -73,7 +81,7 @@ try:
         if(c[0]-a[0]!==20)continue;
         maxConcavity=Math.max(maxConcavity,b[1]-(a[1]+c[1])/2,(a[2]+c[2])/2-b[2]);
       }
-      rows.push({gain,yaw,headInteriorHolePixels,holeLocations,leakLocations,cheekEarGapPixels,maxConcavity,contour,nearEarPixels:yaw?nearEarPixels:null,nearEarColorContribution:yaw?contribution('ear-'+near):null,earOverlap,farBackOutsidePixels:leak,farEarPixels:yaw?contribution('ear-'+far):null,
+      rows.push({gain,yaw,foreheadSideHairPixels,headInteriorHolePixels,holeLocations,leakLocations,cheekEarGapPixels,maxConcavity,contour,nearEarPixels:yaw?nearEarPixels:null,nearEarColorContribution:yaw?contribution('ear-'+near):null,earOverlap,farBackOutsidePixels:leak,farEarPixels:yaw?contribution('ear-'+far):null,
         nearCraniumPixels:contribution('side-cranium-'+near),farCraniumPixels:contribution('side-cranium-'+far)});
     }
     return rows;

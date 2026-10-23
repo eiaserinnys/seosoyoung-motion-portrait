@@ -24,6 +24,12 @@ def build():
             l,r=runs[0][0],runs[-1][1]
             if p['id']=='hair-top':l-=x;r-=x
             domain[row,max(0,l):min(w,r)]=True
+        if p['id']=='back-hair-center':
+            # The continuous backing overlaps the independently moving temple
+            # lock by two texels, including its antialiased inner edge.
+            expanded=cv2.dilate(domain.astype(np.uint8),np.ones((5,5),np.uint8))>0
+            upper=(np.arange(h)+y>=200)&(np.arange(h)+y<=400)
+            domain[upper]=expanded[upper]
         repair=domain & (a[:,:,3]<255)
         rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
         a[repair,:3]=rgb[repair];a[domain,3]=255

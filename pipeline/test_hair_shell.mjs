@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
+import {domeSection} from '../bundle/hair-surface.mjs';
 import {hairLift,hairWorld,sideWorld} from '../bundle/hair-shell.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
@@ -43,5 +44,14 @@ for(const side of ['left','right']){
  assert(opacity(mesh(id),p,{hidden:new Set()})<opacity(mesh(id),{...p,CorrHairOcclusion:0},{hidden:new Set()}),'far ear occlusion control');checks++;
  const nearPose={...p,ParamAngleX:-yaw};
  assert(width(nearPose)>width(p),'near ear remains wider');checks++;
+}
+// The temple lock must not overtake its fringe into the forehead arch.
+for(const [side,x,yaw,edge] of [['right',674,-45,535],['left',330,45,469]]){
+ const q=sideWorld([x,330],side,{...base,CorrTurn:1,ParamAngleX:yaw});
+ assert(side==='right'?q[0]>=edge:q[0]<=edge,`${side} temple crosses forehead: ${q[0]}`);checks++;
+}
+for(const side of ['left','right'])for(const y of [200,260,330,350])for(const yaw of [-45,0,45]){
+ const {cx,rx}=domeSection(y),xy=[502+cx+(side==='left'?-rx:rx),y],p={...base,CorrTurn:1,ParamAngleX:yaw};
+ near(sideWorld(xy,side,p),hairWorld(xy,p,4));checks++;
 }
 console.log(`PASS ${checks} hair shell and preserved face checks`);

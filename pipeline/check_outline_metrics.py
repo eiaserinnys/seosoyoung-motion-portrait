@@ -5,6 +5,7 @@ from pathlib import Path
 def validate(rows):
     assert rows and {r['gain'] for r in rows}=={.65,1}
     assert all(r['earOverlap']==0 for r in rows)
+    assert all(r['foreheadSideHairPixels']==0 for r in rows)
     assert all(r['cheekEarGapPixels']==0 for r in rows)
     assert all(r['headInteriorHolePixels']==0 for r in rows)
     assert all(r['maxConcavity']<=20 for r in rows)
@@ -20,7 +21,7 @@ def validate(rows):
 if __name__=='__main__':
     rows=json.loads((Path(__file__).resolve().parents[1]/'debug/outline_metrics.json').read_text())
     validate(rows)
-    for key in ['earOverlap','farBackOutsidePixels','farCraniumPixels','farEarPixels','cheekEarGapPixels','headInteriorHolePixels']:
+    for key in ['foreheadSideHairPixels','earOverlap','farBackOutsidePixels','farCraniumPixels','farEarPixels','cheekEarGapPixels','headInteriorHolePixels']:
         broken=copy.deepcopy(rows);broken[0][key]=1
         try:validate(broken)
         except AssertionError:continue
@@ -33,4 +34,4 @@ if __name__=='__main__':
     try:validate(broken)
     except AssertionError:pass
     else:raise AssertionError('Checker accepted a stepped skull contour')
-    print('PASS raster contract and 8 injected violations rejected')
+    print('PASS raster contract and 9 injected violations rejected')

@@ -88,18 +88,18 @@ Four required near-ear measurements, at 1440×900 CSS pixels and DPR 2:
 
 All 14 pose/gain cases have zero front ear intrusion, zero exposed far lower-back pixels, zero head-interior holes and zero cheek–ear gap pixels. Front and far cranium contribution is zero; the near surface is visible when turned. Head-interior sampling follows the fitted section from y=80 to 420, inset 15 canvas pixels from loose strands/antialias edges. It catches both enclosed holes and the formerly open upper seam. Ear-gap sampling separately checks the face–ear attachment from y=440 to 490.
 
-The upper outline is sampled every ten canvas pixels from y=60 to 420. Maximum inward midpoint deviation is 16.7247 px, below the 20 px tolerance for the original drawing's loose strands (previous front-art baseline approximately 17.5 px). This is a step/notch detector, not a claim that every individual strand forms a mathematically convex silhouette. The fitted upper dome itself has continuous ellipsoidal curvature.
+The upper outline is sampled every ten canvas pixels from y=60 to 420. Maximum inward midpoint deviation is 16.0279 px, below the 20 px tolerance for the original drawing's loose strands (previous front-art baseline approximately 17.5 px). This is a step/notch detector, not a claim that every individual strand forms a mathematically convex silhouette. The fitted upper dome itself has continuous ellipsoidal curvature.
 
 | Executed check | Result |
 |:--|:--|
 | Outline/stereo tests | 14 passed; measured eye, nose, mouth, ear, bead and face endpoints |
 | Attachment sweep | 200 cases; no collapsed 3D original-part triangles or reversed facial ribbons; spherical backfaces culled |
-| Hair/face preservation | 92 checks passed |
+| Hair/face preservation | 118 checks passed |
 | Correction controls | 402 checks passed |
 | Sphere and head-turn baseline | Sphere/eye rigidity and fixed neck passed; 12 head-turn tests passed |
 | Alpha silhouette topology | 2 tests passed: concavity/thin-strand coverage and constrained horizon |
 | WebGL outline raster | 14 poses passed; required ears ≥1800 px and all hole/occlusion checks zero |
-| Raster checker mutation tests | 8 injected violations rejected |
+| Raster checker mutation tests | 9 injected violations rejected |
 | Full viewer/browser | Passed: feature visibility, iris clipping, neck coverage, controls, narrow layout and zero WebGL/console/request errors |
 
 [Raster evidence](outline_metrics.json) preserves all values and contour rows. Shader/geometry/mesh changes received independent code review; the UV-boundary finding was corrected and rechecked.
@@ -120,6 +120,16 @@ Focused checks are `pipeline/test_outline.mjs`, `test_hair_shell.mjs`, `test_att
 
 The first revision omitted unmasked eye layers from the face-decal branch. Their measured anchor depth was behind the preserved skin: the front lower lines, brows and sclera contributed zero pixels, while the masked iris remained visible. All `eye-*` layers and `closed-eyes-v1` now use the same decal depth policy as nose/mouth. Masked iris clipping and the later side/front hair rendering remain intact.
 
-The assembled-view visibility test now includes both upper lashes, lower lines, brows and sclera, across the original seven poses plus input ±50°. These nine poses require every tested eye layer to contribute visible pixels. Actual ±45° additionally checks side-hair occlusion. At those endpoints the near eyebrow is fully covered by hair; a separate all-parts render with hair hidden verifies that the eyebrow is visible over skin. This distinguishes intended hair occlusion from the rejected skin-depth failure without changing the approved hairstyle or feature coordinates.
+The assembled-view visibility test now includes both upper lashes, lower lines, brows and sclera, across the original seven poses plus input ±50°. These nine poses require every tested eye layer to contribute visible pixels. Actual ±45° additionally checks side-hair occlusion. At those endpoints a separate all-parts render with hair hidden verifies that the near eyebrow is visible over skin, independently of the hairstyle’s occlusion. This distinguishes intended hair occlusion from the rejected skin-depth failure without changing the approved hairstyle or feature coordinates.
 
-Final browser verification passed: 72 assembled eye-layer observations are nonzero (minimum 6 pixels at DPR 1). Side-hair occlusion at actual −45°/+45° covers 55/36 eye pixels. With hair hidden, the near brows contribute 68/76 pixels. Updated captures include front, input ±50°, actual ±45°, pitch ±20°, yaw sweep and the narrow layout.
+Final browser verification passed: 72 assembled eye-layer observations are nonzero (minimum 27 pixels at DPR 1). Side-hair occlusion at actual −45°/+45° covers 16/14 eye pixels. With hair hidden, the near brows contribute 68/76 pixels. Updated captures include front, input ±50°, actual ±45°, pitch ±20°, yaw sweep and the narrow layout.
+
+## Temple depth continuity
+
+The upper inner side-hair used the broad skull depth (about +215 px) while its covering fringe used about +121 px. At actual −45° the right temple sample (674,330) projected to x=476.05 and crossed the forehead arch. The inner temple now blends from fringe depth into the measured hanging lock between y260 and407. The influence rises inward over 60 pixels from the common horizon and over y200..260; at the outer seam it is exactly zero. At y407 the established lower-lock transform is unchanged.
+
+Moving that lock exposed seven background pixels at +32.5°: a reverse projection found the central backing's transparent 1–2 texel edge at source x310..312, y374. The backing's existing filled region now overlaps by two texels over y200..400, inpainted from neighboring hair. This keeps the joint covered without changing the foreground silhouette or face fit.
+
+The raster contract identifies the near side-hair in the assembled image and requires zero pixels in y280..365 with x<535 for left turns and x>469 for right turns, at effective ±32.5° and ±45°. Geometry checks also preserve both outer seams at y200,260,330,350 across three yaw values.
+
+Final temple verification: all four forehead intrusion counts are 0; all 14 pose/gain cases retain 0 interior-hole, cheek–ear-gap and far-back-exposure pixels. Required near-ear counts remain 1950/2224/2017/2274. The full browser suite passes with all 72 eye-layer visibility observations nonzero. All nine requested captures were regenerated and opened; the left-turn forehead arch shows skin rather than the former diagonal side-hair patch.

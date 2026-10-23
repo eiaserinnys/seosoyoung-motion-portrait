@@ -1,5 +1,5 @@
 import {strandWorld} from './side-strands.mjs';
-import {hairSurface} from './hair-surface.mjs';
+import {hairSurface,domeSection} from './hair-surface.mjs';
 import {earWorld} from './stereo-attachments.mjs';
 import {DOME} from './dome-data.mjs';
 export {craniumWeight,craniumWorld} from './cranium-surface.mjs';
@@ -41,6 +41,14 @@ export function sideWorld(point,side,p,ear=false) {
  // than being flattened onto the narrower skull at ear height. Rotation moves
  // them in front of the cheek, uncovering the posterior ear naturally.
  const shell=hairWorld(point,p,4),lock=strandWorld(point,side,p),face=outlineWorld(point,p,0);
+ // Only the outer horizon belongs to the broad skull shell. The inner
+ // temple lies behind the fringe and joins the measured hanging lock.
+ const section=domeSection(point[1]);
+ const seam=HEAD_CENTER[0]+section.cx+(side==='left'?-section.rx:section.rx);
+ const inset=(side==='left'?1:-1)*(point[0]-seam);
+ const temple=smooth(inset/60)*smooth((point[1]-200)/60);
+ const fringe=fringeWorld(point,p,4),lower=smooth((point[1]-260)/147);
+ for(let i=0;i<3;i++)shell[i]+=(fringe[i]+(lock[i]-fringe[i])*lower-shell[i])*temple;
  const hanging=smooth((point[1]-350)/57);
  for(let i=0;i<3;i++)shell[i]+=(lock[i]-shell[i])*hanging;
  const world=shell.map((v,i)=>v+(face[i]-v)*join);
