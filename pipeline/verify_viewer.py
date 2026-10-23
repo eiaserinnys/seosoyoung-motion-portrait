@@ -121,13 +121,30 @@ try:
     const {renderer,state,p}=studio,gl=renderer.gl,results=[];
     const read=hidden=>{renderer.render(p,{...state,mode:'all',grid:false,wire:false,hidden});const d=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);return d;};
     p.ParamEyeLOpen=p.ParamEyeROpen=1;
-    for(const [x,y,z]of [[0,0,0],[-25,0,0],[25,0,0],[0,20,0],[0,-20,0],[-50,-28,-14],[50,28,14]]){
-      Object.assign(p,{ParamAngleX:x,ParamAngleY:y,ParamAngleZ:z});const visible=read(new Set());
-      for(const id of ['ear-left','ear-right','mouth-detail','nose-detail','tail-left-tie','tail-right-tie']){
+    for(const [x,y,z,gain=.65]of [[0,0,0],[-25,0,0],[25,0,0],[0,20,0],[0,-20,0],[-50,-28,-14],[50,28,14],[-50,0,0],[50,0,0]]){
+      Object.assign(p,{ParamAngleX:x,ParamAngleY:y,ParamAngleZ:z,CorrTurn:gain});const visible=read(new Set());
+      for(const id of ['ear-left','ear-right','mouth-detail','nose-detail','tail-left-tie','tail-right-tie',...['left','right'].flatMap(side=>['upper-lashes','lower-line','brow','sclera'].map(part=>'eye-'+side+'-'+part))]){
         const hidden=read(new Set([id]));let pixels=0;for(let i=0;i<hidden.length;i+=4)if(Math.abs(hidden[i]-visible[i])+Math.abs(hidden[i+1]-visible[i+1])+Math.abs(hidden[i+2]-visible[i+2])>12)pixels++;
-        results.push({pose:[x,y,z],id,pixels});
+        results.push({pose:[x,y,z],gain,id,pixels});
       }
     }return results;
+  }""")
+  metrics['eyeHairOcclusion']=page.evaluate("""() => {
+    const {renderer,state,p}=studio,gl=renderer.gl,rows=[];
+    const eyes=renderer.rig.meshes.filter(m=>m.id.startsWith('eye-')).map(m=>m.id);
+    const read=hidden=>{renderer.render(p,{...state,mode:'all',grid:false,wire:false,hidden,identify:eyes});const d=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);return d;};
+    for(const yaw of [-45,45]){
+      Object.assign(p,{ParamAngleX:yaw,ParamAngleY:0,ParamAngleZ:0,CorrTurn:1,ParamEyeLOpen:1,ParamEyeROpen:1});
+      const normal=read(new Set()),uncovered=read(new Set(['side-hair-left','side-hair-right']));let pixels=0;
+      for(let i=0;i<normal.length;i+=4)if(uncovered[i]>127&&normal[i]<64)pixels++;
+      const hair=renderer.rig.meshes.filter(m=>m.id.includes('hair')||m.id.startsWith('bangs')).map(m=>m.id);
+      const brow='eye-'+(yaw<0?'right':'left')+'-brow';
+      renderer.render(p,{...state,mode:'all',grid:false,wire:false,hidden:new Set(hair),identify:[brow]});
+      const d=new Uint8Array(normal.length);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);
+      let browWithoutHairPixels=0;for(let i=0;i<d.length;i+=4)if(d[i]>127)browWithoutHairPixels++;
+      rows.push({yaw,sideHairCoveredEyePixels:pixels,browWithoutHairPixels});
+    }
+    return rows;
   }""")
   metrics['correctionPresets']={}
   for preset in ['pure','recommended']:
@@ -186,6 +203,7 @@ try:
   assert metrics['attachment']['maxFolded']==0
   # Far ears are allowed to disappear behind the cheek in r10.
   assert all(r['pixels']>0 for r in metrics['featureVisibility'] if not r['id'].startswith('ear-'))
+  assert all(r['sideHairCoveredEyePixels']>0 and r['browWithoutHairPixels']>0 for r in metrics['eyeHairOcclusion'])
   assert metrics['maxSphereRasterDrift']<=1 and metrics['maxSphereRollSizeDrift']<=1
   g=metrics['geometry'];assert g['radiusError']<1e-9 and g['eyeRadiusError']<1e-9 and g['neckYawError']==0 and g['eyeLocalHeadLeak']==0 and g['bodyHeadLeak']==0 and g['frontHemisphere'] and g['backHemisphere'] and g['shirtOpacity']==0
   # Raw attachment points are diagnostic; neck pixels outside the face are clipped at the cap.

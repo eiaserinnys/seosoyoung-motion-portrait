@@ -604,7 +604,7 @@
     "nearEarColorContribution": 1218,
     "earOverlap": 0,
     "farBackOutsidePixels": 0,
-    "farEarPixels": 145,
+    "farEarPixels": 113,
     "nearCraniumPixels": 1179,
     "farCraniumPixels": 0
   },
@@ -1010,7 +1010,7 @@
     "nearEarColorContribution": 1489,
     "earOverlap": 0,
     "farBackOutsidePixels": 0,
-    "farEarPixels": 79,
+    "farEarPixels": 73,
     "nearCraniumPixels": 1191,
     "farCraniumPixels": 0
   },

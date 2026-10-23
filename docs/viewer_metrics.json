@@ -110,7 +110,7 @@
     }
   ],
   "surfaceComparison": {
-    "changedPixels": 35681
+    "changedPixels": 36013
   },
   "geometry": {
     "radiusError": 1.7053025658242404e-13,
@@ -1040,6 +1040,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "ear-left",
       "pixels": 271
     },
@@ -1049,8 +1050,9 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "ear-right",
-      "pixels": 245
+      "pixels": 244
     },
     {
       "pose": [
@@ -1058,6 +1060,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "mouth-detail",
       "pixels": 15
     },
@@ -1067,6 +1070,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "nose-detail",
       "pixels": 27
     },
@@ -1076,6 +1080,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "tail-left-tie",
       "pixels": 605
     },
@@ -1085,17 +1090,89 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "tail-right-tie",
       "pixels": 608
     },
     {
       "pose": [
-        -25,
+        0,
         0,
         0
       ],
-      "id": "ear-left",
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 323
+    },
+    {
+      "pose": [
+        0,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
       "pixels": 37
+    },
+    {
+      "pose": [
+        0,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 41
+    },
+    {
+      "pose": [
+        0,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 192
+    },
+    {
+      "pose": [
+        0,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 309
+    },
+    {
+      "pose": [
+        0,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 36
+    },
+    {
+      "pose": [
+        0,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 71
+    },
+    {
+      "pose": [
+        0,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 182
     },
     {
       "pose": [
@@ -1103,6 +1180,17 @@
         0,
         0
       ],
+      "gain": 0.65,
+      "id": "ear-left",
+      "pixels": 27
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
       "id": "ear-right",
       "pixels": 316
     },
@@ -1112,6 +1200,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "mouth-detail",
       "pixels": 15
     },
@@ -1121,6 +1210,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "nose-detail",
       "pixels": 24
     },
@@ -1130,6 +1220,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "tail-left-tie",
       "pixels": 654
     },
@@ -1139,8 +1230,89 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "tail-right-tie",
       "pixels": 677
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 299
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 40
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 41
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 181
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 319
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 40
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 50
+    },
+    {
+      "pose": [
+        -25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 191
     },
     {
       "pose": [
@@ -1148,6 +1320,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "ear-left",
       "pixels": 374
     },
@@ -1157,8 +1330,9 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "ear-right",
-      "pixels": 16
+      "pixels": 15
     },
     {
       "pose": [
@@ -1166,6 +1340,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "mouth-detail",
       "pixels": 16
     },
@@ -1175,6 +1350,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "nose-detail",
       "pixels": 23
     },
@@ -1184,6 +1360,7 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "tail-left-tie",
       "pixels": 745
     },
@@ -1193,8 +1370,89 @@
         0,
         0
       ],
+      "gain": 0.65,
       "id": "tail-right-tie",
       "pixels": 657
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 324
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 41
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 36
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 193
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 289
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 39
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 68
+    },
+    {
+      "pose": [
+        25,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 169
     },
     {
       "pose": [
@@ -1202,6 +1460,7 @@
         20,
         0
       ],
+      "gain": 0.65,
       "id": "ear-left",
       "pixels": 351
     },
@@ -1211,6 +1470,7 @@
         20,
         0
       ],
+      "gain": 0.65,
       "id": "ear-right",
       "pixels": 279
     },
@@ -1220,6 +1480,7 @@
         20,
         0
       ],
+      "gain": 0.65,
       "id": "mouth-detail",
       "pixels": 15
     },
@@ -1229,6 +1490,7 @@
         20,
         0
       ],
+      "gain": 0.65,
       "id": "nose-detail",
       "pixels": 25
     },
@@ -1238,6 +1500,7 @@
         20,
         0
       ],
+      "gain": 0.65,
       "id": "tail-left-tie",
       "pixels": 717
     },
@@ -1247,17 +1510,99 @@
         20,
         0
       ],
+      "gain": 0.65,
       "id": "tail-right-tie",
       "pixels": 684
     },
     {
       "pose": [
         0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 318
+    },
+    {
+      "pose": [
+        0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 37
+    },
+    {
+      "pose": [
+        0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 43
+    },
+    {
+      "pose": [
+        0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 191
+    },
+    {
+      "pose": [
+        0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 310
+    },
+    {
+      "pose": [
+        0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 44
+    },
+    {
+      "pose": [
+        0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 74
+    },
+    {
+      "pose": [
+        0,
+        20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 183
+    },
+    {
+      "pose": [
+        0,
         -20,
         0
       ],
+      "gain": 0.65,
       "id": "ear-left",
-      "pixels": 164
+      "pixels": 161
     },
     {
       "pose": [
@@ -1265,8 +1610,9 @@
         -20,
         0
       ],
+      "gain": 0.65,
       "id": "ear-right",
-      "pixels": 160
+      "pixels": 158
     },
     {
       "pose": [
@@ -1274,6 +1620,7 @@
         -20,
         0
       ],
+      "gain": 0.65,
       "id": "mouth-detail",
       "pixels": 16
     },
@@ -1283,6 +1630,7 @@
         -20,
         0
       ],
+      "gain": 0.65,
       "id": "nose-detail",
       "pixels": 25
     },
@@ -1292,6 +1640,7 @@
         -20,
         0
       ],
+      "gain": 0.65,
       "id": "tail-left-tie",
       "pixels": 490
     },
@@ -1301,8 +1650,89 @@
         -20,
         0
       ],
+      "gain": 0.65,
       "id": "tail-right-tie",
       "pixels": 508
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 301
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 40
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 43
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 179
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 295
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 46
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 70
+    },
+    {
+      "pose": [
+        0,
+        -20,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 177
     },
     {
       "pose": [
@@ -1310,6 +1740,7 @@
         -28,
         -14
       ],
+      "gain": 0.65,
       "id": "ear-left",
       "pixels": 0
     },
@@ -1319,6 +1750,7 @@
         -28,
         -14
       ],
+      "gain": 0.65,
       "id": "ear-right",
       "pixels": 361
     },
@@ -1328,6 +1760,7 @@
         -28,
         -14
       ],
+      "gain": 0.65,
       "id": "mouth-detail",
       "pixels": 16
     },
@@ -1337,6 +1770,7 @@
         -28,
         -14
       ],
+      "gain": 0.65,
       "id": "nose-detail",
       "pixels": 25
     },
@@ -1346,6 +1780,7 @@
         -28,
         -14
       ],
+      "gain": 0.65,
       "id": "tail-left-tie",
       "pixels": 296
     },
@@ -1355,8 +1790,89 @@
         -28,
         -14
       ],
+      "gain": 0.65,
       "id": "tail-right-tie",
       "pixels": 723
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 226
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 32
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 29
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 164
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 239
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 43
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 28
+    },
+    {
+      "pose": [
+        -50,
+        -28,
+        -14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 182
     },
     {
       "pose": [
@@ -1364,6 +1880,7 @@
         28,
         14
       ],
+      "gain": 0.65,
       "id": "ear-left",
       "pixels": 687
     },
@@ -1373,6 +1890,7 @@
         28,
         14
       ],
+      "gain": 0.65,
       "id": "ear-right",
       "pixels": 0
     },
@@ -1382,6 +1900,7 @@
         28,
         14
       ],
+      "gain": 0.65,
       "id": "mouth-detail",
       "pixels": 18
     },
@@ -1391,6 +1910,7 @@
         28,
         14
       ],
+      "gain": 0.65,
       "id": "nose-detail",
       "pixels": 24
     },
@@ -1400,6 +1920,7 @@
         28,
         14
       ],
+      "gain": 0.65,
       "id": "tail-left-tie",
       "pixels": 795
     },
@@ -1409,8 +1930,381 @@
         28,
         14
       ],
+      "gain": 0.65,
       "id": "tail-right-tie",
       "pixels": 725
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 303
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 37
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 27
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 187
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 224
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 30
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 57
+    },
+    {
+      "pose": [
+        50,
+        28,
+        14
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 141
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "ear-left",
+      "pixels": 0
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "ear-right",
+      "pixels": 594
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "mouth-detail",
+      "pixels": 16
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "nose-detail",
+      "pixels": 27
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "tail-left-tie",
+      "pixels": 641
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "tail-right-tie",
+      "pixels": 690
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 258
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 35
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 37
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 166
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 302
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 40
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 6
+    },
+    {
+      "pose": [
+        -50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 190
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "ear-left",
+      "pixels": 663
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "ear-right",
+      "pixels": 0
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "mouth-detail",
+      "pixels": 18
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "nose-detail",
+      "pixels": 24
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "tail-left-tie",
+      "pixels": 686
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "tail-right-tie",
+      "pixels": 615
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-upper-lashes",
+      "pixels": 315
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-lower-line",
+      "pixels": 44
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-brow",
+      "pixels": 15
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-left-sclera",
+      "pixels": 198
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-upper-lashes",
+      "pixels": 238
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-lower-line",
+      "pixels": 27
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-brow",
+      "pixels": 50
+    },
+    {
+      "pose": [
+        50,
+        0,
+        0
+      ],
+      "gain": 0.65,
+      "id": "eye-right-sclera",
+      "pixels": 145
+    }
+  ],
+  "eyeHairOcclusion": [
+    {
+      "yaw": -45,
+      "sideHairCoveredEyePixels": 55,
+      "browWithoutHairPixels": 68
+    },
+    {
+      "yaw": 45,
+      "sideHairCoveredEyePixels": 36,
+      "browWithoutHairPixels": 76
     }
   ],
   "correctionPresets": {
@@ -1455,7 +2349,7 @@
       "crownPixels": 1922,
       "earPixels": [
         271,
-        245
+        244
       ],
       "hairBounds": [
         277,
@@ -1472,7 +2366,7 @@
       ],
       "crownPixels": 2037,
       "earPixels": [
-        37,
+        27,
         316
       ],
       "hairBounds": [
@@ -1491,7 +2385,7 @@
       "crownPixels": 1977,
       "earPixels": [
         374,
-        16
+        15
       ],
       "hairBounds": [
         273,
@@ -1544,8 +2438,8 @@
       ],
       "crownPixels": 2366,
       "earPixels": [
-        164,
-        160
+        161,
+        158
       ],
       "hairBounds": [
         276,
