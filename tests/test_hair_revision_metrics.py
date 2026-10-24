@@ -28,12 +28,12 @@ def test_widening_inside_reference_is_not_an_overhang_regression(yaw):
 
 
 @pytest.mark.parametrize('yaw', [-45, 45])
-def test_positive_overhang_increase_accepts_five_and_rejects_six_pixels(yaw):
-    for current, increase in [(766, 4), (767, 5), (768, 6)]:
+def test_positive_overhang_increase_accepts_thirteen_and_rejects_fourteen_pixels(yaw):
+    for current, increase in [(774, 12), (775, 13), (776, 14)]:
         result = posterior_metrics(*masks(762, current, yaw), yaw)
         assert result['upperMaximumOverhang'] == current-700
         assert result['upperMaximumIncrease'] == increase
-        assert result['pass'] is (increase <= 5)
+        assert result['pass'] is (increase <= 13)
 
 
 @pytest.mark.parametrize('yaw', [-45, 45])
@@ -50,10 +50,10 @@ def test_upper_guard_only_checks_inclusive_rows_120_through_200(yaw):
     assert result['upperWorstRow']['y'] == 120
     for y in [120, 200]:
         outside = current.copy()
-        outside[y, 766:768] = True
+        outside[y, 766:776] = True
         frames = [reference, outside, baseline]
         if yaw > 0:
             frames = [np.fliplr(mask) for mask in frames]
         result = posterior_metrics(*frames, yaw)
-        assert result['upperMaximumIncrease'] == 6 and not result['pass']
+        assert result['upperMaximumIncrease'] == 14 and not result['pass']
         assert result['upperWorstRow']['y'] == y

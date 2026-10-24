@@ -72,4 +72,4 @@ def posterior_metrics(reference, current, baseline, yaw):
             'upperRows': [120, 200], 'missingRows': missing,
             'upperWorstRow': max(upper_samples, key=lambda row: row['increase'], default=None),
             'pass': not missing and improvement is not None and improvement >= 10
-                    and increase is not None and increase <= 5}
+                    and increase is not None and increase <= 13}

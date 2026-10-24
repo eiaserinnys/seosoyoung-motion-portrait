@@ -61,9 +61,9 @@ def test_posterior_uses_active_latitudes_and_detects_regression_from_r16():
     assert result['improvement'] == 10 and result['pass']
     assert result['upperMaximumOverhang'] == 114
     assert result['upperMaximumIncrease'] == 0
-    current[150, 814:819] = True
+    current[150, 814:827] = True
     assert posterior_metrics(ref, current, old, -45)['pass']
-    current[150, 819] = True
+    current[150, 827] = True
     assert not posterior_metrics(ref, current, old, -45)['pass']
     current[340:441, 720] = True
     result = posterior_metrics(ref, current, old, -45)

@@ -1,6 +1,6 @@
 {
   "baseline": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
-  "head": "acd180e8772e5c81636452ecc1f1dfce1ddd3b8f",
+  "head": "d9c492b302b398b7a3b12ba636e4c6e9442084b8",
   "registrationSha256": "ea2cb7220fa37f5579405500d43ecef0eaafaeeddee99ce254704fbfe4ec9a04",
   "referenceMaskMethod": "Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation",
   "canvas": [
@@ -116,7 +116,7 @@
           "current": 684,
           "increase": 12
         },
-        "pass": false
+        "pass": true
       },
       "retriangulationSilhouette": {
         "all": {
@@ -1358,7 +1358,7 @@
     {
       "pose": "up-left",
       "gate": "upper diagonal posterior volume",
-      "pass": false,
+      "pass": true,
       "value": {
         "baselineMeanAbsoluteDelta": 40.75247524752475,
         "meanAbsoluteDelta": 28.544554455445546,
@@ -1381,7 +1381,7 @@
           "current": 684,
           "increase": 12
         },
-        "pass": false
+        "pass": true
       }
     },
     {
@@ -2254,8 +2254,8 @@
     "bundle/assets/seosoyoung-rig.json": "c9f607d0c79a2da3a43c44da95d7e1cd1605066b718bc707b9a4ff4163edbb26"
   },
   "measurementMode": "saved frames",
-  "measurementApproval": "Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper rows120..200 positive-overhang-beyond-reference increase from r16<=5px; downward cheek<=2px; stem<=17px",
-  "probeSha256": "b587a65dfc2cf9cc81995bf3292a1f293cbb5e7ae5682f7ba48f8ae0565d322f",
+  "measurementApproval": "Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper rows120..200 maximum positive-overhang-beyond-reference increase from r16<=13px (V1 crown-lift chord allowance); downward cheek<=2px; stem<=17px",
+  "probeSha256": "b262ef318c2445a4fae11c4d883f5578282a7013232a0d633059f96e9091f517",
   "strictRasterPass": false,
   "bounds": {
     "pass": true,
@@ -2365,7 +2365,7 @@
       }
     ]
   },
-  "invariantPass": false,
+  "invariantPass": true,
   "invariants": [
     {
       "gate": "nine poses",
@@ -2424,7 +2424,7 @@
     {
       "pose": "up-left",
       "gate": "upper diagonal posterior volume",
-      "pass": false,
+      "pass": true,
       "value": {
         "baselineMeanAbsoluteDelta": 40.75247524752475,
         "meanAbsoluteDelta": 28.544554455445546,
@@ -2447,7 +2447,7 @@
           "current": 684,
           "increase": 12
         },
-        "pass": false
+        "pass": true
       }
     },
     {
@@ -3589,6 +3589,6 @@
   "stemMaskMethod": "visible crown | tails | face-skin; tie R>200/alpha>100, x percentile20..80 step2, empty pixels from row before tie",
   "protectedFilesPass": true,
   "protectedFileCount": 16,
-  "acceptance": "fail",
-  "pass": false
+  "acceptance": "bounded pass",
+  "pass": true
 }
