@@ -17,13 +17,16 @@ test('neutral face and feature vertices retain every original canvas coordinate'
   assert(Math.hypot(q[0]-point[0],q[1]-point[1])<1e-9,mesh.id);
  }
 });
-test('non-node face displacements mirror exactly around each rest row',()=>{
+test('non-node face keeps mirrored X and symmetric Y beneath its fixed artwork arch',()=>{
+ const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
+ const arch=([x,y],pitch)=>-10*pitch/30*(1-Math.max(-1,Math.min(1,(x-502)/135))**2)*smooth((y-445)/90)*(1-.65*smooth((y-595)/20));
  for(const yaw of [10,22.5,37,45])for(const pitch of [-30,-15,0,18,30])for(const y of [465,510,570,610])for(const u of [0,.25,.5,.75,1]){
   const [l,r]=outlineRow(y),a=[l+(r-l)*u,y],b=[r-(r-l)*u,y];
   const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch},q={...p,ParamAngleX:yaw};
   const left=outlineWorld(a,p),right=outlineWorld(b,q);
   assert(Math.abs(left[0]-a[0]+right[0]-b[0])<1e-6,`outline X ${yaw},${pitch},${y},${u}`);
-  assert(Math.abs(left[1]-right[1])<1e-6,`outline Y ${yaw},${pitch},${y},${u}`);
+  // The approved fixed center is 502; rest-row midpoints preserve the artwork.
+  assert(Math.abs(left[1]-arch(a,pitch)-right[1]+arch(b,pitch))<1e-6,`outline Y ${yaw},${pitch},${y},${u}`);
  }
 });
 test('non-node feature centers and scales mirror while neutral art stays fixed',()=>{
@@ -37,8 +40,7 @@ test('non-node feature centers and scales mirror while neutral art stays fixed',
   const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch},q={...p,ParamAngleX:yaw};
   const l=featureWorld(ids[a],fit.front[a],p),r=featureWorld(ids[b],fit.front[b],q);
   assert(Math.abs(l[0]-fit.front[a][0]+r[0]-fit.front[b][0])<1e-6,`${a} X ${yaw},${pitch}`);
-  const phi=Math.max(-30,Math.min(30,pitch))*Math.PI/180;
-  assert(Math.abs(l[1]-r[1]-(fit.front[a][1]-fit.front[b][1])*Math.cos(phi))<1e-6,`${a} Y ${yaw},${pitch}`);
+  assert(Math.abs(l[1]-fit.front[a][1]-r[1]+fit.front[b][1])<1e-6,`${a} Y ${yaw},${pitch}`);
   if(a==='left')for(const axis of [0,1]){
    const span=(key,pose)=>{const pt=fit.front[key],lo=pt.slice(),hi=pt.slice();lo[axis]-=5;hi[axis]+=5;return featureWorld(ids[key],hi,pose)[axis]-featureWorld(ids[key],lo,pose)[axis];};
    assert(Math.abs(span(a,p)-span(b,q))<1e-6,`eye scale ${axis} ${yaw},${pitch}`);

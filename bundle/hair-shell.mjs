@@ -46,8 +46,7 @@ export function craniumWorld([x,y,lambda],side,p) {
  if(!crownBlend)return world;
  const seam=canopyWorld([HEAD_CENTER[0]+cx+sign*rx,y],p);
  if(Math.abs(Math.abs(lambda)-Math.PI/2)<1e-4)return world.map((v,i)=>v+(seam[i]-v)*crownBlend);
- const w=clamp((Math.abs(lambda)-Math.PI/2)/(Math.PI*.18),0,1);
- return [world[0],world[1]+(seam[1]-world[1])*crownBlend*(1-w),world[2]];
+ return [world[0],world[1]+(seam[1]-world[1])*crownBlend,world[2]];
 }
 export function farSideWeight(side,p) {
   const angle=p.ParamAngleX*(side==='left'?-1:1);

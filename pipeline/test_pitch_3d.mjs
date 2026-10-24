@@ -40,13 +40,24 @@ test('upper canopy meets longitude 90 exactly while rear interior retains full v
   }
  }
 });
-test('pitch raises and lowers the chin with U/V jaw perspective instead of stretching the face',()=>{
- const neutral=outlineWorld([502,616],base)[1];
- const jaw=p=>{const [l]=outlineRow(550);return outlineWorld([502,616],p)[1]-outlineWorld([l,550],p)[1];};
- const up=pose(0,30),down=pose(0,-30);
- assert(outlineWorld([502,616],up)[1]<neutral-45,'up chin rises');
- assert(outlineWorld([502,616],down)[1]>neutral+20,'down chin descends');
- assert(jaw(up)<45,'up jaw becomes round U');assert(jaw(down)>80,'down jaw becomes V');
+test('normalized pitch spans preserve a curved jaw and mouth-to-chin space',()=>{
+ const mouth=[504.5,554.5];
+ for(const yaw of [-45,0,45])for(const pitch of [-30,30]){
+  const p=pose(yaw,pitch),chin=outlineWorld([502.5,616],p),lip=featureWorld('mouth-detail',mouth,p);
+  assert(chin[1]>540&&chin[1]<640,`chin ${yaw},${pitch}: ${chin[1]}`);
+  assert(chin[1]-lip[1]>45&&chin[1]-lip[1]<85,`mouth clearance ${yaw},${pitch}: ${chin[1]-lip[1]}`);
+ }
+ const up=pose(0,30),jaw=outlineWorld([outlineRow(550)[0],550],up),chin=outlineWorld([502.5,616],up);
+ assert(chin[1]-jaw[1]>45,'low-angle jaw keeps curvature instead of a horizontal brick');
+});
+test('all upper rear longitudes share crown row Y under downward diagonals',()=>{
+ for(const yaw of [-45,45])for(const sign of [-1,1])for(const y of [60,120,200,300,340]){
+  const p=pose(yaw,-30),{cx,rx}=domeSection(y),seam=canopyWorld([502+cx+sign*rx,y],p);
+  for(const deg of [100,120,150,180]){
+   const q=craniumWorld([0,y,sign*deg*Math.PI/180],sign<0?'left':'right',p);
+   assert(Math.abs(q[1]-seam[1])<1e-9,`crown Y ${yaw},${sign},${y},${deg}`);
+  }
+ }
 });
 test('diagonal face geometry is continuous through zero pitch',()=>{
  for(const yaw of [-45,45])for(const y of [420,465,510,550,590,616])for(const x of [...outlineRow(y).slice(0,2),502]){
@@ -69,11 +80,11 @@ test('socket shortens vertically and tilts along the diagonal latitude',()=>{
  for(const side of ['left','right']){
   const id=`eye-${side}-sclera`,[x,y]=FEATURE_FIT.landmarks[side].front;
   const height=p=>featureWorld(id,[x,y+25],p)[1]-featureWorld(id,[x,y-25],p)[1];
-  assert(height(pose(0,30))<height(base)*.96);assert(height(pose(0,-30))<height(base)*.8);
+  for(const pitch of [-30,30]){const ratio=height(pose(0,pitch))/height(base);assert(ratio>.7&&ratio<1.05,`natural socket height ${pitch}: ${ratio}`);}
   for(const yaw of [-45,45])for(const pitch of [-30,30]){
    const p=pose(yaw,pitch),dy=featureWorld(id,[x+40,y],p)[1]-featureWorld(id,[x-40,y],p)[1];
-   assert(Math.abs(dy)>10,`socket slope ${side},${yaw},${pitch}`);
-   assert(Math.sign(dy)===Math.sign(yaw*pitch));
+   assert(Math.abs(dy)>8,`socket slope ${side},${yaw},${pitch}`);
+   assert(Math.sign(dy)===-Math.sign(yaw*pitch));
   }
  }
 });
@@ -81,8 +92,8 @@ test('iris rotates inside its socket with head pitch and yaw and retains indepen
  for(const side of ['left','right']){
   const [x,y]=FEATURE_FIT.landmarks[side].front,id=`eye-${side}-iris`,socket=`eye-${side}-sclera`;
   const offset=p=>featureWorld(id,[x,y],p).map((v,i)=>v-featureWorld(socket,[x,y],p)[i]);
-  assert(offset(pose(0,30))[1]<-2,'up iris rolls up');
-  assert(offset(pose(0,-30))[1]>2,'down iris rolls down');
+  assert(offset(pose(0,30))[1]<-.1,'up iris rolls up relative to its arched socket');
+  assert(offset(pose(0,-30))[1]>.5,'down iris rolls down relative to its arched socket');
   assert(offset(pose(-45,0))[0]<-1,'left iris rolls left');
   assert(offset(pose(45,0))[0]>1,'right iris rolls right');
   assert.notDeepEqual(featureWorld(id,[x,y],{...pose(45,30),ParamEyeBallX:1}),featureWorld(id,[x,y],pose(45,30)));

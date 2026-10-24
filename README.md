@@ -28,7 +28,7 @@ The neck stays stationary during pure yaw. Pitch and roll blend the hidden upper
 
 All six front hair layers share a rounded dome, protected in front of the forehead by a smooth depth maximum. The upper backing meets that dome without a depth inset. The rear cranium retains the complete elliptical shell, with a narrow upper seam blend and yaw-only visibility. Crown, bangs and hairpin retain their illustration order. The hair controls adjust volume and far-side occlusion.
 
-The face uses a silhouette mesh. Its calibrated yaw projection stays unchanged; pitch uses a rounded jaw section, making the chin rise into a U-shaped low-angle outline or descend into a V-shaped high-angle outline. The neck attachment follows the chin. The old pitched bounding-box keyforms remain reference measurements and no longer drive these surfaces.
+The face uses a silhouette mesh. Its calibrated yaw projection stays unchanged; pitch combines registered reference shapes with normalized lower-face height and a curved central arch. Diagonal latitude converges toward the chin. The neck follows the chin, and the registered feature centers retain the eyes, nose and mouth on the face while local socket and corneal motion adds perspective.
 
 This is a custom WebGL renderer and JSON format. It does not load or produce Cubism binary models.
 
