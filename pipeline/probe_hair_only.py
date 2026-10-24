@@ -48,15 +48,22 @@ def top_gate(pitch, rendered, target):
 
 
 def stem_gap(hair, tie):
-    """Empty rows above the tie inside its central 60% horizontal region."""
+    """Worst column gap above the tie, across its central 60% width."""
     yy, xx = np.where(tie)
     if not len(xx):
         return None
     left, right = int(xx.min()), int(xx.max()) + 1
     lo, hi = left + int((right-left)*.2), right - int((right-left)*.2)
-    top = int(yy.min())
-    above = np.flatnonzero(hair[max(0, top-80):top+1, lo:hi].any(axis=1))
-    return top - (max(0, top-80) + int(above[-1])) if len(above) else 81
+    gaps = []
+    for x in range(lo, hi):
+        ys = np.flatnonzero(tie[:, x])
+        if not len(ys):
+            continue
+        top = int(ys[0])
+        start = max(0, top-80)
+        above = np.flatnonzero(hair[start:top+1, x])
+        gaps.append(top-(start+int(above[-1])) if len(above) else 81)
+    return max(gaps, default=81)
 
 
 def cheek_cover_rows(face, hair, side, rows):
@@ -339,7 +346,7 @@ def measure(poses, current):
             covered = [r['y'] for r in baseline_rows if r['gap'] == 0]
             cover = cheek_cover_rows(face, read_mask(current / f'{name}-crown.png', 40), near_side, covered)
         report.append({'name': name, 'yaw': pose['yaw'], 'pitch': pose['pitch'], 'registrationDelta': ref['delta'],
-                       'topY': top, 'topGate': top_gate(pose['pitch'], top, 92) if pose['pitch'] < 0 or (pose['pitch'] > 0 and not pose['yaw']) else None,
+                       'topY': top, 'topGate': top_gate(pose['pitch'], top, int(np.where(ref['head'])[0].min()) if pose['yaw'] else 92) if pose['pitch'] else None,
                        'exterior': exterior, 'beads': ties, 'neutralChangedPixels': neutral,
                        'neutralVertexHashMatches': vertex_match, 'nearCheekCover': cover,
                        'posteriorProjectionShift': shifts, **hairline})
@@ -392,6 +399,27 @@ def assess(poses):
     return checks
 
 
+def summarize_metrics(data):
+    """Keep release evidence small; full per-row samples belong in debug/."""
+    result = json.loads(json.dumps(data))
+    for p in result['poses']:
+        exterior = p['exterior']
+        p['exterior'] = {'sampledRows': len(exterior), 'maxAbsoluteError': max(
+            (abs(v) for r in exterior if r['delta'] for v in r['delta']), default=None)}
+        shifts = p['posteriorProjectionShift']
+        worst = max((r for r in shifts if r['shift']), key=lambda r: max(abs(v) for v in r['shift']), default=None)
+        p['posteriorProjectionShift'] = {'sampledRows': len(shifts), 'worstRow': worst,
+                                       'maximum': max(abs(v) for v in worst['shift']) if worst else None}
+        cover = p['nearCheekCover']
+        p['nearCheekCover'] = {'sampledRows': len(cover), 'maximumGap': max((r['gap'] for r in cover), default=None)} if cover is not None else None
+        p['hairline'] = {'sampleCount': len(p['hairline']), 'medianError': p['hairlineMedianError']}
+    for c in result['checks']:
+        if c['gate'] == 'near cheek background gap':
+            rows = c['value'] or []
+            c['value'] = {'sampledRows': len(rows), 'maximumGap': max((r['gap'] for r in rows), default=None)}
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline', action='store_true')
@@ -415,7 +443,9 @@ def main():
     bounds['pass'] = all(c['pass'] for c in bounds['checks'])
     protected = [line.split('  ', 1)[1] for line in (ROOT / 'docs/hair-hspec-protected-sha256.txt').read_text().splitlines()]
     protected_pass = subprocess.run(['git', 'diff', '--quiet', BASELINE, '--', *protected], cwd=ROOT).returncode == 0
-    invariants = [c for c in checks if c['gate'] in ['nine poses', 'neutral pixels', 'neutral vertices and sections']]
+    invariants = [c for c in checks if c['gate'] in ['nine poses', 'neutral pixels', 'neutral vertices and sections',
+                                                   'left stem gap', 'right stem gap']
+                  or (c['gate'] == 'crown top' and c['pose'].startswith('up'))]
     invariant_pass = all(c['pass'] for c in invariants)
     strict_pass = all(c['pass'] for c in checks)
     accepted = bounds['pass'] and invariant_pass and protected_pass
@@ -429,7 +459,8 @@ def main():
             'protectedFilesPass': protected_pass, 'protectedFileCount': len(protected),
             'acceptance': 'strict pass' if strict_pass and accepted else 'bounded pass' if accepted else 'fail',
             'pass': accepted}
-    (ROOT / args.output / 'hair-r15-metrics.json').write_text(json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
+    (current / 'hair-r15-metrics-raw.json').write_text(json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
+    (ROOT / args.output / 'hair-r15-metrics.json').write_text(json.dumps(summarize_metrics(data), ensure_ascii=False, indent=2, allow_nan=False) + '\n')
     print(json.dumps([{'name': p['name'], 'topY': p['topY'], 'neutralChangedPixels': p['neutralChangedPixels'],
                        'beadY': {s: b['dBodyFrame'][1] if b['dBodyFrame'] else None for s, b in p['beads'].items()}}
                       for p in report]))

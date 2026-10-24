@@ -36,7 +36,8 @@ export function pitchHairDepth(point,p,relief=0) {
  const y=point[1],base=correctedLift(point,0,p)[2];
  if(y>=310)return base+relief;
  const latitude=sphereEase((310-y)/302);
- const topZ=DOME.pitchArc.topZ*correction(p,'CorrHairDepth');
+ const yawWeight=sphereEase(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/45);
+ const topZ=(DOME.pitchArc.topZ+(DOME.pitchArc.diagonalTopZ-DOME.pitchArc.topZ)*yawWeight)*correction(p,'CorrHairDepth');
  return base+(topZ-base)*latitude+relief;
 }
 const capRadius=y=>DOME.rx*Math.sqrt(Math.max(0,1-((y-DOME.cy)/DOME.ry)**2));

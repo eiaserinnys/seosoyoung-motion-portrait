@@ -1,6 +1,6 @@
-import {strandWorld} from './side-strands.mjs';
+import {strandWorld,STRANDS} from './side-strands.mjs';
 import {hairLift,pitchHairDepth,domeSection,hairSurface,craniumPosition,sphereEase,pitchEase,hairPoseValue} from './hair-surface.mjs';
-import {earWorld} from './stereo-attachments.mjs';
+import {earWorld,beadWorld,BEADS} from './stereo-attachments.mjs';
 import {outlinePitchShift} from './face-outline.mjs';
 import {HEAD_CENTER,clamp,correction,artWorld} from './geometry.mjs';
 import {DOME} from './dome-data.mjs';
@@ -9,6 +9,12 @@ export {hairLift,pitchHairDepth} from './hair-surface.mjs';
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 
 const shellWorld=(point,p,relief=0)=>hairSurface(point,p,0,relief);
+// The tie's upper edge, not its centre, ends the shared gravity transition.
+function hangingXY(world,y,p,neutral){
+ const hang=sphereEase((y-405)/101)*sphereEase(Math.abs(p.ParamAngleY*correction(p,'CorrTurn'))/30);
+ for(const i of [0,1])world[i]+=(neutral[i]-world[i])*hang;
+ return world;
+}
 export function referenceFringe(point,p,relief=0) {
  const local=hairLift(point,p,relief);
  if(!p.ParamAngleY)return artWorld(local,p);
@@ -71,11 +77,11 @@ export function craniumWorld([x,y,lambda],side,p) {
   for(const i of [0,2])world[i]+=(seam[i]-world[i])*collar;
  }
  world[1]=yOut;
- if(weight===1)return world;
  // The neutral seam's authored X/Z correction must fade out continuously;
  // a binary branch drops several pixels as automatic pitch crosses zero.
  const neutral={...p,ParamAngleY:0},rest=craniumPosition(point,neutral),legacy=legacyCranium(point,side,neutral);
- return world.map((v,i)=>i===1?v:v+(legacy[i]-rest[i])*(1-weight));
+ for(const i of [0,2])world[i]+=(legacy[i]-rest[i])*(1-weight);
+ return y>405?hangingXY(world,y,p,legacy):world;
 }
 function legacyCranium([x,y,lambda],side,p){
  const world=craniumPosition([x,y,lambda],p);
@@ -107,18 +113,30 @@ function templeWorld(point,side,p,surface) {
  const shift=outlinePitchShift(point,p);
  shell[0]+=shift[0]*join;
  if(p.ParamAngleY&&point[1]>405){
-  const neutral=templeWorld(point,side,{...p,ParamAngleY:0},surface);
-  const hang=sphereEase((point[1]-405)/139)*sphereEase(Math.abs(p.ParamAngleY*correction(p,'CorrTurn'))/30);
-  shell[1]+=(neutral[1]-shell[1])*hang;
+  const flat={...p,ParamAngleY:0},neutral=templeWorld(point,side,flat,surface);
+  // Far-view alpha is narrower than the tie. Expand only the hanging ribbon
+  // toward the tie's authored central 60%, retaining the neutral yaw artwork.
+  if(p.ParamAngleX*correction(p,'CorrTurn')*(side==='left'?-1:1)>0){
+   const rows=STRANDS[side],y=point[1];let i=0;
+   while(i<rows.length-2&&y>rows[i+1][0])i++;
+   const a=rows[i],b=rows[i+1],t=clamp((y-a[0])/(b[0]-a[0]),0,1);
+   const lo=a[1]+(b[1]-a[1])*t,hi=a[2]+(b[2]-a[2])*t,u=clamp((point[0]-lo)/(hi-lo),0,1);
+   const l=templeWorld([lo,y],side,flat,surface)[0],r=templeWorld([hi,y],side,flat,surface)[0];
+   const [left,right]=side==='left'?[250,366]:[632,746],width=right-left;
+   const root=beadWorld(side,flat)[0]-BEADS[side].front[0];
+   const yawWeight=sphereEase(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/45);
+   neutral[0]+=(Math.min(0,root+left+width*.2-l)*(1-u)+Math.max(0,root+right-width*.2-r)*u)*yawWeight;
+  }
+  hangingXY(shell,point[1],p,neutral);
  }
  return shell;
 }
 export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}
 export function backWorld(point,p) {
  const back=shellWorld(point,p,-4),upper=1-pitchEase((point[1]-380)/85,p);
- if(!upper)return back;
  // Background is painted first, so the upper backing can share the dome
  // exactly. A depth-only inset opens a projected crack at the far temple.
  const canopy=p.ParamAngleY?fringeSurface(point,p,0):referenceFringe(point,p,0);
- return back.map((v,i)=>v+(canopy[i]-v)*upper);
+ const world=back.map((v,i)=>v+(canopy[i]-v)*upper);
+ return p.ParamAngleY&&point[1]>405?hangingXY(world,point[1],p,backWorld(point,{...p,ParamAngleY:0})):world;
 }

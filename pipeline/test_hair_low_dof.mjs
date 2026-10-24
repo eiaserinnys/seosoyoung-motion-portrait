@@ -12,7 +12,7 @@ const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CO
 const near=(a,b)=>assert(Math.max(...a.map((v,i)=>Math.abs(v-b[i])))<1e-6,`${a} != ${b}`);
 test('runtime dome data matches its canonical source',()=>{
  assert.deepEqual(DOME,JSON.parse(readFileSync(new URL('../source/viewer/dome-fit.json',import.meta.url))));
- const config=JSON.parse(readFileSync(new URL('../config/rig-config.json',import.meta.url)));
+ const config=JSON.parse(readFileSync(new URL('../source/viewer/hair-pitch.json',import.meta.url)));
  for(const key of ['pitchArc','tipLag','rearPitch'])assert.deepEqual(DOME[key],config[key]);
  const upperRight=config.rearPitch.poses.find(p=>p.name==='up-right');
  assert.deepEqual([upperRight.rx,upperRight.rz,upperRight.y],[0,0,0]);
@@ -29,7 +29,7 @@ test('H4 both bead roots remain in the yaw-only gravity frame at every pitch',{t
  }
 });
 test('H2 pitched posterior retains true X/Z and joins the canopy seam',{timeout:60000},()=>{
- for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const sign of [-1,1])for(const y of [80,200,340,465,540]){
+ for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const sign of [-1,1])for(const y of [80,200,340,400]){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch},side=sign<0?'left':'right',lambda=sign*Math.PI/2,{cx,rx}=domeSection(y);
   const seam=craniumWorld([0,y,lambda],side,p),canopy=canopyWorld([502+cx+sign*rx,y],p);
   near([seam[0],seam[2]],[canopy[0],canopy[2]]);
@@ -63,11 +63,13 @@ test('H2 posterior supplementation stays within 45px of stage a, including inter
 });
 test('bounded acceptance rejects a configuration outside the approved scalar limits',{timeout:60000},()=>{
  assert(measureHairBounds().pass);
- const top=DOME.pitchArc.topZ,kappa=DOME.tipLag.kappa;
+ const top=DOME.pitchArc.topZ,kappa=DOME.tipLag.kappa,diagonal=DOME.pitchArc.diagonalTopZ,tip=DOME.tipLag.poses[0].kappa;
  try{
   DOME.pitchArc.topZ=-200;assert(!measureHairBounds().pass);
   DOME.pitchArc.topZ=top;DOME.tipLag.kappa=.9;assert(!measureHairBounds().pass);
- }finally{DOME.pitchArc.topZ=top;DOME.tipLag.kappa=kappa;}
+  DOME.tipLag.kappa=kappa;DOME.pitchArc.diagonalTopZ=-90;assert(!measureHairBounds().pass);
+  DOME.pitchArc.diagonalTopZ=diagonal;DOME.tipLag.poses[0].kappa=.7;assert(!measureHairBounds().pass);
+ }finally{DOME.pitchArc.topZ=top;DOME.tipLag.kappa=kappa;DOME.pitchArc.diagonalTopZ=diagonal;DOME.tipLag.poses[0].kappa=tip;}
 });
 test('rear seam and hanging locks cross zero pitch with continuous position and tangent',{timeout:60000},()=>{
  for(const yaw of [-45,45])for(const y of [340,350,360,370,380])for(const sign of [-1,1]){
@@ -91,7 +93,7 @@ test('pointwise upper depth preserves convexity and joins each lower-depth colum
  }
 });
 test('rear horizon excludes raw skull pitch drop and adds only bounded posterior Y',{timeout:60000},()=>{
- for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const sign of [-1,1])for(const y of [80,200,340,360,465]){
+ for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const sign of [-1,1])for(const y of [80,200,340,360,400]){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch},side=sign<0?'left':'right',{cx,rx}=domeSection(y),edge=[502+cx+sign*rx,y];
   const t=Math.max(0,Math.min(1,(y-345)/35)),blend=1-(1-Math.cos(t*Math.PI))*.5;
   const fringe=fringeSurface(edge,p),canopy=canopyWorld(edge,p),horizon=fringe[1]+(canopy[1]-fringe[1])*blend;

@@ -1,6 +1,6 @@
 """Contracts for the hair-only measurements, independent of WebGL fixtures."""
 import numpy as np
-from pipeline.probe_hair_only import outline_rows, bead_centers, top_gate, neutral_difference, hairline_metrics, assess, stem_gap, cheek_cover_rows, fill_holes
+from pipeline.probe_hair_only import outline_rows, bead_centers, top_gate, neutral_difference, hairline_metrics, assess, stem_gap, cheek_cover_rows, fill_holes, summarize_metrics
 
 
 def test_outline_samples_canvas_rows_and_keeps_missing_rows_explicit():
@@ -77,6 +77,31 @@ def test_stem_gap_rejects_a_gap_in_the_central_columns_without_counting_side_ove
     assert stem_gap(hair, tie) == 10
     hair[:, 38:62] = False
     assert stem_gap(hair, tie) == 81
+
+
+def test_stem_gap_rejects_one_empty_column_even_when_an_adjacent_column_connects():
+    hair = np.zeros((200, 100), bool)
+    tie = hair.copy()
+    tie[100:130, 30:70] = True
+    hair[20:101, 30:70] = True
+    hair[85:101, 50] = False
+    assert stem_gap(hair, tie) == 16
+
+
+def test_summary_keeps_worst_residual_and_does_not_mutate_raw_samples():
+    raw = {'poses': [{'exterior': [{'delta': [-9, 4]}],
+                      'posteriorProjectionShift': [{'y': 100, 'shift': [0, -12]}, {'y': 101, 'shift': [3, 0]}],
+                      'nearCheekCover': [{'y': 520, 'gap': 7}],
+                      'hairline': [{'delta': 4}], 'hairlineMedianError': 4}],
+           'checks': [{'gate': 'near cheek background gap', 'pass': False, 'value': [{'y': 520, 'gap': 7}]}]}
+    summary = summarize_metrics(raw)
+    p = summary['poses'][0]
+    assert p['posteriorProjectionShift']['maximum'] == 12
+    assert p['posteriorProjectionShift']['worstRow']['y'] == 100
+    assert p['exterior']['maxAbsoluteError'] == 9
+    assert p['nearCheekCover']['maximumGap'] == 7
+    assert summary['checks'][0]['value']['maximumGap'] == 7
+    assert isinstance(raw['poses'][0]['exterior'], list)
 
 
 def test_cropped_hair_does_not_turn_the_outside_background_into_a_filled_hole():
