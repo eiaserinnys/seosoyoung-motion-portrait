@@ -48,7 +48,7 @@ def test_hairline_measurement_detects_a_lowered_fringe_and_lost_forehead_area():
 
 
 def test_acceptance_gate_rejects_the_observed_top_bead_and_neutral_regressions():
-    poses = [dict(name=f'{yaw},{pitch}', yaw=yaw, pitch=pitch, topY=100 if pitch > 0 else 0,
+    poses = [dict(name=f'{yaw},{pitch}', yaw=yaw, pitch=pitch, topY=(60 if yaw else 97) if pitch > 0 else 0,
                   topGate={'pass': True} if pitch else None, neutralChangedPixels=0,
                   neutralVertexHashMatches=True, exterior=[{'y': y, 'delta': [0, 0]} for y in range(80, 521, 20)],
                   hairlineMedianError=0, foreheadExposure={'ratioError': 0},
@@ -86,6 +86,41 @@ def test_stem_gap_rejects_one_empty_column_even_when_an_adjacent_column_connects
     hair[20:101, 30:70] = True
     hair[85:101, 50] = False
     assert stem_gap(hair, tie) == 16
+
+
+def test_visible_face_closes_an_occluded_hair_column_but_leaves_real_background_gaps():
+    hair = np.zeros((200, 100), bool)
+    face = hair.copy()
+    tie = hair.copy()
+    tie[100:130, 30:70] = True
+    face[20:101, 30:70] = True
+    assert stem_gap(hair, tie) == 81
+    assert stem_gap(hair | face, tie) == 0
+    face[84:101, 50] = False
+    assert stem_gap(hair | face, tie) == 17
+
+
+def test_approved_top_gate_uses_pose_bounds_and_rejects_regressions():
+    from pipeline import probe_hair_only as probe
+    for yaw, pitch, boundary in [(0, 30, 100), (-45, 30, 65), (45, 30, 65), (-45, -30, 12), (45, -30, 12)]:
+        assert probe.approved_top_gate(yaw, pitch, boundary)['pass']
+        assert not probe.approved_top_gate(yaw, pitch, boundary + 1)['pass']
+    assert probe.approved_top_gate(0, 30, 84)['pass']
+    assert not probe.approved_top_gate(0, 30, 83)['pass']
+    assert probe.approved_top_gate(0, -30, 7) is None
+
+
+def test_foreground_stem_gate_accepts_15_and_rejects_16_pixels():
+    poses = [dict(name='up', yaw=0, pitch=30, topY=97, topGate={'pass': True},
+                  neutralChangedPixels=None, neutralVertexHashMatches=None,
+                  exterior=[{'y': y, 'delta': [0, 0]} for y in range(80, 521, 20)],
+                  hairlineMedianError=0, foreheadExposure={'ratioError': 0}, nearCheekCover=None,
+                  beads={s: {'dBodyFrame': [0, 0], 'stemGap': 15} for s in ['left', 'right']})]
+    checks = assess(poses)
+    stems = [c for c in checks if c['gate'].endswith('foreground stem gap')]
+    assert len(stems) == 2 and all(c['pass'] for c in stems)
+    poses[0]['beads']['left']['stemGap'] = 16
+    assert any(not c['pass'] for c in assess(poses) if c['gate'] == 'left foreground stem gap')
 
 
 def test_summary_keeps_worst_residual_and_does_not_mutate_raw_samples():

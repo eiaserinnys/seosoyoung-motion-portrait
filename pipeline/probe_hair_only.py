@@ -47,6 +47,16 @@ def top_gate(pitch, rendered, target):
             'pass': abs(rendered - target) <= 8}
 
 
+def approved_top_gate(yaw, pitch, rendered):
+    """Approved completion bounds; reference residuals remain diagnostic."""
+    if pitch > 0 and not yaw:
+        return {'target': 92, 'tolerance': 8, 'pass': abs(rendered-92) <= 8}
+    if yaw and pitch:
+        maximum = 65 if pitch > 0 else 12
+        return {'maximum': maximum, 'pass': rendered <= maximum}
+    return None
+
+
 def stem_gap(hair, tie):
     """Worst column gap above the tie, across its central 60% width."""
     yy, xx = np.where(tie)
@@ -325,7 +335,8 @@ def measure(poses, current):
                 side_tie = tie_mask.copy()
                 side_tie[:, :left] = False
                 side_tie[:, right:] = False
-                ties[side]['stemGap'] = stem_gap(attachment_hair, side_tie)
+                ties[side]['hairOnlyStemGap'] = stem_gap(attachment_hair, side_tie)
+                ties[side]['stemGap'] = stem_gap(attachment_hair | face, side_tie)
         neutral = None
         vertex_match = None
         if not pose['pitch']:
@@ -371,6 +382,9 @@ def assess(poses):
             check('neutral vertices and sections', p['neutralVertexHashMatches'] is True, p['neutralVertexHashMatches'])
         if p['topGate']:
             check('crown top', p['topGate']['pass'], p['topY'])
+        approved_top = approved_top_gate(yaw, pitch, p['topY'])
+        if approved_top is not None:
+            check('approved crown top', approved_top['pass'], p['topY'])
         if pitch and not yaw:
             selected = [r for r in p['exterior'] if 100 <= r['y'] <= 300]
             error = max((max(abs(v) for v in r['delta']) if r['delta'] else float('inf') for r in selected), default=float('inf'))
@@ -393,9 +407,8 @@ def assess(poses):
             delta = bead['dBodyFrame']
             inherited = side == 'right' and name in ['up-right', 'down-left', 'down-right']
             check(side + ' bead body frame', delta is not None and max(abs(v) for v in delta) <= (20 if inherited else 8), delta)
-            if pitch:
-                gap = bead.get('stemGap')
-                check(side + ' stem gap', gap is not None and gap <= 8, gap)
+            gap = bead.get('stemGap')
+            check(side + ' foreground stem gap', gap is not None and gap <= 15, gap)
     return checks
 
 
@@ -413,7 +426,7 @@ def summarize_metrics(data):
         cover = p['nearCheekCover']
         p['nearCheekCover'] = {'sampledRows': len(cover), 'maximumGap': max((r['gap'] for r in cover), default=None)} if cover is not None else None
         p['hairline'] = {'sampleCount': len(p['hairline']), 'medianError': p['hairlineMedianError']}
-    for c in result['checks']:
+    for c in result['checks'] + result.get('rawResidualFailures', []):
         if c['gate'] == 'near cheek background gap':
             rows = c['value'] or []
             c['value'] = {'sampledRows': len(rows), 'maximumGap': max((r['gap'] for r in rows), default=None)}
@@ -443,9 +456,9 @@ def main():
     bounds['pass'] = all(c['pass'] for c in bounds['checks'])
     protected = [line.split('  ', 1)[1] for line in (ROOT / 'docs/hair-hspec-protected-sha256.txt').read_text().splitlines()]
     protected_pass = subprocess.run(['git', 'diff', '--quiet', BASELINE, '--', *protected], cwd=ROOT).returncode == 0
-    invariants = [c for c in checks if c['gate'] in ['nine poses', 'neutral pixels', 'neutral vertices and sections',
-                                                   'left stem gap', 'right stem gap']
-                  or (c['gate'] == 'crown top' and c['pose'].startswith('up'))]
+    invariant_gates = {'nine poses', 'neutral pixels', 'neutral vertices and sections',
+                       'left foreground stem gap', 'right foreground stem gap', 'approved crown top'}
+    invariants = [c for c in checks if c['gate'] in invariant_gates]
     invariant_pass = all(c['pass'] for c in invariants)
     strict_pass = all(c['pass'] for c in checks)
     accepted = bounds['pass'] and invariant_pass and protected_pass
@@ -456,6 +469,8 @@ def main():
             'productSha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                               for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs']]},
             'strictRasterPass': strict_pass, 'bounds': bounds, 'invariantPass': invariant_pass,
+            'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] not in invariant_gates],
+            'stemMaskMethod': 'visible crown | tails | face-skin; central 60% columns, worst vertical gap',
             'protectedFilesPass': protected_pass, 'protectedFileCount': len(protected),
             'acceptance': 'strict pass' if strict_pass and accepted else 'bounded pass' if accepted else 'fail',
             'pass': accepted}

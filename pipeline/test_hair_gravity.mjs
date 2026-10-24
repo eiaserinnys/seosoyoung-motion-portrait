@@ -32,6 +32,16 @@ test('upper pole follows the bounded symmetric yaw depth arc',()=>{
   for(const x of [300,502,700])assert(Math.abs(pitchHairDepth([x,8],p)-expected)<1e-8);
  }
 });
+test('diagonal top depth activates only on upward pitch and crosses zero with C1 continuity',()=>{
+ for(const yaw of [-45,45]){
+  const depth=pitch=>pitchHairDepth([502,8],{...base,ParamAngleX:yaw,ParamAngleY:pitch});
+  for(const pitch of [-30,-15,0])assert(Math.abs(depth(pitch)-DOME.pitchArc.topZ)<1e-8);
+  assert(Math.abs(depth(30)-DOME.pitchArc.diagonalTopZ)<1e-8);
+  const h=1e-4;
+  assert(Math.abs(depth(1e-8)-depth(0))<1e-8);
+  assert(Math.abs((depth(h)-2*depth(0)+depth(-h))/h)<.001);
+ }
+});
 test('tip lag and rear supplementation share mirrored key coefficients',()=>{
  for(const direction of ['up','down']){
   const tips=DOME.tipLag.poses.filter(p=>p.name===`${direction}-left`||p.name===`${direction}-right`);
