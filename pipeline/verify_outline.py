@@ -13,6 +13,9 @@ try:
   page=browser.new_page(viewport={'width':1440,'height':900},device_scale_factor=2)
   page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle')
   page.wait_for_function('window.studio?.ready',timeout=30000)
+  interior=(ROOT/'pipeline/raster_interior.mjs').read_text().replace('../bundle/','./')
+  page.add_script_tag(type='module',content=interior+'\nwindow.rasterInterior={mainOpaqueRuns,headInteriorInterval,rowAlphaGaps};')
+  page.wait_for_function('window.rasterInterior')
   metrics=page.evaluate('''async()=>{
     const {renderer,state,p,rig}=studio,gl=renderer.gl,{deform3D}=await import('./rig.mjs'),{outlineRow}=await import('./face-outline.mjs'),{domeSection}=await import('./hair-surface.mjs');
     const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
@@ -55,11 +58,13 @@ try:
         for(let x=0;x<w;x++)if(full[((h-1-sy)*w+x)*4+3]>200){l=Math.min(l,x);r=Math.max(r,x);}
         if(r<0)continue;
         if(cy>=80&&cy<=420){
-          const {rx,rz,cz,cx}=domeSection(cy),angle=yaw*gain*Math.PI/180;
-          const center=502+cx*Math.cos(angle)+cz*Math.sin(angle),radius=Math.hypot(rx*Math.cos(angle),rz*Math.sin(angle));
+          const main=window.rasterInterior.mainOpaqueRuns(full,w,h,sy,scale);
+          if(!main)throw Error(`No opaque head run at row ${cy}`);
+          const [left,right]=window.rasterInterior.headInteriorInterval(cy,p,...main,ox,scale);
           // Exclude the outer antialias/loose-strand fringe, not internal gaps.
-          for(let x=Math.ceil(ox+(center-radius+15)*scale);x<ox+(center+radius-15)*scale;x++)
-            if(full[((h-1-sy)*w+x)*4+3]<10){headInteriorHolePixels++;if(holeLocations.length<20)holeLocations.push([(x-ox)/scale,cy]);}
+          const gaps=window.rasterInterior.rowAlphaGaps(full,w,h,sy,left,right);
+          headInteriorHolePixels+=gaps.count;
+          for(const x of gaps.locations)if(holeLocations.length<20)holeLocations.push([(x-ox)/scale,cy]);
         }
         if(cy<=420&&cy%10===0)contour.push([cy,(l-ox)/scale,(r-ox)/scale]);
       }

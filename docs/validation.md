@@ -1,4 +1,28 @@
-# r11 revision: measured attachments and a continuous hair surface
+# Nine-direction hair calibration and surface coverage
+
+The current hair revision keeps the neutral face and symmetric motion calibration. Eight immutable hair inputs supply the original alpha and lower-strand RGB. Redrawn no-rimlight references are transferred only onto matching visible dark-brown hair, after a 3x3 mask erosion, excluding darkened brow pixels and restricting the transfer to the crown or right outer rim. Protected lower fringe RGB is restored byte for byte, including outline preparation and zero-weight color conversion effects.
+
+Side-cranium textures preserve dark linework and natural upper highlights. Valid-mask-normalized Gaussian LAB illumination (sigma 18) is removed before inpainting, retaining high-frequency hair detail at .85 L and .5 chroma. TELEA receives only eroded brown seeds with original light >=30; source detail is restored in the inner core or on nonblack valid texels, leaving boundary ink out of the fill. Final tone matching measures only valid source texels. The 3x3 source-mask erosion and smooth inner alpha transition remove the former dotted border and vertical cutoff. Alpha stays opaque through reference y415 and fades out over y465..505.
+
+Cranium visibility depends on yaw alone. Every longitude follows its shared canopy row's screen Y, preventing a second upper head under pitch. Its lower width taper starts at canvas y425, beneath the interior-coverage test. The exact 90-degree seam stays shared; the original upper outer geometry is preserved for yaw-only poses. The fringe-to-lock transition remains outside upper diagonal fringe strands through y405.
+
+| Current gate | Evidence |
+|:--|:--|
+| Node tests | 52 passed, 0 failed; one worker and 60-second timeout |
+| Pixel tests | 7 passed, including exact lower-strand RGB, opaque-to-soft cranium alpha and the filled hairpin notch/backing |
+| Head interior raster | PASS: all 14 poses have zero interior holes, cheek-ear gaps, forehead intrusion and far-back exposure |
+| Full viewer | PASS: shared 972 samples/error 0; four forehead counts 0; ears 1944/2218/2032/2257; all 72 eye observations visible; clipping, controls, neck coverage and narrow layout pass; browser/HTTP/WebGL errors 0 |
+| Independent Sol review | PASS: final pin repair, backing crop, sampler and previous UI defect requirements verified |
+
+The raster interior checker uses the actual canopy and visible bridged-cranium projection on the near side. The far side and frontal poses use the first and last contiguous alpha>200 spans at least 20 canvas pixels wide, excluding thin exterior wisps. The far bound is additionally intersected with the skull dome, excluding the normal ear notch between dangling side locks and the cheek at y408..420. Both bounds retain a 15-canvas-pixel inset, and the zero-hole requirement stays at zero. It retains the zero-hole requirement across the complete head span, including the temple join, while excluding background beyond cropped far-side source hair. Unit tests inject closed and open gaps and require detection, ignore exterior five-pixel wisps while retaining holes between main head regions, and verify that changing the measured far boundary never weakens the near-side geometric expectation.
+
+The pin cutout below the accessory was a physical gap: the right side-hair repair now reaches canvas x634 over y340..406, and the center backing reaches x700 over y350..407, using ten transparent padding pixels on the working crop while preserving the immutable original. The fill stops before the foreground ear. The side-hair and backing opacity are checked directly in the built parts, independently of the ear-notch sampler correction.
+
+The rebuilt side-cranium and original fringe part images were opened directly. All 11 required current captures, including the nine-direction sheet and actual right 45-degree screenshot at original DPR 2, were opened directly; the pin-side background hole is filled. Both raster and full-viewer gates passed. All 28 bundle files and 11 required captures are synchronized with the designated artifact copies. The viewer panels, controls, typography and layout are unchanged. Specialist UI/UX re-review remains with the coordinator.
+
+Evidence: [browser metrics](viewer_metrics.json), [outline metrics](outline_metrics.json), [nine-direction sheet](captures/viewer_9dir_grid.png), [input provenance](no-rimlight-inputs.json), [bundle hashes](bundle-sha256.txt). The following sections record historical r11 evidence and are superseded by the current surface and alpha contracts. [The older rebuild parity report](build_repro.json) applies to 4e6b1f2.
+
+## Earlier r11 baseline: measured attachments and a continuous hair surface
 
 This revision preserves the approved face silhouette fit and corrects the ears, twin-tail roots, eyes, nose, mouth and hair surface. It uses the independently generated left/right references, not mirrored lighting. The viewer remains a custom WebGL rig, not a native Cubism model.
 

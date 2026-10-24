@@ -1,5 +1,6 @@
-import {artWorld,correctedLift,correction,clamp,radians} from './geometry.mjs';
-import {OUTLINE_ROWS} from './outline-data.mjs';
+import {HEAD_CENTER,artWorld,correctedLift,correction,clamp,radians} from './geometry.mjs';
+import {OUTLINE_ROWS,OUTLINE_POSES} from './outline-data.mjs';
+import {gridValue,frameValue} from './pose-grid.mjs';
 export {OUTLINE_ROWS} from './outline-data.mjs';
 // Cubic Hermite interpolation keeps the sampled mask residual smooth in height.
 export function outlineRow(y){
@@ -14,23 +15,67 @@ export function outlineRow(y){
  }
  return OUTLINE_ROWS.at(-1).slice(1);
 }
-export function applyOutline(point,world,p){
+function legacyOutline(point,world,p){
  const angle=p.ParamAngleX*correction(p,'CorrTurn'),theta=radians(clamp(angle,-45,45));
  const weight=correction(p,'CorrOutline')*clamp((point[1]-250)/80,0,1);
  if(!theta||!weight)return world;
  const sampleY=Math.max(465,point[1]);
  const [l,r,ll,lr,rl,rr,ty]=outlineRow(sampleY);
- const u=clamp((point[0]-l)/(r-l),0,1);
+ const [frontL,frontR]=outlineRow(point[1]),u=clamp((point[0]-frontL)/(frontR-frontL),0,1);
+ const half=(r-l)/2,offset=(l+r)/2-HEAD_CENTER[0];
  const residual=(yaw,targets)=>{
   const pose={...p,ParamAngleX:yaw,CorrTurn:1,ParamAngleY:0,ParamAngleZ:0};
-  const a=targets[0]-artWorld(correctedLift([l,sampleY],0,p),pose)[0];
-  const b=targets[1]-artWorld(correctedLift([r,sampleY],0,p),pose)[0];
-  return a+(b-a)*u;
+  return [targets[0]-offset-artWorld(correctedLift([HEAD_CENTER[0]-half,sampleY],0,p),pose)[0],
+          targets[1]-offset-artWorld(correctedLift([HEAD_CENTER[0]+half,sampleY],0,p),pose)[0]];
  };
- const minus=residual(-45,[ll,lr]),plus=residual(45,[rl,rr]);
+ const neg=residual(-45,[ll,lr]),pos=residual(45,[rl,rr]);
+ const near=(pos[1]-neg[0])/2,far=(pos[0]-neg[1])/2;
+ const minus=-near*(1-u)-far*u,plus=far*(1-u)+near*u;
  const odd=Math.sin(theta)/Math.sin(Math.PI/4),even=(1-Math.cos(theta))/(1-Math.cos(Math.PI/4));
  const shift=((plus-minus)*odd+(plus+minus)*even)*.5*weight;
  const dy=(ty-Math.min(sampleY,616))*even*weight,roll=radians(p.ParamAngleZ);
  return [world[0]+shift*Math.cos(roll)-dy*Math.sin(roll),world[1]+shift*Math.sin(roll)+dy*Math.cos(roll),world[2]];
 }
-export function outlineWorld(point,p,relief=0){return applyOutline(point,artWorld(correctedLift(point,relief,p),p),p);}
+const SOURCE_ROWS=OUTLINE_ROWS.filter(r=>r[0]>=465);
+function symmetricBase(point,p,relief=0){
+ const [l,r]=outlineRow(point[1]),offset=(l+r)/2-HEAD_CENTER[0];
+ const q=artWorld(correctedLift([point[0]-offset,point[1]],relief,p),p),roll=radians(p.ParamAngleZ);
+ q[0]+=offset*Math.cos(roll);q[1]+=offset*Math.sin(roll);
+ return q;
+}
+function targetRow(pose,y){
+ const rows=pose.rows;
+ if(y<=rows[0][0]&&pose.pitch===0)return rows[0];
+ // Source samples are deliberately nonuniform; interpolate by front height.
+ let i=0;while(i<rows.length-2&&y>SOURCE_ROWS[i+1][0])i++;
+ const src=SOURCE_ROWS,t=clamp((y-src[i][0])/(src[i+1][0]-src[i][0]),0,1);
+ return rows[i].map((v,j)=>v+(rows[i+1][j]-v)*t);
+}
+export function outlinePitchShift(point,p){
+ const t=clamp((point[1]-218)/247,0,1);
+ const weight=correction(p,'CorrOutline')*t*t*(3-2*t);
+ const pitch=p.ParamAngleY*correction(p,'CorrTurn');
+ if(!pitch||!weight)return [0,0,0];
+ const y=clamp(point[1],465,616),[l,r]=outlineRow(y),[frontL,frontR]=outlineRow(point[1]);
+ const u=clamp((point[0]-frontL)/(frontR-frontL),0,1);
+ const residual=frameValue(p,'outline:'+y,()=>[0,1,2,3].map(component=>gridValue(OUTLINE_POSES,p.ParamAngleX*correction(p,'CorrTurn'),pitch,pose=>{
+  if(!pose.pitch)return 0;
+  const [ty,tl,tr]=targetRow(pose,y),key={...p,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,ParamAngleZ:0};
+  const x=component%2?r:l,axis=component<2?0:1;
+  const q=legacyOutline([x,y],symmetricBase([x,y],key),key);
+  const s=clamp((y-465)/151,0,1);
+  const targetY=ty+(pose.registration.topEdgeY[component%2]-pose.yTop)*(1-s);
+  return (axis===0?(component%2?tr:tl):targetY)-q[axis];
+ })));
+ const delta=[residual[0]+(residual[1]-residual[0])*u,residual[2]+(residual[3]-residual[2])*u];
+ const roll=radians(p.ParamAngleZ),dx=delta[0]*weight,dy=delta[1]*weight;
+ return [dx*Math.cos(roll)-dy*Math.sin(roll),dx*Math.sin(roll)+dy*Math.cos(roll),0];
+}
+export function applyOutline(point,world,p){
+ const base=legacyOutline(point,world,p),shift=outlinePitchShift(point,p);
+ return base.map((v,i)=>v+shift[i]);
+}
+export function outlineWorld(point,p,relief=0){
+ const plain=artWorld(correctedLift(point,relief,p),p),symmetric=symmetricBase(point,p,relief),weight=correction(p,'CorrOutline');
+ return applyOutline(point,plain.map((v,i)=>v+(symmetric[i]-v)*weight),p);
+}

@@ -32,6 +32,15 @@ export function hairSurface(point,p,reference=0,relief=0){
  const zz=-restX*Math.sin(yaw)+restZ*Math.cos(yaw);
  return artWorld([xx,y-HEAD_CENTER[1],zz+relief],{...p,ParamAngleX:0});
 }
+// A finite tangent at the photographed limb prevents the thin alpha fringe
+// from folding around an infinite sqrt slope. XY remains exact at rest.
+export function canopySurface(point,p,back=false){
+ const [x,y]=point,{rx,rz,cz,cx}=domeSection(y);
+ const nx=(x-HEAD_CENTER[0]-cx)/Math.max(1,rx),v=1-nx*nx;
+ const root=v>=.16?Math.sqrt(v):.4*Math.exp((v-.16)/.32);
+ const t=clamp((y-60)/120,0,1),polar=t*t*(3-2*t);
+ return artWorld([x-HEAD_CENTER[0],y-HEAD_CENTER[1],(cz+(back?-1:1)*rz*correction(p,'CorrHairDepth')*root)*polar],p);
+}
 
 // The narrow crack-prevention collar is folded onto the horizon at rest,
 // then unfolds geometrically over the first ten degrees; alpha stays one.
@@ -47,12 +56,12 @@ export function craniumPosition([x,y,lambda],p){
 export function craniumFacing([x,y,lambda],p){
  lambda=seamLongitude(lambda,p);
  const section=domeSection(y),a=domeSection(y-.5),b=domeSection(y+.5),gain=correction(p,'CorrHairDepth');
- if(section.rx<.001)return rotateXYZ([0,-1,0],p.ParamAngleX*correction(p,'CorrTurn'),p.ParamAngleY*correction(p,'CorrTurn'),0)[2];
+ if(section.rx<.001)return rotateXYZ([0,-1,0],p.ParamAngleX*correction(p,'CorrTurn'),0,0)[2];
  const nx=Math.sin(lambda)/Math.max(.001,section.rx),nz=Math.cos(lambda)/(section.rz*gain);
  const ny=-nx*((b.cx-a.cx)+(b.rx-a.rx)*Math.sin(lambda))-nz*((b.cz-a.cz)+(b.rz-a.rz)*gain*Math.cos(lambda));
  const n=[nx,ny,nz];
  const length=Math.hypot(...n);
- return rotateXYZ(n.map(v=>v/length),p.ParamAngleX*correction(p,'CorrTurn'),p.ParamAngleY*correction(p,'CorrTurn'),0)[2];
+ return rotateXYZ(n.map(v=>v/length),p.ParamAngleX*correction(p,'CorrTurn'),0,0)[2];
 }
 export function craniumSeam(){return 1;}
 // The front photograph has no texture resolution at its projected horizon.

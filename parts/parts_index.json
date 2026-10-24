@@ -30,7 +30,7 @@
     "bbox": [
       242,
       2,
-      448,
+      458,
       574
     ],
     "area_px": 162832
@@ -489,7 +489,7 @@
       330,
       521
     ],
-    "reference": "left_45_ref_720.png"
+    "reference": "left_45_no_rimlight.png"
   },
   {
     "id": "side-cranium-left",
@@ -501,6 +501,6 @@
       321,
       521
     ],
-    "reference": "right_45_ref_720.png"
+    "reference": "right_45_no_rimlight.png"
   }
 ]

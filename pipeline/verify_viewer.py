@@ -2,6 +2,7 @@ import functools
 import http.server
 import json
 import threading
+import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
@@ -14,7 +15,7 @@ errors=[];failures=[];metrics={}
 try:
  with sync_playwright() as pw:
   browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--use-angle=swiftshader'])
-  page=browser.new_page(viewport={'width':1440,'height':900},device_scale_factor=1)
+  page=browser.new_page(viewport={'width':1440,'height':900},device_scale_factor=2)
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
   page.on('response',lambda r:failures.append(r.url) if r.status>=400 else None)
@@ -24,6 +25,60 @@ try:
    page.evaluate('([x,y,z,grid,outfit,bangs])=>{studio.setPose(x,y,z,"3D 구면");Object.assign(studio.state,{grid,outfit,bangs,wire:false,before:false});for(const id of ["grid","bangs","wire"])document.getElementById(id).setAttribute("aria-pressed",String(studio.state[id]));for(const id of ["shirt","sweater"])document.getElementById(id).setAttribute("aria-pressed",String(outfit===id));studio.renderer.render(studio.p,studio.state)}',[x,y,z,grid,outfit,bangs])
   def snap(name):
    page.screenshot(path=str(ROOT/'debug'/name),full_page=True)
+  metrics['canopyContinuity']=page.evaluate("""async()=>{
+   const {deform3D}=await import('./rig.mjs'),{p,rig}=studio;
+   const ids=['hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','hairpin'];
+   let maxError=0,cases=0;
+   for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const wind of [0,1]){
+    const pose={...p,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamHairFront:wind,ParamHairSide:-wind};
+    for(const xy of [[490,80],[501,120],[512,180],[502,210],[502,245],[330,180],[674,220],[380,300],[625,400]]){
+     const points=ids.map(id=>deform3D(rig.meshes.find(m=>m.id===id),xy,pose));
+     for(const q of points){maxError=Math.max(maxError,Math.hypot(...q.map((v,i)=>v-points[0][i])));cases++;}
+    }
+   }return {maxError,cases};
+  }""")
+  from PIL import Image,ImageDraw
+  import io
+  tiles=[]
+  for pitch in ([] if '--stereo-only' in sys.argv else [30,0,-30]):
+   for yaw in [-45,0,45]:
+    page.evaluate('studio.p.CorrTurn=1');pose(yaw,pitch)
+    raw=Image.open(io.BytesIO(page.locator('#stage').screenshot()))
+    v=page.evaluate('studio.renderer.view');s=v['scale'];ox=v['ox'];oy=v['oy']
+    tile=raw.crop((ox+152*s,oy+20*s,ox+872*s,oy+740*s)).convert('RGB').resize((480,480))
+    ImageDraw.Draw(tile).text((8,8),f'yaw {yaw} / pitch {pitch}',fill='white');tiles.append(tile)
+  if tiles:
+   sheet=Image.new('RGB',(1440,1440))
+   for i,tile in enumerate(tiles):sheet.paste(tile,((i%3)*480,(i//3)*480))
+   sheet.save(ROOT/'debug/viewer_9dir_grid.png')
+  metrics['stereoRaster']=page.evaluate("""()=>{
+   const {p,state,renderer}=studio,gl=renderer.gl,out=[];
+   const read=extra=>{renderer.render(p,{...state,grid:false,wire:false,...extra});const a=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,a);return a;};
+   for(const gain of [.65,1])for(const yaw of [-1,1].map(s=>s*(gain===1?45:50))){
+    Object.assign(p,{CorrTurn:gain,ParamAngleX:yaw,ParamAngleY:0,ParamAngleZ:0});
+    const side=yaw<0?'right':'left',ear=read({identify:'ear-'+side}),hair=read({identify:'side-hair-'+side}),full=read({});
+    let earPixels=0,foreheadPixels=0;for(let i=0;i<ear.length;i+=4)if(ear[i]>200)earPixels++;
+    const {scale,ox,oy}=renderer.view,w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
+    for(let sy=Math.ceil(oy+280*scale);sy<oy+365*scale;sy++)for(let sx=0;sx<w;sx++)if((yaw<0?(sx-ox)/scale<535:(sx-ox)/scale>469)&&hair[((h-1-sy)*w+sx)*4]>200)foreheadPixels++;
+    const beads=['tail-left-tie','tail-right-tie'].map(id=>{const hidden=read({hidden:new Set([id])});let n=0;for(let i=0;i<full.length;i+=4)if(Math.abs(full[i]-hidden[i])+Math.abs(full[i+1]-hidden[i+1])+Math.abs(full[i+2]-hidden[i+2])>12)n++;return n;});
+    out.push({yaw,gain,earPixels,foreheadPixels,beads});
+   }return out;
+  }""")
+  for side,yaw in [('left',-45),('right',45)]:
+   page.evaluate('studio.p.CorrTurn=1');pose(yaw,0);snap('viewer_actual_45_'+side+'.png')
+  (ROOT/'debug/pose_metrics.json').write_text(json.dumps({k:metrics[k] for k in ['canopyContinuity','stereoRaster']},indent=2)+'\n')
+  print(json.dumps(metrics['stereoRaster']),flush=True)
+  assert all(r['earPixels']>=1500 and r['foreheadPixels']==0 and min(r['beads'])>0 for r in metrics['stereoRaster'])
+  if '--poses-only' in sys.argv or '--stereo-only' in sys.argv:
+   browser.close();raise SystemExit(0)
+  page.close()
+  page=browser.new_page(viewport={'width':1440,'height':900},device_scale_factor=1)
+  page.on('pageerror',lambda e:errors.append(str(e)))
+  page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
+  page.on('response',lambda r:failures.append(r.url) if r.status>=400 else None)
+  page.on('requestfailed',lambda r:failures.append(r.url))
+  page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle');page.wait_for_function('window.studio?.ready',timeout=30000)
+  page.locator('#correction-recommended').click()
   for name,x,y in [('front',0,0),('turn_left_25',-25,0),('turn_right_25',25,0),('turn_left_50',-50,0),('turn_right_50',50,0),('pitch_up_20',0,20),('pitch_down_20',0,-20)]:
    for grid in [False,True]:
     pose(x,y,grid=grid);snap('viewer_1440_'+name+('_grid' if grid else '')+'.png')
@@ -81,7 +136,7 @@ try:
       for(const id of ['face-skin','hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right']){
         const m=studio.rig.meshes.find(m=>m.id===id),q=m.positions.map(pt=>deform3D(m,pt,p));
         const reversed=m.triangles.filter(t=>area(t.map(i=>q[i]))*area(t.map(i=>m.positions[i]))<0).length;
-        const culled=id==='hair-top'||id.startsWith('side-hair');
+        const culled=id==='hair-top'||id.startsWith('side-hair')||id.startsWith('bangs');
         rows.push({gain,pose:[x,y],id,folded:culled?0:reversed,backFacing:culled?reversed:0});
       }
     }
@@ -198,6 +253,7 @@ try:
   (ROOT/'debug/viewer_metrics.json').write_text(json.dumps(metrics,ensure_ascii=False,indent=2)+'\n')
   print(json.dumps({k:v for k,v in metrics.items() if k not in ['clipping','neckOcclusion','featureVisibility']},ensure_ascii=False))
   assert metrics['surfaceComparison']['changedPixels']>0
+  assert metrics['canopyContinuity']['maxError']<1e-4
   assert metrics['correctionInput']==.73
   assert metrics['hairControlInput']==.8 and metrics['occlusionControlInput']==.5
   assert metrics['attachment']['maxFolded']==0

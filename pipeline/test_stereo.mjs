@@ -27,7 +27,7 @@ test('cranium is opaque while it rotates through the near horizon',()=>{
   assert.equal(opacity(mesh('side-cranium-'+side),{...base,ParamAngleX:sgn*yaw},{hidden:new Set()}),1);
 });
 test('eye, nose and mouth centers reach measured asymmetric targets',()=>{
- for(const [id,front,neg,pos] of [['eye-left-iris',[415.7,432.2],[362.4,429.3],[514.2,430.7]],['eye-right-iris',[588.1,430.8],[525.1,429.2],[670.1,428.9]],['nose-detail',[508,497],[406.9,497.1],[629.9,490.5]],['mouth-detail',[504.5,554.5],[434.1,556.2],[598.7,553.3]]]){
+ for(const [id,front,neg,pos] of [['eye-left-iris',[415.7,432.2],[348.05,429.8],[496.45,430.65]],['eye-right-iris',[588.1,430.8],[507.35,429.25],[655.75,428.4]],['nose-detail',[508,497],[396.5,493.8],[619.5,493.8]],['mouth-detail',[504.5,554.5],[422.2,554.75],[586.8,554.75]]]){
   for(const [yaw,target] of [[-45,neg],[45,pos]]){
    const q=deform3D(mesh(id),front,{...base,ParamAngleX:yaw});
    assert(Math.hypot(q[0]-target[0],q[1]-target[1])<1,`${id} ${yaw}: ${q}`);
