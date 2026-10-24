@@ -49,11 +49,13 @@ export function featureWorld(id,point,p){
   // iris as the origin would cancel its head-driven roll inside the socket.
   const origin=legacyFeatureWorld(id,anchor,{...neutral,ParamAngleX:rest.ParamAngleX},neutral);
   const target=[0,1].map(i=>gridValue(FEATURE_FIT.poses,yaw,pitch,pose=>{
-   if(pose.pitch&&(i===1||!eye))return pose.centers[key][i];
+   if(pose.pitch)return pose.centers[key][i];
    return legacyFeatureWorld(id,anchor,{...neutral,CorrTurn:1,ParamAngleX:pose.yaw},neutral)[i];
   }));
   const scale=i=>eye?gridValue(FEATURE_FIT.poses,yaw,pitch,pose=>pose.scales[side][i]):1;
-  return {center,origin,target,width:1,height:brow?1:scale(1)};
+  const baseWidth=eye&&!brow?gridValue(FEATURE_FIT.poses,yaw,0,pose=>pose.scales[side][0]):1;
+  const width=eye&&!brow?scale(0)/Math.max(.1,baseWidth):1;
+  return {center,origin,target,width,height:brow?1:scale(1)};
  });
  q[0]+=center[0]-origin[0];q[1]+=center[1]-origin[1];
  const sPhi=clamp(pitch/30,-1.2,1.2),theta=radians(clamp(yaw,-45,45));

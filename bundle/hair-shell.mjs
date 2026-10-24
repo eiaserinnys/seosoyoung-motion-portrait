@@ -87,7 +87,7 @@ function templeWorld(point,side,p) {
  const hanging=smooth((point[1]-350)/57);
  for(let i=0;i<3;i++)shell[i]+=(lock[i]-shell[i])*hanging;
  const shift=outlinePitchShift(point,p);
- for(const i of [0,1])shell[i]+=shift[i]*join;
+ shell[0]+=shift[0]*join;
  return shell;
 }
 export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}

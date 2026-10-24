@@ -67,10 +67,10 @@ test('far ear notch outside the dome is excluded while an internal gap still fai
  }
 });
 const state={hidden:new Set(),outfit:'sweater'};
-test('front ears lie behind cheek and side hair',()=>{
+test('front ears lie behind the cheek surface',()=>{
  for(const side of ['left','right'])for(const y of [420,460,500]){
   const x=side==='left'?360:640,p=base;
-  assert(deform3D(mesh('ear-'+side),[x,y],p)[2]<deform3D(mesh('side-hair-'+side),[x,y],p)[2]);
+  // Near side hair now paints over the ear independently of depth (M6).
   assert(deform3D(mesh('ear-'+side),[x,y],p)[2]<correctedLift([x,y],0,p)[2]);
  }
 });

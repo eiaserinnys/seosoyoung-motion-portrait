@@ -109,7 +109,11 @@ export class Renderer {
         gl.disable(gl.DEPTH_TEST);gl.depthMask(false);
       // Measured feature anchors define motion, not a second skin surface.
       // Paint facial details over the preserved face; hair still draws later.
-      }else if(mesh.id.startsWith('side-hair')){gl.enable(gl.DEPTH_TEST);gl.depthMask(false);}
+      }else if(mesh.id.startsWith('side-hair')){
+        const farSideHair=(mesh.id==='side-hair-left'&&p.ParamAngleX<0)||(mesh.id==='side-hair-right'&&p.ParamAngleX>0);
+        if(farSideHair)gl.enable(gl.DEPTH_TEST);else gl.disable(gl.DEPTH_TEST);
+        gl.depthMask(false);
+      }
       else if(frontHair(mesh)||mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-')){gl.disable(gl.DEPTH_TEST);gl.depthMask(false);}
       else{gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
       if(frontHair(mesh)||mesh.id==='face-skin')gl.enable(gl.CULL_FACE);else gl.disable(gl.CULL_FACE);

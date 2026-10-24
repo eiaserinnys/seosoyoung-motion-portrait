@@ -28,7 +28,18 @@ export function strandWorld(point,side,p){
  const advance=near&&Math.abs(theta)<45?12*Math.sin(4*radians(theta))**2:0;
  const pose={...p,ParamAngleX:(theta+Math.sign(theta)*advance)/correction(p,'CorrTurn')};
  const local=[point[0]-HEAD_CENTER[0],point[1]-HEAD_CENTER[1],z];
- const world=artWorld(local,pose);
+ // The fitted yaw depth includes camera compression. Preserve that XY fit,
+ // but pitch the whole ribbon at the physical inner cheek/ear attachment.
+ const innerX=side==='left'?353:655;
+ const zAttach=Math.max(strandDepth([innerX,point[1]],side),earWorld([innerX,point[1]],side,rest)[2]+8);
+ const yawPose={...pose,ParamAngleY:0,ParamAngleZ:0};
+ const yawWorld=artWorld(local,yawPose),attachment=[local[0],local[1],zAttach];
+ const pitched=artWorld(attachment,{...pose,ParamAngleZ:0}),flat=artWorld(attachment,yawPose);
+ const world=[yawWorld[0]+pitched[0]-flat[0],yawWorld[1]+pitched[1]-flat[1],pitched[2]];
+ if(p.ParamAngleZ){
+  const rolled=artWorld([world[0]-HEAD_CENTER[0],world[1]-HEAD_CENTER[1],world[2]],{...p,ParamAngleX:0,ParamAngleY:0});
+  world.splice(0,3,...rolled);
+ }
  if(!near&&theta){
   const farRows=side==='left'?[[407,231,307],[430,229,310],[460,237,318],[490,255,325],[515,331,333]]:[[407,712,764],[430,714,766],[460,706,767],[490,699,762],[515,711,716]];
   const rows=STRANDS[side],y=point[1];let index=0;

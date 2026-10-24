@@ -18,7 +18,7 @@ try:
   page.add_script_tag(type='module',content=interior+'\nwindow.rasterInterior={mainOpaqueRuns,headInteriorInterval,rowAlphaGaps,foreheadBoundary,foreheadIntrusion};')
   page.wait_for_function('window.rasterInterior')
   metrics=page.evaluate('''async()=>{
-    const {renderer,state,p,rig}=studio,gl=renderer.gl,{deform3D}=await import('./rig.mjs'),{outlineRow}=await import('./face-outline.mjs'),{domeSection}=await import('./hair-surface.mjs');
+    const {renderer,state,p,rig}=studio,gl=renderer.gl,{deform3D}=await import('./rig.mjs'),{outlineRow}=await import('./face-outline.mjs'),{domeSection}=await import('./hair-surface.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs');
     const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
     const read=options=>{renderer.render(p,{...state,grid:false,wire:false,...options});const d=new Uint8Array(w*h*4);gl.readPixels(0,0,w,h,gl.RGBA,gl.UNSIGNED_BYTE,d);return d;};
     const solo=ids=>read({mode:'solo',selectedIds:new Set(ids)});
@@ -90,16 +90,42 @@ try:
       rows.push({gain,yaw,foreheadSideHairPixels,headInteriorHolePixels,holeLocations,leakLocations,cheekEarGapPixels,maxConcavity,contour,nearEarPixels:yaw?nearEarPixels:null,nearEarColorContribution:yaw?contribution('ear-'+near):null,earOverlap,farBackOutsidePixels:leak,farEarPixels:yaw?contribution('ear-'+far):null,
         nearCraniumPixels:contribution('side-cranium-'+near),farCraniumPixels:contribution('side-cranium-'+far)});
     }
-    return rows;
+    const pitchedRows=[];
+    const poses=[...[-45,45].flatMap(x=>[-30,30].map(y=>[x,y])),...[-33.75,33.75].flatMap(x=>[-22.5,22.5].map(y=>[x,y]))];
+    for(const [yaw,pitch] of poses){
+      Object.assign(p,{CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamAngleZ:0});
+      const pose={...p,[FRAME_CACHE]:new Map()},full=read({}),near=yaw<0?'right':'left',inner=near==='right'?626:379;
+      const ear=rig.meshes.find(m=>m.id==='ear-'+near),face=rig.meshes.find(m=>m.id==='face-skin');
+      const boundary=[];
+      for(let y=347;y<=616;y+=.5)boundary.push(deform3D(face,[outlineRow(y)[near==='right'?1:0],y],pose));
+      const {scale,ox,oy}=renderer.view;
+      let pitchedCheekEarGapPixels=0;
+      for(let y=440;y<=490;y++){
+        const e=deform3D(ear,[inner+(near==='right'?25:-25),y],pose),hits=[];
+        for(let i=1;i<boundary.length;i++){
+          const a=boundary[i-1],b=boundary[i];
+          if((e[1]-a[1])*(e[1]-b[1])<=0&&a[1]!==b[1])hits.push(a[0]+(b[0]-a[0])*(e[1]-a[1])/(b[1]-a[1]));
+        }
+        if(!hits.length)throw Error(`No pitched cheek boundary ${yaw},${pitch},${y}`);
+        const faceX=near==='right'?Math.max(...hits):Math.min(...hits),sy=Math.round(oy+e[1]*scale);
+        const left=Math.ceil(ox+Math.min(e[0],faceX)*scale),right=Math.floor(ox+Math.max(e[0],faceX)*scale)+1;
+        if(left<0||right>w||sy<0||sy>=h)throw Error('Pitched ear/cheek interval outside raster');
+        pitchedCheekEarGapPixels+=window.rasterInterior.rowAlphaGaps(full,w,h,sy,left,right).count;
+      }
+      pitchedRows.push({yaw,pitch,pitchedCheekEarGapPixels});
+    }
+    return {rows,pitchedRows};
   }''')
-  (ROOT/'debug/outline_metrics.json').write_text(json.dumps(metrics,indent=2)+'\n')
+  (ROOT/'debug/outline_metrics.json').write_text(json.dumps(metrics['rows'],indent=2)+'\n')
+  (ROOT/'debug/pitched_outline_metrics.json').write_text(json.dumps(metrics['pitchedRows'],indent=2)+'\n')
   from check_outline_metrics import validate
   # Validation follows captures so a failed geometry has inspectable evidence.
-  print(json.dumps([{k:v for k,v in r.items() if k!='contour'} for r in metrics]))
+  print(json.dumps({**metrics,'rows':[{k:v for k,v in r.items() if k!='contour'} for r in metrics['rows']]}))
   for side,yaw in [('left',-45),('right',45)]:
    page.evaluate('(yaw)=>{studio.p.CorrTurn=1;studio.setPose(yaw,0,0,"45° 레퍼런스 비교");studio.renderer.render(studio.p,studio.state)}',yaw)
    page.screenshot(path=str(ROOT/'debug'/f'viewer_actual_45_{side}.png'),full_page=True)
   browser.close()
-  validate(metrics)
-  print("PASS r11 raster occlusion and cranium visibility")
+  validate(metrics['rows'])
+  assert all(r['pitchedCheekEarGapPixels']==0 for r in metrics['pitchedRows'])
+  print("PASS r11 14-pose raster and 8 pitched cheek/ear gap checks")
 finally:server.shutdown();server.server_close()

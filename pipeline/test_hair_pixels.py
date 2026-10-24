@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from pipeline.hair_albedo import delight, transfer_redrawn_hair
-from pipeline.fit_outline import symmetrize
+from pipeline.fit_outline import symmetrize,CHIN_CANVAS_SPAN
 
 class HairPixels(unittest.TestCase):
  def test_rim_is_reduced_without_changing_alpha_or_erasing_texture(self):
@@ -26,14 +26,39 @@ class HairPixels(unittest.TestCase):
   np.testing.assert_array_equal(b[5,5,:3],redrawn[5,5])
   for y,x in [(15,15),(30,15),(15,35)]:
    np.testing.assert_array_equal(b[y,x],original[y,x]);self.assertEqual(mask[y,x],0)
- def test_pitched_far_jaw_cannot_narrow_more_than_clear_horizontal_reference(self):
+ def test_near_cheek_retains_clear_r11_attachment_and_uses_less_occluded_side(self):
   rows=[[465,350,650,330,610,390,670,465]]
   poses=[dict(yaw=yaw,pitch=pitch,yTop=465,yChin=616,
-              registration={'topEdgeY':[465,465]},rows=[[465,320 if yaw<0 else 420,570 if yaw<0 else 680]])
+              rows=[[465,465,320 if yaw<0 else 420,465,570 if yaw<0 else 680]])
          for pitch in [-30,30] for yaw in [-45,0,45]]
   symmetrize(rows,poses)
   up=next(p for p in poses if p['pitch']==30 and p['yaw']==-45)
-  self.assertEqual(up['rows'][0][2],610)
+  self.assertEqual(up['rows'][0][4],610)
+  # A wider independent near cheek must win rather than averaging the cut.
+  poses[0]['rows'][0][4]=630
+  symmetrize(rows,poses)
+  self.assertEqual(poses[0]['rows'][0][4],630)
+ def test_quartic_chin_endpoint_cannot_cross_its_opposite_edge(self):
+  rows=[[616,497,508,423,436,568,581,615]]
+  poses=[dict(yaw=yaw,pitch=pitch,rows=[[616,615,506,615,499]])
+         for pitch in [-30,30] for yaw in [-45,0,45]]
+  symmetrize(rows,poses)
+  for p in poses:
+   if p['yaw']==0:self.assertGreaterEqual(p['rows'][0][4]-p['rows'][0][2],11)
+  self.assertEqual(CHIN_CANVAS_SPAN,{30:64.0,-30:50.0})
+ def test_sclera_boundary_fixture_matches_the_actual_opaque_parts(self):
+  import json
+  root=Path(__file__).resolve().parents[1]
+  rig=json.loads((root/'bundle/assets/seosoyoung-rig.json').read_text())
+  fixture=json.loads((root/'pipeline/fixtures/sclera-alpha-boundary.json').read_text())
+  for side in ['left','right']:
+   key=f'eye-{side}-sclera';mesh=next(m for m in rig['meshes'] if m['id']==key)
+   alpha=np.array(Image.open(root/'parts'/f'{key}.png'))[:,:,3]
+   points=[]
+   for y in range(alpha.shape[0]):
+    xs=np.flatnonzero(alpha[y]>127)
+    if len(xs):points.extend([[int(x)+mesh['bbox'][0],y+mesh['bbox'][1]] for x in [xs.min(),xs.max()]])
+   self.assertEqual(fixture[side],points)
  def test_built_fringe_and_back_ribbons_keep_the_complete_original_alpha(self):
   root=Path(__file__).resolve().parents[1]
   for key in ['bangs-left','bangs-right','back-hair-left','back-hair-right']:

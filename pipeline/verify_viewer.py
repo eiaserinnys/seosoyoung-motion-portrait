@@ -26,11 +26,11 @@ try:
   def snap(name):
    page.screenshot(path=str(ROOT/'debug'/name),full_page=True)
   metrics['canopyContinuity']=page.evaluate("""async()=>{
-   const {deform3D}=await import('./rig.mjs'),{p,rig}=studio;
+   const {deform3D}=await import('./rig.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs'),{p,rig}=studio;
    const ids=['hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','hairpin'];
    let maxError=0,cases=0;
    for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const wind of [0,1]){
-    const pose={...p,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamHairFront:wind,ParamHairSide:-wind};
+    const pose={...p,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamHairFront:wind,ParamHairSide:-wind,[FRAME_CACHE]:new Map()};
     for(const xy of [[490,80],[501,120],[512,180],[502,210],[502,245],[330,180],[674,220],[380,300],[625,400]]){
      const points=ids.map(id=>deform3D(rig.meshes.find(m=>m.id===id),xy,pose));
      for(const q of points){maxError=Math.max(maxError,Math.hypot(...q.map((v,i)=>v-points[0][i])));cases++;}
@@ -133,13 +133,13 @@ try:
     return {radiusError,eyeRadiusError,neckYawError,eyeLocalHeadLeak,bodyHeadLeak,sphereVertexCount:shell.positions.length,backHemisphere:shell.positions.some(q=>q[2]<-261),frontHemisphere:shell.positions.some(q=>q[2]>261),shirtOpacity:opacity(shirt,base,{...studio.state,outfit:'sweater'})};
   }""")
   metrics['attachment']=page.evaluate("""async()=>{
-    const {deform3D}=await import('./rig.mjs'),{CORRECTION_PRESETS}=await import('./geometry.mjs');
+    const {deform3D}=await import('./rig.mjs'),{CORRECTION_PRESETS}=await import('./geometry.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs');
     const base={...Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
     const area=([a,b,c])=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
     const area3=([a,b,c])=>{const u=b.map((v,i)=>v-a[i]),v=c.map((w,i)=>w-a[i]);return Math.hypot(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]);};
     const rows=[];
     for(const gain of [.65,1])for(const [x,y]of [[-50,-28],[-50,28],[50,-28],[50,28],[-25,0],[25,0]]){
-      const p={...base,CorrTurn:gain,ParamAngleX:x,ParamAngleY:y};
+      const p={...base,CorrTurn:gain,ParamAngleX:x,ParamAngleY:y,[FRAME_CACHE]:new Map()};
       for(const id of ['face-skin','hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right']){
         const m=studio.rig.meshes.find(m=>m.id===id),q=m.positions.map(pt=>deform3D(m,pt,p));
         const reversed=m.triangles.filter(t=>area(t.map(i=>q[i]))*area(t.map(i=>m.positions[i]))<0).length;
@@ -151,10 +151,10 @@ try:
     return {maxFolded:Math.max(...rows.map(r=>r.folded)),maxCulledBackFaces:Math.max(...rows.map(r=>r.backFacing)),faceMaskProjectedBackFaces:rows.reduce((n,r)=>n+r.projectedBackFaces,0),faceMaskMinAreaRatio:Math.min(...rows.filter(r=>r.id==='face-skin').map(r=>r.minAreaRatio)),cases:rows.length,effectiveAutoAngles:[50*base.CorrTurn,28*base.CorrTurn,14]};
   }""")
   metrics['neckOcclusion']=page.evaluate("""async () => {
-    const {deform3D}=await import('./rig.mjs'),{renderer,state}=studio,gl=renderer.gl;
+    const {deform3D}=await import('./rig.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs'),{renderer,state}=studio,gl=renderer.gl;
     const base=Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),neck=studio.rig.meshes.find(m=>m.id==='neck');
     return [[-50,0,0],[50,0,0],[0,28,0],[0,-28,0],[-50,-28,-14],[50,28,14]].map(angles=>{
-      const p={...base,ParamAngleX:angles[0],ParamAngleY:angles[1],ParamAngleZ:angles[2]};renderer.render(p,{...state,mode:'solo',selectedIds:new Set(['face-skin']),grid:false,wire:false});
+      const p={...base,ParamAngleX:angles[0],ParamAngleY:angles[1],ParamAngleZ:angles[2],[FRAME_CACHE]:new Map()};renderer.render(p,{...state,mode:'solo',selectedIds:new Set(['face-skin']),grid:false,wire:false});
       const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight,data=new Uint8Array(w*h*4);gl.readPixels(0,0,w,h,gl.RGBA,gl.UNSIGNED_BYTE,data);const {scale,ox,oy}=renderer.view;
       const points=[436,502,567].map(x=>{const q=deform3D(neck,[x,540],p),xx=Math.floor(ox+q[0]*scale),yy=Math.floor(oy+q[1]*scale);return {point:q,coverAlpha:data[((h-1-yy)*w+xx)*4+3]};});
       return {angles,points};
@@ -162,14 +162,15 @@ try:
   }""")
   pose(0,0)
   metrics['neckCapClipping']=page.evaluate("""async()=>{
-    const {renderer,state,p}=studio,gl=renderer.gl,{deform3D}=await import('./rig.mjs'),neck=studio.rig.meshes.find(m=>m.id==='neck'),out=[];
+    const {renderer,state,p}=studio,gl=renderer.gl,{deform3D}=await import('./rig.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs'),neck=studio.rig.meshes.find(m=>m.id==='neck'),out=[];
     for(const angles of [[-50,0,0],[50,0,0],[0,28,0],[0,-28,0],[-50,-28,-14],[50,28,14]]){
       [p.ParamAngleX,p.ParamAngleY,p.ParamAngleZ]=angles;
+      p[FRAME_CACHE]=new Map();
       const read=id=>{renderer.render(p,{...state,mode:'solo',selectedIds:new Set([id]),wire:false,grid:false});const a=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,a);return a;};
       const face=read('face-skin'),skin=read('neck'),{scale,ox,oy}=renderer.view,w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
       let exposed=0;for(let x=436;x<=567;x++){const q=deform3D(neck,[x,540],p),xx=Math.floor(ox+q[0]*scale),yy=h-1-Math.floor(oy+q[1]*scale),i=(yy*w+xx)*4+3;if(face[i]===0&&skin[i]>4)exposed++;}
       out.push({angles,exposed});
-    }return out;
+    }delete p[FRAME_CACHE];return out;
   }""")
   metrics['clipping']=page.evaluate("""() => {
     const {renderer,rig,p,state}=studio,gl=renderer.gl;
