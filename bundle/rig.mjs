@@ -29,16 +29,16 @@ export function deform3D(mesh,point,parameters) {
     const capT=clamp((578-y)/42,0,1);
     const xIn=502+(x-502)*(1-.75*capT),yIn=y-16*capT,sampleY=Math.min(yIn,568);
     // Yaw is a rotation about the neck's vertical axis, never a lateral shear input.
-    const head=artWorld(correctedLift([xIn,sampleY],-2,p),{...p,ParamAngleX:0});
-    if(p.ParamAngleY){
-      const chin=[502.5,616],pose={...p,ParamAngleZ:0};
-      const plain=artWorld(correctedLift(chin,0,p),pose),jaw=outlineWorld(chin,pose);
-      const shift=jaw[1]-plain[1],roll=radians(p.ParamAngleZ);
-      head[0]-=shift*Math.sin(roll);head[1]+=shift*Math.cos(roll);
-    }
+    const head=artWorld(correctedLift([xIn,sampleY],-2,p),{...p,ParamAngleX:0,ParamAngleY:0});
     const headDx=head[0]-x,headDy=head[1]-sampleY+yIn-y;
     const u=clamp((680-y)/110,0,1),weight=u*u*(3-2*u),upper=clamp((1536-y)/960,0,1);
-    return [x+headDx*weight+p.ParamBodyAngleX*upper*(1-weight),y+headDy*weight-p.ParamBreath*4*upper*(1-weight),-20];
+    const result=[x+headDx*weight+p.ParamBodyAngleX*upper*(1-weight),y+headDy*weight-p.ParamBreath*4*upper*(1-weight),-20];
+    if(p.ParamAngleY){
+      const chinDy=outlineWorld([502,616],{...p,ParamAngleZ:0})[1]-616;
+      const t=1-clamp((y-585)/95,0,1),attach=t*t*(3-2*t),roll=radians(p.ParamAngleZ);
+      result[0]-=chinDy*attach*Math.sin(roll);result[1]+=chinDy*attach*Math.cos(roll);
+    }
+    return result;
   }
   const feature=id.startsWith('eye-')||id==='closed-eyes-v1'||id==='nose-detail'||id.startsWith('mouth');
   if(feature&&correction(p,'CorrOutline')>0){

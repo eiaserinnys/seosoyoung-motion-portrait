@@ -1,32 +1,23 @@
 import {strandWorld} from './side-strands.mjs';
 import {hairSurface,domeSection,craniumPosition} from './hair-surface.mjs';
 import {earWorld} from './stereo-attachments.mjs';
-import {DOME} from './dome-data.mjs';
-import {outlinePitchShift} from './face-outline.mjs';
-import {HEAD_CENTER,HEAD_RADIUS,clamp,radians,correction,correctedLift,artWorld} from './geometry.mjs';
+import {HEAD_CENTER,clamp,correction,correctedLift,artWorld} from './geometry.mjs';
 
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 
-// Preserve the established forehead/fringe correction; the complete outer
-// skull is owned by hairSurface, not this front illustration relief.
+const smax=(a,b,k=8)=>(a+b+Math.sqrt((a-b)**2+k*k))/2;
+// The front dome meets the rear shell at longitude ±90°, where Z is cz.
 export function hairLift(point,p,relief=0) {
-  const q=correctedLift(point,0,p),y=point[1];
-  if(y<310){
-    const t=clamp((y-(HEAD_CENTER[1]-HEAD_RADIUS))/246,0,1);
-    const dx=(point[0]-HEAD_CENTER[0])/DOME.rx;
-    const v=1-dx*dx-((y-DOME.cy)/DOME.ry)**2;
-    // Tangent continuation avoids a square-root derivative cliff at the limb.
-    const upper=v>=.16?Math.sqrt(v):Math.max(0,.4+(v-.16)/.8);
-    // Ease the pole into the sampled artwork ribbon; its finite slope avoids
-    // a square-root cliff at the first row while keeping the pole at zero.
-    q[2]=q[2]*smooth(t)+30*correction(p,'CorrHairDepth')*upper*Math.sin(Math.PI*t)**2;
-  }
-  // Measured outer forehead clearance. The center fringe remains unchanged;
-  // the temple ribbon joins its shallower attachment before the free locks.
-  const temple=smooth((Math.abs(point[0]-HEAD_CENTER[0])-105)/45)*smooth((y-240)/65)*(1-smooth((y-350)/60));
-  q[2]-=28*temple;
-  q[2]+=relief;
-  return q;
+ const [x,y]=point,{cx,rx,cz}=domeSection(y);
+ const s=clamp((x-HEAD_CENTER[0]-cx)/Math.max(1,rx),-1,1);
+ const u=clamp((250-y)/192,0,1),cap=Math.sqrt(Math.max(.08,1-u*u));
+ const lowerMix=smooth((y-230)/120),skinY=clamp(y,220,350);
+ const zSkinMid=correctedLift([502,skinY],0,p)[2];
+ const zCenter=(195*cap*(1-lowerMix)+(zSkinMid+12)*lowerMix)*correction(p,'CorrHairDepth');
+ const zDome=cz+(zCenter-cz)*Math.sqrt(Math.max(0,1-s*s));
+ const zFace=correctedLift([x,skinY],0,p)[2];
+ const foreheadFade=(1-smooth((Math.abs(s)-.72)/.28))*smooth((y-210)/35);
+ return [x-HEAD_CENTER[0],y-HEAD_CENTER[1],zDome+(smax(zDome,zFace+6)-zDome)*foreheadFade+relief];
 }
 const shellWorld=(point,p,relief=0)=>hairSurface(point,p,0,relief);
 const fringeSurface=(point,p)=>artWorld(hairLift(point,p,0),p);
@@ -35,8 +26,7 @@ const fringeSurface=(point,p)=>artWorld(hairLift(point,p,0),p);
 export function canopyWorld(point,p) {
  const [x,y]=point,world=fringeSurface(point,p);
  const side=x<HEAD_CENTER[0]?'left':'right';
- const lower=smooth((y-405)/55),xStart=126-42*lower,width=14;
- const lockWeight=smooth((Math.abs(x-HEAD_CENTER[0])-xStart)/width)*smooth((y-340)/67);
+ const lockWeight=smooth((y-340)/45);
  if(lockWeight){
   const lock=templeWorld(point,side,p);
   for(let i=0;i<3;i++)world[i]+=(lock[i]-world[i])*lockWeight;
@@ -50,25 +40,20 @@ export const hairWorld=canopyWorld;
 export const fringeWorld=canopyWorld;
 export const craniumWeight=()=>1;
 export function craniumWorld([x,y,lambda],side,p) {
- const dome=craniumPosition([x,y,lambda],p);
- const {cx,rx,cz}=domeSection(y),sign=Math.sign(lambda)||(side==='left'?-1:1);
+ const world=craniumPosition([x,y,lambda],p);
+ const {cx,rx}=domeSection(y),sign=Math.sign(lambda)||(side==='left'?-1:1);
+ const crownBlend=1-smooth((y-345)/35);
+ if(!crownBlend)return world;
  const seam=canopyWorld([HEAD_CENTER[0]+cx+sign*rx,y],p);
- // Reuse the endpoint exactly instead of retaining cos(pi/2) roundoff.
- if(Math.abs(lambda)===Math.PI/2)return seam;
- const w=1-smooth((Math.abs(lambda)-Math.PI/2)/(Math.PI/4));
- const domeSeam=artWorld([cx+sign*rx,y-HEAD_CENTER[1],cz],p);
- const bridgedX=dome[0]+(seam[0]-domeSeam[0])*w;
- const taper=1-.65*smooth((y-425)/70)*(1-w);
- return [taper===1?bridgedX:seam[0]+(bridgedX-seam[0])*taper,seam[1],dome[2]+(seam[2]-domeSeam[2])*w];
+ if(Math.abs(Math.abs(lambda)-Math.PI/2)<1e-4)return world.map((v,i)=>v+(seam[i]-v)*crownBlend);
+ const w=clamp((Math.abs(lambda)-Math.PI/2)/(Math.PI*.18),0,1);
+ return [world[0],world[1]+(seam[1]-world[1])*crownBlend*(1-w),world[2]];
 }
 export function farSideWeight(side,p) {
   const angle=p.ParamAngleX*(side==='left'?-1:1);
   return smooth(angle/50)*correction(p,'CorrHairOcclusion');
 }
 function templeWorld(point,side,p) {
- const inner=side==='left'?379:626;
- const outward=Math.max(0,(point[0]-inner)*(side==='left'?-1:1));
- const join=(1-smooth(outward/30))*smooth((point[1]-380)/70);
  // Hanging front locks retain the original forehead-depth attachment rather
  // than being flattened onto the narrower skull at ear height. Rotation moves
  // them in front of the cheek, uncovering the posterior ear naturally.
@@ -76,14 +61,14 @@ function templeWorld(point,side,p) {
  const shell=fringe.map((v,i)=>v+(lock[i]-v)*lower);
  const hanging=smooth((point[1]-350)/57);
  for(let i=0;i<3;i++)shell[i]+=(lock[i]-shell[i])*hanging;
- const world=shell,shift=outlinePitchShift(point,p);
- for(const i of [0,1])world[i]+=shift[i]*join;
- return world;
+ return shell;
 }
 export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}
 export function backWorld(point,p) {
  const back=shellWorld(point,p,-4),upper=1-smooth((point[1]-380)/85);
  if(!upper)return back;
- const canopy=artWorld(hairLift(point,p,-4),p);
+ // Background is painted first, so the upper backing can share the dome
+ // exactly. A depth-only inset opens a projected crack at the far temple.
+ const canopy=artWorld(hairLift(point,p,0),p);
  return back.map((v,i)=>v+(canopy[i]-v)*upper);
 }

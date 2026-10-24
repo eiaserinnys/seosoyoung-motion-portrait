@@ -1,6 +1,5 @@
 import {HEAD_CENTER,artWorld,correctedLift,correction,clamp,radians} from './geometry.mjs';
-import {OUTLINE_ROWS,OUTLINE_POSES} from './outline-data.mjs';
-import {gridValue,frameValue} from './pose-grid.mjs';
+import {OUTLINE_ROWS} from './outline-data.mjs';
 export {OUTLINE_ROWS} from './outline-data.mjs';
 // Cubic Hermite interpolation keeps the sampled mask residual smooth in height.
 export function outlineRow(y){
@@ -36,45 +35,32 @@ function legacyOutline(point,world,p){
  const dy=(ty-Math.min(sampleY,616))*even*weight,roll=radians(p.ParamAngleZ);
  return [world[0]+shift*Math.cos(roll)-dy*Math.sin(roll),world[1]+shift*Math.sin(roll)+dy*Math.cos(roll),world[2]];
 }
-const SOURCE_ROWS=OUTLINE_ROWS.filter(r=>r[0]>=465);
+const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+// Yaw keeps the measured r12 surface; only pitch sees the jaw's rounded section.
 function symmetricBase(point,p,relief=0){
- const [l,r]=outlineRow(point[1]),offset=(l+r)/2-HEAD_CENTER[0];
- const q=artWorld(correctedLift([point[0]-offset,point[1]],relief,p),p),roll=radians(p.ParamAngleZ);
+ const [x,y]=point,[l,r]=outlineRow(y),mid=(l+r)/2,offset=mid-HEAD_CENTER[0];
+ const local=correctedLift([x-offset,y],relief,p),roll=radians(p.ParamAngleZ);
+ const phi=radians(clamp((p.ParamAngleY??0)*correction(p,'CorrTurn'),-30,30));
+ const sPhi=clamp(Math.sin(phi)/Math.max(1e-4,Math.sin(radians(30*correction(p,'CorrTurn')))),-1.2,1.2);
+ const s=clamp((x-mid)/Math.max(12,(r-l)/2),-1,1);
+ local[0]+=s*10*sPhi*smooth((y-470)/70)*(1-smooth((y-575)/35));
+ const q=artWorld(local,p);
+ if(phi&&y>380){
+  const zMid=correctedLift([HEAD_CENTER[0],Math.min(y,490)],relief,p)[2];
+  const chinConv=smooth((y-525)/(616-525));
+  const zRim=(28+(zMid-8-28)*chinConv)*correction(p,'CorrDepth')/.55+relief;
+  const z3d=zRim+(zMid-zRim)*Math.sqrt(Math.max(.04,1-.96*s*s));
+  const zPitch=local[2]+(z3d-local[2])*smooth((y-380)/70);
+  const restRoll={...p,ParamAngleZ:0},before=artWorld(local,restRoll);
+  const pitched=artWorld([local[0],local[1],zPitch],restRoll),dy=pitched[1]-before[1];
+  q[0]-=dy*Math.sin(roll);q[1]+=dy*Math.cos(roll);
+  // Keep XYZ continuous through zero pitch as well as preserving yaw-only XYZ.
+  q[2]+=(pitched[2]-before[2])*smooth(Math.abs(sPhi));
+ }
  q[0]+=offset*Math.cos(roll);q[1]+=offset*Math.sin(roll);
  return q;
 }
-function targetRow(pose,y){
- const rows=pose.rows;
- if(y<=rows[0][0]&&pose.pitch===0)return rows[0];
- // Source samples are deliberately nonuniform; interpolate by front height.
- let i=0;while(i<rows.length-2&&y>SOURCE_ROWS[i+1][0])i++;
- const src=SOURCE_ROWS,t=clamp((y-src[i][0])/(src[i+1][0]-src[i][0]),0,1);
- return rows[i].map((v,j)=>v+(rows[i+1][j]-v)*t);
-}
-export function outlinePitchShift(point,p){
- const t=clamp((point[1]-218)/247,0,1);
- const weight=correction(p,'CorrOutline')*t*t*(3-2*t);
- const pitch=p.ParamAngleY*correction(p,'CorrTurn');
- if(!pitch||!weight)return [0,0,0];
- const y=clamp(point[1],465,616),[l,r]=outlineRow(y),[frontL,frontR]=outlineRow(point[1]);
- const u=clamp((point[0]-frontL)/(frontR-frontL),0,1);
- const residual=frameValue(p,'outline:'+y,()=>[0,1,2,3].map(component=>gridValue(OUTLINE_POSES,p.ParamAngleX*correction(p,'CorrTurn'),pitch,pose=>{
-  if(!pose.pitch)return 0;
-  const [ty,tl,tr]=targetRow(pose,y),key={...p,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,ParamAngleZ:0};
-  const x=component%2?r:l,axis=component<2?0:1;
-  const q=legacyOutline([x,y],symmetricBase([x,y],key),key);
-  const s=clamp((y-465)/151,0,1);
-  const targetY=ty+(pose.registration.topEdgeY[component%2]-pose.yTop)*(1-s);
-  return (axis===0?(component%2?tr:tl):targetY)-q[axis];
- })));
- const delta=[residual[0]+(residual[1]-residual[0])*u,residual[2]+(residual[3]-residual[2])*u];
- const roll=radians(p.ParamAngleZ),dx=delta[0]*weight,dy=delta[1]*weight;
- return [dx*Math.cos(roll)-dy*Math.sin(roll),dx*Math.sin(roll)+dy*Math.cos(roll),0];
-}
-export function applyOutline(point,world,p){
- const base=legacyOutline(point,world,p),shift=outlinePitchShift(point,p);
- return base.map((v,i)=>v+shift[i]);
-}
+export const applyOutline=(point,world,p)=>legacyOutline(point,world,p);
 export function outlineWorld(point,p,relief=0){
  const plain=artWorld(correctedLift(point,relief,p),p),symmetric=symmetricBase(point,p,relief),weight=correction(p,'CorrOutline');
  return applyOutline(point,plain.map((v,i)=>v+(symmetric[i]-v)*weight),p);

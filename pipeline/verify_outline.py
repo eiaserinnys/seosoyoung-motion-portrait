@@ -3,6 +3,7 @@ import functools, http.server, json, threading
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
+(ROOT/'debug').mkdir(exist_ok=True)
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args):pass
 server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT/'bundle')))
@@ -14,7 +15,7 @@ try:
   page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle')
   page.wait_for_function('window.studio?.ready',timeout=30000)
   interior=(ROOT/'pipeline/raster_interior.mjs').read_text().replace('../bundle/','./')
-  page.add_script_tag(type='module',content=interior+'\nwindow.rasterInterior={mainOpaqueRuns,headInteriorInterval,rowAlphaGaps};')
+  page.add_script_tag(type='module',content=interior+'\nwindow.rasterInterior={mainOpaqueRuns,headInteriorInterval,rowAlphaGaps,foreheadBoundary,foreheadIntrusion};')
   page.wait_for_function('window.rasterInterior')
   metrics=page.evaluate('''async()=>{
     const {renderer,state,p,rig}=studio,gl=renderer.gl,{deform3D}=await import('./rig.mjs'),{outlineRow}=await import('./face-outline.mjs'),{domeSection}=await import('./hair-surface.mjs');
@@ -31,9 +32,9 @@ try:
       let foreheadSideHairPixels=0;
       if((gain===.65&&Math.abs(yaw)===50)||(gain===1&&Math.abs(yaw)===45)){
         const hair=read({identify:'side-hair-'+near}),{scale,ox,oy}=renderer.view;
-        for(let sy=Math.ceil(oy+280*scale);sy<oy+365*scale;sy++)for(let sx=0;sx<w;sx++){
-          const x=(sx-ox)/scale;
-          if((yaw<0?x<535:x>469)&&hair[((h-1-sy)*w+sx)*4]>200)foreheadSideHairPixels++;
+        for(let sy=Math.ceil(oy+280*scale);sy<oy+365*scale;sy++){
+          const boundary=window.rasterInterior.foreheadBoundary((sy-oy)/scale,p);
+          for(let sx=0;sx<w;sx++)if(window.rasterInterior.foreheadIntrusion((sx-ox)/scale,boundary,yaw)&&hair[((h-1-sy)*w+sx)*4]>200)foreheadSideHairPixels++;
         }
       }
       let nearEarPixels=0;for(let i=0;i<identification.length;i+=4)if(identification[i]>200)nearEarPixels++;

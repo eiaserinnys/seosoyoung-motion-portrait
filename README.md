@@ -22,11 +22,13 @@ The yellow guide remains a closed sphere. Portrait artwork has an independently 
 
 The upper backing uses a sampled hair strip from our own crown drawing, with an open face and jaw region. It does not write depth over the illustration layers. Artwork ribbons are two-sided; the closed diagnostic sphere uses face culling. This avoids hiding ears or cutting the lower face at a sphere pole. The reconstructed rear is inferred from front artwork, not a captured rear view.
 
-Each eye is a radius-54 sphere attached in head-local coordinates. Its local basis follows the face surface normal; original artwork rays intersect that sphere without changing neutral XY. Gaze rotates the child sphere first, and the head transform rotates the entire child afterward. The eyelid opening follows the head and clips the iris, pupil and highlights during blinking. Head rotation does not change local gaze.
+The diagnostic child eyes are radius-54 spheres. The recommended portrait keeps measured yaw anchors, adds curved socket depth and pitch foreshortening, and rotates radius-42 corneal caps with the head. Independent gaze is applied before that rotation. The projected eyelid opening clips the iris, pupil and highlights during blinking.
 
 The neck stays stationary during pure yaw. Pitch and roll blend the hidden upper attachment into the body. One moving neck owns the skin above the collar; the shirt's duplicate upper neck is removed. Hair ties and hanging tails follow head attachment points and damped gravity motion.
 
-The hair cap shares the corrected face depth field at its forehead and cheek boundaries. Its upper surface reaches zero depth at the north pole and gains volume between the pole and forehead. Crown and rear artwork use the same depth sign, separated only by their layer relief. The trailing outer contour damps lateral displacement to retain volume during yaw; far ears and outer side strands narrow toward the cheek and receive a camera-depth occlusion bias. Front crown, bangs and the hairpin retain their illustration overlap order above the face crop. The two hair controls adjust upper volume and far-side occlusion without changing face geometry.
+All six front hair layers share a rounded dome, protected in front of the forehead by a smooth depth maximum. The upper backing meets that dome without a depth inset. The rear cranium retains the complete elliptical shell, with a narrow upper seam blend and yaw-only visibility. Crown, bangs and hairpin retain their illustration order. The hair controls adjust volume and far-side occlusion.
+
+The face uses a silhouette mesh. Its calibrated yaw projection stays unchanged; pitch uses a rounded jaw section, making the chin rise into a U-shaped low-angle outline or descend into a V-shaped high-angle outline. The neck attachment follows the chin. The old pitched bounding-box keyforms remain reference measurements and no longer drive these surfaces.
 
 This is a custom WebGL renderer and JSON format. It does not load or produce Cubism binary models.
 
