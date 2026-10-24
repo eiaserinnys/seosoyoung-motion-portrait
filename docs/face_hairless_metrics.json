@@ -1,6 +1,17 @@
 {
-  "definition": "restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only",
+  "definition": "restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only; redBg is render-only over registered RGB max<40; redHair is remaining render-only occlusion",
   "visibility": "face skin + eyes + brows + nose + closed mouth only; all hair/ears/neck/body OFF",
+  "approvedUpDiagonalLimits": {
+    "redBgPixels": 120,
+    "redBgMaxDepth": 2.0,
+    "cyanPixels": 1500,
+    "cyanMaxDepth": 8.0,
+    "chinMidpointError": 10.0,
+    "leftMaxOutwardStep": 0.0,
+    "rightMaxOutwardStep": 0.0,
+    "maxSecondDifference": 15.0,
+    "maxMidpointReversal": 5.0
+  },
   "poses": [
     {
       "name": "left",
@@ -126,7 +137,15 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 8593,
+      "redMaxDepth": 16.0,
+      "cyanPixels": 3229,
+      "cyanMaxDepth": 8.394,
+      "redBgPixels": 254,
+      "redBgMaxDepth": 2.0,
+      "redHairPixels": 8339,
+      "redHairMaxDepth": 16.0
     },
     {
       "name": "front",
@@ -252,7 +271,15 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 196,
+      "redMaxDepth": 2.8,
+      "cyanPixels": 0,
+      "cyanMaxDepth": 0.0,
+      "redBgPixels": 1,
+      "redBgMaxDepth": 1.0,
+      "redHairPixels": 195,
+      "redHairMaxDepth": 2.8
     },
     {
       "name": "right",
@@ -378,7 +405,15 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 12140,
+      "redMaxDepth": 27.763,
+      "cyanPixels": 2610,
+      "cyanMaxDepth": 7.0,
+      "redBgPixels": 238,
+      "redBgMaxDepth": 2.0,
+      "redHairPixels": 11902,
+      "redHairMaxDepth": 23.772
     },
     {
       "name": "up-left",
@@ -386,16 +421,16 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 10.108435012816283,
+      "rawVisibleRms": 11.275324502455874,
       "rawSampleCount": 413,
-      "rawChinError": 1.041282024151883,
+      "rawChinError": 6.041282024151883,
       "lengthErrors": {
         "eyeChin": 0.0,
         "eyeNose": 0.0,
         "noseMouth": 0.0
       },
       "rawLengthErrors": {
-        "eyeChin": -0.9549999999999272,
+        "eyeChin": -5.954999999999927,
         "eyeNose": -6.204999999999927,
         "noseMouth": 3.2700000000000387
       },
@@ -428,10 +463,10 @@
         "peakRestY": 450,
         "peakCount": 1,
         "lowerStart": 480,
-        "maxLowerWidthIncrease": 0.0,
-        "maxLowerHalfWidthIncrease": 0.0,
+        "maxLowerWidthIncrease": 0.03282737317476858,
+        "maxLowerHalfWidthIncrease": 0.01641368658738429,
         "maxUpperPriorError": 5.4309890846006965,
-        "pearMargin": 3.9935477910183863,
+        "pearMargin": 3.9607204178436177,
         "widths": [
           [
             410,
@@ -447,7 +482,7 @@
           ],
           [
             440,
-            268.4036526004336
+            268.2534039524403
           ],
           [
             450,
@@ -463,7 +498,7 @@
           ],
           [
             490,
-            265.8243183717884
+            265.8571457449632
           ],
           [
             510,
@@ -471,19 +506,19 @@
           ],
           [
             530,
-            258.8658007616418
+            255.4547529452309
           ],
           [
             550,
-            234.78810315962676
+            223.25706937476173
           ],
           [
             570,
-            191.62606087805796
+            173.78613218462135
           ],
           [
             590,
-            128.29772495298187
+            125.37824798800744
           ],
           [
             600,
@@ -512,7 +547,61 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "diagonalJaw": {
+        "rows": [
+          [
+            570.0,
+            565.4500877276244,
+            351.0398915821646,
+            565.513151848414,
+            524.826023766786
+          ],
+          [
+            590.0,
+            582.3883815177292,
+            375.8136262345974,
+            582.4173912521983,
+            501.19187422260484
+          ],
+          [
+            600.0,
+            588.2559924429115,
+            393.5640147465101,
+            588.2714621835701,
+            483.01609990189786
+          ],
+          [
+            610.0,
+            593.1893648565774,
+            408.5390583799201,
+            593.1939034644552,
+            454.8868118477076
+          ],
+          [
+            616.0,
+            595.5052480182615,
+            417.4850079993098,
+            595.5052480182615,
+            436.1685364377986
+          ]
+        ],
+        "chinMidpoint": 426.8267722185542,
+        "r11ChinMidpoint": 430.1,
+        "chinMidpointError": 3.2732277814458257,
+        "leftMaxOutwardStep": 0.0,
+        "rightMaxOutwardStep": 0.0,
+        "maxSecondDifference": 9.953513733483305,
+        "maxMidpointReversal": 0.5697925541258542
+      },
+      "redPixels": 8438,
+      "redMaxDepth": 10.591,
+      "cyanPixels": 1071,
+      "cyanMaxDepth": 7.194,
+      "redBgPixels": 81,
+      "redBgMaxDepth": 1.4,
+      "redHairPixels": 8357,
+      "redHairMaxDepth": 10.591
     },
     {
       "name": "up",
@@ -646,7 +735,15 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 11985,
+      "redMaxDepth": 14.394,
+      "cyanPixels": 1906,
+      "cyanMaxDepth": 6.591,
+      "redBgPixels": 79,
+      "redBgMaxDepth": 1.4,
+      "redHairPixels": 11906,
+      "redHairMaxDepth": 14.388
     },
     {
       "name": "up-right",
@@ -654,16 +751,16 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 15.774348075926916,
-      "rawSampleCount": 410,
-      "rawChinError": 1.041282024151883,
+      "rawVisibleRms": 17.55382054216436,
+      "rawSampleCount": 413,
+      "rawChinError": 3.958717975848117,
       "lengthErrors": {
         "eyeChin": 0.0,
         "eyeNose": 0.0,
         "noseMouth": 0.0
       },
       "rawLengthErrors": {
-        "eyeChin": 0.9550000000000409,
+        "eyeChin": -4.044999999999959,
         "eyeNose": 6.205000000000041,
         "noseMouth": -3.269999999999982
       },
@@ -696,10 +793,10 @@
         "peakRestY": 450,
         "peakCount": 1,
         "lowerStart": 480,
-        "maxLowerWidthIncrease": 0.0,
-        "maxLowerHalfWidthIncrease": 0.0,
+        "maxLowerWidthIncrease": 0.03282737317476858,
+        "maxLowerHalfWidthIncrease": 0.01641368658738429,
         "maxUpperPriorError": 5.43098908460081,
-        "pearMargin": 3.9935477910183863,
+        "pearMargin": 3.9607204178436177,
         "widths": [
           [
             410,
@@ -715,7 +812,7 @@
           ],
           [
             440,
-            268.4036526004336
+            268.2534039524403
           ],
           [
             450,
@@ -731,7 +828,7 @@
           ],
           [
             490,
-            265.8243183717884
+            265.8571457449632
           ],
           [
             510,
@@ -739,19 +836,19 @@
           ],
           [
             530,
-            258.8658007616418
+            255.4547529452309
           ],
           [
             550,
-            234.78810315962676
+            223.25706937476173
           ],
           [
             570,
-            191.62606087805796
+            173.78613218462135
           ],
           [
             590,
-            128.29772495298187
+            125.37824798800739
           ],
           [
             600,
@@ -780,7 +877,61 @@
         }
       },
       "validBgSamples": 2,
-      "bgFitRmsReference": 1.5001936507040508
+      "bgFitRmsReference": 1.5001936507040508,
+      "diagonalJaw": {
+        "rows": [
+          [
+            570.0,
+            565.513151848414,
+            479.17397623321403,
+            565.4500877276244,
+            652.9601084178354
+          ],
+          [
+            590.0,
+            582.4173912521983,
+            502.80812577739516,
+            582.3883815177292,
+            628.1863737654025
+          ],
+          [
+            600.0,
+            588.2714621835701,
+            520.9839000981021,
+            588.2559924429115,
+            610.4359852534899
+          ],
+          [
+            610.0,
+            593.1939034644552,
+            549.1131881522924,
+            593.1893648565774,
+            595.4609416200799
+          ],
+          [
+            616.0,
+            595.5052480182615,
+            567.8314635622014,
+            595.5052480182615,
+            586.5149920006902
+          ]
+        ],
+        "chinMidpoint": 577.1732277814458,
+        "r11ChinMidpoint": 573.9,
+        "chinMidpointError": 3.2732277814458257,
+        "leftMaxOutwardStep": 0.0,
+        "rightMaxOutwardStep": 0.0,
+        "maxSecondDifference": 9.953513733483305,
+        "maxMidpointReversal": 0.5697925541257973
+      },
+      "redPixels": 9126,
+      "redMaxDepth": 12.984,
+      "cyanPixels": 1202,
+      "cyanMaxDepth": 7.991,
+      "redBgPixels": 30,
+      "redBgMaxDepth": 1.0,
+      "redHairPixels": 9096,
+      "redHairMaxDepth": 12.984
     },
     {
       "name": "down-left",
@@ -914,7 +1065,15 @@
         }
       },
       "validBgSamples": 3,
-      "bgFitRmsReference": 4.860201604301202
+      "bgFitRmsReference": 4.860201604301202,
+      "redPixels": 4813,
+      "redMaxDepth": 12.0,
+      "cyanPixels": 2208,
+      "cyanMaxDepth": 7.194,
+      "redBgPixels": 32,
+      "redBgMaxDepth": 1.4,
+      "redHairPixels": 4781,
+      "redHairMaxDepth": 12.0
     },
     {
       "name": "down",
@@ -1048,7 +1207,15 @@
         }
       },
       "validBgSamples": 8,
-      "bgFitRmsReference": 2.141235348237624
+      "bgFitRmsReference": 2.141235348237624,
+      "redPixels": 6738,
+      "redMaxDepth": 15.984,
+      "cyanPixels": 773,
+      "cyanMaxDepth": 5.0,
+      "redBgPixels": 148,
+      "redBgMaxDepth": 2.0,
+      "redHairPixels": 6590,
+      "redHairMaxDepth": 15.984
     },
     {
       "name": "down-right",
@@ -1182,7 +1349,15 @@
         }
       },
       "validBgSamples": 2,
-      "bgFitRmsReference": 14.495279204405309
+      "bgFitRmsReference": 14.495279204405309,
+      "redPixels": 10410,
+      "redMaxDepth": 14.581,
+      "cyanPixels": 826,
+      "cyanMaxDepth": 4.0,
+      "redBgPixels": 480,
+      "redBgMaxDepth": 5.6,
+      "redHairPixels": 9930,
+      "redHairMaxDepth": 14.581
     }
   ],
   "protectedChanges": [],

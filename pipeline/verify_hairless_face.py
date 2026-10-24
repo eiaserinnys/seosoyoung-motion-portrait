@@ -3,6 +3,10 @@ import argparse,json,subprocess
 from pathlib import Path
 import numpy as np
 from hairless_face_reference import ROOT,geometry,raw_mask,matrix,mask_interval,registered_point
+R11_CHIN_MIDPOINT={'up-left':430.1,'up-right':573.9}
+UP_DIAGONAL_LIMITS=dict(redBgPixels=120,redBgMaxDepth=2.,cyanPixels=1500,cyanMaxDepth=8.)
+DIAGONAL_JAW_LIMITS=dict(chinMidpointError=10.,leftMaxOutwardStep=0.,rightMaxOutwardStep=0.,
+                         maxSecondDifference=15.,maxMidpointReversal=5.)
 
 def rms(values):return float(np.sqrt(np.mean(np.square(values))))
 def expected_opening(poses,p,side):
@@ -27,6 +31,18 @@ def outline_shape(p):
     return dict(peakRestY=peak_rows[0],peakCount=len(peak_rows),lowerStart=start,
                 maxLowerWidthIncrease=increase,maxLowerHalfWidthIncrease=increase/2,
                 maxUpperPriorError=upper,pearMargin=at[450]-at[490],widths=[[r[0],w] for r,w in zip(rows,widths)])
+
+def diagonal_jaw(p):
+    rows=np.asarray([r for r in p['outline']['rows'] if r[0]>=570],float)
+    edges=rows[:,[2,4]];steps=np.diff(edges,axis=0);mid=edges.mean(axis=1)
+    r11=R11_CHIN_MIDPOINT[p['name']]
+    reverse=np.diff(mid)*(1 if p['name']=='up-left' else -1)
+    return dict(rows=rows.tolist(),chinMidpoint=float(mid[-1]),r11ChinMidpoint=r11,
+                chinMidpointError=float(abs(mid[-1]-r11)),
+                leftMaxOutwardStep=float(max(0.,np.max(-steps[:,0]))),
+                rightMaxOutwardStep=float(max(0.,np.max(steps[:,1]))),
+                maxSecondDifference=float(np.abs(np.diff(edges,n=2,axis=0)).max()),
+                maxMidpointReversal=float(max(0.,np.max(reverse))))
 
 def metrics(poses):
     result=[]
@@ -73,6 +89,7 @@ def metrics(poses):
                            lengthErrors=length_errors,rawLengthErrors=raw_length_errors,eyes=eyes,cheekError=cheek_error,
                            cheekDisplacements=cheeks,sphericalError=p['sphericalError'],outlineShape=outline_shape(p),
                            boundaryClassCounts=counts,validBgSamples=len(bg_errors),bgFitRmsReference=rms(bg_errors) if bg_errors else None))
+        if p['name'] in R11_CHIN_MIDPOINT:result[-1]['diagonalJaw']=diagonal_jaw(p)
     return result
 
 def failures(rows,protected):
@@ -98,6 +115,9 @@ def failures(rows,protected):
                 failed.append(dict(pose=p['name'],gate='single cheek peak',value=s['peakRestY'],count=s['peakCount']))
             if p['pitch']>0:check('upper prior width',s['maxUpperPriorError'],8)
             if p['name']=='up' and s['pearMargin']<=8:failed.append(dict(pose=p['name'],gate='pear inversion',value=s['pearMargin'],minimumExclusive=8))
+        if p['name'] in R11_CHIN_MIDPOINT:
+            for key,limit in UP_DIAGONAL_LIMITS.items():check(key,p[key],limit)
+            for key,limit in DIAGONAL_JAW_LIMITS.items():check(key,p['diagonalJaw'][key],limit)
     if protected:failed.append(dict(gate='protected paths',paths=protected,limit=0))
     return failed
 
@@ -131,20 +151,36 @@ def self_test():
     for key,value in [('peakRestY',510),('peakCount',2),('maxLowerWidthIncrease',.501),('maxLowerHalfWidthIncrease',.501),('maxUpperPriorError',8.01)]:
         mutated=json.loads(json.dumps(valid));mutated['outlineShape'][key]=value;assert failures([mutated],[]),key
     up={**valid,'name':'up','outlineShape':{**valid['outlineShape'],'pearMargin':8}};assert failures([up],[])
-    print('PASS gate self-test: 18 injected violations rejected')
+    diagonal={**valid,'name':'up-left','yaw':-45,**{key:limit for key,limit in UP_DIAGONAL_LIMITS.items()},
+              'diagonalJaw':DIAGONAL_JAW_LIMITS.copy(),'redHairPixels':1000000}
+    assert not failures([diagonal],[])
+    for key,limit in UP_DIAGONAL_LIMITS.items():
+        mutated=json.loads(json.dumps(diagonal));mutated[key]=limit+.001;assert failures([mutated],[]),key
+    for key,limit in DIAGONAL_JAW_LIMITS.items():
+        mutated=json.loads(json.dumps(diagonal));mutated['diagonalJaw'][key]=limit+.001;assert failures([mutated],[]),key
+    print('PASS gate self-test: 27 injected violations rejected')
 
-def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--self-test',action='store_true');args=parser.parse_args()
+def write_metrics(poses,differences):
     self_test()
-    if args.self_test:return
-    rows=metrics(geometry());protected=protected_changes();failed=failures(rows,protected)
-    out=dict(definition='restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only',
+    rows=metrics(poses)
+    for p in rows:p.update(differences[p['name']])
+    protected=protected_changes();failed=failures(rows,protected)
+    out=dict(definition='restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only; redBg is render-only over registered RGB max<40; redHair is remaining render-only occlusion',
              visibility='face skin + eyes + brows + nose + closed mouth only; all hair/ears/neck/body OFF',
+             approvedUpDiagonalLimits={**UP_DIAGONAL_LIMITS,**DIAGONAL_JAW_LIMITS},
              poses=rows,protectedChanges=protected,failures=failed,passed=not failed)
     (ROOT/'docs/face_hairless_metrics.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
     print('pose         targetRMS rawMaskRefRMS chinY lengthMax shear cheek')
     for p in rows:
         print(f"{p['name']:12} {p['targetRms']:7.3f} {p['rawVisibleRms']:12.3f} {p['rawChinError']:5.3f} {max(map(abs,p['lengthErrors'].values()),default=0):9.3f} {max(v['shear'] for v in p['eyes'].values()):5.1f} {p['cheekError']:5.3f}")
     print(json.dumps(failed,ensure_ascii=False,indent=2))
+    return failed
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--self-test',action='store_true');args=parser.parse_args()
+    if args.self_test:self_test();return
+    from capture_hairless_face import webgl_renders,silhouette_difference
+    poses=geometry();renders=webgl_renders(poses)
+    failed=write_metrics(poses,{p['name']:silhouette_difference(p,renders[p['name']])[-1] for p in poses})
     raise SystemExit(1 if failed else 0)
 if __name__=='__main__':main()
