@@ -126,7 +126,11 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 8593,
+      "redMaxDepth": 16.0,
+      "cyanPixels": 3229,
+      "cyanMaxDepth": 8.394
     },
     {
       "name": "front",
@@ -252,7 +256,11 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 196,
+      "redMaxDepth": 2.8,
+      "cyanPixels": 0,
+      "cyanMaxDepth": 0.0
     },
     {
       "name": "right",
@@ -378,7 +386,11 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 12140,
+      "redMaxDepth": 27.763,
+      "cyanPixels": 2610,
+      "cyanMaxDepth": 7.0
     },
     {
       "name": "up-left",
@@ -386,7 +398,7 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 10.108435012816283,
+      "rawVisibleRms": 8.155727372811596,
       "rawSampleCount": 413,
       "rawChinError": 1.041282024151883,
       "lengthErrors": {
@@ -428,10 +440,10 @@
         "peakRestY": 450,
         "peakCount": 1,
         "lowerStart": 480,
-        "maxLowerWidthIncrease": 0.0,
-        "maxLowerHalfWidthIncrease": 0.0,
+        "maxLowerWidthIncrease": 0.03282737317476858,
+        "maxLowerHalfWidthIncrease": 0.01641368658738429,
         "maxUpperPriorError": 5.4309890846006965,
-        "pearMargin": 3.9935477910183863,
+        "pearMargin": 3.9607204178436177,
         "widths": [
           [
             410,
@@ -447,7 +459,7 @@
           ],
           [
             440,
-            268.4036526004336
+            268.2534039524403
           ],
           [
             450,
@@ -463,7 +475,7 @@
           ],
           [
             490,
-            265.8243183717884
+            265.8571457449632
           ],
           [
             510,
@@ -471,31 +483,31 @@
           ],
           [
             530,
-            258.8658007616418
+            255.4547529452309
           ],
           [
             550,
-            234.78810315962676
+            223.25706937476173
           ],
           [
             570,
-            191.62606087805796
+            173.78613218462135
           ],
           [
             590,
-            128.29772495298187
+            116.61981709308412
           ],
           [
             600,
-            89.45208515538775
+            94.32956278219342
           ],
           [
             610,
-            46.34775346778747
+            58.9393352036476
           ],
           [
             616,
-            18.683528438488793
+            22.55249600034506
           ]
         ]
       },
@@ -512,7 +524,11 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 8612,
+      "redMaxDepth": 10.591,
+      "cyanPixels": 693,
+      "cyanMaxDepth": 4.0
     },
     {
       "name": "up",
@@ -646,7 +662,11 @@
         }
       },
       "validBgSamples": 0,
-      "bgFitRmsReference": null
+      "bgFitRmsReference": null,
+      "redPixels": 11985,
+      "redMaxDepth": 14.394,
+      "cyanPixels": 1906,
+      "cyanMaxDepth": 6.591
     },
     {
       "name": "up-right",
@@ -654,7 +674,7 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 15.774348075926916,
+      "rawVisibleRms": 11.310650020211106,
       "rawSampleCount": 410,
       "rawChinError": 1.041282024151883,
       "lengthErrors": {
@@ -696,10 +716,10 @@
         "peakRestY": 450,
         "peakCount": 1,
         "lowerStart": 480,
-        "maxLowerWidthIncrease": 0.0,
-        "maxLowerHalfWidthIncrease": 0.0,
+        "maxLowerWidthIncrease": 0.03282737317476858,
+        "maxLowerHalfWidthIncrease": 0.01641368658738429,
         "maxUpperPriorError": 5.43098908460081,
-        "pearMargin": 3.9935477910183863,
+        "pearMargin": 3.9607204178436177,
         "widths": [
           [
             410,
@@ -715,7 +735,7 @@
           ],
           [
             440,
-            268.4036526004336
+            268.2534039524403
           ],
           [
             450,
@@ -731,7 +751,7 @@
           ],
           [
             490,
-            265.8243183717884
+            265.8571457449632
           ],
           [
             510,
@@ -739,31 +759,31 @@
           ],
           [
             530,
-            258.8658007616418
+            255.4547529452309
           ],
           [
             550,
-            234.78810315962676
+            223.25706937476173
           ],
           [
             570,
-            191.62606087805796
+            173.78613218462135
           ],
           [
             590,
-            128.29772495298187
+            116.61981709308418
           ],
           [
             600,
-            89.45208515538775
+            94.3295627821933
           ],
           [
             610,
-            46.34775346778747
+            58.9393352036476
           ],
           [
             616,
-            18.683528438488793
+            22.552496000344945
           ]
         ]
       },
@@ -780,7 +800,11 @@
         }
       },
       "validBgSamples": 2,
-      "bgFitRmsReference": 1.5001936507040508
+      "bgFitRmsReference": 1.5001936507040508,
+      "redPixels": 8997,
+      "redMaxDepth": 12.984,
+      "cyanPixels": 571,
+      "cyanMaxDepth": 4.2
     },
     {
       "name": "down-left",
@@ -914,7 +938,11 @@
         }
       },
       "validBgSamples": 3,
-      "bgFitRmsReference": 4.860201604301202
+      "bgFitRmsReference": 4.860201604301202,
+      "redPixels": 4813,
+      "redMaxDepth": 12.0,
+      "cyanPixels": 2208,
+      "cyanMaxDepth": 7.194
     },
     {
       "name": "down",
@@ -1048,7 +1076,11 @@
         }
       },
       "validBgSamples": 8,
-      "bgFitRmsReference": 2.141235348237624
+      "bgFitRmsReference": 2.141235348237624,
+      "redPixels": 6738,
+      "redMaxDepth": 15.984,
+      "cyanPixels": 773,
+      "cyanMaxDepth": 5.0
     },
     {
       "name": "down-right",
@@ -1182,7 +1214,11 @@
         }
       },
       "validBgSamples": 2,
-      "bgFitRmsReference": 14.495279204405309
+      "bgFitRmsReference": 14.495279204405309,
+      "redPixels": 10410,
+      "redMaxDepth": 14.581,
+      "cyanPixels": 826,
+      "cyanMaxDepth": 4.0
     }
   ],
   "protectedChanges": [],

@@ -133,11 +133,11 @@ def self_test():
     up={**valid,'name':'up','outlineShape':{**valid['outlineShape'],'pearMargin':8}};assert failures([up],[])
     print('PASS gate self-test: 18 injected violations rejected')
 
-def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--self-test',action='store_true');args=parser.parse_args()
+def write_metrics(poses,differences):
     self_test()
-    if args.self_test:return
-    rows=metrics(geometry());protected=protected_changes();failed=failures(rows,protected)
+    rows=metrics(poses)
+    for p in rows:p.update(differences[p['name']])
+    protected=protected_changes();failed=failures(rows,protected)
     out=dict(definition='restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only',
              visibility='face skin + eyes + brows + nose + closed mouth only; all hair/ears/neck/body OFF',
              poses=rows,protectedChanges=protected,failures=failed,passed=not failed)
@@ -146,5 +146,13 @@ def main():
     for p in rows:
         print(f"{p['name']:12} {p['targetRms']:7.3f} {p['rawVisibleRms']:12.3f} {p['rawChinError']:5.3f} {max(map(abs,p['lengthErrors'].values()),default=0):9.3f} {max(v['shear'] for v in p['eyes'].values()):5.1f} {p['cheekError']:5.3f}")
     print(json.dumps(failed,ensure_ascii=False,indent=2))
+    return failed
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--self-test',action='store_true');args=parser.parse_args()
+    if args.self_test:self_test();return
+    from capture_hairless_face import webgl_renders,silhouette_difference
+    poses=geometry();renders=webgl_renders(poses)
+    failed=write_metrics(poses,{p['name']:silhouette_difference(p,renders[p['name']])[3] for p in poses})
     raise SystemExit(1 if failed else 0)
 if __name__=='__main__':main()
