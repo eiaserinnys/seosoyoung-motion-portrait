@@ -64,7 +64,7 @@ export function featureWorld(id,point,p){
  const lidWeight=sPhi>=0?.55+.45*eta:.35+.65*eta;
  const archY=eye&&!brow&&!/-(iris|pupil|highlight)$/.test(id)?-5*sPhi*(1-xi*xi)*lidWeight:0;
  const dxLocal=(q[0]-center[0])*width;
- const diagTiltY=eye?-dxLocal*Math.sin(theta)*Math.sin(radians(pitch))*.55:0;
+ const diagTiltY=eye?-dxLocal*Math.sin(theta)*Math.sin(radians(pitch))*.32:0;
  const featurePitchShiftY=id==='nose-detail'?-6*Math.max(0,sPhi)+4*Math.max(0,-sPhi):id.startsWith('mouth')?-12*Math.max(0,sPhi)+6*Math.max(0,-sPhi):0;
  const x=target[0]+dxLocal;
  const y=target[1]+featurePitchShiftY+(q[1]-center[1])*height*vScale+archY+diagTiltY;

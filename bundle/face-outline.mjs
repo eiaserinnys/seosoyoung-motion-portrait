@@ -68,7 +68,7 @@ export function outlinePitchShift(point,p){
   const normSpan=pose.pitch>0?(pose.yaw===0?166:158):(pose.yaw===0?124:134);
   const sCurve=Math.pow(s,pose.pitch>0?.84:1.12);
   const topEdge=pose.registration.topEdgeY,topMid=(topEdge[0]+topEdge[1])/2;
-  const targetY=topMid+normSpan*sCurve+(topEdge[component%2]-topMid)*(1-s);
+  const targetY=topMid+normSpan*sCurve+(topEdge[component%2]-topMid)*.35*(1-s);
   return targetY-q[1];
  })));
  const sPhi=clamp(pitch/30,-1.2,1.2);
@@ -82,7 +82,7 @@ export function outlinePitchShift(point,p){
   const s=clamp((y-465)/151,0,1),sCurve=Math.pow(s,pose.pitch>0?.84:1.12);
   const normSpan=pose.pitch>0?(pose.yaw===0?166:158):(pose.yaw===0?124:134);
   const topEdge=pose.registration.topEdgeY,topMid=(topEdge[0]+topEdge[1])/2;
-  return topMid+normSpan*sCurve+(topEdge[0]*(1-u)+topEdge[1]*u-topMid)*(1-s);
+  return topMid+normSpan*sCurve+(topEdge[0]*(1-u)+topEdge[1]*u-topMid)*.35*(1-s);
  });
  // Keep the forehead's rigid motion, joining the normalized lower-face map
  // across the arch start and first measured cheek row without a height step.

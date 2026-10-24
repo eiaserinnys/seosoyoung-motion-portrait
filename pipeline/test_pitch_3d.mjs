@@ -12,6 +12,14 @@ import {strandWorld} from '../bundle/side-strands.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const pose=(yaw,pitch)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch});
+test('diagonal jaw slope stays near the feature plane instead of twisting the lower face',()=>{
+ assert.equal(CORRECTION_PRESETS.recommended.CorrDiagonal,.65);
+ for(const yaw of [-45,45])for(const pitch of [-30,30]){
+  const p=pose(yaw,pitch),[l,r]=outlineRow(465);
+  const dy=outlineWorld([r,465],p)[1]-outlineWorld([l,465],p)[1];
+  assert(Math.abs(dy)>15&&Math.abs(dy)<25,`diagonal cheek slope ${yaw},${pitch}: ${dy}`);
+ }
+});
 test('pitch jaw widths stay within five percent of approved yaw shapes and converge at the chin',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const y of [465,510,550,590,610,616]){
   const [l,r]=outlineRow(y),neutral=[l,r].map(x=>outlineWorld([x,y],pose(yaw,0))[0]);
@@ -101,7 +109,7 @@ test('socket shortens vertically and tilts along the diagonal latitude',()=>{
   for(const pitch of [-30,30]){const ratio=height(pose(0,pitch))/height(base);assert(ratio>.7&&ratio<1.05,`natural socket height ${pitch}: ${ratio}`);}
   for(const yaw of [-45,45])for(const pitch of [-30,30]){
    const p=pose(yaw,pitch),dy=featureWorld(id,[x+40,y],p)[1]-featureWorld(id,[x-40,y],p)[1];
-   assert(Math.abs(dy)>8,`socket slope ${side},${yaw},${pitch}`);
+   assert(Math.abs(dy)>5&&Math.abs(dy)<11,`socket slope ${side},${yaw},${pitch}: ${dy}`);
    assert(Math.sign(dy)===-Math.sign(yaw*pitch));
   }
  }

@@ -108,7 +108,7 @@
       "CorrEyeDepth": 0,
       "CorrJaw": 1,
       "CorrFarEye": 0.18,
-      "CorrDiagonal": 0.22,
+      "CorrDiagonal": 0.65,
       "CorrTurn": 0.65,
       "CorrHairDepth": 1,
       "CorrHairOcclusion": 0.8,
