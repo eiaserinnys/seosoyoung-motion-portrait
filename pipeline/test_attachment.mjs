@@ -16,19 +16,19 @@ for(const gain of [.65,1])for(const [x,y] of [[-50,-28],[-50,28],[50,-28],[50,28
   const mesh=rig.meshes.find(m=>m.id===id),points=mesh.positions.map(pt=>deform3D(mesh,pt,p));
   assert(points.every(q=>q.every(Number.isFinite)),id+' finite vertices');
   const reversed=mesh.triangles.filter(t=>area(t.map(i=>points[i]))*area(t.map(i=>mesh.positions[i]))<0).length;
-  const solid=id==='hair-top'||id==='hairpin'||id.startsWith('bangs')||id.startsWith('side-hair')||id.startsWith('back-hair');
-  // A surface turning away from the camera is a back face, not a collapsed
-  // ArtMesh. These surfaces use CULL_FACE; keep the unculled facial ribbons'
-  // original screen-orientation contract and check 3D area for the surfaces.
+  const surface=id==='face-skin'||id==='hair-top'||id==='hairpin'||id.startsWith('bangs')||id.startsWith('side-hair')||id.startsWith('back-hair');
+  // The face mask is now a depth surface. Its far cheek can turn away from the
+  // camera, so distinguish projected back faces from collapsed 3D triangles.
   let minAreaRatio=Infinity;
   for(const t of mesh.triangles){
    const original=Math.abs(area(t.map(i=>mesh.positions[i])));
    if(original>1e-8)minAreaRatio=Math.min(minAreaRatio,area3(t.map(i=>points[i]))/original);
   }
   assert(minAreaRatio>1e-4,`${id}: collapsed 3D triangle ${minAreaRatio}`);
-  if(!solid)assert.equal(reversed,0,`${id}: front artwork fold`);
-  rows.push({gain,pose:[x,y],id,backFacing:solid?reversed:0,minAreaRatio});
+  if(!surface)assert.equal(reversed,0,`${id}: front artwork fold`);
+  rows.push({gain,pose:[x,y],id,projectedBackFaces:surface?reversed:0,minAreaRatio});
  }
 }
-console.log(JSON.stringify({cases:rows.length,minAreaRatio:Math.min(...rows.map(r=>r.minAreaRatio)),maxBackFacing:Math.max(...rows.map(r=>r.backFacing))}));
-console.log(`${rows.length} attachment cases PASS (back faces culled; no collapsed 3D triangles or inverted facial ribbons)`);
+const faceBackFaces=rows.filter(r=>r.id==='face-skin').reduce((sum,r)=>sum+r.projectedBackFaces,0);
+console.log(JSON.stringify({cases:rows.length,minAreaRatio:Math.min(...rows.map(r=>r.minAreaRatio)),faceMaskProjectedBackFaces:faceBackFaces}));
+console.log(`${rows.length} attachment cases PASS (no collapsed 3D triangles or inverted flat artwork ribbons)`);

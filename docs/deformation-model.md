@@ -46,7 +46,7 @@ Final = center + Rz(roll) (P - center)
 | 옆, 뒷머리 | 가려진 쪽이 드러날 때 기하만 움직여도 빈 곳은 채워지지 않는다 | 뒤쪽 외피, 여분 원화, 겹침 영역, 가림 순서; 잔차만으로 새 픽셀 생성 불가 |
 | 목 | 머리와 함께 강체 회전하면 어깨 연결부가 움직인다 | 아래는 몸에 고정하고 위만 턱 부착점 변위에 따라 움직이는 띠 |
 
-목은 `Pneck = Prest + w(p) (jawMoved-jawRest)`를 최소 기준으로 쓴다. w=0은 어깨, w=1은 턱이다. 필요하면 그 위에 목 자체의 국소 잔차를 둔다. 피부를 뒤집거나 턱에 가려질 영역을 새로 그리는 작업은 이 수식의 기능이 아니다.
+목은 `Pneck = Prest + w(p) (jawMoved-jawRest)`를 최소 기준으로 쓴다. w=0은 어깨, w=1은 턱이다. 호흡과 좌우 스웨이는 머리와 y576 위쪽 목에 같은 이동량을 더하고, 목 아래와 몸은 상단 가중치로 자연스럽게 감쇠한다. 필요하면 그 위에 목 자체의 국소 잔차를 둔다. 피부를 뒤집거나 턱에 가려질 영역을 새로 그리는 작업은 이 수식의 기능이 아니다.
 
 ## 4. 실행 모듈과 사용 경계
 
@@ -62,13 +62,15 @@ Final = center + Rz(roll) (P - center)
 
 여섯 상하 레퍼런스의 카메라 이동은 먼저 제거한다. `reference_registration.mjs`가 r11 자식 안구의 3D 피벗을 해당 자세로 회전하고, 레퍼런스의 양안 중점을 그 중점에 평행 이동한다. 원시 측정과 등록 이동량은 `source/viewer/face-feature-fit.json`에 함께 남긴다. 눈의 형태, 시선, 깜빡임과 눈썹 및 입 모양은 등록된 중심 주변에서 적용하며 마지막에 고개 기울임을 적용한다.
 
-얼굴 윤곽은 원본 광대 y465부터 턱 y616까지의 정규화 비율로 대응시킨다. SAM 3가 목까지 선택한 원본 마스크도 보존하고, 측정한 턱선으로 목을 제외한다. 각 자세의 볼과 턱은 독립적인 좌우 4차 최소제곱 곡선으로 피팅한다. 광대 기준선에서는 pitch의 세로 잔차가 0이고, 아래로 갈수록 해당 레퍼런스의 볼과 턱 길이를 적용한다. 광대 양끝의 3D 기울기는 턱으로 갈수록 줄어든다. 목 상단도 턱의 세로 잔차를 따른다.
+얼굴 윤곽은 원본 광대 y465부터 턱 y616까지의 마스크 실측을 쓴다. `fit_depth.py`는 정면 원화를 1024 정사각 캔버스에 `(152,20)`으로 맞춰 Depth Anything V2 Small의 상대 깊이를 추정하고, ±45° 윤곽에서 복원한 `z_edge(y)`에 선형 피팅한다. 좌우 대칭화와 sigma 4px 평활화를 거친 격자는 내부가 외곽보다 앞으로 나오며, y616 턱 중심은 외곽 깊이로 부드럽게 이어진다. 결과는 `source/viewer/face-depth.json`과 `bundle/face-depth.mjs`에 저장한다.
+
+`faceLift`가 이 깊이 격자를 이용해 마스크 하관을 실제 3D 회전시키고, `outlinePitchShift`는 회전 뒤의 상대 높이 `s_rot`에서 2D 레퍼런스 폭과 중심을 다시 맞춘다. 상향에서는 광대 위쪽 폭 보정을 0 이하로 제한하고, 하향에서는 레퍼런스보다 10px 넘게 더 좁아지지 않게 한다. `fit_outline.py`의 pitch 샘플도 윤곽 외곽 깊이를 적용한 3D 회전 스팬에서 추출한다. SAM 3가 목까지 선택한 원본 마스크도 보존하고, 측정한 턱선으로 목을 제외한다. 목 상단은 턱의 세로 이동량을 따른다.
 
 여섯 앞쪽 머리카락 파츠의 위치는 `canopyWorld([x,y], p)` 하나가 소유한다. 동일한 원화 좌표와 포즈는 같은 XYZ를 반환한다. 상단은 중심에서 외곽으로 깊이가 단조 감소하는 `hairLift`를 사용하고 구레나룻 하단만 실측 가닥으로 이어진다. 파츠별 깊이 오프셋을 제거했고 두피 y245 위의 흔들림은 0이다. `pipeline/canopy_mesh.py`는 겹치는 텍스처가 같은 캔버스 격자와 삼각형 대각선을 쓰게 하여 GPU의 내부 보간 차이도 줄인다. 레이어 순서는 옆머리, 정수리, 앞머리, 머리핀이다. 측면 레퍼런스 RGB 스탬핑은 모든 파츠에서 0이고, 옆머리는 피부 깊이를 검사한다. 기존 뒤머리 바탕의 상단은 뒤반구에 놓아 아래를 볼 때 드러나는 정수리를 채운다.
 
 `hair_albedo.py`는 외곽의 저주파 림라이트를 내부 암갈색 Lab 톤으로 낮추면서 고주파 머릿결을 남긴다. 눈썹 마스크와 겹치는 앞머리 픽셀은 위아래 관통 가닥만 유지한다. `prepare_front_hair.py`는 고정 입력에서 다시 시작하며, 정수리의 새 메움은 y230~250에서 사라진다. 측후두부 텍스처는 밝은 테두리를 샘플에서 제외한 뒤 정면 내부 톤의 평균과 대비에 맞춘다.
 
-재생성 순서는 `pipeline/segment_references.py`, `pipeline/stage3_build_viewer.py`다. 캐시된 마스크는 네트워크 호출 없이 재사용한다. Python 의존성은 `requirements.txt`에 있으며 빌드 환경은 워크트리 전용으로 준비한다. 검증은 `pipeline/test_outline.mjs`, `test_hair_shell.mjs`, `test_stereo.mjs`, `test_attachment.mjs`, `test_corrections.mjs`, `test_sphere_3d.mjs`와 `verify_viewer.py`로 실행한다. `verify_viewer.py --poses-only`는 DPR 2의 아홉 자세 및 좌우 45도 캡처와 귀, 구슬, 이마 검사를 수행한다.
+재생성은 필요할 때 `pipeline/fit_depth.py`를 먼저 실행하고 `pipeline/stage3_build_viewer.py`로 뷰어 산출물을 만든다. 깊이 추정 도구는 별도 `requirements-depth.txt`의 CPU PyTorch와 Transformers를 쓰며, 모델 가중치는 생성 때만 필요하다. 캐시된 마스크와 고정된 모델 revision은 재생성 입력으로 남긴다. 기본 Python 의존성은 `requirements.txt`에 있으며 빌드 환경은 워크트리 전용으로 준비한다. 검증은 `pipeline/test_outline.mjs`, `test_hair_shell.mjs`, `test_stereo.mjs`, `test_attachment.mjs`, `test_corrections.mjs`, `test_sphere_3d.mjs`와 `verify_viewer.py`로 실행한다. `verify_viewer.py --poses-only`는 DPR 2의 아홉 자세 및 좌우 45도 캡처와 귀, 구슬, 이마 검사를 수행한다.
 
 ## 근거와 해석
 

@@ -19,6 +19,11 @@ export function bindRig(rig) {
 export function deform3D(mesh,point,parameters) {
   const p={...parameters};
   for(const node of mesh.chain||[])for(const [channel,keys] of Object.entries(node.keyforms))if(channel.startsWith('Param'))p[channel]=interpolate(keys,parameters[channel]);
+  const world=deformLocal(mesh,point,p);
+  if(mesh.deformerId==='WarpBody'||mesh.id==='neck'||(!p.ParamBodyAngleX&&!p.ParamBreath))return world;
+  return [world[0]+(p.ParamBodyAngleX||0),world[1]-(p.ParamBreath||0)*4,world[2]];
+}
+function deformLocal(mesh,point,p) {
   const id=mesh.id;let [x,y]=point;
   if(id==='hair-top'||id.startsWith('bangs')||id.startsWith('side-hair')||id==='hairpin')return canopyWorld(point,p);
   if(mesh.deformerId==='WarpBody') {
@@ -32,7 +37,7 @@ export function deform3D(mesh,point,parameters) {
     const head=artWorld(correctedLift([xIn,sampleY],-2,p),{...p,ParamAngleX:0,ParamAngleY:0});
     const headDx=head[0]-x,headDy=head[1]-sampleY+yIn-y;
     const u=clamp((680-y)/110,0,1),weight=u*u*(3-2*u),upper=clamp((1536-y)/960,0,1);
-    const result=[x+headDx*weight+p.ParamBodyAngleX*upper*(1-weight),y+headDy*weight-p.ParamBreath*4*upper*(1-weight),-20];
+    const result=[x+headDx*weight+p.ParamBodyAngleX*upper,y+headDy*weight-p.ParamBreath*4*upper,-20];
     if(p.ParamAngleY){
       const chinDy=outlineWorld([502,616],{...p,ParamAngleZ:0})[1]-616;
       const t=1-clamp((y-585)/95,0,1),attach=t*t*(3-2*t),roll=radians(p.ParamAngleZ);
@@ -44,7 +49,7 @@ export function deform3D(mesh,point,parameters) {
   if(feature&&correction(p,'CorrOutline')>0){
     const weight=correction(p,'CorrOutline'),target=featureWorld(id,[x,y],p);
     if(weight===1)return target;
-    const original=deform3D(mesh,point,{...parameters,CorrOutline:0});
+    const original=deformLocal(mesh,point,{...p,CorrOutline:0});
     return original.map((v,i)=>v+(target[i]-v)*weight);
   }
   if(id.startsWith('tail-')) {

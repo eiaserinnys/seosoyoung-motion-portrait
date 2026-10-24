@@ -1,6 +1,7 @@
 import {HEAD_CENTER,artWorld,correctedLift,correction,clamp,radians} from './geometry.mjs';
 import {OUTLINE_ROWS,OUTLINE_POSES} from './outline-data.mjs';
 import {gridValue,frameValue} from './pose-grid.mjs';
+import {faceDepthAt,faceDepthEdgeAt} from './face-depth.mjs';
 export {OUTLINE_ROWS} from './outline-data.mjs';
 // Cubic Hermite interpolation keeps the sampled mask residual smooth in height.
 export function outlineRow(y){
@@ -46,17 +47,12 @@ function targetRow(pose,y){
  const src=SOURCE_ROWS,t=clamp((y-src[i][0])/(src[i+1][0]-src[i][0]),0,1);
  return rows[i].map((v,j)=>v+(rows[i+1][j]-v)*t);
 }
-// Stage 1: True 3D face mask surface replacing the vertical jaw ribbon for pitch,
-// while preserving pitch=0 projection identically.
+// Stage 1: Depth Anything surface calibrated to the measured silhouette edges.
 export function faceLift([x,y],relief,p){
  const old=correctedLift([x,y],relief,p);
  if(y<=400)return old;
- const v=clamp((x-HEAD_CENTER[0])/145,-1,1),s=clamp((y-465)/(616-465),0,1);
- const z0=correctedLift([502,465],0,p)[2],zEdge0=correctedLift([345,465],0,p)[2];
- const zChin=68*correction(p,'CorrDepth')/.78;
- const zMid=z0-(z0-zChin)*Math.pow(s,1.25),arch=(z0-zEdge0)*(1-.75*s);
- const zJaw=zMid-arch+arch*(1-v*v)+relief,t=smooth((y-400)/65);
- return [old[0],old[1],old[2]+(zJaw-old[2])*t];
+ const edge=faceDepthEdgeAt(y),depth=edge+(faceDepthAt(x,y)-edge)*correction(p,'CorrDepth')/.78+relief,t=smooth((y-400)/65);
+ return [old[0],old[1],old[2]+(depth-old[2])*t];
 }
 export function faceWorld(point,relief,p){
  const old=correctedLift(point,relief,p),neu=faceLift(point,relief,p);
@@ -77,8 +73,7 @@ function symmetricFace(point,p,relief=0){
  q[0]+=offset*Math.cos(roll);q[1]+=offset*Math.sin(roll);
  return q;
 }
-// Stage 2: Residual warp matching the 3D-rotated mask edges to 2D reference silhouettes
-// while preserving Stage 1's 3D interior arch.
+// Stage 2: Match the 3D-rotated mask edges to reference rows at their rotated height.
 export function outlinePitchShift(point,p){
  const t=clamp((point[1]-218)/247,0,1);
  const weight=correction(p,'CorrOutline')*t*t*(3-2*t);
@@ -89,25 +84,32 @@ export function outlinePitchShift(point,p){
  const residual=frameValue(p,'outline:'+y,()=>[0,1,2,3].map(component=>gridValue(OUTLINE_POSES,p.ParamAngleX*correction(p,'CorrTurn'),pitch,pose=>{
   if(!pose.pitch)return 0;
   const key={...p,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,ParamAngleZ:0};
-  const x=component%2?r:l,axis=component<2?0:1;
-  const q=legacyOutline([x,y],symmetricFace([x,y],key),key);
-  const s=clamp((y-465)/151,0,1);
-  if(axis===0){
-   const key0={...key,ParamAngleY:0};
-   const qL0=legacyOutline([l,y],symmetricFace([l,y],key0),key0)[0];
-   const qR0=legacyOutline([r,y],symmetricFace([r,y],key0),key0)[0];
-   const mid0=(qL0+qR0)/2,half0=(qR0-qL0)/2;
-   const [,rl,rr]=targetRow(pose,y),[,bl,br]=targetRow(POSE_BY_KEY.get(`${pose.yaw}:0`),y);
-   const bw=br-bl,rw=rr-rl;
-   const dHalf=clamp((rw-bw)/2,-half0*.44,half0*.56)*smooth(s/.35);
-   const midShiftX=pose.yaw?-Math.sign(pose.yaw)*(pose.pitch<0?16:-2)*Math.pow(s,1.15):0;
-   return mid0+midShiftX+(component%2?1:-1)*(half0+dHalf)-q[0];
-  }
-  const normSpan=pose.pitch>0?(pose.yaw===0?166:158):(pose.yaw===0?116:128);
-  const sCurve=Math.pow(s,pose.pitch>0?.88:1.08);
+  const qL=legacyOutline([l,y],symmetricFace([l,y],key),key);
+  const qR=legacyOutline([r,y],symmetricFace([r,y],key),key);
+  const rotatedSpan=frameValue(p,`outline-span:${pose.yaw}:${pose.pitch}`,()=>{
+   const edgeY=edge=>{
+    const [edgeL,edgeR]=outlineRow(edge);
+    const a=legacyOutline([edgeL,edge],symmetricFace([edgeL,edge],key),key);
+    const b=legacyOutline([edgeR,edge],symmetricFace([edgeR,edge],key),key);
+    return (a[1]+b[1])/2;
+   };
+   return [edgeY(465),edgeY(616)];
+  });
+  const sRot=clamp(((qL[1]+qR[1])/2-rotatedSpan[0])/(rotatedSpan[1]-rotatedSpan[0]),0,1);
+  const [targetY,targetLeft,targetRight]=targetRow(pose,465+sRot*151);
+  const [,baseLeft,baseRight]=targetRow(POSE_BY_KEY.get(`${pose.yaw}:0`),465+sRot*151);
+  const currentMid=(qL[0]+qR[0])/2,currentHalf=(qR[0]-qL[0])/2;
+  const targetMid=(targetLeft+targetRight)/2,targetHalf=(targetRight-targetLeft)/2;
+  const centerShift=targetMid-(baseLeft+baseRight)/2;
+  let dHalf=(targetHalf-currentHalf)*smooth(sRot/.35);
+  if(pose.pitch>0&&y<=520)dHalf=Math.min(dHalf,0);
+  if(pose.pitch<0)dHalf=Math.max(dHalf,-10);
+  const outputMid=currentMid+centerShift;
+  if(component===0)return outputMid-(currentHalf+dHalf)-qL[0];
+  if(component===1)return outputMid+(currentHalf+dHalf)-qR[0];
   const topEdge=pose.registration.topEdgeY,topMid=(topEdge[0]+topEdge[1])/2;
-  const targetY=topMid+normSpan*sCurve+(topEdge[component%2]-topMid)*.35*(1-s);
-  return targetY-q[1];
+  const targetEdgeY=targetY+(topEdge[component%2]-topMid)*.35*(1-sRot);
+  return targetEdgeY-(component===2?qL[1]:qR[1]);
  })));
  const unrolled={...p,ParamAngleZ:0};
  const stage1Pt=legacyOutline(point,symmetricFace(point,unrolled),unrolled);

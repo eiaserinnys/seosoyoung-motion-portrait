@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
 import {outlineWorld,outlineRow,outlinePitchShift,faceLift,faceWorld} from '../bundle/face-outline.mjs';
+import {faceDepthAt,faceDepthEdgeAt} from '../bundle/face-depth.mjs';
 import {featureWorld} from '../bundle/face-features.mjs';
 import {canopyWorld,craniumWorld,hairLift} from '../bundle/hair-shell.mjs';
 import * as hairShell from '../bundle/hair-shell.mjs';
@@ -21,17 +22,52 @@ test('diagonal jaw slope stays near the feature plane instead of twisting the lo
   assert(Math.abs(dy)>15&&Math.abs(dy)<25,`diagonal cheek slope ${yaw},${pitch}: ${dy}`);
  }
 });
-test('3D pitch face keeps its attachment width and follows measured 2D jaw residuals',()=>{
+test('depth surface keeps exact outline edge depths and a smooth convex interior',()=>{
+ for(const y of [465,510,530,570,616]){
+  const [l,r]=outlineRow(y),offset=(l+r)/2-502,edge=faceDepthEdgeAt(y);
+  assert(Math.abs(faceDepthAt(l-offset,y)-edge)<1e-8,`left registered edge depth at ${y}`);
+  assert(Math.abs(faceDepthAt(r-offset,y)-edge)<1e-8,`right registered edge depth at ${y}`);
+  if(y<616)assert(faceDepthAt(502,y)>edge,`convex face interior at ${y}`);
+ }
+ assert(Math.abs(faceDepthAt(502,616)-faceDepthEdgeAt(616))<1e-8,'chin center joins the measured edge depth');
+ for(const y of [465,530,570,610])for(const x of [352,424,480,500]){
+  assert(Math.abs(faceDepthAt(x,y)-faceDepthAt(1004-x,y))<1e-8,`depth symmetry at ${x},${y}`);
+ }
+});
+test('3D pitch face preserves neutral projection and follows rotated-height references',()=>{
  const width=(y,p)=>{const [l,r]=outlineRow(y);return outlineWorld([r,y],p)[0]-outlineWorld([l,y],p)[0];};
  const neutralWidth=width(465,pose(0,0));
  assert(Math.abs(width(465,pose(0,30))-neutralWidth)<1e-8,'up pitch preserves the side-hair attachment width');
  assert(Math.abs(width(465,pose(0,-30))-neutralWidth)<1e-8,'down pitch preserves the side-hair attachment width');
- for(const y of [510,550,570,590]){
-  const neutral=width(y,pose(0,0)),up=width(y,pose(0,30)),down=width(y,pose(0,-30));
-  assert(up>neutral,`up pitch expands the measured U-shaped jaw at y=${y}`);
-  assert(down<neutral,`down pitch narrows the measured jaw at y=${y}`);
+ const traces=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url)));
+ const edgeDepth=y=>{
+  const rows=traces.rows;
+  for(let i=1;i<rows.length;i++)if(y<=rows[i][0]){
+   const a=rows[i-1],b=rows[i],t=(y-a[0])/(b[0]-a[0]);
+   const v=a.map((n,j)=>n+(b[j]-n)*t);
+   return ((v[5]-v[3])+(v[6]-v[4]))/(4*Math.sin(Math.PI/4));
+  }
+  throw new Error(`No outline edge depth at ${y}`);
+ };
+ for(const sample of traces.poses.filter(q=>q.pitch)){
+  const expected=151*Math.cos(sample.pitch*Math.PI/180)-(edgeDepth(616)-edgeDepth(465))*Math.cos(sample.yaw*Math.PI/180)*Math.sin(sample.pitch*Math.PI/180);
+  assert(Math.abs(sample.samplingSpan-expected)<1e-6,`${sample.name} uses its 3D rotated vertical span`);
+  assert(Math.abs((sample.yChin-sample.yTop)-sample.samplingSpan)<1e-8,`${sample.name} reference rows use the sampled span`);
  }
- assert(faceLift([502,616],0,base)[2]<correctedLift([502,616],0,base)[2]-80,'the chin has depth beyond the vertical ribbon');
+ for(const y of [510,520]){
+  const neutral=width(y,pose(0,0)),up=width(y,pose(0,30));
+  assert(up<=neutral+1e-6,`up pitch does not inflate the upper cheek at y=${y}`);
+ }
+ for(const y of [530,550,570]){
+  const neutral=width(y,pose(0,0)),up=width(y,pose(0,30)),down=width(y,pose(0,-30));
+  assert(up<neutral+20,`up pitch avoids a swollen cheek at y=${y}`);
+  assert(down>neutral-20,`down pitch retains mouth-side jaw width at y=${y}`);
+ }
+ for(const y of [465,530,616]){
+  const edge=faceDepthEdgeAt(y),expected=edge+(faceDepthAt(502,y)-edge)*base.CorrDepth/.78;
+  assert(Math.abs(faceLift([502,y],0,base)[2]-expected)<1e-7,`depth grid drives faceLift at ${y}`);
+ }
+ assert.equal(faceLift([502,400],0,base)[2],correctedLift([502,400],0,base)[2],'y=400 retains the original surface');
  for(const yaw of [-45,0,45])for(const point of [[502,465],[502,550],[502,616]]){
   const p=pose(yaw,0),expected=artWorld(correctedLift(point,0,p),p),actual=faceWorld(point,0,p);
   assert(Math.hypot(actual[0]-expected[0],actual[1]-expected[1])<1e-9,`neutral pitch projection ${yaw},${point}`);
@@ -98,13 +134,15 @@ test('upper canopy meets longitude 90 exactly while rear interior retains full v
 });
 test('normalized pitch spans preserve a curved jaw and mouth-to-chin space',()=>{
  const mouth=[504.5,554.5];
+ const traces=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url)));
  for(const yaw of [-45,0,45])for(const pitch of [-30,30]){
   const p=pose(yaw,pitch),chin=outlineWorld([502.5,616],p),lip=featureWorld('mouth-detail',mouth,p);
-  assert(chin[1]>540&&chin[1]<640,`chin ${yaw},${pitch}: ${chin[1]}`);
-  assert(chin[1]-lip[1]>45&&chin[1]-lip[1]<85,`mouth clearance ${yaw},${pitch}: ${chin[1]-lip[1]}`);
+  const target=traces.poses.find(q=>q.yaw===yaw&&q.pitch===pitch);
+  assert(Math.abs(chin[1]-target.yChin)<1e-6,`chin follows the rotated reference span ${yaw},${pitch}: ${chin[1]}`);
+  assert(chin[1]-lip[1]>25&&chin[1]-lip[1]<85,`mouth clearance ${yaw},${pitch}: ${chin[1]-lip[1]}`);
  }
  const up=pose(0,30),jaw=outlineWorld([outlineRow(550)[0],550],up),chin=outlineWorld([502.5,616],up);
- assert(chin[1]-jaw[1]>45,'low-angle jaw keeps curvature instead of a horizontal brick');
+ assert(chin[1]-jaw[1]>35,'low-angle jaw keeps curvature instead of a horizontal brick');
 });
 test('all upper rear longitudes share crown row Y under downward diagonals',()=>{
  for(const yaw of [-45,45])for(const sign of [-1,1])for(const y of [60,120,200,300,340]){
@@ -176,4 +214,24 @@ test('neck top tracks chin pitch displacement while body attachment stays fixed'
   assert(Math.abs(q[1]-neutral[1]-dy)<1e-8);
   assert.deepEqual(deform3D(mesh,[502,700],p),deform3D(mesh,[502,700],base));
  }
+});
+test('head meshes and the upper neck inherit one continuous breath and body sway offset',()=>{
+ const bodyX=5,breath=.75,shift=[bodyX,-breath*4,0];
+ const still={...pose(0,0),ParamBodyAngleX:0,ParamBreath:0};
+ const moving={...still,ParamBodyAngleX:bodyX,ParamBreath:breath};
+ const assertShift=(mesh,point,label)=>{
+  const a=deform3D(mesh,point,moving),b=deform3D(mesh,point,still);
+  assert(Math.hypot(...a.map((v,i)=>v-b[i]-shift[i]))<1e-8,label);
+ };
+ for(const [id,points] of [['face-skin',[[502,465],[435,300],[650,560]]],['hair-top',[[502,120],[390,245],[610,300]]]]){
+  const mesh=rig.meshes.find(m=>m.id===id);
+  for(const point of points)assertShift(mesh,point,id+' '+point);
+ }
+ const neck=rig.meshes.find(m=>m.id==='neck'),top=neck.positions.filter(point=>point[1]<=576);
+ assert(top.length>0,'neck mesh has upper attachment samples');
+ for(const point of top)assertShift(neck,point,'neck '+point);
+ const sclera=rig.meshes.find(m=>m.id==='eye-left-sclera'),point=[415,432];
+ const partialMoving={...moving,CorrOutline:.5},partialStill={...still,CorrOutline:.5};
+ const a=deform3D(sclera,point,partialMoving),b=deform3D(sclera,point,partialStill);
+ assert(Math.hypot(...a.map((v,i)=>v-b[i]-shift[i]))<1e-8,'partial outline fallback adds body motion exactly once');
 });

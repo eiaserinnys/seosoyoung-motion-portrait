@@ -24,11 +24,11 @@ The upper backing uses a sampled hair strip from our own crown drawing, with an 
 
 The diagnostic child eyes are radius-54 spheres. The recommended portrait keeps measured yaw anchors, adds curved socket depth and pitch foreshortening, and rotates radius-42 corneal caps with the head. Independent gaze is applied before that rotation. The projected eyelid opening clips the iris, pupil and highlights during blinking.
 
-The neck stays stationary during pure yaw. Pitch and roll blend the hidden upper attachment into the body. One moving neck owns the skin above the collar; the shirt's duplicate upper neck is removed. Hair ties and hanging tails follow head attachment points and damped gravity motion.
+The neck stays stationary during pure yaw. Pitch and roll blend the hidden upper attachment into the body. Breath and torso sway move the head and upper neck together, then fade into the torso. One moving neck owns the skin above the collar; the shirt's duplicate upper neck is removed. Hair ties and hanging tails follow head attachment points and damped gravity motion.
 
 All six front hair layers share a rounded dome, protected in front of the forehead by a smooth depth maximum. The upper backing meets that dome without a depth inset. The rear cranium retains the complete elliptical shell, with a narrow upper seam blend and yaw-only visibility. Crown, bangs and hairpin retain their illustration order. The hair controls adjust volume and far-side occlusion.
 
-The face uses a silhouette mesh. Its calibrated yaw projection stays unchanged; pitch combines registered reference shapes with normalized lower-face height and a curved central arch. Diagonal latitude converges toward the chin. The neck follows the chin, and the registered feature centers retain the eyes, nose and mouth on the face while local socket and corneal motion adds perspective.
+The face uses a silhouette mesh. Its calibrated yaw projection stays unchanged; the lower mask pitches as a depth surface fitted from the front artwork and the measured 45° outline depths. A second residual follows the rotated mask height into the 2D pitch references. The neck follows the chin, and the registered feature centers retain the eyes, nose and mouth on the face while local socket and corneal motion adds perspective.
 
 This is a custom WebGL renderer and JSON format. It does not load or produce Cubism binary models.
 
@@ -52,7 +52,7 @@ node --test tests/head-turn.test.mjs
 .venv/bin/python pipeline/verify_outline.py
 ```
 
-Stage 2 reconstructs the 40 cropped RGBA parts from `source/character/` and the cached masks in `sam3_masks/`. Restoration uses deterministic pixel interpolation and alpha geometry; it does not call an external generative inpainting service. Stage 3 adds two independently segmented 45° cranium parts, fits the dome and face outlines from cached masks, and produces the paired 2048-square atlases, front/back sphere textures, meshes and rig data under `bundle/assets/`.
+Stage 2 reconstructs the 40 cropped RGBA parts from `source/character/` and the cached masks in `sam3_masks/`. Restoration uses deterministic pixel interpolation and alpha geometry; it does not call an external generative inpainting service. The optional one-time face-depth fit uses `.venv/bin/python -m pip install -r requirements-depth.txt` followed by `.venv/bin/python pipeline/fit_depth.py`; it downloads the pinned Depth Anything V2 Small model. Stage 3 adds two independently segmented 45° cranium parts, fits the dome and face outlines from cached masks, and produces the paired 2048-square atlases, front/back sphere textures, meshes and rig data under `bundle/assets/`.
 
 The optional `stage1_sam3_segment.py` uses the existing cached masks without network calls. Generating a missing mask calls the paid fal.ai SAM 3 endpoint and requires `FAL_KEY` in the environment. No credentials are included. Keep all masks to reproduce the provided build offline.
 

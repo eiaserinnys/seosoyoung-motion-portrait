@@ -1,5 +1,6 @@
 """Sample actual SAM 3 face silhouettes; compile independent left/right targets."""
 import json
+import math
 from pathlib import Path
 import numpy as np
 from PIL import Image
@@ -12,11 +13,27 @@ def interval(mask,y):
 def main_component(mask):
     n,labels=cv2.connectedComponents((mask>127).astype(np.uint8));counts=np.bincount(labels.ravel());counts[0]=0
     return np.where(labels==counts.argmax(),255,0)
-def symmetrize(rows,poses):
-    for row in rows:
+def symmetrized_outline_rows(rows):
+    result=[row[:] for row in rows]
+    for row in result:
         _,l,r,ll,lr,rl,rr,_=row
         near=((l-ll)+(rr-r))/2;far=((r-lr)+(rl-l))/2
         row[3:7]=[l-near,r-far,l+far,r+near]
+    return result
+def edge_depth(rows,y):
+    if y<=rows[0][0]:row=rows[0]
+    elif y>=rows[-1][0]:row=rows[-1]
+    else:
+        row=None
+        for a,b in zip(rows,rows[1:]):
+            if y<=b[0]:
+                t=(y-a[0])/(b[0]-a[0]);row=[a[i]+(b[i]-a[i])*t for i in range(len(a))];break
+    return ((row[5]-row[3])+(row[6]-row[4]))/(4*math.sin(math.radians(45)))
+def rotated_span(rows,yaw,pitch):
+    edge_delta=edge_depth(rows,616)-edge_depth(rows,465)
+    return (616-465)*math.cos(math.radians(pitch))-edge_delta*math.cos(math.radians(yaw))*math.sin(math.radians(pitch))
+def symmetrize(rows,poses):
+    rows[:]=symmetrized_outline_rows(rows)
     source=[r for r in rows if r[0]>=465]
     for pitch in [-30,30]:
         group={p['yaw']:p for p in poses if p['pitch']==pitch}
@@ -70,6 +87,7 @@ def build():
     features=json.loads((ROOT/'source/viewer/face-feature-fit.json').read_text())
     poses=[]
     samples=[r for r in rows if r[0]>=465]
+    span_rows=symmetrized_outline_rows(rows)
     ss=np.linspace(0,1,41)
     for pose in features['poses']:
         name=pose['name'];yaw=pose['yaw'];pitch=pose['pitch']
@@ -80,15 +98,16 @@ def build():
             continue
         mask=main_component(np.array(Image.open(ROOT/'sam3_masks/references'/f'{name}-face.png')))
         chin=int(np.where(mask>127)[0].max())+20
-        top=round((pose['rawCenters']['left'][1]+pose['rawCenters']['right'][1])/2+35)
+        span=rotated_span(span_rows,yaw,pitch)
+        top=round(chin-span)
         raw_xy=np.array([interval(mask,round(top+(chin-top)*s)-20) for s in ss],float)+152
         coeff=[np.polyfit(ss,raw_xy[:,i],4) for i in [0,1]]
         fitted=np.stack([np.polyval(c,ss) for c in coeff],axis=1)
         target=[]
         for r in samples:
             s=(r[0]-465)/(616-465)
-            target.append([pose['registration']['topY']+(chin-top)*s,*[float(np.polyval(c,s))+pose['registration']['delta'][0] for c in coeff]])
-        poses.append(dict(name=name,yaw=yaw,pitch=pitch,yTop=pose['registration']['topY'],yChin=pose['registration']['topY']+chin-top,rawYTop=top,rawYChin=chin,registration=pose['registration'],rows=target,
+            target.append([pose['registration']['topY']+span*s,*[float(np.polyval(c,s))+pose['registration']['delta'][0] for c in coeff]])
+        poses.append(dict(name=name,yaw=yaw,pitch=pitch,yTop=pose['registration']['topY'],yChin=pose['registration']['topY']+span,samplingSpan=span,rawYTop=top,rawYChin=chin,registration=pose['registration'],rows=target,
                           fitRmsPixels=float(np.sqrt(np.mean((fitted-raw_xy)**2))),coefficients=[c.tolist() for c in coeff],source=f'{name}-face.png'))
     data['measuredRows']=[r[:] for r in rows]
     symmetrize(rows,poses)
