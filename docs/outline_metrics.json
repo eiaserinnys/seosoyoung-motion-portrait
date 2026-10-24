@@ -1011,8 +1011,8 @@
         792.1393728222996
       ]
     ],
-    "nearEarPixels": 975,
-    "nearEarColorContribution": 1495,
+    "nearEarPixels": 973,
+    "nearEarColorContribution": 1450,
     "earOverlap": 0,
     "farBackOutsidePixels": 0,
     "farEarPixels": 66,
@@ -1419,8 +1419,8 @@
         786.5644599303135
       ]
     ],
-    "nearEarPixels": 2213,
-    "nearEarColorContribution": 2598,
+    "nearEarPixels": 2212,
+    "nearEarColorContribution": 2593,
     "earOverlap": 0,
     "farBackOutsidePixels": 0,
     "farEarPixels": 0,
@@ -1623,8 +1623,8 @@
         787.9581881533101
       ]
     ],
-    "nearEarPixels": 2365,
-    "nearEarColorContribution": 2793,
+    "nearEarPixels": 2363,
+    "nearEarColorContribution": 2792,
     "earOverlap": 0,
     "farBackOutsidePixels": 0,
     "farEarPixels": 0,
@@ -2643,8 +2643,8 @@
         768.4459930313589
       ]
     ],
-    "nearEarPixels": 2256,
-    "nearEarColorContribution": 2605,
+    "nearEarPixels": 2250,
+    "nearEarColorContribution": 2578,
     "earOverlap": 0,
     "farBackOutsidePixels": 0,
     "farEarPixels": 0,
@@ -2848,7 +2848,7 @@
       ]
     ],
     "nearEarPixels": 2447,
-    "nearEarColorContribution": 2800,
+    "nearEarColorContribution": 2790,
     "earOverlap": 0,
     "farBackOutsidePixels": 0,
     "farEarPixels": 0,

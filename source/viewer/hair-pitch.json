@@ -1,0 +1,83 @@
+{
+  "pitchArc": {
+    "topZ": -90,
+    "diagonalTopZ": -25
+  },
+  "tipLag": {
+    "kappa": 0.65,
+    "poses": [
+      {
+        "name": "up-left",
+        "yaw": -45,
+        "pitch": 30,
+        "kappa": 0.6
+      },
+      {
+        "name": "up",
+        "yaw": 0,
+        "pitch": 30,
+        "kappa": 0.35
+      },
+      {
+        "name": "up-right",
+        "yaw": 45,
+        "pitch": 30,
+        "kappa": 0.6
+      },
+      {
+        "name": "down-left",
+        "yaw": -45,
+        "pitch": -30,
+        "kappa": 0.85
+      },
+      {
+        "name": "down",
+        "yaw": 0,
+        "pitch": -30,
+        "kappa": 0.35
+      },
+      {
+        "name": "down-right",
+        "yaw": 45,
+        "pitch": -30,
+        "kappa": 0.85
+      }
+    ]
+  },
+  "rearPitch": {
+    "poses": [
+      {
+        "name": "up-left",
+        "yaw": -45,
+        "pitch": 30,
+        "rx": 0,
+        "rz": 0,
+        "y": 0
+      },
+      {
+        "name": "up-right",
+        "yaw": 45,
+        "pitch": 30,
+        "rx": 0,
+        "rz": 0,
+        "y": 0
+      },
+      {
+        "name": "down-left",
+        "yaw": -45,
+        "pitch": -30,
+        "rx": 44.7706274656728,
+        "rz": 4.537721491006616,
+        "y": 0.0
+      },
+      {
+        "name": "down-right",
+        "yaw": 45,
+        "pitch": -30,
+        "rx": 44.7706274656728,
+        "rz": 4.537721491006616,
+        "y": 0.0
+      }
+    ]
+  }
+}

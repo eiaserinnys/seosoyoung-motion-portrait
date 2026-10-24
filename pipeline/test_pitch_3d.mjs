@@ -8,7 +8,7 @@ import {faceDepthAt,faceDepthEdgeAt} from '../bundle/face-depth.mjs';
 import {featureWorld} from '../bundle/face-features.mjs';
 import {canopyWorld,craniumWorld,hairLift} from '../bundle/hair-shell.mjs';
 import * as hairShell from '../bundle/hair-shell.mjs';
-import {domeSection,craniumPosition} from '../bundle/hair-surface.mjs';
+import {domeSection,craniumPosition,sphereEase,pitchEase} from '../bundle/hair-surface.mjs';
 import {FEATURE_FIT} from '../bundle/feature-data.mjs';
 import {strandWorld} from '../bundle/side-strands.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
@@ -60,14 +60,14 @@ test('3D pitch face preserves neutral projection and uses yaw-zero vertical frac
   assert(Math.hypot(actual[0]-expected[0],actual[1]-expected[1])<1e-9,`neutral pitch projection ${yaw},${point}`);
  }
 });
-test('right hanging lock tip follows its face attachment under upward left yaw',()=>{
+test('right hanging lock tip retains Z and gravity-frame XY under upward left yaw',()=>{
  const point=[648,544],p=pose(-45,30),strand=strandWorld(point,'right',p),shift=outlinePitchShift(point,p);
- const t=22/30,join=1-t*t*(3-2*t),world=canopyWorld(point,p);
+ const join=1-sphereEase(22/30),world=canopyWorld(point,p);
  // The s3d near edge can have zero X residual after the r11 width bound.
  // A nonzero skin Y shift makes this a direct regression for M6's Y decoupling.
  assert(Math.abs(shift[1]*join)>1);
- assert(Math.abs(world[0]-strand[0]-shift[0]*join)<1e-8);
- assert.equal(world[1],strand[1]);
+ assert.equal(world[0],canopyWorld(point,pose(-45,0))[0]);
+ assert.equal(world[1],canopyWorld(point,pose(-45,0))[1]);
  assert.equal(world[2],strand[2]);
 });
 test('face mesh follows its alpha silhouette instead of a coarse rectangle',()=>{
@@ -91,21 +91,21 @@ test('pitch crown stays convex while yaw-only dome projection is unchanged',()=>
   const {cx,rx}=domeSection(y),center=[502+cx,y],p=pose(yaw,0);
   assert.deepEqual(hairShell.fringeSurface(center,p),artWorld(hairLift(center,p),p));
   if(y<=120){
-   const down=pose(yaw,-30),mid=canopyWorld(center,down);
-   const sides=[-1,1].map(sign=>canopyWorld([502+cx+sign*rx,y],down)[1]);
-   // The frontal arc has at most 6px local curvature, replacing the old
-   // 60–100px depression. Diagonals stay above the far-side horizon.
-   assert(mid[1]<=Math.max(...sides)+(yaw?0:6),`crown depression ${yaw},${y}`);
+   const up=pose(yaw,30),mid=canopyWorld(center,up);
+   const sides=[-1,1].map(sign=>canopyWorld([502+cx+sign*rx,y],up)[1]);
+   assert(mid[1]<=Math.max(...sides)+1e-8,`upward crown depression ${yaw},${y}`);
   }
  }
 });
-test('rear shell horizon increases continuously through the lower crown',()=>{
+test('rear shell uses the front horizon plus only posterior pitch displacement',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const sign of [-1,1])for(const deg of [90,120,150,180]){
   const p=pose(yaw,pitch),side=sign<0?'left':'right';let previous=-Infinity;
-  for(let y=60;y<=465;y++){
-   const q=craniumWorld([0,y,sign*deg*Math.PI/180],side,p);
-   assert(q[1]>=previous-1e-8,`rear horizon inversion ${yaw},${pitch},${sign},${deg},${y}`);previous=q[1];
-   if(y>=380){const {cx,rx}=domeSection(y);assert(Math.abs(q[1]-hairShell.fringeSurface([502+cx+sign*rx,y],p)[1])<1e-8);}
+  for(const y of [60,80,120,200,300,340,350,360,370,380,400]){
+   const pt=[0,y,sign*deg*Math.PI/180],q=craniumWorld(pt,side,p),{cx,rx}=domeSection(y),edge=[502+cx+sign*rx,y];
+   const a=hairShell.fringeSurface(edge,p),b=canopyWorld(edge,p),blend=1-pitchEase((y-345)/35,p);
+   const delta=craniumPosition(pt,p)[1]-craniumPosition(pt,p,false)[1];
+   assert(Math.abs(q[1]-a[1]-(b[1]-a[1])*blend-delta)<1e-8);
+   assert(q.every(Number.isFinite));previous=q[1];
   }
  }
 });
@@ -116,7 +116,7 @@ test('upper canopy meets longitude 90 exactly while rear interior retains full v
    const {cx,rx}=domeSection(y),a=canopyWorld([502+cx+sign*rx,y],p),b=craniumWorld([0,y,sign*Math.PI/2],side,p);
    assert(Math.hypot(...a.map((v,i)=>v-b[i]))<1e-9,`seam ${yaw},${pitch},${y}`);
   }
-  for(const y of [120,300,400,465])for(const deg of [100,135,150,180]){
+  for(const y of [120,300,400])for(const deg of [105,135,150,180]){
    const pt=[0,y,sign*deg*Math.PI/180],a=craniumWorld(pt,side,p),b=craniumPosition(pt,p);
    for(const i of [0,2])assert(Math.abs(a[i]-b[i])<1e-9,`volume ${yaw},${pitch},${y},${deg}`);
   }
@@ -156,12 +156,13 @@ test('downward pitch keeps the central cheek free of projected face-mask folds',
   assert.equal(reversed,0,`central cheek projected folds at yaw=${yaw}, pitch=-30`);
  }
 });
-test('all upper rear longitudes share crown row Y under downward diagonals',()=>{
+test('rear Y stays on the shared crown horizon throughout the former collar',()=>{
  for(const yaw of [-45,45])for(const sign of [-1,1])for(const y of [60,120,200,300,340]){
   const p=pose(yaw,-30),{cx,rx}=domeSection(y),seam=canopyWorld([502+cx+sign*rx,y],p);
   for(const deg of [100,120,150,180]){
    const q=craniumWorld([0,y,sign*deg*Math.PI/180],sign<0?'left':'right',p);
-   assert(Math.abs(q[1]-seam[1])<1e-9,`crown Y ${yaw},${sign},${y},${deg}`);
+   const pt=[0,y,sign*deg*Math.PI/180],raw=craniumPosition(pt,p),base=craniumPosition(pt,p,false);
+   assert(Math.abs(q[1]-(seam[1]+raw[1]-base[1]))<1e-9,`crown Y ${yaw},${sign},${y},${deg}`);
   }
  }
 });

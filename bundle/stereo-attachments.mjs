@@ -1,4 +1,4 @@
-import {HEAD_CENTER,artWorld,correction,radians,clamp} from './geometry.mjs';
+import {HEAD_CENTER,NECK_PIVOT,artWorld,correction,radians,clamp,rotateXYZ} from './geometry.mjs';
 const ears={left:{front:[287,407,379,523],target:[324,400,442,515],angle:45},right:{front:[626,407,716,522],target:[576,385,688,511],angle:-45}};
 // Recover the slanted rest plane from independently registered front/near views.
 export function earWorld([x,y],side,p){
@@ -11,7 +11,7 @@ export function earWorld([x,y],side,p){
  return artWorld([x-HEAD_CENTER[0],y-HEAD_CENTER[1]+vertical,z],p);
 }
 export const BEADS={left:{front:[306.5,544.2],negative:[304,542.2],positive:[310.5,544.2],near:45},right:{front:[691.5,542.6],negative:[686.8,542.3],positive:[709.3,544],near:-45}};
-export function beadWorld(side,p){
+export function beadRotation(side,p){
  const b=BEADS[side],a=radians(b.near),target=b.near>0?b.positive:b.negative;
  const dx=b.front[0]-HEAD_CENTER[0],z=(target[0]-HEAD_CENTER[0]-dx*Math.cos(a))/Math.sin(a);
  const theta=radians(clamp(p.ParamAngleX*correction(p,'CorrTurn'),-45,45));
@@ -25,4 +25,12 @@ export function beadWorld(side,p){
  const shift=neg.map((n,i)=>(pos[i]-n)*odd/2+(pos[i]+n)*even/2);
  const yaw=radians(p.ParamAngleX*correction(p,'CorrTurn'));
  return artWorld([dx*Math.cos(yaw)+z*Math.sin(yaw)+shift[0],b.front[1]-HEAD_CENTER[1]+shift[1],-dx*Math.sin(yaw)+z*Math.cos(yaw)],{...p,ParamAngleX:0});
+}
+// The hanging tie belongs to the gravity frame: yaw moves its attachment,
+// pitch does not. Roll is applied once, around the same neck pivot as the head.
+export function beadWorld(side,p){
+ if(!p.ParamAngleY)return beadRotation(side,p);
+ const world=beadRotation(side,{...p,ParamAngleY:0,ParamAngleZ:0});
+ if(!p.ParamAngleZ)return world;
+ return rotateXYZ(world.map((v,i)=>v-NECK_PIVOT[i]),0,0,p.ParamAngleZ).map((v,i)=>v+NECK_PIVOT[i]);
 }

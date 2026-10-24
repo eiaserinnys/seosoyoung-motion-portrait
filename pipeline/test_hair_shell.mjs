@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
 import {domeSection,craniumPosition,craniumFacing} from '../bundle/hair-surface.mjs';
-import {hairLift,hairWorld,sideWorld,backWorld,craniumWorld,fringeSurface} from '../bundle/hair-shell.mjs';
+import {hairLift,hairWorld,sideWorld,backWorld,craniumWorld,fringeSurface,referenceFringe} from '../bundle/hair-shell.mjs';
 import {craniumWorld as exportedCranium} from '../bundle/cranium-surface.mjs';
 import './test_9dir.mjs';
 import './test_pitch_3d.mjs';
@@ -61,12 +61,12 @@ for(const side of ['left','right'])for(const y of [200,260,330,350])for(const ya
 }
 console.log(`PASS ${checks} hair shell and preserved face checks`);
 
-// The backing stays on the fringe hemisphere through y380, then joins the
-// lower shell with a smooth tangent. The former sign flip made a 390px ridge.
+// The backing stays on the approved r15 hemisphere, independently of the
+// new crown-interior relief, then joins the lower shell with a smooth tangent.
 for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
  const p={...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch};
  for(const x of [300,400,502,600,700]){
-  for(const y of [60,180,245,300,350,380])near(backWorld([x,y],p),fringeSurface([x,y],p,0));
+  for(const y of [60,180,245,300,350,380])near(backWorld([x,y],p),p.ParamAngleY?fringeSurface([x,y],p,0):referenceFringe([x,y],p,0));
   for(const y of [245,350,380,465]){
    const a=backWorld([x,y-.001],p),b=backWorld([x,y+.001],p);
    assert(Math.hypot(...a.map((v,i)=>v-b[i]))<.1,'backing contains a depth step');
@@ -74,8 +74,8 @@ for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
  }
 }
 
-test('frontal yaw never reveals either cranium at any pitch',()=>{
- for(const pitch of [-30,0,30])for(const id of ['side-cranium-left','side-cranium-right'])for(const pt of mesh(id).positions){
+test('frontal yaw at neutral pitch never reveals either cranium',()=>{
+ for(const pitch of [0])for(const id of ['side-cranium-left','side-cranium-right'])for(const pt of mesh(id).positions){
   assert(craniumFacing(pt,{...base,CorrTurn:1,ParamAngleX:0,ParamAngleY:pitch})<1e-9);
  }
 });

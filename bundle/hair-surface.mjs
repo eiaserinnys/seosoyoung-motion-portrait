@@ -1,5 +1,46 @@
 import {DOME} from './dome-data.mjs';
-import {HEAD_CENTER,clamp,radians,artWorld,correction,rotateXYZ} from './geometry.mjs';
+import {HEAD_CENTER,correctedLift,clamp,radians,artWorld,correction,rotateXYZ} from './geometry.mjs';
+const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+export const sphereEase=t=>(1-Math.cos(clamp(t,0,1)*Math.PI))*.5;
+export const pitchEase=(t,p)=>{
+ const weight=sphereEase(Math.abs(p.ParamAngleY*correction(p,'CorrTurn'))/30);
+ return smooth(t)+(sphereEase(t)-smooth(t))*weight;
+};
+// Piecewise spherical weights stay in the convex hull of the approved keys.
+// This prevents trigonometric cardinal overshoot from exceeding the 45px cap.
+export function hairPoseValue(poses,p,value){
+ const yaw=p.ParamAngleX*correction(p,'CorrTurn'),pitch=p.ParamAngleY*correction(p,'CorrTurn');
+ return poses.reduce((sum,pose)=>{
+  if(Math.sign(pitch)!==Math.sign(pose.pitch))return sum;
+  const yawWeight=pose.yaw===0?1-sphereEase(Math.abs(yaw)/45):Math.sign(yaw)===Math.sign(pose.yaw)?sphereEase(Math.abs(yaw)/45):0;
+  return sum+yawWeight*sphereEase(Math.abs(pitch)/30)*value(pose);
+ },0);
+}
+const smax=(a,b,k=8)=>(a+b+Math.sqrt((a-b)**2+k*k))/2;
+// The front dome meets the rear shell at longitude ±90°, where Z is cz.
+export function hairLift(point,p,relief=0) {
+ const [x,y]=point,{cx,rx,cz}=domeSection(y);
+ const s=clamp((x-HEAD_CENTER[0]-cx)/Math.max(1,rx),-1,1);
+ const u=clamp((250-y)/192,0,1),cap=Math.sqrt(Math.max(.08,1-u*u));
+ const lowerMix=smooth((y-230)/120),skinY=clamp(y,220,350);
+ const zSkinMid=correctedLift([502,skinY],0,p)[2];
+ const zCenter=(195*cap*(1-lowerMix)+(zSkinMid+12)*lowerMix)*correction(p,'CorrHairDepth');
+ const zDome=cz+(zCenter-cz)*Math.sqrt(Math.max(0,1-s*s));
+ const zFace=correctedLift([x,skinY],0,p)[2];
+ const foreheadFade=(1-smooth((Math.abs(s)-.72)/.28))*smooth((y-210)/35);
+ return [x-HEAD_CENTER[0],y-HEAD_CENTER[1],zDome+(smax(zDome,zFace+6)-zDome)*foreheadFade+relief];
+}
+// One upper latitude arc. Its negative top depth only drives pitch Y;
+// yaw X/Z always belong to hairLift, including at the rear seam.
+export function pitchHairDepth(point,p,relief=0) {
+ const y=point[1],base=correctedLift(point,0,p)[2];
+ if(y>=310)return base+relief;
+ const latitude=sphereEase((310-y)/302);
+ const pitch=p.ParamAngleY*correction(p,'CorrTurn');
+ const yawWeight=sphereEase(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/45)*sphereEase(Math.max(0,pitch)/30);
+ const topZ=(DOME.pitchArc.topZ+(DOME.pitchArc.diagonalTopZ-DOME.pitchArc.topZ)*yawWeight)*correction(p,'CorrHairDepth');
+ return base+(topZ-base)*latitude+relief;
+}
 const capRadius=y=>DOME.rx*Math.sqrt(Math.max(0,1-((y-DOME.cy)/DOME.ry)**2));
 function frontSection(y){
  const rows=DOME.frontSeam,cy=clamp(y,60,350),i=Math.min(rows.length-2,Math.floor((cy-60)/2));
@@ -45,23 +86,35 @@ export function canopySurface(point,p,back=false){
 // The narrow crack-prevention collar is folded onto the horizon at rest,
 // then unfolds geometrically over the first ten degrees; alpha stays one.
 function seamLongitude(lambda,p){
- const t=clamp(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/10,0,1),w=t*t*(3-2*t);
+ const t=clamp(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/10,0,1),w=pitchEase(t,p);
  return lambda+Math.sign(lambda)*Math.max(0,Math.PI/2-Math.abs(lambda))*(1-w);
 }
-export function craniumPosition([x,y,lambda],p){
- lambda=seamLongitude(lambda,p);
+export function posteriorLocal(y,lambda,p,includePosterior=true){
  const {rx,rz:depth,cz,cx}=domeSection(y),rz=depth*correction(p,'CorrHairDepth');
- return artWorld([cx+rx*Math.sin(lambda),y-HEAD_CENTER[1],cz+rz*Math.cos(lambda)],p);
+ const local=[cx+rx*Math.sin(lambda),y-HEAD_CENTER[1],cz+rz*Math.cos(lambda)];
+ if(!includePosterior||!p.ParamAngleY||!p.ParamAngleX)return local;
+ const rear=Math.sin(Math.max(0,Math.abs(lambda)-Math.PI/2));
+ const latitude=Math.cos(Math.asin(clamp((y-DOME.cy)/DOME.ry,-1,1)));
+ const delta=[hairPoseValue(DOME.rearPitch.poses,p,q=>q.rx)*Math.sin(lambda),
+              hairPoseValue(DOME.rearPitch.poses,p,q=>q.y),
+              hairPoseValue(DOME.rearPitch.poses,p,q=>q.rz)*Math.cos(lambda)].map(v=>v*rear*latitude);
+ const zero=artWorld([0,0,0],p),world=artWorld(delta,p).map((v,i)=>v-zero[i]);
+ const weight=Math.min(1,45/Math.max(1,Math.hypot(...delta),Math.hypot(...world)));
+ return local.map((v,i)=>v+delta[i]*weight);
+}
+export function craniumPosition([x,y,lambda],p,includePosterior=true){
+ lambda=seamLongitude(lambda,p);
+ return artWorld(posteriorLocal(y,lambda,p,includePosterior),p);
 }
 export function craniumFacing([x,y,lambda],p){
  lambda=seamLongitude(lambda,p);
  const section=domeSection(y),a=domeSection(y-.5),b=domeSection(y+.5),gain=correction(p,'CorrHairDepth');
- if(section.rx<.001)return rotateXYZ([0,-1,0],p.ParamAngleX*correction(p,'CorrTurn'),0,0)[2];
+ if(section.rx<.001)return rotateXYZ([0,-1,0],p.ParamAngleX*correction(p,'CorrTurn'),p.ParamAngleY*correction(p,'CorrTurn'),0)[2];
  const nx=Math.sin(lambda)/Math.max(.001,section.rx),nz=Math.cos(lambda)/(section.rz*gain);
  const ny=-nx*((b.cx-a.cx)+(b.rx-a.rx)*Math.sin(lambda))-nz*((b.cz-a.cz)+(b.rz-a.rz)*gain*Math.cos(lambda));
  const n=[nx,ny,nz];
  const length=Math.hypot(...n);
- return rotateXYZ(n.map(v=>v/length),p.ParamAngleX*correction(p,'CorrTurn'),0,0)[2];
+ return rotateXYZ(n.map(v=>v/length),p.ParamAngleX*correction(p,'CorrTurn'),p.ParamAngleY*correction(p,'CorrTurn'),0)[2];
 }
 export function craniumSeam(){return 1;}
 // The front photograph has no texture resolution at its projected horizon.
