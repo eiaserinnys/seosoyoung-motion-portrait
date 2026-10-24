@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from pipeline.hair_albedo import delight, transfer_redrawn_hair
-from pipeline.fit_outline import symmetrize,CHIN_CANVAS_SPAN
+from pipeline.fit_outline import symmetrize
 
 class HairPixels(unittest.TestCase):
  def test_rim_is_reduced_without_changing_alpha_or_erasing_texture(self):
@@ -45,7 +45,15 @@ class HairPixels(unittest.TestCase):
   symmetrize(rows,poses)
   for p in poses:
    if p['yaw']==0:self.assertGreaterEqual(p['rows'][0][4]-p['rows'][0][2],11)
-  self.assertEqual(CHIN_CANVAS_SPAN,{30:64.0,-30:50.0})
+  import json
+  root=Path(__file__).resolve().parents[1]
+  features=json.loads((root/'source/viewer/face-feature-fit.json').read_text())
+  traces=json.loads((root/'source/viewer/outline-traces.json').read_text())
+  for pose in traces['poses']:
+   if not pose['pitch']:continue
+   reg=next(f for f in features['poses'] if f['name']==pose['name'])['registration']
+   actual_chin=reg['eyeMid'][1]+(pose['rawYChin']-reg['referenceEyeMid'][1])*reg['scale']
+   for side in ['left','right']:self.assertAlmostEqual(pose['mapping']['canvasYSpan'][side][1],actual_chin)
  def test_sclera_boundary_fixture_matches_the_actual_opaque_parts(self):
   import json
   root=Path(__file__).resolve().parents[1]

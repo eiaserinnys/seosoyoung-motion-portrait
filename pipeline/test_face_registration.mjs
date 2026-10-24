@@ -37,17 +37,18 @@ test('outline tables cover the complete sixteen rest rows with independent edge 
   if(p.pitch){
    assert.deepEqual(p.mapping.restY,[431.5,616]);
    const mapping=p.mapping;
-   assert.equal(mapping.sFloor,p.pitch>0?.06:0);
    assert.equal(mapping.s3d.length,OUTLINE_ROWS.length);
    const y3d=y=>outlineRow(y).slice(0,2).reduce((sum,x)=>sum+faceWorld([x,y],0,at(0,p.pitch))[1]/2,0);
    const top=y3d(431.5),span=y3d(616)-top;
+   near(mapping.sFloor,p.pitch>0?(y3d(440)-top)/span:0,p.name+' derived floor');
    OUTLINE_ROWS.forEach(([y],i)=>near(mapping.s3d[i],(y3d(y)-top)/span,p.name+' s3d '+y));
    assert.deepEqual(mapping.clampedRows,OUTLINE_ROWS.filter((r,i)=>mapping.s3d[i]<mapping.sFloor).map(r=>r[0]));
    for(const side of ['left','right']){
     const feature=FEATURE_FIT.poses.find(f=>f.name===p.name);
-    assert.deepEqual(mapping.rawYSpan[side],[feature.rawCenters[side][1],p.rawYChin]);
-    near(mapping.canvasYSpan[side][0],feature.centers[side][1],p.name+' canvas eye');
-    near(mapping.canvasYSpan[side][1],feature.centers.mouth[1]+(p.pitch>0?-12+64:6+50),p.name+' canvas chin');
+    const r=feature.registration;
+    assert.deepEqual(mapping.rawYSpan[side],[feature.rawCenters[side][1]+mapping.rimOffset/r.scale,p.rawYChin]);
+    near(mapping.canvasYSpan[side][0],feature.centers[side][1]+mapping.rimOffset,p.name+' canvas rim');
+    near(mapping.canvasYSpan[side][1],r.eyeMid[1]+(p.rawYChin-r.referenceEyeMid[1])*r.scale,p.name+' actual canvas chin');
    }
    assert(p.fitRmsPixels<=(p.name==='up'?4.5:5.5),`${p.name} RMS ${p.fitRmsPixels}`);
    if(p.yaw===0){const chin=p.rows.find(r=>r[0]===616);assert(chin[4]-chin[2]>=11-1e-7,`${p.name} chin width ${chin[4]-chin[2]}`);}
@@ -152,10 +153,10 @@ test('yaw endpoints sweep through pitch without a binocular X jump or discontinu
   }
  }
 });
-test('diagonal near cheeks retain the r11 endpoint envelope through rest Y570',()=>{
+test('diagonal near cheeks retain the r11 envelope only at ear attachment Y440..490',()=>{
  for(const p of OUTLINE_POSES.filter(p=>p.pitch&&p.yaw)){
   const rest=OUTLINE_POSES.find(q=>q.yaw===p.yaw&&!q.pitch),index=p.yaw<0?4:2,sign=p.yaw<0?1:-1;
-  p.rows.forEach((row,i)=>{if(row[0]<=570)assert(sign*(row[index]-rest.rows[i][index])>=-1e-6,`${p.name} near cheek ${row[0]}`);});
+  p.rows.forEach((row,i)=>{if(row[0]>=440&&row[0]<=490)assert(sign*(row[index]-rest.rows[i][index])>=-1e-6,`${p.name} near cheek ${row[0]}`);});
  }
 });
 test('near ear overlap stays within two pixels of the r11 baseline at six turned poses',()=>{

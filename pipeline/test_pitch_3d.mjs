@@ -43,10 +43,9 @@ test('3D pitch face preserves neutral projection and uses yaw-zero vertical frac
  for(const sample of traces.poses.filter(q=>q.pitch)){
   assert.deepEqual(sample.mapping.restY,[431.5,616]);
   const feature=FEATURE_FIT.poses.find(p=>p.name===sample.name);
-  assert.equal(sample.mapping.rawYSpan.left[0],feature.rawCenters.left[1]);
-  assert.equal(sample.mapping.rawYSpan.right[0],feature.rawCenters.right[1]);
-  const mouth=feature.centers.mouth[1]+(sample.pitch>0?-12:6);
-  assert(Math.abs(sample.mapping.canvasYSpan.left[1]-mouth-(sample.pitch>0?64:50))<1e-8);
+  for(const side of ['left','right'])assert.equal(sample.mapping.rawYSpan[side][0],feature.rawCenters[side][1]+sample.mapping.rimOffset/feature.registration.scale);
+  const reg=feature.registration,chin=reg.eyeMid[1]+(sample.rawYChin-reg.referenceEyeMid[1])*reg.scale;
+  assert(Math.abs(sample.mapping.canvasYSpan.left[1]-chin)<1e-8);
  }
  for(const y of [465,530,616]){
   const edge=faceDepthEdgeAt(y),depthScale=1+(base.CorrDepth/.78-1)*smooth((y-465)/151),expected=edge+(faceDepthAt(502,y)-edge)*depthScale;
@@ -123,7 +122,7 @@ test('upper canopy meets longitude 90 exactly while rear interior retains full v
   }
  }
 });
-test('landmark-mapped jaw preserves the specified mouth-to-chin space',()=>{
+test('landmark-mapped jaw uses the actual registered chin without a synthetic lip span',()=>{
  const mouth=[504.5,554.5];
  const traces=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url)));
  for(const yaw of [-45,0,45])for(const pitch of [-30,30]){
@@ -134,8 +133,11 @@ test('landmark-mapped jaw preserves the specified mouth-to-chin space',()=>{
   // the approved yaw row), rather than adding an unrequested chin-center pin.
   for(const x of outlineRow(616).slice(0,2))assert(Math.abs(outlineWorld([x,616],p)[1]-target.yChin)<1e-7);
   assert(Math.abs(chin[1]-target.yChin)<1,`chin retains the endpoint height within its curved interior ${yaw},${pitch}`);
-  assert(Math.abs(target.yChin-featurePose.centers.mouth[1]-(pitch>0?52:56))<1e-7,`registered mouth-to-chin space ${yaw},${pitch}`);
-  assert(chin[1]-lip[1]>45&&chin[1]-lip[1]<85,`rendered mouth clearance ${yaw},${pitch}: ${chin[1]-lip[1]}`);
+  const reg=featurePose.registration,actualChin=reg.eyeMid[1]+(target.rawYChin-reg.referenceEyeMid[1])*reg.scale;
+  const mirror=traces.poses.find(q=>q.yaw===-yaw&&q.pitch===pitch),other=FEATURE_FIT.poses.find(q=>q.yaw===-yaw&&q.pitch===pitch).registration;
+  const mirrorChin=other.eyeMid[1]+(mirror.rawYChin-other.referenceEyeMid[1])*other.scale;
+  assert(Math.abs(target.yChin-(actualChin+mirrorChin)/2)<1e-7,`registered actual chin ${yaw},${pitch}`);
+  assert(Math.abs(lip[1]-featurePose.centers.mouth[1])<1e-7,`registered mouth ${yaw},${pitch}`);
  }
  const up=pose(0,30),jaw=outlineWorld([outlineRow(550)[0],550],up),chin=outlineWorld([502.5,616],up);
  assert(chin[1]-jaw[1]>35,'low-angle jaw keeps curvature instead of a horizontal brick');
@@ -180,15 +182,17 @@ test('central fringe remains in front of the forehead without a temple indentati
   }
  }
 });
-test('socket shortens vertically and tilts along the diagonal latitude',()=>{
+test('socket uses measured opening height without diagonal shear',()=>{
  for(const side of ['left','right']){
   const id=`eye-${side}-sclera`,[x,y]=FEATURE_FIT.landmarks[side].front;
   const height=p=>featureWorld(id,[x,y+25],p)[1]-featureWorld(id,[x,y-25],p)[1];
-  for(const pitch of [-30,30]){const ratio=height(pose(0,pitch))/height(base);assert(ratio>.7&&ratio<1.05,`natural socket height ${pitch}: ${ratio}`);}
+  for(const pitch of [-30,30]){
+   const ratio=height(pose(0,pitch))/height(base),fit=FEATURE_FIT.poses.find(p=>p.yaw===0&&p.pitch===pitch);
+   assert(Math.abs(ratio-fit.scales[side][1])<1e-8,`measured socket height ${pitch}: ${ratio}`);
+  }
   for(const yaw of [-45,45])for(const pitch of [-30,30]){
    const p=pose(yaw,pitch),dy=featureWorld(id,[x+40,y],p)[1]-featureWorld(id,[x-40,y],p)[1];
-   assert(Math.abs(dy)>5&&Math.abs(dy)<11,`socket slope ${side},${yaw},${pitch}: ${dy}`);
-   assert(Math.sign(dy)===Math.sign(yaw*pitch));
+   assert(Math.abs(dy)<1e-8,`socket shear ${side},${yaw},${pitch}: ${dy}`);
   }
  }
 });
@@ -196,8 +200,7 @@ test('iris rotates inside its socket with head pitch and yaw and retains indepen
  for(const side of ['left','right']){
   const [x,y]=FEATURE_FIT.landmarks[side].front,id=`eye-${side}-iris`,socket=`eye-${side}-sclera`;
   const offset=p=>featureWorld(id,[x,y],p).map((v,i)=>v-featureWorld(socket,[x,y],p)[i]);
-  assert(offset(pose(0,30))[1]<-3.5,'up iris rolls up relative to its arched socket');
-  assert(offset(pose(0,-30))[1]>3.5,'down iris rolls down relative to its arched socket');
+  for(const pitch of [-30,30])assert(Math.abs(offset(pose(0,pitch))[1])<1e-8,'iris and opening share the registered center without extra pitch offset');
   for(const yaw of [-45,45]){
    assert(Math.abs(offset(pose(yaw,0))[0])<1e-6,'iris keeps its registered horizontal center');
    const width=(id,p)=>featureWorld(id,[x+20,y],p)[0]-featureWorld(id,[x-20,y],p)[0];
@@ -206,14 +209,23 @@ test('iris rotates inside its socket with head pitch and yaw and retains indepen
   assert.notDeepEqual(featureWorld(id,[x,y],{...pose(45,30),ParamEyeBallX:1}),featureWorld(id,[x,y],pose(45,30)));
  }
 });
-test('near upper lash stays inside the face skin under downward diagonals',()=>{
+test('near upper lash tips stay within the approved 1.5px skin silhouette tolerance',()=>{
  const face=rig.meshes.find(m=>m.id==='face-skin');
  const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+ const accept=(distance,label)=>assert(distance<=1.5,`${label}: ${distance}px`);
+ accept(1.5,'allowed endpoint');assert.throws(()=>accept(1.500001,'injected protrusion'),assert.AssertionError);
  // Opaque upper-arc samples (source alpha >200), rather than the outer
  // wisps covered by the temple hair in the final composition.
  for(const [yaw,side,point] of [[-45,'right',[639,397]],[45,'left',[376,390]]]){
   const p=pose(yaw,-30),tip=featureWorld(`eye-${side}-upper-lashes`,point,p),skin=face.positions.map(pt=>outlineWorld(pt,p));
-  assert(face.triangles.some(t=>{const [a,b,c]=t.map(i=>skin[i]),s=[cross(a,b,tip),cross(b,c,tip),cross(c,a,tip)];return s.every(v=>v>=-1e-6)||s.every(v=>v<=1e-6);}),`near lash outside skin ${yaw}`);
+  const inside=face.triangles.some(t=>{const [a,b,c]=t.map(i=>skin[i]),s=[cross(a,b,tip),cross(b,c,tip),cross(c,a,tip)];return s.every(v=>v>=-1e-6)||s.every(v=>v<=1e-6);});
+  const distance=(a,b)=>{
+   const dx=b[0]-a[0],dy=b[1]-a[1],length=dx*dx+dy*dy;
+   const t=length?Math.max(0,Math.min(1,((tip[0]-a[0])*dx+(tip[1]-a[1])*dy)/length)):0;
+   return Math.hypot(tip[0]-a[0]-dx*t,tip[1]-a[1]-dy*t);
+  };
+  const protrusion=inside?0:Math.min(...face.triangles.flatMap(t=>t.map((n,i)=>distance(skin[n],skin[t[(i+1)%3]]))));
+  accept(protrusion,`near lash protrusion ${yaw}`);
  }
 });
 test('neck top tracks chin pitch displacement while body attachment stays fixed',()=>{

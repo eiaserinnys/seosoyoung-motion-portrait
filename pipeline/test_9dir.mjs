@@ -76,10 +76,10 @@ test('reference camera translation aligns binocular midpoints to the r11 pivots'
   assert(Math.abs(mid-pose.registration.eyeMid[i])<1e-8);
  }
 });
-test('occlusion never collapses an eye keyform and central pitch pairs are symmetric',()=>{
+test('opening envelopes stay finite without height clamps and central pitch pairs are symmetric',()=>{
  const fit=JSON.parse(readFileSync(new URL('../source/viewer/face-feature-fit.json',import.meta.url)));
  for(const pose of fit.poses){
-  for(const side of ['left','right'])assert(pose.scales[side][1]>=.88&&pose.scales[side][1]<=1.02);
+  for(const side of ['left','right'])assert(pose.scales[side].every(v=>Number.isFinite(v)&&v>0));
   if(!pose.yaw)assert.equal(pose.scales.left[1],pose.scales.right[1]);
  }
 });

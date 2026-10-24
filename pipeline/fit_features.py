@@ -1,7 +1,7 @@
 """Deterministic color/ink measurements inside explicit reference-space ROIs.
 
-The neutral yaw row is the approved r11 calibration. New pitch keyforms use
-iris color extents, eyebrow ink, nose highlight and mouth ink centroids.
+The neutral yaw row is the approved r11 calibration. Pitch keyforms use iris
+centers, opening/lash envelopes, eyebrow ink, nose highlight and mouth ink.
 """
 import hashlib,json,subprocess
 from pathlib import Path
@@ -67,6 +67,26 @@ def measure(rgb,seed,kind):
  center=[(np.percentile(xx,2)+np.percentile(xx,98))/2,(np.percentile(yy,2)+np.percentile(yy,98))/2] if kind in ['left','right','mouth'] else [np.median(xx),np.median(yy)]
  return dict(center=[float(center[0]+x-rx+152),float(center[1]+y-ry+20)],
              extent=[int(np.percentile(xx,98)-np.percentile(xx,2)+1),int(np.percentile(yy,98)-np.percentile(yy,2)+1)],roi=[x-rx,y-ry,x+rx,y+ry])
+def measure_opening(rgb,center):
+ """Connected iris/sclera plus its 12px lash/liner neighborhood, not iris size.
+
+ The neighborhood includes the black upper lash envelope and lower liner while
+ keeping disconnected brows/hair out. Centers retain the existing iris detector.
+ """
+ x,y=round(center[0]-152),round(center[1]-20);rx,ry=60,58
+ crop=rgb[y-ry:y+ry+1,x-rx:x+rx+1];hsv=cv2.cvtColor(crop,cv2.COLOR_RGB2HSV)
+ red,_,blue=np.moveaxis(crop.astype(float),-1,0)
+ iris=(hsv[:,:,0]>20)&(hsv[:,:,0]<145)&(hsv[:,:,1]>75)&(hsv[:,:,2]>75)
+ sclera=(blue>red*.9)&(crop.min(2)>130)&(hsv[:,:,1]<65)
+ connected=cv2.morphologyEx((iris|sclera).astype(np.uint8),cv2.MORPH_CLOSE,np.ones((3,3),np.uint8))
+ count,labels,_,_=cv2.connectedComponentsWithStats(connected)
+ component=max(range(1,count),key=lambda k:np.count_nonzero(iris&(labels==k)))
+ core=labels==component
+ nearby=cv2.dilate(core.astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(25,25)))>0
+ envelope=core|((crop.mean(2)<140)&nearby)
+ yy,xx=np.where(envelope)
+ bbox=[int(xx.min()+x-rx+152),int(yy.min()+y-ry+20),int(xx.max()+x-rx+152),int(yy.max()+y-ry+20)]
+ return dict(openingExtent=[int(xx.max()-xx.min()+1),int(yy.max()-yy.min()+1)],openingBBox=bbox)
 def build():
  front={'left':[415.7,432.2],'right':[588.1,430.8],'nose':[508,497],'mouth':[504.5,554.5]}
  rig=json.loads((ROOT/'bundle/assets/seosoyoung-rig.json').read_text())
@@ -86,18 +106,21 @@ def build():
    centers[key]=[front[key][j]+centers[side][j]-front[side][j] for j in [0,1]]
   poses.append(dict(name=name,yaw=yaw,pitch=0,centers=centers,scales={'left':[widths[0],1],'right':[widths[1],1]},source='approved r11'))
  front_rgb=np.array(Image.open(ROOT/'source/references/head_front_ref.png').convert('RGB'))
- extents={k:measure(front_rgb,(round(front[k][0]-152),round(front[k][1]-20)),k)['extent'] for k in ['left','right']}
+ front_openings={k:measure_opening(front_rgb,measure(front_rgb,(round(front[k][0]-152),round(front[k][1]-20)),k)['center']) for k in ['left','right']}
+ extents={k:v['openingExtent'] for k,v in front_openings.items()}
+ front_measured_nose=measure(front_rgb,(round(front['nose'][0]-152),round(front['nose'][1]-20)),'nose')
+ front_nose_bias_y=front['nose'][1]-front_measured_nose['center'][1]
  for name,seeds in SEEDS.items():
   file=name.replace('-','_')+'_ref_720.png';src=ROOT/'source/references'/file;rgb=np.array(Image.open(src).convert('RGB'))
   measured={k:measure(rgb,seed,k) for k,seed in zip(KEYS,seeds)}
-  scales={k:[measured[k]['extent'][i]/extents[k][i] for i in [0,1]] for k in ['left','right']}
+  for k in ['left','right']:measured[k].update(measure_opening(rgb,measured[k]['center']))
+  measured['nose']['detectedCenter']=measured['nose']['center'][:]
+  measured['nose']['frontBiasY']=front_nose_bias_y
+  measured['nose']['center'][1]+=front_nose_bias_y
+  scales={k:[measured[k]['openingExtent'][i]/extents[k][i] for i in [0,1]] for k in ['left','right']}
   measured_scales={k:v[:] for k,v in scales.items()}
-  for value in scales.values():value[1]=float(np.clip(value[1],.88,1.02))
-  if name in ['up','down']:
-   height=float(np.clip(max(v[1] for v in measured_scales.values()),.94,1.0))
-   for value in scales.values():value[1]=height
   poses.append(dict(name=name,yaw=-45 if name.endswith('-left') else 45 if name.endswith('-right') else 0,pitch=30 if name.startswith('up') else -30,
-                    centers={k:v['center'] for k,v in measured.items()},scales=scales,measuredScales=measured_scales,scalePolicy='height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]',measurements=measured,source=file,sha256=hashlib.sha256(src.read_bytes()).hexdigest()))
+                    centers={k:v['center'] for k,v in measured.items()},scales=scales,measuredScales=measured_scales,scalePolicy='connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp',measurements=measured,source=file,sha256=hashlib.sha256(src.read_bytes()).hexdigest()))
  # Symmetrize the approved row before deriving its shared registration frame.
  neutral=[p for p in poses if not p['pitch']]
  symmetrize(front,neutral)
@@ -105,17 +128,20 @@ def build():
  for pose in poses:
   if not pose['pitch']:continue
   reg=next(r for r in registration if r['yaw']==pose['yaw'] and r['pitch']==pose['pitch'])
-  midpoint=[(pose['centers']['left'][i]+pose['centers']['right'][i])/2 for i in [0,1]]
-  delta=[reg['eyeMid'][i]-midpoint[i] for i in [0,1]]
   pose['rawCenters']={k:v[:] for k,v in pose['centers'].items()}
-  pose['centers']={k:[v[i]+delta[i] for i in [0,1]] for k,v in pose['centers'].items()}
+  midpoint=[(pose['rawCenters']['left'][i]+pose['rawCenters']['right'][i])/2 for i in [0,1]]
+  delta=[reg['eyeMid'][i]-midpoint[i] for i in [0,1]]
   eye_dist=float(np.linalg.norm(np.array(pose['rawCenters']['right'])-pose['rawCenters']['left']))
-  pose['registration']={**reg,'delta':delta,'referenceEyeMid':midpoint,'binocularRatio':eye_dist/reg['r11EyeDist'],'method':'translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling'}
+  binocular_ratio=eye_dist/reg['r11EyeDist']
+  scale=(1.0/binocular_ratio) if pose['yaw']==0 else 1.0
+  pose['centers']={k:[reg['eyeMid'][i]+(v[i]-midpoint[i])*scale for i in [0,1]] for k,v in pose['rawCenters'].items()}
+  pose['scales']={k:[v*scale for v in value] for k,value in pose['scales'].items()}
+  pose['registration']={**reg,'delta':delta,'referenceEyeMid':midpoint,'binocularRatio':binocular_ratio,'scale':scale,'method':'eye-midpoint registration; inverse binocular zoom for yaw-zero pitch only'}
  symmetrize(front,poses)
  row={p['yaw']:p for p in poses if p['pitch']==0}
  landmarks={key:dict(front=value,neg=row[-45]['centers'][key],pos=row[45]['centers'][key]) for key,value in front.items()}
  for side in ['left','right']:landmarks[side]['width']=[row[-45]['scales'][side][0],row[45]['scales'][side][0]]
- data=dict(method=__doc__,front=front,poses=poses,landmarks=landmarks,symmetry='rest-relative mirrored center displacements; geometric paired eye scales')
+ data=dict(method=__doc__,front=front,frontOpenings=front_openings,frontNoseBiasY=front_nose_bias_y,poses=poses,landmarks=landmarks,symmetry='rest-relative mirrored center displacements; geometric paired eye scales')
  (ROOT/'source/viewer/face-feature-fit.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
  (ROOT/'bundle/feature-data.mjs').write_text('// Generated by pipeline/fit_features.py.\nexport const FEATURE_FIT='+json.dumps(data,ensure_ascii=False)+';\n')
  print('PASS measured',len(poses),'feature keyforms')

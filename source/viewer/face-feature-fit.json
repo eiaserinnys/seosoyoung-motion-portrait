@@ -1,5 +1,5 @@
 {
-  "method": "Deterministic color/ink measurements inside explicit reference-space ROIs.\n\nThe neutral yaw row is the approved r11 calibration. New pitch keyforms use\niris color extents, eyebrow ink, nose highlight and mouth ink centroids.\n",
+  "method": "Deterministic color/ink measurements inside explicit reference-space ROIs.\n\nThe neutral yaw row is the approved r11 calibration. Pitch keyforms use iris\ncenters, opening/lash envelopes, eyebrow ink, nose highlight and mouth ink.\n",
   "front": {
     "left": [
       415.7,
@@ -26,6 +26,33 @@
       345.8828046343186
     ]
   },
+  "frontOpenings": {
+    "left": {
+      "openingExtent": [
+        95,
+        82
+      ],
+      "openingBBox": [
+        357,
+        394,
+        451,
+        475
+      ]
+    },
+    "right": {
+      "openingExtent": [
+        93,
+        81
+      ],
+      "openingBBox": [
+        552,
+        393,
+        644,
+        473
+      ]
+    }
+  },
+  "frontNoseBiasY": 5.0,
   "poses": [
     {
       "name": "left",
@@ -254,7 +281,7 @@
         ],
         "nose": [
           379.87,
-          422.75524801826145
+          427.75524801826145
         ],
         "mouth": [
           391.6,
@@ -263,25 +290,25 @@
       },
       "scales": {
         "left": [
-          0.65546138683345,
-          0.88
+          0.6055767992272401,
+          0.9262149503743169
         ],
         "right": [
-          1.0442080110640648,
-          0.9920738512408185
+          0.9946091251481444,
+          1.0183501544346312
         ]
       },
       "measuredScales": {
         "left": [
-          0.6666666666666666,
-          0.8163265306122449
+          0.631578947368421,
+          0.9390243902439024
         ],
         "right": [
-          1.0666666666666667,
-          0.9649122807017544
+          0.989247311827957,
+          1.037037037037037
         ]
       },
-      "scalePolicy": "height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]",
+      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
       "measurements": {
         "left": {
           "center": [
@@ -297,6 +324,16 @@
             291,
             219,
             379
+          ],
+          "openingExtent": [
+            60,
+            77
+          ],
+          "openingBBox": [
+            295,
+            313,
+            354,
+            389
           ]
         },
         "right": {
@@ -313,6 +350,16 @@
             290,
             366,
             378
+          ],
+          "openingExtent": [
+            92,
+            84
+          ],
+          "openingBBox": [
+            444,
+            310,
+            535,
+            393
           ]
         },
         "browLeft": {
@@ -350,7 +397,7 @@
         "nose": {
           "center": [
             364.0,
-            394.5
+            399.5
           ],
           "extent": [
             17,
@@ -361,7 +408,12 @@
             366,
             223,
             386
-          ]
+          ],
+          "detectedCenter": [
+            364.0,
+            394.5
+          ],
+          "frontBiasY": 5.0
         },
         "mouth": {
           "center": [
@@ -401,7 +453,7 @@
         ],
         "nose": [
           364.0,
-          394.5
+          399.5
         ],
         "mouth": [
           373.46000000000004,
@@ -429,7 +481,8 @@
           348.34000000000003
         ],
         "binocularRatio": 0.9207510138775048,
-        "method": "translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling"
+        "scale": 1.0,
+        "method": "eye-midpoint registration; inverse binocular zoom for yaw-zero pitch only"
       },
       "registeredCenters": {
         "left": [
@@ -450,7 +503,7 @@
         ],
         "nose": [
           383.09,
-          429.04653004241334
+          434.04653004241334
         ],
         "mouth": [
           392.55,
@@ -464,51 +517,51 @@
       "pitch": 30,
       "centers": {
         "left": [
-          409.9,
+          415.71274882757945,
           379.0705010666575
         ],
         "right": [
-          593.9,
+          588.0872511724206,
           377.67050106665755
         ],
         "browLeft": [
-          406.35937474657817,
-          299.6036152326599
+          412.14053254792077,
+          304.6423839174367
         ],
         "browRight": [
-          589.3593747465782,
-          297.6373869006552
+          583.5782169452355,
+          302.67615558543196
         ],
         "nose": [
           508,
-          413.12050106665754
+          415.60901448082836
         ],
         "mouth": [
           504.5,
-          495.9605010666575
+          488.53092351627635
         ]
       },
       "scales": {
         "left": [
-          1.088888888888889,
-          1.0
+          0.9069161183013618,
+          0.9253933384101356
         ],
         "right": [
-          1.088888888888889,
-          1.0
+          0.9069161183013618,
+          0.9253933384101356
         ]
       },
       "measuredScales": {
         "left": [
-          1.0666666666666667,
-          1.0
+          0.968421052631579,
+          0.975609756097561
         ],
         "right": [
-          1.1111111111111112,
-          0.7017543859649122
+          0.967741935483871,
+          1.0
         ]
       },
-      "scalePolicy": "height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]",
+      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
       "measurements": {
         "left": {
           "center": [
@@ -524,6 +577,16 @@
             250,
             305,
             338
+          ],
+          "openingExtent": [
+            92,
+            80
+          ],
+          "openingBBox": [
+            364,
+            271,
+            455,
+            350
           ]
         },
         "right": {
@@ -540,6 +603,16 @@
             250,
             486,
             338
+          ],
+          "openingExtent": [
+            90,
+            81
+          ],
+          "openingBBox": [
+            566,
+            271,
+            655,
+            351
           ]
         },
         "browLeft": {
@@ -577,7 +650,7 @@
         "nose": {
           "center": [
             514.0,
-            341.0
+            346.0
           ],
           "extent": [
             18,
@@ -588,7 +661,12 @@
             312,
             374,
             332
-          ]
+          ],
+          "detectedCenter": [
+            514.0,
+            341.0
+          ],
+          "frontBiasY": 5.0
         },
         "mouth": {
           "center": [
@@ -628,7 +706,7 @@
         ],
         "nose": [
           514.0,
-          341.0
+          346.0
         ],
         "mouth": [
           511.0,
@@ -656,32 +734,33 @@
           306.25
         ],
         "binocularRatio": 1.0674432558006852,
-        "method": "translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling"
+        "scale": 0.9368179475263102,
+        "method": "eye-midpoint registration; inverse binocular zoom for yaw-zero pitch only"
       },
       "registeredCenters": {
         "left": [
-          409.9,
-          380.12050106665754
+          415.71274882757945,
+          380.0099324748286
         ],
         "right": [
-          593.9,
-          376.62050106665754
+          588.0872511724206,
+          376.7310696584865
         ],
         "browLeft": [
-          408.4,
-          299.12050106665754
+          414.30752190629,
+          304.1276787251975
         ],
         "browRight": [
-          591.4,
-          298.12050106665754
+          585.7452063036047,
+          303.19086077767116
         ],
         "nose": [
-          504.4,
-          413.12050106665754
+          504.24204486881575,
+          415.60901448082836
         ],
         "mouth": [
-          501.4,
-          495.9605010666575
+          501.43159102623684,
+          488.53092351627635
         ]
       }
     },
@@ -708,7 +787,7 @@
         ],
         "nose": [
           636.13,
-          422.75524801826145
+          427.75524801826145
         ],
         "mouth": [
           617.4,
@@ -717,25 +796,25 @@
       },
       "scales": {
         "left": [
-          1.0442080110640648,
-          0.9920738512408185
+          0.9946091251481444,
+          1.0183501544346312
         ],
         "right": [
-          0.65546138683345,
-          0.88
+          0.6055767992272401,
+          0.9262149503743169
         ]
       },
       "measuredScales": {
         "left": [
-          1.0222222222222221,
-          1.163265306122449
+          1.0,
+          1.0
         ],
         "right": [
-          0.6444444444444445,
-          0.8771929824561403
+          0.5806451612903226,
+          0.9135802469135802
         ]
       },
-      "scalePolicy": "height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]",
+      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
       "measurements": {
         "left": {
           "center": [
@@ -751,6 +830,16 @@
             291,
             447,
             379
+          ],
+          "openingExtent": [
+            95,
+            82
+          ],
+          "openingBBox": [
+            504,
+            311,
+            598,
+            392
           ]
         },
         "right": {
@@ -767,6 +856,16 @@
             294,
             586,
             382
+          ],
+          "openingExtent": [
+            54,
+            74
+          ],
+          "openingBBox": [
+            684,
+            318,
+            737,
+            391
           ]
         },
         "browLeft": {
@@ -804,7 +903,7 @@
         "nose": {
           "center": [
             696.0,
-            388.0
+            393.0
           ],
           "extent": [
             20,
@@ -815,7 +914,12 @@
             359,
             557,
             379
-          ]
+          ],
+          "detectedCenter": [
+            696.0,
+            388.0
+          ],
+          "frontBiasY": 5.0
         },
         "mouth": {
           "center": [
@@ -855,7 +959,7 @@
         ],
         "nose": [
           696.0,
-          388.0
+          393.0
         ],
         "mouth": [
           675.0,
@@ -883,7 +987,8 @@
           354.25
         ],
         "binocularRatio": 0.8823479342450035,
-        "method": "translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling"
+        "scale": 1.0,
+        "method": "eye-midpoint registration; inverse binocular zoom for yaw-zero pitch only"
       },
       "registeredCenters": {
         "left": [
@@ -904,7 +1009,7 @@
         ],
         "nose": [
           639.35,
-          416.46396599410957
+          421.46396599410957
         ],
         "mouth": [
           618.35,
@@ -935,7 +1040,7 @@
         ],
         "nose": [
           393.54999999999995,
-          506.4138682557542
+          511.4138682557542
         ],
         "mouth": [
           419.79999999999995,
@@ -944,25 +1049,25 @@
       },
       "scales": {
         "left": [
-          0.6308919807368173,
-          0.947417542586161
+          0.5661654296388702,
+          0.8490389912554587
         ],
         "right": [
-          1.0550291084861527,
-          0.88
+          1.025978352085154,
+          0.8367140098245491
         ]
       },
       "measuredScales": {
         "left": [
-          0.6888888888888889,
-          1.0612244897959184
+          0.6210526315789474,
+          0.926829268292683
         ],
         "right": [
-          1.0888888888888888,
-          0.8771929824561403
+          1.075268817204301,
+          0.9259259259259259
         ]
       },
-      "scalePolicy": "height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]",
+      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
       "measurements": {
         "left": {
           "center": [
@@ -978,6 +1083,16 @@
             393,
             219,
             481
+          ],
+          "openingExtent": [
+            59,
+            76
+          ],
+          "openingBBox": [
+            299,
+            413,
+            357,
+            488
           ]
         },
         "right": {
@@ -994,6 +1109,16 @@
             414,
             372,
             502
+          ],
+          "openingExtent": [
+            100,
+            75
+          ],
+          "openingBBox": [
+            445,
+            438,
+            544,
+            512
           ]
         },
         "browLeft": {
@@ -1031,7 +1156,7 @@
         "nose": {
           "center": [
             377.0,
-            522.0
+            527.0
           ],
           "extent": [
             13,
@@ -1042,7 +1167,12 @@
             493,
             238,
             513
-          ]
+          ],
+          "detectedCenter": [
+            377.0,
+            522.0
+          ],
+          "frontBiasY": 5.0
         },
         "mouth": {
           "center": [
@@ -1082,7 +1212,7 @@
         ],
         "nose": [
           377.0,
-          522.0
+          527.0
         ],
         "mouth": [
           398.24,
@@ -1110,7 +1240,8 @@
           463.0
         ],
         "binocularRatio": 0.9588242405039445,
-        "method": "translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling"
+        "scale": 1.0,
+        "method": "eye-midpoint registration; inverse binocular zoom for yaw-zero pitch only"
       },
       "registeredCenters": {
         "left": [
@@ -1131,7 +1262,7 @@
         ],
         "nose": [
           390.2,
-          506.82758623160237
+          511.82758623160237
         ],
         "mouth": [
           411.44,
@@ -1145,51 +1276,51 @@
       "pitch": -30,
       "centers": {
         "left": [
-          416.15,
+          415.69862320624884,
           456.99361520735823
         ],
         "right": [
-          587.65,
+          588.1013767937511,
           455.59361520735825
         ],
         "browLeft": [
-          411.35937474657817,
-          394.7767293733606
+          410.90405005084085,
+          394.44773754118046
         ],
         "browRight": [
-          584.3593747465782,
-          392.8105010413559
+          584.8146994423155,
+          392.4815092091757
         ],
         "nose": [
           508,
-          514.7936152073582
+          520.1278709088533
         ],
         "mouth": [
           504.5,
-          559.2936152073582
+          559.8357937467912
         ]
       },
       "scales": {
         "left": [
-          1.011111111111111,
-          0.94
+          0.9464954722010017,
+          0.6228791710577234
         ],
         "right": [
-          1.011111111111111,
-          0.94
+          0.9464954722010017,
+          0.6228791710577234
         ]
       },
       "measuredScales": {
         "left": [
-          1.0222222222222221,
-          0.5510204081632653
+          0.9368421052631579,
+          0.6219512195121951
         ],
         "right": [
-          1.0,
-          0.543859649122807
+          0.946236559139785,
+          0.6172839506172839
         ]
       },
-      "scalePolicy": "height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]",
+      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
       "measurements": {
         "left": {
           "center": [
@@ -1205,6 +1336,16 @@
             439,
             305,
             527
+          ],
+          "openingExtent": [
+            89,
+            51
+          ],
+          "openingBBox": [
+            366,
+            473,
+            454,
+            523
           ]
         },
         "right": {
@@ -1221,6 +1362,16 @@
             437,
             475,
             525
+          ],
+          "openingExtent": [
+            88,
+            50
+          ],
+          "openingBBox": [
+            555,
+            473,
+            642,
+            522
           ]
         },
         "browLeft": {
@@ -1258,7 +1409,7 @@
         "nose": {
           "center": [
             509.0,
-            558.0
+            563.0
           ],
           "extent": [
             10,
@@ -1269,7 +1420,12 @@
             529,
             370,
             549
-          ]
+          ],
+          "detectedCenter": [
+            509.0,
+            558.0
+          ],
+          "frontBiasY": 5.0
         },
         "mouth": {
           "center": [
@@ -1309,7 +1465,7 @@
         ],
         "nose": [
           509.0,
-          558.0
+          563.0
         ],
         "mouth": [
           505.67,
@@ -1337,32 +1493,33 @@
           499.5
         ],
         "binocularRatio": 0.9947636939160363,
-        "method": "translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling"
+        "scale": 1.0052638693148825,
+        "method": "eye-midpoint registration; inverse binocular zoom for yaw-zero pitch only"
       },
       "registeredCenters": {
         "left": [
-          416.15,
-          455.79361520735824
+          415.6986232062488,
+          455.7909832727008
         ],
         "right": [
-          587.65,
-          456.79361520735824
+          588.1013767937511,
+          456.79624714201566
         ],
         "browLeft": [
-          414.65,
-          395.79361520735824
+          414.1907274022765,
+          395.47515111380784
         ],
         "browRight": [
-          587.65,
-          391.79361520735824
+          588.1013767937511,
+          391.45409563654835
         ],
         "nose": [
-          505.65,
-          514.7936152073582
+          505.66973950993076,
+          520.1278709088533
         ],
         "mouth": [
-          502.32,
-          559.2936152073582
+          502.3222108251122,
+          559.8357937467912
         ]
       }
     },
@@ -1389,7 +1546,7 @@
         ],
         "nose": [
           622.45,
-          506.4138682557542
+          511.4138682557542
         ],
         "mouth": [
           589.2,
@@ -1398,25 +1555,25 @@
       },
       "scales": {
         "left": [
-          1.0550291084861527,
-          0.88
+          1.025978352085154,
+          0.8367140098245491
         ],
         "right": [
-          0.6308919807368173,
-          0.947417542586161
+          0.5661654296388702,
+          0.8490389912554587
         ]
       },
       "measuredScales": {
         "left": [
-          1.0222222222222221,
-          0.7959183673469388
+          0.9789473684210527,
+          0.7560975609756098
         ],
         "right": [
-          0.5777777777777777,
-          0.5087719298245614
+          0.5161290322580645,
+          0.7777777777777778
         ]
       },
-      "scalePolicy": "height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]",
+      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
       "measurements": {
         "left": {
           "center": [
@@ -1432,6 +1589,16 @@
             449,
             433,
             537
+          ],
+          "openingExtent": [
+            93,
+            62
+          ],
+          "openingBBox": [
+            495,
+            482,
+            587,
+            543
           ]
         },
         "right": {
@@ -1448,6 +1615,16 @@
             429,
             582,
             517
+          ],
+          "openingExtent": [
+            48,
+            63
+          ],
+          "openingBBox": [
+            680,
+            457,
+            727,
+            519
           ]
         },
         "browLeft": {
@@ -1485,7 +1662,7 @@
         "nose": {
           "center": [
             667.0,
-            557.0
+            562.0
           ],
           "extent": [
             11,
@@ -1496,7 +1673,12 @@
             530,
             528,
             550
-          ]
+          ],
+          "detectedCenter": [
+            667.0,
+            557.0
+          ],
+          "frontBiasY": 5.0
         },
         "mouth": {
           "center": [
@@ -1536,7 +1718,7 @@
         ],
         "nose": [
           667.0,
-          557.0
+          562.0
         ],
         "mouth": [
           628.74,
@@ -1564,7 +1746,8 @@
           499.0
         ],
         "binocularRatio": 0.966327288054383,
-        "method": "translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling"
+        "scale": 1.0,
+        "method": "eye-midpoint registration; inverse binocular zoom for yaw-zero pitch only"
       },
       "registeredCenters": {
         "left": [
@@ -1585,7 +1768,7 @@
         ],
         "nose": [
           619.1,
-          506.00015027990605
+          511.00015027990605
         ],
         "mouth": [
           580.84,
