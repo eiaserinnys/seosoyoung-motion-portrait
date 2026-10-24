@@ -10,9 +10,13 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL_ID = 'depth-anything/Depth-Anything-V2-Small-hf'
 MODEL_REVISION = '5426e4f0f36572d16453bbda7a8389317b1bef99'
 CANVAS_SIZE = 1024
-X_VALUES = list(range(336, 665, 8)) + [668]
-Y_VALUES = list(range(400, 623, 6)) + [624]
+X_VALUES = sorted(set(list(range(336, 665, 8)) + [502, 668]))
+Y_VALUES = sorted(set(list(range(400, 623, 6)) + [465, 624]))
 EDGE_SCALE = 4 * np.sin(np.deg2rad(45))
+FACE_RADIUS = 262.0
+FACE_CENTER_Y = 326.0
+REFERENCE_CORR_VERTICAL = 1.45
+REFERENCE_CORR_DEPTH = 0.55
 
 
 def interpolate_rows(rows, y, columns):
@@ -47,6 +51,15 @@ def depth_at(depth, x, y):
 def smoothstep(value):
     value = np.clip(value, 0, 1)
     return value * value * (3 - 2 * value)
+
+
+def corrected_center_depth(y):
+    # Matches correctedLift([502, y], 0, recommended) through the unextended
+    # upper ellipsoid and reaches 134.1px at the measured cheek row y=465.
+    ry = FACE_RADIUS * REFERENCE_CORR_VERTICAL
+    rz = FACE_RADIUS * REFERENCE_CORR_DEPTH
+    normalized_y = (y - FACE_CENTER_Y) / ry
+    return rz * np.sqrt(max(0.0, 1.0 - normalized_y * normalized_y))
 
 
 def load_depth_map():
@@ -103,27 +116,34 @@ def fit_grid(depth, rows):
         edge_da = (depth_at(depth, left, y) + depth_at(depth, right, y)) * 0.5
         center_bulges.append(max(0.0, alpha * depth_at(depth, mid, y) + beta - (alpha * edge_da + beta)))
     model_bulge = float(np.median(center_bulges)) if center_bulges else 0.0
-    prior_weight = float(np.clip((8.0 - model_bulge) / 8.0, 0.0, 0.85))
+    chin_edge_depth = contour_at(rows, 616)[2]
 
     z_grid = []
+    centerline_rows = []
     for yi, y in enumerate(Y_VALUES):
         left, right, z_edge = contour_at(rows, y)
-        mid = (left + right) * 0.5
+        mid = 502.0
         half = max((right - left) * 0.5, 1e-6)
-        left_da = alpha * depth_at(depth, left, y) + beta
-        right_da = alpha * depth_at(depth, right, y) + beta
-        taper = float(smoothstep((616 - y) / 30))
-        s = np.clip((y - 465) / 151, 0, 1)
-        prior_profile = 9 + 9 * np.sin(np.pi * s)
+        surface_left, surface_right = mid - half, mid + half
+        left_da = alpha * depth_at(depth, surface_left, y) + beta
+        right_da = alpha * depth_at(depth, surface_right, y) + beta
+        da_edge = (left_da + right_da) * 0.5
+        da_mid = alpha * depth_at(depth, mid, y) + beta
+        da_denominator = max(da_mid - da_edge, 1e-4)
+        if y <= 465:
+            z_mid_target = corrected_center_depth(y)
+        else:
+            t = np.clip((y - 465) / 151.0, 0, 1)
+            z_mid_target = corrected_center_depth(465) + (chin_edge_depth - corrected_center_depth(465)) * smoothstep(t)
+        center_arch = max(0.0, z_mid_target - z_edge)
+        centerline_rows.append([float(y), float(z_edge + center_arch)])
         row = []
         for xi, x in enumerate(X_VALUES):
-            u = np.clip((x - left) / max(right - left, 1e-6), 0, 1)
-            da_edge = left_da + (right_da - left_da) * u
-            da_bulge = max(0.0, da_grid[yi, xi] - da_edge)
             normalized_x = (x - mid) / half
-            prior_bulge = prior_profile * np.sqrt(max(0.0, 1 - normalized_x * normalized_x))
-            bulge = ((1 - prior_weight) * da_bulge + prior_weight * prior_bulge) * taper
-            row.append(float(z_edge + bulge))
+            sphere = max(0.0, 1.0 - normalized_x * normalized_x)
+            da_norm = np.clip((da_grid[yi, xi] - da_edge) / da_denominator, 0.0, 1.0)
+            shape = (0.35 * da_norm + 0.65 * sphere) * sphere
+            row.append(float(z_edge + center_arch * shape))
         z_grid.append(row)
 
     metadata = {
@@ -136,19 +156,21 @@ def fit_grid(depth, rows):
         'edgeFit': {'alpha': float(alpha), 'beta': float(beta), 'rSquared': r_squared,
                     'samples': len(boundary)},
         'medianCenterBulge': model_bulge,
-        'priorWeight': prior_weight,
-        'chinTaperPixels': 30,
+        'centerlineProfile': {'topY': 465, 'topDepth': float(corrected_center_depth(465)),
+                              'chinY': 616, 'chinDepth': float(chin_edge_depth),
+                              'depthModelWeight': 0.35, 'sphereModelWeight': 0.65},
         'edgeDepthFormula': '((right45Left-left45Left)+(right45Right-left45Right))/(4*sin(45deg))',
     }
-    return z_grid, metadata
+    return z_grid, metadata, centerline_rows
 
 
-def write_outputs(grid, metadata, rows):
+def write_outputs(grid, metadata, rows, centerline_rows):
     result = {
         'metadata': metadata,
         'x': X_VALUES,
         'y': Y_VALUES,
         'z': grid,
+        'centerRows': centerline_rows,
         'edgeRows': [[float(row[0]), *contour_at(rows, float(row[0]))] for row in rows],
     }
     json_text = json.dumps(result, ensure_ascii=False, separators=(',', ':'), allow_nan=False)
@@ -169,6 +191,15 @@ function sampleGridRaw(x,y){
  return a+(b-a)*ty;
 }
 function sampleGrid(x,y){return (sampleGridRaw(x,y)+sampleGridRaw(1004-x,y))/2;}
+function centerAt(y){
+ const rows=FACE_DEPTH.centerRows;
+ if(y<=rows[0][0])return rows[0][1];
+ for(let i=1;i<rows.length;i++)if(y<=rows[i][0]){
+   const a=rows[i-1],b=rows[i],t=(y-a[0])/(b[0]-a[0]);
+   return a[1]+(b[1]-a[1])*t;
+ }
+ return rows.at(-1)[1];
+}
 function contourAt(y){
  const rows=FACE_DEPTH.edgeRows;
  let edge;
@@ -186,7 +217,9 @@ export function faceDepthAt(x,y){
  const raw=sampleGrid(x,y),[l,r,target]=contourAt(y);
  if(x<l||x>r||r<=l)return raw;
  const u=clamp((x-l)/(r-l),0,1),leftError=target-sampleGrid(l,y),rightError=target-sampleGrid(r,y);
- return raw+leftError*(1-u)+rightError*u;
+ const edgeAdjusted=raw+leftError*(1-u)+rightError*u;
+ const centerError=centerAt(y)-(sampleGrid(502,y)+(leftError+rightError)*.5);
+ return edgeAdjusted+centerError*4*u*(1-u);
 }
 '''
     (ROOT / 'bundle/face-depth.mjs').write_text(module)
@@ -196,12 +229,12 @@ def build():
     trace = json.loads((ROOT / 'source/viewer/outline-traces.json').read_text())
     rows = trace['rows']
     depth = load_depth_map()
-    grid, metadata = fit_grid(depth, rows)
-    write_outputs(grid, metadata, rows)
+    grid, metadata, centerline_rows = fit_grid(depth, rows)
+    write_outputs(grid, metadata, rows, centerline_rows)
     print('PASS depth fit', json.dumps({
         'model': metadata['model'], 'revision': metadata['revision'],
         'edgeFitR2': round(metadata['edgeFit']['rSquared'], 4),
-        'priorWeight': round(metadata['priorWeight'], 3),
+        'centerlineTopDepth': round(metadata['centerlineProfile']['topDepth'], 3),
         'grid': [len(Y_VALUES), len(X_VALUES)],
     }))
 

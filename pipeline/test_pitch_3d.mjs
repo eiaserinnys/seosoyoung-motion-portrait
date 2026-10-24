@@ -14,6 +14,7 @@ import {strandWorld} from '../bundle/side-strands.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const pose=(yaw,pitch)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch});
+const smooth=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t);};
 test('diagonal jaw slope stays near the feature plane instead of twisting the lower face',()=>{
  assert.equal(CORRECTION_PRESETS.recommended.CorrDiagonal,.65);
  for(const yaw of [-45,45])for(const pitch of [-30,30]){
@@ -52,7 +53,9 @@ test('3D pitch face preserves neutral projection and follows rotated-height refe
  for(const sample of traces.poses.filter(q=>q.pitch)){
   const expected=151*Math.cos(sample.pitch*Math.PI/180)-(edgeDepth(616)-edgeDepth(465))*Math.cos(sample.yaw*Math.PI/180)*Math.sin(sample.pitch*Math.PI/180);
   assert(Math.abs(sample.samplingSpan-expected)<1e-6,`${sample.name} uses its 3D rotated vertical span`);
-  assert(Math.abs((sample.yChin-sample.yTop)-sample.samplingSpan)<1e-8,`${sample.name} reference rows use the sampled span`);
+  const expectedTargetSpan=sample.pitch>0?(sample.yaw===0?166:158):(sample.yaw===0?116:128);
+  assert.equal(sample.targetSpan,expectedTargetSpan,`${sample.name} uses the approved canvas target span`);
+  assert(Math.abs((sample.yChin-sample.yTop)-sample.targetSpan)<1e-8,`${sample.name} reference rows use the target span`);
  }
  for(const y of [510,520]){
   const neutral=width(y,pose(0,0)),up=width(y,pose(0,30));
@@ -64,9 +67,12 @@ test('3D pitch face preserves neutral projection and follows rotated-height refe
   assert(down>neutral-20,`down pitch retains mouth-side jaw width at y=${y}`);
  }
  for(const y of [465,530,616]){
-  const edge=faceDepthEdgeAt(y),expected=edge+(faceDepthAt(502,y)-edge)*base.CorrDepth/.78;
+  const edge=faceDepthEdgeAt(y),depthScale=1+(base.CorrDepth/.78-1)*smooth((y-465)/151),expected=edge+(faceDepthAt(502,y)-edge)*depthScale;
   assert(Math.abs(faceLift([502,y],0,base)[2]-expected)<1e-7,`depth grid drives faceLift at ${y}`);
  }
+ const cheekDepth=correctedLift([502,465],0,base)[2];
+ assert(Math.abs(faceDepthAt(502,465)-cheekDepth)<.01,'depth prior meets the existing upper-face center at y=465');
+ assert(Math.abs(faceLift([502,465],0,base)[2]-cheekDepth)<1e-8,'faceLift has no centerline depth cliff at y=465');
  assert.equal(faceLift([502,400],0,base)[2],correctedLift([502,400],0,base)[2],'y=400 retains the original surface');
  for(const yaw of [-45,0,45])for(const point of [[502,465],[502,550],[502,616]]){
   const p=pose(yaw,0),expected=artWorld(correctedLift(point,0,p),p),actual=faceWorld(point,0,p);
@@ -138,11 +144,27 @@ test('normalized pitch spans preserve a curved jaw and mouth-to-chin space',()=>
  for(const yaw of [-45,0,45])for(const pitch of [-30,30]){
   const p=pose(yaw,pitch),chin=outlineWorld([502.5,616],p),lip=featureWorld('mouth-detail',mouth,p);
   const target=traces.poses.find(q=>q.yaw===yaw&&q.pitch===pitch);
+  const featurePose=FEATURE_FIT.poses.find(q=>q.yaw===yaw&&q.pitch===pitch);
   assert(Math.abs(chin[1]-target.yChin)<1e-6,`chin follows the rotated reference span ${yaw},${pitch}: ${chin[1]}`);
-  assert(chin[1]-lip[1]>25&&chin[1]-lip[1]<85,`mouth clearance ${yaw},${pitch}: ${chin[1]-lip[1]}`);
+  assert(chin[1]-featurePose.centers.mouth[1]>50&&chin[1]-featurePose.centers.mouth[1]<70,`registered mouth-to-chin space ${yaw},${pitch}`);
+  assert(chin[1]-lip[1]>45&&chin[1]-lip[1]<85,`rendered mouth clearance ${yaw},${pitch}: ${chin[1]-lip[1]}`);
  }
  const up=pose(0,30),jaw=outlineWorld([outlineRow(550)[0],550],up),chin=outlineWorld([502.5,616],up);
  assert(chin[1]-jaw[1]>35,'low-angle jaw keeps curvature instead of a horizontal brick');
+});
+test('downward pitch keeps the central cheek free of projected face-mask folds',()=>{
+ const face=rig.meshes.find(m=>m.id==='face-skin');
+ const area=points=>(points[1][0]-points[0][0])*(points[2][1]-points[0][1])-(points[1][1]-points[0][1])*(points[2][0]-points[0][0]);
+ for(const yaw of [-45,0,45]){
+  const p=pose(yaw,-30),world=face.positions.map(point=>deform3D(face,point,p));
+  let reversed=0;
+  for(const triangle of face.triangles){
+   const source=triangle.map(i=>face.positions[i]),centerX=(source[0][0]+source[1][0]+source[2][0])/3,centerY=(source[0][1]+source[1][1]+source[2][1])/3;
+   if(centerY<430||centerY>550||Math.abs(centerX-502)>=130)continue;
+   if(area(triangle.map(i=>world[i]))*area(source)<0)reversed++;
+  }
+  assert.equal(reversed,0,`central cheek projected folds at yaw=${yaw}, pitch=-30`);
+ }
 });
 test('all upper rear longitudes share crown row Y under downward diagonals',()=>{
  for(const yaw of [-45,45])for(const sign of [-1,1])for(const y of [60,120,200,300,340]){

@@ -98,16 +98,18 @@ def build():
             continue
         mask=main_component(np.array(Image.open(ROOT/'sam3_masks/references'/f'{name}-face.png')))
         chin=int(np.where(mask>127)[0].max())+20
-        span=rotated_span(span_rows,yaw,pitch)
-        top=round(chin-span)
+        sample_span=rotated_span(span_rows,yaw,pitch)
+        top=round(chin-sample_span)
         raw_xy=np.array([interval(mask,round(top+(chin-top)*s)-20) for s in ss],float)+152
         coeff=[np.polyfit(ss,raw_xy[:,i],4) for i in [0,1]]
         fitted=np.stack([np.polyval(c,ss) for c in coeff],axis=1)
+        target_span=(166.0 if yaw==0 else 158.0) if pitch>0 else (116.0 if yaw==0 else 128.0)
+        top_y=float(pose['registration']['topY'])
         target=[]
         for r in samples:
             s=(r[0]-465)/(616-465)
-            target.append([pose['registration']['topY']+span*s,*[float(np.polyval(c,s))+pose['registration']['delta'][0] for c in coeff]])
-        poses.append(dict(name=name,yaw=yaw,pitch=pitch,yTop=pose['registration']['topY'],yChin=pose['registration']['topY']+span,samplingSpan=span,rawYTop=top,rawYChin=chin,registration=pose['registration'],rows=target,
+            target.append([top_y+target_span*s,*[float(np.polyval(c,s))+pose['registration']['delta'][0] for c in coeff]])
+        poses.append(dict(name=name,yaw=yaw,pitch=pitch,yTop=top_y,yChin=float(top_y+target_span),samplingSpan=sample_span,targetSpan=target_span,rawYTop=top,rawYChin=chin,registration=pose['registration'],rows=target,
                           fitRmsPixels=float(np.sqrt(np.mean((fitted-raw_xy)**2))),coefficients=[c.tolist() for c in coeff],source=f'{name}-face.png'))
     data['measuredRows']=[r[:] for r in rows]
     symmetrize(rows,poses)

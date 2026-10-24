@@ -51,7 +51,8 @@ function targetRow(pose,y){
 export function faceLift([x,y],relief,p){
  const old=correctedLift([x,y],relief,p);
  if(y<=400)return old;
- const edge=faceDepthEdgeAt(y),depth=edge+(faceDepthAt(x,y)-edge)*correction(p,'CorrDepth')/.78+relief,t=smooth((y-400)/65);
+ const edge=faceDepthEdgeAt(y),depthScale=1+(correction(p,'CorrDepth')/.78-1)*smooth((y-465)/151);
+ const depth=edge+(faceDepthAt(x,y)-edge)*depthScale+relief,t=smooth((y-400)/65);
  return [old[0],old[1],old[2]+(depth-old[2])*t];
 }
 export function faceWorld(point,relief,p){
@@ -114,12 +115,11 @@ export function outlinePitchShift(point,p){
  const unrolled={...p,ParamAngleZ:0};
  const stage1Pt=legacyOutline(point,symmetricFace(point,unrolled),unrolled);
  const oldPt=legacyOutline(point,symmetricBase(point,unrolled),unrolled);
- const lowerBlend=smooth((point[1]-445)/20);
  const edgeDx=residual[0]+(residual[1]-residual[0])*u;
  const edgeDy=residual[2]+(residual[3]-residual[2])*u;
- const dx=(stage1Pt[0]-oldPt[0])*lowerBlend+edgeDx*weight;
- const dy=(stage1Pt[1]-oldPt[1])*lowerBlend+edgeDy*weight;
- const dz=(stage1Pt[2]-oldPt[2])*lowerBlend;
+ const dx=(stage1Pt[0]-oldPt[0])+edgeDx*weight;
+ const dy=(stage1Pt[1]-oldPt[1])+edgeDy*weight;
+ const dz=stage1Pt[2]-oldPt[2];
  const roll=radians(p.ParamAngleZ);
  return [dx*Math.cos(roll)-dy*Math.sin(roll),dx*Math.sin(roll)+dy*Math.cos(roll),dz];
 }

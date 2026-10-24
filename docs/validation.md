@@ -1,19 +1,21 @@
 # r14 depth-fitted face mask and body-linked motion
 
-The lower face now uses a symmetric 3D depth surface fitted from Depth Anything V2 and constrained to the depths reconstructed from the approved ±45° outline. Pitch rotates that surface first; the 2D outline residual then samples reference widths by the rotated height `s_rot`. The cheek-width residual is limited to prevent the earlier puffed-up cheeks and over-pinched down pose. The new surface joins the existing face above y465, keeps its measured edge depths, and reaches the measured chin depth.
+The face mask now uses a Depth Anything V2 surface constrained by the approved outline edge depths. Its center depth joins the existing upper face at y=465 (134.108 px) and eases to the measured chin edge depth at y=616 (102.471 px). The y=400..465 blend keeps the eye sockets, forehead and crown attachment unchanged. The pitch outline residual no longer introduces a separate abrupt blend across y=445..465.
 
-`ParamBreath` and `ParamBodyAngleX` now move the neck’s upper section and every non-body upper mesh together. The lower neck fades into the torso. Auto motion drives both breathing and a small left-right body sway. The `CorrOutline < 1` feature fallback uses the local deformation path to avoid adding the shared body offset twice.
+`fit_outline.py` now separates raw-mask sampling span from canvas target span. It samples each reference with its 3D rotated span to preserve cheek width, while placing the chin at a pose-specific target span: up is 166 px front / 158 px diagonal; down is 116 px front / 128 px diagonal. This leaves the measured mouth-to-chin clearance in the up poses while retaining the rounded down-pose jaw.
+
+`ParamBreath` and `ParamBodyAngleX` move the neck's upper section and every non-body upper mesh together. Auto motion drives breathing and a small left-right body sway. The `CorrOutline < 1` feature fallback uses the local deformation path to avoid adding the shared body offset twice.
 
 | Gate | Result |
 |:--|:--|
-| Node tests | `test_outline`, `test_pitch_3d`, and `test_9dir`: 47 passed, 0 failed |
+| Node tests | `test_outline`, `test_pitch_3d`, and `test_9dir`: 48 passed, 0 failed |
 | Attachments | 200 pose/mesh cases passed; no collapsed 3D triangles or inverted flat-artwork ribbons |
-| Outline raster | Final post-culling run: 14 yaw/gain poses; zero interior holes, cheek-ear gaps, forehead intrusion, and far-back exposure |
-| Viewer | One final PASS: 972 canopy samples with zero error; 72 attachment poses with zero flat-mesh folds; face-mask 3D area ratio 0.556 minimum; WebGL, console, request, neck clipping, feature clipping, and narrow-layout checks pass |
+| Outline raster | 14 yaw/gain poses passed; zero interior holes, cheek-ear gaps, forehead intrusion, and far-back exposure |
+| Viewer | PASS: 972 canopy samples with zero error; 72 attachment poses with zero flat-mesh folds; face-mask minimum 3D area ratio 0.588; WebGL, console, request, neck clipping, feature clipping, and narrow-layout checks passed |
 
-The face mask has 40 screen-projected back-facing triangles across the viewer’s tested poses. Their 3D area remains intact; the validator records them separately from flat-mesh folds, and WebGL culls their backs in the face, neck-mask, and silhouette passes. All 1,176 source face triangles use the configured CW front winding. The final post-culling 9-direction sheet was opened and inspected. `up` retains a rounded U-shaped jaw without a lateral cheek bulge, and `down` keeps the mouth-side jaw width while shortening the lower face. The `left`, `front`, and `right` pitch-zero tiles are pixel-identical to the prior PR capture.
+The downward-pitch regression test found zero projected folds in the central face-mask cheek at yaw −45°, 0° and +45°. The updated nine-direction sheet was opened directly: up poses keep the cheek contour restrained with visible jaw length below the mouth, and down-left/down-right no longer show the horizontal cheek slit. The front, left and right pitch-zero tiles retain their prior geometry.
 
-Evidence: [viewer metrics](viewer_metrics.json), [outline metrics](outline_metrics.json), [nine directions](captures/viewer_9dir_grid.png), [bundle SHA256](bundle-sha256.txt). Outline raster evidence was produced before the body-motion wrapper was added; at its zero body-motion defaults, the wrapper returns the original local deformation unchanged. Merge, deployment, and specialist UI/UX review remain with the coordinator.
+Evidence: [viewer metrics](viewer_metrics.json), [outline metrics](outline_metrics.json), [nine directions](captures/viewer_9dir_grid.png), [bundle SHA256](bundle-sha256.txt). Merge and publication remain with the coordinator.
 
 ## Earlier r11 baseline: measured attachments and a continuous hair surface
 
@@ -68,7 +70,7 @@ The upper center-back part is the continuous crown backing. Its lower dangling r
 
 ## Mesh scope
 
-Ear, hair, hairpin and twin-tail meshes use constrained alpha-silhouette triangulation. Concavities, holes and thin strands are retained; attachment points are explicit vertices. The common horizon is also a constrained polyline: a triangle must not bridge an opaque inner surface and a transparent outer wisp across the inverse-projection limb. The side cranium uses a longitude/height grid for a curved surface. The approved face-skin mesh and `face-outline.mjs` / `outline-data.mjs` remain unchanged. Eyes, mouth, body and clothing retain their existing topology because their local expression deformation has not changed.
+Ear, hair, hairpin and twin-tail meshes use constrained alpha-silhouette triangulation. Concavities, holes and thin strands are retained; attachment points are explicit vertices. The common horizon is also a constrained polyline: a triangle must not bridge an opaque inner surface and a transparent outer wisp across the inverse-projection limb. The side cranium uses a longitude/height grid for a curved surface. The face-skin mesh topology remains unchanged; `face-depth.mjs`, `face-outline.mjs` and `outline-data.mjs` supply its fitted 3D depth and pitch residual. Eyes, mouth, body and clothing retain their existing topology because their local expression deformation has not changed.
 
 Real spherical backfaces are culled. Tests distinguish them from collapsed 3D triangles and from reversed front-facing illustration ribbons; this revision does not claim that every projected spherical triangle has positive signed area at every yaw.
 
