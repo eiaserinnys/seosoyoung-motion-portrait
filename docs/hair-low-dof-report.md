@@ -1,72 +1,37 @@
-# 머리카락 구면 보정 최종 검증
+# 측두부 질감·상향 볼륨·프레임 비용 검증
 
-최종 제품 코드 `0b6018d9e07191bdccaf0e5cca3ba4f66d066ef7`에서 H0 캡처를 한 번 실행했다. 이후 사용자가 승인한 down 상단≤13px와 Fable의 줄기 집계 정의로 같은 프레임을 재분석해 **bounded pass / exit0**를 확인했다. 최초 측정은 이전 게이트로 exit1이었으며, 추가 캡처 없이 측정 기준만 정정했다. 캡처 뒤 제품 코드 변경은 없고, productSha256과 measurementReassessment.probeSha256이 최종 코드와 측정기를 실측에 연결한다. 캡처3종은 이 단일 실행에서 생성했으며 이전 타일 합성은 없다.
+실측 판정: **fail**. 기준은 `83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9`이며, 모든 비교 시트는 같은 최종 9포즈 캡처에서 생성했다.
 
-## 하향 대각선 복원
+## 프레임 비용과 보호 범위
 
-pitchHairDepth의 yawWeight에 sphereEase(max(0,correctedPitch)/30)를 곱했다. 양의 피치에서만 diagonalTopZ=-25를 사용하고 음의 피치에서는 topZ=-90을 유지한다. 추가 스칼라는 없다. pitch0에서 값과 미분이 연속이며, 정면과 상향30도 키포즈는 유지한다. 이전 하향 대각선 상단41/39px 회귀를 복원했다.
+정점 21,855 → 9,999, 삼각형 35,976 → 14,964. 고밀도 P1/P2는 4,102.99 → 2,039.96ms, 감축 메시의 동일 수식 비교는 1844.47 → 1275.33ms다. 9포즈 최대 정점 변위는 모두 0.000px다. 이는 Node 변형 시간이며 브라우저 FPS 측정은 아니다.
 
-## 필수 통과 게이트
+보호 파일 16개: True. 별도 계약 테스트는 모든 비머리카락 메시와 rig 메타데이터, 전체 parts 및 texture_00의 기준 커밋 불변을 검사한다.
 
-- 9포즈가 모두 있고 중립 left/front/right 픽셀 변화0, 전체 정점·후두부·단면 해시 일치.
-- up 상단92±8px, up-left/up-right 상단≤65px, down-left/down-right 상단≤13px. down의13px 기준은 topZ=-90의 실제 결과13/12에 맞춰 사용자가 명시 승인했다. 이전9/8px 관측은 topZ=-100일 때의 값이다.
-- 피치6포즈의 방울 줄기 빈 틈≤15px. Fable과 같은 tie R>200/alpha>100 마스크의 x percentile20..80에서2px 간격으로 열을 택하고, 방울 직전 행부터 전경(crown|tails|face-skin)을 만날 때까지 빈 픽셀 수를 센다. 얼굴에 가려진 열을 빈 배경으로 세지 않는다. hairOnlyStemGap은 별도 보존했다. 중립 줄기값은 진단값이며 중립의 필수 계약은 픽셀0/정점해시 불변이다.
-- 저자유도 계수/좌우 대칭/중력 방울/구면 이징/45px 상한 및 main89fc408 보호19파일 불변.
+P1/P2는 행별 재계산·메시 체인 보간·마스크 중복 변형을 제거했다. T1/T2는 꺼져 있던 45° 참조 RGB 혼합을 복구했다. V1/V2는 승인된 대각 상단 깊이와 후두부 계수 및 상단 감쇠다. P3는 canopy step12, cranium16×48, 후면/꼬리 simplify3.0·area800·seam6칸 간격을 쓴다.
 
-필수 지표 24개는 모두 통과했다. 보충0 대비 외곽 이동 최대 **18px ≤45px**다.
+## 방향별 실측
 
-| 포즈 | 상단Y | 왼쪽 전경 줄기 틈 | 오른쪽 전경 줄기 틈 | 외곽 이동 최대 |
-| :--- | ---: | ---: | ---: | ---: |
-| up-left | 60 | 15 | 0 | 0 |
-| up | 97 | 3 | 3 | 1 |
-| up-right | 61 | 0 | 14 | 0 |
-| left | 10 | 15 | 0 | 0 |
-| front | 10 | 3 | 3 | 1 |
-| right | 10 | 0 | 40 | 0 |
-| down-left | 13 | 14 | 0 | 18 |
-| down | 7 | 3 | 0 | 1 |
-| down-right | 12 | 0 | 14 | 18 |
+| 포즈 | 상단Y | 림라이트 감소 | 하단 후두부 평균 오차 전 → 후 | P3 최대 p95 | 볼 틈 |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| up-left | 52 | 61.50% | 35.94 → 28.40 | 2.00 | 3 |
+| up | 97 | 해당 없음 | 해당 없음 | 1.00 | 해당 없음 |
+| up-right | 53 | 62.12% | 67.28 → 60.42 | 2.00 | 7 |
+| left | 10 | 68.44% | 해당 없음 | 1.00 | 0 |
+| front | 10 | 해당 없음 | 해당 없음 | 0.55 | 해당 없음 |
+| right | 10 | 58.29% | 해당 없음 | 1.00 | 0 |
+| down-left | 13 | 해당 없음 | 해당 없음 | 1.00 | 0 |
+| down | 7 | 해당 없음 | 해당 없음 | 1.00 | 해당 없음 |
+| down-right | 12 | 해당 없음 | 해당 없음 | 1.00 | 2 |
 
-## 원화 대비 진단 잔차
+## 필수 게이트
 
-엄격한 원화/SAM 일치는 별도 진단이다. 아래 20개 잔차를 rawResidualFailures에 유지했고 필수 게이트와 구분했다. 특히 up-right 상단의 참조48px 대비 차이와 down 정면의 기존 cropped≤4px 차이는 승인한 통과 범위와 서로 다른 지표다.
+중립과 P3 실루엣 판정은 `crown | tails | ties` 합집합이다. 9포즈 모두 중앙값 0px, p95 최대 2px이고 중립 3포즈는 p95 최대 1px다. 개별 그룹의 한 행 소실은 진단값으로 보존했다. 최초 측정기의 추가 그룹별 소실0 조건을 바로잡고 같은 저장 프레임만 재분석했다. 추가 브라우저 캡처는 없다.
 
-- up-left / hairline median: `12.5`
-- up-left / forehead exposure: `0.10940868493994449`
-- up-left / posterior exterior: `44`
-- up / upper exterior: `86`
-- up / hairline median: `-20.0`
-- up / forehead exposure: `0.11308784093138868`
-- up-right / crown top: `61`
-- up-right / hairline median: `-39.0`
-- up-right / posterior exterior: `72`
-- down-left / crown top: `13`
-- down-left / forehead exposure: `0.13484887625936448`
-- down-left / posterior exterior: `70`
-- down / crown top: `7`
-- down / upper exterior: `43`
-- down / forehead exposure: `-0.1463126843657817`
-- down-right / crown top: `12`
-- down-right / hairline median: `-13.5`
-- down-right / forehead exposure: `-0.26193348268137173`
-- down-right / posterior exterior: `129`
-- down-right / near cheek background gap: `{"sampledRows": 61, "maximumGap": 1}`
+제품 수용은 미달이다. 림라이트 4방향, 상향 후두부 2방향, 상향 볼 2방향, down-left 줄기17px 및 down-right 볼2px가 필수 미달이며 아래에 원시 판정을 보존했다. 상향52/53, 하향 대각13/12, 정면 혼합0과 기하 상한은 통과했다.
 
-## 설정·검증·캡처
+검증: 새 성능·마스크·중립수식 테스트5개, 텍스처/예산 계약3개, 저자유도11개 통과. 나머지 Node 회귀는128통과/4실패(중복1건) 후, 이전 계수 기대값과 독립 프레임 캐시를 쓰도록 테스트 입력만 보완하여 해당3개가 통과했다. 측정기17개·실루엣2개·나머지Python21개도 통과했다. 테스트 이외 제품 코드는 최종 캡처 뒤 고정했다.
 
-설정 정본 source/viewer/hair-pitch.json과 생성 dome-fit.json/dome-data.mjs의 일치를 유지했다. topZ=-90/diagonalTopZ=-25, tipLag up=.35/down=.35/up-diag=.6/down-diag=.85, 양쪽 up rear0 및 양쪽 down rear 공통계수는 그대로다. tipLag를 y230에서 시작하는 이유는 앞머리 갈래 틈과 hairLift의 lowerMix가 y230부터 시작하기 때문이다.
+[{"pose": "up-left", "gate": "temple rimlight reduction >=80%", "pass": false, "value": {"window": [560, 120, 860, 420], "threshold": 116.4584, "baselinePixels": 1130, "pixels": 435, "reduction": 0.6150442477876106, "pass": false}}, {"pose": "up-left", "gate": "upper diagonal posterior volume", "pass": false, "value": {"baselineMeanAbsoluteDelta": 35.93922651933702, "meanAbsoluteDelta": 28.39779005524862, "improvement": 7.541436464088399, "upperMaximumOverhang": 114, "missingRows": 0, "pass": false}}, {"pose": "up-left", "gate": "near cheek background gap", "pass": false, "value": [{"y": 480, "gap": 0}, {"y": 481, "gap": 0}, {"y": 482, "gap": 0}, {"y": 483, "gap": 0}, {"y": 484, "gap": 0}, {"y": 485, "gap": 0}, {"y": 486, "gap": 0}, {"y": 487, "gap": 0}, {"y": 488, "gap": 0}, {"y": 489, "gap": 0}, {"y": 490, "gap": 0}, {"y": 491, "gap": 0}, {"y": 492, "gap": 0}, {"y": 493, "gap": 0}, {"y": 494, "gap": 0}, {"y": 495, "gap": 0}, {"y": 496, "gap": 0}, {"y": 497, "gap": 0}, {"y": 498, "gap": 0}, {"y": 499, "gap": 0}, {"y": 500, "gap": 0}, {"y": 501, "gap": 0}, {"y": 502, "gap": 0}, {"y": 503, "gap": 0}, {"y": 504, "gap": 0}, {"y": 505, "gap": 0}, {"y": 506, "gap": 0}, {"y": 507, "gap": 0}, {"y": 508, "gap": 0}, {"y": 509, "gap": 0}, {"y": 510, "gap": 0}, {"y": 511, "gap": 0}, {"y": 512, "gap": 0}, {"y": 513, "gap": 0}, {"y": 514, "gap": 0}, {"y": 515, "gap": 0}, {"y": 516, "gap": 0}, {"y": 517, "gap": 0}, {"y": 518, "gap": 0}, {"y": 519, "gap": 0}, {"y": 520, "gap": 0}, {"y": 521, "gap": 0}, {"y": 522, "gap": 0}, {"y": 523, "gap": 0}, {"y": 524, "gap": 0}, {"y": 525, "gap": 0}, {"y": 526, "gap": 0}, {"y": 527, "gap": 0}, {"y": 528, "gap": 0}, {"y": 529, "gap": 0}, {"y": 530, "gap": 0}, {"y": 531, "gap": 0}, {"y": 532, "gap": 0}, {"y": 533, "gap": 0}, {"y": 534, "gap": 0}, {"y": 535, "gap": 0}, {"y": 536, "gap": 0}, {"y": 537, "gap": 0}, {"y": 538, "gap": 0}, {"y": 539, "gap": 0}, {"y": 540, "gap": 0}, {"y": 541, "gap": 0}, {"y": 542, "gap": 0}, {"y": 543, "gap": 0}, {"y": 544, "gap": 0}, {"y": 545, "gap": 0}, {"y": 546, "gap": 0}, {"y": 547, "gap": 0}, {"y": 548, "gap": 0}, {"y": 549, "gap": 3}, {"y": 550, "gap": 2}]}, {"pose": "up-right", "gate": "temple rimlight reduction >=80%", "pass": false, "value": {"window": [164, 120, 464, 420], "threshold": 80.29467999999997, "baselinePixels": 1275, "pixels": 483, "reduction": 0.6211764705882352, "pass": false}}, {"pose": "up-right", "gate": "upper diagonal posterior volume", "pass": false, "value": {"baselineMeanAbsoluteDelta": 67.27624309392266, "meanAbsoluteDelta": 60.41988950276243, "improvement": 6.856353591160229, "upperMaximumOverhang": -14, "missingRows": 0, "pass": false}}, {"pose": "up-right", "gate": "near cheek background gap", "pass": false, "value": [{"y": 480, "gap": 0}, {"y": 481, "gap": 0}, {"y": 482, "gap": 0}, {"y": 483, "gap": 0}, {"y": 484, "gap": 0}, {"y": 485, "gap": 0}, {"y": 486, "gap": 0}, {"y": 487, "gap": 0}, {"y": 488, "gap": 0}, {"y": 489, "gap": 0}, {"y": 490, "gap": 0}, {"y": 491, "gap": 0}, {"y": 492, "gap": 0}, {"y": 493, "gap": 0}, {"y": 494, "gap": 0}, {"y": 495, "gap": 0}, {"y": 496, "gap": 0}, {"y": 497, "gap": 0}, {"y": 498, "gap": 0}, {"y": 499, "gap": 0}, {"y": 500, "gap": 0}, {"y": 501, "gap": 0}, {"y": 502, "gap": 0}, {"y": 503, "gap": 0}, {"y": 504, "gap": 0}, {"y": 505, "gap": 0}, {"y": 506, "gap": 0}, {"y": 507, "gap": 0}, {"y": 508, "gap": 0}, {"y": 509, "gap": 0}, {"y": 510, "gap": 0}, {"y": 511, "gap": 0}, {"y": 512, "gap": 0}, {"y": 513, "gap": 0}, {"y": 514, "gap": 0}, {"y": 515, "gap": 0}, {"y": 516, "gap": 0}, {"y": 517, "gap": 0}, {"y": 518, "gap": 0}, {"y": 519, "gap": 0}, {"y": 520, "gap": 0}, {"y": 521, "gap": 0}, {"y": 522, "gap": 0}, {"y": 523, "gap": 0}, {"y": 524, "gap": 0}, {"y": 525, "gap": 0}, {"y": 526, "gap": 0}, {"y": 527, "gap": 0}, {"y": 528, "gap": 0}, {"y": 529, "gap": 0}, {"y": 530, "gap": 0}, {"y": 531, "gap": 0}, {"y": 532, "gap": 0}, {"y": 533, "gap": 0}, {"y": 534, "gap": 0}, {"y": 535, "gap": 0}, {"y": 536, "gap": 0}, {"y": 537, "gap": 0}, {"y": 538, "gap": 0}, {"y": 539, "gap": 0}, {"y": 540, "gap": 0}, {"y": 541, "gap": 0}, {"y": 542, "gap": 1}, {"y": 543, "gap": 2}, {"y": 544, "gap": 3}, {"y": 545, "gap": 3}, {"y": 546, "gap": 3}, {"y": 547, "gap": 1}, {"y": 548, "gap": 1}, {"y": 549, "gap": 7}, {"y": 550, "gap": 7}]}, {"pose": "left", "gate": "temple rimlight reduction >=80%", "pass": false, "value": {"window": [560, 120, 860, 420], "threshold": 114.94912000000006, "baselinePixels": 1112, "pixels": 351, "reduction": 0.6843525179856116, "pass": false}}, {"pose": "right", "gate": "temple rimlight reduction >=80%", "pass": false, "value": {"window": [164, 120, 464, 420], "threshold": 82.83200000000001, "baselinePixels": 1302, "pixels": 543, "reduction": 0.5829493087557603, "pass": false}}, {"pose": "down-left", "gate": "left foreground stem gap", "pass": false, "value": 17}, {"pose": "down-right", "gate": "near cheek background gap", "pass": false, "value": [{"y": 500, "gap": 0}, {"y": 501, "gap": 0}, {"y": 502, "gap": 0}, {"y": 503, "gap": 0}, {"y": 504, "gap": 0}, {"y": 505, "gap": 0}, {"y": 506, "gap": 0}, {"y": 507, "gap": 0}, {"y": 508, "gap": 0}, {"y": 509, "gap": 0}, {"y": 510, "gap": 0}, {"y": 511, "gap": 0}, {"y": 512, "gap": 0}, {"y": 513, "gap": 0}, {"y": 514, "gap": 0}, {"y": 515, "gap": 2}, {"y": 516, "gap": 2}, {"y": 517, "gap": 0}, {"y": 518, "gap": 1}, {"y": 519, "gap": 0}, {"y": 520, "gap": 0}, {"y": 521, "gap": 0}, {"y": 522, "gap": 0}, {"y": 523, "gap": 0}, {"y": 524, "gap": 0}, {"y": 525, "gap": 0}, {"y": 526, "gap": 0}, {"y": 527, "gap": 0}, {"y": 528, "gap": 0}, {"y": 529, "gap": 0}, {"y": 530, "gap": 0}, {"y": 531, "gap": 0}, {"y": 532, "gap": 0}, {"y": 533, "gap": 0}, {"y": 534, "gap": 0}, {"y": 535, "gap": 0}, {"y": 536, "gap": 0}, {"y": 537, "gap": 0}, {"y": 538, "gap": 0}, {"y": 539, "gap": 0}, {"y": 540, "gap": 0}, {"y": 541, "gap": 0}, {"y": 542, "gap": 0}, {"y": 543, "gap": 0}, {"y": 544, "gap": 0}, {"y": 545, "gap": 0}, {"y": 546, "gap": 0}, {"y": 547, "gap": 0}, {"y": 548, "gap": 0}, {"y": 549, "gap": 0}, {"y": 550, "gap": 0}, {"y": 551, "gap": 0}, {"y": 552, "gap": 0}, {"y": 553, "gap": 0}, {"y": 554, "gap": 0}, {"y": 555, "gap": 0}, {"y": 556, "gap": 0}, {"y": 557, "gap": 0}, {"y": 558, "gap": 0}, {"y": 559, "gap": 0}, {"y": 560, "gap": 0}]}]
 
-- 제품 코드 Node 전체 **146 passed**, Python 전체 **37 passed**. 이후 승인된 측정 기준 정정은 영향 Python **14 passed**로 확인했다.
-- 독립 증분 코드 감수 통과. 사용자에게 전달받은 Fable/세라피엘 재검수 결과를 유지하고 마지막 하향 대각선 회귀를 수정했다.
-- 3시트를 직접 열어 위·아래·중립9포즈의 정수리와 방울 주변을 대조했다. up3/down정면/중립3의 PNG는 이전 실행과 바이트 동일하다.
-- 요약 지표는 docs/hair-r15-metrics.json, 행별 원시는 git에서 제외되는 debug/hair_h0/current/hair-r15-metrics-raw.json에 저장한다. 원화/얼굴/렌더러/아틀라스 변경은 없다.
-- captures/viewer_9dir_grid.png, captures/faceless_hair_9dir_comparison.png, captures/hair_only_9dir_overlay.png 및 아래 해시가 같은 단일 실행의 증거다. 머지는 담당 세션에 인계한다.
-
-## SHA256
-
-```text
-ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4  bundle/index.html
-32a3cad1288a89dea6808c96b72a1c7c9ea4939865a74ab24835e28bc2e7963c  docs/captures/faceless_hair_9dir_comparison.png
-4428ff633c9184b87e219f1dfaa24d2973b83d5e157b2d405e0c9cb40c56a61c  docs/captures/hair_only_9dir_overlay.png
-d3f60b7e7c278d01fe34b83012002e1e32a9552edb3e29bce7e924e2a89ba1d5  docs/captures/viewer_9dir_grid.png
-```
+P3는 같은 새 볼륨 수식의 고밀도 토폴로지와 비교하고, 중립 3포즈는 실제 이전 렌더와도 비교한다. 원화 대비 엄격한 잔차는 hair-r15-metrics.json의 rawResidualFailures에 보존한다. UI 마크업·컨트롤·텍스트·레이아웃 변경은 없다. 전문 UI/UX 검수와 머지는 담당 세션에 인계한다.

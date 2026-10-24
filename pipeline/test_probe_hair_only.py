@@ -3,6 +3,43 @@ import numpy as np
 from pipeline.probe_hair_only import outline_rows, bead_centers, top_gate, neutral_difference, hairline_metrics, assess, stem_gap, cheek_cover_rows, fill_holes, summarize_metrics
 
 
+def test_neutral_span_gate_accepts_antialiasing_but_rejects_real_boundary_drift():
+    from pipeline.probe_hair_only import neutral_silhouette
+    a = np.zeros((740, 1024), bool)
+    a[80:521, 200:700] = True
+    b = np.roll(a, 1, axis=1)
+    assert neutral_silhouette(a, b)['pass']
+    assert not neutral_silhouette(a, np.roll(a, 3, axis=1))['pass']
+    assert not neutral_silhouette(a, np.zeros_like(a))['pass']
+
+
+def test_rimlight_uses_frozen_brightness_threshold_and_rejects_unchanged_texture():
+    from pipeline.probe_hair_only import rimlight_metrics
+    a = np.zeros((740, 1024, 4), np.uint8)
+    a[120:420, 560:860] = [80, 60, 40, 255]
+    a[120:126, 560:860, :3] = 255
+    mask = a[:, :, 3] > 0
+    unchanged = rimlight_metrics(a, a, mask, mask, -45)
+    assert unchanged['reduction'] == 0 and not unchanged['pass']
+    b = a.copy()
+    b[120:126, 560:860, :3] = 60
+    assert rimlight_metrics(a, b, mask, mask, -45)['reduction'] == 1
+
+
+def test_posterior_gate_requires_lower_improvement_and_no_upper_horn():
+    from pipeline.probe_hair_only import posterior_metrics
+    ref = np.zeros((740, 1024), bool)
+    ref[80:521, 200:700] = True
+    old = ref.copy()
+    old[340:521, 700:730] = True
+    result = posterior_metrics(ref, ref, old, -45)
+    assert result['improvement'] == 30 and result['pass']
+    assert not posterior_metrics(ref, old, old, -45)['pass']
+    horn = ref.copy()
+    horn[100, 700:731] = True
+    assert not posterior_metrics(ref, horn, old, -45)['pass']
+
+
 def test_outline_samples_canvas_rows_and_keeps_missing_rows_explicit():
     mask = np.zeros((740, 1024), bool)
     mask[100:121, 200:700] = True
@@ -48,8 +85,11 @@ def test_hairline_measurement_detects_a_lowered_fringe_and_lost_forehead_area():
 
 
 def test_acceptance_gate_rejects_the_observed_top_bead_and_neutral_regressions():
-    poses = [dict(name=f'{yaw},{pitch}', yaw=yaw, pitch=pitch, topY=(60 if yaw else 97) if pitch > 0 else 0,
+    poses = [dict(name=f'{yaw},{pitch}', yaw=yaw, pitch=pitch, topY=(52 if yaw < 0 else 53 if yaw > 0 else 97) if pitch > 0 else 0,
                   topGate={'pass': True} if pitch else None, neutralChangedPixels=0,
+                  neutralSilhouette={'all': {'pass': True}}, referenceMixMaximum=0,
+                  retriangulationSilhouette={'all': {'pass': True}},
+                  templeRimlight={'pass': True}, posteriorVolume={'pass': True},
                   neutralVertexHashMatches=True, exterior=[{'y': y, 'delta': [0, 0]} for y in range(80, 521, 20)],
                   hairlineMedianError=0, foreheadExposure={'ratioError': 0},
                   nearCheekCover=[{'y': 520, 'gap': 0}],
@@ -57,10 +97,16 @@ def test_acceptance_gate_rejects_the_observed_top_bead_and_neutral_regressions()
              for yaw in [-45, 0, 45] for pitch in [-30, 0, 30]]
     assert all(c['pass'] for c in assess(poses))
     poses[0]['beads']['left']['dBodyFrame'][1] = -119
-    poses[1]['neutralChangedPixels'] = 1
+    poses[1]['neutralSilhouette']['all']['pass'] = False
     poses[2]['topGate']['pass'] = False
     failures = [c for c in assess(poses) if not c['pass']]
-    assert {c['gate'] for c in failures} == {'left bead body frame', 'neutral pixels', 'crown top'}
+    assert {c['gate'] for c in failures} == {'left bead body frame', 'neutral silhouette span <=2px', 'crown top'}
+    poses[4]['referenceMixMaximum'] = .1
+    poses[7]['templeRimlight']['pass'] = False
+    poses[8]['posteriorVolume']['pass'] = False
+    poses[6]['retriangulationSilhouette']['all']['pass'] = False
+    failures = {c['gate'] for c in assess(poses) if not c['pass']}
+    assert {'front reference mix ==0', 'temple rimlight reduction >=80%', 'upper diagonal posterior volume', 'P3 silhouette span <=2px'} <= failures
     poses[5]['exterior'][1]['delta'] = None
     import json
     serialized = json.dumps(assess(poses), allow_nan=False)
@@ -102,7 +148,7 @@ def test_visible_face_closes_an_occluded_hair_column_but_leaves_real_background_
 
 def test_approved_top_gate_uses_pose_bounds_and_rejects_regressions():
     from pipeline import probe_hair_only as probe
-    for yaw, pitch, boundary in [(0, 30, 100), (-45, 30, 65), (45, 30, 65), (-45, -30, 13), (45, -30, 13)]:
+    for yaw, pitch, boundary in [(0, 30, 100), (-45, 30, 61), (45, 30, 54), (-45, -30, 13), (45, -30, 13)]:
         assert probe.approved_top_gate(yaw, pitch, boundary)['pass']
         assert not probe.approved_top_gate(yaw, pitch, boundary + 1)['pass']
     assert probe.approved_top_gate(0, 30, 84)['pass']
@@ -112,6 +158,7 @@ def test_approved_top_gate_uses_pose_bounds_and_rejects_regressions():
 
 def test_foreground_stem_gate_accepts_15_and_rejects_16_pixels():
     poses = [dict(name='up', yaw=0, pitch=30, topY=97, topGate={'pass': True},
+                  retriangulationSilhouette={'all': {'pass': True}},
                   neutralChangedPixels=None, neutralVertexHashMatches=None,
                   exterior=[{'y': y, 'delta': [0, 0]} for y in range(80, 521, 20)],
                   hairlineMedianError=0, foreheadExposure={'ratioError': 0}, nearCheekCover=None,

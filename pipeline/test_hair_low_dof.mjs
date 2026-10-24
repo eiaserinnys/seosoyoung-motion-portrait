@@ -15,7 +15,7 @@ test('runtime dome data matches its canonical source',()=>{
  const config=JSON.parse(readFileSync(new URL('../source/viewer/hair-pitch.json',import.meta.url)));
  for(const key of ['pitchArc','tipLag','rearPitch'])assert.deepEqual(DOME[key],config[key]);
  const upperRight=config.rearPitch.poses.find(p=>p.name==='up-right');
- assert.deepEqual([upperRight.rx,upperRight.rz,upperRight.y],[0,0,0]);
+ assert.deepEqual([upperRight.rx,upperRight.rz,upperRight.y],[35,10,0]);
 });
 test('H1 every pitched fringe X/Z stays on the yaw dome, including diagonals',{timeout:60000},()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,-15,15,30])for(const y of [8,70,150,230,310,400])for(const x of [300,400,502,600,700]){
@@ -68,6 +68,7 @@ test('bounded acceptance rejects a configuration outside the approved scalar lim
   DOME.pitchArc.topZ=-200;assert(!measureHairBounds().pass);
   DOME.pitchArc.topZ=top;DOME.tipLag.kappa=.9;assert(!measureHairBounds().pass);
   DOME.tipLag.kappa=kappa;DOME.pitchArc.diagonalTopZ=-90;assert(!measureHairBounds().pass);
+  DOME.pitchArc.diagonalTopZ=10;assert(!measureHairBounds().pass);
   DOME.pitchArc.diagonalTopZ=diagonal;DOME.tipLag.poses[0].kappa=.7;assert(!measureHairBounds().pass);
  }finally{DOME.pitchArc.topZ=top;DOME.tipLag.kappa=kappa;DOME.pitchArc.diagonalTopZ=diagonal;DOME.tipLag.poses[0].kappa=tip;}
 });

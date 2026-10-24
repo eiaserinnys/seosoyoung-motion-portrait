@@ -10,7 +10,7 @@ def polygons(shape):
     elif hasattr(shape,'geoms'):
         for part in shape.geoms:yield from polygons(part)
 
-def silhouette_mesh(im,bbox,atlas,size,pins=(),seams=()):
+def silhouette_mesh(im,bbox,atlas,size,pins=(),seams=(),max_area=150,simplify_tol=.65):
     x,y,w,h=bbox;ax,ay,_,_=atlas
     domain=cv2.dilate((np.array(im.getchannel('A'))>8).astype(np.uint8),np.ones((3,3),np.uint8))
     contours,hierarchy=cv2.findContours(domain,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
@@ -24,11 +24,13 @@ def silhouette_mesh(im,bbox,atlas,size,pins=(),seams=()):
             child=hierarchy[0][child][0]
         shape=make_valid(Polygon(contours[outer].reshape(-1,2),rings))
         for poly in polygons(shape):
-            poly=poly.simplify(.65,preserve_topology=True)
+            poly=poly.simplify(simplify_tol,preserve_topology=True)
             if poly.area<1:continue
             vertices=[];segments=[];holes=[]
             for number,ring in enumerate([poly.exterior,*poly.interiors]):
-                coords=list(ring.coords)[:-1];start=len(vertices);vertices.extend(coords)
+                coords=list(ring.coords)[:-1]
+                if len(coords)<3:continue
+                start=len(vertices);vertices.extend(coords)
                 segments.extend([[start+i,start+(i+1)%len(coords)] for i in range(len(coords))])
                 if number:
                     point=Polygon(ring).representative_point();holes.append([point.x,point.y])
@@ -49,8 +51,9 @@ def silhouette_mesh(im,bbox,atlas,size,pins=(),seams=()):
                     if previous is not None and previous!=index:segments.append([previous,index])
                     previous=index
             data={'vertices':vertices,'segments':segments}
+            if len(vertices)<3:continue
             if holes:data['holes']=holes
-            result=triangle.triangulate(data,'pq20a150')
+            result=triangle.triangulate(data,f'pq20a{max_area}')
             offset=len(positions);positions.extend(result['vertices'].tolist())
             triangles.extend((result['triangles']+offset).tolist())
     return dict(positions=[[float(x+px),float(y+py)] for px,py in positions],

@@ -20,10 +20,16 @@ from urllib.parse import unquote, urlsplit
 
 import cv2
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image
+if __package__:
+    from .hair_report import sheets, summarize_metrics, write_release_report
+    from .hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics
+else:
+    from hair_report import sheets, summarize_metrics, write_release_report
+    from hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = '89fc408e7b8efb06acadb958324c31a30d0c0b84'
+BASELINE = '83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9'
 HAIR_CROWN = ['hair-top', 'bangs-left', 'bangs-right', 'side-hair-left',
               'side-hair-right', 'hairpin', 'back-hair-left', 'back-hair-right',
               'back-hair-center', 'side-cranium-left', 'side-cranium-right']
@@ -51,9 +57,11 @@ def approved_top_gate(yaw, pitch, rendered):
     """Approved completion bounds; reference residuals remain diagnostic."""
     if pitch > 0 and not yaw:
         return {'target': 92, 'tolerance': 8, 'pass': abs(rendered-92) <= 8}
-    if yaw and pitch:
-        maximum = 65 if pitch > 0 else 13
-        return {'maximum': maximum, 'pass': rendered <= maximum}
+    if yaw and pitch > 0:
+        target = 55 if yaw < 0 else 48
+        return {'target': target, 'tolerance': 6, 'pass': abs(rendered-target) <= 6}
+    if yaw and pitch < 0:
+        return {'maximum': 13, 'pass': rendered <= 13}
     return None
 
 
@@ -189,14 +197,15 @@ def reference(pose):
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     baseline = False
+    dense = False
 
     def log_message(self, *args):
         pass
 
     def do_GET(self):
-        if not self.baseline:
-            return super().do_GET()
         path = unquote(urlsplit(self.path).path).lstrip('/') or 'index.html'
+        if not self.baseline and not (self.dense and path == 'assets/seosoyoung-rig.json'):
+            return super().do_GET()
         try:
             data = subprocess.check_output(['git', 'show', f'{BASELINE}:bundle/{path}'], cwd=ROOT, stderr=subprocess.DEVNULL)
         except subprocess.CalledProcessError:
@@ -209,12 +218,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(data)
 
 
-def capture(poses, baseline):
+def capture(poses, baseline, dense=False):
     from playwright.sync_api import sync_playwright
-    handler = type('SelectedHandler', (Handler,), {'baseline': baseline})
+    handler = type('SelectedHandler', (Handler,), {'baseline': baseline, 'dense': dense})
     server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(handler, directory=str(ROOT / 'bundle')))
     threading.Thread(target=server.serve_forever, daemon=True).start()
-    output = ROOT / 'debug/hair_h0' / ('r15' if baseline else 'current')
+    output = ROOT / 'debug/hair_h0' / ('r15' if baseline else 'dense' if dense else 'current')
     output.mkdir(parents=True, exist_ok=True)
     try:
         with sync_playwright() as pw:
@@ -225,7 +234,7 @@ def capture(poses, baseline):
             page.goto(f'http://127.0.0.1:{server.server_port}', wait_until='networkidle')
             page.wait_for_function('window.studio?.ready', timeout=30000)
             page.add_style_tag(content='#stage{position:fixed!important;inset:0!important;width:1100px!important;height:1600px!important;max-width:none!important;max-height:none!important;}')
-            geometry = {}
+            geometry, mixes = {}, {}
             for pose in poses:
                 page.evaluate('pose=>{studio.setPose(pose.yaw,pose.pitch,0,"3D 구면");Object.assign(studio.p,{CorrTurn:1,ParamBodyAngleX:0,ParamBreath:0,ParamHairFront:0,ParamHairSide:0,ParamHairBack:0});Object.assign(studio.state,{auto:false,track:false});}', pose)
                 groups = {'full': None, **GROUPS}
@@ -247,6 +256,11 @@ def capture(poses, baseline):
                     assert ox == int(ox) and oy == int(oy)
                     rgba.crop((ox, oy, ox + 1024, oy + 740)).save(output / f'{pose["name"]}-{name}.png')
                 if not pose['pitch']:
+                    mixes[pose['name']] = page.evaluate('''async()=>{
+                      const {referenceHairSample}=await import('./hair-surface.mjs');
+                      const weights=studio.rig.meshes.flatMap(m=>m.positions.map(pt=>referenceHairSample(pt,studio.p).weight));
+                      return Math.max(...weights);
+                    }''')
                     geometry[pose['name']] = page.evaluate('''async()=>{
                       const {deform3D}=await import('./rig.mjs'),{craniumFacing,craniumPosition,domeSection}=await import('./hair-surface.mjs');
                       const {rig,p}=studio;
@@ -256,6 +270,9 @@ def capture(poses, baseline):
                       return Array.from(new Uint8Array(bytes),v=>v.toString(16).padStart(2,'0')).join('');
                     }''')
             (output / 'geometry-sha256.json').write_text(json.dumps(geometry, indent=2) + '\n')
+            (output / 'reference-mix.json').write_text(json.dumps(mixes) + '\n')
+            if baseline:
+                (output / 'baseline.txt').write_text(BASELINE)
             assert not errors, errors
             browser.close()
     finally:
@@ -269,36 +286,6 @@ def read_mask(path, threshold=200, alpha_threshold=40):
     return (a[:, :, 0] > threshold) & (a[:, :, 3] > alpha_threshold)
 
 
-def sheets(rows, out):
-    comparison = Image.new('RGB', (1080, len(rows) * 360), '#182330')
-    overlay_sheet = Image.new('RGB', (1080, 1080), '#182330')
-    portrait_sheet = Image.new('RGB', (1440, 1440), '#24303c')
-    for i, row in enumerate(rows):
-        ref, render, mask = row['ref'], row['render'], row['mask']
-        portrait = Image.new('RGBA', (1024, 740), '#24303c')
-        portrait.alpha_composite(Image.fromarray(render))
-        tile = portrait.crop((152, 20, 872, 740)).convert('RGB').resize((480, 480))
-        ImageDraw.Draw(tile).text((8, 8), row['name'], fill='white')
-        portrait_sheet.paste(tile, ((i % 3) * 480, (i // 3) * 480))
-        reference_hair = ref['rgb'].copy()
-        reference_hair[~ref['mask']] = [24, 35, 48]
-        actual = render[:, :, :3].copy()
-        actual[~mask] = [24, 35, 48]
-        over = np.zeros_like(actual) + [24, 35, 48]
-        over[ref['mask']] = [40, 170, 220]
-        over[mask] = [240, 110, 80]
-        over[mask & ref['mask']] = [210, 210, 210]
-        for j, (image, title) in enumerate([(reference_hair, 'reference'), (actual, 'render'), (over, 'overlay')]):
-            tile = Image.fromarray(image.astype(np.uint8)).crop((152, 0, 872, 720)).resize((360, 360))
-            ImageDraw.Draw(tile).text((6, 6), row['name'] + ' ' + title, fill='white')
-            comparison.paste(tile, (j * 360, i * 360))
-            if j == 2:
-                overlay_sheet.paste(tile, ((i % 3) * 360, (i // 3) * 360))
-    comparison.crop((0, 0, 1080, len(rows) * 360)).save(out / 'faceless_hair_9dir_comparison.png')
-    overlay_sheet.save(out / 'hair_only_9dir_overlay.png')
-    portrait_sheet.save(out / 'viewer_9dir_grid.png')
-
-
 def measure(poses, current):
     rows, report = [], []
     for pose in poses:
@@ -307,6 +294,9 @@ def measure(poses, current):
         render = np.array(Image.open(current / f'{name}-full.png').convert('RGBA'))
         crown = read_mask(current / f'{name}-crown.png')
         mask = crown | read_mask(current / f'{name}-tails.png') | read_mask(current / f'{name}-ties.png')
+        dense_dir = ROOT / 'debug/hair_h0/dense'
+        dense_mask = read_mask(dense_dir / f'{name}-crown.png') | read_mask(dense_dir / f'{name}-tails.png') | read_mask(dense_dir / f'{name}-ties.png')
+        reduction_spans = {'all': neutral_silhouette(dense_mask, mask), **{group: neutral_silhouette(read_mask(dense_dir / f'{name}-{group}.png'), read_mask(current / f'{name}-{group}.png')) for group in ['crown', 'tails', 'ties']}}
         face = read_mask(current / f'{name}-face.png')
         head = fill_holes(mask | face)
         stage_a = fill_holes(read_mask(current / f'{name}-stage-a-head.png'))
@@ -337,13 +327,24 @@ def measure(poses, current):
                 side_tie[:, right:] = False
                 ties[side]['hairOnlyStemGap'] = stem_gap(attachment_hair, side_tie)
                 ties[side]['stemGap'] = stem_gap(attachment_hair | face, side_tie)
-        neutral = None
+        neutral, neutral_spans, rimlight, posterior = None, None, None, None
+        baseline_dir = ROOT / 'debug/hair_h0/r15'
         vertex_match = None
         if not pose['pitch']:
             neutral = neutral_difference(render, np.array(Image.open(ROOT / 'debug/hair_h0/r15' / f'{name}-full.png').convert('RGBA')))
             baseline_hash = json.loads((ROOT / 'debug/hair_h0/r15/geometry-sha256.json').read_text())
             current_hash = json.loads((current / 'geometry-sha256.json').read_text())
             vertex_match = baseline_hash[name] == current_hash[name]
+            neutral_spans = {group: neutral_silhouette(read_mask(baseline_dir / f'{name}-{group}.png'), read_mask(current / f'{name}-{group}.png')) for group in ['crown', 'tails', 'ties']}
+            old_mask = read_mask(baseline_dir / f'{name}-crown.png') | read_mask(baseline_dir / f'{name}-tails.png') | read_mask(baseline_dir / f'{name}-ties.png')
+            neutral_spans['all'] = neutral_silhouette(old_mask, mask)
+        if pose['yaw'] and pose['pitch'] >= 0:
+            old_render = np.array(Image.open(baseline_dir / f'{name}-full.png').convert('RGBA'))
+            old_crown = read_mask(baseline_dir / f'{name}-crown.png')
+            rimlight = rimlight_metrics(old_render, render, old_crown, crown, pose['yaw'])
+            if pose['pitch']:
+                old_head = fill_holes(old_crown | read_mask(baseline_dir / f'{name}-tails.png') | read_mask(baseline_dir / f'{name}-ties.png') | read_mask(baseline_dir / f'{name}-face.png'))
+                posterior = posterior_metrics(ref['head'], head, old_head, pose['yaw'])
         eye_y = int((pose['centers']['left'][1] + pose['centers']['right'][1]) / 2 - 20)
         hairline = hairline_metrics(ref['face'], face, eye_y)
         cover = None
@@ -355,11 +356,14 @@ def measure(poses, current):
                                             read_mask(baseline_dir / f'{neutral_name}-crown.png', 40),
                                             near_side, range(500, 561))
             covered = [r['y'] for r in baseline_rows if r['gap'] == 0]
-            cover = cheek_cover_rows(face, read_mask(current / f'{name}-crown.png', 40), near_side, covered)
+            cover = cheek_cover_rows(face, read_mask(current / f'{name}-crown.png', 40), near_side, range(480, 551) if pose['pitch'] > 0 else covered)
         report.append({'name': name, 'yaw': pose['yaw'], 'pitch': pose['pitch'], 'registrationDelta': ref['delta'],
                        'topY': top, 'topGate': top_gate(pose['pitch'], top, int(np.where(ref['head'])[0].min()) if pose['yaw'] else 92) if pose['pitch'] else None,
                        'exterior': exterior, 'beads': ties, 'neutralChangedPixels': neutral,
                        'neutralVertexHashMatches': vertex_match, 'nearCheekCover': cover,
+                       'neutralSilhouette': neutral_spans, 'templeRimlight': rimlight, 'posteriorVolume': posterior,
+                       'retriangulationSilhouette': reduction_spans,
+                       'referenceMixMaximum': json.loads((current / 'reference-mix.json').read_text()).get(name),
                        'posteriorProjectionShift': shifts, **hairline})
         rows.append({'name': name, 'ref': ref, 'render': render, 'mask': mask})
     return rows, report
@@ -377,9 +381,19 @@ def assess(poses):
             if missing:
                 item['reason'] = 'Missing rendered or reference span; see exterior rows'
             checks.append(item)
+        reduction = p['retriangulationSilhouette']
+        check('P3 silhouette span <=2px', bool(reduction) and reduction['all']['pass'], reduction)
         if not pitch:
-            check('neutral pixels', p['neutralChangedPixels'] == 0, p['neutralChangedPixels'])
-            check('neutral vertices and sections', p['neutralVertexHashMatches'] is True, p['neutralVertexHashMatches'])
+            silhouette = p['neutralSilhouette']
+            check('neutral silhouette span <=2px', bool(silhouette) and silhouette['all']['pass'], silhouette)
+            if not yaw:
+                check('front reference mix ==0', p['referenceMixMaximum'] == 0, p['referenceMixMaximum'])
+        if yaw and pitch >= 0:
+            rim = p['templeRimlight']
+            check('temple rimlight reduction >=80%', rim is not None and rim['pass'], rim)
+            if pitch:
+                volume = p['posteriorVolume']
+                check('upper diagonal posterior volume', volume is not None and volume['pass'], volume)
         if p['topGate']:
             check('crown top', p['topGate']['pass'], p['topY'])
         approved_top = approved_top_gate(yaw, pitch, p['topY'])
@@ -400,9 +414,8 @@ def assess(poses):
             side = 1 if yaw < 0 else 0
             error = max((abs(r['delta'][side]) if r['delta'] else float('inf') for r in rear), default=float('inf'))
             check('posterior exterior', error <= 12, error)
-            if pitch < 0:
-                cover = p['nearCheekCover']
-                check('near cheek background gap', bool(cover) and all(r['gap'] == 0 for r in cover), cover)
+            cover = p['nearCheekCover']
+            check('near cheek background gap', bool(cover) and all(r['gap'] == 0 for r in cover), cover)
         for side, bead in p['beads'].items():
             delta = bead['dBodyFrame']
             inherited = side == 'right' and name in ['up-right', 'down-left', 'down-right']
@@ -413,38 +426,25 @@ def assess(poses):
     return checks
 
 
-def summarize_metrics(data):
-    """Keep release evidence small; full per-row samples belong in debug/."""
-    result = json.loads(json.dumps(data))
-    for p in result['poses']:
-        exterior = p['exterior']
-        p['exterior'] = {'sampledRows': len(exterior), 'maxAbsoluteError': max(
-            (abs(v) for r in exterior if r['delta'] for v in r['delta']), default=None)}
-        shifts = p['posteriorProjectionShift']
-        worst = max((r for r in shifts if r['shift']), key=lambda r: max(abs(v) for v in r['shift']), default=None)
-        p['posteriorProjectionShift'] = {'sampledRows': len(shifts), 'worstRow': worst,
-                                       'maximum': max(abs(v) for v in worst['shift']) if worst else None}
-        cover = p['nearCheekCover']
-        p['nearCheekCover'] = {'sampledRows': len(cover), 'maximumGap': max((r['gap'] for r in cover), default=None)} if cover is not None else None
-        p['hairline'] = {'sampleCount': len(p['hairline']), 'medianError': p['hairlineMedianError']}
-    for c in result['checks'] + result.get('rawResidualFailures', []):
-        if c['gate'] == 'near cheek background gap':
-            rows = c['value'] or []
-            c['value'] = {'sampledRows': len(rows), 'maximumGap': max((r['gap'] for r in rows), default=None)}
-    return result
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--baseline', action='store_true')
+    parser.add_argument('--measure-only', action='store_true', help='Reassess saved frames without opening a browser')
     parser.add_argument('--output', default='docs', help='Directory for this measurement snapshot')
     args = parser.parse_args()
     features = json.loads((ROOT / 'source/viewer/face-feature-fit.json').read_text())
     poses = sorted(features['poses'], key=lambda p: (-p['pitch'], p['yaw']))
-    current = capture([p for p in poses if not p['pitch']] if args.baseline else poses, args.baseline)
+    baseline_dir = ROOT / 'debug/hair_h0/r15'
+    stamp = baseline_dir / 'baseline.txt'
+    if not args.measure_only and (args.baseline or not stamp.exists() or stamp.read_text() != BASELINE):
+        capture(poses, True)
     if args.baseline:
-        print('PASS r15 neutral baseline captures (3 poses, scale=1)')
+        print('PASS frozen baseline captures (9 poses, scale=1)')
         return
+    if not args.measure_only:
+        capture(poses, False, dense=True)
+        capture(poses, False)
+    current = ROOT / 'debug/hair_h0/current'
     rows, report = measure(poses, current)
     out = ROOT / args.output / 'captures'
     out.mkdir(parents=True, exist_ok=True)
@@ -457,7 +457,9 @@ def main():
     bounds['pass'] = all(c['pass'] for c in bounds['checks'])
     protected = [line.split('  ', 1)[1] for line in (ROOT / 'docs/hair-hspec-protected-sha256.txt').read_text().splitlines()]
     protected_pass = subprocess.run(['git', 'diff', '--quiet', BASELINE, '--', *protected], cwd=ROOT).returncode == 0
-    invariant_gates = {'nine poses', 'neutral pixels', 'neutral vertices and sections',
+    invariant_gates = {'nine poses', 'P3 silhouette span <=2px', 'neutral silhouette span <=2px', 'front reference mix ==0',
+                       'temple rimlight reduction >=80%', 'upper diagonal posterior volume',
+                       'near cheek background gap',
                        'left foreground stem gap', 'right foreground stem gap', 'approved crown top'}
     invariants = [c for c in checks if c['gate'] in invariant_gates]
     invariant_pass = all(c['pass'] for c in invariants)
@@ -468,7 +470,9 @@ def main():
             'referenceMaskMethod': 'Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation',
             'canvas': [1100, 1600], 'scale': 1, 'hairMeshCount': 15, 'poses': report, 'checks': checks,
             'productSha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-                              for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs']]},
+                              for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs', 'rig.mjs', 'renderer.mjs', 'assets/seosoyoung-rig.json']]},
+            'measurementMode': 'saved frames' if args.measure_only else 'single browser capture per variant',
+            'probeSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'strictRasterPass': strict_pass, 'bounds': bounds, 'invariantPass': invariant_pass,
             'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] not in invariant_gates],
             'stemMaskMethod': 'visible crown | tails | face-skin; tie R>200/alpha>100, x percentile20..80 step2, empty pixels from row before tie',
@@ -477,6 +481,7 @@ def main():
             'pass': accepted}
     (current / 'hair-r15-metrics-raw.json').write_text(json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
     (ROOT / args.output / 'hair-r15-metrics.json').write_text(json.dumps(summarize_metrics(data), ensure_ascii=False, indent=2, allow_nan=False) + '\n')
+    write_release_report(ROOT, args.output, summarize_metrics(data))
     print(json.dumps([{'name': p['name'], 'topY': p['topY'], 'neutralChangedPixels': p['neutralChangedPixels'],
                        'beadY': {s: b['dBodyFrame'][1] if b['dBodyFrame'] else None for s, b in p['beads'].items()}}
                       for p in report]))
