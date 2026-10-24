@@ -5,8 +5,6 @@ import numpy as np
 from PIL import Image
 import cv2
 ROOT=Path(__file__).resolve().parents[1]
-# With no separate chin underside, compromise relative to the rest 61.5px span.
-CHIN_CANVAS_SPAN={30:64.0,-30:50.0}
 def interval(mask,y):
     xs=np.flatnonzero(mask[y]>127)
     if not len(xs):raise ValueError(f'Empty silhouette row {y}')
@@ -14,6 +12,56 @@ def interval(mask,y):
 def main_component(mask):
     n,labels=cv2.connectedComponents((mask>127).astype(np.uint8));counts=np.bincount(labels.ravel());counts[0]=0
     return np.where(labels==counts.argmax(),255,0)
+def classify_boundary(img,y,x_edge,dx):
+    h,w,_=img.shape
+    vals=[img[y,max(0,min(w-1,x_edge+step))] for step in (dx,dx+(1 if dx>0 else -1))]
+    px=np.median(vals,axis=0)
+    if px.max()<40:return 'BG'
+    if px[0]>170 and px[1]>120 and px[0]-px[2]>20 and px[0]-px[1]<80:return 'SKIN'
+    return 'HAIR'
+def boundary_sample(img,mask,y,side,reg):
+    index=0 if side=='left' else 1;dx=-4 if index==0 else 4
+    x=interval(mask,y)[index];kind=classify_boundary(img,y,x,dx)
+    adjacent=[]
+    for yy in [y-1,y+1]:
+        if 0<=yy<mask.shape[0] and np.any(mask[yy]>127):
+            adjacent.append(classify_boundary(img,yy,interval(mask,yy)[index],dx))
+    return dict(referenceY=y,xMask=x,xCanvas=reg['eyeMid'][0]+(152+x-reg['referenceEyeMid'][0])*reg['scale'],
+                **{'class':kind},neckBounded=kind=='SKIN',validBG=kind=='BG' and 'BG' in adjacent)
+def qualify_background(samples):
+    # A sampling floor can repeat one temple-gap row several times. Repeated
+    # copies are one observation, not a continuous silhouette segment.
+    for side in ['left','right']:
+        i=0
+        while i<len(samples):
+            if samples[i][side]['class']!='BG':i+=1;continue
+            j=i
+            while j+1<len(samples) and samples[j+1][side]['class']=='BG':j+=1
+            if samples[j]['restY']<480 and len({s[side]['referenceY'] for s in samples[i:j+1]})<2:
+                for s in samples[i:j+1]:s[side].update(validBG=False,excluded='upper isolated background gap')
+            i=j+1
+def sphere_ease(t):return (1-np.cos(np.clip(t,0,1)*np.pi))*.5
+def blend_profile(prior,measured,valid,offset):
+    prior=np.asarray(prior,float)+offset;measured=np.asarray(measured,float)
+    target=prior.copy();weight=np.zeros(len(prior));i=0
+    while i<len(valid):
+        if not valid[i]:i+=1;continue
+        end=i
+        while end+1<len(valid) and valid[end+1]:end+=1
+        for k in range(max(0,i-2),min(len(valid),end+3)):
+            w=min(float(sphere_ease((k-(i-2))/4)) if i else 1.,float(sphere_ease(((end+2)-k)/4)) if end<len(valid)-1 else 1.)
+            if w>weight[k]:
+                j=min(end,max(i,k));target[k]=prior[k]+w*(measured[j]-prior[j]);weight[k]=w
+        i=end+1
+    return target,weight
+def monotone_profile(rows):
+    values=np.asarray(rows,float);mid=(values[:,2]+values[:,4])/2
+    half=np.maximum(5.5,(values[:,4]-values[:,2])/2)
+    candidates=np.flatnonzero((values[:,0]>=440)&(values[:,0]<=490))
+    peak=int(candidates[np.argmax(half[candidates])])
+    half[peak:]=np.minimum.accumulate(half[peak:])
+    values[:,2]=mid-half;values[:,4]=mid+half
+    return values.tolist()
 def symmetrized_outline_rows(rows):
     result=[row[:] for row in rows]
     for row in result:
@@ -22,8 +70,7 @@ def symmetrized_outline_rows(rows):
         row[3:7]=[l-near,r-far,l+far,r+near]
     return result
 def symmetrize(rows,poses):
-    rows[:]=symmetrized_outline_rows(rows)
-    # The approved yaw row is shared by neutral poses and near-cheek bounds.
+    # The caller supplies the canonical r11 row, symmetrized exactly once.
     for p in poses:
         if p['pitch']:continue
         i=1 if p['yaw']==0 else 3 if p['yaw']<0 else 5
@@ -32,25 +79,15 @@ def symmetrize(rows,poses):
         group={p['yaw']:p for p in poses if p['pitch']==pitch}
         for p in group.values():p['measuredRows']=[r[:] for r in p['rows']]
         center=group[0]
-        for row,base in zip(center['rows'],rows):
-            _,l,r,*_=base;sy,yl,xl,yr,xr=row
-            # Prevent a quartic endpoint crossing; retain the 11px rest chin.
-            d=max(((l-xl)+(xr-r))/2,5.5-(r-l)/2)
-            row[:]=[sy,(yl+yr)/2,l-d,(yl+yr)/2,r+d]
+        for row in center['rows']:
+            sy,yl,xl,yr,xr=row;half=max(5.5,(xr-xl)/2)
+            row[:]=[sy,(yl+yr)/2,502-half,(yl+yr)/2,502+half]
         neg,pos=group[-45],group[45]
-        for left,right,base in zip(neg['rows'],pos['rows'],rows):
-            sy,l,r,*_=base
-            far=((l-left[2])+(right[4]-r))/2
-            # SAM cuts the near cheek at side-hair. Preserve the approved r11
-            # attachment width through the upper jaw, then mirror the less cut
-            # observation so an occluded side cannot shrink its counterpart.
-            if sy<=570:
-                left[4]=max(left[4],base[4])
-                right[2]=min(right[2],base[5])
-            near=min(r-left[4],right[2]-l)
+        for left,right in zip(neg['rows'],pos['rows']):
+            sy=left[0];l=(left[2]+1004-right[4])/2;r=(left[4]+1004-right[2])/2
             yl=(left[1]+right[3])/2;yr=(left[3]+right[1])/2
-            left[:]=[sy,yl,l-far,yr,r-near]
-            right[:]=[sy,yr,l+near,yl,r+far]
+            left[:]=[sy,yl,l,yr,r]
+            right[:]=[sy,yr,1004-r,yl,1004-l]
     for p in poses:
         p['yTop']=(p['rows'][0][1]+p['rows'][0][3])/2
         p['yChin']=(p['rows'][-1][1]+p['rows'][-1][3])/2
@@ -65,6 +102,8 @@ def build():
         targets=[[x+152 for x in interval(mask,ty-20)] for mask in masks]
         rows.append([y,*f,*targets[0],*targets[1],ty])
     raw=[row[:] for row in rows]
+    # This polynomial belongs only to the immutable approved r11 yaw row.
+    # The six pitch profiles below never fit a polynomial to occluded masks.
     fit_rows=np.array([row for row in rows if row[0]>=465],float)
     errors=[]
     for column in [3,4,5,6]:
@@ -73,13 +112,15 @@ def build():
         errors.extend((fitted-fit_rows[:,column]).tolist())
         for row in rows:
             if row[0]>=465:row[column]=float(np.polyval(coeff,(row[0]-540)/100))
-    data=dict(rawRows=raw,fitRmsPixels=float(np.sqrt(np.mean(np.square(errors)))),fitMaxPixels=float(np.max(np.abs(errors))),method='SAM 3 alpha >127; largest connected face component, outer row extent; independent quartic least-squares contours below y465; hair-occluded upper face uses boundary residual at y465; chin y registration 616 to 615',
+    data=dict(rawRows=raw,fitRmsPixels=float(np.sqrt(np.mean(np.square(errors)))),fitMaxPixels=float(np.max(np.abs(errors))),method='approved neutral r11 retains its original quartic yaw contours and 616-to-615 chin registration; pitch profiles use classified BG evidence, rotated r11 priors plus side translations, cosine seams and monotone half-widths; no pitch quartic fit',
               columns=['front_y','front_left','front_right','left45_left','left45_right','right45_left','right45_right','target_y'],rows=rows)
+    measured_rows=[r[:] for r in rows]
+    rows[:]=symmetrized_outline_rows(rows)
     features=json.loads((ROOT/'source/viewer/face-feature-fit.json').read_text())
     poses=[]
     samples=rows
-    ss=np.array([(r[0]-410)/(616-410) for r in samples])
     fractions=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/outline_vertical_registration.mjs')],input=json.dumps(rows),text=True))
+    priors=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/outline_prior.mjs')],input=json.dumps(rows),text=True))
     for pose in features['poses']:
         name=pose['name'];yaw=pose['yaw'];pitch=pose['pitch']
         if not pitch:
@@ -88,29 +129,62 @@ def build():
             poses.append(dict(name=name,yaw=yaw,pitch=pitch,rows=target,fitRmsPixels=0,source='approved r11'))
             continue
         mask=main_component(np.array(Image.open(ROOT/'sam3_masks/references'/f'{name}-face.png')))
+        img=np.array(Image.open(ROOT/'source/references'/pose['source']).convert('RGB'))
         chin=int(np.where(mask>127)[0].max())+20
         raw=pose['rawCenters'];canvas=pose['centers']
-        s3d=fractions[str(pitch)]
+        vertical=fractions[str(pitch)];s3d=vertical['s3d']
         # Upward eye-edge projection enters hair-occluded temple rows. Start
-        # about 15px below the eye (rest Y~442) rather than sample that cut.
-        s_floor=0.06 if pitch>0 else 0.0
-        mouth=canvas['mouth'][1]+(-12.0 if pitch>0 else 6.0)
-        chin_canvas=mouth+CHIN_CANVAS_SPAN[pitch]
-        raw_y={side:[raw[side][1],chin] for side in ['left','right']}
-        canvas_y={side:[canvas[side][1],chin_canvas] for side in ['left','right']}
-        raw_xy=np.array([[interval(mask,round(raw_y[side][0]+max(s_floor,s)*(chin-raw_y[side][0]))-20)[i]+152+pose['registration']['delta'][0] for i,side in enumerate(['left','right'])] for s in s3d],float)
-        coeff=[np.polyfit(ss,raw_xy[:,i],4) for i in [0,1]]
-        fitted=np.stack([np.polyval(c,ss) for c in coeff],axis=1)
+        # at the derived restY440 fraction rather than sample that cut.
+        s_floor=vertical['sFloor'];rim_offset=vertical['rimOffset']
+        reg=pose['registration'];scale=reg['scale'];midpoint=reg['referenceEyeMid'];eye_mid=reg['eyeMid']
+        chin_canvas=eye_mid[1]+(chin-midpoint[1])*scale
+        raw_y={side:[raw[side][1]+rim_offset/scale,chin] for side in ['left','right']}
+        canvas_y={side:[canvas[side][1]+rim_offset,chin_canvas] for side in ['left','right']}
+        observations=[]
+        for row,s in zip(samples,s3d):
+            item=dict(restY=row[0])
+            for side in ['left','right']:
+                y=round(raw_y[side][0]+max(s_floor,s)*(chin-raw_y[side][0]))-20
+                item[side]=boundary_sample(img,mask,y,side,reg)
+            item['neckBounded']=any(item[side]['neckBounded'] for side in ['left','right'])
+            observations.append(item)
+        qualify_background(observations)
+        prior=priors[name];offsets={}
+        for j,side in enumerate(['left','right']):
+            valid=[s[side]['xCanvas']-r[j+1] for s,r in zip(observations,prior) if s[side]['validBG'] and s['restY']<600]
+            offsets[side]=float(np.mean(valid)) if valid else None
         target=[]
-        for r,s,fraction in zip(samples,ss,s3d):
+        for i,(r,fraction) in enumerate(zip(samples,s3d)):
             yl,yr=[canvas_y[side][0]+fraction*(chin_canvas-canvas_y[side][0]) for side in ['left','right']]
-            target.append([r[0],yl,float(np.polyval(coeff[0],s)),yr,float(np.polyval(coeff[1],s))])
+            target.append([r[0],yl,prior[i][1],yr,prior[i][2]])
         poses.append(dict(name=name,yaw=yaw,pitch=pitch,rawYChin=chin,registration=pose['registration'],rows=target,
-                          mapping=dict(restY=[431.5,616.0],s3d=s3d,sFloor=s_floor,clampedRows=[r[0] for r,s in zip(samples,s3d) if s<s_floor],rawYSpan=raw_y,canvasYSpan=canvas_y),
-                          fitRmsPixels=float(np.sqrt(np.mean((fitted-raw_xy)**2))),coefficients=[c.tolist() for c in coeff],source=f'{name}-face.png'))
-    data['measuredRows']=[r[:] for r in rows]
+                          mapping=dict(restY=[431.5,616.0],s3d=s3d,sFloor=s_floor,rimOffset=rim_offset,clampedRows=[r[0] for r,s in zip(samples,s3d) if s<s_floor],rawYSpan=raw_y,canvasYSpan=canvas_y),
+                          priorRows=prior,boundarySamples=observations,measuredOffsets=offsets,source=f'{name}-face.png'))
+    for p in poses:
+        if not p['pitch']:continue
+        mirror=next(q for q in poses if q['pitch']==p['pitch'] and q['yaw']==-p['yaw'])
+        p['offsets']={side:(value if value is not None else -mirror['measuredOffsets'][other] if p['yaw'] and mirror['measuredOffsets'][other] is not None else 0.)
+                      for side,other,value in [('left','right',p['measuredOffsets']['left']),('right','left',p['measuredOffsets']['right'])]}
+        p['blendWeights']={};bg_errors=[]
+        for j,side in enumerate(['left','right']):
+            observed=p['boundarySamples'];measured=[s[side]['xCanvas'] for s in observed];valid=[s[side]['validBG'] for s in observed]
+            target,weight=blend_profile([r[j+1] for r in p['priorRows']],measured,valid,p['offsets'][side])
+            p['blendWeights'][side]=weight.tolist()
+            for i,row in enumerate(p['rows']):row[2 if j==0 else 4]=float(target[i])
+            bg_errors.extend(float(v-measured[i]) for i,v in enumerate(target) if valid[i])
+        if not p['yaw'] and not any(s[side]['validBG'] for s in p['boundarySamples'] for side in ['left','right']):
+            # A neck-bounded chin may supply an inward bound, never a hair cut.
+            for row,sample in zip(p['rows'],p['boundarySamples']):
+                if row[0]<480 or not sample['neckBounded']:continue
+                mid=(row[2]+row[4])/2;half=(row[4]-row[2])/2
+                measured=max(5.5,(sample['right']['xCanvas']-sample['left']['xCanvas'])/2)
+                h=half+(min(half,measured)-half)*float(sphere_ease((row[0]-480)/(616-480)))
+                row[2]=mid-h;row[4]=mid+h
+        p['rows']=monotone_profile(p['rows'])
+        p['fitRmsPixels']=float(np.sqrt(np.mean(np.square(bg_errors)))) if bg_errors else 0.
+    data['measuredRows']=measured_rows
     symmetrize(rows,poses)
-    data.update(poses=poses,symmetry='far cheek mirror mean; near cheek r11 ear attachment bound and less-occluded mirror envelope; mirrored independent edge heights',registration='shared feature translation; yaw-zero 3D eye-to-chin vertical fractions shared across yaw; hair-occlusion sampling floor; quartic X fit over rest y410..616')
+    data.update(poses=poses,symmetry='pitched profiles use absolute x502 mirror mean; approved neutral r11 rows unchanged',registration='shared feature eye-midpoint and yaw-zero zoom; model-rim-to-actual-chin vertical fractions; BG-only measurements plus rotated r11 prior and per-side translation; cosine seams; monotone half-width below cheek peak')
     (ROOT/'source/viewer/outline-traces.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
     (ROOT/'bundle/outline-data.mjs').write_text('// Generated by pipeline/fit_outline.py from SAM 3 masks.\nexport const OUTLINE_ROWS='+json.dumps(rows)+';\nexport const OUTLINE_POSES='+json.dumps(poses)+';\n')
     print('PASS sampled',len(rows),'rows from independent face masks')

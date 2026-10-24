@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from pipeline.hair_albedo import delight, transfer_redrawn_hair
-from pipeline.fit_outline import symmetrize,CHIN_CANVAS_SPAN
+from pipeline.fit_outline import symmetrize
 
 class HairPixels(unittest.TestCase):
  def test_rim_is_reduced_without_changing_alpha_or_erasing_texture(self):
@@ -26,18 +26,18 @@ class HairPixels(unittest.TestCase):
   np.testing.assert_array_equal(b[5,5,:3],redrawn[5,5])
   for y,x in [(15,15),(30,15),(15,35)]:
    np.testing.assert_array_equal(b[y,x],original[y,x]);self.assertEqual(mask[y,x],0)
- def test_near_cheek_retains_clear_r11_attachment_and_uses_less_occluded_side(self):
+ def test_near_cheek_mirror_averages_prior_profiles_without_an_ear_clamp(self):
   rows=[[465,350,650,330,610,390,670,465]]
   poses=[dict(yaw=yaw,pitch=pitch,yTop=465,yChin=616,
               rows=[[465,465,320 if yaw<0 else 420,465,570 if yaw<0 else 680]])
          for pitch in [-30,30] for yaw in [-45,0,45]]
   symmetrize(rows,poses)
   up=next(p for p in poses if p['pitch']==30 and p['yaw']==-45)
-  self.assertEqual(up['rows'][0][4],610)
-  # A wider independent near cheek must win rather than averaging the cut.
+  self.assertEqual(up['rows'][0][4],577)
+  # Occlusion is handled upstream; both reconstructed sides contribute equally.
   poses[0]['rows'][0][4]=630
   symmetrize(rows,poses)
-  self.assertEqual(poses[0]['rows'][0][4],630)
+  self.assertEqual(poses[0]['rows'][0][4],603.5)
  def test_quartic_chin_endpoint_cannot_cross_its_opposite_edge(self):
   rows=[[616,497,508,423,436,568,581,615]]
   poses=[dict(yaw=yaw,pitch=pitch,rows=[[616,615,506,615,499]])
@@ -45,7 +45,15 @@ class HairPixels(unittest.TestCase):
   symmetrize(rows,poses)
   for p in poses:
    if p['yaw']==0:self.assertGreaterEqual(p['rows'][0][4]-p['rows'][0][2],11)
-  self.assertEqual(CHIN_CANVAS_SPAN,{30:64.0,-30:50.0})
+  import json
+  root=Path(__file__).resolve().parents[1]
+  features=json.loads((root/'source/viewer/face-feature-fit.json').read_text())
+  traces=json.loads((root/'source/viewer/outline-traces.json').read_text())
+  for pose in traces['poses']:
+   if not pose['pitch']:continue
+   reg=next(f for f in features['poses'] if f['name']==pose['name'])['registration']
+   actual_chin=reg['eyeMid'][1]+(pose['rawYChin']-reg['referenceEyeMid'][1])*reg['scale']
+   for side in ['left','right']:self.assertAlmostEqual(pose['mapping']['canvasYSpan'][side][1],actual_chin)
  def test_sclera_boundary_fixture_matches_the_actual_opaque_parts(self):
   import json
   root=Path(__file__).resolve().parents[1]
