@@ -1,0 +1,61 @@
+{
+  "baseline": "d6a58ba5d0b409389ac1baf4ffdae6a0695c5364",
+  "protectedFiles": 19,
+  "neutralRowChangedPixels": 0,
+  "nodeTests": 118,
+  "faceRegistrationTests": 12,
+  "pythonTests": 16,
+  "outlinePoses": 22,
+  "pitchedCheekEarGapPixels": 0,
+  "geometryPreservationPoses": 9,
+  "canopyContinuity": {
+    "maxError": 0,
+    "cases": 972
+  },
+  "consoleErrors": [],
+  "requestFailures": [],
+  "webglError": 0,
+  "indexSha256": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
+  "captureSha256": "da4902c82473367e3cd291db105bafa6c3acf6e0d5655c8b3ea082645380c287",
+  "downRowChangedPixelsSinceApprovedAB": 0,
+  "earWorldByteIdentical": true,
+  "attachmentContinuity": [
+    {
+      "yaw": -45,
+      "side": "left",
+      "tieTop": 472.89944638443546,
+      "skullBottom": 506.70887023722344,
+      "overlap": 33.80942385278797,
+      "rootBefore": [
+        304,
+        608.9846922981957,
+        -57.74386482471998
+      ],
+      "rootAfter": [
+        304,
+        508.9088702372235,
+        -57.74386482471998
+      ]
+    },
+    {
+      "yaw": 45,
+      "side": "right",
+      "tieTop": 474.6823450101085,
+      "skullBottom": 506.70887023722344,
+      "overlap": 32.02652522711492,
+      "rootBefore": [
+        709.3,
+        607.1935380250077,
+        -51.04149461936426
+      ],
+      "rootAfter": [
+        709.3,
+        510.70887023722344,
+        -51.04149461936426
+      ]
+    }
+  ],
+  "attachmentCases": 200,
+  "attachmentMin3DAreaRatio": 0.1543975939864213,
+  "independentSolReview": "PASS: code and final A/B/C capture, no P0/P1"
+}

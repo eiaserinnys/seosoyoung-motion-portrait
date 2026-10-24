@@ -920,14 +920,14 @@
           ],
           "baseline": [
             304,
-            608.9846922981957,
+            508.9088702372235,
             -57.74386482471998
           ],
           "observedDelta": [
             20.589999999999975,
-            -30.938162255782345
+            69.13765980518986
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         },
         "right": {
           "reference": [
@@ -954,7 +954,7 @@
             18.789999999999964,
             105.82197023869003
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         }
       }
     },
@@ -1107,7 +1107,7 @@
             -7.600000000000023,
             62.99280936366915
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         },
         "right": {
           "reference": [
@@ -1134,7 +1134,7 @@
             -12.100000000000023,
             65.79606544367391
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         }
       }
     },
@@ -1289,7 +1289,7 @@
             -58.54999999999998,
             99.98659861031501
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         },
         "right": {
           "reference": [
@@ -1309,14 +1309,14 @@
           ],
           "baseline": [
             709.3,
-            607.1935380250077,
+            510.70887023722344,
             -51.04149461936426
           ],
           "observedDelta": [
             -52.43999999999994,
-            -31.72957203089811
+            64.75509575688613
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         }
       }
     },
@@ -1469,7 +1469,7 @@
             16.69999999999999,
             110.00289393340665
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         },
         "right": {
           "reference": [
@@ -1496,7 +1496,7 @@
             16.40000000000009,
             -13.090443641822503
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         }
       }
     },
@@ -1649,7 +1649,7 @@
             -1.8500000000000227,
             23.487820698817472
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         },
         "right": {
           "reference": [
@@ -1676,7 +1676,7 @@
             -5.850000000000023,
             22.13584591092274
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         }
       }
     },
@@ -1829,7 +1829,7 @@
             -49.89999999999998,
             -64.45596854782855
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         },
         "right": {
           "reference": [
@@ -1856,7 +1856,7 @@
             -50.66999999999996,
             45.13661225489835
           ],
-          "attachmentPolicy": "r15-observation-only"
+          "attachmentPolicy": "measured-observation-only"
         }
       }
     }

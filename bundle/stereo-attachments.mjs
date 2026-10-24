@@ -1,4 +1,6 @@
-import {HEAD_CENTER,artWorld,correction,radians,clamp} from './geometry.mjs';
+import {HEAD_CENTER,artWorld,correction,radians,clamp,rotateXYZ} from './geometry.mjs';
+import {domeSection,fringeRotation} from './hair-surface.mjs';
+import {frameValue} from './pose-grid.mjs';
 const ears={left:{front:[287,407,379,523],target:[324,400,442,515],angle:45},right:{front:[626,407,716,522],target:[576,385,688,511],angle:-45}};
 // Recover the slanted rest plane from independently registered front/near views.
 export function earWorld([x,y],side,p){
@@ -11,7 +13,7 @@ export function earWorld([x,y],side,p){
  return artWorld([x-HEAD_CENTER[0],y-HEAD_CENTER[1]+vertical,z],p);
 }
 export const BEADS={left:{front:[306.5,544.2],negative:[304,542.2],positive:[310.5,544.2],near:45},right:{front:[691.5,542.6],negative:[686.8,542.3],positive:[709.3,544],near:-45}};
-export function beadWorld(side,p){
+export function beadRotation(side,p){
  const b=BEADS[side],a=radians(b.near),target=b.near>0?b.positive:b.negative;
  const dx=b.front[0]-HEAD_CENTER[0],z=(target[0]-HEAD_CENTER[0]-dx*Math.cos(a))/Math.sin(a);
  const theta=radians(clamp(p.ParamAngleX*correction(p,'CorrTurn'),-45,45));
@@ -25,4 +27,21 @@ export function beadWorld(side,p){
  const shift=neg.map((n,i)=>(pos[i]-n)*odd/2+(pos[i]+n)*even/2);
  const yaw=radians(p.ParamAngleX*correction(p,'CorrTurn'));
  return artWorld([dx*Math.cos(yaw)+z*Math.sin(yaw)+shift[0],b.front[1]-HEAD_CENTER[1]+shift[1],-dx*Math.sin(yaw)+z*Math.cos(yaw)],{...p,ParamAngleX:0});
+}
+// Keep the r15 rotation except where an upward far tie would leave the
+// lower skull. Use that same rim's pitch displacement as its attachment bound.
+export function beadWorld(side,p){
+ const world=beadRotation(side,p),pitch=p.ParamAngleY*correction(p,'CorrTurn');
+ const far=-p.ParamAngleX*correction(p,'CorrTurn')*(side==='left'?1:-1);
+ if(pitch<=0||far<=0)return world;
+ const dy=frameValue(p,'bead-skull-bound-'+side,()=>{
+  const unrolled={...p,ParamAngleZ:0},rest={...unrolled,ParamAngleY:0};
+  const {cx,rx}=domeSection(540),sign=side==='left'?-1:1;
+  const rim=fringeRotation([502+cx+sign*rx,540],unrolled)[1];
+  const limit=rim+beadRotation(side,rest)[1]-540;
+  const t=clamp(far/45,0,1);
+  return Math.min(0,limit-beadRotation(side,unrolled)[1])*t*t*(3-2*t);
+ });
+ const shift=rotateXYZ([0,dy,0],0,0,p.ParamAngleZ);
+ return world.map((v,i)=>v+shift[i]);
 }

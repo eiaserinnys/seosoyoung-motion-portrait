@@ -118,7 +118,7 @@ def measure_pitch(fit):
    # that observation for inspection; never fit it as an attachment offset.
    b=pose['beads'][side];b['baseline']=base['beads'][side]
    b['observedDelta']=[b['registeredObservation'][i]-b['baseline'][i] for i in [0,1]]
-   b['attachmentPolicy']='r15-observation-only'
+   b['attachmentPolicy']='measured-observation-only'
  fit['pitchRows']=PITCH_ROWS;fit['pitchPoses']=poses
 def write_fit(fit):
  (ROOT/'source/viewer/dome-fit.json').write_text(json.dumps(fit,ensure_ascii=False,indent=2)+'\n')

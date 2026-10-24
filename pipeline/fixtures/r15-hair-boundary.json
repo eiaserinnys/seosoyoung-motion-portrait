@@ -1,6 +1,6 @@
 {
   "baseline": "d6a58ba5d0b409389ac1baf4ffdae6a0695c5364",
-  "scope": "all non-front-crown meshes; side-hair source Y>=310",
+  "scope": "all non-front-crown meshes; side-hair source Y>=310; only far/up tail vertices excluded by approved C correction",
   "cases": [
     {
       "yaw": -45,
@@ -35,7 +35,7 @@
     {
       "yaw": -45,
       "pitch": 30,
-      "sha256": "1cb2edb2dfbd5629874298553e98f3103d63ae7a998e6c9875022f71121d8baa"
+      "sha256": "810fcfb41240ec8c5f911912fe3486dc5300182c69db5effefa4a44f81d9ffb5"
     },
     {
       "yaw": 0,
@@ -45,7 +45,8 @@
     {
       "yaw": 45,
       "pitch": 30,
-      "sha256": "846e7cd76f8b22703761f5c00b85394a29f686bcbe737708ef46558d3a3ff8e6"
+      "sha256": "f8872f3fb0d00b3a07afc80a6a06da94882350a1e81f5484a31849c84913e3cf"
     }
-  ]
+  ],
+  "earWorldSha256": "46fd688a2e4ead8dcfcb97d8bc0c3bfea4d6d4ad124e9ee91a79dc7cd5253f46"
 }

@@ -12,11 +12,12 @@ import {DOME} from '../bundle/dome-data.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const front=['hair-top','hairpin','bangs-left','bangs-right','side-hair-left','side-hair-right'];
-test('r15 faces, rear surfaces, lower side locks and physical attachments retain every vertex',{timeout:60000},()=>{
+test('r15 geometry stays exact except the approved far-up tail correction',{timeout:60000},()=>{
  const fixture=JSON.parse(readFileSync(new URL('./fixtures/r15-hair-boundary.json',import.meta.url)));
  for(const {yaw,pitch,sha256} of fixture.cases){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()},h=createHash('sha256');
-  for(const m of rig.meshes.filter(m=>!front.includes(m.id)||m.id.startsWith('side-hair'))){
+  const far=pitch>0&&yaw?(yaw<0?'left':'right'):null;
+  for(const m of rig.meshes.filter(m=>(!front.includes(m.id)||m.id.startsWith('side-hair'))&&!(far&&m.id.startsWith('tail-'+far+'-')))){
    const points=m.positions.filter(pt=>!m.id.startsWith('side-hair')||pt[1]>=310);
    h.update(JSON.stringify([m.id,points.map(pt=>deform3D(m,pt,p))]));
   }
