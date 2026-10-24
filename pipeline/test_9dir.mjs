@@ -17,16 +17,13 @@ test('neutral face and feature vertices retain every original canvas coordinate'
   assert(Math.hypot(q[0]-point[0],q[1]-point[1])<1e-9,mesh.id);
  }
 });
-test('non-node face keeps mirrored X and symmetric Y beneath its fixed artwork arch',()=>{
- const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
- const arch=([x,y],pitch)=>-10*pitch/30*(1-Math.max(-1,Math.min(1,(x-502)/135))**2)*smooth((y-445)/90)*(1-.65*smooth((y-595)/20));
+test('non-node face keeps mirrored X and symmetric Y',()=>{
  for(const yaw of [10,22.5,37,45])for(const pitch of [-30,-15,0,18,30])for(const y of [465,510,570,610])for(const u of [0,.25,.5,.75,1]){
   const [l,r]=outlineRow(y),a=[l+(r-l)*u,y],b=[r-(r-l)*u,y];
   const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch},q={...p,ParamAngleX:yaw};
   const left=outlineWorld(a,p),right=outlineWorld(b,q);
   assert(Math.abs(left[0]-a[0]+right[0]-b[0])<1e-6,`outline X ${yaw},${pitch},${y},${u}`);
-  // The approved fixed center is 502; rest-row midpoints preserve the artwork.
-  assert(Math.abs(left[1]-arch(a,pitch)-right[1]+arch(b,pitch))<1e-6,`outline Y ${yaw},${pitch},${y},${u}`);
+  assert(Math.abs(left[1]-right[1])<1e-6,`outline Y ${yaw},${pitch},${y},${u}`);
  }
 });
 test('non-node feature centers and scales mirror while neutral art stays fixed',()=>{

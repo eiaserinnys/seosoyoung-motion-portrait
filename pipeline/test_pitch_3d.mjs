@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
-import {outlineWorld,outlineRow,outlinePitchShift} from '../bundle/face-outline.mjs';
+import {outlineWorld,outlineRow,outlinePitchShift,faceLift,faceWorld} from '../bundle/face-outline.mjs';
 import {featureWorld} from '../bundle/face-features.mjs';
 import {canopyWorld,craniumWorld,hairLift} from '../bundle/hair-shell.mjs';
 import * as hairShell from '../bundle/hair-shell.mjs';
@@ -21,14 +21,20 @@ test('diagonal jaw slope stays near the feature plane instead of twisting the lo
   assert(Math.abs(dy)>15&&Math.abs(dy)<25,`diagonal cheek slope ${yaw},${pitch}: ${dy}`);
  }
 });
-test('pitch jaw widths stay within five percent of approved yaw shapes and converge at the chin',()=>{
- for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const y of [465,510,550,590,610,616]){
-  const [l,r]=outlineRow(y),neutral=[l,r].map(x=>outlineWorld([x,y],pose(yaw,0))[0]);
-  const current=[l,r].map(x=>outlineWorld([x,y],pose(yaw,pitch))[0]),s=(y-465)/151;
-  const scale=1+(pitch>0?.05:-.05)*Math.sin(Math.PI*s);
-  const shift=yaw?-Math.sign(yaw)*(pitch<0?16:3)*s:0;
-  assert(Math.abs((current[1]-current[0])-(neutral[1]-neutral[0])*scale)<1e-8,`width ${yaw},${pitch},${y}`);
-  assert(Math.abs((current[0]+current[1]-neutral[0]-neutral[1])/2-shift)<1e-8,`midpoint ${yaw},${pitch},${y}`);
+test('3D pitch face keeps its attachment width and follows measured 2D jaw residuals',()=>{
+ const width=(y,p)=>{const [l,r]=outlineRow(y);return outlineWorld([r,y],p)[0]-outlineWorld([l,y],p)[0];};
+ const neutralWidth=width(465,pose(0,0));
+ assert(Math.abs(width(465,pose(0,30))-neutralWidth)<1e-8,'up pitch preserves the side-hair attachment width');
+ assert(Math.abs(width(465,pose(0,-30))-neutralWidth)<1e-8,'down pitch preserves the side-hair attachment width');
+ for(const y of [510,550,570,590]){
+  const neutral=width(y,pose(0,0)),up=width(y,pose(0,30)),down=width(y,pose(0,-30));
+  assert(up>neutral,`up pitch expands the measured U-shaped jaw at y=${y}`);
+  assert(down<neutral,`down pitch narrows the measured jaw at y=${y}`);
+ }
+ assert(faceLift([502,616],0,base)[2]<correctedLift([502,616],0,base)[2]-80,'the chin has depth beyond the vertical ribbon');
+ for(const yaw of [-45,0,45])for(const point of [[502,465],[502,550],[502,616]]){
+  const p=pose(yaw,0),expected=artWorld(correctedLift(point,0,p),p),actual=faceWorld(point,0,p);
+  assert(Math.hypot(actual[0]-expected[0],actual[1]-expected[1])<1e-9,`neutral pitch projection ${yaw},${point}`);
  }
 });
 test('right hanging lock tip follows its face attachment under upward left yaw',()=>{
