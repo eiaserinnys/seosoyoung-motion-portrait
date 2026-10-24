@@ -64,7 +64,7 @@ class DiagonalJawTest(unittest.TestCase):
         for kind in ['SKIN','HAIR','BG']:
             p=self.pose(kind,[200,800])
             p['rows']+=[[y,y,400,y,600] for y in [590,600,610,616]]
-            p['priorRows']=[[r[0],300+i*10,700-i*10] for i,r in enumerate(p['rows'])]
+            p['priorRows']=[[r[0],r[2]-2,r[4]+2] for r in p['rows']]
             p['offsets']={'left':2.,'right':-2.}
             p['boundarySamples']+=[copy.deepcopy(p['boundarySamples'][-1]) for _ in range(4)]
             fit.correct_up_diagonal(p)
@@ -73,6 +73,19 @@ class DiagonalJawTest(unittest.TestCase):
                     self.assertEqual(row[2::2],[p['priorRows'][i][1]+2,p['priorRows'][i][2]-2])
                 shift=5.*float(fit.sphere_ease((row[0]-570)/46)) if row[0]>570 else 0.
                 np.testing.assert_allclose(row[1::2],[row[0]-shift]*2)
+
+    def test_570_to_600_ramp_returns_to_base_at_three_quarters_then_one(self):
+        p=self.pose('SKIN',[350,650])
+        p['rows']+=[[590,590,340,590,660],[600,600,400,600,600],
+                    [610,610,420,610,580],[616,616,440,616,560]]
+        p['boundarySamples']+=[copy.deepcopy(p['boundarySamples'][-1]) for _ in range(4)]
+        p['priorRows']=[[r[0],r[2],r[4]] for r in p['rows']];p['offsets']={'left':0.,'right':0.}
+        base=copy.deepcopy(p['rows']);fit.correct_up_diagonal(p)
+        # At590 the SKIN result contributes25%, the original contour75%.
+        inward=340+float(fit.sphere_ease(110/136))*10
+        self.assertAlmostEqual(p['rows'][4][2],.25*inward+.75*340)
+        self.assertAlmostEqual(p['rows'][4][4],1000-p['rows'][4][2])
+        for i in [5,6,7]:self.assertEqual(p['rows'][i][2::2],base[i][2::2])
 
     def test_generated_rows_match_scope_chin_and_single_peak_contract(self):
         data=json.loads((fit.ROOT/'source/viewer/outline-traces.json').read_text())
@@ -89,6 +102,13 @@ class DiagonalJawTest(unittest.TestCase):
                 own_mid=(sum(own)+p['offsets']['left']+p['offsets']['right'])/2
                 other_mid=(sum(other)+mirror['offsets']['left']+mirror['offsets']['right'])/2
                 self.assertAlmostEqual(mid,(own_mid+1004-other_mid)/2)
+                self.assertLessEqual(abs(mid-{'up-left':430.1,'up-right':573.9}[p['name']]),10)
+                jaw=verify.diagonal_jaw({'name':p['name'],'outline':p})
+                self.assertEqual([r[0] for r in jaw['rows']],[570,590,600,610,616])
+                self.assertEqual(jaw['leftMaxOutwardStep'],0)
+                self.assertEqual(jaw['rightMaxOutwardStep'],0)
+                self.assertLessEqual(jaw['maxSecondDifference'],15)
+                self.assertLessEqual(jaw['maxMidpointReversal'],5)
                 self.assertNotEqual(p['rows'],old[p['name']]['rows'])
                 self.assertAlmostEqual(p['yChin'],old[p['name']]['yChin']-5)
                 for i,row in enumerate(p['rows']):
@@ -104,6 +124,45 @@ class DiagonalJawTest(unittest.TestCase):
                 self.assertLessEqual(shape['maxLowerWidthIncrease'],.5)
                 self.assertLessEqual(shape['maxLowerHalfWidthIncrease'],.5)
             if p['name'] not in ['up-left','up-right']:self.assertEqual(p['yChin'],old[p['name']]['yChin'])
+
+
+class ApprovedDiagonalGateTest(unittest.TestCase):
+    def valid(self):
+        row=copy.deepcopy(next(p for p in json.loads((fit.ROOT/'docs/face_hairless_metrics.json').read_text())['poses'] if p['name']=='up-left'))
+        row.update(redBgPixels=120,redBgMaxDepth=2.,cyanPixels=1500,cyanMaxDepth=8.,
+                   redHairPixels=1000000,redHairMaxDepth=1000.,
+                   diagonalJaw=dict(chinMidpointError=10.,leftMaxOutwardStep=0.,rightMaxOutwardStep=0.,
+                                    maxSecondDifference=15.,maxMidpointReversal=5.))
+        return row
+
+    def test_exact_approved_limits_pass_and_hair_remains_reference_only(self):
+        for name,yaw in [('up-left',-45),('up-right',45)]:
+            row=self.valid();row.update(name=name,yaw=yaw)
+            self.assertEqual(verify.failures([row],[]),[])
+
+    def test_every_approved_gate_rejects_an_injected_violation(self):
+        for key,value in [('redBgPixels',121),('redBgMaxDepth',2.001),('cyanPixels',1501),('cyanMaxDepth',8.001)]:
+            with self.subTest(key=key):
+                row=self.valid();row[key]=value
+                self.assertTrue(verify.failures([row],[]),key)
+        for key,value in [('chinMidpointError',10.001),('leftMaxOutwardStep',.001),('rightMaxOutwardStep',.001),
+                          ('maxSecondDifference',15.001),('maxMidpointReversal',5.001)]:
+            with self.subTest(key=key):
+                row=self.valid();row['diagonalJaw'][key]=value
+                self.assertTrue(verify.failures([row],[]),key)
+
+    def test_jaw_summary_measures_injected_outward_step_and_reversal(self):
+        rows=[[y,y,400+i*10,y,600-i*20] for i,y in enumerate([570,590,600,610,616])]
+        p=dict(name='up-left',outline={'rows':rows})
+        summary=verify.diagonal_jaw(p)
+        self.assertEqual(summary['leftMaxOutwardStep'],0)
+        self.assertEqual(summary['rightMaxOutwardStep'],0)
+        self.assertEqual(summary['maxSecondDifference'],0)
+        self.assertEqual(summary['maxMidpointReversal'],0)
+        rows[1][4]=601;summary=verify.diagonal_jaw(p)
+        self.assertEqual(summary['rightMaxOutwardStep'],1)
+        self.assertEqual(summary['maxSecondDifference'],42)
+        self.assertEqual(summary['maxMidpointReversal'],5.5)
 
 
 class SilhouetteDifferenceTest(unittest.TestCase):

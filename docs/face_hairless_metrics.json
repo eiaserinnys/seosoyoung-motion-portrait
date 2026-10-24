@@ -1,6 +1,17 @@
 {
   "definition": "restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only; redBg is render-only over registered RGB max<40; redHair is remaining render-only occlusion",
   "visibility": "face skin + eyes + brows + nose + closed mouth only; all hair/ears/neck/body OFF",
+  "approvedUpDiagonalLimits": {
+    "redBgPixels": 120,
+    "redBgMaxDepth": 2.0,
+    "cyanPixels": 1500,
+    "cyanMaxDepth": 8.0,
+    "chinMidpointError": 10.0,
+    "leftMaxOutwardStep": 0.0,
+    "rightMaxOutwardStep": 0.0,
+    "maxSecondDifference": 15.0,
+    "maxMidpointReversal": 5.0
+  },
   "poses": [
     {
       "name": "left",
@@ -410,7 +421,7 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 11.26869368902802,
+      "rawVisibleRms": 11.275324502455874,
       "rawSampleCount": 413,
       "rawChinError": 6.041282024151883,
       "lengthErrors": {
@@ -507,7 +518,7 @@
           ],
           [
             590,
-            116.61981709308412
+            125.37824798800744
           ],
           [
             600,
@@ -519,7 +530,7 @@
           ],
           [
             616,
-            18.683528438488736
+            18.683528438488793
           ]
         ]
       },
@@ -537,13 +548,59 @@
       },
       "validBgSamples": 0,
       "bgFitRmsReference": null,
-      "redPixels": 8497,
+      "diagonalJaw": {
+        "rows": [
+          [
+            570.0,
+            565.4500877276244,
+            351.0398915821646,
+            565.513151848414,
+            524.826023766786
+          ],
+          [
+            590.0,
+            582.3883815177292,
+            375.8136262345974,
+            582.4173912521983,
+            501.19187422260484
+          ],
+          [
+            600.0,
+            588.2559924429115,
+            393.5640147465101,
+            588.2714621835701,
+            483.01609990189786
+          ],
+          [
+            610.0,
+            593.1893648565774,
+            408.5390583799201,
+            593.1939034644552,
+            454.8868118477076
+          ],
+          [
+            616.0,
+            595.5052480182615,
+            417.4850079993098,
+            595.5052480182615,
+            436.1685364377986
+          ]
+        ],
+        "chinMidpoint": 426.8267722185542,
+        "r11ChinMidpoint": 430.1,
+        "chinMidpointError": 3.2732277814458257,
+        "leftMaxOutwardStep": 0.0,
+        "rightMaxOutwardStep": 0.0,
+        "maxSecondDifference": 9.953513733483305,
+        "maxMidpointReversal": 0.5697925541258542
+      },
+      "redPixels": 8438,
       "redMaxDepth": 10.591,
-      "cyanPixels": 1228,
-      "cyanMaxDepth": 7.0,
+      "cyanPixels": 1071,
+      "cyanMaxDepth": 7.194,
       "redBgPixels": 81,
       "redBgMaxDepth": 1.4,
-      "redHairPixels": 8416,
+      "redHairPixels": 8357,
       "redHairMaxDepth": 10.591
     },
     {
@@ -694,7 +751,7 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 17.00748812302742,
+      "rawVisibleRms": 17.55382054216436,
       "rawSampleCount": 413,
       "rawChinError": 3.958717975848117,
       "lengthErrors": {
@@ -791,7 +848,7 @@
           ],
           [
             590,
-            116.61981709308418
+            125.37824798800739
           ],
           [
             600,
@@ -821,13 +878,59 @@
       },
       "validBgSamples": 2,
       "bgFitRmsReference": 1.5001936507040508,
-      "redPixels": 8926,
+      "diagonalJaw": {
+        "rows": [
+          [
+            570.0,
+            565.513151848414,
+            479.17397623321403,
+            565.4500877276244,
+            652.9601084178354
+          ],
+          [
+            590.0,
+            582.4173912521983,
+            502.80812577739516,
+            582.3883815177292,
+            628.1863737654025
+          ],
+          [
+            600.0,
+            588.2714621835701,
+            520.9839000981021,
+            588.2559924429115,
+            610.4359852534899
+          ],
+          [
+            610.0,
+            593.1939034644552,
+            549.1131881522924,
+            593.1893648565774,
+            595.4609416200799
+          ],
+          [
+            616.0,
+            595.5052480182615,
+            567.8314635622014,
+            595.5052480182615,
+            586.5149920006902
+          ]
+        ],
+        "chinMidpoint": 577.1732277814458,
+        "r11ChinMidpoint": 573.9,
+        "chinMidpointError": 3.2732277814458257,
+        "leftMaxOutwardStep": 0.0,
+        "rightMaxOutwardStep": 0.0,
+        "maxSecondDifference": 9.953513733483305,
+        "maxMidpointReversal": 0.5697925541257973
+      },
+      "redPixels": 9126,
       "redMaxDepth": 12.984,
-      "cyanPixels": 1133,
-      "cyanMaxDepth": 7.197,
+      "cyanPixels": 1202,
+      "cyanMaxDepth": 7.991,
       "redBgPixels": 30,
       "redBgMaxDepth": 1.0,
-      "redHairPixels": 8896,
+      "redHairPixels": 9096,
       "redHairMaxDepth": 12.984
     },
     {

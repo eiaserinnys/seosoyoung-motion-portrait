@@ -65,6 +65,7 @@ def monotone_profile(rows):
     return values.tolist()
 def correct_up_diagonal(p):
     if p['pitch']<=0 or not p['yaw']:return
+    base_rows=np.asarray(p['rows'],float).copy()
     for row,sample in zip(p['rows'],p['boundarySamples']):
         if row[0]>570:
             lift=5.*float(sphere_ease((row[0]-570)/(616-570)))
@@ -88,12 +89,11 @@ def correct_up_diagonal(p):
     pl=int(np.argmin(rows[:,2]));pr=int(np.argmax(rows[:,4]))
     rows[pl:,2]=np.maximum.accumulate(rows[pl:,2])
     rows[pr:,4]=np.minimum.accumulate(rows[pr:,4])
-    # The last three mask rows can follow the pigtail behind the chin.
-    # Keep their prior plus side translation through the per-side bound.
+    # Fade back to the original prior profile before the fixed chin rows.
     for i,row in enumerate(rows):
-        if row[0] in CHIN_ROWS:
-            rows[i,2]=p['priorRows'][i][1]+p['offsets']['left']
-            rows[i,4]=p['priorRows'][i][2]+p['offsets']['right']
+        w=float(sphere_ease((row[0]-570)/30))
+        rows[i,2]=(1.-w)*rows[i,2]+w*base_rows[i,2]
+        rows[i,4]=(1.-w)*rows[i,4]+w*base_rows[i,4]
     p['rows']=rows.tolist()
 def symmetrized_outline_rows(rows):
     result=[row[:] for row in rows]
