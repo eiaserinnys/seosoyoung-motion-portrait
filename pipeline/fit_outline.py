@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 import cv2
 ROOT=Path(__file__).resolve().parents[1]
+CHIN_ROWS={600,610,616}
 def interval(mask,y):
     xs=np.flatnonzero(mask[y]>127)
     if not len(xs):raise ValueError(f'Empty silhouette row {y}')
@@ -62,6 +63,38 @@ def monotone_profile(rows):
     half[peak:]=np.minimum.accumulate(half[peak:])
     values[:,2]=mid-half;values[:,4]=mid+half
     return values.tolist()
+def correct_up_diagonal(p):
+    if p['pitch']<=0 or not p['yaw']:return
+    base_rows=np.asarray(p['rows'],float).copy()
+    for row,sample in zip(p['rows'],p['boundarySamples']):
+        if row[0]>570:
+            lift=5.*float(sphere_ease((row[0]-570)/(616-570)))
+            row[1]-=lift;row[3]-=lift
+        if row[0]<480 or row[0] in CHIN_ROWS:continue
+        ease=float(sphere_ease((row[0]-480)/(616-480)))
+        for side,column in [('left',2),('right',4)]:
+            if sample[side]['validBG']:continue
+            base=row[column];meas=sample[side]['xCanvas']
+            if sample[side]['class']=='SKIN':
+                # Skin beyond the face mask is neck: it only bounds inward.
+                inward=max(base,meas) if side=='left' else min(base,meas)
+                row[column]=base+ease*(inward-base)
+            elif sample[side]['class']=='HAIR':
+                # Hair can trim a mask inward; an outward edge is face evidence.
+                outward=min(base,meas) if side=='left' else max(base,meas)
+                if abs(outward-base)>3.:row[column]=base+ease*(outward-base)
+    # Each side owns its monotonic bound; a shifted midpoint must not pull
+    # the opposite jaw inward through another symmetric half-width pass.
+    rows=np.asarray(p['rows'],float)
+    pl=int(np.argmin(rows[:,2]));pr=int(np.argmax(rows[:,4]))
+    rows[pl:,2]=np.maximum.accumulate(rows[pl:,2])
+    rows[pr:,4]=np.minimum.accumulate(rows[pr:,4])
+    # Fade back to the original prior profile before the fixed chin rows.
+    for i,row in enumerate(rows):
+        w=float(sphere_ease((row[0]-570)/30))
+        rows[i,2]=(1.-w)*rows[i,2]+w*base_rows[i,2]
+        rows[i,4]=(1.-w)*rows[i,4]+w*base_rows[i,4]
+    p['rows']=rows.tolist()
 def symmetrized_outline_rows(rows):
     result=[row[:] for row in rows]
     for row in result:
@@ -181,6 +214,7 @@ def build():
                 h=half+(min(half,measured)-half)*float(sphere_ease((row[0]-480)/(616-480)))
                 row[2]=mid-h;row[4]=mid+h
         p['rows']=monotone_profile(p['rows'])
+        correct_up_diagonal(p)
         p['fitRmsPixels']=float(np.sqrt(np.mean(np.square(bg_errors)))) if bg_errors else 0.
     data['measuredRows']=measured_rows
     symmetrize(rows,poses)
