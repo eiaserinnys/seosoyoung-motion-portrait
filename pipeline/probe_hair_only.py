@@ -474,7 +474,7 @@ def main():
             'productSha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                               for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs', 'rig.mjs', 'renderer.mjs', 'assets/seosoyoung-rig.json']]},
             'measurementMode': 'saved frames' if args.measure_only else 'single browser capture per variant',
-            'measurementApproval': 'Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper positive-overhang-beyond-reference increase from r16<=5px; downward cheek<=2px; stem<=17px',
+            'measurementApproval': 'Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper rows120..200 positive-overhang-beyond-reference increase from r16<=5px; downward cheek<=2px; stem<=17px',
             'probeSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'strictRasterPass': strict_pass, 'bounds': bounds, 'invariantPass': invariant_pass,
             'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] not in invariant_gates],

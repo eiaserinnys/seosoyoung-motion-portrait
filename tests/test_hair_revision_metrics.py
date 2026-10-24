@@ -34,3 +34,26 @@ def test_positive_overhang_increase_accepts_five_and_rejects_six_pixels(yaw):
         assert result['upperMaximumOverhang'] == current-700
         assert result['upperMaximumIncrease'] == increase
         assert result['pass'] is (increase <= 5)
+
+
+@pytest.mark.parametrize('yaw', [-45, 45])
+def test_upper_guard_only_checks_inclusive_rows_120_through_200(yaw):
+    reference, current, baseline = masks(762, 766, -45)
+    for y in [80, 115, 116, 119, 201, 216, 219, 220]:
+        current[y, 766:790] = True
+    frames = [reference, current, baseline]
+    if yaw > 0:
+        frames = [np.fliplr(mask) for mask in frames]
+    result = posterior_metrics(*frames, yaw)
+    assert result['upperRows'] == [120, 200]
+    assert result['upperMaximumIncrease'] == 4 and result['pass']
+    assert result['upperWorstRow']['y'] == 120
+    for y in [120, 200]:
+        outside = current.copy()
+        outside[y, 766:768] = True
+        frames = [reference, outside, baseline]
+        if yaw > 0:
+            frames = [np.fliplr(mask) for mask in frames]
+        result = posterior_metrics(*frames, yaw)
+        assert result['upperMaximumIncrease'] == 6 and not result['pass']
+        assert result['upperWorstRow']['y'] == y

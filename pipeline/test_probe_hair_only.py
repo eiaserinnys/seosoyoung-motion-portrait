@@ -43,7 +43,7 @@ def test_posterior_gate_requires_lower_improvement_and_no_upper_horn():
     assert result['improvement'] == 30 and result['pass']
     assert not posterior_metrics(ref, old, old, -45)['pass']
     horn = ref.copy()
-    horn[100, 700:731] = True
+    horn[150, 700:731] = True
     assert not posterior_metrics(ref, horn, old, -45)['pass']
 
 
@@ -61,9 +61,9 @@ def test_posterior_uses_active_latitudes_and_detects_regression_from_r16():
     assert result['improvement'] == 10 and result['pass']
     assert result['upperMaximumOverhang'] == 114
     assert result['upperMaximumIncrease'] == 0
-    current[100, 814:819] = True
+    current[150, 814:819] = True
     assert posterior_metrics(ref, current, old, -45)['pass']
-    current[100, 819] = True
+    current[150, 819] = True
     assert not posterior_metrics(ref, current, old, -45)['pass']
     current[340:441, 720] = True
     result = posterior_metrics(ref, current, old, -45)

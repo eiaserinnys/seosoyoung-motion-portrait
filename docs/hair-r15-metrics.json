@@ -1,6 +1,6 @@
 {
   "baseline": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
-  "head": "46c9afddfe2720f8eb1b26e88847fb76e5380813",
+  "head": "acd180e8772e5c81636452ecc1f1dfce1ddd3b8f",
   "registrationSha256": "ea2cb7220fa37f5579405500d43ecef0eaafaeeddee99ce254704fbfe4ec9a04",
   "referenceMaskMethod": "Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation",
   "canvas": [
@@ -99,16 +99,23 @@
         "meanAbsoluteDelta": 28.544554455445546,
         "improvement": 12.207920792079204,
         "upperMaximumOverhang": 114,
-        "upperMaximumIncrease": 13,
+        "upperMaximumIncrease": 12,
         "lowerRows": [
           340,
           440
         ],
         "upperRows": [
-          80,
-          220
+          120,
+          200
         ],
         "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 661,
+          "baseline": 672,
+          "current": 684,
+          "increase": 12
+        },
         "pass": false
       },
       "retriangulationSilhouette": {
@@ -378,17 +385,24 @@
         "baselineMeanAbsoluteDelta": 64.65346534653466,
         "meanAbsoluteDelta": 53.54455445544554,
         "improvement": 11.108910891089117,
-        "upperMaximumOverhang": -14,
+        "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
           340,
           440
         ],
         "upperRows": [
-          80,
-          220
+          120,
+          200
         ],
         "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 277,
+          "baseline": 308,
+          "current": 302,
+          "increase": 0
+        },
         "pass": true
       },
       "retriangulationSilhouette": {
@@ -1350,16 +1364,23 @@
         "meanAbsoluteDelta": 28.544554455445546,
         "improvement": 12.207920792079204,
         "upperMaximumOverhang": 114,
-        "upperMaximumIncrease": 13,
+        "upperMaximumIncrease": 12,
         "lowerRows": [
           340,
           440
         ],
         "upperRows": [
-          80,
-          220
+          120,
+          200
         ],
         "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 661,
+          "baseline": 672,
+          "current": 684,
+          "increase": 12
+        },
         "pass": false
       }
     },
@@ -1572,17 +1593,24 @@
         "baselineMeanAbsoluteDelta": 64.65346534653466,
         "meanAbsoluteDelta": 53.54455445544554,
         "improvement": 11.108910891089117,
-        "upperMaximumOverhang": -14,
+        "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
           340,
           440
         ],
         "upperRows": [
-          80,
-          220
+          120,
+          200
         ],
         "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 277,
+          "baseline": 308,
+          "current": 302,
+          "increase": 0
+        },
         "pass": true
       }
     },
@@ -2226,8 +2254,8 @@
     "bundle/assets/seosoyoung-rig.json": "c9f607d0c79a2da3a43c44da95d7e1cd1605066b718bc707b9a4ff4163edbb26"
   },
   "measurementMode": "saved frames",
-  "measurementApproval": "Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper positive-overhang-beyond-reference increase from r16<=5px; downward cheek<=2px; stem<=17px",
-  "probeSha256": "d24d31acccd8b7403eca6b8b46c238f854c06738a421a595a88bf61c28d5ce5d",
+  "measurementApproval": "Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper rows120..200 positive-overhang-beyond-reference increase from r16<=5px; downward cheek<=2px; stem<=17px",
+  "probeSha256": "b587a65dfc2cf9cc81995bf3292a1f293cbb5e7ae5682f7ba48f8ae0565d322f",
   "strictRasterPass": false,
   "bounds": {
     "pass": true,
@@ -2402,16 +2430,23 @@
         "meanAbsoluteDelta": 28.544554455445546,
         "improvement": 12.207920792079204,
         "upperMaximumOverhang": 114,
-        "upperMaximumIncrease": 13,
+        "upperMaximumIncrease": 12,
         "lowerRows": [
           340,
           440
         ],
         "upperRows": [
-          80,
-          220
+          120,
+          200
         ],
         "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 661,
+          "baseline": 672,
+          "current": 684,
+          "increase": 12
+        },
         "pass": false
       }
     },
@@ -2540,17 +2575,24 @@
         "baselineMeanAbsoluteDelta": 64.65346534653466,
         "meanAbsoluteDelta": 53.54455445544554,
         "improvement": 11.108910891089117,
-        "upperMaximumOverhang": -14,
+        "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
           340,
           440
         ],
         "upperRows": [
-          80,
-          220
+          120,
+          200
         ],
         "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 277,
+          "baseline": 308,
+          "current": 302,
+          "increase": 0
+        },
         "pass": true
       }
     },

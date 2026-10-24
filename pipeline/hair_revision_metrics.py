@@ -44,6 +44,7 @@ def rimlight_metrics(before, after, before_mask, after_mask, yaw):
 def posterior_metrics(reference, current, baseline, yaw):
     side, outward = (1, 1) if yaw < 0 else (0, -1)
     old_errors, errors, upper, upper_increase = [], [], [], []
+    upper_samples = []
     missing = 0
     for y in range(80, 521):
         r, c, b = [row_span(mask, y) for mask in [reference, current, baseline]]
@@ -53,11 +54,13 @@ def posterior_metrics(reference, current, baseline, yaw):
         if 340 <= y <= 440:
             old_errors.append(abs(b[side]-r[side]))
             errors.append(abs(c[side]-r[side]))
-        if y <= 220:
+        if 120 <= y <= 200:
             cur_overhang = (c[side]-r[side])*outward
             base_overhang = (b[side]-r[side])*outward
             upper.append(cur_overhang)
             upper_increase.append(max(0, cur_overhang) - max(0, base_overhang))
+            upper_samples.append({'y': y, 'reference': r[side], 'baseline': b[side],
+                                  'current': c[side], 'increase': upper_increase[-1]})
     old_mean = float(np.mean(old_errors)) if old_errors else None
     mean = float(np.mean(errors)) if errors else None
     improvement = old_mean-mean if mean is not None else None
@@ -66,6 +69,7 @@ def posterior_metrics(reference, current, baseline, yaw):
     return {'baselineMeanAbsoluteDelta': old_mean, 'meanAbsoluteDelta': mean,
             'improvement': improvement, 'upperMaximumOverhang': maximum,
             'upperMaximumIncrease': increase, 'lowerRows': [340, 440],
-            'upperRows': [80, 220], 'missingRows': missing,
+            'upperRows': [120, 200], 'missingRows': missing,
+            'upperWorstRow': max(upper_samples, key=lambda row: row['increase'], default=None),
             'pass': not missing and improvement is not None and improvement >= 10
                     and increase is not None and increase <= 5}
