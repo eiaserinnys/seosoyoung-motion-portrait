@@ -736,17 +736,17 @@
         [
           421.075819746502,
           336.26038259297565,
-          589.1867686674691
+          594.2030838720002
         ],
         [
           433.1950250445153,
           334.77155624643126,
-          588.6731563397452
+          597.8642672950064
         ],
         [
           457.4334356405418,
           336.9982229005643,
-          590.795491010749
+          603.2770127560293
         ],
         [
           481.6718462365683,
@@ -859,7 +859,7 @@
           458.4202574970719
         ]
       ],
-      "farVisibilityWeight": 1
+      "farFit": "minimum inward displacement of both pitched samples and clear pitch-zero contour"
     },
     {
       "name": "up",
@@ -1062,17 +1062,17 @@
         ],
         [
           421.075819746502,
-          413.8132313325309,
+          408.7969161279998,
           666.7396174070243
         ],
         [
           433.1950250445153,
-          414.3268436602548,
+          405.13573270499364,
           668.2284437535687
         ],
         [
           457.4334356405418,
-          417.20450898925105,
+          404.72298724397064,
           671.0017770994357
         ],
         [
@@ -1186,7 +1186,7 @@
           610.8269127480232
         ]
       ],
-      "farVisibilityWeight": 0
+      "farFit": "minimum inward displacement of both pitched samples and clear pitch-zero contour"
     },
     {
       "name": "down-left",
@@ -1350,7 +1350,7 @@
           457.55780793868934
         ]
       ],
-      "farVisibilityWeight": 1
+      "farFit": "mirror average"
     },
     {
       "name": "down",
@@ -1677,9 +1677,9 @@
           542.1571883997675
         ]
       ],
-      "farVisibilityWeight": 1
+      "farFit": "mirror average"
     }
   ],
-  "symmetry": "rest-relative mirror averaging; up-right occluded far cheek excluded",
+  "symmetry": "rest-relative mirror averaging; up far-cheek inward displacement capped by both pitched samples and clear pitch-zero contour",
   "registration": "s=(front_y-465)/(616-465); y_k(s)=yTop_k+s*(yChin_k-yTop_k); independent quartic mask contours"
 }

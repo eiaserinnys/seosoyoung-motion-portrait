@@ -1,0 +1,29 @@
+{
+  "references": {
+    "head_front_no_rimlight.png": "ec71b6d02be6ecbc9396d838f03da0ddfd759e29809f2c16cd90525dd49c4461",
+    "left_45_no_rimlight.png": "c49d5c550b474fad1968d9fe5f184624b19eab26a22de0f8d4256cbe004c968a",
+    "right_45_no_rimlight.png": "06ffeaad76c3b42c7a1c316ec1d398aa284f0fba43162c3fad707534ca01f32e",
+    "still_no_rimlight.png": "ce9b4a0ffa63a1fac3785b563acfa3aa36beeadf63b1d3770381a49192fa0ad5"
+  },
+  "frontCanvas": [
+    152,
+    20,
+    720,
+    720
+  ],
+  "originalCanvas": [
+    0,
+    0,
+    1024,
+    1536
+  ],
+  "sourceMatchTolerance": 3,
+  "preservedAlpha": [
+    "bangs-left",
+    "bangs-right",
+    "back-hair-left",
+    "back-hair-right"
+  ],
+  "fallback": "Lab delight only outside safe visible redrawn hair",
+  "backing": "same fringe hemisphere through y380, smooth lower-shell transition to y465"
+}

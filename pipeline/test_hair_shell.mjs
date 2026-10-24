@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
+import {test} from 'node:test';
 import {readFileSync} from 'node:fs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
-import {domeSection} from '../bundle/hair-surface.mjs';
-import {hairLift,hairWorld,sideWorld} from '../bundle/hair-shell.mjs';
+import {domeSection,craniumPosition} from '../bundle/hair-surface.mjs';
+import {hairLift,hairWorld,sideWorld,backWorld,craniumWorld} from '../bundle/hair-shell.mjs';
+import {craniumWorld as exportedCranium} from '../bundle/cranium-surface.mjs';
 import './test_9dir.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
@@ -19,7 +21,7 @@ for(const [yaw,pitch] of [[0,0],[-25,0],[25,0],[-50,0],[50,0],[0,-20],[0,20]]){
  for(const xy of [[502,64],[502,150],[502,230]]){
   const rest={...p,ParamAngleX:0,ParamAngleY:0},front=point('hair-top',xy,rest),back=point('back-hair-center',xy,rest);
   near(front.slice(0,2),back.slice(0,2));
-  assert(back[2]<front[2],'upper backing occupies the rear hemisphere');checks++;
+  near(back,artWorld(hairLift(xy,rest,-4),rest));checks++;
  }
  for(const [side,x] of [['left',379],['right',626]]){
   const original=sideWorld([x,438],side,p),morphed=sideWorld([x,438],side,{...p,CorrOutline:1});
@@ -57,3 +59,38 @@ for(const side of ['left','right'])for(const y of [200,260,330,350])for(const ya
  near(sideWorld(xy,side,p),hairWorld(xy,p));checks++;
 }
 console.log(`PASS ${checks} hair shell and preserved face checks`);
+
+// The backing stays on the fringe hemisphere through y380, then joins the
+// lower shell with a smooth tangent. The former sign flip made a 390px ridge.
+for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
+ const p={...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch};
+ for(const x of [300,400,502,600,700]){
+  for(const y of [60,180,245,300,350,380])near(backWorld([x,y],p),artWorld(hairLift([x,y],p,-4),p));
+  for(const y of [245,350,380,465]){
+   const a=backWorld([x,y-.001],p),b=backWorld([x,y+.001],p);
+   assert(Math.hypot(...a.map((v,i)=>v-b[i]))<.1,'backing contains a depth step');
+  }
+ }
+}
+
+test('cranium bridge meets the shared canopy seam at all nine poses',()=>{
+ assert.equal(exportedCranium,craniumWorld,'one implementation owns both exports');
+ for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const sign of [-1,1])for(const y of [60,120,180,245,300,350,400,465]){
+  const p={...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch};
+  const {cx,rx}=domeSection(y),side=sign<0?'left':'right';
+  const a=craniumWorld([0,y,sign*Math.PI/2],side,p),b=hairWorld([502+cx+sign*rx,y],p);
+  assert(Math.hypot(...a.map((v,i)=>v-b[i]))<1e-14,`${yaw},${pitch},${sign},${y}`);
+ }
+});
+test('cranium bridge preserves the outer silhouette at and beyond 135 degrees',()=>{
+ for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const sign of [-1,1])for(const y of [60,180,300,400,465])for(const angle of [135,150,180]){
+  const p={...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch},pt=[0,y,sign*angle*Math.PI/180];
+  assert.deepEqual(craniumWorld(pt,sign<0?'left':'right',p),craniumPosition(pt,p));
+ }
+});
+test('upper diagonal fringe strands remain wholly on the fringe surface',()=>{
+ for(const yaw of [-45,45])for(const pitch of [0,30])for(const y of [350,380,400,405])for(const x of [606,615,624]){
+  const p={...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch};
+  near(hairWorld([x,y],p),artWorld(hairLift([x,y],p,0),p));
+ }
+});

@@ -1,4 +1,4 @@
-"""Deterministic hair albedo correction and foreground-mask cleanup."""
+"""Safe redrawn hair RGB transfer with albedo correction for hidden backing."""
 import cv2
 import numpy as np
 
@@ -39,12 +39,21 @@ def delight(a,canvas_y,back=False):
  out[:,:,:3]=cv2.cvtColor(np.uint8(np.clip(corrected,0,255)),cv2.COLOR_LAB2RGB)
  return out
 
-def remove_brow_ghost(a,brow_mask,canvas_y):
- out=a.copy();yy=np.arange(a.shape[0])+canvas_y
- upper=a[(yy>=322)&(yy<=331),:,3];lower=a[(yy>=363)&(yy<=372),:,3]
- through=(upper.max(0)>80)&(lower.max(0)>80)
- brow=cv2.dilate((brow_mask>16).astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9)))>0
- erase=brow&((yy>=333)&(yy<=362))[:,None]&~through[None,:]
- fade=np.maximum(erase.astype(np.float32),cv2.GaussianBlur(erase.astype(np.float32),(3,3),1))
- out[:,:,3]=np.rint(a[:,:,3]*(1-fade)).astype(np.uint8)
- return out
+def transfer_redrawn_hair(a,original,still,redrawn,canvas_x,canvas_y):
+ """Use repainted RGB only where the part is visible in the original still.
+
+ All inputs are the same canvas crop. Matching the immutable part excludes
+ hidden face infill. A dark brown target gate rejects skin, blue accessories
+ and white gaps. Eroding inward by two pixels softens only the safe side of
+ the mask, so excluded colors never leak across the blend. Alpha is untouched.
+ """
+ rgb=redrawn.astype(np.float32);light=rgb.mean(2)
+ match=np.abs(original[:,:,:3].astype(np.int16)-still.astype(np.int16)).max(2)<=3
+ hair=(light>=18)&(light<125)&(rgb[:,:,0]>=rgb[:,:,2])&(rgb[:,:,0]-rgb[:,:,1]<45)&(rgb[:,:,1]-rgb[:,:,2]<35)
+ yy,xx=np.indices(light.shape);xx+=canvas_x;yy+=canvas_y
+ pin=(xx>=646)&(xx<703)&(yy>=241)&(yy<311)
+ safe=match&hair&~pin&(original[:,:,3]>0)
+ weight=smoothstep(0,2,cv2.distanceTransform(safe.astype(np.uint8),cv2.DIST_L2,5))
+ out=a.copy()
+ out[:,:,:3]=np.rint(a[:,:,:3]+(rgb-a[:,:,:3])*weight[:,:,None]).astype(np.uint8)
+ return out,weight

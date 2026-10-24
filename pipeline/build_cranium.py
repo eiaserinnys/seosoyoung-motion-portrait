@@ -10,7 +10,7 @@ def build():
     front=np.array(Image.open(ROOT/'source/front-hair-inputs/hair-top.png').convert('RGBA'))
     target_mean,target_std=interior_tone(front)
     entries=[]
-    for side,file,crown in [('right','left_45_ref_720.png','left-crown'),('left','right_45_ref_720.png','right-crown')]:
+    for side,file,crown in [('right','left_45_no_rimlight.png','left-crown'),('left','right_45_no_rimlight.png','right-crown')]:
         rgb=np.array(Image.open(ROOT/'source/references'/file).convert('RGB'))
         mask=np.array(Image.open(ROOT/'sam3_masks/references'/f'{crown}.png').convert('L'))>127
         n,labels=cv2.connectedComponents(mask.astype(np.uint8));counts=np.bincount(labels.ravel());counts[0]=0

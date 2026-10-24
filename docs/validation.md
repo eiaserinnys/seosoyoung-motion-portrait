@@ -1,22 +1,27 @@
-# Nine-direction calibration and continuous hair
+# Nine-direction calibration and redrawn hair
 
-The final calibration preserves every neutral face/feature vertex while making rest-relative outline, eye, brow, nose and mouth motion mirror symmetric. Tests cover yaw 10/22.5/37/45 and pitch -30/-15/0/18/30, including intermediate face positions. The up-right occluded far-cheek measurement has zero weight; its visible opposite supplies that fit. Raw mask/feature measurements remain in the calibration JSON alongside balanced targets.
+The no-rimlight front, full-body and two 45-degree references now supply visible hair RGB. Immutable part-to-still pixel matching excludes hidden face backing, and the target dark-brown gate plus the explicit bunny-pin exclusion keep skin and accessory colors out. The original alpha of both fringe parts and both rear ribbons is preserved byte for byte. The previous same-column brow eraser has been removed so diagonal fringe strands remain intact.
 
-| Final gate | Evidence |
+The upper back ribbons use the same hemisphere as the fringe through y380 and smoothly join the lower shell by y465. The side-cranium bridge meets the exact shared canopy position at 90 degrees and tapers to the original silhouette by 135 degrees. The fringe-to-lock transition stays outside the diagonal fringe strands through y405 and reaches the lower locks by y460. This removes the former rear-to-front depth reversal. Both occluded upward far-cheek samples are bounded by the clear horizontal reference to preserve a rounded symmetric jaw. Neutral face vertices and the symmetric motion field remain unchanged.
+
+| Current gate | Evidence |
 |:--|:--|
-| Node tests | 45 passed, 0 failed, one worker and 60-second test timeout |
-| Pixel contracts | 2 passed: rim reduction preserves alpha/detail; disconnected brow ink removed while vertical hair survives |
-| Shared canopy | 972 browser samples, maximum XYZ difference 0; upper depth is monotone toward both outer edges |
-| Forehead at DPR 2 | 0 pixels in all four required pose/gain cases |
-| Near ear at DPR 2 | 1944 / 2218 pixels at input -50/+50, gain .65; 2032 / 2257 at actual -45/+45 |
-| Eye decals | All 72 observations visible, minimum contribution 33 pixels at DPR 1 |
-| Other browser contracts | Iris clipping, neck cap coverage, rigid child sphere, controls, auto motion, narrow layout passed; console/HTTP/WebGL errors 0 |
-| Rebuild | All 71 part/bundle files byte-identical after rebuilding from immutable inputs; dist exactly matches bundle |
-| Independent code review | Sol high passed the final source/data/capture review; specialist UI/UX review remains with the coordinator |
+| Node tests | 48 passed, 0 failed, one worker, 60-second timeout |
+| Pixel contracts | 4 passed: safe authored RGB transfer, alpha preservation, fallback detail, occluded jaw bound |
+| Shared canopy | 972 browser samples, maximum XYZ difference 0 |
+| Forehead at DPR 2 | 0 pixels in all four required cases |
+| Near ear at DPR 2 | 1944 / 2218 at input -50/+50 gain .65; 2032 / 2257 at actual -45/+45 |
+| Eye decals | All 72 observations visible |
+| Other browser contracts | Clipping, neck coverage, controls, auto motion, narrow layout passed; console/HTTP/WebGL errors 0 |
+| Bundle copies | All 28 files identical in bundle, dist and the designated artifact bundle; nine core captures synchronized |
+| Cranium boundary | Exact shared-canopy endpoint at both 90-degree seams across all nine poses, error <1e-14; 135-degree and outer silhouettes unchanged |
+| Visual inspection | Former near-side background gaps are filled in the latest nine-direction sheet; Sol follow-up review passed |
 
-The nine-direction sheet and eight required captures were opened directly. The bright orange crown stripe is suppressed, the center part follows one field, and the near ears and beads remain visible. Face motion uses symmetric offsets around the preserved asymmetric neutral drawing. Hair artwork and accessories retain their original asymmetry. The existing panels, typography and controls are reused, with no layout or UI token changes. Specialist aesthetic review remains with the coordinator after the PR is prepared.
+The latest nine-direction sheet was opened directly after the coordinator supplied the bridge and fringe-transition equations. The former background-colored triangular gaps at both actual 45-degree turns are filled. The upper diagonal fringe strands remain on the fringe surface instead of straddling the temple transition. Bright rim and large rear-wing protrusions are reduced, and the original fringe alpha remains intact. The prescribed 90-degree seam endpoint is returned directly to avoid the floating-point residue of cos(pi/2); both modules export this one implementation. The old inverse-projection test now checks the unchanged spherical primitive, while the new final-surface tests check exact seam matching and the untouched outer silhouette. Independent Sol follow-up review passed the repaired gap and associated fringe transition. All nine required current captures were opened directly; near ears and beads remain visible.
 
-Current evidence: [browser metrics](viewer_metrics.json), [rebuild parity](build_repro.json), [nine-direction sheet](captures/viewer_9dir_grid.png). The sections below record the earlier r11 baseline; the current symmetric calibration supersedes its asymmetric yaw targets and its former layer order.
+The existing viewer panels, typography and controls are unchanged. No UI tokens or layout dimensions were added. Specialist UI/UX review remains with the coordinator.
+
+Evidence: [browser metrics](viewer_metrics.json), [input provenance](no-rimlight-inputs.json), [nine-direction sheet](captures/viewer_9dir_grid.png), [bundle hashes](bundle-sha256.txt). [The earlier rebuild check](build_repro.json) describes the previous 4e6b1f2 baseline, not this revision. The sections below preserve earlier r11 evidence and are superseded where the current specification differs.
 
 ## Earlier r11 baseline: measured attachments and a continuous hair surface
 

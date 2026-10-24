@@ -1,5 +1,5 @@
 import './test_stereo.mjs';
-import {craniumFacing,domeSection} from '../bundle/hair-surface.mjs';
+import {craniumFacing,domeSection,craniumPosition} from '../bundle/hair-surface.mjs';
 import {DOME} from '../bundle/dome-data.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -76,11 +76,14 @@ test('all sampled cheek and jaw edges match independent SAM 3 targets at 45 degr
  }
 });
 
-test('inverse spherical longitude restores both reference meshes at ±45 degrees',()=>{
+test('unbridged inverse spherical longitude restores both reference meshes at ±45 degrees',()=>{
  for(const [side,yaw] of [['right',-45],['left',45]]){
   const m=mesh('side-cranium-'+side);
   for(const xy of m.positions){
-   const q=deform3D(m,xy,{...base,ParamAngleX:yaw,CorrTurn:1});
+   // The authored canopy bridge deliberately shifts the inner collar. This
+   // contract concerns its unmodified spherical reference, tested separately
+   // from final seam matching and silhouette preservation in test_hair_shell.
+   const q=craniumPosition(xy,{...base,ParamAngleX:yaw,CorrTurn:1});
    assert(Math.hypot(q[0]-xy[0],q[1]-xy[1])<1e-8);
   }
  }

@@ -4,9 +4,9 @@ from pathlib import Path
 import cv2
 import numpy as np
 from PIL import Image
-from hair_albedo import delight,neutralize_outline,remove_brow_ghost,smoothstep
+from hair_albedo import delight,neutralize_outline,transfer_redrawn_hair,smoothstep
 ROOT=Path(__file__).resolve().parents[1]
-IDS={'hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','back-hair-center'}
+IDS={'hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','back-hair-center','back-hair-left','back-hair-right'}
 
 def copy_bangs_rgb(a,part,parts,images):
  x,y,w,h=part['bbox'];seed=np.zeros((h,w),bool)
@@ -30,19 +30,15 @@ def build():
   if not path.exists():shutil.copyfile(ROOT/parts[key]['file'],path)
  original={key:np.array(Image.open(source/(key+'.png')).convert('RGBA')) for key in IDS}
  images={key:neutralize_outline(a) for key,a in original.items()}
- for key in ['bangs-left','bangs-right']:
-  x,y,w,h=parts[key]['bbox'];brows=np.zeros((1536,1024),np.uint8)
-  for side in ['left','right']:
-   part=parts[f'eye-{side}-brow'];bx,by,bw,bh=part['bbox']
-   alpha=np.array(Image.open(ROOT/part['file']).convert('RGBA'))[:,:,3]
-   brows[by:by+bh,bx:bx+bw]=np.maximum(brows[by:by+bh,bx:bx+bw],alpha)
-  images[key]=remove_brow_ghost(images[key],brows[y:y+h,x:x+w],y)
+ still=np.array(Image.open(ROOT/'source/character/still.png').convert('RGB'))
+ redrawn=np.array(Image.open(ROOT/'source/references/still_no_rimlight.png').convert('RGB'))
+ redrawn[20:740,152:872]=np.array(Image.open(ROOT/'source/references/head_front_no_rimlight.png').convert('RGB'))
  union=np.zeros((1536,1024),np.uint8)
- for key in IDS-{'back-hair-center'}:
+ for key in IDS-{'back-hair-center','back-hair-left','back-hair-right'}:
   x,y,w,h=parts[key]['bbox'];union[y:y+h,x:x+w]=np.maximum(union[y:y+h,x:x+w],images[key][:,:,3])
  for key in sorted(IDS):
   part=parts[key];x,y,w,h=part['bbox'];a=images[key];domain=a[:,:,3]>128
-  if not key.startswith('bangs'):
+  if not key.startswith('bangs') and key not in {'back-hair-left','back-hair-right'}:
    for row in range(h):
     limit=250 if key=='hair-top' else 400 if key=='back-hair-center' else 350
     if not 60<=row+y<=limit:continue
@@ -60,11 +56,14 @@ def build():
    rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
    a[repair,:3]=rgb[repair];a[domain,3]=255
    if key=='hair-top':taper_added(a,original[key],y)
-  images[key]=delight(a,y,key=='back-hair-center')
+  fallback=delight(a,y,key.startswith('back-hair'))
+  # Visible redrawn texels retain their authored tone; correction only supplies
+  # hidden backing and the soft inward edge of the safe transfer mask.
+  images[key],_=transfer_redrawn_hair(fallback,original[key],still[y:y+h,x:x+w],redrawn[y:y+h,x:x+w],x,y)
  # Seed real RGB before inpainting, then retain identical overlap after tone correction.
  copy_bangs_rgb(images['hair-top'],parts['hair-top'],parts,images)
  for key,a in images.items():Image.fromarray(a).save(ROOT/parts[key]['file'])
- print('PASS six immutable hair inputs, brow cleanup and albedo correction')
+ print('PASS eight immutable hair inputs, intact fringe alpha and redrawn hair RGB')
 
 def fill_seam():
  """Fill only the crown backing; side-hair never expands toward frontSeam."""

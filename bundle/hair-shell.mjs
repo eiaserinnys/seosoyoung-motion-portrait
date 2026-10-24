@@ -1,8 +1,7 @@
 import {strandWorld} from './side-strands.mjs';
-import {hairSurface,canopySurface} from './hair-surface.mjs';
+import {hairSurface,domeSection,craniumPosition} from './hair-surface.mjs';
 import {earWorld} from './stereo-attachments.mjs';
 import {DOME} from './dome-data.mjs';
-export {craniumWeight,craniumWorld} from './cranium-surface.mjs';
 import {outlinePitchShift} from './face-outline.mjs';
 import {HEAD_CENTER,HEAD_RADIUS,clamp,radians,correction,correctedLift,artWorld} from './geometry.mjs';
 
@@ -36,7 +35,7 @@ const fringeSurface=(point,p)=>artWorld(hairLift(point,p,0),p);
 export function canopyWorld(point,p) {
  const [x,y]=point,world=fringeSurface(point,p);
  const side=x<HEAD_CENTER[0]?'left':'right';
- const lower=smooth((y-380)/60),xStart=115-35*lower,width=10+15*lower;
+ const lower=smooth((y-405)/55),xStart=126-42*lower,width=14;
  const lockWeight=smooth((Math.abs(x-HEAD_CENTER[0])-xStart)/width)*smooth((y-340)/67);
  if(lockWeight){
   const lock=templeWorld(point,side,p);
@@ -49,6 +48,18 @@ export function canopyWorld(point,p) {
 }
 export const hairWorld=canopyWorld;
 export const fringeWorld=canopyWorld;
+export const craniumWeight=()=>1;
+export function craniumWorld([x,y,lambda],side,p) {
+ const dome=craniumPosition([x,y,lambda],p);
+ const w=1-smooth((Math.abs(lambda)-Math.PI/2)/(Math.PI/4));
+ if(!w)return dome;
+ const {cx,rx,cz}=domeSection(y),sign=Math.sign(lambda)||(side==='left'?-1:1);
+ const domeSeam=artWorld([cx+sign*rx,y-HEAD_CENTER[1],cz],p);
+ const seam=canopyWorld([HEAD_CENTER[0]+cx+sign*rx,y],p);
+ // Reuse the endpoint exactly instead of retaining cos(pi/2) roundoff.
+ if(Math.abs(lambda)===Math.PI/2)return seam;
+ return dome.map((v,i)=>v+(seam[i]-domeSeam[i])*w);
+}
 export function farSideWeight(side,p) {
   const angle=p.ParamAngleX*(side==='left'?-1:1);
   return smooth(angle/50)*correction(p,'CorrHairOcclusion');
@@ -70,8 +81,8 @@ function templeWorld(point,side,p) {
 }
 export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}
 export function backWorld(point,p) {
- const back=shellWorld(point,p,-4),upper=1-smooth((point[1]-245)/105);
+ const back=shellWorld(point,p,-4),upper=1-smooth((point[1]-380)/85);
  if(!upper)return back;
- const canopy=canopySurface(point,p,true);
+ const canopy=artWorld(hairLift(point,p,-4),p);
  return back.map((v,i)=>v+(canopy[i]-v)*upper);
 }
