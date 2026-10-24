@@ -8,7 +8,7 @@ The lower face now uses a symmetric 3D depth surface fitted from Depth Anything 
 |:--|:--|
 | Node tests | `test_outline`, `test_pitch_3d`, and `test_9dir`: 47 passed, 0 failed |
 | Attachments | 200 pose/mesh cases passed; no collapsed 3D triangles or inverted flat-artwork ribbons |
-| Outline raster | One PASS on the fitted face; no interior holes, cheek-ear gaps, forehead intrusion, or far-back exposure |
+| Outline raster | Final post-culling run: 14 yaw/gain poses; zero interior holes, cheek-ear gaps, forehead intrusion, and far-back exposure |
 | Viewer | One final PASS: 972 canopy samples with zero error; 72 attachment poses with zero flat-mesh folds; face-mask 3D area ratio 0.556 minimum; WebGL, console, request, neck clipping, feature clipping, and narrow-layout checks pass |
 
 The face mask has 40 screen-projected back-facing triangles across the viewer’s tested poses. Their 3D area remains intact; the validator records them separately from flat-mesh folds, and WebGL culls their backs in the face, neck-mask, and silhouette passes. All 1,176 source face triangles use the configured CW front winding. The final post-culling 9-direction sheet was opened and inspected. `up` retains a rounded U-shaped jaw without a lateral cheek bulge, and `down` keeps the mouth-side jaw width while shortening the lower face. The `left`, `front`, and `right` pitch-zero tiles are pixel-identical to the prior PR capture.
