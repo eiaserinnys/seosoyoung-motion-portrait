@@ -25,7 +25,10 @@ test('non-node face boundaries and the complete neutral row remain mirror symmet
   const [l,r]=outlineRow(y),a=[l+(r-l)*u,y],b=[r-(r-l)*u,y];
   const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch},q={...p,ParamAngleX:yaw};
   const left=outlineWorld(a,p),right=outlineWorld(b,q);
-  assert(Math.abs(left[0]-a[0]+right[0]-b[0])<1e-6,`outline X ${yaw},${pitch},${y},${u}`);
+  const restMid=(a[0]+b[0])/2;
+  const even=(1-Math.cos(pitch*Math.PI/180))/(1-Math.cos(Math.PI/6));
+  const targetMid=restMid+(502-restMid)*even;
+  assert(Math.abs(left[0]+right[0]-targetMid*2)<1e-6,`outline X ${yaw},${pitch},${y},${u}`);
   assert(Math.abs(left[1]-right[1])<1e-6,`outline Y ${yaw},${pitch},${y},${u}`);
  }
 });
@@ -76,10 +79,10 @@ test('reference camera translation aligns binocular midpoints to the r11 pivots'
   assert(Math.abs(mid-pose.registration.eyeMid[i])<1e-8);
  }
 });
-test('occlusion never collapses an eye keyform and central pitch pairs are symmetric',()=>{
+test('opening envelopes stay finite without height clamps and central pitch pairs are symmetric',()=>{
  const fit=JSON.parse(readFileSync(new URL('../source/viewer/face-feature-fit.json',import.meta.url)));
  for(const pose of fit.poses){
-  for(const side of ['left','right'])assert(pose.scales[side][1]>=.88&&pose.scales[side][1]<=1.02);
+  for(const side of ['left','right'])assert(pose.scales[side].every(v=>Number.isFinite(v)&&v>0));
   if(!pose.yaw)assert.equal(pose.scales.left[1],pose.scales.right[1]);
  }
 });

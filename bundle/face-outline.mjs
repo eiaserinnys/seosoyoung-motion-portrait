@@ -1,4 +1,4 @@
-import {HEAD_CENTER,artWorld,correctedLift,correction,clamp,radians} from './geometry.mjs';
+import {HEAD_CENTER,HEAD_RADIUS,artWorld,correctedLift,correction,clamp,radians} from './geometry.mjs';
 import {OUTLINE_ROWS,OUTLINE_POSES} from './outline-data.mjs';
 import {gridValue,frameValue,FRAME_CACHE} from './pose-grid.mjs';
 import {faceDepthAt,faceDepthEdgeAt} from './face-depth.mjs';
@@ -40,6 +40,12 @@ function legacyOutline(point,world,p){
  return [world[0]+shift*Math.cos(roll)-dy*Math.sin(roll),world[1]+shift*Math.sin(roll)+dy*Math.cos(roll),world[2]];
 }
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+const longitude=u=>Math.asin(clamp(2*u-1,-1,1));
+const latitude=(y,p)=>Math.asin(clamp((y-HEAD_CENTER[1])/(HEAD_RADIUS*correction(p,'CorrVertical')),-1,1));
+const sphereEase=(a,a0,a1)=>(1-Math.cos(clamp((a-a0)/Math.max(1e-6,a1-a0),0,1)*Math.PI))*.5;
+// Across the full hemisphere this equals u; share it so anchor subtraction
+// and the applied rim field use exactly the same spherical weight.
+const wLon=u=>sphereEase(longitude(u),-Math.PI/2,Math.PI/2);
 function targetRow(pose,y){
  const rows=pose.rows;
  let i=0;while(i<rows.length-2&&y>rows[i+1][0])i++;
@@ -75,6 +81,7 @@ function symmetricFace(point,p,relief=0){
 }
 const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
 const basePt=(pt,p)=>legacyOutline(pt,symmetricBase(pt,p),p);
+export {basePt as outlinePriorWorld};
 const facePt=(pt,p)=>legacyOutline(pt,symmetricFace(pt,p),p);
 function edgeAt(edges,y){
  let i=0;while(i<edges.length-2&&y>edges[i+1].y)i++;
@@ -104,7 +111,7 @@ function faceField(p){
    const f=featureWorld(featureIds[key],anchor,unrolled),b=basePt(anchor,unrolled);
    const f0=featureWorld(featureIds[key],anchor,neutral),b0=basePt(anchor,neutral);
    const residual=[0,1].map(i=>f[i]-b[i]-f0[i]+b0[i]);
-   controls.push([u,residual.map((v,i)=>v-mix(edge[0],edge[1],u)[i])]);
+   controls.push([u,residual.map((v,i)=>v-mix(edge[0],edge[1],wLon(u))[i])]);
   }
   controls.push([1,[0,0]]);controls.sort((a,b)=>a[0]-b[0]);
   return {y,controls};
@@ -112,8 +119,19 @@ function faceField(p){
  return {edges,bands};
 }
 function interiorAt(band,u){
- const c=band.controls;let i=0;while(i<c.length-2&&u>c[i+1][0])i++;
- return mix(c[i][1],c[i+1][1],clamp((u-c[i][0])/(c[i+1][0]-c[i][0]),0,1));
+ if(band.controls.length<=2)return [0,0];
+ const lambda=longitude(u),halfPi=Math.PI/2;
+ const c=band.controls.slice(1,-1).map(([at,value])=>[longitude(at),value]);
+ if(lambda<=c[0][0]){
+  const w=Math.sin((lambda+halfPi)/Math.max(1e-6,c[0][0]+halfPi)*halfPi);
+  return c[0][1].map(v=>v*w);
+ }
+ if(lambda>=c.at(-1)[0]){
+  const w=Math.sin((halfPi-lambda)/Math.max(1e-6,halfPi-c.at(-1)[0])*halfPi);
+  return c.at(-1)[1].map(v=>v*w);
+ }
+ let i=0;while(i<c.length-2&&lambda>c[i+1][0])i++;
+ return mix(c[i][1],c[i+1][1],sphereEase(lambda,c[i][0],c[i+1][0]));
 }
 // A single residual field joins measured edges and all six internal landmarks.
 export function outlinePitchShift(point,p){
@@ -123,8 +141,8 @@ export function outlinePitchShift(point,p){
  const [l,r]=outlineRow(point[1]),u=clamp((point[0]-l)/(r-l),0,1);
  const edge=edgeAt(edges,point[1]);
  let i=0;while(i<bands.length-2&&point[1]>bands[i+1].y)i++;
- const a=bands[i],b=bands[i+1],t=smooth((point[1]-a.y)/(b.y-a.y));
- const residual=mix(edge[0],edge[1],u),interior=mix(interiorAt(a,u),interiorAt(b,u),t);
+ const a=bands[i],b=bands[i+1],t=sphereEase(latitude(point[1],p),latitude(a.y,p),latitude(b.y,p));
+ const residual=mix(edge[0],edge[1],wLon(u)),interior=mix(interiorAt(a,u),interiorAt(b,u),t);
  // Fade only above the brow band; every measured cheek endpoint has full weight.
  const fade=smooth((point[1]-218)/(347-218));
  const dx=(residual[0]+interior[0])*weight*fade,dy=(residual[1]+interior[1])*weight*fade;
