@@ -156,7 +156,7 @@
     }
   ],
   "surfaceComparison": {
-    "changedPixels": 38496
+    "changedPixels": 38684
   },
   "geometry": {
     "radiusError": 1.7053025658242404e-13,
@@ -172,6 +172,8 @@
   "attachment": {
     "maxFolded": 0,
     "maxCulledBackFaces": 519,
+    "faceMaskProjectedBackFaces": 0,
+    "faceMaskMinAreaRatio": 0.588351341802907,
     "cases": 72,
     "effectiveAutoAngles": [
       32.5,
@@ -256,7 +258,7 @@
         {
           "point": [
             480.7857142857143,
-            494.8199581758972,
+            497.94831609326104,
             -20
           ],
           "coverAlpha": 255
@@ -264,7 +266,7 @@
         {
           "point": [
             502,
-            494.8199581758972,
+            497.94831609326104,
             -20
           ],
           "coverAlpha": 255
@@ -272,7 +274,7 @@
         {
           "point": [
             522.8928571428571,
-            494.8199581758972,
+            497.94831609326104,
             -20
           ],
           "coverAlpha": 255
@@ -289,7 +291,7 @@
         {
           "point": [
             480.7857142857143,
-            537.8389269033728,
+            531.723259457874,
             -20
           ],
           "coverAlpha": 255
@@ -297,7 +299,7 @@
         {
           "point": [
             502,
-            537.8389269033728,
+            531.723259457874,
             -20
           ],
           "coverAlpha": 255
@@ -305,7 +307,7 @@
         {
           "point": [
             522.8928571428571,
-            537.8389269033728,
+            531.723259457874,
             -20
           ],
           "coverAlpha": 255
@@ -321,24 +323,24 @@
       "points": [
         {
           "point": [
-            474.1225576673147,
-            543.8803252340572,
+            472.4682297996493,
+            537.2451785646076,
             -20
           ],
           "coverAlpha": 255
         },
         {
           "point": [
-            494.70668843188406,
-            538.7481250202642,
+            493.05236056421865,
+            532.1129783508146,
             -20
           ],
           "coverAlpha": 255
         },
         {
           "point": [
-            514.9789384272932,
-            533.6936854157713,
+            513.3246105596278,
+            527.0585387463217,
             -20
           ],
           "coverAlpha": 255
@@ -354,24 +356,24 @@
       "points": [
         {
           "point": [
-            499.1885340867558,
-            491.58553446238955,
+            498.1703044547634,
+            495.6694304563459,
             -20
           ],
           "coverAlpha": 255
         },
         {
           "point": [
-            519.7726648513252,
-            496.71773467618243,
+            518.7544352193328,
+            500.80163067013876,
             -20
           ],
           "coverAlpha": 255
         },
         {
           "point": [
-            540.0449148467344,
-            501.7721742806756,
+            539.026685214742,
+            505.8560702746319,
             -20
           ],
           "coverAlpha": 255
@@ -1508,7 +1510,7 @@
       ],
       "gain": 0.65,
       "id": "ear-left",
-      "pixels": 322
+      "pixels": 335
     },
     {
       "pose": [
@@ -1518,7 +1520,7 @@
       ],
       "gain": 0.65,
       "id": "ear-right",
-      "pixels": 255
+      "pixels": 261
     },
     {
       "pose": [
@@ -1548,7 +1550,7 @@
       ],
       "gain": 0.65,
       "id": "tail-left-tie",
-      "pixels": 714
+      "pixels": 717
     },
     {
       "pose": [
@@ -1558,7 +1560,7 @@
       ],
       "gain": 0.65,
       "id": "tail-right-tie",
-      "pixels": 677
+      "pixels": 674
     },
     {
       "pose": [
@@ -1598,7 +1600,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-sclera",
-      "pixels": 199
+      "pixels": 197
     },
     {
       "pose": [
@@ -1658,7 +1660,7 @@
       ],
       "gain": 0.65,
       "id": "ear-right",
-      "pixels": 158
+      "pixels": 157
     },
     {
       "pose": [
@@ -1678,7 +1680,7 @@
       ],
       "gain": 0.65,
       "id": "nose-detail",
-      "pixels": 28
+      "pixels": 27
     },
     {
       "pose": [
@@ -1688,7 +1690,7 @@
       ],
       "gain": 0.65,
       "id": "tail-left-tie",
-      "pixels": 500
+      "pixels": 496
     },
     {
       "pose": [
@@ -1698,7 +1700,7 @@
       ],
       "gain": 0.65,
       "id": "tail-right-tie",
-      "pixels": 528
+      "pixels": 530
     },
     {
       "pose": [
@@ -1708,7 +1710,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-upper-lashes",
-      "pixels": 282
+      "pixels": 281
     },
     {
       "pose": [
@@ -1798,7 +1800,7 @@
       ],
       "gain": 0.65,
       "id": "ear-right",
-      "pixels": 351
+      "pixels": 344
     },
     {
       "pose": [
@@ -1828,7 +1830,7 @@
       ],
       "gain": 0.65,
       "id": "tail-left-tie",
-      "pixels": 284
+      "pixels": 308
     },
     {
       "pose": [
@@ -1848,7 +1850,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-upper-lashes",
-      "pixels": 218
+      "pixels": 183
     },
     {
       "pose": [
@@ -1858,7 +1860,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-lower-line",
-      "pixels": 28
+      "pixels": 27
     },
     {
       "pose": [
@@ -1868,7 +1870,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-brow",
-      "pixels": 32
+      "pixels": 30
     },
     {
       "pose": [
@@ -1878,7 +1880,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-sclera",
-      "pixels": 143
+      "pixels": 145
     },
     {
       "pose": [
@@ -1888,7 +1890,7 @@
       ],
       "gain": 0.65,
       "id": "eye-right-upper-lashes",
-      "pixels": 283
+      "pixels": 285
     },
     {
       "pose": [
@@ -1908,7 +1910,7 @@
       ],
       "gain": 0.65,
       "id": "eye-right-brow",
-      "pixels": 31
+      "pixels": 32
     },
     {
       "pose": [
@@ -1928,7 +1930,7 @@
       ],
       "gain": 0.65,
       "id": "ear-left",
-      "pixels": 670
+      "pixels": 677
     },
     {
       "pose": [
@@ -1988,7 +1990,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-upper-lashes",
-      "pixels": 335
+      "pixels": 319
     },
     {
       "pose": [
@@ -2008,7 +2010,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-brow",
-      "pixels": 37
+      "pixels": 45
     },
     {
       "pose": [
@@ -2018,7 +2020,7 @@
       ],
       "gain": 0.65,
       "id": "eye-left-sclera",
-      "pixels": 233
+      "pixels": 234
     },
     {
       "pose": [
@@ -2028,7 +2030,7 @@
       ],
       "gain": 0.65,
       "id": "eye-right-upper-lashes",
-      "pixels": 210
+      "pixels": 201
     },
     {
       "pose": [
@@ -2058,7 +2060,7 @@
       ],
       "gain": 0.65,
       "id": "eye-right-sclera",
-      "pixels": 167
+      "pixels": 168
     },
     {
       "pose": [
@@ -2485,7 +2487,7 @@
       "crownPixels": 2414,
       "earPixels": [
         167,
-        158
+        157
       ],
       "hairBounds": [
         276,
@@ -2502,14 +2504,14 @@
       ],
       "crownPixels": 2004,
       "earPixels": [
-        322,
-        255
+        335,
+        261
       ],
       "hairBounds": [
         276,
         18,
         480,
-        213
+        216
       ],
       "hairWidth": 205
     }

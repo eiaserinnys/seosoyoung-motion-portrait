@@ -67,7 +67,7 @@ export class Renderer {
       gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);
       gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
       const side=p.ParamAngleX<0?'left':'right';
-      for(const id of ['face-skin','side-hair-'+side]){if(id.startsWith('side-hair'))gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id===id),p,1);gl.disable(gl.CULL_FACE);}
+      for(const id of ['face-skin','side-hair-'+side]){gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id===id),p,1);gl.disable(gl.CULL_FACE);}
       gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);
     }
     if(!state.surfaceOnly)for(const mesh of this.rig.meshes.filter(background).sort((a,b)=>Number(!a.id.startsWith('side-cranium'))-Number(!b.id.startsWith('side-cranium')))){
@@ -75,7 +75,7 @@ export class Renderer {
       if(!visible(mesh))continue;
       if(mesh.id==='neck'){
         gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-        this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);
+        gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);gl.disable(gl.CULL_FACE);
         gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);
       }
       if(mesh.id.startsWith('ear-')){gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
@@ -112,7 +112,7 @@ export class Renderer {
       }else if(mesh.id.startsWith('side-hair')){gl.enable(gl.DEPTH_TEST);gl.depthMask(false);}
       else if(frontHair(mesh)||mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-')){gl.disable(gl.DEPTH_TEST);gl.depthMask(false);}
       else{gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
-      if(frontHair(mesh))gl.enable(gl.CULL_FACE);else gl.disable(gl.CULL_FACE);
+      if(frontHair(mesh)||mesh.id==='face-skin')gl.enable(gl.CULL_FACE);else gl.disable(gl.CULL_FACE);
       wire(mesh,this.draw(mesh,p,alpha,{clip:mesh.masks.length>0,tint:state.masks&&mesh.id.endsWith('sclera')}));
     }
     gl.depthMask(true);gl.disable(gl.CULL_FACE);gl.disable(gl.DEPTH_TEST);

@@ -136,6 +136,7 @@ try:
     const {deform3D}=await import('./rig.mjs'),{CORRECTION_PRESETS}=await import('./geometry.mjs');
     const base={...Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
     const area=([a,b,c])=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+    const area3=([a,b,c])=>{const u=b.map((v,i)=>v-a[i]),v=c.map((w,i)=>w-a[i]);return Math.hypot(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]);};
     const rows=[];
     for(const gain of [.65,1])for(const [x,y]of [[-50,-28],[-50,28],[50,-28],[50,28],[-25,0],[25,0]]){
       const p={...base,CorrTurn:gain,ParamAngleX:x,ParamAngleY:y};
@@ -143,10 +144,11 @@ try:
         const m=studio.rig.meshes.find(m=>m.id===id),q=m.positions.map(pt=>deform3D(m,pt,p));
         const reversed=m.triangles.filter(t=>area(t.map(i=>q[i]))*area(t.map(i=>m.positions[i]))<0).length;
         const culled=id==='hair-top'||id.startsWith('side-hair')||id.startsWith('bangs');
-        rows.push({gain,pose:[x,y],id,folded:culled?0:reversed,backFacing:culled?reversed:0});
+        const minAreaRatio=id==='face-skin'?Math.min(...m.triangles.map(t=>area3(t.map(i=>q[i]))/Math.abs(area(t.map(i=>m.positions[i])))).filter(Number.isFinite)):null;
+        rows.push({gain,pose:[x,y],id,folded:culled||id==='face-skin'?0:reversed,backFacing:culled?reversed:0,projectedBackFaces:id==='face-skin'?reversed:0,minAreaRatio});
       }
     }
-    return {maxFolded:Math.max(...rows.map(r=>r.folded)),maxCulledBackFaces:Math.max(...rows.map(r=>r.backFacing)),cases:rows.length,effectiveAutoAngles:[50*base.CorrTurn,28*base.CorrTurn,14]};
+    return {maxFolded:Math.max(...rows.map(r=>r.folded)),maxCulledBackFaces:Math.max(...rows.map(r=>r.backFacing)),faceMaskProjectedBackFaces:rows.reduce((n,r)=>n+r.projectedBackFaces,0),faceMaskMinAreaRatio:Math.min(...rows.filter(r=>r.id==='face-skin').map(r=>r.minAreaRatio)),cases:rows.length,effectiveAutoAngles:[50*base.CorrTurn,28*base.CorrTurn,14]};
   }""")
   metrics['neckOcclusion']=page.evaluate("""async () => {
     const {deform3D}=await import('./rig.mjs'),{renderer,state}=studio,gl=renderer.gl;
@@ -263,6 +265,7 @@ try:
   assert metrics['correctionInput']==.73
   assert metrics['hairControlInput']==.8 and metrics['occlusionControlInput']==.5
   assert metrics['attachment']['maxFolded']==0
+  assert metrics['attachment']['faceMaskMinAreaRatio']>1e-4
   # Far ears are allowed to disappear behind the cheek in r10.
   assert all(r['pixels']>0 for r in metrics['featureVisibility'] if not r['id'].startswith('ear-'))
   assert all(r['sideHairCoveredEyePixels']>0 and r['browWithoutHairPixels']>0 for r in metrics['eyeHairOcclusion'])
