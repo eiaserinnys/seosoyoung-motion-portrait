@@ -2,7 +2,8 @@ import {strandWorld} from './side-strands.mjs';
 import {hairSurface,domeSection,craniumPosition} from './hair-surface.mjs';
 import {earWorld} from './stereo-attachments.mjs';
 import {outlinePitchShift} from './face-outline.mjs';
-import {HEAD_CENTER,clamp,correction,correctedLift,artWorld} from './geometry.mjs';
+import {HEAD_CENTER,HEAD_RADIUS,clamp,correction,correctedLift,artWorld} from './geometry.mjs';
+import {DOME} from './dome-data.mjs';
 
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 
@@ -21,7 +22,26 @@ export function hairLift(point,p,relief=0) {
  return [x-HEAD_CENTER[0],y-HEAD_CENTER[1],zDome+(smax(zDome,zFace+6)-zDome)*foreheadFade+relief];
 }
 const shellWorld=(point,p,relief=0)=>hairSurface(point,p,0,relief);
-const fringeSurface=(point,p)=>artWorld(hairLift(point,p,0),p);
+// Keep the yaw dome depth; pitch uses a pole-convergent upper arc so its
+// center does not sink below the rim when the head looks downward.
+export function pitchHairDepth(point,p,relief=0) {
+ const q=correctedLift(point,0,p),y=point[1];
+ if(y<310){
+  const t=clamp((y-(HEAD_CENTER[1]-HEAD_RADIUS))/246,0,1),dx=(point[0]-HEAD_CENTER[0])/DOME.rx;
+  const v=1-dx*dx-((y-DOME.cy)/DOME.ry)**2,upper=v>=.16?Math.sqrt(v):Math.max(0,.4+(v-.16)/.8);
+  q[2]=q[2]*smooth(t)+30*correction(p,'CorrHairDepth')*upper*Math.sin(Math.PI*t)**2;
+ }
+ return q[2]+relief;
+}
+export function fringeSurface(point,p,relief=0) {
+ const local=hairLift(point,p,relief);
+ if(!p.ParamAngleY)return artWorld(local,p);
+ const unrolled={...p,ParamAngleZ:0};
+ const a=artWorld(local,unrolled),b=artWorld([local[0],local[1],pitchHairDepth(point,p,relief)],unrolled);
+ const q=[a[0],b[1],a[2]];
+ if(!p.ParamAngleZ)return q;
+ return artWorld(q.map((v,i)=>v-(i<2?HEAD_CENTER[i]:0)),{...p,ParamAngleX:0,ParamAngleY:0});
+}
 // One coordinate field owns every overlapping front-hair pixel. Layer order
 // belongs to the renderer; it must never alter the rotated geometry.
 export function canopyWorld(point,p) {
@@ -44,11 +64,12 @@ export const craniumWeight=()=>1;
 export function craniumWorld([x,y,lambda],side,p) {
  const world=craniumPosition([x,y,lambda],p);
  const {cx,rx}=domeSection(y),sign=Math.sign(lambda)||(side==='left'?-1:1);
+ const edge=[HEAD_CENTER[0]+cx+sign*rx,y],horizonY=fringeSurface(edge,p)[1];
  const crownBlend=1-smooth((y-345)/35);
- if(!crownBlend)return world;
- const seam=canopyWorld([HEAD_CENTER[0]+cx+sign*rx,y],p);
- if(Math.abs(Math.abs(lambda)-Math.PI/2)<1e-4)return world.map((v,i)=>v+(seam[i]-v)*crownBlend);
- return [world[0],world[1]+(seam[1]-world[1])*crownBlend,world[2]];
+ if(!crownBlend)return [world[0],horizonY,world[2]];
+ const seam=canopyWorld(edge,p),yOut=horizonY+(seam[1]-horizonY)*crownBlend;
+ if(Math.abs(Math.abs(lambda)-Math.PI/2)<1e-4)return [world[0]+(seam[0]-world[0])*crownBlend,yOut,world[2]+(seam[2]-world[2])*crownBlend];
+ return [world[0],yOut,world[2]];
 }
 export function farSideWeight(side,p) {
   const angle=p.ParamAngleX*(side==='left'?-1:1);
@@ -75,6 +96,6 @@ export function backWorld(point,p) {
  if(!upper)return back;
  // Background is painted first, so the upper backing can share the dome
  // exactly. A depth-only inset opens a projected crack at the far temple.
- const canopy=artWorld(hairLift(point,p,0),p);
+ const canopy=fringeSurface(point,p,0);
  return back.map((v,i)=>v+(canopy[i]-v)*upper);
 }

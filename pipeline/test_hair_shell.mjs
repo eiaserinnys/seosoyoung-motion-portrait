@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
 import {domeSection,craniumPosition,craniumFacing} from '../bundle/hair-surface.mjs';
-import {hairLift,hairWorld,sideWorld,backWorld,craniumWorld} from '../bundle/hair-shell.mjs';
+import {hairLift,hairWorld,sideWorld,backWorld,craniumWorld,fringeSurface} from '../bundle/hair-shell.mjs';
 import {craniumWorld as exportedCranium} from '../bundle/cranium-surface.mjs';
 import './test_9dir.mjs';
 import './test_pitch_3d.mjs';
@@ -66,7 +66,7 @@ console.log(`PASS ${checks} hair shell and preserved face checks`);
 for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
  const p={...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch};
  for(const x of [300,400,502,600,700]){
-  for(const y of [60,180,245,300,350,380])near(backWorld([x,y],p),artWorld(hairLift([x,y],p,0),p));
+  for(const y of [60,180,245,300,350,380])near(backWorld([x,y],p),fringeSurface([x,y],p,0));
   for(const y of [245,350,380,465]){
    const a=backWorld([x,y-.001],p),b=backWorld([x,y+.001],p);
    assert(Math.hypot(...a.map((v,i)=>v-b[i]))<.1,'backing contains a depth step');

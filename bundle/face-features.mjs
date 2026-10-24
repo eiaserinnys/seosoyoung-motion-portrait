@@ -19,12 +19,11 @@ function legacyFeatureWorld(id,point,p,head=p){
    const rest={...p,ParamAngleX:0,ParamAngleY:0,ParamAngleZ:0};
    const q=eyeballVertex(point,side,id.split('-').at(-1),rest);x=q[0];y=q[1];
    const [ex0,ey0]=landmarks[side].front,u0=x-ex0,v0=y-ey0,r2=(u0*u0+v0*v0)/(42*42);
-   const zc=(id.endsWith('highlight')?13:10)*Math.sqrt(Math.max(.15,1-Math.min(.85,r2)));
+   const zc=(id.endsWith('highlight')?14:11)*Math.sqrt(Math.max(.15,1-Math.min(.85,r2)));
    const yawE=radians(clamp(head.ParamAngleX*correction(head,'CorrTurn'),-45,45))*.28;
-   const pitchE=radians(clamp(head.ParamAngleY*correction(head,'CorrTurn'),-30,30))*.65;
-   const z1=-u0*Math.sin(yawE)+zc*Math.cos(yawE);
-   x=ex0+u0*Math.cos(yawE)+zc*Math.sin(yawE);
-   y=ey0+v0*Math.cos(pitchE)-z1*Math.sin(pitchE);
+   const pitchE=radians(clamp(head.ParamAngleY*correction(head,'CorrTurn'),-30,30))*.85;
+   x=ex0+u0*Math.cos(yawE);
+   y=ey0+v0*Math.cos(pitchE)-zc*Math.sin(pitchE);
   }else if(id.endsWith('brow'))y-=(side==='left'?p.ParamBrowLY:p.ParamBrowRY)*12;
   else if(id!=='closed-eyes-v1')y=m.front[1]+(y-m.front[1])*(side==='left'?p.ParamEyeLOpen:p.ParamEyeROpen);
   const ratios=landmarks[side].width.map(v=>v<1?1+(v-1)*correction(p,'CorrFarEye')/.18:v);
@@ -50,21 +49,21 @@ export function featureWorld(id,point,p){
   // iris as the origin would cancel its head-driven roll inside the socket.
   const origin=legacyFeatureWorld(id,anchor,{...neutral,ParamAngleX:rest.ParamAngleX},neutral);
   const target=[0,1].map(i=>gridValue(FEATURE_FIT.poses,yaw,pitch,pose=>{
-   if(pose.pitch)return pose.centers[key][i];
+   if(pose.pitch&&(i===1||!eye))return pose.centers[key][i];
    return legacyFeatureWorld(id,anchor,{...neutral,CorrTurn:1,ParamAngleX:pose.yaw},neutral)[i];
   }));
   const scale=i=>eye?gridValue(FEATURE_FIT.poses,yaw,pitch,pose=>pose.scales[side][i]):1;
-  const width0=eye?gridValue(FEATURE_FIT.poses,yaw,0,pose=>pose.scales[side][0]):1;
-  return {center,origin,target,width:scale(0)/width0,height:brow?1:scale(1)};
+  return {center,origin,target,width:1,height:brow?1:scale(1)};
  });
  q[0]+=center[0]-origin[0];q[1]+=center[1]-origin[1];
  const sPhi=clamp(pitch/30,-1.2,1.2),theta=radians(clamp(yaw,-45,45));
  const xi=clamp((point[0]-anchor[0])/46,-1,1),eta=clamp((anchor[1]-point[1])/36,-1,1);
  const vScale=eye&&!brow?1-.08*sPhi*sPhi-.04*Math.max(0,-sPhi):1;
- const lidWeight=sPhi>=0?.55+.45*eta:.35+.65*eta;
- const archY=eye&&!brow&&!/-(iris|pupil|highlight)$/.test(id)?-5*sPhi*(1-xi*xi)*lidWeight:0;
+ const isBall=/-(iris|pupil|highlight)$/.test(id);
+ const lidWeight=isBall?(sPhi>=0?.55:.35):(sPhi>=0?.55+.45*eta:.35+.65*eta);
+ const archY=eye&&!brow?-5*sPhi*(1-xi*xi)*lidWeight:0;
  const dxLocal=(q[0]-center[0])*width;
- const diagTiltY=eye?-dxLocal*Math.sin(theta)*Math.sin(radians(pitch))*.32:0;
+ const diagTiltY=eye?dxLocal*Math.sin(theta)*Math.sin(radians(pitch))*.32:0;
  const featurePitchShiftY=id==='nose-detail'?-6*Math.max(0,sPhi)+4*Math.max(0,-sPhi):id.startsWith('mouth')?-12*Math.max(0,sPhi)+6*Math.max(0,-sPhi):0;
  const x=target[0]+dxLocal;
  const y=target[1]+featurePitchShiftY+(q[1]-center[1])*height*vScale+archY+diagTiltY;

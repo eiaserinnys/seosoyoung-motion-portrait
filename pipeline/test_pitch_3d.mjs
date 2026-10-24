@@ -2,10 +2,11 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
-import {CORRECTION_PRESETS,correctedLift} from '../bundle/geometry.mjs';
+import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
 import {outlineWorld,outlineRow,outlinePitchShift} from '../bundle/face-outline.mjs';
 import {featureWorld} from '../bundle/face-features.mjs';
-import {canopyWorld,craniumWorld} from '../bundle/hair-shell.mjs';
+import {canopyWorld,craniumWorld,hairLift} from '../bundle/hair-shell.mjs';
+import * as hairShell from '../bundle/hair-shell.mjs';
 import {domeSection,craniumPosition} from '../bundle/hair-surface.mjs';
 import {FEATURE_FIT} from '../bundle/feature-data.mjs';
 import {strandWorld} from '../bundle/side-strands.mjs';
@@ -51,6 +52,29 @@ test('r12 yaw-only face XYZ remains unchanged at all sampled rows and both gains
 test('crown has a round volumetric dome rather than a flattened pole ribbon',()=>{
  for(const [y,min] of [[80,85],[120,135],[160,165],[200,180]]){
   assert(canopyWorld([502,y],base)[2]>min,`crown y=${y}`);
+ }
+});
+test('pitch crown stays convex while yaw-only dome projection is unchanged',()=>{
+ for(const yaw of [-45,0,45])for(const y of [60,80,100,120,200,300]){
+  const {cx,rx}=domeSection(y),center=[502+cx,y],p=pose(yaw,0);
+  assert.deepEqual(hairShell.fringeSurface(center,p),artWorld(hairLift(center,p),p));
+  if(y<=120){
+   const down=pose(yaw,-30),mid=canopyWorld(center,down);
+   const sides=[-1,1].map(sign=>canopyWorld([502+cx+sign*rx,y],down)[1]);
+   // The frontal arc has at most 6px local curvature, replacing the old
+   // 60–100px depression. Diagonals stay above the far-side horizon.
+   assert(mid[1]<=Math.max(...sides)+(yaw?0:6),`crown depression ${yaw},${y}`);
+  }
+ }
+});
+test('rear shell horizon increases continuously through the lower crown',()=>{
+ for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const sign of [-1,1])for(const deg of [90,120,150,180]){
+  const p=pose(yaw,pitch),side=sign<0?'left':'right';let previous=-Infinity;
+  for(let y=60;y<=465;y++){
+   const q=craniumWorld([0,y,sign*deg*Math.PI/180],side,p);
+   assert(q[1]>=previous-1e-8,`rear horizon inversion ${yaw},${pitch},${sign},${deg},${y}`);previous=q[1];
+   if(y>=380){const {cx,rx}=domeSection(y);assert(Math.abs(q[1]-hairShell.fringeSurface([502+cx+sign*rx,y],p)[1])<1e-8);}
+  }
  }
 });
 test('upper canopy meets longitude 90 exactly while rear interior retains full volume',()=>{
@@ -110,7 +134,7 @@ test('socket shortens vertically and tilts along the diagonal latitude',()=>{
   for(const yaw of [-45,45])for(const pitch of [-30,30]){
    const p=pose(yaw,pitch),dy=featureWorld(id,[x+40,y],p)[1]-featureWorld(id,[x-40,y],p)[1];
    assert(Math.abs(dy)>5&&Math.abs(dy)<11,`socket slope ${side},${yaw},${pitch}: ${dy}`);
-   assert(Math.sign(dy)===-Math.sign(yaw*pitch));
+   assert(Math.sign(dy)===Math.sign(yaw*pitch));
   }
  }
 });
@@ -118,11 +142,24 @@ test('iris rotates inside its socket with head pitch and yaw and retains indepen
  for(const side of ['left','right']){
   const [x,y]=FEATURE_FIT.landmarks[side].front,id=`eye-${side}-iris`,socket=`eye-${side}-sclera`;
   const offset=p=>featureWorld(id,[x,y],p).map((v,i)=>v-featureWorld(socket,[x,y],p)[i]);
-  assert(offset(pose(0,30))[1]<-.1,'up iris rolls up relative to its arched socket');
-  assert(offset(pose(0,-30))[1]>.5,'down iris rolls down relative to its arched socket');
-  assert(offset(pose(-45,0))[0]<-1,'left iris rolls left');
-  assert(offset(pose(45,0))[0]>1,'right iris rolls right');
+  assert(offset(pose(0,30))[1]<-3.5,'up iris rolls up relative to its arched socket');
+  assert(offset(pose(0,-30))[1]>3.5,'down iris rolls down relative to its arched socket');
+  for(const yaw of [-45,45]){
+   assert(Math.abs(offset(pose(yaw,0))[0])<1e-6,'iris keeps its registered horizontal center');
+   const width=(id,p)=>featureWorld(id,[x+20,y],p)[0]-featureWorld(id,[x-20,y],p)[0];
+   assert(Math.abs(width(id,pose(yaw,0))/width(socket,pose(yaw,0))-Math.cos(yaw*Math.PI/180*.28))<1e-8,'corneal width foreshortens around the registered center');
+  }
   assert.notDeepEqual(featureWorld(id,[x,y],{...pose(45,30),ParamEyeBallX:1}),featureWorld(id,[x,y],pose(45,30)));
+ }
+});
+test('near upper lash stays inside the face skin under downward diagonals',()=>{
+ const face=rig.meshes.find(m=>m.id==='face-skin');
+ const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+ // Opaque upper-arc samples (source alpha >200), rather than the outer
+ // wisps covered by the temple hair in the final composition.
+ for(const [yaw,side,point] of [[-45,'right',[639,397]],[45,'left',[376,390]]]){
+  const p=pose(yaw,-30),tip=featureWorld(`eye-${side}-upper-lashes`,point,p),skin=face.positions.map(pt=>outlineWorld(pt,p));
+  assert(face.triangles.some(t=>{const [a,b,c]=t.map(i=>skin[i]),s=[cross(a,b,tip),cross(b,c,tip),cross(c,a,tip)];return s.every(v=>v>=-1e-6)||s.every(v=>v<=1e-6);}),`near lash outside skin ${yaw}`);
  }
 });
 test('neck top tracks chin pitch displacement while body attachment stays fixed',()=>{
