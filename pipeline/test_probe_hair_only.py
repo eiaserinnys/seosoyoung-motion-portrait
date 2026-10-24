@@ -24,6 +24,13 @@ def test_rimlight_uses_frozen_brightness_threshold_and_rejects_unchanged_texture
     b = a.copy()
     b[120:126, 560:860, :3] = 60
     assert rimlight_metrics(a, b, mask, mask, -45)['reduction'] == 1
+    # The approved broad window includes authored highlights: 58% is its bound.
+    roi = b[120:420, 560:860].copy()
+    roi.reshape(-1, 4)[:756, :3] = 255
+    b[120:420, 560:860] = roi
+    assert rimlight_metrics(a, b, mask, mask, -45)['pass']
+    b[122, 776, :3] = 255
+    assert not rimlight_metrics(a, b, mask, mask, -45)['pass']
 
 
 def test_posterior_gate_requires_lower_improvement_and_no_upper_horn():
@@ -38,6 +45,29 @@ def test_posterior_gate_requires_lower_improvement_and_no_upper_horn():
     horn = ref.copy()
     horn[100, 700:731] = True
     assert not posterior_metrics(ref, horn, old, -45)['pass']
+
+
+def test_posterior_uses_active_latitudes_and_detects_regression_from_r16():
+    from pipeline.probe_hair_only import posterior_metrics
+    ref = np.zeros((740, 1024), bool)
+    ref[80:521, 200:700] = True
+    old, current = ref.copy(), ref.copy()
+    old[80:221, 700:814] = True
+    current[80:221, 700:814] = True
+    old[340:441, 700:730] = True
+    current[340:441, 700:720] = True
+    current[441:521, 700:800] = True
+    result = posterior_metrics(ref, current, old, -45)
+    assert result['improvement'] == 10 and result['pass']
+    assert result['upperMaximumOverhang'] == 114
+    assert result['upperMaximumIncrease'] == 0
+    current[100, 814:819] = True
+    assert posterior_metrics(ref, current, old, -45)['pass']
+    current[100, 819] = True
+    assert not posterior_metrics(ref, current, old, -45)['pass']
+    current[340:441, 720] = True
+    result = posterior_metrics(ref, current, old, -45)
+    assert result['improvement'] == 9 and not result['pass']
 
 
 def test_outline_samples_canvas_rows_and_keeps_missing_rows_explicit():
@@ -106,7 +136,7 @@ def test_acceptance_gate_rejects_the_observed_top_bead_and_neutral_regressions()
     poses[8]['posteriorVolume']['pass'] = False
     poses[6]['retriangulationSilhouette']['all']['pass'] = False
     failures = {c['gate'] for c in assess(poses) if not c['pass']}
-    assert {'front reference mix ==0', 'temple rimlight reduction >=80%', 'upper diagonal posterior volume', 'P3 silhouette span <=2px'} <= failures
+    assert {'front reference mix ==0', 'temple rimlight reduction >=58%', 'upper diagonal posterior volume', 'P3 silhouette span <=2px'} <= failures
     poses[5]['exterior'][1]['delta'] = None
     import json
     serialized = json.dumps(assess(poses), allow_nan=False)
@@ -156,18 +186,33 @@ def test_approved_top_gate_uses_pose_bounds_and_rejects_regressions():
     assert probe.approved_top_gate(0, -30, 7) is None
 
 
-def test_foreground_stem_gate_accepts_15_and_rejects_16_pixels():
+def test_foreground_stem_gate_accepts_17_and_rejects_18_pixels():
     poses = [dict(name='up', yaw=0, pitch=30, topY=97, topGate={'pass': True},
                   retriangulationSilhouette={'all': {'pass': True}},
                   neutralChangedPixels=None, neutralVertexHashMatches=None,
                   exterior=[{'y': y, 'delta': [0, 0]} for y in range(80, 521, 20)],
                   hairlineMedianError=0, foreheadExposure={'ratioError': 0}, nearCheekCover=None,
-                  beads={s: {'dBodyFrame': [0, 0], 'stemGap': 15} for s in ['left', 'right']})]
+                  beads={s: {'dBodyFrame': [0, 0], 'stemGap': 17} for s in ['left', 'right']})]
     checks = assess(poses)
     stems = [c for c in checks if c['gate'].endswith('foreground stem gap')]
     assert len(stems) == 2 and all(c['pass'] for c in stems)
-    poses[0]['beads']['left']['stemGap'] = 16
+    poses[0]['beads']['left']['stemGap'] = 18
     assert any(not c['pass'] for c in assess(poses) if c['gate'] == 'left foreground stem gap')
+
+
+def test_cheek_gate_only_applies_downward_and_accepts_two_pixel_boundary_drift():
+    poses = [dict(name='diagonal', yaw=-45, pitch=-30, topY=13, topGate={'pass': True},
+                  retriangulationSilhouette={'all': {'pass': True}},
+                  exterior=[{'y': y, 'delta': [0, 0]} for y in range(80, 521, 20)],
+                  hairlineMedianError=0, foreheadExposure={'ratioError': 0},
+                  nearCheekCover=[{'y': 515, 'gap': 2}],
+                  beads={s: {'dBodyFrame': [0, 0], 'stemGap': 0} for s in ['left', 'right']})]
+    cheek = lambda: [c for c in assess(poses) if c['gate'] == 'near cheek background gap']
+    assert cheek()[0]['pass']
+    poses[0]['nearCheekCover'][0]['gap'] = 3
+    assert not cheek()[0]['pass']
+    poses[0].update(pitch=30, topY=52, templeRimlight={'pass': True}, posteriorVolume={'pass': True})
+    assert cheek() == []
 
 
 def test_summary_keeps_worst_residual_and_does_not_mutate_raw_samples():

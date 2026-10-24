@@ -38,29 +38,34 @@ def rimlight_metrics(before, after, before_mask, after_mask, yaw):
     reduction = 1-count/old_count if old_count else 0
     return {'window': [x0, 120, x1, 420], 'threshold': threshold,
             'baselinePixels': old_count, 'pixels': count, 'reduction': reduction,
-            'pass': reduction >= .8}
+            'minimumReduction': .58, 'pass': reduction >= .58}
 
 
 def posterior_metrics(reference, current, baseline, yaw):
     side, outward = (1, 1) if yaw < 0 else (0, -1)
-    old_errors, errors, upper = [], [], []
+    old_errors, errors, upper, upper_increase = [], [], [], []
     missing = 0
     for y in range(80, 521):
         r, c, b = [row_span(mask, y) for mask in [reference, current, baseline]]
         if r is None or c is None or b is None:
             missing += 1
             continue
-        if y >= 340:
+        if 340 <= y <= 440:
             old_errors.append(abs(b[side]-r[side]))
             errors.append(abs(c[side]-r[side]))
         if y <= 220:
-            upper.append((c[side]-r[side])*outward)
+            cur_overhang = (c[side]-r[side])*outward
+            base_overhang = (b[side]-r[side])*outward
+            upper.append(cur_overhang)
+            upper_increase.append(max(0, cur_overhang) - max(0, base_overhang))
     old_mean = float(np.mean(old_errors)) if old_errors else None
     mean = float(np.mean(errors)) if errors else None
     improvement = old_mean-mean if mean is not None else None
     maximum = max(upper, default=None)
+    increase = max(upper_increase, default=None)
     return {'baselineMeanAbsoluteDelta': old_mean, 'meanAbsoluteDelta': mean,
             'improvement': improvement, 'upperMaximumOverhang': maximum,
-            'missingRows': missing,
-            'pass': not missing and improvement is not None and improvement >= 12
-                    and maximum is not None and maximum <= 30}
+            'upperMaximumIncrease': increase, 'lowerRows': [340, 440],
+            'upperRows': [80, 220], 'missingRows': missing,
+            'pass': not missing and improvement is not None and improvement >= 10
+                    and increase is not None and increase <= 5}

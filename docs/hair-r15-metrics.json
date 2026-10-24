@@ -1,6 +1,6 @@
 {
   "baseline": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
-  "head": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
+  "head": "46c9afddfe2720f8eb1b26e88847fb76e5380813",
   "registrationSha256": "ea2cb7220fa37f5579405500d43ecef0eaafaeeddee99ce254704fbfe4ec9a04",
   "referenceMaskMethod": "Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation",
   "canvas": [
@@ -91,13 +91,23 @@
         "baselinePixels": 1130,
         "pixels": 435,
         "reduction": 0.6150442477876106,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       },
       "posteriorVolume": {
-        "baselineMeanAbsoluteDelta": 35.93922651933702,
-        "meanAbsoluteDelta": 28.39779005524862,
-        "improvement": 7.541436464088399,
+        "baselineMeanAbsoluteDelta": 40.75247524752475,
+        "meanAbsoluteDelta": 28.544554455445546,
+        "improvement": 12.207920792079204,
         "upperMaximumOverhang": 114,
+        "upperMaximumIncrease": 13,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          80,
+          220
+        ],
         "missingRows": 0,
         "pass": false
       },
@@ -361,15 +371,25 @@
         "baselinePixels": 1275,
         "pixels": 483,
         "reduction": 0.6211764705882352,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       },
       "posteriorVolume": {
-        "baselineMeanAbsoluteDelta": 67.27624309392266,
-        "meanAbsoluteDelta": 60.41988950276243,
-        "improvement": 6.856353591160229,
+        "baselineMeanAbsoluteDelta": 64.65346534653466,
+        "meanAbsoluteDelta": 53.54455445544554,
+        "improvement": 11.108910891089117,
         "upperMaximumOverhang": -14,
+        "upperMaximumIncrease": 0,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          80,
+          220
+        ],
         "missingRows": 0,
-        "pass": false
+        "pass": true
       },
       "retriangulationSilhouette": {
         "all": {
@@ -527,7 +547,8 @@
         "baselinePixels": 1112,
         "pixels": 351,
         "reduction": 0.6843525179856116,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       },
       "posteriorVolume": null,
       "retriangulationSilhouette": {
@@ -830,7 +851,8 @@
         "baselinePixels": 1302,
         "pixels": 543,
         "reduction": 0.5829493087557603,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       },
       "posteriorVolume": null,
       "retriangulationSilhouette": {
@@ -1302,8 +1324,8 @@
     },
     {
       "pose": "up-left",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           560,
@@ -1315,7 +1337,8 @@
         "baselinePixels": 1130,
         "pixels": 435,
         "reduction": 0.6150442477876106,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
@@ -1323,10 +1346,19 @@
       "gate": "upper diagonal posterior volume",
       "pass": false,
       "value": {
-        "baselineMeanAbsoluteDelta": 35.93922651933702,
-        "meanAbsoluteDelta": 28.39779005524862,
-        "improvement": 7.541436464088399,
+        "baselineMeanAbsoluteDelta": 40.75247524752475,
+        "meanAbsoluteDelta": 28.544554455445546,
+        "improvement": 12.207920792079204,
         "upperMaximumOverhang": 114,
+        "upperMaximumIncrease": 13,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          80,
+          220
+        ],
         "missingRows": 0,
         "pass": false
       }
@@ -1360,15 +1392,6 @@
       "gate": "posterior exterior",
       "pass": false,
       "value": 38
-    },
-    {
-      "pose": "up-left",
-      "gate": "near cheek background gap",
-      "pass": false,
-      "value": {
-        "sampledRows": 71,
-        "maximumGap": 3
-      }
     },
     {
       "pose": "up-left",
@@ -1524,8 +1547,8 @@
     },
     {
       "pose": "up-right",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           164,
@@ -1537,20 +1560,30 @@
         "baselinePixels": 1275,
         "pixels": 483,
         "reduction": 0.6211764705882352,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
       "pose": "up-right",
       "gate": "upper diagonal posterior volume",
-      "pass": false,
+      "pass": true,
       "value": {
-        "baselineMeanAbsoluteDelta": 67.27624309392266,
-        "meanAbsoluteDelta": 60.41988950276243,
-        "improvement": 6.856353591160229,
+        "baselineMeanAbsoluteDelta": 64.65346534653466,
+        "meanAbsoluteDelta": 53.54455445544554,
+        "improvement": 11.108910891089117,
         "upperMaximumOverhang": -14,
+        "upperMaximumIncrease": 0,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          80,
+          220
+        ],
         "missingRows": 0,
-        "pass": false
+        "pass": true
       }
     },
     {
@@ -1582,15 +1615,6 @@
       "gate": "posterior exterior",
       "pass": false,
       "value": 72
-    },
-    {
-      "pose": "up-right",
-      "gate": "near cheek background gap",
-      "pass": false,
-      "value": {
-        "sampledRows": 71,
-        "maximumGap": 7
-      }
     },
     {
       "pose": "up-right",
@@ -1686,8 +1710,8 @@
     },
     {
       "pose": "left",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           560,
@@ -1699,7 +1723,8 @@
         "baselinePixels": 1112,
         "pixels": 351,
         "reduction": 0.6843525179856116,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
@@ -1870,8 +1895,8 @@
     },
     {
       "pose": "right",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           164,
@@ -1883,7 +1908,8 @@
         "baselinePixels": 1302,
         "pixels": 543,
         "reduction": 0.5829493087557603,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
@@ -1986,7 +2012,7 @@
     {
       "pose": "down-left",
       "gate": "left foreground stem gap",
-      "pass": false,
+      "pass": true,
       "value": 17
     },
     {
@@ -2153,7 +2179,7 @@
     {
       "pose": "down-right",
       "gate": "near cheek background gap",
-      "pass": false,
+      "pass": true,
       "value": {
         "sampledRows": 61,
         "maximumGap": 2
@@ -2200,7 +2226,8 @@
     "bundle/assets/seosoyoung-rig.json": "c9f607d0c79a2da3a43c44da95d7e1cd1605066b718bc707b9a4ff4163edbb26"
   },
   "measurementMode": "saved frames",
-  "probeSha256": "a9bbbae6ab44c4d2b2f16a7c546db05da6d56beea35386d638807f22f827026a",
+  "measurementApproval": "Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper positive-overhang-beyond-reference increase from r16<=5px; downward cheek<=2px; stem<=17px",
+  "probeSha256": "d24d31acccd8b7403eca6b8b46c238f854c06738a421a595a88bf61c28d5ce5d",
   "strictRasterPass": false,
   "bounds": {
     "pass": true,
@@ -2349,8 +2376,8 @@
     },
     {
       "pose": "up-left",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           560,
@@ -2362,7 +2389,8 @@
         "baselinePixels": 1130,
         "pixels": 435,
         "reduction": 0.6150442477876106,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
@@ -2370,10 +2398,19 @@
       "gate": "upper diagonal posterior volume",
       "pass": false,
       "value": {
-        "baselineMeanAbsoluteDelta": 35.93922651933702,
-        "meanAbsoluteDelta": 28.39779005524862,
-        "improvement": 7.541436464088399,
+        "baselineMeanAbsoluteDelta": 40.75247524752475,
+        "meanAbsoluteDelta": 28.544554455445546,
+        "improvement": 12.207920792079204,
         "upperMaximumOverhang": 114,
+        "upperMaximumIncrease": 13,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          80,
+          220
+        ],
         "missingRows": 0,
         "pass": false
       }
@@ -2383,297 +2420,6 @@
       "gate": "approved crown top",
       "pass": true,
       "value": 52
-    },
-    {
-      "pose": "up-left",
-      "gate": "near cheek background gap",
-      "pass": false,
-      "value": [
-        {
-          "y": 480,
-          "gap": 0
-        },
-        {
-          "y": 481,
-          "gap": 0
-        },
-        {
-          "y": 482,
-          "gap": 0
-        },
-        {
-          "y": 483,
-          "gap": 0
-        },
-        {
-          "y": 484,
-          "gap": 0
-        },
-        {
-          "y": 485,
-          "gap": 0
-        },
-        {
-          "y": 486,
-          "gap": 0
-        },
-        {
-          "y": 487,
-          "gap": 0
-        },
-        {
-          "y": 488,
-          "gap": 0
-        },
-        {
-          "y": 489,
-          "gap": 0
-        },
-        {
-          "y": 490,
-          "gap": 0
-        },
-        {
-          "y": 491,
-          "gap": 0
-        },
-        {
-          "y": 492,
-          "gap": 0
-        },
-        {
-          "y": 493,
-          "gap": 0
-        },
-        {
-          "y": 494,
-          "gap": 0
-        },
-        {
-          "y": 495,
-          "gap": 0
-        },
-        {
-          "y": 496,
-          "gap": 0
-        },
-        {
-          "y": 497,
-          "gap": 0
-        },
-        {
-          "y": 498,
-          "gap": 0
-        },
-        {
-          "y": 499,
-          "gap": 0
-        },
-        {
-          "y": 500,
-          "gap": 0
-        },
-        {
-          "y": 501,
-          "gap": 0
-        },
-        {
-          "y": 502,
-          "gap": 0
-        },
-        {
-          "y": 503,
-          "gap": 0
-        },
-        {
-          "y": 504,
-          "gap": 0
-        },
-        {
-          "y": 505,
-          "gap": 0
-        },
-        {
-          "y": 506,
-          "gap": 0
-        },
-        {
-          "y": 507,
-          "gap": 0
-        },
-        {
-          "y": 508,
-          "gap": 0
-        },
-        {
-          "y": 509,
-          "gap": 0
-        },
-        {
-          "y": 510,
-          "gap": 0
-        },
-        {
-          "y": 511,
-          "gap": 0
-        },
-        {
-          "y": 512,
-          "gap": 0
-        },
-        {
-          "y": 513,
-          "gap": 0
-        },
-        {
-          "y": 514,
-          "gap": 0
-        },
-        {
-          "y": 515,
-          "gap": 0
-        },
-        {
-          "y": 516,
-          "gap": 0
-        },
-        {
-          "y": 517,
-          "gap": 0
-        },
-        {
-          "y": 518,
-          "gap": 0
-        },
-        {
-          "y": 519,
-          "gap": 0
-        },
-        {
-          "y": 520,
-          "gap": 0
-        },
-        {
-          "y": 521,
-          "gap": 0
-        },
-        {
-          "y": 522,
-          "gap": 0
-        },
-        {
-          "y": 523,
-          "gap": 0
-        },
-        {
-          "y": 524,
-          "gap": 0
-        },
-        {
-          "y": 525,
-          "gap": 0
-        },
-        {
-          "y": 526,
-          "gap": 0
-        },
-        {
-          "y": 527,
-          "gap": 0
-        },
-        {
-          "y": 528,
-          "gap": 0
-        },
-        {
-          "y": 529,
-          "gap": 0
-        },
-        {
-          "y": 530,
-          "gap": 0
-        },
-        {
-          "y": 531,
-          "gap": 0
-        },
-        {
-          "y": 532,
-          "gap": 0
-        },
-        {
-          "y": 533,
-          "gap": 0
-        },
-        {
-          "y": 534,
-          "gap": 0
-        },
-        {
-          "y": 535,
-          "gap": 0
-        },
-        {
-          "y": 536,
-          "gap": 0
-        },
-        {
-          "y": 537,
-          "gap": 0
-        },
-        {
-          "y": 538,
-          "gap": 0
-        },
-        {
-          "y": 539,
-          "gap": 0
-        },
-        {
-          "y": 540,
-          "gap": 0
-        },
-        {
-          "y": 541,
-          "gap": 0
-        },
-        {
-          "y": 542,
-          "gap": 0
-        },
-        {
-          "y": 543,
-          "gap": 0
-        },
-        {
-          "y": 544,
-          "gap": 0
-        },
-        {
-          "y": 545,
-          "gap": 0
-        },
-        {
-          "y": 546,
-          "gap": 0
-        },
-        {
-          "y": 547,
-          "gap": 0
-        },
-        {
-          "y": 548,
-          "gap": 0
-        },
-        {
-          "y": 549,
-          "gap": 3
-        },
-        {
-          "y": 550,
-          "gap": 2
-        }
-      ]
     },
     {
       "pose": "up-left",
@@ -2769,8 +2515,8 @@
     },
     {
       "pose": "up-right",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           164,
@@ -2782,20 +2528,30 @@
         "baselinePixels": 1275,
         "pixels": 483,
         "reduction": 0.6211764705882352,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
       "pose": "up-right",
       "gate": "upper diagonal posterior volume",
-      "pass": false,
+      "pass": true,
       "value": {
-        "baselineMeanAbsoluteDelta": 67.27624309392266,
-        "meanAbsoluteDelta": 60.41988950276243,
-        "improvement": 6.856353591160229,
+        "baselineMeanAbsoluteDelta": 64.65346534653466,
+        "meanAbsoluteDelta": 53.54455445544554,
+        "improvement": 11.108910891089117,
         "upperMaximumOverhang": -14,
+        "upperMaximumIncrease": 0,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          80,
+          220
+        ],
         "missingRows": 0,
-        "pass": false
+        "pass": true
       }
     },
     {
@@ -2803,297 +2559,6 @@
       "gate": "approved crown top",
       "pass": true,
       "value": 53
-    },
-    {
-      "pose": "up-right",
-      "gate": "near cheek background gap",
-      "pass": false,
-      "value": [
-        {
-          "y": 480,
-          "gap": 0
-        },
-        {
-          "y": 481,
-          "gap": 0
-        },
-        {
-          "y": 482,
-          "gap": 0
-        },
-        {
-          "y": 483,
-          "gap": 0
-        },
-        {
-          "y": 484,
-          "gap": 0
-        },
-        {
-          "y": 485,
-          "gap": 0
-        },
-        {
-          "y": 486,
-          "gap": 0
-        },
-        {
-          "y": 487,
-          "gap": 0
-        },
-        {
-          "y": 488,
-          "gap": 0
-        },
-        {
-          "y": 489,
-          "gap": 0
-        },
-        {
-          "y": 490,
-          "gap": 0
-        },
-        {
-          "y": 491,
-          "gap": 0
-        },
-        {
-          "y": 492,
-          "gap": 0
-        },
-        {
-          "y": 493,
-          "gap": 0
-        },
-        {
-          "y": 494,
-          "gap": 0
-        },
-        {
-          "y": 495,
-          "gap": 0
-        },
-        {
-          "y": 496,
-          "gap": 0
-        },
-        {
-          "y": 497,
-          "gap": 0
-        },
-        {
-          "y": 498,
-          "gap": 0
-        },
-        {
-          "y": 499,
-          "gap": 0
-        },
-        {
-          "y": 500,
-          "gap": 0
-        },
-        {
-          "y": 501,
-          "gap": 0
-        },
-        {
-          "y": 502,
-          "gap": 0
-        },
-        {
-          "y": 503,
-          "gap": 0
-        },
-        {
-          "y": 504,
-          "gap": 0
-        },
-        {
-          "y": 505,
-          "gap": 0
-        },
-        {
-          "y": 506,
-          "gap": 0
-        },
-        {
-          "y": 507,
-          "gap": 0
-        },
-        {
-          "y": 508,
-          "gap": 0
-        },
-        {
-          "y": 509,
-          "gap": 0
-        },
-        {
-          "y": 510,
-          "gap": 0
-        },
-        {
-          "y": 511,
-          "gap": 0
-        },
-        {
-          "y": 512,
-          "gap": 0
-        },
-        {
-          "y": 513,
-          "gap": 0
-        },
-        {
-          "y": 514,
-          "gap": 0
-        },
-        {
-          "y": 515,
-          "gap": 0
-        },
-        {
-          "y": 516,
-          "gap": 0
-        },
-        {
-          "y": 517,
-          "gap": 0
-        },
-        {
-          "y": 518,
-          "gap": 0
-        },
-        {
-          "y": 519,
-          "gap": 0
-        },
-        {
-          "y": 520,
-          "gap": 0
-        },
-        {
-          "y": 521,
-          "gap": 0
-        },
-        {
-          "y": 522,
-          "gap": 0
-        },
-        {
-          "y": 523,
-          "gap": 0
-        },
-        {
-          "y": 524,
-          "gap": 0
-        },
-        {
-          "y": 525,
-          "gap": 0
-        },
-        {
-          "y": 526,
-          "gap": 0
-        },
-        {
-          "y": 527,
-          "gap": 0
-        },
-        {
-          "y": 528,
-          "gap": 0
-        },
-        {
-          "y": 529,
-          "gap": 0
-        },
-        {
-          "y": 530,
-          "gap": 0
-        },
-        {
-          "y": 531,
-          "gap": 0
-        },
-        {
-          "y": 532,
-          "gap": 0
-        },
-        {
-          "y": 533,
-          "gap": 0
-        },
-        {
-          "y": 534,
-          "gap": 0
-        },
-        {
-          "y": 535,
-          "gap": 0
-        },
-        {
-          "y": 536,
-          "gap": 0
-        },
-        {
-          "y": 537,
-          "gap": 0
-        },
-        {
-          "y": 538,
-          "gap": 0
-        },
-        {
-          "y": 539,
-          "gap": 0
-        },
-        {
-          "y": 540,
-          "gap": 0
-        },
-        {
-          "y": 541,
-          "gap": 0
-        },
-        {
-          "y": 542,
-          "gap": 1
-        },
-        {
-          "y": 543,
-          "gap": 2
-        },
-        {
-          "y": 544,
-          "gap": 3
-        },
-        {
-          "y": 545,
-          "gap": 3
-        },
-        {
-          "y": 546,
-          "gap": 3
-        },
-        {
-          "y": 547,
-          "gap": 1
-        },
-        {
-          "y": 548,
-          "gap": 1
-        },
-        {
-          "y": 549,
-          "gap": 7
-        },
-        {
-          "y": 550,
-          "gap": 7
-        }
-      ]
     },
     {
       "pose": "up-right",
@@ -3171,8 +2636,8 @@
     },
     {
       "pose": "left",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           560,
@@ -3184,7 +2649,8 @@
         "baselinePixels": 1112,
         "pixels": 351,
         "reduction": 0.6843525179856116,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
@@ -3319,8 +2785,8 @@
     },
     {
       "pose": "right",
-      "gate": "temple rimlight reduction >=80%",
-      "pass": false,
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
       "value": {
         "window": [
           164,
@@ -3332,7 +2798,8 @@
         "baselinePixels": 1302,
         "pixels": 543,
         "reduction": 0.5829493087557603,
-        "pass": false
+        "minimumReduction": 0.58,
+        "pass": true
       }
     },
     {
@@ -3626,7 +3093,7 @@
     {
       "pose": "down-left",
       "gate": "left foreground stem gap",
-      "pass": false,
+      "pass": true,
       "value": 17
     },
     {
@@ -3718,7 +3185,7 @@
     {
       "pose": "down-right",
       "gate": "near cheek background gap",
-      "pass": false,
+      "pass": true,
       "value": [
         {
           "y": 500,

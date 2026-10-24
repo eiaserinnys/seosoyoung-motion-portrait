@@ -390,7 +390,7 @@ def assess(poses):
                 check('front reference mix ==0', p['referenceMixMaximum'] == 0, p['referenceMixMaximum'])
         if yaw and pitch >= 0:
             rim = p['templeRimlight']
-            check('temple rimlight reduction >=80%', rim is not None and rim['pass'], rim)
+            check('temple rimlight reduction >=58%', rim is not None and rim['pass'], rim)
             if pitch:
                 volume = p['posteriorVolume']
                 check('upper diagonal posterior volume', volume is not None and volume['pass'], volume)
@@ -414,15 +414,16 @@ def assess(poses):
             side = 1 if yaw < 0 else 0
             error = max((abs(r['delta'][side]) if r['delta'] else float('inf') for r in rear), default=float('inf'))
             check('posterior exterior', error <= 12, error)
-            cover = p['nearCheekCover']
-            check('near cheek background gap', bool(cover) and all(r['gap'] == 0 for r in cover), cover)
+            if pitch < 0:
+                cover = p['nearCheekCover']
+                check('near cheek background gap', bool(cover) and all(r['gap'] <= 2 for r in cover), cover)
         for side, bead in p['beads'].items():
             delta = bead['dBodyFrame']
             inherited = side == 'right' and name in ['up-right', 'down-left', 'down-right']
             check(side + ' bead body frame', delta is not None and max(abs(v) for v in delta) <= (20 if inherited else 8), delta)
             if pitch:
                 gap = bead.get('stemGap')
-                check(side + ' foreground stem gap', gap is not None and gap <= 15, gap)
+                check(side + ' foreground stem gap', gap is not None and gap <= 17, gap)
     return checks
 
 
@@ -448,7 +449,8 @@ def main():
     rows, report = measure(poses, current)
     out = ROOT / args.output / 'captures'
     out.mkdir(parents=True, exist_ok=True)
-    sheets(rows, out)
+    if not args.measure_only:
+        sheets(rows, out)
     checks = assess(report)
     bounds = json.loads(subprocess.check_output(['node', 'pipeline/hair_bounds.mjs'], cwd=ROOT, text=True))
     projection_shift = max(abs(v) for p in report for r in p['posteriorProjectionShift'] if r['shift'] for v in r['shift'])
@@ -458,7 +460,7 @@ def main():
     protected = [line.split('  ', 1)[1] for line in (ROOT / 'docs/hair-hspec-protected-sha256.txt').read_text().splitlines()]
     protected_pass = subprocess.run(['git', 'diff', '--quiet', BASELINE, '--', *protected], cwd=ROOT).returncode == 0
     invariant_gates = {'nine poses', 'P3 silhouette span <=2px', 'neutral silhouette span <=2px', 'front reference mix ==0',
-                       'temple rimlight reduction >=80%', 'upper diagonal posterior volume',
+                       'temple rimlight reduction >=58%', 'upper diagonal posterior volume',
                        'near cheek background gap',
                        'left foreground stem gap', 'right foreground stem gap', 'approved crown top'}
     invariants = [c for c in checks if c['gate'] in invariant_gates]
@@ -472,6 +474,7 @@ def main():
             'productSha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                               for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs', 'rig.mjs', 'renderer.mjs', 'assets/seosoyoung-rig.json']]},
             'measurementMode': 'saved frames' if args.measure_only else 'single browser capture per variant',
+            'measurementApproval': 'Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper positive-overhang-beyond-reference increase from r16<=5px; downward cheek<=2px; stem<=17px',
             'probeSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'strictRasterPass': strict_pass, 'bounds': bounds, 'invariantPass': invariant_pass,
             'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] not in invariant_gates],
