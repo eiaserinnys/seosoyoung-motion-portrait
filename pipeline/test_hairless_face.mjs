@@ -29,14 +29,13 @@ test('S1/S2: actual registered chin, model rim and derived sampling floor',()=>{
   }
  }
 });
-test('S3: lower near cheeks follow the less occluded mirrored measurement',()=>{
+test('T4: lower cheeks mirror-average the classified prior profiles without r11 bounds',()=>{
  for(const pitch of [-30,30]){
   const a=OUTLINE_POSES.find(p=>p.pitch===pitch&&p.yaw===-45),b=OUTLINE_POSES.find(p=>p.pitch===pitch&&p.yaw===45);
   for(let i=0;i<a.rows.length;i++){
-   const sy=a.rows[i][0],[l,r]=outlineRow(sy);
-   if(sy<=490)continue;
-   const n=Math.min(r-a.measuredRows[i][4],b.measuredRows[i][2]-l);
-   near(a.rows[i][4],r-n,'left near '+sy);near(b.rows[i][2],l+n,'right near '+sy);
+   const sy=a.rows[i][0];
+   const n=(a.measuredRows[i][4]+1004-b.measuredRows[i][2])/2;
+   near(a.rows[i][4],n,'left near '+sy);near(b.rows[i][2],1004-n,'right near '+sy);
   }
  }
 });

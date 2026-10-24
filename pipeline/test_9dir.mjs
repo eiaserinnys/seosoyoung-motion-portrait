@@ -25,7 +25,10 @@ test('non-node face boundaries and the complete neutral row remain mirror symmet
   const [l,r]=outlineRow(y),a=[l+(r-l)*u,y],b=[r-(r-l)*u,y];
   const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch},q={...p,ParamAngleX:yaw};
   const left=outlineWorld(a,p),right=outlineWorld(b,q);
-  assert(Math.abs(left[0]-a[0]+right[0]-b[0])<1e-6,`outline X ${yaw},${pitch},${y},${u}`);
+  const restMid=(a[0]+b[0])/2;
+  const even=(1-Math.cos(pitch*Math.PI/180))/(1-Math.cos(Math.PI/6));
+  const targetMid=restMid+(502-restMid)*even;
+  assert(Math.abs(left[0]+right[0]-targetMid*2)<1e-6,`outline X ${yaw},${pitch},${y},${u}`);
   assert(Math.abs(left[1]-right[1])<1e-6,`outline Y ${yaw},${pitch},${y},${u}`);
  }
 });

@@ -30,7 +30,8 @@ export function geometry(){
   }));
   const landmarks=Object.fromEntries(Object.entries(keys).map(([k,id])=>[k,featureWorld(id,FEATURE_FIT.front[k],p)]));
   const boundary=[];
-  for(let y=440;y<=616;y+=.5)boundary.push({y,points:outlineRow(y).slice(0,2).map(x=>outlineWorld([x,y],p))});
+  for(let y=410;y<=616;y+=.5)boundary.push({y,points:outlineRow(y).slice(0,2).map(x=>outlineWorld([x,y],p))});
+  const [capL,capR]=outlineRow(347),comparisonTop=Array.from({length:33},(_,i)=>outlineWorld([capL+(capR-capL)*i/32,347],p).slice(0,2));
   const cheeks={};
   for(const u of [.25,.375,.5,.625,.75]){
    const [l,r]=outlineRow(497),pt=[l+(r-l)*u,497];
@@ -46,7 +47,7 @@ export function geometry(){
     heightRatio:span(id,p)/span(id,neutral),measuredHeightRatio:f.scales[side][1],
     ballRatios:Object.fromEntries(['iris','pupil','highlight'].map(part=>{const id='eye-'+side+'-'+part;return [part,span(id,p)/span(id,neutral)];}))};
   }
-  return {name:f.name,yaw:f.yaw,pitch:f.pitch,meshes,landmarks,boundary,cheeks,eyes,
+  return {name:f.name,yaw:f.yaw,pitch:f.pitch,meshes,landmarks,boundary,comparisonTop,cheeks,eyes,
    sphericalError:!f.yaw&&f.pitch?sphericalFaceError(p):0,feature:f,outline:OUTLINE_POSES.find(o=>o.name===f.name)};
  });
 }

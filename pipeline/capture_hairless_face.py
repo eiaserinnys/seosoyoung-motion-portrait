@@ -43,13 +43,18 @@ def webgl_renders(poses):
                   const state={...studio.state,hidden,mode:'normal',wire:false,grid:false,before:false,surfaceOnly:false,identify:null};
                   faceCapture.render(studio.p,state);
                   if(faceCapture.gl.getError()!==0)throw Error('WebGL error');
-                  return faceCapture.canvas.toDataURL('image/png').split(',')[1];
+                  const hairless=faceCapture.canvas.toDataURL('image/png').split(',')[1];
+                  faceCapture.render(studio.p,{...state,hidden:new Set()});
+                  if(faceCapture.gl.getError()!==0)throw Error('Full portrait WebGL error');
+                  return {hairless,full:faceCapture.canvas.toDataURL('image/png').split(',')[1]};
                 }''',[p['yaw'],p['pitch']])
                 # Renderer at scale=1: canvas origin = (38,32).
-                im=Image.open(io.BytesIO(base64.b64decode(data))).crop((38,32,1062,1056)).convert('RGBA')
+                im=Image.open(io.BytesIO(base64.b64decode(data['hairless']))).crop((38,32,1062,1056)).convert('RGBA')
                 bg=Image.new('RGBA',(1024,1024),BG+(255,));bg.alpha_composite(im);renders[name]=bg.convert('RGB')
-                tile=bg.convert('RGB').crop((152,20,872,740)).resize((480,480))
-                ImageDraw.Draw(tile).text((8,8),name+' | hair / ears / neck OFF',fill='white');tiles.append(tile)
+                full=Image.open(io.BytesIO(base64.b64decode(data['full']))).crop((38,32,1062,1056)).convert('RGBA')
+                full_bg=Image.new('RGBA',(1024,1024),BG+(255,));full_bg.alpha_composite(full)
+                tile=full_bg.convert('RGB').crop((152,20,872,740)).resize((480,480))
+                ImageDraw.Draw(tile).text((8,8),name+' | full portrait',fill='white');tiles.append(tile)
             # Verify the existing viewer entry point responds to its actual sliders.
             page.get_by_role('button',name='상 +20°',exact=True).click()
             assert page.evaluate('studio.p.ParamAngleY')==20
@@ -97,6 +102,14 @@ def geometry_overlay(p,background,grid=True):
         x,y=registered_point(p,pt);draw.line((x-5,y,x+5,y),fill=GREEN,width=2);draw.line((x,y-5,x,y+5),fill=GREEN,width=2)
     return out
 
+def comparison_region(p,im):
+    # The source skin above restY347 is cut into bang-shaped artwork. Its shape
+    # supplies no face-silhouette evidence; compare the shared lower region.
+    points=[tuple(pt) for pt in p['comparisonTop']]
+    mask=Image.new('L',im.size,0)
+    ImageDraw.Draw(mask).polygon([(0,points[0][1]),*points,(1024,points[-1][1]),(1024,1024),(0,1024)],fill=255)
+    return Image.composite(im,Image.new('RGB',im.size,BG),mask)
+
 def main():
     poses=geometry();renders=webgl_renders(poses)
     comparison=Image.new('RGB',(2040,1020),BG);overlay=Image.new('RGB',(1440,1440),BG)
@@ -106,15 +119,15 @@ def main():
         for side in [0,1]:
             pts=[tuple(row['points'][side][:2]) for row in p['boundary']]
             ImageDraw.Draw(ref).line(pts,fill=PINK,width=2);ImageDraw.Draw(render).line(pts,fill=PINK,width=2)
-        pair=[ref,render]
+        pair=[comparison_region(p,ref),comparison_region(p,render)]
         for j,im in enumerate(pair):
             tile=im.crop(CROP).resize((340,340));d=ImageDraw.Draw(tile)
             d.text((6,6),name+(' | REF green / rig pink' if j==0 else ' | WebGL face only'),fill='white')
             comparison.paste(tile,(((i%3)*2+j)*340,(i//3)*340))
-        geom=geometry_overlay(p,reference(p)).crop(CROP).resize((480,480))
+        geom=comparison_region(p,geometry_overlay(p,reference(p))).crop(CROP).resize((480,480))
         d=ImageDraw.Draw(geom);d.text((8,8),name+' | SAM green / mesh pink / boxes amber',fill='white')
         overlay.paste(geom,((i%3)*480,(i//3)*480))
     comparison.save(ROOT/'docs/captures/hairless_face_9dir_comparison.png')
     overlay.save(ROOT/'docs/captures/face_geom_9dir_overlay.png')
-    print('PASS actual WebGL face-only 9 poses, slider entry point, HTTP/console/WebGL errors 0; 3 capture sheets saved')
+    print('PASS WebGL face-only + full portrait 9 poses, pose button, HTTP/console/WebGL errors 0; 3 sheets saved')
 if __name__=='__main__':main()

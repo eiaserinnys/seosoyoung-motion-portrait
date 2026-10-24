@@ -1,5 +1,5 @@
 {
-  "definition": "restY440..616; symmetric target rows and centers; raw visible contours/lengths are reference-only artwork asymmetry; paired measured opening envelopes",
+  "definition": "restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only",
   "visibility": "face skin + eyes + brows + nose + closed mouth only; all hair/ears/neck/body OFF",
   "poses": [
     {
@@ -8,8 +8,8 @@
       "pitch": 0,
       "targetRms": 1.0802222280134393,
       "targetChinError": 0.0,
-      "rawVisibleRms": 11.230935472793055,
-      "rawSampleCount": 353,
+      "rawVisibleRms": 11.859546375842466,
+      "rawSampleCount": 413,
       "rawChinError": 0.0,
       "lengthErrors": {},
       "rawLengthErrors": {},
@@ -37,7 +37,96 @@
         "0.625": 0,
         "0.75": 0
       },
-      "sphericalError": 0
+      "sphericalError": 0,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 1.0686702711286102,
+        "maxLowerHalfWidthIncrease": 0.5343351355643051,
+        "maxUpperPriorError": 0.0,
+        "pearMargin": 8.038000441683664,
+        "widths": [
+          [
+            410,
+            235.5
+          ],
+          [
+            420,
+            252.5
+          ],
+          [
+            430,
+            255.5
+          ],
+          [
+            440,
+            263
+          ],
+          [
+            450,
+            269.5
+          ],
+          [
+            465,
+            261.5584499534599
+          ],
+          [
+            480,
+            260.3933292871877
+          ],
+          [
+            490,
+            261.46199955831634
+          ],
+          [
+            510,
+            262.0397347066224
+          ],
+          [
+            530,
+            253.42677710166754
+          ],
+          [
+            550,
+            229.36514865039982
+          ],
+          [
+            570,
+            186.19742506610027
+          ],
+          [
+            590,
+            122.86673586838117
+          ],
+          [
+            600,
+            84.02109607078705
+          ],
+          [
+            610,
+            40.91676438318683
+          ],
+          [
+            616,
+            13.25253935388804
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 0,
+          "HAIR": 0,
+          "SKIN": 0
+        },
+        "right": {
+          "BG": 0,
+          "HAIR": 0,
+          "SKIN": 0
+        }
+      },
+      "validBgSamples": 0,
+      "bgFitRmsReference": null
     },
     {
       "name": "front",
@@ -45,8 +134,8 @@
       "pitch": 0,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 1.137922303393017,
-      "rawSampleCount": 706,
+      "rawVisibleRms": 1.0601653957141366,
+      "rawSampleCount": 826,
       "rawChinError": 0.0,
       "lengthErrors": {},
       "rawLengthErrors": {},
@@ -74,7 +163,96 @@
         "0.625": 0,
         "0.75": 0
       },
-      "sphericalError": 0
+      "sphericalError": 0,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 0.0,
+        "maxLowerHalfWidthIncrease": 0.0,
+        "maxUpperPriorError": 0.0,
+        "pearMargin": 26,
+        "widths": [
+          [
+            410,
+            307
+          ],
+          [
+            420,
+            311
+          ],
+          [
+            430,
+            314
+          ],
+          [
+            440,
+            317
+          ],
+          [
+            450,
+            319
+          ],
+          [
+            465,
+            315
+          ],
+          [
+            480,
+            303
+          ],
+          [
+            490,
+            293
+          ],
+          [
+            510,
+            282
+          ],
+          [
+            530,
+            259
+          ],
+          [
+            550,
+            229
+          ],
+          [
+            570,
+            187
+          ],
+          [
+            590,
+            122
+          ],
+          [
+            600,
+            83
+          ],
+          [
+            610,
+            42
+          ],
+          [
+            616,
+            11
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 0,
+          "HAIR": 0,
+          "SKIN": 0
+        },
+        "right": {
+          "BG": 0,
+          "HAIR": 0,
+          "SKIN": 0
+        }
+      },
+      "validBgSamples": 0,
+      "bgFitRmsReference": null
     },
     {
       "name": "right",
@@ -82,8 +260,8 @@
       "pitch": 0,
       "targetRms": 1.080222228013453,
       "targetChinError": 0.0,
-      "rawVisibleRms": 11.648872559736596,
-      "rawSampleCount": 353,
+      "rawVisibleRms": 11.263280595187734,
+      "rawSampleCount": 413,
       "rawChinError": 0.0,
       "lengthErrors": {},
       "rawLengthErrors": {},
@@ -111,7 +289,96 @@
         "0.625": 0,
         "0.75": 0
       },
-      "sphericalError": 0
+      "sphericalError": 0,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 1.068670271128724,
+        "maxLowerHalfWidthIncrease": 0.534335135564362,
+        "maxUpperPriorError": 0.0,
+        "pearMargin": 8.038000441683607,
+        "widths": [
+          [
+            410,
+            235.5
+          ],
+          [
+            420,
+            252.5
+          ],
+          [
+            430,
+            255.5
+          ],
+          [
+            440,
+            263
+          ],
+          [
+            450,
+            269.5
+          ],
+          [
+            465,
+            261.5584499534599
+          ],
+          [
+            480,
+            260.39332928718767
+          ],
+          [
+            490,
+            261.4619995583164
+          ],
+          [
+            510,
+            262.0397347066224
+          ],
+          [
+            530,
+            253.42677710166748
+          ],
+          [
+            550,
+            229.36514865039982
+          ],
+          [
+            570,
+            186.19742506610032
+          ],
+          [
+            590,
+            122.86673586838123
+          ],
+          [
+            600,
+            84.02109607078705
+          ],
+          [
+            610,
+            40.916764383186774
+          ],
+          [
+            616,
+            13.252539353887983
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 0,
+          "HAIR": 0,
+          "SKIN": 0
+        },
+        "right": {
+          "BG": 0,
+          "HAIR": 0,
+          "SKIN": 0
+        }
+      },
+      "validBgSamples": 0,
+      "bgFitRmsReference": null
     },
     {
       "name": "up-left",
@@ -119,8 +386,8 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 6.3684861292012656,
-      "rawSampleCount": 353,
+      "rawVisibleRms": 10.108435012816283,
+      "rawSampleCount": 413,
       "rawChinError": 1.041282024151883,
       "lengthErrors": {
         "eyeChin": 0.0,
@@ -156,7 +423,96 @@
         "0.625": -64.6262122125703,
         "0.75": -59.528120017650394
       },
-      "sphericalError": 0
+      "sphericalError": 0,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 0.0,
+        "maxLowerHalfWidthIncrease": 0.0,
+        "maxUpperPriorError": 5.4309890846006965,
+        "pearMargin": 3.9935477910183863,
+        "widths": [
+          [
+            410,
+            261.33258478856817
+          ],
+          [
+            420,
+            264.16101191331427
+          ],
+          [
+            430,
+            266.28233225687404
+          ],
+          [
+            440,
+            268.4036526004336
+          ],
+          [
+            450,
+            269.8178661628068
+          ],
+          [
+            465,
+            266.9894390380605
+          ],
+          [
+            480,
+            265.8243183717884
+          ],
+          [
+            490,
+            265.8243183717884
+          ],
+          [
+            510,
+            265.8243183717884
+          ],
+          [
+            530,
+            258.8658007616418
+          ],
+          [
+            550,
+            234.78810315962676
+          ],
+          [
+            570,
+            191.62606087805796
+          ],
+          [
+            590,
+            128.29772495298187
+          ],
+          [
+            600,
+            89.45208515538775
+          ],
+          [
+            610,
+            46.34775346778747
+          ],
+          [
+            616,
+            18.683528438488793
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 0,
+          "HAIR": 16,
+          "SKIN": 0
+        },
+        "right": {
+          "BG": 0,
+          "HAIR": 10,
+          "SKIN": 6
+        }
+      },
+      "validBgSamples": 0,
+      "bgFitRmsReference": null
     },
     {
       "name": "up",
@@ -164,8 +520,8 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 4.748909713932045,
-      "rawSampleCount": 706,
+      "rawVisibleRms": 12.758597943299904,
+      "rawSampleCount": 826,
       "rawChinError": 0.0,
       "lengthErrors": {
         "eyeChin": 0.0,
@@ -201,7 +557,96 @@
         "0.625": -79.55602868523926,
         "0.75": -72.82028850816351
       },
-      "sphericalError": 5.684341886080802e-14
+      "sphericalError": 5.684341886080802e-14,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 465,
+        "maxLowerWidthIncrease": 0.0,
+        "maxLowerHalfWidthIncrease": 0.0,
+        "maxUpperPriorError": 0.0,
+        "pearMargin": 26.0,
+        "widths": [
+          [
+            410,
+            307.0
+          ],
+          [
+            420,
+            311.0
+          ],
+          [
+            430,
+            314
+          ],
+          [
+            440,
+            317.0
+          ],
+          [
+            450,
+            319.0
+          ],
+          [
+            465,
+            315.0
+          ],
+          [
+            480,
+            303.0
+          ],
+          [
+            490,
+            293.0
+          ],
+          [
+            510,
+            282
+          ],
+          [
+            530,
+            259.0
+          ],
+          [
+            550,
+            229.0
+          ],
+          [
+            570,
+            183.09222362425794
+          ],
+          [
+            590,
+            109.83719657634856
+          ],
+          [
+            600,
+            71.59663984860208
+          ],
+          [
+            610,
+            24.44185974125776
+          ],
+          [
+            616,
+            11.0
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 0,
+          "HAIR": 9,
+          "SKIN": 7
+        },
+        "right": {
+          "BG": 4,
+          "HAIR": 6,
+          "SKIN": 6
+        }
+      },
+      "validBgSamples": 0,
+      "bgFitRmsReference": null
     },
     {
       "name": "up-right",
@@ -209,8 +654,8 @@
       "pitch": 30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 6.096789853730907,
-      "rawSampleCount": 350,
+      "rawVisibleRms": 15.774348075926916,
+      "rawSampleCount": 410,
       "rawChinError": 1.041282024151883,
       "lengthErrors": {
         "eyeChin": 0.0,
@@ -246,7 +691,96 @@
         "0.625": -64.67353842358796,
         "0.75": -59.631865098231344
       },
-      "sphericalError": 0
+      "sphericalError": 0,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 0.0,
+        "maxLowerHalfWidthIncrease": 0.0,
+        "maxUpperPriorError": 5.43098908460081,
+        "pearMargin": 3.9935477910183863,
+        "widths": [
+          [
+            410,
+            261.33258478856817
+          ],
+          [
+            420,
+            264.16101191331427
+          ],
+          [
+            430,
+            266.28233225687404
+          ],
+          [
+            440,
+            268.4036526004336
+          ],
+          [
+            450,
+            269.8178661628068
+          ],
+          [
+            465,
+            266.9894390380605
+          ],
+          [
+            480,
+            265.8243183717884
+          ],
+          [
+            490,
+            265.8243183717884
+          ],
+          [
+            510,
+            265.8243183717884
+          ],
+          [
+            530,
+            258.8658007616418
+          ],
+          [
+            550,
+            234.78810315962676
+          ],
+          [
+            570,
+            191.62606087805796
+          ],
+          [
+            590,
+            128.29772495298187
+          ],
+          [
+            600,
+            89.45208515538775
+          ],
+          [
+            610,
+            46.34775346778747
+          ],
+          [
+            616,
+            18.683528438488793
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 0,
+          "HAIR": 9,
+          "SKIN": 7
+        },
+        "right": {
+          "BG": 2,
+          "HAIR": 14,
+          "SKIN": 0
+        }
+      },
+      "validBgSamples": 2,
+      "bgFitRmsReference": 1.5001936507040508
     },
     {
       "name": "down-left",
@@ -254,8 +788,8 @@
       "pitch": -30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 9.686100410210202,
-      "rawSampleCount": 353,
+      "rawVisibleRms": 7.689688788607532,
+      "rawSampleCount": 413,
       "rawChinError": 4.413717975848158,
       "lengthErrors": {
         "eyeChin": 0.0,
@@ -291,7 +825,96 @@
         "0.625": 18.929328039159884,
         "0.75": 18.95438368892502
       },
-      "sphericalError": 0
+      "sphericalError": 0,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 0.0,
+        "maxLowerHalfWidthIncrease": 0.0,
+        "maxUpperPriorError": 0.27896059418884533,
+        "pearMargin": 3.9935477910185,
+        "widths": [
+          [
+            410,
+            256.18055629815626
+          ],
+          [
+            420,
+            259.00898342290236
+          ],
+          [
+            430,
+            261.1303037664622
+          ],
+          [
+            440,
+            263.2516241100217
+          ],
+          [
+            450,
+            264.6658376723949
+          ],
+          [
+            465,
+            261.83741054764863
+          ],
+          [
+            480,
+            260.6722898813764
+          ],
+          [
+            490,
+            260.6722898813764
+          ],
+          [
+            510,
+            260.6722898813764
+          ],
+          [
+            530,
+            253.70573769585633
+          ],
+          [
+            550,
+            229.64410924458855
+          ],
+          [
+            570,
+            186.476385660289
+          ],
+          [
+            590,
+            121.77759540344266
+          ],
+          [
+            600,
+            80.06269104913838
+          ],
+          [
+            610,
+            37.016268412541535
+          ],
+          [
+            616,
+            12.374932282283908
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 3,
+          "HAIR": 13,
+          "SKIN": 0
+        },
+        "right": {
+          "BG": 0,
+          "HAIR": 11,
+          "SKIN": 5
+        }
+      },
+      "validBgSamples": 3,
+      "bgFitRmsReference": 4.860201604301202
     },
     {
       "name": "down",
@@ -299,8 +922,8 @@
       "pitch": -30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 3.6288667729864548,
-      "rawSampleCount": 706,
+      "rawVisibleRms": 9.108719087168694,
+      "rawSampleCount": 826,
       "rawChinError": 1.1368683772161603e-13,
       "lengthErrors": {
         "eyeChin": 0.0,
@@ -336,7 +959,96 @@
         "0.625": 22.23143599067089,
         "0.75": 19.282598235175783
       },
-      "sphericalError": 1.1368683772161603e-13
+      "sphericalError": 1.1368683772161603e-13,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 0.0,
+        "maxLowerHalfWidthIncrease": 0.0,
+        "maxUpperPriorError": 12.09106918634285,
+        "pearMargin": 27.652625176166055,
+        "widths": [
+          [
+            410,
+            294.90893081365715
+          ],
+          [
+            420,
+            298.90893081365715
+          ],
+          [
+            430,
+            301.90893081365715
+          ],
+          [
+            440,
+            304.90893081365715
+          ],
+          [
+            450,
+            306.90893081365715
+          ],
+          [
+            465,
+            302.90893081365715
+          ],
+          [
+            480,
+            290.42488810631767
+          ],
+          [
+            490,
+            279.2563056374911
+          ],
+          [
+            510,
+            269.14829831103316
+          ],
+          [
+            530,
+            243.89928939790167
+          ],
+          [
+            550,
+            217.10359643213866
+          ],
+          [
+            570,
+            178.93347751448277
+          ],
+          [
+            590,
+            111.0876932511269
+          ],
+          [
+            600,
+            70.90893081365715
+          ],
+          [
+            610,
+            29.90893081365715
+          ],
+          [
+            616,
+            11.0
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 5,
+          "HAIR": 10,
+          "SKIN": 1
+        },
+        "right": {
+          "BG": 3,
+          "HAIR": 9,
+          "SKIN": 4
+        }
+      },
+      "validBgSamples": 8,
+      "bgFitRmsReference": 2.141235348237624
     },
     {
       "name": "down-right",
@@ -344,8 +1056,8 @@
       "pitch": -30,
       "targetRms": 0.0,
       "targetChinError": 0.0,
-      "rawVisibleRms": 10.015024618153603,
-      "rawSampleCount": 347,
+      "rawVisibleRms": 21.557305239636936,
+      "rawSampleCount": 407,
       "rawChinError": 4.413717975848158,
       "lengthErrors": {
         "eyeChin": 0.0,
@@ -381,7 +1093,96 @@
         "0.625": 14.819931366982928,
         "0.75": 9.946062935437396
       },
-      "sphericalError": 0
+      "sphericalError": 0,
+      "outlineShape": {
+        "peakRestY": 450,
+        "peakCount": 1,
+        "lowerStart": 480,
+        "maxLowerWidthIncrease": 0.0,
+        "maxLowerHalfWidthIncrease": 0.0,
+        "maxUpperPriorError": 0.27896059418901586,
+        "pearMargin": 3.9935477910185,
+        "widths": [
+          [
+            410,
+            256.18055629815626
+          ],
+          [
+            420,
+            259.00898342290236
+          ],
+          [
+            430,
+            261.13030376646225
+          ],
+          [
+            440,
+            263.2516241100217
+          ],
+          [
+            450,
+            264.6658376723949
+          ],
+          [
+            465,
+            261.8374105476487
+          ],
+          [
+            480,
+            260.6722898813764
+          ],
+          [
+            490,
+            260.6722898813764
+          ],
+          [
+            510,
+            260.6722898813764
+          ],
+          [
+            530,
+            253.70573769585633
+          ],
+          [
+            550,
+            229.64410924458855
+          ],
+          [
+            570,
+            186.476385660289
+          ],
+          [
+            590,
+            121.77759540344272
+          ],
+          [
+            600,
+            80.06269104913838
+          ],
+          [
+            610,
+            37.016268412541535
+          ],
+          [
+            616,
+            12.374932282283908
+          ]
+        ]
+      },
+      "boundaryClassCounts": {
+        "left": {
+          "BG": 0,
+          "HAIR": 8,
+          "SKIN": 8
+        },
+        "right": {
+          "BG": 2,
+          "HAIR": 14,
+          "SKIN": 0
+        }
+      },
+      "validBgSamples": 2,
+      "bgFitRmsReference": 14.495279204405309
     }
   ],
   "protectedChanges": [],

@@ -81,6 +81,7 @@ function symmetricFace(point,p,relief=0){
 }
 const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
 const basePt=(pt,p)=>legacyOutline(pt,symmetricBase(pt,p),p);
+export {basePt as outlinePriorWorld};
 const facePt=(pt,p)=>legacyOutline(pt,symmetricFace(pt,p),p);
 function edgeAt(edges,y){
  let i=0;while(i<edges.length-2&&y>edges[i+1].y)i++;

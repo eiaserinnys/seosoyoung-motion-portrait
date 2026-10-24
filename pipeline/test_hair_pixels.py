@@ -26,18 +26,18 @@ class HairPixels(unittest.TestCase):
   np.testing.assert_array_equal(b[5,5,:3],redrawn[5,5])
   for y,x in [(15,15),(30,15),(15,35)]:
    np.testing.assert_array_equal(b[y,x],original[y,x]);self.assertEqual(mask[y,x],0)
- def test_near_cheek_retains_clear_r11_attachment_and_uses_less_occluded_side(self):
+ def test_near_cheek_mirror_averages_prior_profiles_without_an_ear_clamp(self):
   rows=[[465,350,650,330,610,390,670,465]]
   poses=[dict(yaw=yaw,pitch=pitch,yTop=465,yChin=616,
               rows=[[465,465,320 if yaw<0 else 420,465,570 if yaw<0 else 680]])
          for pitch in [-30,30] for yaw in [-45,0,45]]
   symmetrize(rows,poses)
   up=next(p for p in poses if p['pitch']==30 and p['yaw']==-45)
-  self.assertEqual(up['rows'][0][4],610)
-  # A wider independent near cheek must win rather than averaging the cut.
+  self.assertEqual(up['rows'][0][4],577)
+  # Occlusion is handled upstream; both reconstructed sides contribute equally.
   poses[0]['rows'][0][4]=630
   symmetrize(rows,poses)
-  self.assertEqual(poses[0]['rows'][0][4],630)
+  self.assertEqual(poses[0]['rows'][0][4],603.5)
  def test_quartic_chin_endpoint_cannot_cross_its_opposite_edge(self):
   rows=[[616,497,508,423,436,568,581,615]]
   poses=[dict(yaw=yaw,pitch=pitch,rows=[[616,615,506,615,499]])
