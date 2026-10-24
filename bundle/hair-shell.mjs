@@ -51,14 +51,15 @@ export const fringeWorld=canopyWorld;
 export const craniumWeight=()=>1;
 export function craniumWorld([x,y,lambda],side,p) {
  const dome=craniumPosition([x,y,lambda],p);
- const w=1-smooth((Math.abs(lambda)-Math.PI/2)/(Math.PI/4));
- if(!w)return dome;
  const {cx,rx,cz}=domeSection(y),sign=Math.sign(lambda)||(side==='left'?-1:1);
- const domeSeam=artWorld([cx+sign*rx,y-HEAD_CENTER[1],cz],p);
  const seam=canopyWorld([HEAD_CENTER[0]+cx+sign*rx,y],p);
  // Reuse the endpoint exactly instead of retaining cos(pi/2) roundoff.
  if(Math.abs(lambda)===Math.PI/2)return seam;
- return dome.map((v,i)=>v+(seam[i]-domeSeam[i])*w);
+ const w=1-smooth((Math.abs(lambda)-Math.PI/2)/(Math.PI/4));
+ const domeSeam=artWorld([cx+sign*rx,y-HEAD_CENTER[1],cz],p);
+ const bridgedX=dome[0]+(seam[0]-domeSeam[0])*w;
+ const taper=1-.65*smooth((y-425)/70)*(1-w);
+ return [taper===1?bridgedX:seam[0]+(bridgedX-seam[0])*taper,seam[1],dome[2]+(seam[2]-domeSeam[2])*w];
 }
 export function farSideWeight(side,p) {
   const angle=p.ParamAngleX*(side==='left'?-1:1);

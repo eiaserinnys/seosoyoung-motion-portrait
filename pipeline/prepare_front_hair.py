@@ -28,7 +28,16 @@ def build():
  for key in ['bangs-left','bangs-right']:
   path=source/(key+'.png')
   if not path.exists():shutil.copyfile(ROOT/parts[key]['file'],path)
- original={key:np.array(Image.open(source/(key+'.png')).convert('RGBA')) for key in IDS}
+ original={}
+ for key in IDS:
+  a=np.array(Image.open(source/(key+'.png')).convert('RGBA'))
+  if key=='back-hair-center':
+   # The immutable crop ends at x690. Pad only the working image so the
+   # requested x700 backing is not silently clipped by its old bbox width.
+   width=max(a.shape[1],700-parts[key]['bbox'][0])
+   a=np.pad(a,((0,0),(0,width-a.shape[1]),(0,0)))
+   parts[key]['bbox'][2]=width
+  original[key]=a
  images={key:neutralize_outline(a) for key,a in original.items()}
  still=np.array(Image.open(ROOT/'source/character/still.png').convert('RGB'))
  redrawn=np.array(Image.open(ROOT/'source/references/still_no_rimlight.png').convert('RGB'))
@@ -40,13 +49,16 @@ def build():
   part=parts[key];x,y,w,h=part['bbox'];a=images[key];domain=a[:,:,3]>128
   if not key.startswith('bangs') and key not in {'back-hair-left','back-hair-right'}:
    for row in range(h):
-    limit=250 if key=='hair-top' else 400 if key=='back-hair-center' else 350
+    limit=250 if key=='hair-top' else 407 if key=='back-hair-center' else 406 if key=='side-hair-right' else 350
     if not 60<=row+y<=limit:continue
     line=union[row+y] if key=='hair-top' else a[row,:,3]
     edges=np.diff(np.pad(line>128,(1,1)).astype(int));runs=[(l,r) for l,r in zip(np.where(edges==1)[0],np.where(edges==-1)[0]) if r-l>=20]
     if not runs:continue
     left,right=runs[0][0],runs[-1][1]
     if key=='hair-top':left-=x;right-=x
+    # Restore the pin cutout below the accessory, stopping before the ear.
+    if key=='side-hair-right' and 340<=row+y<=406:left=min(left,634-x)
+    if key=='back-hair-center' and 350<=row+y<=407:right=max(right,min(w,700-x))
     domain[row,max(0,left):min(w,right)]=True
    if key=='back-hair-center':
     expanded=cv2.dilate(domain.astype(np.uint8),np.ones((5,5),np.uint8))>0
@@ -63,6 +75,7 @@ def build():
  # Seed real RGB before inpainting, then retain identical overlap after tone correction.
  copy_bangs_rgb(images['hair-top'],parts['hair-top'],parts,images)
  for key,a in images.items():Image.fromarray(a).save(ROOT/parts[key]['file'])
+ (ROOT/'parts/parts_index.json').write_text(json.dumps(list(parts.values()),ensure_ascii=False,indent=2)+'\n')
  print('PASS eight immutable hair inputs, intact fringe alpha and redrawn hair RGB')
 
 def fill_seam():

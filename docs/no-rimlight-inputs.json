@@ -25,5 +25,11 @@
     "back-hair-right"
   ],
   "fallback": "Lab delight only outside safe visible redrawn hair",
-  "backing": "same fringe hemisphere through y380, smooth lower-shell transition to y465"
+  "backing": "same fringe hemisphere through y380, smooth lower-shell transition to y465",
+  "transfer": "alpha>200; not_darkened; 3x3 erosion; crown/right-rim zone; protected lower RGB restored",
+  "craniumFill": "valid-weight LAB sigma18; brown-only TELEA seeds; inner detail restoration; valid-only tone statistics",
+  "craniumAlpha": "soft inner transition; opaque through reference y415; fade465..505",
+  "craniumGeometry": "yaw-only visibility; canopy row Y; lower width taper425/70",
+  "pinNotchFill": "right side-hair x634..660/y340..406; backing x700/y350..407, working crop padded10px from immutable input",
+  "rasterInterior": "near bridged projection; far main opaque spans intersect dome; 15px inset; zero-hole threshold0"
 }

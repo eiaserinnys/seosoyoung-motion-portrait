@@ -2,8 +2,8 @@ import unittest
 from pathlib import Path
 import numpy as np
 from PIL import Image
-from hair_albedo import delight, transfer_redrawn_hair
-from fit_outline import symmetrize
+from pipeline.hair_albedo import delight, transfer_redrawn_hair
+from pipeline.fit_outline import symmetrize
 
 class HairPixels(unittest.TestCase):
  def test_rim_is_reduced_without_changing_alpha_or_erasing_texture(self):
@@ -40,5 +40,34 @@ class HairPixels(unittest.TestCase):
    original=np.array(Image.open(root/'source/front-hair-inputs'/f'{key}.png'))
    built=np.array(Image.open(root/'parts'/f'{key}.png'))
    np.testing.assert_array_equal(built[:,:,3],original[:,:,3],err_msg=key)
+ def test_built_lower_fringe_rgb_is_identical_to_original(self):
+  import json
+  root=Path(__file__).resolve().parents[1]
+  parts={p['id']:p for p in json.loads((root/'parts/parts_index.json').read_text())}
+  for key in ['bangs-left','bangs-right','side-hair-left']:
+   original=np.array(Image.open(root/'source/front-hair-inputs'/f'{key}.png'))
+   built=np.array(Image.open(root/'parts'/f'{key}.png'))
+   x,y,_,_=parts[key]['bbox'];yy,xx=np.indices(original.shape[:2])
+   protected=(yy+y>=310)&(xx+x<640)&(original[:,:,3]>200)
+   self.assertTrue(protected.any(),key)
+   np.testing.assert_array_equal(built[protected,:3],original[protected,:3],err_msg=key)
+ def test_cranium_top_is_opaque_and_lower_edge_fades_out(self):
+  root=Path(__file__).resolve().parents[1]
+  for side in ['left','right']:
+   alpha=np.array(Image.open(root/'parts'/f'side-cranium-{side}.png'))[:,:,3]
+   self.assertTrue((alpha[:416]==255).all())
+   self.assertTrue((alpha[505:]==0).all())
+   self.assertTrue(((alpha[466:505]>0)&(alpha[466:505]<255)).any())
+ def test_hairpin_notch_has_opaque_side_hair_and_backing_before_the_ear(self):
+  import json
+  root=Path(__file__).resolve().parents[1]
+  parts={p['id']:p for p in json.loads((root/'parts/parts_index.json').read_text())}
+  p=parts['side-hair-right'];x,y,_,_=p['bbox']
+  a=np.array(Image.open(root/p['file']))[:,:,3]
+  self.assertTrue((a[340-y:407-y,634-x:660-x]==255).all())
+  p=parts['back-hair-center'];x,y,w,_=p['bbox']
+  self.assertGreaterEqual(x+w,700,'backing crop must contain the requested canvas x700 endpoint')
+  a=np.array(Image.open(root/p['file']))[:,:,3];end=min(w,700-x)
+  self.assertTrue((a[350-y:408-y,end-2:end]==255).all())
 
 if __name__=='__main__':unittest.main()

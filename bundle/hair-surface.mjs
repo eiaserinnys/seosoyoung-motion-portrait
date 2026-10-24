@@ -56,12 +56,12 @@ export function craniumPosition([x,y,lambda],p){
 export function craniumFacing([x,y,lambda],p){
  lambda=seamLongitude(lambda,p);
  const section=domeSection(y),a=domeSection(y-.5),b=domeSection(y+.5),gain=correction(p,'CorrHairDepth');
- if(section.rx<.001)return rotateXYZ([0,-1,0],p.ParamAngleX*correction(p,'CorrTurn'),p.ParamAngleY*correction(p,'CorrTurn'),0)[2];
+ if(section.rx<.001)return rotateXYZ([0,-1,0],p.ParamAngleX*correction(p,'CorrTurn'),0,0)[2];
  const nx=Math.sin(lambda)/Math.max(.001,section.rx),nz=Math.cos(lambda)/(section.rz*gain);
  const ny=-nx*((b.cx-a.cx)+(b.rx-a.rx)*Math.sin(lambda))-nz*((b.cz-a.cz)+(b.rz-a.rz)*gain*Math.cos(lambda));
  const n=[nx,ny,nz];
  const length=Math.hypot(...n);
- return rotateXYZ(n.map(v=>v/length),p.ParamAngleX*correction(p,'CorrTurn'),p.ParamAngleY*correction(p,'CorrTurn'),0)[2];
+ return rotateXYZ(n.map(v=>v/length),p.ParamAngleX*correction(p,'CorrTurn'),0,0)[2];
 }
 export function craniumSeam(){return 1;}
 // The front photograph has no texture resolution at its projected horizon.

@@ -7,9 +7,58 @@ import {readFileSync} from 'node:fs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift} from '../bundle/geometry.mjs';
 import {hairLift} from '../bundle/hair-shell.mjs';
+import {mainOpaqueRuns,projectedHeadInterval,headInteriorInterval,rowAlphaGaps} from './raster_interior.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
 const mesh=id=>rig.meshes.find(m=>m.id===id);
+test('raster interior rejects injected closed and open gaps while excluding exterior background',()=>{
+ const width=32,rgba=new Uint8Array(width*4);
+ for(let x=8;x<24;x++)rgba[x*4+3]=255;
+ assert.equal(rowAlphaGaps(rgba,width,1,0,8,24).count,0);
+ rgba[16*4+3]=0;
+ assert.equal(rowAlphaGaps(rgba,width,1,0,8,24).count,1);
+ for(let x=14;x<18;x++)rgba[x*4+3]=0;
+ assert.equal(rowAlphaGaps(rgba,width,1,0,8,24).count,4);
+});
+test('near-side bridged coverage remains strict while the far boundary follows source alpha',()=>{
+ const y=300,scale=2,ox=30;
+ for(const yaw of [-45,0,45]){
+  const p={...base,CorrTurn:1,ParamAngleX:yaw},a=headInteriorInterval(y,p,100,1900,ox,scale);
+  const [left,right]=projectedHeadInterval(y,p);
+  const {rx,rz,cz,cx}=domeSection(y),angle=yaw*Math.PI/180;
+  const center=502+cx*Math.cos(angle)+cz*Math.sin(angle),radius=Math.hypot(rx*Math.cos(angle),rz*Math.sin(angle));
+  assert.equal(a[0],yaw>0?ox+(left+15)*scale:Math.max(130,yaw<0?ox+(center-radius+15)*scale:0));
+  assert.equal(a[1],yaw<0?ox+(right-15)*scale:Math.min(1870,yaw>0?ox+(center+radius-15)*scale:Infinity));
+  const shifted=headInteriorInterval(y,p,110,1890,ox,scale);
+  if(yaw>0)assert.equal(a[0],shifted[0]);
+  if(yaw<0)assert.equal(a[1],shifted[1]);
+ }
+});
+test('main opaque spans ignore five-pixel wisps but retain holes between head regions',()=>{
+ const width=200,rgba=new Uint8Array(width*4);
+ const fill=(a,b)=>{for(let x=a;x<b;x++)rgba[x*4+3]=255;};
+ fill(0,5);fill(40,95);fill(105,160);fill(185,190);
+ const span=mainOpaqueRuns(rgba,width,1,0,1);
+ assert.deepEqual(span,[40,160]);
+ assert.equal(rowAlphaGaps(rgba,width,1,0,span[0]+15,span[1]-15).count,10);
+ fill(95,105);
+ assert.equal(rowAlphaGaps(rgba,width,1,0,span[0]+15,span[1]-15).count,0);
+ assert.deepEqual(mainOpaqueRuns(rgba,width,1,0,2),[40,160]);
+});
+test('far ear notch outside the dome is excluded while an internal gap still fails',()=>{
+ const width=2200,y=414,rgba=new Uint8Array(width*4);
+ for(let x=0;x<width;x++)rgba[x*4+3]=255;
+ for(const yaw of [-45,45]){
+  const p={...base,CorrTurn:1,ParamAngleX:yaw},[left,right]=headInteriorInterval(y,p,0,width,0,2);
+  assert(left>30&&right<width-30,'far ear notch lies beyond the dome intersection');
+  const outside=yaw<0?Math.floor(left)-5:Math.ceil(right)+5;
+  rgba[outside*4+3]=0;
+  assert.equal(rowAlphaGaps(rgba,width,1,0,left,right).count,0);
+  const inside=Math.floor((left+right)/2);rgba[inside*4+3]=0;
+  assert.equal(rowAlphaGaps(rgba,width,1,0,left,right).count,1);
+  rgba[outside*4+3]=255;rgba[inside*4+3]=255;
+ }
+});
 const state={hidden:new Set(),outfit:'sweater'};
 test('front ears lie behind cheek and side hair',()=>{
  for(const side of ['left','right'])for(const y of [420,460,500]){

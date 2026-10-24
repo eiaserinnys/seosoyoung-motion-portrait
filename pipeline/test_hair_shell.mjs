@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import {readFileSync} from 'node:fs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
-import {domeSection,craniumPosition} from '../bundle/hair-surface.mjs';
+import {domeSection,craniumPosition,craniumFacing} from '../bundle/hair-surface.mjs';
 import {hairLift,hairWorld,sideWorld,backWorld,craniumWorld} from '../bundle/hair-shell.mjs';
 import {craniumWorld as exportedCranium} from '../bundle/cranium-surface.mjs';
 import './test_9dir.mjs';
@@ -82,10 +82,19 @@ test('cranium bridge meets the shared canopy seam at all nine poses',()=>{
   assert(Math.hypot(...a.map((v,i)=>v-b[i]))<1e-14,`${yaw},${pitch},${sign},${y}`);
  }
 });
-test('cranium bridge preserves the outer silhouette at and beyond 135 degrees',()=>{
+test('cranium follows canopy row height and preserves the upper yaw-only silhouette',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const sign of [-1,1])for(const y of [60,180,300,400,465])for(const angle of [135,150,180]){
   const p={...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch},pt=[0,y,sign*angle*Math.PI/180];
-  assert.deepEqual(craniumWorld(pt,sign<0?'left':'right',p),craniumPosition(pt,p));
+  const {cx,rx}=domeSection(y),side=sign<0?'left':'right';
+  const a=craniumWorld(pt,side,p),b=hairWorld([502+cx+sign*rx,y],p);
+  assert(Math.abs(a[1]-b[1])<1e-12,'pitch never raises the cranium above its canopy row');
+  if(!pitch&&y<=400)assert.deepEqual(a,craniumPosition(pt,p));
+  if(y>425)assert(Math.abs(a[0]-b[0])<=Math.abs(craniumPosition(pt,p)[0]-b[0])+1e-9,'lower cranium contracts toward the seam');
+ }
+});
+test('frontal yaw never reveals either cranium at any pitch',()=>{
+ for(const pitch of [-30,0,30])for(const id of ['side-cranium-left','side-cranium-right'])for(const pt of mesh(id).positions){
+  assert(craniumFacing(pt,{...base,CorrTurn:1,ParamAngleX:0,ParamAngleY:pitch})<1e-9);
  }
 });
 test('upper diagonal fringe strands remain wholly on the fringe surface',()=>{
