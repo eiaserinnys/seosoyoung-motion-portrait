@@ -1,8 +1,8 @@
-# r13 normalized pitch and crown continuity
+# r13 final jaw width and lock attachment
 
 The rounded canopy dome and full rear-cranium X/Z from the initial r13 remain unchanged. All upper cranium longitudes now follow the shared canopy seam Y with crownBlend, without longitude attenuation. This preserves the approved yaw-only crown and rear volume.
 
-The face combines the measured SAM3 X calibration with registered, normalized pitch Y. Up spans are 166px (front) and 158px (diagonal); down spans are 124px and 134px. Progress follows s^.84/up and s^1.12/down. The old correctedLift pitch Y is removed from the lower-face map, which joins the existing upper face across y445..465. The registered top-edge height difference fades by (1-s), converging from the 94.83px cheek difference to zero at the 11px-wide chin row. A fixed artwork-centered arch, xi=(x-502)/135, avoids the narrowing-row derivative. The 673-vertex silhouette mesh remains.
+The face derives pitch X from the approved yaw-only silhouette and combines it with registered, normalized pitch Y. Contaminated pitched-mask widths no longer drive the runtime. Mid-jaw width varies only +5% up or -5% down through sin(pi*s), and returns to the yaw width at the cheek and chin. Diagonal centers shift by the approved 3px/up or 16px/down amounts toward the chin. Up spans are 166px (front) and 158px (diagonal); down spans are 124px and 134px. Progress follows s^.84/up and s^1.12/down. The old correctedLift pitch Y is removed from the lower-face map, which joins the existing upper face across y445..465. The registered top-edge height difference fades by (1-s), converging from the 94.83px cheek difference to zero at the 11px-wide chin row. A fixed artwork-centered arch, xi=(x-502)/135, avoids the narrowing-row derivative. The 673-vertex silhouette mesh remains. Final chin widths are 11px front and approximately 13.252539px at either yaw, matching their pitch-zero silhouettes.
 
 Feature centers, width and height use the measured pose registration. A neutral corneal reference and separate yaw registration origin preserve local eyeball rotation without doubling head translation. Head-driven corneal angles are yaw*.28 and pitch*.65, after independent gaze. The lighter socket scale, eyelid arch and diagonal tilt follow the approved formulas. Nose and mouth have their registered pitch shifts. The neck follows the new chin position.
 
@@ -10,17 +10,17 @@ At gain 1, up30 chin Y is 556.84px, mouth-to-chin distance 72.63px and jaw drop 
 
 | Gate | Result |
 |:--|:--|
-| Node | 55 distinct contracts covered: 54 passed in the full run; its obsolete mirror expectation was corrected for the fixed artwork arch, then all 9 affected mirror/neutral contracts passed |
+| Node | 57 passed, 0 failed; includes two RED-to-GREEN contracts for normalized widths and the right lock tip attachment |
 | Attachments | 200 conditions passed: no inverted face ribbons or collapsed 3D triangles |
 | Outline | One execution PASS: 14 yaw/gain poses, zero internal holes, cheek-ear gaps, forehead intrusion and far-back exposure |
 | Viewer | One execution PASS: 972 shared canopy samples/error 0; eye clipping, gaze, neck, controls, lightbox and narrow layout pass; browser/HTTP/WebGL errors 0 |
 | Python | Previous 9-test evidence reused; Python source and pixel restoration are unchanged |
 
-The current 9-direction sheet was opened directly. The up row has a curved jaw with restored mouth clearance; the down row has more open eyes. The middle row retains crown and rear volume. Panels, typography and layout reuse the existing implementation without new dimensions.
+The current 9-direction sheet was opened directly and compared with r13b. Excess up-row cheek width and broad diagonal chin tips are reduced. The isolated brown pixel on the upper-left pose's right cheek is gone. Restored r12 lockWeight and temple outlinePitchShift attachment keep that hanging tip on its face attachment. The middle row retains crown and rear volume; the down row retains the corrected eye height. Panels, typography and layout reuse the existing implementation without new dimensions.
 
 The remaining triangular background area in the lower diagonal crown was traced to original transparent artwork rather than an unmatched cranium Y row. In the left-down tile, sheet [240,1015] corresponds to canvas [512,102.5], then hair-top source [543.95,41.29]. Its atlas alpha is zero. Canvas [527,110] maps to source [560.96,45.86], also alpha zero. Both immutable hair source pixels [544,41]/[561,46] and corresponding reference pixels [392,21]/[409,26] are RGBA (0,0,0,0). No visible near-cranium triangle covers these sample points; the intersecting far cranium has negative facing. The original gap is preserved by both hair-top and back-hair-center. [Barycentric source evidence](crown-origin-r13b.json) records the rays, UVs, alpha and source correspondence.
 
-The coordinator has the remaining visual decision: retain this original exterior strand gap or authorize additional backing/artwork coverage. Static code review confirms the approved formulas; the full visual task remains pending that decision. The 14-pose outline gate is yaw-only and does not establish pitched crown coverage.
+The user explicitly confirmed this source correspondence and instructed preservation of the original alpha. No fill was applied. Independent Sol 6.1 high code review passed the final two corrections and directly compared the current nine-direction sheet; no unresolved code findings remain. Specialist UI/UX review is the coordinator's next step. The 14-pose outline gate is yaw-only; the pitched crown was also inspected in the current sheet.
 
 Evidence: [viewer metrics](viewer_metrics.json), [outline metrics](outline_metrics.json), [nine directions](captures/viewer_9dir_grid.png), [actual left](captures/viewer_actual_45_left.png), [actual right](captures/viewer_actual_45_right.png), [narrow layout](captures/viewer_1024_narrow.png), [bundle SHA256](bundle-sha256.txt). Runtime synchronization covers the same 28 files; requested 11 captures and the narrow-layout capture are current. Older captures below remain historical. Merge, deployment and specialist UI/UX approval remain with the coordinator.
 

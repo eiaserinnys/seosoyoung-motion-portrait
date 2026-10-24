@@ -1,6 +1,7 @@
 import {strandWorld} from './side-strands.mjs';
 import {hairSurface,domeSection,craniumPosition} from './hair-surface.mjs';
 import {earWorld} from './stereo-attachments.mjs';
+import {outlinePitchShift} from './face-outline.mjs';
 import {HEAD_CENTER,clamp,correction,correctedLift,artWorld} from './geometry.mjs';
 
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
@@ -26,7 +27,8 @@ const fringeSurface=(point,p)=>artWorld(hairLift(point,p,0),p);
 export function canopyWorld(point,p) {
  const [x,y]=point,world=fringeSurface(point,p);
  const side=x<HEAD_CENTER[0]?'left':'right';
- const lockWeight=smooth((y-340)/45);
+ const lower=smooth((y-405)/55),xStart=126-42*lower,width=14;
+ const lockWeight=smooth((Math.abs(x-HEAD_CENTER[0])-xStart)/width)*smooth((y-340)/67);
  if(lockWeight){
   const lock=templeWorld(point,side,p);
   for(let i=0;i<3;i++)world[i]+=(lock[i]-world[i])*lockWeight;
@@ -53,6 +55,9 @@ export function farSideWeight(side,p) {
   return smooth(angle/50)*correction(p,'CorrHairOcclusion');
 }
 function templeWorld(point,side,p) {
+ const inner=side==='left'?379:626;
+ const outward=Math.max(0,(point[0]-inner)*(side==='left'?-1:1));
+ const join=(1-smooth(outward/30))*smooth((point[1]-380)/70);
  // Hanging front locks retain the original forehead-depth attachment rather
  // than being flattened onto the narrower skull at ear height. Rotation moves
  // them in front of the cheek, uncovering the posterior ear naturally.
@@ -60,6 +65,8 @@ function templeWorld(point,side,p) {
  const shell=fringe.map((v,i)=>v+(lock[i]-v)*lower);
  const hanging=smooth((point[1]-350)/57);
  for(let i=0;i<3;i++)shell[i]+=(lock[i]-shell[i])*hanging;
+ const shift=outlinePitchShift(point,p);
+ for(const i of [0,1])shell[i]+=shift[i]*join;
  return shell;
 }
 export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}

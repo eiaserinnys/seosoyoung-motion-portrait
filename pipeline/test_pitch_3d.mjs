@@ -3,14 +3,32 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift} from '../bundle/geometry.mjs';
-import {outlineWorld,outlineRow} from '../bundle/face-outline.mjs';
+import {outlineWorld,outlineRow,outlinePitchShift} from '../bundle/face-outline.mjs';
 import {featureWorld} from '../bundle/face-features.mjs';
 import {canopyWorld,craniumWorld} from '../bundle/hair-shell.mjs';
 import {domeSection,craniumPosition} from '../bundle/hair-surface.mjs';
 import {FEATURE_FIT} from '../bundle/feature-data.mjs';
+import {strandWorld} from '../bundle/side-strands.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const pose=(yaw,pitch)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch});
+test('pitch jaw widths stay within five percent of approved yaw shapes and converge at the chin',()=>{
+ for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const y of [465,510,550,590,610,616]){
+  const [l,r]=outlineRow(y),neutral=[l,r].map(x=>outlineWorld([x,y],pose(yaw,0))[0]);
+  const current=[l,r].map(x=>outlineWorld([x,y],pose(yaw,pitch))[0]),s=(y-465)/151;
+  const scale=1+(pitch>0?.05:-.05)*Math.sin(Math.PI*s);
+  const shift=yaw?-Math.sign(yaw)*(pitch<0?16:3)*s:0;
+  assert(Math.abs((current[1]-current[0])-(neutral[1]-neutral[0])*scale)<1e-8,`width ${yaw},${pitch},${y}`);
+  assert(Math.abs((current[0]+current[1]-neutral[0]-neutral[1])/2-shift)<1e-8,`midpoint ${yaw},${pitch},${y}`);
+ }
+});
+test('right hanging lock tip follows its face attachment under upward left yaw',()=>{
+ const point=[648,544],p=pose(-45,30),strand=strandWorld(point,'right',p),shift=outlinePitchShift(point,p);
+ const t=22/30,join=1-t*t*(3-2*t),world=canopyWorld(point,p);
+ assert(Math.hypot(shift[0]*join,shift[1]*join)>1);
+ for(const i of [0,1])assert(Math.abs(world[i]-strand[i]-shift[i]*join)<1e-8);
+ assert.equal(world[2],strand[2]);
+});
 test('face mesh follows its alpha silhouette instead of a coarse rectangle',()=>{
  const mesh=rig.meshes.find(m=>m.id==='face-skin');
  assert.equal(mesh.topology,'alpha-silhouette');assert(mesh.positions.length>132);
