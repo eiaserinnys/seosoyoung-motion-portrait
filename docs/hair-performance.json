@@ -1,0 +1,8 @@
+{
+  "measurement": "Node deform3D over all mesh vertices at nine fixed poses; wall time, not browser FPS",
+  "baseline": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
+  "initialDenseCacheComparison": {"vertices": 21855, "beforeMs": 4102.992117, "afterMs": 2039.9564520000006, "maximumDisplacementPx": 0},
+  "finalReducedCacheComparison": {"vertices": 9999, "beforeMs": 1844.4737969999994, "afterMs": 1275.3312660000001, "maximumDisplacementPx": 0},
+  "baselineTriangles": 35976,
+  "finalTriangles": 14964
+}

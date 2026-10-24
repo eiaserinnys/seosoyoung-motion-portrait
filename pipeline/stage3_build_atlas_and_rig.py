@@ -69,7 +69,7 @@ def mesh(im,bbox,atlas):
 
 def cranium_mesh(side,bbox,atlas):
     dome=json.loads((ROOT/'source/viewer/dome-fit.json').read_text())
-    cols,rows=32,96;positions=[];uvs=[];triangles=[]
+    cols,rows=16,48;positions=[];uvs=[];triangles=[]
     sign=1 if side=='right' else -1;ref=-sign*math.pi/4
     for j in range(rows+1):
         y=dome['cy']-dome['ry']+(540-dome['cy']+dome['ry'])*j/rows
@@ -146,6 +146,9 @@ def build():
     meshes=[]; originals={}
     seam_rows=json.loads((ROOT/'source/viewer/dome-fit.json').read_text())['frontSeam']
     seams=[[(row[side],row[0]) for row in seam_rows] for side in [1,2]]
+    coarse_rows=seam_rows[::6]
+    if coarse_rows[-1]!=seam_rows[-1]:coarse_rows.append(seam_rows[-1])
+    coarse_seams=[[(row[side],row[0]) for row in coarse_rows] for side in [1,2]]
     for p in parts:
         key=p['id'];box=boxes[key];x,y,w,h=p['bbox']
         im=Image.open(ROOT/p['file']).convert('RGBA')
@@ -168,7 +171,9 @@ def build():
         masks=[f"eye-{'left' if '-left-' in key else 'right'}-sclera"] if any(key.endswith('-'+s) for s in ['iris','pupil','highlight']) else []
         # Union topology preserves both versions with identical positions and UVs.
         union=im.copy();union.putalpha(Image.frombytes('L',im.size,bytes(max(a,b) for a,b in zip(im.getchannel('A').tobytes(),original.getchannel('A').tobytes()))))
-        meshes.append(dict(id=key,label=p.get('label',key),partId=group,drawOrder=draw,deformerId=deformer_for(key),bbox=p['bbox'],atlas=box,masks=masks,**(cranium_mesh(key.split('-')[-1],p['bbox'],box) if key.startswith('side-cranium') else silhouette_mesh(union,p['bbox'],box,SIZE,[(306.5,544.2),(691.5,542.6),(379,465),(626,465)],seams if key=='hair-top' or key.startswith(('side-hair','back-hair')) else ()) if key.startswith(('ear-','tail-','side-hair','back-hair','bangs')) or key in ['face-skin','hair-top','hairpin'] else mesh(union,p['bbox'],box))))
+        coarse=key.startswith(('back-hair-','tail-'))
+        mesh_seams=coarse_seams if key.startswith('back-hair-') else seams if key=='hair-top' or key.startswith('side-hair') else ()
+        meshes.append(dict(id=key,label=p.get('label',key),partId=group,drawOrder=draw,deformerId=deformer_for(key),bbox=p['bbox'],atlas=box,masks=masks,**(cranium_mesh(key.split('-')[-1],p['bbox'],box) if key.startswith('side-cranium') else silhouette_mesh(union,p['bbox'],box,SIZE,[(306.5,544.2),(691.5,542.6),(379,465),(626,465)],mesh_seams,max_area=800 if coarse else 150,simplify_tol=3.0 if coarse else .65) if key.startswith(('ear-','tail-','side-hair','back-hair','bangs')) or key in ['face-skin','hair-top','hairpin'] else mesh(union,p['bbox'],box))))
     after.save(assets/'texture_00.png');before.save(assets/'texture_before_00.png')
     build_head_surface(parts,assets)
     build_head_surface(parts,assets,originals)

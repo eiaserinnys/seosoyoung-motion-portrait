@@ -1,6 +1,6 @@
 {
-  "baseline": "89fc408e7b8efb06acadb958324c31a30d0c0b84",
-  "head": "0b6018d9e07191bdccaf0e5cca3ba4f66d066ef7",
+  "baseline": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
+  "head": "d9c492b302b398b7a3b12ba636e4c6e9442084b8",
   "registrationSha256": "ea2cb7220fa37f5579405500d43ecef0eaafaeeddee99ce254704fbfe4ec9a04",
   "referenceMaskMethod": "Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation",
   "canvas": [
@@ -18,16 +18,16 @@
         19.089999999999975,
         34.54653004241334
       ],
-      "topY": 60,
+      "topY": 52,
       "topGate": {
         "kind": "target",
         "target": 55,
-        "error": 5,
+        "error": -3,
         "pass": true
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 63
+        "maxAbsoluteError": 67
       },
       "beads": {
         "left": {
@@ -41,12 +41,12 @@
           ],
           "pixels": 3830,
           "render": [
-            298.5,
-            541.5
+            298.6299999999999,
+            537.5
           ],
           "dBodyFrame": [
-            -3.910000000000025,
-            -1.9534699575866625
+            -3.7800000000001432,
+            -5.9534699575866625
           ],
           "hairOnlyStemGap": 15,
           "stemGap": 15
@@ -62,11 +62,11 @@
           ],
           "pixels": 5223,
           "render": [
-            684.5,
+            684.0,
             538.5
           ],
           "dBodyFrame": [
-            -1.9100000000000819,
+            -2.410000000000082,
             -4.4534699575866625
           ],
           "hairOnlyStemGap": 0,
@@ -76,33 +76,99 @@
       "neutralChangedPixels": null,
       "neutralVertexHashMatches": null,
       "nearCheekCover": {
-        "sampledRows": 61,
-        "maximumGap": 9
+        "sampledRows": 71,
+        "maximumGap": 3
       },
+      "neutralSilhouette": null,
+      "templeRimlight": {
+        "window": [
+          560,
+          120,
+          860,
+          420
+        ],
+        "threshold": 116.4584,
+        "baselinePixels": 1130,
+        "pixels": 435,
+        "reduction": 0.6150442477876106,
+        "minimumReduction": 0.58,
+        "pass": true
+      },
+      "posteriorVolume": {
+        "baselineMeanAbsoluteDelta": 40.75247524752475,
+        "meanAbsoluteDelta": 28.544554455445546,
+        "improvement": 12.207920792079204,
+        "upperMaximumOverhang": 114,
+        "upperMaximumIncrease": 12,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          120,
+          200
+        ],
+        "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 661,
+          "baseline": 672,
+          "current": 684,
+          "increase": 12
+        },
+        "pass": true
+      },
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 1,
+          "pass": false
+        }
+      },
+      "referenceMixMaximum": null,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 80,
+          "y": 275,
           "shift": [
             0,
-            0
+            17
           ]
         },
-        "maximum": 0
+        "maximum": 17
       },
       "hairline": {
         "sampleCount": 16,
-        "medianError": 12.5
+        "medianError": 10.5
       },
-      "hairlineMedianError": 12.5,
+      "hairlineMedianError": 10.5,
       "foreheadExposure": {
-        "referenceArea": 12988,
-        "renderArea": 14409,
-        "ratioError": 0.10940868493994449,
+        "referenceArea": 13573,
+        "renderArea": 14630,
+        "ratioError": 0.077875193398659,
         "region": [
           331,
           150,
-          512,
+          520,
           362
         ]
       }
@@ -139,11 +205,11 @@
           "pixels": 5414,
           "render": [
             307.0,
-            542.5
+            539.0
           ],
           "dBodyFrame": [
             -1.6000000000000227,
-            -0.879498933342461
+            -4.379498933342461
           ],
           "hairOnlyStemGap": 3,
           "stemGap": 3
@@ -160,11 +226,11 @@
           "pixels": 4561,
           "render": [
             689.5,
-            542.0
+            538.0
           ],
           "dBodyFrame": [
             -5.600000000000023,
-            -0.879498933342461
+            -4.879498933342461
           ],
           "hairOnlyStemGap": 3,
           "stemGap": 3
@@ -173,6 +239,36 @@
       "neutralChangedPixels": null,
       "neutralVertexHashMatches": null,
       "nearCheekCover": null,
+      "neutralSilhouette": null,
+      "templeRimlight": null,
+      "posteriorVolume": null,
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "referenceMixMaximum": null,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
@@ -191,8 +287,8 @@
       "hairlineMedianError": -20.0,
       "foreheadExposure": {
         "referenceArea": 15289,
-        "renderArea": 17018,
-        "ratioError": 0.11308784093138868,
+        "renderArea": 17019,
+        "ratioError": 0.11315324743279476,
         "region": [
           386,
           150,
@@ -209,12 +305,12 @@
         -56.64999999999998,
         28.46396599410957
       ],
-      "topY": 61,
+      "topY": 53,
       "topGate": {
         "kind": "target",
         "target": 48,
-        "error": 13,
-        "pass": false
+        "error": 5,
+        "pass": true
       },
       "exterior": {
         "sampledRows": 23,
@@ -232,12 +328,12 @@
           ],
           "pixels": 5372,
           "render": [
-            312.0,
-            542.5
+            311.5,
+            539.0
           ],
           "dBodyFrame": [
-            2.3500000000000227,
-            -1.5360340058904285
+            1.8500000000000227,
+            -5.0360340058904285
           ],
           "hairOnlyStemGap": 0,
           "stemGap": 0
@@ -253,33 +349,99 @@
           ],
           "pixels": 157,
           "render": [
-            711.0,
-            542.5
+            710.95,
+            543.5
           ],
           "dBodyFrame": [
-            -6.090000000000032,
-            -10.536034005890428
+            -6.139999999999986,
+            -9.536034005890428
           ],
-          "hairOnlyStemGap": 14,
-          "stemGap": 14
+          "hairOnlyStemGap": 10,
+          "stemGap": 10
         }
       },
       "neutralChangedPixels": null,
       "neutralVertexHashMatches": null,
       "nearCheekCover": {
-        "sampledRows": 61,
-        "maximumGap": 14
+        "sampledRows": 71,
+        "maximumGap": 7
       },
+      "neutralSilhouette": null,
+      "templeRimlight": {
+        "window": [
+          164,
+          120,
+          464,
+          420
+        ],
+        "threshold": 80.29467999999997,
+        "baselinePixels": 1275,
+        "pixels": 483,
+        "reduction": 0.6211764705882352,
+        "minimumReduction": 0.58,
+        "pass": true
+      },
+      "posteriorVolume": {
+        "baselineMeanAbsoluteDelta": 64.65346534653466,
+        "meanAbsoluteDelta": 53.54455445544554,
+        "improvement": 11.108910891089117,
+        "upperMaximumOverhang": -19,
+        "upperMaximumIncrease": 0,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          120,
+          200
+        ],
+        "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 277,
+          "baseline": 308,
+          "current": 302,
+          "increase": 0
+        },
+        "pass": true
+      },
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.6499999999999986,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "referenceMixMaximum": null,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 80,
+          "y": 282,
           "shift": [
-            0,
+            -17,
             0
           ]
         },
-        "maximum": 0
+        "maximum": 17
       },
       "hairline": {
         "sampleCount": 17,
@@ -288,8 +450,8 @@
       "hairlineMedianError": -39.0,
       "foreheadExposure": {
         "referenceArea": 12016,
-        "renderArea": 11422,
-        "ratioError": -0.049434087882822886,
+        "renderArea": 11469,
+        "ratioError": -0.04552263648468713,
         "region": [
           474,
           150,
@@ -310,7 +472,7 @@
       "topGate": null,
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 95
+        "maxAbsoluteError": 94
       },
       "beads": {
         "left": {
@@ -325,14 +487,14 @@
           "pixels": 3394,
           "render": [
             298.5,
-            540.5
+            537.0
           ],
           "dBodyFrame": [
             -7.0,
-            -1.5
+            -5.0
           ],
-          "hairOnlyStemGap": 15,
-          "stemGap": 15
+          "hairOnlyStemGap": 16,
+          "stemGap": 16
         },
         "right": {
           "refFrame": [
@@ -345,23 +507,91 @@
           ],
           "pixels": 5168,
           "render": [
-            684.5,
+            684.0,
             538.5
           ],
           "dBodyFrame": [
-            -7.0,
+            -7.5,
             -5.5
           ],
           "hairOnlyStemGap": 0,
           "stemGap": 0
         }
       },
-      "neutralChangedPixels": 0,
-      "neutralVertexHashMatches": true,
+      "neutralChangedPixels": 125491,
+      "neutralVertexHashMatches": false,
       "nearCheekCover": {
         "sampledRows": 61,
         "maximumGap": 0
       },
+      "neutralSilhouette": {
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "templeRimlight": {
+        "window": [
+          560,
+          120,
+          860,
+          420
+        ],
+        "threshold": 114.94912000000006,
+        "baselinePixels": 1112,
+        "pixels": 351,
+        "reduction": 0.6843525179856116,
+        "minimumReduction": 0.58,
+        "pass": true
+      },
+      "posteriorVolume": null,
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "referenceMixMaximum": 1,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
@@ -375,15 +605,15 @@
       },
       "hairline": {
         "sampleCount": 12,
-        "medianError": -12.5
+        "medianError": -16.0
       },
-      "hairlineMedianError": -12.5,
+      "hairlineMedianError": -16.0,
       "foreheadExposure": {
-        "referenceArea": 12457,
-        "renderArea": 12949,
-        "ratioError": 0.03949586577827735,
+        "referenceArea": 12481,
+        "renderArea": 12995,
+        "ratioError": 0.04118259754827336,
         "region": [
-          350,
+          349,
           150,
           489,
           409
@@ -402,7 +632,7 @@
       "topGate": null,
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 22
+        "maxAbsoluteError": 7
       },
       "beads": {
         "left": {
@@ -417,11 +647,11 @@
           "pixels": 5063,
           "render": [
             307.0,
-            542.5
+            539.0
           ],
           "dBodyFrame": [
             -0.5,
-            -1.5
+            -5.0
           ],
           "hairOnlyStemGap": 3,
           "stemGap": 3
@@ -438,19 +668,74 @@
           "pixels": 4212,
           "render": [
             689.5,
-            542.0
+            538.0
           ],
           "dBodyFrame": [
             0.0,
-            -1.0
+            -5.0
           ],
           "hairOnlyStemGap": 3,
           "stemGap": 3
         }
       },
-      "neutralChangedPixels": 0,
-      "neutralVertexHashMatches": true,
+      "neutralChangedPixels": 16232,
+      "neutralVertexHashMatches": false,
       "nearCheekCover": null,
+      "neutralSilhouette": {
+        "crown": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "templeRimlight": null,
+      "posteriorVolume": null,
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "referenceMixMaximum": 0,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
@@ -505,12 +790,12 @@
           ],
           "pixels": 5398,
           "render": [
-            312.0,
-            542.5
+            311.5,
+            539.0
           ],
           "dBodyFrame": [
-            3.5,
-            -2.0299999999997453
+            3.0,
+            -5.529999999999745
           ],
           "hairOnlyStemGap": 0,
           "stemGap": 0
@@ -527,22 +812,90 @@
           "pixels": 1827,
           "render": [
             710.0,
-            541.5
+            543.5
           ],
           "dBodyFrame": [
             5.740000000000009,
-            -2.0
+            0.0
           ],
           "hairOnlyStemGap": 80,
           "stemGap": 40
         }
       },
-      "neutralChangedPixels": 0,
-      "neutralVertexHashMatches": true,
+      "neutralChangedPixels": 124940,
+      "neutralVertexHashMatches": false,
       "nearCheekCover": {
         "sampledRows": 61,
         "maximumGap": 0
       },
+      "neutralSilhouette": {
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "templeRimlight": {
+        "window": [
+          164,
+          120,
+          464,
+          420
+        ],
+        "threshold": 82.83200000000001,
+        "baselinePixels": 1302,
+        "pixels": 543,
+        "reduction": 0.5829493087557603,
+        "minimumReduction": 0.58,
+        "pass": true
+      },
+      "posteriorVolume": null,
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "referenceMixMaximum": 1,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
@@ -561,8 +914,8 @@
       "hairlineMedianError": -30.5,
       "foreheadExposure": {
         "referenceArea": 10729,
-        "renderArea": 10487,
-        "ratioError": -0.02255569018547865,
+        "renderArea": 10485,
+        "ratioError": -0.022742100848168523,
         "region": [
           536,
           150,
@@ -587,7 +940,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 70
+        "maxAbsoluteError": 77
       },
       "beads": {
         "left": {
@@ -601,15 +954,15 @@
           ],
           "pixels": 1213,
           "render": [
-            302.0,
-            541.5
+            302.5,
+            537.5
           ],
           "dBodyFrame": [
-            2.6999999999999886,
-            1.3275862316023677
+            3.1999999999999886,
+            -2.6724137683976323
           ],
-          "hairOnlyStemGap": 14,
-          "stemGap": 14
+          "hairOnlyStemGap": 17,
+          "stemGap": 17
         },
         "right": {
           "refFrame": [
@@ -622,11 +975,11 @@
           ],
           "pixels": 5569,
           "render": [
-            684.5,
+            684.0,
             538.5
           ],
           "dBodyFrame": [
-            -5.2999999999999545,
+            -5.7999999999999545,
             -18.172413768397632
           ],
           "hairOnlyStemGap": 0,
@@ -639,6 +992,36 @@
         "sampledRows": 61,
         "maximumGap": 0
       },
+      "neutralSilhouette": null,
+      "templeRimlight": null,
+      "posteriorVolume": null,
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 1,
+          "pass": false
+        }
+      },
+      "referenceMixMaximum": null,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
@@ -657,8 +1040,8 @@
       "hairlineMedianError": -10.0,
       "foreheadExposure": {
         "referenceArea": 3871,
-        "renderArea": 4393,
-        "ratioError": 0.13484887625936448,
+        "renderArea": 4381,
+        "ratioError": 0.13174890209248247,
         "region": [
           347,
           150,
@@ -698,11 +1081,11 @@
           "pixels": 4732,
           "render": [
             307.0,
-            542.5
+            539.0
           ],
           "dBodyFrame": [
             0.14999999999997726,
-            -1.7063847926417566
+            -5.206384792641757
           ],
           "hairOnlyStemGap": 3,
           "stemGap": 3
@@ -719,11 +1102,11 @@
           "pixels": 3695,
           "render": [
             689.5,
-            542.0
+            538.3
           ],
           "dBodyFrame": [
             -2.3500000000000227,
-            -1.2063847926417566
+            -4.906384792641802
           ],
           "hairOnlyStemGap": 0,
           "stemGap": 0
@@ -732,6 +1115,36 @@
       "neutralChangedPixels": null,
       "neutralVertexHashMatches": null,
       "nearCheekCover": null,
+      "neutralSilhouette": null,
+      "templeRimlight": null,
+      "posteriorVolume": null,
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.6499999999999986,
+          "missingRows": 1,
+          "pass": false
+        }
+      },
+      "referenceMixMaximum": null,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
@@ -750,8 +1163,8 @@
       "hairlineMedianError": 10.0,
       "foreheadExposure": {
         "referenceArea": 10170,
-        "renderArea": 8682,
-        "ratioError": -0.1463126843657817,
+        "renderArea": 8678,
+        "ratioError": -0.14670599803343165,
         "region": [
           465,
           150,
@@ -776,7 +1189,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 129
+        "maxAbsoluteError": 134
       },
       "beads": {
         "left": {
@@ -790,12 +1203,12 @@
           ],
           "pixels": 5440,
           "render": [
-            312.0,
-            542.5
+            311.5,
+            539.0
           ],
           "dBodyFrame": [
-            3.1000000000000227,
-            -1.4998497200939482
+            2.6000000000000227,
+            -4.999849720093948
           ],
           "hairOnlyStemGap": 0,
           "stemGap": 0
@@ -812,22 +1225,52 @@
           "pixels": 203,
           "render": [
             708.0,
-            541.0
+            543.5
           ],
           "dBodyFrame": [
             -11.399999999999977,
-            -11.499849720093948
+            -8.999849720093948
           ],
-          "hairOnlyStemGap": 14,
-          "stemGap": 14
+          "hairOnlyStemGap": 15,
+          "stemGap": 15
         }
       },
       "neutralChangedPixels": null,
       "neutralVertexHashMatches": null,
       "nearCheekCover": {
         "sampledRows": 61,
-        "maximumGap": 1
+        "maximumGap": 2
       },
+      "neutralSilhouette": null,
+      "templeRimlight": null,
+      "posteriorVolume": null,
+      "retriangulationSilhouette": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      },
+      "referenceMixMaximum": null,
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
@@ -841,15 +1284,15 @@
       },
       "hairline": {
         "sampleCount": 6,
-        "medianError": -13.5
+        "medianError": -14.0
       },
-      "hairlineMedianError": -13.5,
+      "hairlineMedianError": -14.0,
       "foreheadExposure": {
-        "referenceArea": 5803,
-        "renderArea": 4283,
-        "ratioError": -0.26193348268137173,
+        "referenceArea": 5819,
+        "renderArea": 4318,
+        "ratioError": -0.25794810104829013,
         "region": [
-          610,
+          609,
           150,
           678,
           427
@@ -864,41 +1307,120 @@
     },
     {
       "pose": "up-left",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 1,
+          "pass": false
+        }
+      }
+    },
+    {
+      "pose": "up-left",
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
+      "value": {
+        "window": [
+          560,
+          120,
+          860,
+          420
+        ],
+        "threshold": 116.4584,
+        "baselinePixels": 1130,
+        "pixels": 435,
+        "reduction": 0.6150442477876106,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-left",
+      "gate": "upper diagonal posterior volume",
+      "pass": true,
+      "value": {
+        "baselineMeanAbsoluteDelta": 40.75247524752475,
+        "meanAbsoluteDelta": 28.544554455445546,
+        "improvement": 12.207920792079204,
+        "upperMaximumOverhang": 114,
+        "upperMaximumIncrease": 12,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          120,
+          200
+        ],
+        "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 661,
+          "baseline": 672,
+          "current": 684,
+          "increase": 12
+        },
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-left",
       "gate": "crown top",
       "pass": true,
-      "value": 60
+      "value": 52
     },
     {
       "pose": "up-left",
       "gate": "approved crown top",
       "pass": true,
-      "value": 60
+      "value": 52
     },
     {
       "pose": "up-left",
       "gate": "hairline median",
-      "pass": false,
-      "value": 12.5
+      "pass": true,
+      "value": 10.5
     },
     {
       "pose": "up-left",
       "gate": "forehead exposure",
-      "pass": false,
-      "value": 0.10940868493994449
+      "pass": true,
+      "value": 0.077875193398659
     },
     {
       "pose": "up-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 44
+      "value": 38
     },
     {
       "pose": "up-left",
       "gate": "left bead body frame",
       "pass": true,
       "value": [
-        -3.910000000000025,
-        -1.9534699575866625
+        -3.7800000000001432,
+        -5.9534699575866625
       ]
     },
     {
@@ -912,7 +1434,7 @@
       "gate": "right bead body frame",
       "pass": true,
       "value": [
-        -1.9100000000000819,
+        -2.410000000000082,
         -4.4534699575866625
       ]
     },
@@ -921,6 +1443,37 @@
       "gate": "right foreground stem gap",
       "pass": true,
       "value": 0
+    },
+    {
+      "pose": "up",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "up",
@@ -950,7 +1503,7 @@
       "pose": "up",
       "gate": "forehead exposure",
       "pass": false,
-      "value": 0.11308784093138868
+      "value": 0.11315324743279476
     },
     {
       "pose": "up",
@@ -958,7 +1511,7 @@
       "pass": true,
       "value": [
         -1.6000000000000227,
-        -0.879498933342461
+        -4.379498933342461
       ]
     },
     {
@@ -973,7 +1526,7 @@
       "pass": true,
       "value": [
         -5.600000000000023,
-        -0.879498933342461
+        -4.879498933342461
       ]
     },
     {
@@ -984,15 +1537,94 @@
     },
     {
       "pose": "up-right",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.6499999999999986,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "up-right",
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
+      "value": {
+        "window": [
+          164,
+          120,
+          464,
+          420
+        ],
+        "threshold": 80.29467999999997,
+        "baselinePixels": 1275,
+        "pixels": 483,
+        "reduction": 0.6211764705882352,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-right",
+      "gate": "upper diagonal posterior volume",
+      "pass": true,
+      "value": {
+        "baselineMeanAbsoluteDelta": 64.65346534653466,
+        "meanAbsoluteDelta": 53.54455445544554,
+        "improvement": 11.108910891089117,
+        "upperMaximumOverhang": -19,
+        "upperMaximumIncrease": 0,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          120,
+          200
+        ],
+        "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 277,
+          "baseline": 308,
+          "current": 302,
+          "increase": 0
+        },
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-right",
       "gate": "crown top",
-      "pass": false,
-      "value": 61
+      "pass": true,
+      "value": 53
     },
     {
       "pose": "up-right",
       "gate": "approved crown top",
       "pass": true,
-      "value": 61
+      "value": 53
     },
     {
       "pose": "up-right",
@@ -1004,7 +1636,7 @@
       "pose": "up-right",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.049434087882822886
+      "value": -0.04552263648468713
     },
     {
       "pose": "up-right",
@@ -1017,8 +1649,8 @@
       "gate": "left bead body frame",
       "pass": true,
       "value": [
-        2.3500000000000227,
-        -1.5360340058904285
+        1.8500000000000227,
+        -5.0360340058904285
       ]
     },
     {
@@ -1032,27 +1664,96 @@
       "gate": "right bead body frame",
       "pass": true,
       "value": [
-        -6.090000000000032,
-        -10.536034005890428
+        -6.139999999999986,
+        -9.536034005890428
       ]
     },
     {
       "pose": "up-right",
       "gate": "right foreground stem gap",
       "pass": true,
-      "value": 14
+      "value": 10
     },
     {
       "pose": "left",
-      "gate": "neutral pixels",
+      "gate": "P3 silhouette span <=2px",
       "pass": true,
-      "value": 0
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "left",
-      "gate": "neutral vertices and sections",
+      "gate": "neutral silhouette span <=2px",
       "pass": true,
-      "value": true
+      "value": {
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "left",
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
+      "value": {
+        "window": [
+          560,
+          120,
+          860,
+          420
+        ],
+        "threshold": 114.94912000000006,
+        "baselinePixels": 1112,
+        "pixels": 351,
+        "reduction": 0.6843525179856116,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
     },
     {
       "pose": "left",
@@ -1060,7 +1761,7 @@
       "pass": true,
       "value": [
         -7.0,
-        -1.5
+        -5.0
       ]
     },
     {
@@ -1068,21 +1769,77 @@
       "gate": "right bead body frame",
       "pass": true,
       "value": [
-        -7.0,
+        -7.5,
         -5.5
       ]
     },
     {
       "pose": "front",
-      "gate": "neutral pixels",
+      "gate": "P3 silhouette span <=2px",
       "pass": true,
-      "value": 0
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "front",
-      "gate": "neutral vertices and sections",
+      "gate": "neutral silhouette span <=2px",
       "pass": true,
-      "value": true
+      "value": {
+        "crown": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "front",
+      "gate": "front reference mix ==0",
+      "pass": true,
+      "value": 0
     },
     {
       "pose": "front",
@@ -1090,7 +1847,7 @@
       "pass": true,
       "value": [
         -0.5,
-        -1.5
+        -5.0
       ]
     },
     {
@@ -1099,28 +1856,97 @@
       "pass": true,
       "value": [
         0.0,
-        -1.0
+        -5.0
       ]
     },
     {
       "pose": "right",
-      "gate": "neutral pixels",
+      "gate": "P3 silhouette span <=2px",
       "pass": true,
-      "value": 0
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "right",
-      "gate": "neutral vertices and sections",
+      "gate": "neutral silhouette span <=2px",
       "pass": true,
-      "value": true
+      "value": {
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "right",
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
+      "value": {
+        "window": [
+          164,
+          120,
+          464,
+          420
+        ],
+        "threshold": 82.83200000000001,
+        "baselinePixels": 1302,
+        "pixels": 543,
+        "reduction": 0.5829493087557603,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
     },
     {
       "pose": "right",
       "gate": "left bead body frame",
       "pass": true,
       "value": [
-        3.5,
-        -2.0299999999997453
+        3.0,
+        -5.529999999999745
       ]
     },
     {
@@ -1129,8 +1955,39 @@
       "pass": true,
       "value": [
         5.740000000000009,
-        -2.0
+        0.0
       ]
+    },
+    {
+      "pose": "down-left",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 1,
+          "pass": false
+        }
+      }
     },
     {
       "pose": "down-left",
@@ -1154,13 +2011,13 @@
       "pose": "down-left",
       "gate": "forehead exposure",
       "pass": false,
-      "value": 0.13484887625936448
+      "value": 0.13174890209248247
     },
     {
       "pose": "down-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 70
+      "value": 77
     },
     {
       "pose": "down-left",
@@ -1176,22 +2033,22 @@
       "gate": "left bead body frame",
       "pass": true,
       "value": [
-        2.6999999999999886,
-        1.3275862316023677
+        3.1999999999999886,
+        -2.6724137683976323
       ]
     },
     {
       "pose": "down-left",
       "gate": "left foreground stem gap",
       "pass": true,
-      "value": 14
+      "value": 17
     },
     {
       "pose": "down-left",
       "gate": "right bead body frame",
       "pass": true,
       "value": [
-        -5.2999999999999545,
+        -5.7999999999999545,
         -18.172413768397632
       ]
     },
@@ -1200,6 +2057,37 @@
       "gate": "right foreground stem gap",
       "pass": true,
       "value": 0
+    },
+    {
+      "pose": "down",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.6499999999999986,
+          "missingRows": 1,
+          "pass": false
+        }
+      }
     },
     {
       "pose": "down",
@@ -1223,7 +2111,7 @@
       "pose": "down",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.1463126843657817
+      "value": -0.14670599803343165
     },
     {
       "pose": "down",
@@ -1231,7 +2119,7 @@
       "pass": true,
       "value": [
         0.14999999999997726,
-        -1.7063847926417566
+        -5.206384792641757
       ]
     },
     {
@@ -1246,7 +2134,7 @@
       "pass": true,
       "value": [
         -2.3500000000000227,
-        -1.2063847926417566
+        -4.906384792641802
       ]
     },
     {
@@ -1254,6 +2142,37 @@
       "gate": "right foreground stem gap",
       "pass": true,
       "value": 0
+    },
+    {
+      "pose": "down-right",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "down-right",
@@ -1271,27 +2190,27 @@
       "pose": "down-right",
       "gate": "hairline median",
       "pass": false,
-      "value": -13.5
+      "value": -14.0
     },
     {
       "pose": "down-right",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.26193348268137173
+      "value": -0.25794810104829013
     },
     {
       "pose": "down-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 129
+      "value": 134
     },
     {
       "pose": "down-right",
       "gate": "near cheek background gap",
-      "pass": false,
+      "pass": true,
       "value": {
         "sampledRows": 61,
-        "maximumGap": 1
+        "maximumGap": 2
       }
     },
     {
@@ -1299,8 +2218,8 @@
       "gate": "left bead body frame",
       "pass": true,
       "value": [
-        3.1000000000000227,
-        -1.4998497200939482
+        2.6000000000000227,
+        -4.999849720093948
       ]
     },
     {
@@ -1315,22 +2234,28 @@
       "pass": true,
       "value": [
         -11.399999999999977,
-        -11.499849720093948
+        -8.999849720093948
       ]
     },
     {
       "pose": "down-right",
       "gate": "right foreground stem gap",
       "pass": true,
-      "value": 14
+      "value": 15
     }
   ],
   "productSha256": {
-    "bundle/hair-shell.mjs": "055d277ae839eb4bf38e969a3b4ecb641353060cda68c49049b8b5df53018ca5",
-    "bundle/hair-surface.mjs": "0ad4b190a5cb0c622d5335a72b1be5da7cb0f120ac900ba09ee32308ee43650b",
-    "bundle/dome-data.mjs": "f86ebd885e39b2efadf1baf016bb6651b23fae84156bc6fdbdb5c7523b3af1e3",
-    "bundle/stereo-attachments.mjs": "231c5fe3d7dc8b2816cd9dc7f0318799ece7a78c46519efd9f326a513d53cc77"
+    "bundle/hair-shell.mjs": "9bf6bf4553bd22c7714eeb3887a16121bfa6cc7f3ff1ab31d2b25d023e03a4d2",
+    "bundle/hair-surface.mjs": "b793cd846e9ba0049a37c2b6b662f0bfa6ff03a3c454234029c2d68a2a49c32c",
+    "bundle/dome-data.mjs": "cd11d0b62a7f9f254f2f2e2da18b1067e2c19bd6e1d1f66323b7b3a01d342c1e",
+    "bundle/stereo-attachments.mjs": "231c5fe3d7dc8b2816cd9dc7f0318799ece7a78c46519efd9f326a513d53cc77",
+    "bundle/rig.mjs": "c45045fa2fdee54e42d5dbd9a82b5e428044af757e453bf44f8996286c1ece70",
+    "bundle/renderer.mjs": "ab01ca2c66406d91ea0d560a1ce09e2c1b7ca1f640b35e63a70b91f0ec745d41",
+    "bundle/assets/seosoyoung-rig.json": "c9f607d0c79a2da3a43c44da95d7e1cd1605066b718bc707b9a4ff4163edbb26"
   },
+  "measurementMode": "saved frames",
+  "measurementApproval": "Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper rows120..200 maximum positive-overhang-beyond-reference increase from r16<=13px (V1 crown-lift chord allowance); downward cheek<=2px; stem<=17px",
+  "probeSha256": "b262ef318c2445a4fae11c4d883f5578282a7013232a0d633059f96e9091f517",
   "strictRasterPass": false,
   "bounds": {
     "pass": true,
@@ -1340,7 +2265,7 @@
         "pass": true,
         "value": {
           "topZ": -90,
-          "diagonalTopZ": -25
+          "diagonalTopZ": -5
         }
       },
       {
@@ -1374,16 +2299,16 @@
             "name": "up-left",
             "yaw": -45,
             "pitch": 30,
-            "rx": 0,
-            "rz": 0,
+            "rx": 35,
+            "rz": 10,
             "y": 0
           },
           {
             "name": "up-right",
             "yaw": 45,
             "pitch": 30,
-            "rx": 0,
-            "rz": 0,
+            "rx": 35,
+            "rz": 10,
             "y": 0
           },
           {
@@ -1405,7 +2330,7 @@
         ]
       },
       {
-        "gate": "H2 mirrored rear coefficients and no upward supplementation",
+        "gate": "H2 mirrored rear coefficients",
         "pass": true,
         "value": null
       },
@@ -1448,9 +2373,88 @@
     },
     {
       "pose": "up-left",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 1,
+          "pass": false
+        }
+      }
+    },
+    {
+      "pose": "up-left",
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
+      "value": {
+        "window": [
+          560,
+          120,
+          860,
+          420
+        ],
+        "threshold": 116.4584,
+        "baselinePixels": 1130,
+        "pixels": 435,
+        "reduction": 0.6150442477876106,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-left",
+      "gate": "upper diagonal posterior volume",
+      "pass": true,
+      "value": {
+        "baselineMeanAbsoluteDelta": 40.75247524752475,
+        "meanAbsoluteDelta": 28.544554455445546,
+        "improvement": 12.207920792079204,
+        "upperMaximumOverhang": 114,
+        "upperMaximumIncrease": 12,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          120,
+          200
+        ],
+        "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 661,
+          "baseline": 672,
+          "current": 684,
+          "increase": 12
+        },
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-left",
       "gate": "approved crown top",
       "pass": true,
-      "value": 60
+      "value": 52
     },
     {
       "pose": "up-left",
@@ -1463,6 +2467,37 @@
       "gate": "right foreground stem gap",
       "pass": true,
       "value": 0
+    },
+    {
+      "pose": "up",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "up",
@@ -1484,9 +2519,88 @@
     },
     {
       "pose": "up-right",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 2.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.6499999999999986,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "up-right",
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
+      "value": {
+        "window": [
+          164,
+          120,
+          464,
+          420
+        ],
+        "threshold": 80.29467999999997,
+        "baselinePixels": 1275,
+        "pixels": 483,
+        "reduction": 0.6211764705882352,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-right",
+      "gate": "upper diagonal posterior volume",
+      "pass": true,
+      "value": {
+        "baselineMeanAbsoluteDelta": 64.65346534653466,
+        "meanAbsoluteDelta": 53.54455445544554,
+        "improvement": 11.108910891089117,
+        "upperMaximumOverhang": -19,
+        "upperMaximumIncrease": 0,
+        "lowerRows": [
+          340,
+          440
+        ],
+        "upperRows": [
+          120,
+          200
+        ],
+        "missingRows": 0,
+        "upperWorstRow": {
+          "y": 120,
+          "reference": 277,
+          "baseline": 308,
+          "current": 302,
+          "increase": 0
+        },
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-right",
       "gate": "approved crown top",
       "pass": true,
-      "value": 61
+      "value": 53
     },
     {
       "pose": "up-right",
@@ -1498,43 +2612,268 @@
       "pose": "up-right",
       "gate": "right foreground stem gap",
       "pass": true,
-      "value": 14
+      "value": 10
     },
     {
       "pose": "left",
-      "gate": "neutral pixels",
+      "gate": "P3 silhouette span <=2px",
       "pass": true,
-      "value": 0
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "left",
-      "gate": "neutral vertices and sections",
+      "gate": "neutral silhouette span <=2px",
       "pass": true,
-      "value": true
+      "value": {
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "left",
+      "gate": "temple rimlight reduction >=58%",
+      "pass": true,
+      "value": {
+        "window": [
+          560,
+          120,
+          860,
+          420
+        ],
+        "threshold": 114.94912000000006,
+        "baselinePixels": 1112,
+        "pixels": 351,
+        "reduction": 0.6843525179856116,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
     },
     {
       "pose": "front",
-      "gate": "neutral pixels",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "front",
+      "gate": "neutral silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "crown": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.5499999999999972,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "front",
+      "gate": "front reference mix ==0",
       "pass": true,
       "value": 0
     },
     {
-      "pose": "front",
-      "gate": "neutral vertices and sections",
+      "pose": "right",
+      "gate": "P3 silhouette span <=2px",
       "pass": true,
-      "value": true
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "right",
-      "gate": "neutral pixels",
+      "gate": "neutral silhouette span <=2px",
       "pass": true,
-      "value": 0
+      "value": {
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
     },
     {
       "pose": "right",
-      "gate": "neutral vertices and sections",
+      "gate": "temple rimlight reduction >=58%",
       "pass": true,
-      "value": true
+      "value": {
+        "window": [
+          164,
+          120,
+          464,
+          420
+        ],
+        "threshold": 82.83200000000001,
+        "baselinePixels": 1302,
+        "pixels": 543,
+        "reduction": 0.5829493087557603,
+        "minimumReduction": 0.58,
+        "pass": true
+      }
+    },
+    {
+      "pose": "down-left",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 1,
+          "pass": false
+        }
+      }
     },
     {
       "pose": "down-left",
@@ -1544,15 +2883,297 @@
     },
     {
       "pose": "down-left",
+      "gate": "near cheek background gap",
+      "pass": true,
+      "value": [
+        {
+          "y": 500,
+          "gap": 0
+        },
+        {
+          "y": 501,
+          "gap": 0
+        },
+        {
+          "y": 502,
+          "gap": 0
+        },
+        {
+          "y": 503,
+          "gap": 0
+        },
+        {
+          "y": 504,
+          "gap": 0
+        },
+        {
+          "y": 505,
+          "gap": 0
+        },
+        {
+          "y": 506,
+          "gap": 0
+        },
+        {
+          "y": 507,
+          "gap": 0
+        },
+        {
+          "y": 508,
+          "gap": 0
+        },
+        {
+          "y": 509,
+          "gap": 0
+        },
+        {
+          "y": 510,
+          "gap": 0
+        },
+        {
+          "y": 511,
+          "gap": 0
+        },
+        {
+          "y": 512,
+          "gap": 0
+        },
+        {
+          "y": 513,
+          "gap": 0
+        },
+        {
+          "y": 514,
+          "gap": 0
+        },
+        {
+          "y": 515,
+          "gap": 0
+        },
+        {
+          "y": 516,
+          "gap": 0
+        },
+        {
+          "y": 517,
+          "gap": 0
+        },
+        {
+          "y": 518,
+          "gap": 0
+        },
+        {
+          "y": 519,
+          "gap": 0
+        },
+        {
+          "y": 520,
+          "gap": 0
+        },
+        {
+          "y": 521,
+          "gap": 0
+        },
+        {
+          "y": 522,
+          "gap": 0
+        },
+        {
+          "y": 523,
+          "gap": 0
+        },
+        {
+          "y": 524,
+          "gap": 0
+        },
+        {
+          "y": 525,
+          "gap": 0
+        },
+        {
+          "y": 526,
+          "gap": 0
+        },
+        {
+          "y": 527,
+          "gap": 0
+        },
+        {
+          "y": 528,
+          "gap": 0
+        },
+        {
+          "y": 529,
+          "gap": 0
+        },
+        {
+          "y": 530,
+          "gap": 0
+        },
+        {
+          "y": 531,
+          "gap": 0
+        },
+        {
+          "y": 532,
+          "gap": 0
+        },
+        {
+          "y": 533,
+          "gap": 0
+        },
+        {
+          "y": 534,
+          "gap": 0
+        },
+        {
+          "y": 535,
+          "gap": 0
+        },
+        {
+          "y": 536,
+          "gap": 0
+        },
+        {
+          "y": 537,
+          "gap": 0
+        },
+        {
+          "y": 538,
+          "gap": 0
+        },
+        {
+          "y": 539,
+          "gap": 0
+        },
+        {
+          "y": 540,
+          "gap": 0
+        },
+        {
+          "y": 541,
+          "gap": 0
+        },
+        {
+          "y": 542,
+          "gap": 0
+        },
+        {
+          "y": 543,
+          "gap": 0
+        },
+        {
+          "y": 544,
+          "gap": 0
+        },
+        {
+          "y": 545,
+          "gap": 0
+        },
+        {
+          "y": 546,
+          "gap": 0
+        },
+        {
+          "y": 547,
+          "gap": 0
+        },
+        {
+          "y": 548,
+          "gap": 0
+        },
+        {
+          "y": 549,
+          "gap": 0
+        },
+        {
+          "y": 550,
+          "gap": 0
+        },
+        {
+          "y": 551,
+          "gap": 0
+        },
+        {
+          "y": 552,
+          "gap": 0
+        },
+        {
+          "y": 553,
+          "gap": 0
+        },
+        {
+          "y": 554,
+          "gap": 0
+        },
+        {
+          "y": 555,
+          "gap": 0
+        },
+        {
+          "y": 556,
+          "gap": 0
+        },
+        {
+          "y": 557,
+          "gap": 0
+        },
+        {
+          "y": 558,
+          "gap": 0
+        },
+        {
+          "y": 559,
+          "gap": 0
+        },
+        {
+          "y": 560,
+          "gap": 0
+        }
+      ]
+    },
+    {
+      "pose": "down-left",
       "gate": "left foreground stem gap",
       "pass": true,
-      "value": 14
+      "value": 17
     },
     {
       "pose": "down-left",
       "gate": "right foreground stem gap",
       "pass": true,
       "value": 0
+    },
+    {
+      "pose": "down",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.6499999999999986,
+          "missingRows": 1,
+          "pass": false
+        }
+      }
     },
     {
       "pose": "down",
@@ -1568,9 +3189,291 @@
     },
     {
       "pose": "down-right",
+      "gate": "P3 silhouette span <=2px",
+      "pass": true,
+      "value": {
+        "all": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "crown": {
+          "median": 0.0,
+          "p95": 1.0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "tails": {
+          "median": 0,
+          "p95": 0,
+          "missingRows": 0,
+          "pass": true
+        },
+        "ties": {
+          "median": 0.0,
+          "p95": 0.0,
+          "missingRows": 0,
+          "pass": true
+        }
+      }
+    },
+    {
+      "pose": "down-right",
       "gate": "approved crown top",
       "pass": true,
       "value": 12
+    },
+    {
+      "pose": "down-right",
+      "gate": "near cheek background gap",
+      "pass": true,
+      "value": [
+        {
+          "y": 500,
+          "gap": 0
+        },
+        {
+          "y": 501,
+          "gap": 0
+        },
+        {
+          "y": 502,
+          "gap": 0
+        },
+        {
+          "y": 503,
+          "gap": 0
+        },
+        {
+          "y": 504,
+          "gap": 0
+        },
+        {
+          "y": 505,
+          "gap": 0
+        },
+        {
+          "y": 506,
+          "gap": 0
+        },
+        {
+          "y": 507,
+          "gap": 0
+        },
+        {
+          "y": 508,
+          "gap": 0
+        },
+        {
+          "y": 509,
+          "gap": 0
+        },
+        {
+          "y": 510,
+          "gap": 0
+        },
+        {
+          "y": 511,
+          "gap": 0
+        },
+        {
+          "y": 512,
+          "gap": 0
+        },
+        {
+          "y": 513,
+          "gap": 0
+        },
+        {
+          "y": 514,
+          "gap": 0
+        },
+        {
+          "y": 515,
+          "gap": 2
+        },
+        {
+          "y": 516,
+          "gap": 2
+        },
+        {
+          "y": 517,
+          "gap": 0
+        },
+        {
+          "y": 518,
+          "gap": 1
+        },
+        {
+          "y": 519,
+          "gap": 0
+        },
+        {
+          "y": 520,
+          "gap": 0
+        },
+        {
+          "y": 521,
+          "gap": 0
+        },
+        {
+          "y": 522,
+          "gap": 0
+        },
+        {
+          "y": 523,
+          "gap": 0
+        },
+        {
+          "y": 524,
+          "gap": 0
+        },
+        {
+          "y": 525,
+          "gap": 0
+        },
+        {
+          "y": 526,
+          "gap": 0
+        },
+        {
+          "y": 527,
+          "gap": 0
+        },
+        {
+          "y": 528,
+          "gap": 0
+        },
+        {
+          "y": 529,
+          "gap": 0
+        },
+        {
+          "y": 530,
+          "gap": 0
+        },
+        {
+          "y": 531,
+          "gap": 0
+        },
+        {
+          "y": 532,
+          "gap": 0
+        },
+        {
+          "y": 533,
+          "gap": 0
+        },
+        {
+          "y": 534,
+          "gap": 0
+        },
+        {
+          "y": 535,
+          "gap": 0
+        },
+        {
+          "y": 536,
+          "gap": 0
+        },
+        {
+          "y": 537,
+          "gap": 0
+        },
+        {
+          "y": 538,
+          "gap": 0
+        },
+        {
+          "y": 539,
+          "gap": 0
+        },
+        {
+          "y": 540,
+          "gap": 0
+        },
+        {
+          "y": 541,
+          "gap": 0
+        },
+        {
+          "y": 542,
+          "gap": 0
+        },
+        {
+          "y": 543,
+          "gap": 0
+        },
+        {
+          "y": 544,
+          "gap": 0
+        },
+        {
+          "y": 545,
+          "gap": 0
+        },
+        {
+          "y": 546,
+          "gap": 0
+        },
+        {
+          "y": 547,
+          "gap": 0
+        },
+        {
+          "y": 548,
+          "gap": 0
+        },
+        {
+          "y": 549,
+          "gap": 0
+        },
+        {
+          "y": 550,
+          "gap": 0
+        },
+        {
+          "y": 551,
+          "gap": 0
+        },
+        {
+          "y": 552,
+          "gap": 0
+        },
+        {
+          "y": 553,
+          "gap": 0
+        },
+        {
+          "y": 554,
+          "gap": 0
+        },
+        {
+          "y": 555,
+          "gap": 0
+        },
+        {
+          "y": 556,
+          "gap": 0
+        },
+        {
+          "y": 557,
+          "gap": 0
+        },
+        {
+          "y": 558,
+          "gap": 0
+        },
+        {
+          "y": 559,
+          "gap": 0
+        },
+        {
+          "y": 560,
+          "gap": 0
+        }
+      ]
     },
     {
       "pose": "down-right",
@@ -1582,27 +3485,15 @@
       "pose": "down-right",
       "gate": "right foreground stem gap",
       "pass": true,
-      "value": 14
+      "value": 15
     }
   ],
   "rawResidualFailures": [
     {
       "pose": "up-left",
-      "gate": "hairline median",
-      "pass": false,
-      "value": 12.5
-    },
-    {
-      "pose": "up-left",
-      "gate": "forehead exposure",
-      "pass": false,
-      "value": 0.10940868493994449
-    },
-    {
-      "pose": "up-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 44
+      "value": 38
     },
     {
       "pose": "up",
@@ -1620,13 +3511,7 @@
       "pose": "up",
       "gate": "forehead exposure",
       "pass": false,
-      "value": 0.11308784093138868
-    },
-    {
-      "pose": "up-right",
-      "gate": "crown top",
-      "pass": false,
-      "value": 61
+      "value": 0.11315324743279476
     },
     {
       "pose": "up-right",
@@ -1650,13 +3535,13 @@
       "pose": "down-left",
       "gate": "forehead exposure",
       "pass": false,
-      "value": 0.13484887625936448
+      "value": 0.13174890209248247
     },
     {
       "pose": "down-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 70
+      "value": 77
     },
     {
       "pose": "down",
@@ -1674,7 +3559,7 @@
       "pose": "down",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.1463126843657817
+      "value": -0.14670599803343165
     },
     {
       "pose": "down-right",
@@ -1686,39 +3571,24 @@
       "pose": "down-right",
       "gate": "hairline median",
       "pass": false,
-      "value": -13.5
+      "value": -14.0
     },
     {
       "pose": "down-right",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.26193348268137173
+      "value": -0.25794810104829013
     },
     {
       "pose": "down-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 129
-    },
-    {
-      "pose": "down-right",
-      "gate": "near cheek background gap",
-      "pass": false,
-      "value": {
-        "sampledRows": 61,
-        "maximumGap": 1
-      }
+      "value": 134
     }
   ],
   "stemMaskMethod": "visible crown | tails | face-skin; tie R>200/alpha>100, x percentile20..80 step2, empty pixels from row before tie",
   "protectedFilesPass": true,
-  "protectedFileCount": 19,
+  "protectedFileCount": 16,
   "acceptance": "bounded pass",
-  "pass": true,
-  "measurementReassessment": {
-    "captureHead": "0b6018d9e07191bdccaf0e5cca3ba4f66d066ef7",
-    "additionalBrowserCaptures": 0,
-    "reason": "Approved down diagonal <=13 and Fable percentile/preceding-row gap definition",
-    "probeSha256": "972559171394e68c24cff2908e9dd6325c092a68b472e66999cb9a06e1853db8"
-  }
+  "pass": true
 }

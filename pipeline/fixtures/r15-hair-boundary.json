@@ -1,51 +1,21 @@
 {
-  "baseline": "d6a58ba5d0b409389ac1baf4ffdae6a0695c5364",
-  "scope": "all non-front-crown meshes; side-hair source Y>=310; only far/up tail vertices excluded by approved C correction",
+  "baseline": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
+  "scope": "All current mesh vertices at neutral pitch, evaluated with frozen baseline formulas",
   "cases": [
     {
       "yaw": -45,
-      "pitch": -30,
-      "sha256": "b3b0c21d16b59e5f67f5e09dccbe0984abcd1241ffcc8bb559d45a79f0d8d7e1"
-    },
-    {
-      "yaw": 0,
-      "pitch": -30,
-      "sha256": "380048fad916d59c2f1bfa9d69221828906fa31493e68d83234b96b7bc6a5a62"
-    },
-    {
-      "yaw": 45,
-      "pitch": -30,
-      "sha256": "3ba08d35b4068310516078f807325a640a5ba5601db0359592c26c7c0bf4c012"
-    },
-    {
-      "yaw": -45,
       "pitch": 0,
-      "sha256": "733a06b211e116473002b4f14ac23291c7492b362ed92d1be9acf2a442c73097"
+      "sha256": "9c4030e429ab8316c7a152debb620a7dc79f581d25e727ed3a4aa84fc466d400"
     },
     {
       "yaw": 0,
       "pitch": 0,
-      "sha256": "9fc227ff98d7ef7fcdfd6da84f8f1e0d824e95528b74fd2e1045ce5b9db0d101"
+      "sha256": "49e6048b6e5e89717e8c6ce69fb607796a6eb09b96fb30b0ecee32338c03ff34"
     },
     {
       "yaw": 45,
       "pitch": 0,
-      "sha256": "c11650d04072c94e7d340b986dd6a8b6aec19abd0a0f5568ddd64c6c1b8a366e"
-    },
-    {
-      "yaw": -45,
-      "pitch": 30,
-      "sha256": "810fcfb41240ec8c5f911912fe3486dc5300182c69db5effefa4a44f81d9ffb5"
-    },
-    {
-      "yaw": 0,
-      "pitch": 30,
-      "sha256": "18b89643c0b6417c1e13d08eb8aa5946c92d87701a7ff250d5a673d1dd287070"
-    },
-    {
-      "yaw": 45,
-      "pitch": 30,
-      "sha256": "f8872f3fb0d00b3a07afc80a6a06da94882350a1e81f5484a31849c84913e3cf"
+      "sha256": "ddd25cd807ee5049bc9cd28b7098b38bb5427ee22ab4d8e77e28275e18149dfb"
     }
   ],
   "earWorldSha256": "46fd688a2e4ead8dcfcb97d8bc0c3bfea4d6d4ad124e9ee91a79dc7cd5253f46"

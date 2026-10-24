@@ -3,6 +3,7 @@ import {BEADS,beadWorld} from './stereo-attachments.mjs';
 import {outlineWorld,applyOutline} from './face-outline.mjs';
 import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './geometry.mjs';
 import {canopyWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
+import {frameValue,FRAME_CACHE} from './pose-grid.mjs';
 export {HEAD_CENTER,HEAD_RADIUS,LEFT_EYE_BALL,RIGHT_EYE_BALL,EYE_BALL_R,spherePoint,sphereWarp,eyeballAngles,headWorld,liftHead,eyeWorld,eyeCenter,rotateXYZ} from './geometry.mjs';
 export function interpolate(keys,value) {
   if(value<=keys[0].value)return keys[0].output;
@@ -17,8 +18,12 @@ export function bindRig(rig) {
   }
 }
 export function deform3D(mesh,point,parameters) {
-  const p={...parameters};
-  for(const node of mesh.chain||[])for(const [channel,keys] of Object.entries(node.keyforms))if(channel.startsWith('Param'))p[channel]=interpolate(keys,parameters[channel]);
+  const p=frameValue(parameters,'params:'+mesh.id,()=>{
+    const p={...parameters};
+    if(parameters[FRAME_CACHE])p[FRAME_CACHE]=parameters[FRAME_CACHE];
+    for(const node of mesh.chain||[])for(const [channel,keys] of Object.entries(node.keyforms))if(channel.startsWith('Param'))p[channel]=interpolate(keys,parameters[channel]);
+    return p;
+  });
   const world=deformLocal(mesh,point,p);
   if(mesh.deformerId==='WarpBody'||mesh.id==='neck'||(!p.ParamBodyAngleX&&!p.ParamBreath))return world;
   return [world[0]+(p.ParamBodyAngleX||0),world[1]-(p.ParamBreath||0)*4,world[2]];

@@ -94,7 +94,7 @@ export function posteriorLocal(y,lambda,p,includePosterior=true){
  const local=[cx+rx*Math.sin(lambda),y-HEAD_CENTER[1],cz+rz*Math.cos(lambda)];
  if(!includePosterior||!p.ParamAngleY||!p.ParamAngleX)return local;
  const rear=Math.sin(Math.max(0,Math.abs(lambda)-Math.PI/2));
- const latitude=Math.cos(Math.asin(clamp((y-DOME.cy)/DOME.ry,-1,1)));
+ const latitude=Math.cos(Math.asin(clamp((y-DOME.cy)/DOME.ry,-1,1)))*sphereEase((y-200)/120);
  const delta=[hairPoseValue(DOME.rearPitch.poses,p,q=>q.rx)*Math.sin(lambda),
               hairPoseValue(DOME.rearPitch.poses,p,q=>q.y),
               hairPoseValue(DOME.rearPitch.poses,p,q=>q.rz)*Math.cos(lambda)].map(v=>v*rear*latitude);
@@ -124,9 +124,9 @@ export function referenceHairSample(point,p){
  const [x,y]=point,{cx,rx}=domeSection(y),theta=p.ParamAngleX*correction(p,'CorrTurn');
  const normalized=(x-DOME.cx-cx)/Math.max(.001,rx),side=theta<0?'right':'left';
  const near=theta*normalized<0;
- const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
  const lambda=Math.asin(clamp(normalized,-1,1));
- const weight=near?smooth((Math.abs(lambda)*180/Math.PI-45)/25)*smooth(Math.abs(theta)/35)*(1-smooth((y-320)/60)):0;
+ const weight=near?sphereEase((Math.abs(lambda)*180/Math.PI-30)/25)*sphereEase(Math.abs(theta)/30)*(1-sphereEase((y-430)/60)):0;
+ if(!weight)return {side,point:[0,0,0],weight:0};
  const q=craniumPosition([0,y,lambda],{...p,CorrTurn:1,ParamAngleX:side==='left'?45:-45,ParamAngleY:0,ParamAngleZ:0});
  return {side,point:q,weight};
 }

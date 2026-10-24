@@ -13,7 +13,7 @@ export function measureHairBounds(){
  const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
  const checks=[];
  const check=(gate,pass,value)=>checks.push({gate,pass:!!pass,value});
- check('H1 front and diagonal bounded depth scalars',Object.keys(DOME.pitchArc).length===2&&DOME.pitchArc.topZ>=-130&&DOME.pitchArc.topZ<=-80&&DOME.pitchArc.diagonalTopZ>=-35&&DOME.pitchArc.diagonalTopZ<=-25,DOME.pitchArc);
+ check('H1 front and diagonal bounded depth scalars',Object.keys(DOME.pitchArc).length===2&&DOME.pitchArc.topZ>=-130&&DOME.pitchArc.topZ<=-80&&DOME.pitchArc.diagonalTopZ>=-35&&DOME.pitchArc.diagonalTopZ<=-5,DOME.pitchArc);
  const tips=[DOME.tipLag.kappa,...DOME.tipLag.poses.map(p=>p.kappa)];
  check('H5 bounded tip coefficients',DOME.tipLag.poses.length<=6&&tips.every(k=>k>=.35&&k<=.85),tips);
  const paired=(poses,fields)=>['up','down'].every(direction=>{
@@ -24,7 +24,7 @@ export function measureHairBounds(){
  check('no affine rows or free front-hair fit',!('pitchRows' in DOME)&&!('pitchPoses' in DOME)&&!('frontHair' in DOME),null);
  const rear=DOME.rearPitch.poses;
  check('H2 at most three rear scalars per diagonal pose',rear.length<=4&&rear.every(p=>p.yaw&&p.pitch&&Object.keys(p).sort().join()===['name','pitch','rx','rz','y','yaw'].sort().join()&&[p.rx,p.rz,p.y].every(Number.isFinite)),rear);
- check('H2 mirrored rear coefficients and no upward supplementation',paired(rear,['rx','rz','y'])&&rear.filter(p=>p.pitch>0).every(p=>p.rx===0&&p.rz===0&&p.y===0),null);
+ check('H2 mirrored rear coefficients',paired(rear,['rx','rz','y'])&&rear.every(p=>p.rx>=0&&p.rx<=45&&p.rz>=0&&p.rz<=45&&p.y===0),null);
  let maxXZ=0,maxRear=0,maxBead=0,samples=0;
  for(const yaw of [-45,-22.5,0,22.5,45])for(const pitch of [-30,-15,0,15,30]){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch};

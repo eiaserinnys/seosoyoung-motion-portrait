@@ -1,5 +1,5 @@
-import {craniumFacing,craniumSeam} from './hair-surface.mjs';
-import {FRAME_CACHE} from './pose-grid.mjs';
+import {craniumFacing,craniumSeam,referenceHairSample} from './hair-surface.mjs';
+import {FRAME_CACHE,frameValue} from './pose-grid.mjs';
 import {deform3D,opacity,bindRig} from './rig.mjs';
 import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction} from './geometry.mjs';
 export class Renderer {
@@ -30,11 +30,17 @@ export class Renderer {
   }
   draw(mesh,p,alpha,{clip=false,tint=false}={}) {
     const gl=this.gl;gl.uniform1f(this.loc.backStart,mesh.id==='back-hair-center'?407:310);gl.uniform1f(this.loc.identify,this.identify?((Array.isArray(this.identify)?this.identify.includes(mesh.id):mesh.id===this.identify)?2:1):0);gl.uniform1f(this.loc.farBack,mesh.id.startsWith('back-hair')?Math.sign(p.ParamAngleX)*Math.min(1,correction(p,'CorrHairOcclusion')/.8)*Math.min(1,Math.abs(p.ParamAngleX)/25)**2*(3-2*Math.min(1,Math.abs(p.ParamAngleX)/25)):0);
-    const points=mesh.positions.map(pt=>mesh.surface?headWorld(pt,p):deform3D(mesh,pt,p));
+    const points=frameValue(p,'pos:'+mesh.id,()=>mesh.positions.map(pt=>mesh.surface?headWorld(pt,p):deform3D(mesh,pt,p)));
     const ref=this.rig.meshes.find(m=>m.id==='side-cranium-'+(p.ParamAngleX<0?'right':'left'));
     const [ax,ay,bw,bh]=ref.atlas,size=this.rig.atlasSize;
     gl.uniform4f(this.loc.refRect,(ax+.5)/size,(ay+.5)/size,(ax+bw-.5)/size,(ay+bh-.5)/size);
-    const reference=()=>[0,0,0];
+    const reference=xy=>{
+      if(!['hair-top','back-hair-center','side-hair-left','side-hair-right'].includes(mesh.id))return [0,0,0];
+      const sample=referenceHairSample(xy,p);
+      if(!sample.weight)return [0,0,0];
+      const [x,y]=sample.point,[bx,by]=ref.bbox,[ax,ay]=ref.atlas;
+      return [(ax+x-bx)/this.rig.atlasSize,(ay+y-by)/this.rig.atlasSize,sample.weight];
+    };
     const data=new Float32Array(points.flatMap((pt,i)=>[...pt,...mesh.uvs[i],mesh.positions[i][0],mesh.positions[i][1],mesh.id.startsWith('side-cranium')?craniumFacing(mesh.positions[i],p):1,mesh.id.startsWith('side-cranium')?craniumSeam(mesh.positions[i]):1,...reference(mesh.positions[i])]));
     gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(mesh.triangles.flat()),gl.STATIC_DRAW);

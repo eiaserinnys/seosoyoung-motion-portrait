@@ -9,21 +9,27 @@ import {fringeSurface} from '../bundle/hair-shell.mjs';
 import {pitchHairDepth,sphereEase,domeSection} from '../bundle/hair-surface.mjs';
 import {correctedLift} from '../bundle/geometry.mjs';
 import {DOME} from '../bundle/dome-data.mjs';
+import {frozenRig} from './frozen_rig.mjs';
 
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
-const front=['hair-top','hairpin','bangs-left','bangs-right','side-hair-left','side-hair-right'];
-test('r15 neutral geometry stays exact',{timeout:60000},()=>{
+test('r15 neutral geometry stays exact on the reduced mesh',{timeout:60000},async()=>{
+ const old=await frozenRig();
+ const oldRig=structuredClone(rig);old.bindRig(oldRig);
+ try{
  const fixture=JSON.parse(readFileSync(new URL('./fixtures/r15-hair-boundary.json',import.meta.url)));
  for(const {yaw,pitch,sha256} of fixture.cases.filter(c=>c.pitch===0)){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()},h=createHash('sha256');
-  const far=pitch>0&&yaw?(yaw<0?'left':'right'):null;
-  for(const m of rig.meshes.filter(m=>(!front.includes(m.id)||m.id.startsWith('side-hair'))&&!(far&&m.id.startsWith('tail-'+far+'-')))){
-   const points=m.positions.filter(pt=>!m.id.startsWith('side-hair')||pt[1]>=310);
-   h.update(JSON.stringify([m.id,points.map(pt=>deform3D(m,pt,p))]));
+  const oldP={...base,ParamAngleX:yaw,ParamAngleY:0,[old.FRAME_CACHE]:new Map()};
+  for(const [i,m] of rig.meshes.entries()){
+   const actual=m.positions.map(pt=>deform3D(m,pt,p));
+   const expected=m.positions.map(pt=>old.deform3D(oldRig.meshes[i],pt,oldP));
+   for(let j=0;j<actual.length;j++)assert(Math.hypot(...actual[j].map((v,k)=>v-expected[j][k]))<1e-9,`${m.id} neutral drift`);
+   h.update(JSON.stringify([m.id,actual]));
   }
   assert.equal(h.digest('hex'),sha256,`r15 boundary drift at ${yaw},${pitch}`);
  }
+ }finally{old.dispose();}
 });
 test('H1 depth is a single bounded cosine latitude arc and keeps the lower lift',()=>{
  assert(DOME.pitchArc.topZ>=-130&&DOME.pitchArc.topZ<=-80);

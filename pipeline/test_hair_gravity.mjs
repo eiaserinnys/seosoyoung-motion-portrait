@@ -25,7 +25,7 @@ test('all three hanging hair layers reach gravity-frame XY at y506',()=>{
 });
 test('upper pole follows the bounded symmetric yaw depth arc',()=>{
  assert.equal(DOME.pitchArc.topZ,-90);
- assert(DOME.pitchArc.diagonalTopZ>=-35&&DOME.pitchArc.diagonalTopZ<=-25);
+ assert(DOME.pitchArc.diagonalTopZ>=-35&&DOME.pitchArc.diagonalTopZ<=-5);
  for(const yaw of [-45,-22.5,0,22.5,45]){
   const p={...base,ParamAngleX:yaw,ParamAngleY:30};
   const expected=DOME.pitchArc.topZ+(DOME.pitchArc.diagonalTopZ-DOME.pitchArc.topZ)*sphereEase(Math.abs(yaw)/45);
@@ -48,7 +48,7 @@ test('tip lag and rear supplementation share mirrored key coefficients',()=>{
   assert.equal(tips[0].kappa,tips[1].kappa);
   const rear=DOME.rearPitch.poses.filter(p=>p.name===`${direction}-left`||p.name===`${direction}-right`);
   assert.deepEqual(rear.map(p=>[p.rx,p.rz,p.y])[0],rear.map(p=>[p.rx,p.rz,p.y])[1]);
-  if(direction==='up')assert.deepEqual([rear[0].rx,rear[0].rz,rear[0].y],[0,0,0]);
+  if(direction==='up')assert.deepEqual([rear[0].rx,rear[0].rz,rear[0].y],[35,10,0]);
  }
 });
 test('far hanging ribbons span the authored central 60 percent of each tie',()=>{

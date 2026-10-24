@@ -242,7 +242,7 @@ test('neck top tracks chin pitch displacement while body attachment stays fixed'
 test('head meshes and the upper neck inherit one continuous breath and body sway offset',()=>{
  const bodyX=5,breath=.75,shift=[bodyX,-breath*4,0];
  const still={...pose(0,0),ParamBodyAngleX:0,ParamBreath:0};
- const moving={...still,ParamBodyAngleX:bodyX,ParamBreath:breath};
+ const moving={...still,ParamBodyAngleX:bodyX,ParamBreath:breath,[FRAME_CACHE]:new Map()};
  const assertShift=(mesh,point,label)=>{
   const a=deform3D(mesh,point,moving),b=deform3D(mesh,point,still);
   assert(Math.hypot(...a.map((v,i)=>v-b[i]-shift[i]))<1e-8,label);
@@ -255,7 +255,7 @@ test('head meshes and the upper neck inherit one continuous breath and body sway
  assert(top.length>0,'neck mesh has upper attachment samples');
  for(const point of top)assertShift(neck,point,'neck '+point);
  const sclera=rig.meshes.find(m=>m.id==='eye-left-sclera'),point=[415,432];
- const partialMoving={...moving,CorrOutline:.5},partialStill={...still,CorrOutline:.5};
+ const partialMoving={...moving,CorrOutline:.5,[FRAME_CACHE]:new Map()},partialStill={...still,CorrOutline:.5,[FRAME_CACHE]:new Map()};
  const a=deform3D(sclera,point,partialMoving),b=deform3D(sclera,point,partialStill);
  assert(Math.hypot(...a.map((v,i)=>v-b[i]-shift[i]))<1e-8,'partial outline fallback adds body motion exactly once');
 });
