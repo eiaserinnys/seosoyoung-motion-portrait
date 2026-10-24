@@ -1,43 +1,78 @@
-# 머리카락 저자유도 보정 최종 보고
+# 머리카락 줄기 연결·구면 정수리·대칭 보완
 
-상향 포즈의 넓고 평평한 정수리와 귀 뒤로 내려오던 삼각형 후두부를 교정했다. 각 점의 `correctedLift` 깊이를 `topZ`로 보간하여 볼록성과 y310 접속을 유지한다. 후두부 Y는 앞머리와 옆머리가 공유하는 높이에 유계 보충 변위만 더한다. 깊은 두개골의 raw pitch Y와 15도 Y collar를 제거했고 X/Z 접합과 중립 연속성은 보존했다.
+**이번 결과는 완료 기준 미달이다.** 단위 테스트와 저자유도 상한은 통과했지만 단일 H0는 exit1이었다. 줄기4곳과 up-right 상단 게이트가 남아 있으며, 재실행 상한에 따라 추가 H0나 캡처 뒤 제품 수정은 하지 않았다.
 
-## 최종 설정
+`6b9a6cf670736f0f3d443acac364be6979b15bf3`의 코드에서 H0를 **한 번** 실행해 9포즈와 캡처 3종을 생성했다. 타일 합성이나 이전 포즈의 실측 재사용은 없다. 캡처 뒤 제품 코드를 변경하지 않았으며 `hair-r15-metrics.json`의 productSha256으로 최종 코드와 대조한다.
 
-`config/rig-config.json`은 수동 보정 설정의 정본이다. `pipeline/fit_dome.py`가 이 파일의 pitchArc, tipLag, rearPitch를 읽어 `source/viewer/dome-fit.json`과 `bundle/dome-data.mjs`에 반영한다. up-right 계수는 세 경로에서 모두 0이다.
+## 원인과 보완
 
-- `up-left`: `rx=23.55969171144356, rz=27.220230095679536, y=0.0`
-- `up-right`: `rx=0, rz=0, y=0`
-- `down-left`: `rx=44.7706274656728, rz=4.537721491006616, y=0.0`
-- `down-right`: `rx=30.23614894778265, rz=33.07390222556095, y=-4.1100229173979805`
+방울은 중력 프레임에 남지만 뒤통수·뒷머리는 피치에 따라 들렸고, 옆머리는 방울 중심 y544에서 Y만 수렴했다. 세 계층 모두 y405부터 방울 윗선 y506까지 구면 이징으로 중력 프레임 X/Y에 수렴한다. 먼 쪽 가닥은 원화 방울의 중앙 60% 폭까지 확장한다. 피치·yaw 이징을 함께 곱해 중립 3포즈와 정면 통과의 연속성을 유지한다. 열별 stem 측정은 각 열의 방울 상단에서 위로 최대80px를 스캔한 최악값이다.
 
-## 승인한 증거 재사용
+정수리는 각 점의 볼록한 base 깊이에서 정면 topZ=-90, 대각선 diagonalTopZ=-25로 보간한다. yaw 가중치는 sphereEase(abs(correctedYaw)/45)다. `tipLag` 시작점을 y230으로 둔 이유는 앞머리 갈래 틈과 hairLift의 lowerMix가 y230부터 시작하기 때문이다.
 
-마지막 전체 H0 실행은 up-right 한 행의 이동 46px로 **exit 1**이었다. 최종 상태에 대한 새 H0나 WebGL 캡처는 실행하지 않았다. 사용자 승인에 따라 up-right의 후두부 보충만 0으로 고정하고, 해당 포즈는 이번 수정의 보충0 stage-a 실측과 타일을 재사용했다. 다른 8포즈는 latest-full-capture의 실측과 타일을 유지했다.
+## 설정과 보호 계약
 
-- 같은 런타임 3파일의 해시와 9포즈 실효 rx/rz/y가 재사용 원본과 완전히 일치한다.
-- DOME의 rear 키만 원본 값으로 되돌려 직렬화한 해시도 두 실측의 기록과 일치한다. 다른 깊이·위도·지체 설정이 바뀌지 않았음을 확인했다.
-- 각 시트의 up-right 타일 밖 픽셀 변화는 0이다. donor/final SHA256과 교체 사각형은 `hair-evidence-reuse.json`에 기록했다.
-- 최종 판정은 **승인한 포즈별 증거 재사용에 따른 bounded pass**다. 보충0 대비 외곽 이동 최대는 **40px ≤ 45px**다. up-left40, up-right1, down-left19, down-right27px이며 나머지는0~1px다.
+설정 정본은 `source/viewer/hair-pitch.json`이다. fit_dome.py가 dome-fit.json과 dome-data.mjs를 생성한다. config 디렉터리는 제거했다. tipLag는 up=.35, down=.35, up-diag=.6, down-diag=.85이며 기본값은 .65다. 양쪽 up rear는0, 양쪽 down rear는 rx=44.7706274656728, rz=4.537721491006616, y=0을 공유한다.
 
-## 확인 결과
+보호19파일은 main89fc408과 바이트 동일하다. 혼합 테스트의 얼굴/피처 단언은 유지했다. 중립 left/front/right 픽셀 및 정점/후두부/단면 비교는 H0의 개별 지표에 기록했다. UI 마크업·공통 레이아웃·원화·아틀라스는 변경하지 않았다.
 
-- 수식 교정 뒤 Node 전체 **140 passed**, Python 전체 **32 passed**.
-- 최종 config/생성 데이터/up-right0 확인 및 관련 회귀는 Node **14 passed**.
-- 독립 코드 감수와 설정·증거 재사용 증분 감수 통과.
-- 얼굴/렌더러/리그/아틀라스/원화 보호19파일과 얼굴·피처 단언13본문은 main89fc408과 바이트 동일하다.
-- 중립3포즈 픽셀 변화0과 정점/후두부/단면 해시 일치를 유지한다.
-- 최종3시트를 직접 열어 상향 정수리의 네모난 지붕/좌우 뿔과 귀 뒤 긴 갈색 플랩이 사라진 것을 확인했다. 하단과 중립도 같은 프레임에서 비교했다.
+## 단일 H0 결과
 
-원화/SAM 정합의 원시 미달 조건 22개는 `hair-r15-metrics.json`에 유지했다. 정확한 원화 정합을 통과했다고 표기하지 않는다. 전문 UI/UX 검수와 머지·발행은 담당 세션에 인계한다.
+판정: **fail**, pass=false. 보충0 대비 외곽 이동 최대 **30px** / 상한45px. 중립 픽셀 변화와 정점 해시, 상향 정수리, 피치6포즈 양쪽 줄기 틈은 필수 게이트다. 다른 참조/SAM 잔차는 승인한 저자유도 bounded pass 정책에 따라 원시값을 남긴다. 지정 topZ=-90 때문에 down의 기존 상단≤4px 기준에 남는 잔차도 숨기지 않는다.
 
-## 산출물 SHA256
+| 포즈 | 상단 Y | 왼쪽 열별 줄기 틈 | 오른쪽 열별 줄기 틈 | 외곽 이동 최대 |
+| :--- | ---: | ---: | ---: | ---: |
+| up-left | 60 | 81 | 1 | 0 |
+| up | 97 | 4 | 5 | 1 |
+| up-right | 61 | 1 | 14 | 0 |
+| left | 10 | 81 | 1 | 0 |
+| front | 10 | 4 | 5 | 1 |
+| right | 10 | 1 | 81 | 0 |
+| down-left | 41 | 16 | 1 | 30 |
+| down | 7 | 5 | 1 | 1 |
+| down-right | 39 | 1 | 81 | 18 |
+
+원시 참조 게이트 미달 24개:
+
+- up-left / hairline median: `12.5`
+- up-left / forehead exposure: `0.10940868493994449`
+- up-left / posterior exterior: `44`
+- up-left / left stem gap: `81`
+- up / upper exterior: `86`
+- up / hairline median: `-20.0`
+- up / forehead exposure: `0.11308784093138868`
+- up-right / crown top: `61`
+- up-right / hairline median: `-39.0`
+- up-right / posterior exterior: `72`
+- up-right / right stem gap: `14`
+- down-left / crown top: `41`
+- down-left / forehead exposure: `0.11114023591087818`
+- down-left / posterior exterior: `107`
+- down-left / left stem gap: `16`
+- down / crown top: `7`
+- down / upper exterior: `43`
+- down / forehead exposure: `-0.1463126843657817`
+- down-right / crown top: `39`
+- down-right / hairline median: `-13.5`
+- down-right / forehead exposure: `-0.2767023850674041`
+- down-right / posterior exterior: `152`
+- down-right / near cheek background gap: `{"sampledRows": 61, "maximumGap": 1}`
+- down-right / right stem gap: `81`
+
+## 검증과 산출물
+
+- 전체 Node144 passed, Python34 passed. 이후 yaw 연속성/경계 게이트 변경은 영향 Node16 passed, 측정기11 passed로 확인했다.
+- 독립 코드 감수 통과. far 폭 확장의 yaw0 활성화 점프를 보완하고 연속성 회귀를 추가했다.
+- metrics는 요약 지표만 저장한다. 행별 상세는 git에서 제외되는 debug/hair_h0/current/hair-r15-metrics-raw.json에 저장한다. 이전 stage-a-metrics와 evidence-reuse 문서는 삭제했다.
+- 캡처는 captures/viewer_9dir_grid.png, captures/faceless_hair_9dir_comparison.png, captures/hair_only_9dir_overlay.png다. 전문 UI/UX 재확인과 머지는 담당 세션에 인계한다.
+
+3시트를 직접 열어 전체9포즈와 머리카락 단독 참조를 비교했다. 정면 up 상단은 둥글지만 up-right의 참조 대비 상단 차이와 먼 쪽 방울 위 빈 구간이 남아 있다. down 대각선의 후두부 외곽도 참조와 차이가 크다. 실화면 완료나 UI/UX 재검수 통과로 보고하지 않는다.
+
+## SHA256
 
 ```text
 ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4  bundle/index.html
-2b7db3b58e73b9fba3dd4f607375c6f0852d6790a5989cbb9e63b0911fcc5da1  docs/captures/faceless_hair_9dir_comparison.png
-9af9ff09ea27a9f8444d16273f16b0316ffbd6651aaee7dc867a65638394975d  docs/captures/hair_only_9dir_overlay.png
-adb5a6d4b73915b90a60cbf0da91ed40e56aa0218457b9bb473e4f627d7c4288  docs/captures/viewer_9dir_grid.png
+d7bee6858003dbe5999bb78bdc9fac8dcf12ba5516088b375a35fb584c218d4a  docs/captures/faceless_hair_9dir_comparison.png
+b44324a091e50ef555f1e079ea6e27562d951a986506fbf4edbef3caec71951c  docs/captures/hair_only_9dir_overlay.png
+e450bc0d9d6a3f624a64d5dba4eca6476f5c970b1f89968d4c0a5bd3308ceccf  docs/captures/viewer_9dir_grid.png
 ```
-
-요청한 3시트는 `captures/viewer_9dir_grid.png`, `captures/faceless_hair_9dir_comparison.png`, `captures/hair_only_9dir_overlay.png`다. 원시 수치, 보충0 기준, 보정 계수와 증거 출처는 각각 `hair-r15-metrics.json`, `hair-stage-a-metrics.json`, `hair-low-dof-calibration.json`, `hair-evidence-reuse.json`에 보존했다.
