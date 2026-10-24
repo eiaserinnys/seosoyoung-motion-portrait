@@ -33,14 +33,11 @@ export function hairLift(point,p,relief=0) {
 // One upper latitude arc. Its negative top depth only drives pitch Y;
 // yaw X/Z always belong to hairLift, including at the rear seam.
 export function pitchHairDepth(point,p,relief=0) {
- const y=point[1];
- if(y>=310)return correctedLift(point,0,p)[2]+relief;
- const z310=correctedLift([502,310],0,p)[2];
+ const y=point[1],base=correctedLift(point,0,p)[2];
+ if(y>=310)return base+relief;
  const latitude=sphereEase((310-y)/302);
- const center=z310+(DOME.pitchArc.topZ*correction(p,'CorrHairDepth')-z310)*latitude;
- const {cx,rx}=domeSection(y),lambda=Math.asin(clamp((point[0]-502-cx)/Math.max(1,rx),-1,1));
- const longitude=Math.cos(lambda)+(1-Math.cos(lambda))*latitude;
- return z310+(center-z310)*longitude+relief;
+ const topZ=DOME.pitchArc.topZ*correction(p,'CorrHairDepth');
+ return base+(topZ-base)*latitude+relief;
 }
 const capRadius=y=>DOME.rx*Math.sqrt(Math.max(0,1-((y-DOME.cy)/DOME.ry)**2));
 function frontSection(y){
@@ -90,10 +87,10 @@ function seamLongitude(lambda,p){
  const t=clamp(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/10,0,1),w=pitchEase(t,p);
  return lambda+Math.sign(lambda)*Math.max(0,Math.PI/2-Math.abs(lambda))*(1-w);
 }
-export function posteriorLocal(y,lambda,p){
+export function posteriorLocal(y,lambda,p,includePosterior=true){
  const {rx,rz:depth,cz,cx}=domeSection(y),rz=depth*correction(p,'CorrHairDepth');
  const local=[cx+rx*Math.sin(lambda),y-HEAD_CENTER[1],cz+rz*Math.cos(lambda)];
- if(!p.ParamAngleY||!p.ParamAngleX)return local;
+ if(!includePosterior||!p.ParamAngleY||!p.ParamAngleX)return local;
  const rear=Math.sin(Math.max(0,Math.abs(lambda)-Math.PI/2));
  const latitude=Math.cos(Math.asin(clamp((y-DOME.cy)/DOME.ry,-1,1)));
  const delta=[hairPoseValue(DOME.rearPitch.poses,p,q=>q.rx)*Math.sin(lambda),
@@ -103,9 +100,9 @@ export function posteriorLocal(y,lambda,p){
  const weight=Math.min(1,45/Math.max(1,Math.hypot(...delta),Math.hypot(...world)));
  return local.map((v,i)=>v+delta[i]*weight);
 }
-export function craniumPosition([x,y,lambda],p){
+export function craniumPosition([x,y,lambda],p,includePosterior=true){
  lambda=seamLongitude(lambda,p);
- return artWorld(posteriorLocal(y,lambda,p),p);
+ return artWorld(posteriorLocal(y,lambda,p,includePosterior),p);
 }
 export function craniumFacing([x,y,lambda],p){
  lambda=seamLongitude(lambda,p);

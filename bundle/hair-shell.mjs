@@ -60,17 +60,22 @@ export function craniumWorld([x,y,lambda],side,p) {
  const point=[x,y,lambda];
  if(!p.ParamAngleY)return legacyCranium(point,side,p);
  const world=craniumPosition(point,p),weight=sphereEase(Math.abs(p.ParamAngleY*correction(p,'CorrTurn'))/30);
+ const noPosterior=craniumPosition(point,p,false),posteriorY=world[1]-noPosterior[1];
+ const {cx,rx}=domeSection(y),sign=lambda<0?-1:1,edge=[HEAD_CENTER[0]+cx+sign*rx,y];
+ const fringe=fringeSurface(edge,p),seam=canopyWorld(edge,p),crownBlend=1-pitchEase((y-345)/35,p);
+ // Pitch the rear horizon with the front shell, then add only the bounded
+ // rear residual. Raw deep-skull pitch Y would form a hanging flap.
+ const yOut=fringe[1]+(seam[1]-fringe[1])*crownBlend+posteriorY;
  const collar=(1-sphereEase(Math.abs(Math.abs(lambda)-Math.PI/2)/(Math.PI/12)))*weight;
  if(collar){
-  const {cx,rx}=domeSection(y),sign=lambda<0?-1:1;
-  const seam=canopyWorld([HEAD_CENTER[0]+cx+sign*rx,y],p);
-  for(let i=0;i<3;i++)world[i]+=(seam[i]-world[i])*collar;
+  for(const i of [0,2])world[i]+=(seam[i]-world[i])*collar;
  }
+ world[1]=yOut;
  if(weight===1)return world;
  // The neutral seam's authored X/Z correction must fade out continuously;
  // a binary branch drops several pixels as automatic pitch crosses zero.
- const neutral={...p,ParamAngleY:0},rest=craniumPosition(point,neutral),seam=legacyCranium(point,side,neutral);
- return world.map((v,i)=>v+(seam[i]-rest[i])*(1-weight));
+ const neutral={...p,ParamAngleY:0},rest=craniumPosition(point,neutral),legacy=legacyCranium(point,side,neutral);
+ return world.map((v,i)=>i===1?v:v+(legacy[i]-rest[i])*(1-weight));
 }
 function legacyCranium([x,y,lambda],side,p){
  const world=craniumPosition([x,y,lambda],p);

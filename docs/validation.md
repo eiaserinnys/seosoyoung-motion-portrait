@@ -56,3 +56,19 @@ H1은 topZ=-100 한 개의 원호와 승인된 극점 수렴 w=cos(lambda)+(1-co
 범위 열거: 공통 앞머리 표면을 쓰는 hair-top/bangs-left/bangs-right/hairpin/side-hair-left/side-hair-right, backing3개, cranium2개, tail hair2개와 tie2개를 측정했다. 양쪽 귀 함수 본문과 얼굴/피처/렌더러/아틀라스/원화는 보호 대상이다. 런타임 변경은 네 머리카락 모듈과 그 DOME 데이터에 한정했다. 요청 밖의 렌더러/UV/face 보정과 추가 자유도는 구현하지 않았다.
 
 증거는 hair-r15-metrics.json, hair-stage-a-metrics.json, hair-low-dof-calibration.json, hair-hspec-protected-sha256.txt, hair-low-dof-sha256.txt 및 captures의 3시트다. metrics의 head는 캡처 당시 기반 HEAD이고, productSha256이 최종 제품 코드와 캡처를 연결한다. 코드/부착/중립 테스트와 실화면 수용을 구분한다.
+
+
+## 상향 정수리 볼록성과 후두부 Y 플랩 교정 (261025)
+
+사용자의 캡처 지적과 확정 수식으로 c8b358f의 상단 기하를 교정했다. 상수 z310과 경도 감쇠가 옆쪽 깊이를 앞쪽으로 뒤집던 원인은 각 점의 correctedLift 깊이에서 topZ로 보간하여 제거했다. y310의 열별 C1 접속과 y8의 공통 극점 수렴을 함께 유지한다.
+
+후두부 Y는 fringeSurface(edge)와 canopyWorld(edge)의 crownBlend 높이를 공유하고 posterior 보충 차분만 더한다. 깊은 두개골의 raw pitch Y와 15도 Y collar는 제거했다. X/Z의 3D 좌표, collar 접합 및 중립 C1 소거는 유지했다. craniumPosition의 includePosterior=false 경로로 같은 표면의 보충0 값을 명시적으로 구한다.
+
+회귀 2개 RED→GREEN. Node 전체140 passed, Python 전체32 passed. 독립 코드 감수 통과이며 y310 접속 오차는 약1.7e-8px다. 얼굴/렌더러/아틀라스/원화19파일과 얼굴피처 단언13본문은 main89fc408과 byte-identical, 중립3포즈pixel0 및 정점/후두부/단면 해시 일치다.
+
+후두부 4대각선의 세 계수를 보충0 캡처에서 다시 산출했다. 마지막 전체 H0는 exit1/46px였으며, 사용자 승인에 따라 up-right 보충0 실측과 다른8포즈 실측을 재사용한 최종 판정이 bounded pass/40px다. 추가 H0 실행은 없었다. 앞머리 지체 계수와 중력 프레임은 유지했다. 원시 참조/마스크 게이트 미달 22개는 hair-r15-metrics.json에 그대로 기록했다.
+
+최종3시트를 직접 열어 up의 넓은 평평한 지붕/좌우 뿔과 up-left/up-right 귀 뒤의 긴 갈색 삼각 플랩이 해소됐음을 확인했다. 새 공식은 down-right의 raw posterior pitch Y 과솟음도 제거한다. 머리카락 단독 참조 및 오버레이로 상단과 하단을 함께 비교했다. 이전 문단의 up 평탄화 미해결 판정은 이 수정으로 대체한다. 수치 정본은 최종metrics/새 stage-a/갱신calibration, 캡처와 HTML 해시는 hair-low-dof-sha256.txt다.
+
+
+최종 설정과 증거 출처는 `hair-low-dof-report.md`에 정리했다. 수동 설정 정본은 `config/rig-config.json`, 생성 데이터는 `source/viewer/dome-fit.json` 및 `bundle/dome-data.mjs`이며 up-right는 rx/rz/y 모두0이다. 최종 관련 Node14개가 통과했고 독립 증분 검수도 통과했다.

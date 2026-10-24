@@ -12,7 +12,7 @@ def write_fit(fit):
 
 def update_pitch(fit):
  # H1/H5 are explicit bounded scalars, never free per-row affine residuals.
- approved=json.loads((ROOT/'source/viewer/dome-fit.json').read_text())
+ approved=json.loads((ROOT/'config/rig-config.json').read_text())
  for key in ['pitchArc','tipLag','rearPitch']:fit[key]=approved[key]
  write_fit(fit)
 

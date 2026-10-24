@@ -27,10 +27,10 @@ test('r15 neutral geometry stays exact',{timeout:60000},()=>{
 });
 test('H1 depth is a single bounded cosine latitude arc and keeps the lower lift',()=>{
  assert(DOME.pitchArc.topZ>=-130&&DOME.pitchArc.topZ<=-80);
- const p={...base,ParamAngleY:30},z310=correctedLift([502,310],0,p)[2];
- for(const y of [8,70,150,230,309]){
-  const expected=z310+(DOME.pitchArc.topZ-z310)*sphereEase((310-y)/302);
-  assert(Math.abs(pitchHairDepth([502+domeSection(y).cx,y],p)-expected)<1e-8);
+ const p={...base,ParamAngleY:30};
+ for(const y of [8,70,150,230,309])for(const x of [330,502,670]){
+  const baseZ=correctedLift([x,y],0,p)[2],expected=baseZ+(DOME.pitchArc.topZ-baseZ)*sphereEase((310-y)/302);
+  assert(Math.abs(pitchHairDepth([x,y],p)-expected)<1e-8);
  }
  for(const y of [310,350,420])for(const x of [300,502,700])assert.equal(pitchHairDepth([x,y],p),correctedLift([x,y],0,p)[2]);
 });
