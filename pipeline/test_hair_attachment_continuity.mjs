@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,rotateXYZ,NECK_PIVOT} from '../bundle/geometry.mjs';
 import {beadWorld,BEADS} from '../bundle/stereo-attachments.mjs';
-import {referenceFringe} from '../bundle/hair-shell.mjs';
+import {canopyWorld} from '../bundle/hair-shell.mjs';
 import {domeSection} from '../bundle/hair-surface.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
@@ -19,14 +19,11 @@ test('earWorld retains the exact r15 implementation',()=>{
  assert.equal(createHash('sha256').update(ear).digest('hex'),fixture.earWorldSha256);
 });
 
-test('both far-up ties overlap the approved lower skull by at least 25px',()=>{
+test('both hanging locks end in the neutral gravity frame at the tie height',()=>{
  for(const yaw of [-45,45]){
   const side=yaw<0?'left':'right',p={...base,ParamAngleX:yaw,ParamAngleY:30};
-  const mesh=rig.meshes.find(m=>m.id===`tail-${side}-tie`);
-  const top=Math.min(...mesh.positions.map(pt=>deform3D(mesh,pt,p)[1]));
-  const {cx,rx}=domeSection(540),sign=side==='left'?-1:1;
-  const bottom=referenceFringe([502+cx+sign*rx,540],p)[1];
-  assert(bottom-top>=25,`${side}: far tie gap/insufficient overlap ${bottom-top}`);
+  const point=[side==='left'?310:691,544];
+  assert.equal(canopyWorld(point,p)[1],canopyWorld(point,{...p,ParamAngleY:0})[1]);
  }
 });
 test('both tail layers share the corrected physical tie root',()=>{

@@ -1,9 +1,10 @@
 import {strandWorld} from './side-strands.mjs';
-import {hairLift,pitchHairDepth,fringeRotation,hairPitchShift,domeSection,hairSurface,craniumPosition} from './hair-surface.mjs';
+import {hairLift,pitchHairDepth,domeSection,hairSurface,craniumPosition,sphereEase,pitchEase,hairPoseValue} from './hair-surface.mjs';
 import {earWorld} from './stereo-attachments.mjs';
 import {outlinePitchShift} from './face-outline.mjs';
 import {HEAD_CENTER,clamp,correction,artWorld} from './geometry.mjs';
-export {hairLift,pitchHairDepth,fringeRotation} from './hair-surface.mjs';
+import {DOME} from './dome-data.mjs';
+export {hairLift,pitchHairDepth} from './hair-surface.mjs';
 
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 
@@ -17,21 +18,27 @@ export function referenceFringe(point,p,relief=0) {
  if(!p.ParamAngleZ)return q;
  return artWorld(q.map((v,i)=>v-(i<2?HEAD_CENTER[i]:0)),{...p,ParamAngleX:0,ParamAngleY:0});
 }
-// Approved perimeter and lower locks stay on the r15 surface. Only the
-// crown interior consumes the inferred depth and measured 2D residual.
+// H1 keeps the authored yaw X/Z. H5 changes only the free fringe's Y.
 export function fringeSurface(point,p,relief=0){
- const approved=referenceFringe(point,p,relief);
- if(!p.ParamAngleY)return approved;
- const {cx,rx}=domeSection(point[1]),u=clamp((point[0]-502-cx)/Math.max(1,rx),-1,1);
- const t=clamp((point[1]-70)/(310-70),0,1),envelope=t*(1-t)*(1-u*u)**2;
- if(!envelope)return approved;
- const rotated=fringeRotation(point,p,relief),shift=hairPitchShift(point,p,rotated);
- return approved.map((v,i)=>v+(rotated[i]-v)*4*envelope+shift[i]*envelope);
+ const local=hairLift(point,p,relief);
+ if(!p.ParamAngleY)return artWorld(local,p);
+ const unrolled={...p,ParamAngleZ:0};
+ const a=artWorld(local,unrolled),b=artWorld([local[0],local[1],pitchHairDepth(point,p,relief)],unrolled);
+ let yWorld=b[1];
+ if(point[1]>230){
+  const neutralY=artWorld(local,{...unrolled,ParamAngleY:0})[1];
+  const kappa=DOME.tipLag.kappa+hairPoseValue(DOME.tipLag.poses,p,pose=>pose.kappa-DOME.tipLag.kappa);
+  yWorld=neutralY+(yWorld-neutralY)*(1-(1-kappa)*sphereEase((point[1]-230)/190));
+ }
+ const q=[a[0],yWorld,a[2]];
+ if(!p.ParamAngleZ)return q;
+ return artWorld(q.map((v,i)=>v-(i<2?HEAD_CENTER[i]:0)),{...p,ParamAngleX:0,ParamAngleY:0});
 }
 // One coordinate field owns every overlapping front-hair pixel. Layer order
 // belongs to the renderer; it must never alter the rotated geometry.
 function canopy(point,p,surface) {
  const [x,y]=point,world=surface(point,p);
+ const smooth=t=>pitchEase(t,p);
  const side=x<HEAD_CENTER[0]?'left':'right';
  const lower=smooth((y-405)/55),xStart=126-42*lower,width=14;
  const lockWeight=smooth((Math.abs(x-HEAD_CENTER[0])-xStart)/width)*smooth((y-340)/67);
@@ -50,6 +57,22 @@ export const hairWorld=canopyWorld;
 export const fringeWorld=canopyWorld;
 export const craniumWeight=()=>1;
 export function craniumWorld([x,y,lambda],side,p) {
+ const point=[x,y,lambda];
+ if(!p.ParamAngleY)return legacyCranium(point,side,p);
+ const world=craniumPosition(point,p),weight=sphereEase(Math.abs(p.ParamAngleY*correction(p,'CorrTurn'))/30);
+ const collar=(1-sphereEase(Math.abs(Math.abs(lambda)-Math.PI/2)/(Math.PI/12)))*weight;
+ if(collar){
+  const {cx,rx}=domeSection(y),sign=lambda<0?-1:1;
+  const seam=canopyWorld([HEAD_CENTER[0]+cx+sign*rx,y],p);
+  for(let i=0;i<3;i++)world[i]+=(seam[i]-world[i])*collar;
+ }
+ if(weight===1)return world;
+ // The neutral seam's authored X/Z correction must fade out continuously;
+ // a binary branch drops several pixels as automatic pitch crosses zero.
+ const neutral={...p,ParamAngleY:0},rest=craniumPosition(point,neutral),seam=legacyCranium(point,side,neutral);
+ return world.map((v,i)=>v+(seam[i]-rest[i])*(1-weight));
+}
+function legacyCranium([x,y,lambda],side,p){
  const world=craniumPosition([x,y,lambda],p);
  const {cx,rx}=domeSection(y),sign=Math.sign(lambda)||(side==='left'?-1:1);
  const edge=[HEAD_CENTER[0]+cx+sign*rx,y],horizonY=referenceFringe(edge,p)[1];
@@ -65,6 +88,7 @@ export function farSideWeight(side,p) {
   return smooth(angle/50)*correction(p,'CorrHairOcclusion');
 }
 function templeWorld(point,side,p,surface) {
+ const smooth=t=>pitchEase(t,p);
  const inner=side==='left'?379:626;
  const outward=Math.max(0,(point[0]-inner)*(side==='left'?-1:1));
  const join=(1-smooth(outward/30))*smooth((point[1]-380)/70);
@@ -77,14 +101,19 @@ function templeWorld(point,side,p,surface) {
  for(let i=0;i<3;i++)shell[i]+=(lock[i]-shell[i])*hanging;
  const shift=outlinePitchShift(point,p);
  shell[0]+=shift[0]*join;
+ if(p.ParamAngleY&&point[1]>405){
+  const neutral=templeWorld(point,side,{...p,ParamAngleY:0},surface);
+  const hang=sphereEase((point[1]-405)/139)*sphereEase(Math.abs(p.ParamAngleY*correction(p,'CorrTurn'))/30);
+  shell[1]+=(neutral[1]-shell[1])*hang;
+ }
  return shell;
 }
 export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}
 export function backWorld(point,p) {
- const back=shellWorld(point,p,-4),upper=1-smooth((point[1]-380)/85);
+ const back=shellWorld(point,p,-4),upper=1-pitchEase((point[1]-380)/85,p);
  if(!upper)return back;
  // Background is painted first, so the upper backing can share the dome
  // exactly. A depth-only inset opens a projected crack at the far temple.
- const canopy=referenceFringe(point,p,0);
+ const canopy=p.ParamAngleY?fringeSurface(point,p,0):referenceFringe(point,p,0);
  return back.map((v,i)=>v+(canopy[i]-v)*upper);
 }
