@@ -1,4 +1,24 @@
-# r11 revision: measured attachments and a continuous hair surface
+# Nine-direction calibration and continuous hair
+
+The final calibration preserves every neutral face/feature vertex while making rest-relative outline, eye, brow, nose and mouth motion mirror symmetric. Tests cover yaw 10/22.5/37/45 and pitch -30/-15/0/18/30, including intermediate face positions. The up-right occluded far-cheek measurement has zero weight; its visible opposite supplies that fit. Raw mask/feature measurements remain in the calibration JSON alongside balanced targets.
+
+| Final gate | Evidence |
+|:--|:--|
+| Node tests | 45 passed, 0 failed, one worker and 60-second test timeout |
+| Pixel contracts | 2 passed: rim reduction preserves alpha/detail; disconnected brow ink removed while vertical hair survives |
+| Shared canopy | 972 browser samples, maximum XYZ difference 0; upper depth is monotone toward both outer edges |
+| Forehead at DPR 2 | 0 pixels in all four required pose/gain cases |
+| Near ear at DPR 2 | 1944 / 2218 pixels at input -50/+50, gain .65; 2032 / 2257 at actual -45/+45 |
+| Eye decals | All 72 observations visible, minimum contribution 33 pixels at DPR 1 |
+| Other browser contracts | Iris clipping, neck cap coverage, rigid child sphere, controls, auto motion, narrow layout passed; console/HTTP/WebGL errors 0 |
+| Rebuild | All 71 part/bundle files byte-identical after rebuilding from immutable inputs; dist exactly matches bundle |
+| Independent code review | Sol high passed the final source/data/capture review; specialist UI/UX review remains with the coordinator |
+
+The nine-direction sheet and eight required captures were opened directly. The bright orange crown stripe is suppressed, the center part follows one field, and the near ears and beads remain visible. Face motion uses symmetric offsets around the preserved asymmetric neutral drawing. Hair artwork and accessories retain their original asymmetry. The existing panels, typography and controls are reused, with no layout or UI token changes. Specialist aesthetic review remains with the coordinator after the PR is prepared.
+
+Current evidence: [browser metrics](viewer_metrics.json), [rebuild parity](build_repro.json), [nine-direction sheet](captures/viewer_9dir_grid.png). The sections below record the earlier r11 baseline; the current symmetric calibration supersedes its asymmetric yaw targets and its former layer order.
+
+## Earlier r11 baseline: measured attachments and a continuous hair surface
 
 This revision preserves the approved face silhouette fit and corrects the ears, twin-tail roots, eyes, nose, mouth and hair surface. It uses the independently generated left/right references, not mirrored lighting. The viewer remains a custom WebGL rig, not a native Cubism model.
 

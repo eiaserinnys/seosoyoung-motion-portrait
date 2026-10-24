@@ -94,5 +94,335 @@
     "source": "right_45_ref_720.png",
     "sha256": "aca2914a95a3deb0ad0f3a838922af7cf6a10ea8f73751ac898c97b468d49640",
     "endpoint": "fal-ai/sam-3/image"
+  },
+  "up-face": {
+    "prompt": "face skin of anime girl excluding ears neck and hair",
+    "crop_box": [
+      185,
+      150,
+      540,
+      560
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9350336194038391,
+    "area_px": 91380,
+    "source": "up_ref_720.png",
+    "sha256": "85f4fbe3f4d95bbb8741481d92c287c946586fe139bb66173ef543d3b46a3fa0",
+    "endpoint": "fal-ai/sam-3/image",
+    "jawConstraint": [
+      [
+        210,
+        448
+      ],
+      [
+        232,
+        472
+      ],
+      [
+        270,
+        499
+      ],
+      [
+        315,
+        518
+      ],
+      [
+        358,
+        529
+      ],
+      [
+        399,
+        518
+      ],
+      [
+        444,
+        496
+      ],
+      [
+        480,
+        466
+      ],
+      [
+        503,
+        435
+      ]
+    ],
+    "maskSha256": "d12a7b9218a5ce751976b4d8b35e9589b60a71ba63858b5f3c29d36c5c7f4f8c"
+  },
+  "up-left-face": {
+    "prompt": "face skin of anime girl excluding ears neck and hair",
+    "crop_box": [
+      125,
+      180,
+      455,
+      565
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9447280168533325,
+    "area_px": 75141,
+    "source": "up_left_ref_720.png",
+    "sha256": "c3e2895da38444d78b72277182e05e77667e2a34863d34987783ddaa9470e0ee",
+    "endpoint": "fal-ai/sam-3/image",
+    "jawConstraint": [
+      [
+        144,
+        425
+      ],
+      [
+        151,
+        473
+      ],
+      [
+        176,
+        514
+      ],
+      [
+        213,
+        547
+      ],
+      [
+        250,
+        550
+      ],
+      [
+        296,
+        538
+      ],
+      [
+        345,
+        516
+      ],
+      [
+        384,
+        485
+      ],
+      [
+        410,
+        443
+      ]
+    ],
+    "maskSha256": "55ff7b4e99348382649ce2e22c11e6e6fcc1ad42699e5a3b8cf9ed104c1ceb63"
+  },
+  "up-right-face": {
+    "prompt": "face skin of anime girl excluding ears neck and hair",
+    "crop_box": [
+      275,
+      180,
+      610,
+      575
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.90509432554245,
+    "area_px": 74321,
+    "source": "up_right_ref_720.png",
+    "sha256": "964ad730b8799d4d7d362fd5441ebd64742f44ab9c4c41cc13f26d643d3d0716",
+    "endpoint": "fal-ai/sam-3/image",
+    "jawConstraint": [
+      [
+        339,
+        448
+      ],
+      [
+        360,
+        490
+      ],
+      [
+        403,
+        523
+      ],
+      [
+        453,
+        544
+      ],
+      [
+        500,
+        551
+      ],
+      [
+        541,
+        551
+      ],
+      [
+        566,
+        515
+      ],
+      [
+        586,
+        469
+      ],
+      [
+        593,
+        426
+      ]
+    ],
+    "maskSha256": "8f394ecec50cd9d4eab906e63d7865b9642bda1ee70ff08a1d0b348239fa7064"
+  },
+  "down-face": {
+    "prompt": "face skin of anime girl excluding ears neck and hair",
+    "crop_box": [
+      190,
+      270,
+      520,
+      635
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.966401994228363,
+    "area_px": 51821,
+    "source": "down_ref_720.png",
+    "sha256": "5774ded8efd39f4f4c2c7cc7ac878392e0ebf4e7b25cc2903063f9ad86fc599d",
+    "endpoint": "fal-ai/sam-3/image",
+    "jawConstraint": [
+      [
+        211,
+        535
+      ],
+      [
+        233,
+        567
+      ],
+      [
+        270,
+        593
+      ],
+      [
+        312,
+        611
+      ],
+      [
+        353,
+        621
+      ],
+      [
+        388,
+        610
+      ],
+      [
+        431,
+        589
+      ],
+      [
+        470,
+        559
+      ],
+      [
+        490,
+        529
+      ]
+    ],
+    "maskSha256": "bb7ee45e015e6926b44a75424115873cce2f69cd5ad0c5896e040237e83bdc2d"
+  },
+  "down-left-face": {
+    "prompt": "face skin of anime girl excluding ears neck and hair",
+    "crop_box": [
+      135,
+      250,
+      445,
+      630
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9454439282417297,
+    "area_px": 61876,
+    "source": "down_left_ref_720.png",
+    "sha256": "ae36e6f92925bd2c061b87c30fc79fc5bcb0520ffc25656854368276b52599ed",
+    "endpoint": "fal-ai/sam-3/image",
+    "jawConstraint": [
+      [
+        153,
+        486
+      ],
+      [
+        165,
+        526
+      ],
+      [
+        190,
+        565
+      ],
+      [
+        224,
+        598
+      ],
+      [
+        259,
+        614
+      ],
+      [
+        294,
+        606
+      ],
+      [
+        338,
+        584
+      ],
+      [
+        381,
+        559
+      ],
+      [
+        409,
+        529
+      ]
+    ],
+    "maskSha256": "0db8350ac370de9bf56b32009a322d21b5e0baeab415f7722fc29aadfe3171e3"
+  },
+  "down-right-face": {
+    "prompt": "face skin of anime girl excluding ears neck and hair",
+    "crop_box": [
+      280,
+      250,
+      610,
+      650
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9403841495513916,
+    "area_px": 49650,
+    "source": "down_right_ref_720.png",
+    "sha256": "b54e8e2874508414155620eda0cb0693596565d00a8a93710bb0dc1544cfdf91",
+    "endpoint": "fal-ai/sam-3/image",
+    "jawConstraint": [
+      [
+        321,
+        534
+      ],
+      [
+        348,
+        574
+      ],
+      [
+        386,
+        606
+      ],
+      [
+        423,
+        629
+      ],
+      [
+        456,
+        639
+      ],
+      [
+        486,
+        619
+      ],
+      [
+        521,
+        594
+      ],
+      [
+        550,
+        563
+      ],
+      [
+        572,
+        529
+      ]
+    ],
+    "maskSha256": "abc85cf96818d3b8e4f79986b2ee6dfa1d0e1de31bdac5d5fd58bae01b55f057"
   }
 }

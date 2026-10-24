@@ -1,65 +1,85 @@
-"""Fill hidden crown inter-part gaps; retain detached wisps outside the solid locks."""
-import json
+"""Rebuild clean, de-lit foreground hair from immutable source pixels."""
+import json,shutil
 from pathlib import Path
 import cv2
 import numpy as np
 from PIL import Image
+from hair_albedo import delight,neutralize_outline,remove_brow_ghost,smoothstep
 ROOT=Path(__file__).resolve().parents[1]
+IDS={'hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','back-hair-center'}
+
+def copy_bangs_rgb(a,part,parts,images):
+ x,y,w,h=part['bbox'];seed=np.zeros((h,w),bool)
+ for key in ['bangs-left','bangs-right']:
+  bx,by,bw,bh=parts[key]['bbox'];left=max(x,bx);top=max(y,by);right=min(x+w,bx+bw);bottom=min(y+h,by+bh)
+  if left>=right or top>=bottom:continue
+  source=images[key][top-by:bottom-by,left-bx:right-bx];target=a[top-y:bottom-y,left-x:right-x]
+  mask=source[:,:,3]>200;target[mask,:3]=source[mask,:3];seed[top-y:bottom-y,left-x:right-x]|=mask
+ return seed
+
+def taper_added(a,original,canvas_y):
+ added=original[:,:,3]==0
+ fade=np.broadcast_to(1-smoothstep(230,250,np.arange(a.shape[0])[:,None]+canvas_y),added.shape)
+ a[:,:,3]=np.where(added,np.rint(a[:,:,3]*fade),a[:,:,3]).astype(np.uint8)
+
 def build():
-    parts=json.loads((ROOT/'parts/parts_index.json').read_text())
-    selected=[p for p in parts if p['id'] in ['hair-top','side-hair-left','side-hair-right','back-hair-center']]
-    # Immutable source assets make rebuilding idempotent.
-    original={p['id']:np.array(Image.open(ROOT/'source/front-hair-inputs'/(p['id']+'.png')).convert('RGBA')) for p in selected}
-    union=np.zeros((1536,1024),dtype=np.uint8)
-    for p in selected:
-        if p['id']=='back-hair-center':continue
-        x,y,w,h=p['bbox'];union[y:y+h,x:x+w]=np.maximum(union[y:y+h,x:x+w],original[p['id']][:,:,3])
-    for p in selected:
-        x,y,w,h=p['bbox'];a=original[p['id']].copy();domain=a[:,:,3]>128
-        for row in range(h):
-            if not 60<=row+y<=(400 if p['id']=='back-hair-center' else 350):continue
-            line=union[row+y] if p['id']=='hair-top' else a[row,:,3]
-            edges=np.diff(np.pad(line>128,(1,1)).astype(int));runs=[(l,r) for l,r in zip(np.where(edges==1)[0],np.where(edges==-1)[0]) if r-l>=20]
-            if not runs:continue
-            l,r=runs[0][0],runs[-1][1]
-            if p['id']=='hair-top':l-=x;r-=x
-            domain[row,max(0,l):min(w,r)]=True
-        if p['id']=='back-hair-center':
-            # The continuous backing overlaps the independently moving temple
-            # lock by two texels, including its antialiased inner edge.
-            expanded=cv2.dilate(domain.astype(np.uint8),np.ones((5,5),np.uint8))>0
-            upper=(np.arange(h)+y>=200)&(np.arange(h)+y<=400)
-            domain[upper]=expanded[upper]
-        repair=domain & (a[:,:,3]<255)
-        rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
-        a[repair,:3]=rgb[repair];a[domain,3]=255
-        Image.fromarray(a).save(ROOT/p['file'])
-    print('PASS hidden front crown gaps filled; detached outer strands retained')
+ parts={p['id']:p for p in json.loads((ROOT/'parts/parts_index.json').read_text())}
+ source=ROOT/'source/front-hair-inputs';source.mkdir(exist_ok=True)
+ for key in ['bangs-left','bangs-right']:
+  path=source/(key+'.png')
+  if not path.exists():shutil.copyfile(ROOT/parts[key]['file'],path)
+ original={key:np.array(Image.open(source/(key+'.png')).convert('RGBA')) for key in IDS}
+ images={key:neutralize_outline(a) for key,a in original.items()}
+ for key in ['bangs-left','bangs-right']:
+  x,y,w,h=parts[key]['bbox'];brows=np.zeros((1536,1024),np.uint8)
+  for side in ['left','right']:
+   part=parts[f'eye-{side}-brow'];bx,by,bw,bh=part['bbox']
+   alpha=np.array(Image.open(ROOT/part['file']).convert('RGBA'))[:,:,3]
+   brows[by:by+bh,bx:bx+bw]=np.maximum(brows[by:by+bh,bx:bx+bw],alpha)
+  images[key]=remove_brow_ghost(images[key],brows[y:y+h,x:x+w],y)
+ union=np.zeros((1536,1024),np.uint8)
+ for key in IDS-{'back-hair-center'}:
+  x,y,w,h=parts[key]['bbox'];union[y:y+h,x:x+w]=np.maximum(union[y:y+h,x:x+w],images[key][:,:,3])
+ for key in sorted(IDS):
+  part=parts[key];x,y,w,h=part['bbox'];a=images[key];domain=a[:,:,3]>128
+  if not key.startswith('bangs'):
+   for row in range(h):
+    limit=250 if key=='hair-top' else 400 if key=='back-hair-center' else 350
+    if not 60<=row+y<=limit:continue
+    line=union[row+y] if key=='hair-top' else a[row,:,3]
+    edges=np.diff(np.pad(line>128,(1,1)).astype(int));runs=[(l,r) for l,r in zip(np.where(edges==1)[0],np.where(edges==-1)[0]) if r-l>=20]
+    if not runs:continue
+    left,right=runs[0][0],runs[-1][1]
+    if key=='hair-top':left-=x;right-=x
+    domain[row,max(0,left):min(w,right)]=True
+   if key=='back-hair-center':
+    expanded=cv2.dilate(domain.astype(np.uint8),np.ones((5,5),np.uint8))>0
+    upper=(np.arange(h)+y>=200)&(np.arange(h)+y<=400);domain[upper]=expanded[upper]
+   seed=copy_bangs_rgb(a,part,parts,images) if key=='hair-top' else np.zeros(domain.shape,bool)
+   repair=domain&(a[:,:,3]==0 if key=='hair-top' else a[:,:,3]<255)&~seed
+   rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
+   a[repair,:3]=rgb[repair];a[domain,3]=255
+   if key=='hair-top':taper_added(a,original[key],y)
+  images[key]=delight(a,y,key=='back-hair-center')
+ # Seed real RGB before inpainting, then retain identical overlap after tone correction.
+ copy_bangs_rgb(images['hair-top'],parts['hair-top'],parts,images)
+ for key,a in images.items():Image.fromarray(a).save(ROOT/parts[key]['file'])
+ print('PASS six immutable hair inputs, brow cleanup and albedo correction')
+
 def fill_seam():
-    """The smoothed seam must land inside opaque artwork, even at local notches."""
-    rows=json.loads((ROOT/'source/viewer/dome-fit.json').read_text())['frontSeam']
-    for part in json.loads((ROOT/'parts/parts_index.json').read_text()):
-        if part['id'] not in ['hair-top','side-hair-left','side-hair-right']:continue
-        x,y,w,h=part['bbox'];a=np.array(Image.open(ROOT/part['file']).convert('RGBA'));domain=a[:,:,3]>128
-        for yy in range(max(y,60),min(y+h,351)):
-            edge=np.interp(yy,np.array(rows)[:,0],np.array(rows)[:,1 if part['id'].endswith('left') else 2])
-            xs=np.flatnonzero(domain[yy-y])
-            if not len(xs):continue
-            if part['id']=='hair-top':
-                left=np.interp(yy,np.array(rows)[:,0],np.array(rows)[:,1]);right=np.interp(yy,np.array(rows)[:,0],np.array(rows)[:,2])
-                lo,hi=int(np.floor(left-x))-1,int(np.ceil(right-x))+2
-            elif part['id'].endswith('left'):lo,hi=int(np.floor(edge-x))-1,int(xs[-1])+1
-            else:lo,hi=int(xs[0]),int(np.ceil(edge-x))+2
-            domain[yy-y,max(0,lo):min(w,hi)]=True
-        repair=domain&(a[:,:,3]<255)
-        rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
-        a[repair,:3]=rgb[repair];a[domain,3]=255
-        if part['id']=='hair-top':
-            # Only the added fill fades into the original lower crop edge.
-            # Otherwise its rectangular last row becomes a visible dark shelf.
-            original=np.array(Image.open(ROOT/'source/front-hair-inputs/hair-top.png').convert('RGBA'))[:,:,3]
-            t=np.clip((h-1-np.arange(h))/24,0,1)
-            weight=(t*t*(3-2*t))[:,None]
-            a[:,:,3]=np.rint(original+(a[:,:,3].astype(float)-original)*weight).astype(np.uint8)
-        Image.fromarray(a).save(ROOT/part['file'])
+ """Fill only the crown backing; side-hair never expands toward frontSeam."""
+ rows=np.array(json.loads((ROOT/'source/viewer/dome-fit.json').read_text())['frontSeam'])
+ parts={p['id']:p for p in json.loads((ROOT/'parts/parts_index.json').read_text())}
+ part=parts['hair-top'];x,y,w,h=part['bbox'];a=np.array(Image.open(ROOT/part['file']).convert('RGBA'))
+ original=np.array(Image.open(ROOT/'source/front-hair-inputs/hair-top.png').convert('RGBA'))
+ domain=a[:,:,3]>128
+ for yy in range(max(y,60),min(y+h,251)):
+  left=np.interp(yy,rows[:,0],rows[:,1]);right=np.interp(yy,rows[:,0],rows[:,2])
+  domain[yy-y,max(0,int(np.floor(left-x))-1):min(w,int(np.ceil(right-x))+2)]=True
+ images={key:np.array(Image.open(ROOT/parts[key]['file']).convert('RGBA')) for key in ['bangs-left','bangs-right']}
+ seed=copy_bangs_rgb(a,part,parts,images);repair=domain&(a[:,:,3]==0)&~seed
+ rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
+ a[repair,:3]=rgb[repair];a[domain,3]=255;taper_added(a,original,y)
+ copy_bangs_rgb(a,part,parts,images);Image.fromarray(a).save(ROOT/part['file'])
+
 if __name__=='__main__':build()

@@ -25,7 +25,7 @@ test('far back hair contracts at least as much as side hair',()=>{
  for(const gain of [.65,1])for(const yaw of [-50,-25,25,50])for(const y of [350,440,530]){
   const side=yaw<0?'left':'right',x=yaw<0?210:775,p={...base,ParamAngleX:yaw,CorrTurn:gain};
   const back=deform3D(mesh('back-hair-'+side),[x,y],p)[0],front=deform3D(mesh('side-hair-'+side),[x,y],p)[0];
-  assert(yaw<0?back>=front:back<=front,`${yaw} ${gain} ${y}: ${back} / ${front}`);
+  assert(yaw<0?back>=front-1e-8:back<=front+1e-8,`${yaw} ${gain} ${y}: ${back} / ${front}`);
  }
 });
 test('upper added depth has negative horizontal second derivative',()=>{
@@ -33,9 +33,12 @@ test('upper added depth has negative horizontal second derivative',()=>{
  assert(extra(402)+extra(602)-2*extra(502)<-1);
 });
 test('45 degree chin reaches the measured target',()=>{
+ const trace=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url))),row=trace.rows.at(-1);
  for(const yaw of [-45,45]){
   const q=deform3D(mesh('face-skin'),[502.5,616],{...base,CorrTurn:1,ParamAngleX:yaw});
-  assert(Math.abs(q[0]-(yaw<0?441.5:586))<4,`${q}`);
+  const target=yaw<0?(row[3]+row[4])/2:(row[5]+row[6])/2;
+  // The edge fit retains the curved 3D interior, rather than flattening it.
+  assert(Math.abs(q[0]-target)<1,`${q}`);
  }
 });
 

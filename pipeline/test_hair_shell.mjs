@@ -4,6 +4,7 @@ import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift,artWorld} from '../bundle/geometry.mjs';
 import {domeSection} from '../bundle/hair-surface.mjs';
 import {hairLift,hairWorld,sideWorld} from '../bundle/hair-shell.mjs';
+import './test_9dir.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
 const mesh=id=>rig.meshes.find(m=>m.id===id);
@@ -16,18 +17,19 @@ for(const [yaw,pitch] of [[0,0],[-25,0],[25,0],[-50,0],[50,0],[0,-20],[0,20]]){
   near(point('face-skin',xy,p),artWorld(correctedLift(xy,0,p),p));checks++;
  }
  for(const xy of [[502,64],[502,150],[502,230]]){
-  const front=point('hair-top',xy,p),back=point('back-hair-center',xy,p);
-  assert(Math.hypot(...front.map((v,i)=>v-back[i]))<=6.000001,'crown layers share one surface');checks++;
+  const rest={...p,ParamAngleX:0,ParamAngleY:0},front=point('hair-top',xy,rest),back=point('back-hair-center',xy,rest);
+  near(front.slice(0,2),back.slice(0,2));
+  assert(back[2]<front[2],'upper backing occupies the rear hemisphere');checks++;
  }
  for(const [side,x] of [['left',379],['right',626]]){
-  near(sideWorld([x,438],side,p),point('face-skin',[x,438],p));checks++;
+  const original=sideWorld([x,438],side,p),morphed=sideWorld([x,438],side,{...p,CorrOutline:1});
+  assert.equal(original[2],morphed[2],'outline displacement never changes lock depth');checks++;
  }
  if(yaw||pitch){
   assert.notDeepEqual(point('hair-top',[502,150],p),point('hair-top',[502,150],{...p,CorrHairDepth:.5}));checks++;
  }
  for(const id of ['bangs-left','bangs-right','hairpin']){
-  const relief=id==='hairpin'?8:6;
-  near(point(id,[502,310],p),artWorld(correctedLift([502,310],relief,p),p));checks++;
+  near(point(id,[502,310],p),hairWorld([502,310],p));checks++;
  }
 }
 assert.equal(hairLift([502,64],base)[2],0,'north pole has zero depth');checks++;
@@ -52,6 +54,6 @@ for(const [side,x,yaw,edge] of [['right',674,-45,535],['left',330,45,469]]){
 }
 for(const side of ['left','right'])for(const y of [200,260,330,350])for(const yaw of [-45,0,45]){
  const {cx,rx}=domeSection(y),xy=[502+cx+(side==='left'?-rx:rx),y],p={...base,CorrTurn:1,ParamAngleX:yaw};
- near(sideWorld(xy,side,p),hairWorld(xy,p,4));checks++;
+ near(sideWorld(xy,side,p),hairWorld(xy,p));checks++;
 }
 console.log(`PASS ${checks} hair shell and preserved face checks`);

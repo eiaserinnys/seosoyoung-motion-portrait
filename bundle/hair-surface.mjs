@@ -32,6 +32,15 @@ export function hairSurface(point,p,reference=0,relief=0){
  const zz=-restX*Math.sin(yaw)+restZ*Math.cos(yaw);
  return artWorld([xx,y-HEAD_CENTER[1],zz+relief],{...p,ParamAngleX:0});
 }
+// A finite tangent at the photographed limb prevents the thin alpha fringe
+// from folding around an infinite sqrt slope. XY remains exact at rest.
+export function canopySurface(point,p,back=false){
+ const [x,y]=point,{rx,rz,cz,cx}=domeSection(y);
+ const nx=(x-HEAD_CENTER[0]-cx)/Math.max(1,rx),v=1-nx*nx;
+ const root=v>=.16?Math.sqrt(v):.4*Math.exp((v-.16)/.32);
+ const t=clamp((y-60)/120,0,1),polar=t*t*(3-2*t);
+ return artWorld([x-HEAD_CENTER[0],y-HEAD_CENTER[1],(cz+(back?-1:1)*rz*correction(p,'CorrHairDepth')*root)*polar],p);
+}
 
 // The narrow crack-prevention collar is folded onto the horizon at rest,
 // then unfolds geometrically over the first ten degrees; alpha stays one.

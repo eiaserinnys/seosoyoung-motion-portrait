@@ -2,7 +2,7 @@ import {featureWorld} from './face-features.mjs';
 import {BEADS,beadWorld} from './stereo-attachments.mjs';
 import {outlineWorld,applyOutline} from './face-outline.mjs';
 import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './geometry.mjs';
-import {hairWorld,fringeWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
+import {canopyWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
 export {HEAD_CENTER,HEAD_RADIUS,LEFT_EYE_BALL,RIGHT_EYE_BALL,EYE_BALL_R,spherePoint,sphereWarp,eyeballAngles,headWorld,liftHead,eyeWorld,eyeCenter,rotateXYZ} from './geometry.mjs';
 export function interpolate(keys,value) {
   if(value<=keys[0].value)return keys[0].output;
@@ -20,6 +20,7 @@ export function deform3D(mesh,point,parameters) {
   const p={...parameters};
   for(const node of mesh.chain||[])for(const [channel,keys] of Object.entries(node.keyforms))if(channel.startsWith('Param'))p[channel]=interpolate(keys,parameters[channel]);
   const id=mesh.id;let [x,y]=point;
+  if(id==='hair-top'||id.startsWith('bangs')||id.startsWith('side-hair')||id==='hairpin')return canopyWorld(point,p);
   if(mesh.deformerId==='WarpBody') {
     const upper=clamp((1536-y)/960,0,1);
     return [x+p.ParamBodyAngleX*upper,y-p.ParamBreath*4*upper,-500];
@@ -29,6 +30,12 @@ export function deform3D(mesh,point,parameters) {
     const xIn=502+(x-502)*(1-.75*capT),yIn=y-16*capT,sampleY=Math.min(yIn,568);
     // Yaw is a rotation about the neck's vertical axis, never a lateral shear input.
     const head=artWorld(correctedLift([xIn,sampleY],-2,p),{...p,ParamAngleX:0});
+    if(p.ParamAngleY){
+      const chin=[502.5,616],pose={...p,ParamAngleZ:0};
+      const plain=artWorld(correctedLift(chin,0,p),pose),jaw=outlineWorld(chin,pose);
+      const shift=jaw[1]-plain[1],roll=radians(p.ParamAngleZ);
+      head[0]-=shift*Math.sin(roll);head[1]+=shift*Math.cos(roll);
+    }
     const headDx=head[0]-x,headDy=head[1]-sampleY+yIn-y;
     const u=clamp((680-y)/110,0,1),weight=u*u*(3-2*u),upper=clamp((1536-y)/960,0,1);
     return [x+headDx*weight+p.ParamBodyAngleX*upper*(1-weight),y+headDy*weight-p.ParamBreath*4*upper*(1-weight),-20];
@@ -58,11 +65,7 @@ export function deform3D(mesh,point,parameters) {
     return backWorld([x,y],p);
   }
   let relief=0;
-  if(id==='hair-top')relief=2;
-  else if(id.startsWith('side-hair'))relief=4;
-  else if(id==='hairpin')relief=8;
-  else if(id.startsWith('bangs'))relief=6;
-  else if(id.startsWith('ear-'))relief=5;
+  if(id.startsWith('ear-'))relief=5;
   else if(id==='nose-detail')relief=correction(p,'CorrNose');
   else if(id.startsWith('eye-'))relief=id.endsWith('brow')?5:3;
   else if(id.startsWith('mouth'))relief=correction(p,'CorrMouth');
@@ -79,11 +82,7 @@ export function deform3D(mesh,point,parameters) {
     x=502+(x-502)*(1+p.ParamMouthForm*.12);
     if(id!=='mouth-detail')y=552+(y-552)*(1+.35*p.ParamMouthOpenY);
   }
-  if(id.startsWith('side-hair'))x+=p.ParamHairSide*9*clamp((y-180)/400,0,1)**2;
-  if(id.startsWith('bangs'))x+=p.ParamHairFront*9*clamp((y-100)/330,0,1)**2;
-  if(id==='hair-top')return hairWorld([x,y],p,2);
-  if(id.startsWith('side-hair')||id.startsWith('ear-'))return sideWorld([x,y],id.endsWith('left')?'left':'right',p,id.startsWith('ear-'));
-  if(id.startsWith('bangs')||id==='hairpin')return fringeWorld([x,y],p,relief);
+  if(id.startsWith('ear-'))return sideWorld([x,y],id.endsWith('left')?'left':'right',p,true);
   return outlineWorld([x,y],p,relief);
 }
 export const deform=(mesh,point,p)=>deform3D(mesh,point,p).slice(0,2);

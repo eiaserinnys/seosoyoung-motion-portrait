@@ -1,4 +1,5 @@
-import {craniumFacing,craniumSeam,referenceHairSample} from './hair-surface.mjs';
+import {craniumFacing,craniumSeam} from './hair-surface.mjs';
+import {FRAME_CACHE} from './pose-grid.mjs';
 import {deform3D,opacity,bindRig} from './rig.mjs';
 import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction} from './geometry.mjs';
 export class Renderer {
@@ -33,19 +34,15 @@ export class Renderer {
     const ref=this.rig.meshes.find(m=>m.id==='side-cranium-'+(p.ParamAngleX<0?'right':'left'));
     const [ax,ay,bw,bh]=ref.atlas,size=this.rig.atlasSize;
     gl.uniform4f(this.loc.refRect,(ax+.5)/size,(ay+.5)/size,(ax+bw-.5)/size,(ay+bh-.5)/size);
-    const reference=xy=>{
-      if(!['hair-top','back-hair-center','side-hair-left','side-hair-right'].includes(mesh.id))return [0,0,0];
-      const sample=referenceHairSample(xy,p);
-      const [x,y]=sample.point,[bx,by,bw,bh]=ref.bbox,[ax,ay]=ref.atlas;
-      return [(ax+x-bx)/this.rig.atlasSize,(ay+y-by)/this.rig.atlasSize,sample.weight];
-    };
+    const reference=()=>[0,0,0];
     const data=new Float32Array(points.flatMap((pt,i)=>[...pt,...mesh.uvs[i],mesh.positions[i][0],mesh.positions[i][1],mesh.id.startsWith('side-cranium')?craniumFacing(mesh.positions[i],p):1,mesh.id.startsWith('side-cranium')?craniumSeam(mesh.positions[i]):1,...reference(mesh.positions[i])]));
     gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(mesh.triangles.flat()),gl.STATIC_DRAW);
     gl.uniform1i(this.loc.neck,mesh.id==='neck');gl.uniform1f(this.loc.opacity,alpha);gl.uniform1i(this.loc.clip,clip);gl.uniform1i(this.loc.tint,tint);gl.uniform1i(this.loc.closed,mesh.id==='closed-eyes-v1');gl.drawElements(gl.TRIANGLES,mesh.triangles.length*3,gl.UNSIGNED_SHORT,0);
     return points;
   }
-  render(p,state) {
+  render(parameters,state) {
+    const p={...parameters,[FRAME_CACHE]:new Map()};
     this.identify=state.identify;
     this.overlay.hidden=!(state.wire||state.grid);
     this.resize();const gl=this.gl,w=this.canvas.width,h=this.canvas.height;
@@ -95,8 +92,9 @@ export class Renderer {
     let currentMask=null;
     // The face crop extends under the crown. Its unmodified r9 depth must not
     // punch through the shallower north pole of the front hair artwork.
-    const frontHair=m=>m.id==='hair-top'||m.id.startsWith('bangs')||m.id==='hairpin';
-    const foreground=this.rig.meshes.filter(m=>!background(m)).sort((a,b)=>Number(frontHair(a))-Number(frontHair(b)));
+    const hairOrder={'side-hair-left':1,'side-hair-right':2,'hair-top':3,'bangs-left':4,'bangs-right':5,'hairpin':6};
+    const frontHair=m=>hairOrder[m.id]>0;
+    const foreground=this.rig.meshes.filter(m=>!background(m)).sort((a,b)=>(hairOrder[a.id]||0)-(hairOrder[b.id]||0));
     if(!state.surfaceOnly)for(const mesh of foreground) {
       if(!visible(mesh))continue;
       const alpha=opacity(mesh,p,state)*(state.mode==='dim'&&!state.selectedIds.has(mesh.id)?.18:1);
@@ -111,9 +109,10 @@ export class Renderer {
         gl.disable(gl.DEPTH_TEST);gl.depthMask(false);
       // Measured feature anchors define motion, not a second skin surface.
       // Paint facial details over the preserved face; hair still draws later.
-      }else if(frontHair(mesh)||mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-')){gl.disable(gl.DEPTH_TEST);gl.depthMask(false);}
+      }else if(mesh.id.startsWith('side-hair')){gl.enable(gl.DEPTH_TEST);gl.depthMask(false);}
+      else if(frontHair(mesh)||mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-')){gl.disable(gl.DEPTH_TEST);gl.depthMask(false);}
       else{gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
-      if(mesh.id==='hair-top'||mesh.id.startsWith('side-hair'))gl.enable(gl.CULL_FACE);else gl.disable(gl.CULL_FACE);
+      if(frontHair(mesh))gl.enable(gl.CULL_FACE);else gl.disable(gl.CULL_FACE);
       wire(mesh,this.draw(mesh,p,alpha,{clip:mesh.masks.length>0,tint:state.masks&&mesh.id.endsWith('sclera')}));
     }
     gl.depthMask(true);gl.disable(gl.CULL_FACE);gl.disable(gl.DEPTH_TEST);

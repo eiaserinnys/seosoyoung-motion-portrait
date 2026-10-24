@@ -16,7 +16,7 @@ for(const gain of [.65,1])for(const [x,y] of [[-50,-28],[-50,28],[50,-28],[50,28
   const mesh=rig.meshes.find(m=>m.id===id),points=mesh.positions.map(pt=>deform3D(mesh,pt,p));
   assert(points.every(q=>q.every(Number.isFinite)),id+' finite vertices');
   const reversed=mesh.triangles.filter(t=>area(t.map(i=>points[i]))*area(t.map(i=>mesh.positions[i]))<0).length;
-  const solid=id==='hair-top'||id.startsWith('side-hair')||id.startsWith('back-hair');
+  const solid=id==='hair-top'||id==='hairpin'||id.startsWith('bangs')||id.startsWith('side-hair')||id.startsWith('back-hair');
   // A surface turning away from the camera is a back face, not a collapsed
   // ArtMesh. These surfaces use CULL_FACE; keep the unculled facial ribbons'
   // original screen-orientation contract and check 3D area for the surfaces.
