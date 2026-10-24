@@ -1,17 +1,12 @@
 """Sample actual SAM 3 face silhouettes; compile independent left/right targets."""
-import json
+import json,subprocess
 from pathlib import Path
 import numpy as np
 from PIL import Image
 import cv2
 ROOT=Path(__file__).resolve().parents[1]
-REST_Y_ANCHORS=[431.5,497.0,554.5,616.0]
-def map_y(y,anchors):
-    # np.interp clamps outside its range; the eye-to-nose slope must extend
-    # above the eyes so the whole cheek (including y410) is sampled.
-    i=int(np.clip(np.searchsorted(REST_Y_ANCHORS,y,side='right')-1,0,2))
-    t=(y-REST_Y_ANCHORS[i])/(REST_Y_ANCHORS[i+1]-REST_Y_ANCHORS[i])
-    return float(anchors[i]+t*(anchors[i+1]-anchors[i]))
+# With no separate chin underside, compromise relative to the rest 61.5px span.
+CHIN_CANVAS_SPAN={30:64.0,-30:50.0}
 def interval(mask,y):
     xs=np.flatnonzero(mask[y]>127)
     if not len(xs):raise ValueError(f'Empty silhouette row {y}')
@@ -38,7 +33,9 @@ def symmetrize(rows,poses):
         for p in group.values():p['measuredRows']=[r[:] for r in p['rows']]
         center=group[0]
         for row,base in zip(center['rows'],rows):
-            _,l,r,*_=base;sy,yl,xl,yr,xr=row;d=((l-xl)+(xr-r))/2
+            _,l,r,*_=base;sy,yl,xl,yr,xr=row
+            # Prevent a quartic endpoint crossing; retain the 11px rest chin.
+            d=max(((l-xl)+(xr-r))/2,5.5-(r-l)/2)
             row[:]=[sy,(yl+yr)/2,l-d,(yl+yr)/2,r+d]
         neg,pos=group[-45],group[45]
         for left,right,base in zip(neg['rows'],pos['rows'],rows):
@@ -82,6 +79,7 @@ def build():
     poses=[]
     samples=rows
     ss=np.array([(r[0]-410)/(616-410) for r in samples])
+    fractions=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/outline_vertical_registration.mjs')],input=json.dumps(rows),text=True))
     for pose in features['poses']:
         name=pose['name'];yaw=pose['yaw'];pitch=pose['pitch']
         if not pitch:
@@ -92,22 +90,27 @@ def build():
         mask=main_component(np.array(Image.open(ROOT/'sam3_masks/references'/f'{name}-face.png')))
         chin=int(np.where(mask>127)[0].max())+20
         raw=pose['rawCenters'];canvas=pose['centers']
-        raw_y=[[raw[side][1],raw['nose'][1],raw['mouth'][1],chin] for side in ['left','right']]
-        nose=canvas['nose'][1]+(-6.0 if pitch>0 else 4.0)
+        s3d=fractions[str(pitch)]
+        # Upward eye-edge projection enters hair-occluded temple rows. Start
+        # about 15px below the eye (rest Y~442) rather than sample that cut.
+        s_floor=0.06 if pitch>0 else 0.0
         mouth=canvas['mouth'][1]+(-12.0 if pitch>0 else 6.0)
-        canvas_y=[[canvas[side][1],nose,mouth,mouth+(64.0 if pitch>0 else 50.0)] for side in ['left','right']]
-        raw_xy=np.array([[interval(mask,round(map_y(r[0],raw_y[i]))-20)[i]+152+pose['registration']['delta'][0] for i in [0,1]] for r in samples],float)
+        chin_canvas=mouth+CHIN_CANVAS_SPAN[pitch]
+        raw_y={side:[raw[side][1],chin] for side in ['left','right']}
+        canvas_y={side:[canvas[side][1],chin_canvas] for side in ['left','right']}
+        raw_xy=np.array([[interval(mask,round(raw_y[side][0]+max(s_floor,s)*(chin-raw_y[side][0]))-20)[i]+152+pose['registration']['delta'][0] for i,side in enumerate(['left','right'])] for s in s3d],float)
         coeff=[np.polyfit(ss,raw_xy[:,i],4) for i in [0,1]]
         fitted=np.stack([np.polyval(c,ss) for c in coeff],axis=1)
         target=[]
-        for r,s in zip(samples,ss):
-            target.append([r[0],map_y(r[0],canvas_y[0]),float(np.polyval(coeff[0],s)),map_y(r[0],canvas_y[1]),float(np.polyval(coeff[1],s))])
+        for r,s,fraction in zip(samples,ss,s3d):
+            yl,yr=[canvas_y[side][0]+fraction*(chin_canvas-canvas_y[side][0]) for side in ['left','right']]
+            target.append([r[0],yl,float(np.polyval(coeff[0],s)),yr,float(np.polyval(coeff[1],s))])
         poses.append(dict(name=name,yaw=yaw,pitch=pitch,rawYChin=chin,registration=pose['registration'],rows=target,
-                          mapping=dict(restY=REST_Y_ANCHORS,rawYLeft=raw_y[0],rawYRight=raw_y[1],canvasYLeft=canvas_y[0],canvasYRight=canvas_y[1]),
+                          mapping=dict(restY=[431.5,616.0],s3d=s3d,sFloor=s_floor,clampedRows=[r[0] for r,s in zip(samples,s3d) if s<s_floor],rawYSpan=raw_y,canvasYSpan=canvas_y),
                           fitRmsPixels=float(np.sqrt(np.mean((fitted-raw_xy)**2))),coefficients=[c.tolist() for c in coeff],source=f'{name}-face.png'))
     data['measuredRows']=[r[:] for r in rows]
     symmetrize(rows,poses)
-    data.update(poses=poses,symmetry='far cheek mirror mean; near cheek r11 ear attachment bound and less-occluded mirror envelope; mirrored independent edge heights',registration='shared feature translation; independent four-landmark piecewise-linear sampling and canvas Y; quartic X fit over rest y410..616')
+    data.update(poses=poses,symmetry='far cheek mirror mean; near cheek r11 ear attachment bound and less-occluded mirror envelope; mirrored independent edge heights',registration='shared feature translation; yaw-zero 3D eye-to-chin vertical fractions shared across yaw; hair-occlusion sampling floor; quartic X fit over rest y410..616')
     (ROOT/'source/viewer/outline-traces.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
     (ROOT/'bundle/outline-data.mjs').write_text('// Generated by pipeline/fit_outline.py from SAM 3 masks.\nexport const OUTLINE_ROWS='+json.dumps(rows)+';\nexport const OUTLINE_POSES='+json.dumps(poses)+';\n')
     print('PASS sampled',len(rows),'rows from independent face masks')

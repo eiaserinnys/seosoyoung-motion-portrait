@@ -38,16 +38,15 @@ test('depth surface keeps exact outline edge depths and a smooth convex interior
   assert(Math.abs(faceDepthAt(x,y)-faceDepthAt(1004-x,y))<1e-8,`depth symmetry at ${x},${y}`);
  }
 });
-test('3D pitch face preserves neutral projection and uses four-landmark reference maps',()=>{
+test('3D pitch face preserves neutral projection and uses yaw-zero vertical fractions',()=>{
  const traces=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url)));
  for(const sample of traces.poses.filter(q=>q.pitch)){
-  assert.deepEqual(sample.mapping.restY,[431.5,497,554.5,616]);
+  assert.deepEqual(sample.mapping.restY,[431.5,616]);
   const feature=FEATURE_FIT.poses.find(p=>p.name===sample.name);
-  assert.equal(sample.mapping.rawYLeft[0],feature.rawCenters.left[1]);
-  assert.equal(sample.mapping.rawYRight[0],feature.rawCenters.right[1]);
-  assert.equal(sample.mapping.canvasYLeft[1],feature.centers.nose[1]+(sample.pitch>0?-6:4));
-  assert.equal(sample.mapping.canvasYLeft[2],feature.centers.mouth[1]+(sample.pitch>0?-12:6));
-  assert(Math.abs(sample.mapping.canvasYLeft[3]-sample.mapping.canvasYLeft[2]-(sample.pitch>0?64:50))<1e-8);
+  assert.equal(sample.mapping.rawYSpan.left[0],feature.rawCenters.left[1]);
+  assert.equal(sample.mapping.rawYSpan.right[0],feature.rawCenters.right[1]);
+  const mouth=feature.centers.mouth[1]+(sample.pitch>0?-12:6);
+  assert(Math.abs(sample.mapping.canvasYSpan.left[1]-mouth-(sample.pitch>0?64:50))<1e-8);
  }
  for(const y of [465,530,616]){
   const edge=faceDepthEdgeAt(y),depthScale=1+(base.CorrDepth/.78-1)*smooth((y-465)/151),expected=edge+(faceDepthAt(502,y)-edge)*depthScale;
@@ -65,7 +64,9 @@ test('3D pitch face preserves neutral projection and uses four-landmark referenc
 test('right hanging lock tip follows its face attachment under upward left yaw',()=>{
  const point=[648,544],p=pose(-45,30),strand=strandWorld(point,'right',p),shift=outlinePitchShift(point,p);
  const t=22/30,join=1-t*t*(3-2*t),world=canopyWorld(point,p);
- assert(Math.abs(shift[0]*join)>1e-9);
+ // The s3d near edge can have zero X residual after the r11 width bound.
+ // A nonzero skin Y shift makes this a direct regression for M6's Y decoupling.
+ assert(Math.abs(shift[1]*join)>1);
  assert(Math.abs(world[0]-strand[0]-shift[0]*join)<1e-8);
  assert.equal(world[1],strand[1]);
  assert.equal(world[2],strand[2]);

@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from pipeline.hair_albedo import delight, transfer_redrawn_hair
-from pipeline.fit_outline import symmetrize,map_y,REST_Y_ANCHORS
+from pipeline.fit_outline import symmetrize,CHIN_CANVAS_SPAN
 
 class HairPixels(unittest.TestCase):
  def test_rim_is_reduced_without_changing_alpha_or_erasing_texture(self):
@@ -38,12 +38,14 @@ class HairPixels(unittest.TestCase):
   poses[0]['rows'][0][4]=630
   symmetrize(rows,poses)
   self.assertEqual(poses[0]['rows'][0][4],630)
- def test_landmark_map_hits_raw_anchors_and_extrapolates_above_the_eyes(self):
-  raw=[350.0,410.0,480.0,550.0]
-  for y,expected in zip(REST_Y_ANCHORS,raw):
-   self.assertEqual(map_y(y,raw),expected)
-  self.assertAlmostEqual(map_y(410,raw),350+(410-431.5)*60/65.5)
-  self.assertEqual(map_y((497+554.5)/2,raw),445)
+ def test_quartic_chin_endpoint_cannot_cross_its_opposite_edge(self):
+  rows=[[616,497,508,423,436,568,581,615]]
+  poses=[dict(yaw=yaw,pitch=pitch,rows=[[616,615,506,615,499]])
+         for pitch in [-30,30] for yaw in [-45,0,45]]
+  symmetrize(rows,poses)
+  for p in poses:
+   if p['yaw']==0:self.assertGreaterEqual(p['rows'][0][4]-p['rows'][0][2],11)
+  self.assertEqual(CHIN_CANVAS_SPAN,{30:64.0,-30:50.0})
  def test_sclera_boundary_fixture_matches_the_actual_opaque_parts(self):
   import json
   root=Path(__file__).resolve().parents[1]
