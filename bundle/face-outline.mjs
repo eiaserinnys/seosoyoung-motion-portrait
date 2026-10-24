@@ -36,20 +36,12 @@ function legacyOutline(point,world,p){
  const dy=(ty-Math.min(sampleY,616))*even*weight,roll=radians(p.ParamAngleZ);
  return [world[0]+shift*Math.cos(roll)-dy*Math.sin(roll),world[1]+shift*Math.sin(roll)+dy*Math.cos(roll),world[2]];
 }
-const SOURCE_ROWS=OUTLINE_ROWS.filter(r=>r[0]>=465);
+const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
 function symmetricBase(point,p,relief=0){
  const [l,r]=outlineRow(point[1]),offset=(l+r)/2-HEAD_CENTER[0];
  const q=artWorld(correctedLift([point[0]-offset,point[1]],relief,p),p),roll=radians(p.ParamAngleZ);
  q[0]+=offset*Math.cos(roll);q[1]+=offset*Math.sin(roll);
  return q;
-}
-function targetRow(pose,y){
- const rows=pose.rows;
- if(y<=rows[0][0]&&pose.pitch===0)return rows[0];
- // Source samples are deliberately nonuniform; interpolate by front height.
- let i=0;while(i<rows.length-2&&y>SOURCE_ROWS[i+1][0])i++;
- const src=SOURCE_ROWS,t=clamp((y-src[i][0])/(src[i+1][0]-src[i][0]),0,1);
- return rows[i].map((v,j)=>v+(rows[i+1][j]-v)*t);
 }
 export function outlinePitchShift(point,p){
  const t=clamp((point[1]-218)/247,0,1);
@@ -60,14 +52,43 @@ export function outlinePitchShift(point,p){
  const u=clamp((point[0]-frontL)/(frontR-frontL),0,1);
  const residual=frameValue(p,'outline:'+y,()=>[0,1,2,3].map(component=>gridValue(OUTLINE_POSES,p.ParamAngleX*correction(p,'CorrTurn'),pitch,pose=>{
   if(!pose.pitch)return 0;
-  const [ty,tl,tr]=targetRow(pose,y),key={...p,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,ParamAngleZ:0};
+  const key={...p,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,ParamAngleZ:0};
   const x=component%2?r:l,axis=component<2?0:1;
   const q=legacyOutline([x,y],symmetricBase([x,y],key),key);
   const s=clamp((y-465)/151,0,1);
-  const targetY=ty+(pose.registration.topEdgeY[component%2]-pose.yTop)*(1-s);
-  return (axis===0?(component%2?tr:tl):targetY)-q[axis];
+  if(axis===0){
+   const key0={...key,ParamAngleY:0};
+   const qL0=legacyOutline([l,y],symmetricBase([l,y],key0),key0)[0];
+   const qR0=legacyOutline([r,y],symmetricBase([r,y],key0),key0)[0];
+   const mid0=(qL0+qR0)/2,half0=(qR0-qL0)/2;
+   const widthScale=1+(pose.pitch>0?.05:-.05)*Math.sin(Math.PI*s);
+   const midShiftX=pose.yaw?-Math.sign(pose.yaw)*(pose.pitch<0?16:3)*s:0;
+   return mid0+midShiftX+(component%2?1:-1)*half0*widthScale-q[0];
+  }
+  const normSpan=pose.pitch>0?(pose.yaw===0?166:158):(pose.yaw===0?124:134);
+  const sCurve=Math.pow(s,pose.pitch>0?.84:1.12);
+  const topEdge=pose.registration.topEdgeY,topMid=(topEdge[0]+topEdge[1])/2;
+  const targetY=topMid+normSpan*sCurve+(topEdge[component%2]-topMid)*.35*(1-s);
+  return targetY-q[1];
  })));
- const delta=[residual[0]+(residual[1]-residual[0])*u,residual[2]+(residual[3]-residual[2])*u];
+ const sPhi=clamp(pitch/30,-1.2,1.2);
+ const xi=clamp((point[0]-502)/135,-1,1);
+ const midArchY=-10*sPhi*(1-xi*xi)*smooth((point[1]-445)/90)*(1-.65*smooth((point[1]-595)/20));
+ const unrolled={...p,ParamAngleZ:0};
+ const currentY=legacyOutline(point,symmetricBase(point,unrolled),unrolled)[1];
+ const directY=gridValue(OUTLINE_POSES,p.ParamAngleX*correction(p,'CorrTurn'),pitch,pose=>{
+  const key={...p,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:0,ParamAngleZ:0};
+  if(!pose.pitch)return legacyOutline(point,symmetricBase(point,key),key)[1];
+  const s=clamp((y-465)/151,0,1),sCurve=Math.pow(s,pose.pitch>0?.84:1.12);
+  const normSpan=pose.pitch>0?(pose.yaw===0?166:158):(pose.yaw===0?124:134);
+  const topEdge=pose.registration.topEdgeY,topMid=(topEdge[0]+topEdge[1])/2;
+  return topMid+normSpan*sCurve+(topEdge[0]*(1-u)+topEdge[1]*u-topMid)*.35*(1-s);
+ });
+ // Keep the forehead's rigid motion, joining the normalized lower-face map
+ // across the arch start and first measured cheek row without a height step.
+ const lowerBlend=smooth((point[1]-445)/(465-445));
+ const edgeDy=residual[2]+(residual[3]-residual[2])*u;
+ const delta=[residual[0]+(residual[1]-residual[0])*u,edgeDy+(directY-currentY-edgeDy)*lowerBlend+midArchY];
  const roll=radians(p.ParamAngleZ),dx=delta[0]*weight,dy=delta[1]*weight;
  return [dx*Math.cos(roll)-dy*Math.sin(roll),dx*Math.sin(roll)+dy*Math.cos(roll),0];
 }

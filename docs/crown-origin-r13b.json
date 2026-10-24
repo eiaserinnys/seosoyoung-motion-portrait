@@ -1,0 +1,294 @@
+{
+  "pose": {
+    "yaw": -45,
+    "pitch": -30,
+    "gain": 1
+  },
+  "sheetToCanvas": {
+    "tileOrigin": [
+      0,
+      960
+    ],
+    "tileSize": 480,
+    "canvasOrigin": [
+      152,
+      20
+    ],
+    "canvasSize": 720
+  },
+  "method": "Inverse projected triangle barycentric coordinates; source atlas and immutable original RGBA sampled at corresponding canvas coordinates",
+  "rays": [
+    {
+      "point": [
+        497,
+        95
+      ],
+      "id": "back-hair-center",
+      "raw": [
+        524.1772293971736,
+        38.87981116305029
+      ],
+      "uv": [
+        0.26619981904158874,
+        0.7343163140444582
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        482,
+        110
+      ],
+      "id": "back-hair-center",
+      "raw": [
+        523.7376836788478,
+        47.35064468067189
+      ],
+      "uv": [
+        0.26598519710881247,
+        0.7384524632229843
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        512,
+        125
+      ],
+      "id": "back-hair-center",
+      "raw": [
+        557.988764271605,
+        56.30753386390175
+      ],
+      "uv": [
+        0.28270935755449456,
+        0.7428259442694832
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        512,
+        102.5
+      ],
+      "id": "side-cranium-left",
+      "raw": [
+        300.04585555007816,
+        135.94273235425902
+      ],
+      "uv": [
+        0.6010966091553116,
+        0.48288219353235307
+      ],
+      "frontFacing": true,
+      "facing": -0.7873210354088851,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        497,
+        95
+      ],
+      "id": "side-cranium-left",
+      "raw": [
+        310.5247345099293,
+        124.02551196935393
+      ],
+      "uv": [
+        0.6062132492724264,
+        0.47706323826628616
+      ],
+      "frontFacing": true,
+      "facing": -0.755361279269899,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        527,
+        110
+      ],
+      "id": "side-cranium-left",
+      "raw": [
+        292.1486515226152,
+        147.1056220631173
+      ],
+      "uv": [
+        0.5972405525012768,
+        0.4883328232730064
+      ],
+      "frontFacing": true,
+      "facing": -0.8069661695218413,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        482,
+        110
+      ],
+      "id": "side-cranium-left",
+      "raw": [
+        294.4552139967475,
+        147.10562206311732
+      ],
+      "uv": [
+        0.5983668037093494,
+        0.48833282327300653
+      ],
+      "frontFacing": true,
+      "facing": -0.8180922148746019,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        512,
+        125
+      ],
+      "id": "side-cranium-left",
+      "raw": [
+        277.11205134125646,
+        168.69643852758063
+      ],
+      "uv": [
+        0.5898984625689728,
+        0.4988752141247952
+      ],
+      "frontFacing": true,
+      "facing": -0.8474032001230101,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        512,
+        102.5
+      ],
+      "id": "hair-top",
+      "raw": [
+        543.9473164030948,
+        41.29290879660326
+      ],
+      "uv": [
+        0.8520250568374487,
+        0.8780727093733415
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 0
+    },
+    {
+      "point": [
+        497,
+        95
+      ],
+      "id": "hair-top",
+      "raw": [
+        526.1620175612306,
+        37.32972464643078
+      ],
+      "uv": [
+        0.8433408288873196,
+        0.8761375608625149
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 2
+    },
+    {
+      "point": [
+        527,
+        110
+      ],
+      "id": "hair-top",
+      "raw": [
+        560.959771985059,
+        45.859670667726284
+      ],
+      "uv": [
+        0.8603319199145796,
+        0.8803025735682257
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 0
+    },
+    {
+      "point": [
+        482,
+        110
+      ],
+      "id": "hair-top",
+      "raw": [
+        524.232579260545,
+        46.96413946957914
+      ],
+      "uv": [
+        0.8423987203420629,
+        0.8808418649753804
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 255
+    },
+    {
+      "point": [
+        512,
+        125
+      ],
+      "id": "hair-top",
+      "raw": [
+        558.1214511446783,
+        56.203907624785586
+      ],
+      "uv": [
+        0.8589460210667375,
+        0.8853534705199149
+      ],
+      "frontFacing": true,
+      "facing": 1,
+      "atlasAlpha": 255
+    }
+  ],
+  "sourceCorrespondence": [
+    {
+      "canvas": [
+        544,
+        41
+      ],
+      "reference": [
+        392,
+        21
+      ],
+      "originalRGBA": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "currentHairAlpha": 0,
+      "currentBackingAlpha": 0
+    },
+    {
+      "canvas": [
+        561,
+        46
+      ],
+      "reference": [
+        409,
+        26
+      ],
+      "originalRGBA": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "currentHairAlpha": 0,
+      "currentBackingAlpha": 0
+    }
+  ]
+}

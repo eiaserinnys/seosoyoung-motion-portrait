@@ -7,10 +7,17 @@ import {readFileSync} from 'node:fs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,correctedLift} from '../bundle/geometry.mjs';
 import {hairLift} from '../bundle/hair-shell.mjs';
-import {mainOpaqueRuns,projectedHeadInterval,headInteriorInterval,rowAlphaGaps} from './raster_interior.mjs';
+import {mainOpaqueRuns,projectedHeadInterval,headInteriorInterval,rowAlphaGaps,foreheadBoundary,foreheadIntrusion} from './raster_interior.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
 const mesh=id=>rig.meshes.find(m=>m.id===id);
+test('forehead intrusion follows the projected lock attachment and rejects inward pixels',()=>{
+ for(const yaw of [-45,45])for(const y of [280,310,344,360]){
+  const p={...base,CorrTurn:1,ParamAngleX:yaw},boundary=foreheadBoundary(y,p),sign=Math.sign(yaw);
+  assert.equal(foreheadIntrusion(boundary-sign,boundary,yaw),false);
+  assert.equal(foreheadIntrusion(boundary+sign,boundary,yaw),true);
+ }
+});
 test('raster interior rejects injected closed and open gaps while excluding exterior background',()=>{
  const width=32,rgba=new Uint8Array(width*4);
  for(let x=8;x<24;x++)rgba[x*4+3]=255;

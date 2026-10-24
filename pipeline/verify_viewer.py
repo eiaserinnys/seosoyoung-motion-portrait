@@ -51,6 +51,9 @@ try:
    sheet=Image.new('RGB',(1440,1440))
    for i,tile in enumerate(tiles):sheet.paste(tile,((i%3)*480,(i//3)*480))
    sheet.save(ROOT/'debug/viewer_9dir_grid.png')
+  interior=(ROOT/'pipeline/raster_interior.mjs').read_text().replace('../bundle/','./')
+  page.add_script_tag(type='module',content=interior+'\nwindow.rasterInterior={foreheadBoundary,foreheadIntrusion};')
+  page.wait_for_function('window.rasterInterior')
   metrics['stereoRaster']=page.evaluate("""()=>{
    const {p,state,renderer}=studio,gl=renderer.gl,out=[];
    const read=extra=>{renderer.render(p,{...state,grid:false,wire:false,...extra});const a=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,a);return a;};
@@ -59,7 +62,10 @@ try:
     const side=yaw<0?'right':'left',ear=read({identify:'ear-'+side}),hair=read({identify:'side-hair-'+side}),full=read({});
     let earPixels=0,foreheadPixels=0;for(let i=0;i<ear.length;i+=4)if(ear[i]>200)earPixels++;
     const {scale,ox,oy}=renderer.view,w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
-    for(let sy=Math.ceil(oy+280*scale);sy<oy+365*scale;sy++)for(let sx=0;sx<w;sx++)if((yaw<0?(sx-ox)/scale<535:(sx-ox)/scale>469)&&hair[((h-1-sy)*w+sx)*4]>200)foreheadPixels++;
+    for(let sy=Math.ceil(oy+280*scale);sy<oy+365*scale;sy++){
+     const boundary=window.rasterInterior.foreheadBoundary((sy-oy)/scale,p);
+     for(let sx=0;sx<w;sx++)if(window.rasterInterior.foreheadIntrusion((sx-ox)/scale,boundary,yaw)&&hair[((h-1-sy)*w+sx)*4]>200)foreheadPixels++;
+    }
     const beads=['tail-left-tie','tail-right-tie'].map(id=>{const hidden=read({hidden:new Set([id])});let n=0;for(let i=0;i<full.length;i+=4)if(Math.abs(full[i]-hidden[i])+Math.abs(full[i+1]-hidden[i+1])+Math.abs(full[i+2]-hidden[i+2])>12)n++;return n;});
     out.push({yaw,gain,earPixels,foreheadPixels,beads});
    }return out;

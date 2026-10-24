@@ -41,7 +41,7 @@ const p={...normal,ParamAngleX:-25,CorrFarEye:0},p2={...p,CorrFarEye:.5};
 assert(eyeRootWorld('left',p)[2]<eyeRootWorld('right',p)[2],'compressed eye is farther from camera');checks++;
 assert.notDeepEqual(deform3D(eyelid,[370,438],p),deform3D(eyelid,[370,438],p2));checks++;
 assert.notDeepEqual(deform3D(iris,[405,432.2],p),deform3D(iris,[405,432.2],p2),'iris shares the eyelid compression');checks++;
-near(deform3D(iris,[415.7,432.2],p),deform3D(iris,[415.7,432.2],p2),'compression preserves the measured eye pivot');
+near(deform3D(eyelid,[415.7,432.2],p),deform3D(eyelid,[415.7,432.2],p2),'compression preserves the socket pivot');
 console.log(JSON.stringify({status:'PASS',checks}));
 
 for(const roll of [-30,-15,15,30]){

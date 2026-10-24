@@ -2,6 +2,14 @@
 // cropped by source hair alpha and uses the measured main opaque spans.
 import {canopyWorld,craniumWorld} from '../bundle/hair-shell.mjs';
 import {domeSection,craniumFacing} from '../bundle/hair-surface.mjs';
+// Project the authored inner lock attachment, rather than a screen-space box
+// calibrated to the former flattened fringe. Used only by yaw-only raster gates.
+export function foreheadBoundary(y,p){
+ return canopyWorld([p.ParamAngleX<0?626:379,y],p)[0];
+}
+export function foreheadIntrusion(x,boundary,yaw){
+ return yaw<0?x<boundary:x>boundary;
+}
 export function projectedHeadInterval(y,p) {
  const {cx,rx}=domeSection(y),xs=[];
  for(let i=0;i<=32;i++)xs.push(canopyWorld([502+cx+rx*(i/16-1),y],p)[0]);
