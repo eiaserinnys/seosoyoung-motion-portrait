@@ -1,0 +1,17 @@
+{
+  "model": "depth-anything/Depth-Anything-V2-Small-hf",
+  "revision": "5426e4f0f36572d16453bbda7a8389317b1bef99",
+  "license": "Apache-2.0",
+  "source": "source/references/head_front_ref.png",
+  "sourceSha256": "56165f689d222c7c656b02e5209a6ef5444ad3524957e5b3edf16b7f9615a7a2",
+  "canvas": [
+    1024,
+    1024
+  ],
+  "sourceOffset": [
+    152,
+    20
+  ],
+  "sampleStep": 8,
+  "preprocessing": "canonical fit_depth.load_depth_map; sigma4; face ROI symmetry"
+}

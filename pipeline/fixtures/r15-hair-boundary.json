@@ -1,0 +1,51 @@
+{
+  "baseline": "d6a58ba5d0b409389ac1baf4ffdae6a0695c5364",
+  "scope": "all non-front-crown meshes; side-hair source Y>=310",
+  "cases": [
+    {
+      "yaw": -45,
+      "pitch": -30,
+      "sha256": "b3b0c21d16b59e5f67f5e09dccbe0984abcd1241ffcc8bb559d45a79f0d8d7e1"
+    },
+    {
+      "yaw": 0,
+      "pitch": -30,
+      "sha256": "380048fad916d59c2f1bfa9d69221828906fa31493e68d83234b96b7bc6a5a62"
+    },
+    {
+      "yaw": 45,
+      "pitch": -30,
+      "sha256": "3ba08d35b4068310516078f807325a640a5ba5601db0359592c26c7c0bf4c012"
+    },
+    {
+      "yaw": -45,
+      "pitch": 0,
+      "sha256": "733a06b211e116473002b4f14ac23291c7492b362ed92d1be9acf2a442c73097"
+    },
+    {
+      "yaw": 0,
+      "pitch": 0,
+      "sha256": "9fc227ff98d7ef7fcdfd6da84f8f1e0d824e95528b74fd2e1045ce5b9db0d101"
+    },
+    {
+      "yaw": 45,
+      "pitch": 0,
+      "sha256": "c11650d04072c94e7d340b986dd6a8b6aec19abd0a0f5568ddd64c6c1b8a366e"
+    },
+    {
+      "yaw": -45,
+      "pitch": 30,
+      "sha256": "1cb2edb2dfbd5629874298553e98f3103d63ae7a998e6c9875022f71121d8baa"
+    },
+    {
+      "yaw": 0,
+      "pitch": 30,
+      "sha256": "18b89643c0b6417c1e13d08eb8aa5946c92d87701a7ff250d5a673d1dd287070"
+    },
+    {
+      "yaw": 45,
+      "pitch": 30,
+      "sha256": "846e7cd76f8b22703761f5c00b85394a29f686bcbe737708ef46558d3a3ff8e6"
+    }
+  ]
+}
