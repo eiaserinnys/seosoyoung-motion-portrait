@@ -138,7 +138,7 @@ def write_metrics(poses,differences):
     rows=metrics(poses)
     for p in rows:p.update(differences[p['name']])
     protected=protected_changes();failed=failures(rows,protected)
-    out=dict(definition='restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only',
+    out=dict(definition='restY440..616 target registration; pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 unchanged; comparison excludes restY<347; raw contours/lengths reference-only; redBg is render-only over registered RGB max<40; redHair is remaining render-only occlusion',
              visibility='face skin + eyes + brows + nose + closed mouth only; all hair/ears/neck/body OFF',
              poses=rows,protectedChanges=protected,failures=failed,passed=not failed)
     (ROOT/'docs/face_hairless_metrics.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
@@ -153,6 +153,6 @@ def main():
     if args.self_test:self_test();return
     from capture_hairless_face import webgl_renders,silhouette_difference
     poses=geometry();renders=webgl_renders(poses)
-    failed=write_metrics(poses,{p['name']:silhouette_difference(p,renders[p['name']])[3] for p in poses})
+    failed=write_metrics(poses,{p['name']:silhouette_difference(p,renders[p['name']])[-1] for p in poses})
     raise SystemExit(1 if failed else 0)
 if __name__=='__main__':main()

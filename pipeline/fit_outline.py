@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 import cv2
 ROOT=Path(__file__).resolve().parents[1]
+CHIN_ROWS={600,610,616}
 def interval(mask,y):
     xs=np.flatnonzero(mask[y]>127)
     if not len(xs):raise ValueError(f'Empty silhouette row {y}')
@@ -65,7 +66,10 @@ def monotone_profile(rows):
 def correct_up_diagonal(p):
     if p['pitch']<=0 or not p['yaw']:return
     for row,sample in zip(p['rows'],p['boundarySamples']):
-        if row[0]<480:continue
+        if row[0]>570:
+            lift=5.*float(sphere_ease((row[0]-570)/(616-570)))
+            row[1]-=lift;row[3]-=lift
+        if row[0]<480 or row[0] in CHIN_ROWS:continue
         ease=float(sphere_ease((row[0]-480)/(616-480)))
         for side,column in [('left',2),('right',4)]:
             if sample[side]['validBG']:continue
@@ -84,6 +88,12 @@ def correct_up_diagonal(p):
     pl=int(np.argmin(rows[:,2]));pr=int(np.argmax(rows[:,4]))
     rows[pl:,2]=np.maximum.accumulate(rows[pl:,2])
     rows[pr:,4]=np.minimum.accumulate(rows[pr:,4])
+    # The last three mask rows can follow the pigtail behind the chin.
+    # Keep their prior plus side translation through the per-side bound.
+    for i,row in enumerate(rows):
+        if row[0] in CHIN_ROWS:
+            rows[i,2]=p['priorRows'][i][1]+p['offsets']['left']
+            rows[i,4]=p['priorRows'][i][2]+p['offsets']['right']
     p['rows']=rows.tolist()
 def symmetrized_outline_rows(rows):
     result=[row[:] for row in rows]

@@ -94,7 +94,8 @@ def reference(p):
 
 def geometry_overlay(p,background,difference,grid=True):
     canvas=np.array(background).astype(float)
-    for mask,color in zip(difference[:2],[RED,CYAN]):canvas[mask]=.55*canvas[mask]+.45*np.array(color)
+    for mask,color,alpha in zip(difference[:3],[RED,RED,CYAN],[1.,.5,.45]):
+        canvas[mask]=(1-alpha)*canvas[mask]+alpha*np.array(color)
     out=Image.fromarray(canvas.astype(np.uint8));draw=ImageDraw.Draw(out)
     skin=next(m for m in p['meshes'] if m['id']=='face-skin')
     if grid:
@@ -128,18 +129,26 @@ def silhouette_difference(p,im):
     a=(np.array(im)[:,:,3]>127)&region
     b=(cv2.warpAffine(raw_mask(p['name']),matrix(p),(1024,1024),flags=cv2.INTER_NEAREST)>127)&region
     red=a&~b;cyan=b&~a;gray=a&b
+    bg_mask=warped_reference(p).max(axis=2)<40
+    red_bg=red&bg_mask;red_hair=red&~bg_mask
     values={}
-    for name,mask in [('red',red),('cyan',cyan)]:
+    for name,mask in [('red',red),('cyan',cyan),('redBg',red_bg),('redHair',red_hair)]:
         count=int(np.count_nonzero(mask));values[name+'Pixels']=count
         values[name+'MaxDepth']=round(float(cv2.distanceTransform(mask.astype(np.uint8),cv2.DIST_L2,5).max()),3) if count else 0.0
-    return red,cyan,gray,values
+    return red_bg,red_hair,cyan,gray,values
 
 def difference_image(p,warped,difference):
     gray=np.array(warped.convert('L'))//2
     canvas=np.repeat(gray[:,:,None],3,axis=2)
     canvas[np.array(comparison_mask(p))==0]=BG
-    for mask,color in zip(difference,[RED,CYAN,(128,128,128)]):canvas[mask]=color
+    for mask,color,alpha in zip(difference,[RED,RED,CYAN,(128,128,128)],[1.,.5,1.,1.]):
+        canvas[mask]=((1-alpha)*canvas[mask]+alpha*np.array(color)).astype(np.uint8)
     return Image.fromarray(canvas)
+
+def difference_label(name,values):
+    # Keep the existing font and tile size; the added reference metric wraps.
+    return (f"{name} | R_bg:{values['redBgPixels']}({values['redBgMaxDepth']:.1f}px)\n"
+            f"R_hair:{values['redHairPixels']} C:{values['cyanPixels']}({values['cyanMaxDepth']:.1f}px)")
 
 def main():
     poses=geometry();renders=webgl_renders(poses)
@@ -147,21 +156,22 @@ def main():
     differences={}
     for i,name in enumerate(ORDER):
         p=next(p for p in poses if p['name']==name);ref=reference(p)
-        red,cyan,gray,values=silhouette_difference(p,renders[name]);differences[name]=values
+        red_bg,red_hair,cyan,gray,values=silhouette_difference(p,renders[name]);differences[name]=values
+        difference=[red_bg,red_hair,cyan,gray]
         bg=Image.new('RGBA',(1024,1024),BG+(255,));bg.alpha_composite(renders[name]);render=bg.convert('RGB')
         # Same crop/scale for reference and render; green SAM, pink rig visible edge.
         for side in [0,1]:
             pts=[tuple(row['points'][side][:2]) for row in p['boundary']]
             ImageDraw.Draw(ref).line(pts,fill=PINK,width=2);ImageDraw.Draw(render).line(pts,fill=PINK,width=2)
         pair=[comparison_region(p,ref),comparison_region(p,render),
-              difference_image(p,Image.fromarray(warped_reference(p)),[red,cyan,gray])]
+              difference_image(p,Image.fromarray(warped_reference(p)),difference)]
         for j,im in enumerate(pair):
             tile=im.crop(CROP).resize((340,340));d=ImageDraw.Draw(tile)
             label=name+(' | REF green / rig pink' if j==0 else ' | WebGL face only')
-            if j==2:label=f"{name} | R:{values['redPixels']} ({values['redMaxDepth']:.1f}px) C:{values['cyanPixels']} ({values['cyanMaxDepth']:.1f}px)"
-            d.text((6,6),label,fill='white')
+            if j==2:label=difference_label(name,values)
+            d.multiline_text((6,6),label,fill='white')
             comparison.paste(tile,(((i%3)*3+j)*340,(i//3)*340))
-        geom=comparison_region(p,geometry_overlay(p,reference(p),[red,cyan,gray])).crop(CROP).resize((480,480))
+        geom=comparison_region(p,geometry_overlay(p,reference(p),difference)).crop(CROP).resize((480,480))
         d=ImageDraw.Draw(geom);d.text((8,8),name+' | SAM green / mesh pink / boxes amber',fill='white')
         overlay.paste(geom,((i%3)*480,(i//3)*480))
     comparison.save(ROOT/'docs/captures/hairless_face_9dir_comparison.png')
