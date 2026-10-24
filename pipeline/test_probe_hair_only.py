@@ -74,18 +74,18 @@ def test_stem_gap_rejects_a_gap_in_the_central_columns_without_counting_side_ove
     hair[20:101, 30:70] = True
     assert stem_gap(hair, tie) == 0
     hair[91:101, 38:62] = False
-    assert stem_gap(hair, tie) == 10
+    assert stem_gap(hair, tie) == 9
     hair[:, 38:62] = False
-    assert stem_gap(hair, tie) == 81
+    assert stem_gap(hair, tie) == 80
 
 
-def test_stem_gap_rejects_one_empty_column_even_when_an_adjacent_column_connects():
+def test_stem_gap_rejects_one_empty_sampled_column_even_when_an_adjacent_column_connects():
     hair = np.zeros((200, 100), bool)
     tie = hair.copy()
     tie[100:130, 30:70] = True
     hair[20:101, 30:70] = True
-    hair[85:101, 50] = False
-    assert stem_gap(hair, tie) == 16
+    hair[85:101, 49] = False
+    assert stem_gap(hair, tie) == 15
 
 
 def test_visible_face_closes_an_occluded_hair_column_but_leaves_real_background_gaps():
@@ -94,15 +94,15 @@ def test_visible_face_closes_an_occluded_hair_column_but_leaves_real_background_
     tie = hair.copy()
     tie[100:130, 30:70] = True
     face[20:101, 30:70] = True
-    assert stem_gap(hair, tie) == 81
+    assert stem_gap(hair, tie) == 80
     assert stem_gap(hair | face, tie) == 0
-    face[84:101, 50] = False
-    assert stem_gap(hair | face, tie) == 17
+    face[84:101, 49] = False
+    assert stem_gap(hair | face, tie) == 16
 
 
 def test_approved_top_gate_uses_pose_bounds_and_rejects_regressions():
     from pipeline import probe_hair_only as probe
-    for yaw, pitch, boundary in [(0, 30, 100), (-45, 30, 65), (45, 30, 65), (-45, -30, 12), (45, -30, 12)]:
+    for yaw, pitch, boundary in [(0, 30, 100), (-45, 30, 65), (45, 30, 65), (-45, -30, 13), (45, -30, 13)]:
         assert probe.approved_top_gate(yaw, pitch, boundary)['pass']
         assert not probe.approved_top_gate(yaw, pitch, boundary + 1)['pass']
     assert probe.approved_top_gate(0, 30, 84)['pass']

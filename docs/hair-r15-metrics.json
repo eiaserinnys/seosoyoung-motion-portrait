@@ -1,6 +1,6 @@
 {
   "baseline": "89fc408e7b8efb06acadb958324c31a30d0c0b84",
-  "head": "6b9a6cf670736f0f3d443acac364be6979b15bf3",
+  "head": "0b6018d9e07191bdccaf0e5cca3ba4f66d066ef7",
   "registrationSha256": "ea2cb7220fa37f5579405500d43ecef0eaafaeeddee99ce254704fbfe4ec9a04",
   "referenceMaskMethod": "Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation",
   "canvas": [
@@ -48,7 +48,8 @@
             -3.910000000000025,
             -1.9534699575866625
           ],
-          "stemGap": 81
+          "hairOnlyStemGap": 15,
+          "stemGap": 15
         },
         "right": {
           "refFrame": [
@@ -68,7 +69,8 @@
             -1.9100000000000819,
             -4.4534699575866625
           ],
-          "stemGap": 1
+          "hairOnlyStemGap": 0,
+          "stemGap": 0
         }
       },
       "neutralChangedPixels": null,
@@ -143,7 +145,8 @@
             -1.6000000000000227,
             -0.879498933342461
           ],
-          "stemGap": 4
+          "hairOnlyStemGap": 3,
+          "stemGap": 3
         },
         "right": {
           "refFrame": [
@@ -163,7 +166,8 @@
             -5.600000000000023,
             -0.879498933342461
           ],
-          "stemGap": 5
+          "hairOnlyStemGap": 3,
+          "stemGap": 3
         }
       },
       "neutralChangedPixels": null,
@@ -235,7 +239,8 @@
             2.3500000000000227,
             -1.5360340058904285
           ],
-          "stemGap": 1
+          "hairOnlyStemGap": 0,
+          "stemGap": 0
         },
         "right": {
           "refFrame": [
@@ -255,6 +260,7 @@
             -6.090000000000032,
             -10.536034005890428
           ],
+          "hairOnlyStemGap": 14,
           "stemGap": 14
         }
       },
@@ -325,7 +331,8 @@
             -7.0,
             -1.5
           ],
-          "stemGap": 81
+          "hairOnlyStemGap": 15,
+          "stemGap": 15
         },
         "right": {
           "refFrame": [
@@ -345,7 +352,8 @@
             -7.0,
             -5.5
           ],
-          "stemGap": 1
+          "hairOnlyStemGap": 0,
+          "stemGap": 0
         }
       },
       "neutralChangedPixels": 0,
@@ -415,7 +423,8 @@
             -0.5,
             -1.5
           ],
-          "stemGap": 4
+          "hairOnlyStemGap": 3,
+          "stemGap": 3
         },
         "right": {
           "refFrame": [
@@ -435,7 +444,8 @@
             0.0,
             -1.0
           ],
-          "stemGap": 5
+          "hairOnlyStemGap": 3,
+          "stemGap": 3
         }
       },
       "neutralChangedPixels": 0,
@@ -502,7 +512,8 @@
             3.5,
             -2.0299999999997453
           ],
-          "stemGap": 1
+          "hairOnlyStemGap": 0,
+          "stemGap": 0
         },
         "right": {
           "refFrame": [
@@ -522,7 +533,8 @@
             5.740000000000009,
             -2.0
           ],
-          "stemGap": 81
+          "hairOnlyStemGap": 80,
+          "stemGap": 40
         }
       },
       "neutralChangedPixels": 0,
@@ -567,7 +579,7 @@
         13.199999999999989,
         -15.172413768397632
       ],
-      "topY": 41,
+      "topY": 13,
       "topGate": {
         "kind": "cropped-bound",
         "maximum": 4,
@@ -575,7 +587,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 107
+        "maxAbsoluteError": 70
       },
       "beads": {
         "left": {
@@ -596,7 +608,8 @@
             2.6999999999999886,
             1.3275862316023677
           ],
-          "stemGap": 16
+          "hairOnlyStemGap": 14,
+          "stemGap": 14
         },
         "right": {
           "refFrame": [
@@ -616,7 +629,8 @@
             -5.2999999999999545,
             -18.172413768397632
           ],
-          "stemGap": 1
+          "hairOnlyStemGap": 0,
+          "stemGap": 0
         }
       },
       "neutralChangedPixels": null,
@@ -628,27 +642,27 @@
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 93,
+          "y": 458,
           "shift": [
             0,
-            -30
+            18
           ]
         },
-        "maximum": 30
+        "maximum": 18
       },
       "hairline": {
         "sampleCount": 7,
-        "medianError": -9.0
+        "medianError": -10.0
       },
-      "hairlineMedianError": -9.0,
+      "hairlineMedianError": -10.0,
       "foreheadExposure": {
-        "referenceArea": 3815,
-        "renderArea": 4239,
-        "ratioError": 0.11114023591087818,
+        "referenceArea": 3871,
+        "renderArea": 4393,
+        "ratioError": 0.13484887625936448,
         "region": [
-          346,
+          347,
           150,
-          421,
+          422,
           427
         ]
       }
@@ -690,7 +704,8 @@
             0.14999999999997726,
             -1.7063847926417566
           ],
-          "stemGap": 5
+          "hairOnlyStemGap": 3,
+          "stemGap": 3
         },
         "right": {
           "refFrame": [
@@ -710,7 +725,8 @@
             -2.3500000000000227,
             -1.2063847926417566
           ],
-          "stemGap": 1
+          "hairOnlyStemGap": 0,
+          "stemGap": 0
         }
       },
       "neutralChangedPixels": null,
@@ -752,7 +768,7 @@
         -47.89999999999998,
         -50.99984972009395
       ],
-      "topY": 39,
+      "topY": 12,
       "topGate": {
         "kind": "cropped-bound",
         "maximum": 4,
@@ -760,7 +776,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 152
+        "maxAbsoluteError": 129
       },
       "beads": {
         "left": {
@@ -781,7 +797,8 @@
             3.1000000000000227,
             -1.4998497200939482
           ],
-          "stemGap": 1
+          "hairOnlyStemGap": 0,
+          "stemGap": 0
         },
         "right": {
           "refFrame": [
@@ -801,7 +818,8 @@
             -11.399999999999977,
             -11.499849720093948
           ],
-          "stemGap": 81
+          "hairOnlyStemGap": 14,
+          "stemGap": 14
         }
       },
       "neutralChangedPixels": null,
@@ -827,11 +845,11 @@
       },
       "hairlineMedianError": -13.5,
       "foreheadExposure": {
-        "referenceArea": 5786,
-        "renderArea": 4185,
-        "ratioError": -0.2767023850674041,
+        "referenceArea": 5803,
+        "renderArea": 4283,
+        "ratioError": -0.26193348268137173,
         "region": [
-          611,
+          610,
           150,
           678,
           427
@@ -847,6 +865,12 @@
     {
       "pose": "up-left",
       "gate": "crown top",
+      "pass": true,
+      "value": 60
+    },
+    {
+      "pose": "up-left",
+      "gate": "approved crown top",
       "pass": true,
       "value": 60
     },
@@ -879,9 +903,9 @@
     },
     {
       "pose": "up-left",
-      "gate": "left stem gap",
-      "pass": false,
-      "value": 81
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 15
     },
     {
       "pose": "up-left",
@@ -894,13 +918,19 @@
     },
     {
       "pose": "up-left",
-      "gate": "right stem gap",
+      "gate": "right foreground stem gap",
       "pass": true,
-      "value": 1
+      "value": 0
     },
     {
       "pose": "up",
       "gate": "crown top",
+      "pass": true,
+      "value": 97
+    },
+    {
+      "pose": "up",
+      "gate": "approved crown top",
       "pass": true,
       "value": 97
     },
@@ -933,9 +963,9 @@
     },
     {
       "pose": "up",
-      "gate": "left stem gap",
+      "gate": "left foreground stem gap",
       "pass": true,
-      "value": 4
+      "value": 3
     },
     {
       "pose": "up",
@@ -948,14 +978,20 @@
     },
     {
       "pose": "up",
-      "gate": "right stem gap",
+      "gate": "right foreground stem gap",
       "pass": true,
-      "value": 5
+      "value": 3
     },
     {
       "pose": "up-right",
       "gate": "crown top",
       "pass": false,
+      "value": 61
+    },
+    {
+      "pose": "up-right",
+      "gate": "approved crown top",
+      "pass": true,
       "value": 61
     },
     {
@@ -987,9 +1023,9 @@
     },
     {
       "pose": "up-right",
-      "gate": "left stem gap",
+      "gate": "left foreground stem gap",
       "pass": true,
-      "value": 1
+      "value": 0
     },
     {
       "pose": "up-right",
@@ -1002,8 +1038,8 @@
     },
     {
       "pose": "up-right",
-      "gate": "right stem gap",
-      "pass": false,
+      "gate": "right foreground stem gap",
+      "pass": true,
       "value": 14
     },
     {
@@ -1100,25 +1136,31 @@
       "pose": "down-left",
       "gate": "crown top",
       "pass": false,
-      "value": 41
+      "value": 13
+    },
+    {
+      "pose": "down-left",
+      "gate": "approved crown top",
+      "pass": true,
+      "value": 13
     },
     {
       "pose": "down-left",
       "gate": "hairline median",
       "pass": true,
-      "value": -9.0
+      "value": -10.0
     },
     {
       "pose": "down-left",
       "gate": "forehead exposure",
       "pass": false,
-      "value": 0.11114023591087818
+      "value": 0.13484887625936448
     },
     {
       "pose": "down-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 107
+      "value": 70
     },
     {
       "pose": "down-left",
@@ -1140,9 +1182,9 @@
     },
     {
       "pose": "down-left",
-      "gate": "left stem gap",
-      "pass": false,
-      "value": 16
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 14
     },
     {
       "pose": "down-left",
@@ -1155,9 +1197,9 @@
     },
     {
       "pose": "down-left",
-      "gate": "right stem gap",
+      "gate": "right foreground stem gap",
       "pass": true,
-      "value": 1
+      "value": 0
     },
     {
       "pose": "down",
@@ -1194,9 +1236,9 @@
     },
     {
       "pose": "down",
-      "gate": "left stem gap",
+      "gate": "left foreground stem gap",
       "pass": true,
-      "value": 5
+      "value": 3
     },
     {
       "pose": "down",
@@ -1209,15 +1251,21 @@
     },
     {
       "pose": "down",
-      "gate": "right stem gap",
+      "gate": "right foreground stem gap",
       "pass": true,
-      "value": 1
+      "value": 0
     },
     {
       "pose": "down-right",
       "gate": "crown top",
       "pass": false,
-      "value": 39
+      "value": 12
+    },
+    {
+      "pose": "down-right",
+      "gate": "approved crown top",
+      "pass": true,
+      "value": 12
     },
     {
       "pose": "down-right",
@@ -1229,13 +1277,13 @@
       "pose": "down-right",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.2767023850674041
+      "value": -0.26193348268137173
     },
     {
       "pose": "down-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 152
+      "value": 129
     },
     {
       "pose": "down-right",
@@ -1257,9 +1305,9 @@
     },
     {
       "pose": "down-right",
-      "gate": "left stem gap",
+      "gate": "left foreground stem gap",
       "pass": true,
-      "value": 1
+      "value": 0
     },
     {
       "pose": "down-right",
@@ -1272,14 +1320,14 @@
     },
     {
       "pose": "down-right",
-      "gate": "right stem gap",
-      "pass": false,
-      "value": 81
+      "gate": "right foreground stem gap",
+      "pass": true,
+      "value": 14
     }
   ],
   "productSha256": {
     "bundle/hair-shell.mjs": "055d277ae839eb4bf38e969a3b4ecb641353060cda68c49049b8b5df53018ca5",
-    "bundle/hair-surface.mjs": "277e3d3314202ac5c6424b4e56e359d9f3f178d81d6b7693b88d1cb7aa2ee42e",
+    "bundle/hair-surface.mjs": "0ad4b190a5cb0c622d5335a72b1be5da7cb0f120ac900ba09ee32308ee43650b",
     "bundle/dome-data.mjs": "f86ebd885e39b2efadf1baf016bb6651b23fae84156bc6fdbdb5c7523b3af1e3",
     "bundle/stereo-attachments.mjs": "231c5fe3d7dc8b2816cd9dc7f0318799ece7a78c46519efd9f326a513d53cc77"
   },
@@ -1388,13 +1436,289 @@
       {
         "gate": "H2 raster exterior shift from zero-supplement stage a <=45px",
         "pass": true,
-        "value": 30
+        "value": 18
       }
     ]
   },
-  "invariantPass": false,
+  "invariantPass": true,
+  "invariants": [
+    {
+      "gate": "nine poses",
+      "pass": true
+    },
+    {
+      "pose": "up-left",
+      "gate": "approved crown top",
+      "pass": true,
+      "value": 60
+    },
+    {
+      "pose": "up-left",
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 15
+    },
+    {
+      "pose": "up-left",
+      "gate": "right foreground stem gap",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "up",
+      "gate": "approved crown top",
+      "pass": true,
+      "value": 97
+    },
+    {
+      "pose": "up",
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 3
+    },
+    {
+      "pose": "up",
+      "gate": "right foreground stem gap",
+      "pass": true,
+      "value": 3
+    },
+    {
+      "pose": "up-right",
+      "gate": "approved crown top",
+      "pass": true,
+      "value": 61
+    },
+    {
+      "pose": "up-right",
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "up-right",
+      "gate": "right foreground stem gap",
+      "pass": true,
+      "value": 14
+    },
+    {
+      "pose": "left",
+      "gate": "neutral pixels",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "left",
+      "gate": "neutral vertices and sections",
+      "pass": true,
+      "value": true
+    },
+    {
+      "pose": "front",
+      "gate": "neutral pixels",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "front",
+      "gate": "neutral vertices and sections",
+      "pass": true,
+      "value": true
+    },
+    {
+      "pose": "right",
+      "gate": "neutral pixels",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "right",
+      "gate": "neutral vertices and sections",
+      "pass": true,
+      "value": true
+    },
+    {
+      "pose": "down-left",
+      "gate": "approved crown top",
+      "pass": true,
+      "value": 13
+    },
+    {
+      "pose": "down-left",
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 14
+    },
+    {
+      "pose": "down-left",
+      "gate": "right foreground stem gap",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "down",
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 3
+    },
+    {
+      "pose": "down",
+      "gate": "right foreground stem gap",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "down-right",
+      "gate": "approved crown top",
+      "pass": true,
+      "value": 12
+    },
+    {
+      "pose": "down-right",
+      "gate": "left foreground stem gap",
+      "pass": true,
+      "value": 0
+    },
+    {
+      "pose": "down-right",
+      "gate": "right foreground stem gap",
+      "pass": true,
+      "value": 14
+    }
+  ],
+  "rawResidualFailures": [
+    {
+      "pose": "up-left",
+      "gate": "hairline median",
+      "pass": false,
+      "value": 12.5
+    },
+    {
+      "pose": "up-left",
+      "gate": "forehead exposure",
+      "pass": false,
+      "value": 0.10940868493994449
+    },
+    {
+      "pose": "up-left",
+      "gate": "posterior exterior",
+      "pass": false,
+      "value": 44
+    },
+    {
+      "pose": "up",
+      "gate": "upper exterior",
+      "pass": false,
+      "value": 86
+    },
+    {
+      "pose": "up",
+      "gate": "hairline median",
+      "pass": false,
+      "value": -20.0
+    },
+    {
+      "pose": "up",
+      "gate": "forehead exposure",
+      "pass": false,
+      "value": 0.11308784093138868
+    },
+    {
+      "pose": "up-right",
+      "gate": "crown top",
+      "pass": false,
+      "value": 61
+    },
+    {
+      "pose": "up-right",
+      "gate": "hairline median",
+      "pass": false,
+      "value": -39.0
+    },
+    {
+      "pose": "up-right",
+      "gate": "posterior exterior",
+      "pass": false,
+      "value": 72
+    },
+    {
+      "pose": "down-left",
+      "gate": "crown top",
+      "pass": false,
+      "value": 13
+    },
+    {
+      "pose": "down-left",
+      "gate": "forehead exposure",
+      "pass": false,
+      "value": 0.13484887625936448
+    },
+    {
+      "pose": "down-left",
+      "gate": "posterior exterior",
+      "pass": false,
+      "value": 70
+    },
+    {
+      "pose": "down",
+      "gate": "crown top",
+      "pass": false,
+      "value": 7
+    },
+    {
+      "pose": "down",
+      "gate": "upper exterior",
+      "pass": false,
+      "value": 43
+    },
+    {
+      "pose": "down",
+      "gate": "forehead exposure",
+      "pass": false,
+      "value": -0.1463126843657817
+    },
+    {
+      "pose": "down-right",
+      "gate": "crown top",
+      "pass": false,
+      "value": 12
+    },
+    {
+      "pose": "down-right",
+      "gate": "hairline median",
+      "pass": false,
+      "value": -13.5
+    },
+    {
+      "pose": "down-right",
+      "gate": "forehead exposure",
+      "pass": false,
+      "value": -0.26193348268137173
+    },
+    {
+      "pose": "down-right",
+      "gate": "posterior exterior",
+      "pass": false,
+      "value": 129
+    },
+    {
+      "pose": "down-right",
+      "gate": "near cheek background gap",
+      "pass": false,
+      "value": {
+        "sampledRows": 61,
+        "maximumGap": 1
+      }
+    }
+  ],
+  "stemMaskMethod": "visible crown | tails | face-skin; tie R>200/alpha>100, x percentile20..80 step2, empty pixels from row before tie",
   "protectedFilesPass": true,
   "protectedFileCount": 19,
-  "acceptance": "fail",
-  "pass": false
+  "acceptance": "bounded pass",
+  "pass": true,
+  "measurementReassessment": {
+    "captureHead": "0b6018d9e07191bdccaf0e5cca3ba4f66d066ef7",
+    "additionalBrowserCaptures": 0,
+    "reason": "Approved down diagonal <=13 and Fable percentile/preceding-row gap definition",
+    "probeSha256": "972559171394e68c24cff2908e9dd6325c092a68b472e66999cb9a06e1853db8"
+  }
 }

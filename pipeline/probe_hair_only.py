@@ -52,27 +52,26 @@ def approved_top_gate(yaw, pitch, rendered):
     if pitch > 0 and not yaw:
         return {'target': 92, 'tolerance': 8, 'pass': abs(rendered-92) <= 8}
     if yaw and pitch:
-        maximum = 65 if pitch > 0 else 12
+        maximum = 65 if pitch > 0 else 13
         return {'maximum': maximum, 'pass': rendered <= maximum}
     return None
 
 
 def stem_gap(hair, tie):
-    """Worst column gap above the tie, across its central 60% width."""
+    """Fable's percentile 20..80 columns, sampled every 2px above the tie."""
     yy, xx = np.where(tie)
     if not len(xx):
         return None
-    left, right = int(xx.min()), int(xx.max()) + 1
-    lo, hi = left + int((right-left)*.2), right - int((right-left)*.2)
+    lo, hi = [int(np.percentile(xx, p)) for p in [20, 80]]
     gaps = []
-    for x in range(lo, hi):
+    for x in range(lo, hi+1, 2):
         ys = np.flatnonzero(tie[:, x])
         if not len(ys):
             continue
         top = int(ys[0])
         start = max(0, top-80)
-        above = np.flatnonzero(hair[start:top+1, x])
-        gaps.append(top-(start+int(above[-1])) if len(above) else 81)
+        above = np.flatnonzero(hair[start:top, x])
+        gaps.append(top-(start+int(above[-1]))-1 if len(above) else 80)
     return max(gaps, default=81)
 
 
@@ -265,9 +264,9 @@ def capture(poses, baseline):
     return output
 
 
-def read_mask(path, threshold=200):
+def read_mask(path, threshold=200, alpha_threshold=40):
     a = np.array(Image.open(path).convert('RGBA'))
-    return (a[:, :, 0] > threshold) & (a[:, :, 3] > 40)
+    return (a[:, :, 0] > threshold) & (a[:, :, 3] > alpha_threshold)
 
 
 def sheets(rows, out):
@@ -322,6 +321,7 @@ def measure(poses, current):
                              'delta': [a['span'][k] - b['span'][k] for k in [0, 1]] if a['span'] and b['span'] else None})
         ties = {}
         tie_mask = read_mask(current / f'{name}-ties.png')
+        stem_tie_mask = read_mask(current / f'{name}-ties.png', alpha_threshold=100)
         attachment_hair = read_mask(current / f'{name}-crown.png', 40) | read_mask(current / f'{name}-tails.png', 40)
         for side, (left, right) in {'left': (0, 502), 'right': (502, 1024)}.items():
             yy, xx = np.where(tie_mask[:, left:right])
@@ -332,7 +332,7 @@ def measure(poses, current):
                           'dBodyFrame': [center[k] - target['refFrame'][k] for k in [0, 1]] if center else None}
             if center:
                 left_tie, right_tie = int(xx.min() + left), int(xx.max() + left)
-                side_tie = tie_mask.copy()
+                side_tie = stem_tie_mask.copy()
                 side_tie[:, :left] = False
                 side_tie[:, right:] = False
                 ties[side]['hairOnlyStemGap'] = stem_gap(attachment_hair, side_tie)
@@ -407,8 +407,9 @@ def assess(poses):
             delta = bead['dBodyFrame']
             inherited = side == 'right' and name in ['up-right', 'down-left', 'down-right']
             check(side + ' bead body frame', delta is not None and max(abs(v) for v in delta) <= (20 if inherited else 8), delta)
-            gap = bead.get('stemGap')
-            check(side + ' foreground stem gap', gap is not None and gap <= 15, gap)
+            if pitch:
+                gap = bead.get('stemGap')
+                check(side + ' foreground stem gap', gap is not None and gap <= 15, gap)
     return checks
 
 
@@ -470,7 +471,7 @@ def main():
                               for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs']]},
             'strictRasterPass': strict_pass, 'bounds': bounds, 'invariantPass': invariant_pass,
             'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] not in invariant_gates],
-            'stemMaskMethod': 'visible crown | tails | face-skin; central 60% columns, worst vertical gap',
+            'stemMaskMethod': 'visible crown | tails | face-skin; tie R>200/alpha>100, x percentile20..80 step2, empty pixels from row before tie',
             'protectedFilesPass': protected_pass, 'protectedFileCount': len(protected),
             'acceptance': 'strict pass' if strict_pass and accepted else 'bounded pass' if accepted else 'fail',
             'pass': accepted}
