@@ -22,7 +22,7 @@ KEYS=['left','right','browLeft','browRight','nose','mouth']
 def symmetrize(front,poses):
  for pose in poses:
   pose['registeredCenters']={k:v[:] for k,v in pose['centers'].items()}
- for pitch in [-30,0,30]:
+ for pitch in sorted({p['pitch'] for p in poses}):
   group={p['yaw']:p for p in poses if p['pitch']==pitch};center=group[0]
   for key in ['nose','mouth']:center['centers'][key][0]=front[key][0]
   for left,right in [('left','right'),('browLeft','browRight')]:
@@ -98,7 +98,10 @@ def build():
    for value in scales.values():value[1]=height
   poses.append(dict(name=name,yaw=-45 if name.endswith('-left') else 45 if name.endswith('-right') else 0,pitch=30 if name.startswith('up') else -30,
                     centers={k:v['center'] for k,v in measured.items()},scales=scales,measuredScales=measured_scales,scalePolicy='height clamp [0.88,1.02]; yaw=0 paired eyes use unoccluded height clamped [0.94,1.0]',measurements=measured,source=file,sha256=hashlib.sha256(src.read_bytes()).hexdigest()))
- registration=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/reference_registration.mjs')],text=True))
+ # Symmetrize the approved row before deriving its shared registration frame.
+ neutral=[p for p in poses if not p['pitch']]
+ symmetrize(front,neutral)
+ registration=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/reference_registration.mjs')],input=json.dumps(neutral,ensure_ascii=False),text=True))
  for pose in poses:
   if not pose['pitch']:continue
   reg=next(r for r in registration if r['yaw']==pose['yaw'] and r['pitch']==pose['pitch'])
@@ -106,7 +109,8 @@ def build():
   delta=[reg['eyeMid'][i]-midpoint[i] for i in [0,1]]
   pose['rawCenters']={k:v[:] for k,v in pose['centers'].items()}
   pose['centers']={k:[v[i]+delta[i] for i in [0,1]] for k,v in pose['centers'].items()}
-  pose['registration']={**reg,'delta':delta,'referenceEyeMid':midpoint,'method':'translation: reference binocular midpoint to r11 3D child-eye pivot midpoint'}
+  eye_dist=float(np.linalg.norm(np.array(pose['rawCenters']['right'])-pose['rawCenters']['left']))
+  pose['registration']={**reg,'delta':delta,'referenceEyeMid':midpoint,'binocularRatio':eye_dist/reg['r11EyeDist'],'method':'translation: approved r11 yaw midpoint X plus relative child-eye pitch Y; no distance scaling'}
  symmetrize(front,poses)
  row={p['yaw']:p for p in poses if p['pitch']==0}
  landmarks={key:dict(front=value,neg=row[-45]['centers'][key],pos=row[45]['centers'][key]) for key,value in front.items()}

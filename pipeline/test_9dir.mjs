@@ -17,8 +17,11 @@ test('neutral face and feature vertices retain every original canvas coordinate'
   assert(Math.hypot(q[0]-point[0],q[1]-point[1])<1e-9,mesh.id);
  }
 });
-test('non-node face keeps mirrored X and symmetric Y',()=>{
+test('non-node face boundaries and the complete neutral row remain mirror symmetric',()=>{
  for(const yaw of [10,22.5,37,45])for(const pitch of [-30,-15,0,18,30])for(const y of [465,510,570,610])for(const u of [0,.25,.5,.75,1]){
+  // Pitched interior now follows the six authored feature anchors. Only the
+  // measured outline endpoints have a mirror contract in the shared field.
+  if(pitch&&u!==0&&u!==1)continue;
   const [l,r]=outlineRow(y),a=[l+(r-l)*u,y],b=[r-(r-l)*u,y];
   const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch},q={...p,ParamAngleX:yaw};
   const left=outlineWorld(a,p),right=outlineWorld(b,q);

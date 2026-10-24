@@ -1,7 +1,9 @@
 import {HEAD_CENTER,artWorld,correctedLift,correction,clamp,radians} from './geometry.mjs';
 import {OUTLINE_ROWS,OUTLINE_POSES} from './outline-data.mjs';
-import {gridValue,frameValue} from './pose-grid.mjs';
+import {gridValue,frameValue,FRAME_CACHE} from './pose-grid.mjs';
 import {faceDepthAt,faceDepthEdgeAt} from './face-depth.mjs';
+import {featureWorld} from './face-features.mjs';
+import {FEATURE_FIT} from './feature-data.mjs';
 export {OUTLINE_ROWS} from './outline-data.mjs';
 // Cubic Hermite interpolation keeps the sampled mask residual smooth in height.
 export function outlineRow(y){
@@ -38,13 +40,10 @@ function legacyOutline(point,world,p){
  return [world[0]+shift*Math.cos(roll)-dy*Math.sin(roll),world[1]+shift*Math.sin(roll)+dy*Math.cos(roll),world[2]];
 }
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
-const SOURCE_ROWS=OUTLINE_ROWS.filter(r=>r[0]>=465);
-const POSE_BY_KEY=new Map(OUTLINE_POSES.map(pose=>[`${pose.yaw}:${pose.pitch}`,pose]));
 function targetRow(pose,y){
  const rows=pose.rows;
- if(y<=rows[0][0]&&pose.pitch===0)return rows[0];
- let i=0;while(i<rows.length-2&&y>SOURCE_ROWS[i+1][0])i++;
- const src=SOURCE_ROWS,t=clamp((y-src[i][0])/(src[i+1][0]-src[i][0]),0,1);
+ let i=0;while(i<rows.length-2&&y>rows[i+1][0])i++;
+ const t=clamp((y-rows[i][0])/(rows[i+1][0]-rows[i][0]),0,1);
  return rows[i].map((v,j)=>v+(rows[i+1][j]-v)*t);
 }
 // Stage 1: Depth Anything surface calibrated to the measured silhouette edges.
@@ -74,54 +73,64 @@ function symmetricFace(point,p,relief=0){
  q[0]+=offset*Math.cos(roll);q[1]+=offset*Math.sin(roll);
  return q;
 }
-// Stage 2: Match the 3D-rotated mask edges to reference rows at their rotated height.
+const mix=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+const basePt=(pt,p)=>legacyOutline(pt,symmetricBase(pt,p),p);
+const facePt=(pt,p)=>legacyOutline(pt,symmetricFace(pt,p),p);
+function edgeAt(edges,y){
+ let i=0;while(i<edges.length-2&&y>edges[i+1].y)i++;
+ const t=clamp((y-edges[i].y)/(edges[i+1].y-edges[i].y),0,1);
+ return [mix(edges[i].left,edges[i+1].left,t),mix(edges[i].right,edges[i+1].right,t)];
+}
+const featureIds={browLeft:'eye-left-brow',browRight:'eye-right-brow',left:'eye-left-sclera',right:'eye-right-sclera',nose:'nose-detail',mouth:'mouth-detail'};
+function faceField(p){
+ const unrolled={...p,ParamAngleZ:0},neutral={...unrolled,ParamAngleY:0,[FRAME_CACHE]:new Map()};
+ const yaw=p.ParamAngleX*correction(p,'CorrTurn'),pitch=p.ParamAngleY*correction(p,'CorrTurn');
+ const edges=OUTLINE_ROWS.map(([y,l,r])=>{
+  const residual=(side,point)=>[0,1].map(i=>gridValue(OUTLINE_POSES,yaw,pitch,pose=>{
+   if(!pose.pitch)return 0;
+   const key={...unrolled,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch};
+   const target=targetRow(pose,y),q=facePt(point,key),b=basePt(point,key);
+   // Combine stage-one depth displacement and the measured edge residual
+   // before interpolating. The sum is the target relative to legacy skin.
+   return q[i]-b[i]+target[side==='left'?(i===0?2:1):(i===0?4:3)]-q[i];
+  }));
+  return {y,left:residual('left',[l,y]),right:residual('right',[r,y])};
+ });
+ const bands=[[347,['browLeft','browRight']],[431.5,['left','right']],[497,['nose']],[554.5,['mouth']],[616,[]]].map(([y,keys])=>{
+  const controls=[[0,[0,0]]];
+  for(const key of keys){
+   const anchor=FEATURE_FIT.front[key],[l,r]=outlineRow(anchor[1]);
+   const u=clamp((anchor[0]-l)/(r-l),0,1),edge=edgeAt(edges,anchor[1]);
+   const f=featureWorld(featureIds[key],anchor,unrolled),b=basePt(anchor,unrolled);
+   const f0=featureWorld(featureIds[key],anchor,neutral),b0=basePt(anchor,neutral);
+   const residual=[0,1].map(i=>f[i]-b[i]-f0[i]+b0[i]);
+   controls.push([u,residual.map((v,i)=>v-mix(edge[0],edge[1],u)[i])]);
+  }
+  controls.push([1,[0,0]]);controls.sort((a,b)=>a[0]-b[0]);
+  return {y,controls};
+ });
+ return {edges,bands};
+}
+function interiorAt(band,u){
+ const c=band.controls;let i=0;while(i<c.length-2&&u>c[i+1][0])i++;
+ return mix(c[i][1],c[i+1][1],clamp((u-c[i][0])/(c[i+1][0]-c[i][0]),0,1));
+}
+// A single residual field joins measured edges and all six internal landmarks.
 export function outlinePitchShift(point,p){
- const t=clamp((point[1]-218)/247,0,1);
- const weight=correction(p,'CorrOutline')*t*t*(3-2*t);
- const pitch=p.ParamAngleY*correction(p,'CorrTurn');
+ const weight=correction(p,'CorrOutline'),pitch=p.ParamAngleY*correction(p,'CorrTurn');
  if(!pitch||!weight)return [0,0,0];
- const y=clamp(point[1],465,616),[l,r]=outlineRow(y),[frontL,frontR]=outlineRow(point[1]);
- const u=clamp((point[0]-frontL)/(frontR-frontL),0,1);
- const residual=frameValue(p,'outline:'+y,()=>[0,1,2,3].map(component=>gridValue(OUTLINE_POSES,p.ParamAngleX*correction(p,'CorrTurn'),pitch,pose=>{
-  if(!pose.pitch)return 0;
-  const key={...p,CorrTurn:1,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,ParamAngleZ:0};
-  const qL=legacyOutline([l,y],symmetricFace([l,y],key),key);
-  const qR=legacyOutline([r,y],symmetricFace([r,y],key),key);
-  const rotatedSpan=frameValue(p,`outline-span:${pose.yaw}:${pose.pitch}`,()=>{
-   const edgeY=edge=>{
-    const [edgeL,edgeR]=outlineRow(edge);
-    const a=legacyOutline([edgeL,edge],symmetricFace([edgeL,edge],key),key);
-    const b=legacyOutline([edgeR,edge],symmetricFace([edgeR,edge],key),key);
-    return (a[1]+b[1])/2;
-   };
-   return [edgeY(465),edgeY(616)];
-  });
-  const sRot=clamp(((qL[1]+qR[1])/2-rotatedSpan[0])/(rotatedSpan[1]-rotatedSpan[0]),0,1);
-  const [targetY,targetLeft,targetRight]=targetRow(pose,465+sRot*151);
-  const [,baseLeft,baseRight]=targetRow(POSE_BY_KEY.get(`${pose.yaw}:0`),465+sRot*151);
-  const currentMid=(qL[0]+qR[0])/2,currentHalf=(qR[0]-qL[0])/2;
-  const targetMid=(targetLeft+targetRight)/2,targetHalf=(targetRight-targetLeft)/2;
-  const centerShift=targetMid-(baseLeft+baseRight)/2;
-  let dHalf=(targetHalf-currentHalf)*smooth(sRot/.35);
-  if(pose.pitch>0&&y<=520)dHalf=Math.min(dHalf,0);
-  if(pose.pitch<0)dHalf=Math.max(dHalf,-10);
-  const outputMid=currentMid+centerShift;
-  if(component===0)return outputMid-(currentHalf+dHalf)-qL[0];
-  if(component===1)return outputMid+(currentHalf+dHalf)-qR[0];
-  const topEdge=pose.registration.topEdgeY,topMid=(topEdge[0]+topEdge[1])/2;
-  const targetEdgeY=targetY+(topEdge[component%2]-topMid)*.35*(1-sRot);
-  return targetEdgeY-(component===2?qL[1]:qR[1]);
- })));
- const unrolled={...p,ParamAngleZ:0};
- const stage1Pt=legacyOutline(point,symmetricFace(point,unrolled),unrolled);
- const oldPt=legacyOutline(point,symmetricBase(point,unrolled),unrolled);
- const edgeDx=residual[0]+(residual[1]-residual[0])*u;
- const edgeDy=residual[2]+(residual[3]-residual[2])*u;
- const dx=(stage1Pt[0]-oldPt[0])+edgeDx*weight;
- const dy=(stage1Pt[1]-oldPt[1])+edgeDy*weight;
- const dz=stage1Pt[2]-oldPt[2];
+ const {edges,bands}=frameValue(p,'face-field',()=>faceField(p));
+ const [l,r]=outlineRow(point[1]),u=clamp((point[0]-l)/(r-l),0,1);
+ const edge=edgeAt(edges,point[1]);
+ let i=0;while(i<bands.length-2&&point[1]>bands[i+1].y)i++;
+ const a=bands[i],b=bands[i+1],t=smooth((point[1]-a.y)/(b.y-a.y));
+ const residual=mix(edge[0],edge[1],u),interior=mix(interiorAt(a,u),interiorAt(b,u),t);
+ // Fade only above the brow band; every measured cheek endpoint has full weight.
+ const fade=smooth((point[1]-218)/(347-218));
+ const dx=(residual[0]+interior[0])*weight*fade,dy=(residual[1]+interior[1])*weight*fade;
+ const unrolled={...p,ParamAngleZ:0},old=basePt(point,unrolled),stage1=facePt(point,unrolled);
  const roll=radians(p.ParamAngleZ);
- return [dx*Math.cos(roll)-dy*Math.sin(roll),dx*Math.sin(roll)+dy*Math.cos(roll),dz];
+ return [dx*Math.cos(roll)-dy*Math.sin(roll),dx*Math.sin(roll)+dy*Math.cos(roll),stage1[2]-old[2]];
 }
 export function applyOutline(point,world,p){
  const base=legacyOutline(point,world,p),shift=outlinePitchShift(point,p);
