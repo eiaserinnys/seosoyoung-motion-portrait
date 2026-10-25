@@ -2,7 +2,7 @@
 
 Raster silhouette normals and visible hairline samples transfer boundary motion
 to a shared 12x16 chart. Horizontal pitch keys and the hanging lower locks stay
-exact. Each pitch pose solves independently under the same regularizer/budget.
+exact. Production fits couple each pitch triplet with conformal and mirror priors.
 """
 import os
 os.environ.setdefault('OPENBLAS_NUM_THREADS','1')
@@ -81,7 +81,7 @@ def observations(pose,feature,captures):
             for side in [0,1]:
                 lo,hi=span(ref['head'],y-4),span(ref['head'],y+4)
                 slope=(hi[side]-lo[side])/8 if lo and hi else 0
-                add([current[side],y],[target[side]-current[side],0],1,normal=(1,-slope))
+                add([current[side],y],[target[side]-current[side],0],silhouette_weight(y,slope),normal=(1,-slope))
     yy,xx=np.where(head);top=int(yy.min());top_x=float(np.median(xx[yy==top]))
     add([top_x,top],[0,int(np.where(ref['head'])[0].min())-top],8,normal=(0,1))
     a,b=span(ref['face'],330),span(face,330)
@@ -91,6 +91,70 @@ def observations(pose,feature,captures):
             if len(old) and len(new):add([x,int(old[0])],[0,int(new[0])-int(old[0])],4,True,normal=(0,1))
     c,d,w,n=map(np.array,zip(*rows))
     return dict(name=name,yaw=pose['yaw'],pitch=pose['pitch'],c=c,d=d,w=w,normal=n)
+
+
+def silhouette_weight(y,slope):
+    y_weight=1.25 if y<=220 else (.55 if 260<=y<=360 else .85)
+    return y_weight/(1+.5*slope**2)
+
+
+def conformal_rows():
+    """Cell-center CR derivatives in (160*s, restY) pixels, area weighted.
+
+    Uniform scale/rotation have zero energy. This is conformal, not full ARAP.
+    """
+    rows=[];dx=(S[1]-S[0])*160;dy=Y[1]-Y[0]
+    for j in range(15):
+        for i in range(11):
+            ids=[j*12+i,j*12+i+1,(j+1)*12+i,(j+1)*12+i+1]
+            ds=np.zeros(192);ds[ids]=np.array([-1,1,-1,1])/(2*dx)
+            dt=np.zeros(192);dt[ids]=np.array([-1,-1,1,1])/(2*dy)
+            rows.extend([np.r_[ds,-dt],np.r_[dt,ds]])
+    return np.array(rows)*np.sqrt(dx*dy)
+
+
+def mirror_operator():
+    mirror=np.eye(192).reshape(16,12,192)[:,::-1].reshape(192,192)
+    return np.kron(np.diag([-1.,1.]),mirror)
+
+
+def solve_joint(systems,r,conformal=.5,symmetry=.2,view=.05,held_out=None):
+    """Joint normal equations; held-out observations contribute no data.
+
+    Weak adjacent-yaw coupling also predicts a missing neutral chart.
+    """
+    count=len(systems);size=384;mirror=mirror_operator();identity=np.eye(size)
+    projections=[(identity+mirror)/2 if p['yaw']==0 else identity for p in systems]
+    cr=conformal_rows();matrix=np.zeros((count*size,count*size));rhs=np.zeros(count*size)
+    designs=[]
+    for k,p in enumerate(systems):
+        projection=projections[k];n=p['normal']
+        c=np.c_[p['c']*n[:,0,None],p['c']*n[:,1,None]]@projection
+        d=np.sum(p['d']*n,axis=1);designs.append((c,d))
+        sl=slice(k*size,(k+1)*size);reg=cr@projection
+        matrix[sl,sl]=np.kron(np.eye(2),r[k] if isinstance(r,list) else r)+conformal*(reg.T@reg)
+        if p['name']!=held_out:
+            matrix[sl,sl]+=c.T@(p['w'][:,None]*c)
+            rhs[sl]=c.T@(p['w']*d)
+    def couple(a,b,weight,transform):
+        left=projections[a];right=transform@projections[b]
+        sa=slice(a*size,(a+1)*size);sb=slice(b*size,(b+1)*size)
+        matrix[sa,sa]+=weight*left.T@left;matrix[sb,sb]+=weight*right.T@right
+        cross=weight*left.T@right
+        matrix[sa,sb]-=cross;matrix[sb,sa]-=cross.T
+    by_yaw={p['yaw']:k for k,p in enumerate(systems)}
+    couple(by_yaw[-45],by_yaw[45],symmetry,mirror)
+    for a,b in [(-45,0),(0,45)]:couple(by_yaw[a],by_yaw[b],view,identity)
+    q=np.linalg.solve(matrix,rhs);poses=[]
+    for k,p in enumerate(systems):
+        v=projections[k]@q[k*size:(k+1)*size];du=v.reshape(2,192).T
+        c,d=designs[k];error=d-c@v
+        stats=dict(observations=len(d),duRms=float(np.sqrt(np.mean(np.sum(du**2,axis=1)))),
+                   duMax=float(np.linalg.norm(du,axis=1).max()),
+                   predictedRms=float(np.sqrt(np.average(error**2,weights=p['w']))),
+                   priorRms=float(np.sqrt(np.average(d**2,weights=p['w']))))
+        poses.append(dict(name=p['name'],yaw=p['yaw'],pitch=p['pitch'],du=du.tolist(),stats=stats))
+    return poses
 
 
 def solve_residual(p,r):
@@ -114,10 +178,28 @@ def solve_residual(p,r):
     return dict(name=p['name'],yaw=p['yaw'],pitch=p['pitch'],du=du.tolist(),stats=stats)
 
 
+def fit_joint(group,conformal=.5,symmetry=.2,view=.05,scale=1.,held_out=None):
+    r=regularizer();scales=np.full(len(group),scale)
+    for iteration in range(20):
+        result=solve_joint(group,[r*v for v in scales],conformal,symmetry,view,held_out)
+        exceeded=np.array([p['stats']['duRms']>6 or p['stats']['duMax']>22 for p in result])
+        if not exceeded.any():break
+        scales[exceeded]*=2
+    else:raise ValueError('Residual budget infeasible')
+    for pose,v in zip(result,scales):
+        pose['regularization']=dict(ridge=.5*v,xSecondDifference=2*v,ySecondDifference=50*v,
+                                    conformal=conformal,symmetry=symmetry,view=view,scale=v)
+    return result
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--captures',default='debug/hair_solve_prior')
     parser.add_argument('--initialize',action='store_true')
+    parser.add_argument('--conformal',type=float,default=.5)
+    parser.add_argument('--symmetry',type=float,default=.2)
+    parser.add_argument('--view',type=float,default=.05)
+    parser.add_argument('--scale',type=float,default=1.)
     args=parser.parse_args();data=empty_data()
     if args.initialize:write(data);return
     source=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/hair_solve_inputs.mjs')],timeout=60))
@@ -126,15 +208,11 @@ def main():
     hashes={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in paths}
     if json.loads((ROOT/args.captures/'sources.json').read_text())!=hashes:
         raise ValueError('Prior capture is stale; run capture_hair_solve_prior.py')
-    systems=[observations(p,features[p['name']],ROOT/args.captures) for p in source];poses=[];r=regularizer()
-    for system in systems:
-        for iteration in range(20):
-            pose=solve_residual(system,r*2**iteration)
-            if pose['stats']['duRms']<=6 and pose['stats']['duMax']<=22:break
-        else:raise ValueError('Residual budget infeasible')
-        pose['regularization']=dict(ridge=.5*2**iteration,xSecondDifference=2*2**iteration,ySecondDifference=50*2**iteration)
-        poses.append(pose)
-    data.update(poses=poses,captureDirectory=args.captures,method='unchanged r15 3D prior; independent smooth 12x16 Tikhonov residual charts',
+    systems=[observations(p,features[p['name']],ROOT/args.captures) for p in source];poses=[]
+    for pitch in [30,-30]:
+        group=[p for p in systems if p['pitch']==pitch]
+        poses.extend(fit_joint(group,args.conformal,args.symmetry,args.view,args.scale))
+    data.update(poses=poses,captureDirectory=args.captures,method='unchanged r15 3D prior; occlusion-weighted conformal/mirror-coupled 12x16 residual charts',
                 sources=hashes)
     write(data);print(json.dumps([dict(name=p['name'],**p['stats']) for p in poses],ensure_ascii=False))
 

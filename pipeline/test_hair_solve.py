@@ -3,7 +3,7 @@ import copy
 import json
 import unittest
 import numpy as np
-from fit_hair_solve import ROOT,stencil,regularizer,solve_residual
+from fit_hair_solve import ROOT,stencil,regularizer,solve_residual,conformal_rows,solve_joint,silhouette_weight,S,Y
 from hair_solve_quality import compare_arrays
 
 
@@ -21,6 +21,26 @@ def assert_budget(data):
 
 
 class HairSolveTest(unittest.TestCase):
+    def test_occluded_and_steep_silhouettes_have_lower_confidence(self):
+        self.assertGreater(silhouette_weight(200,0),silhouette_weight(300,0))
+        self.assertGreater(silhouette_weight(200,0),silhouette_weight(200,2))
+
+    def test_conformal_energy_permits_similarity_and_penalizes_shear(self):
+        points=np.array([[160*s,y] for y in Y for s in S]);cr=conformal_rows()
+        for du in [points,points@np.array([[0,1],[-1,0]]),np.ones((192,2))]:
+            np.testing.assert_allclose(cr@du.T.reshape(-1),0,atol=1e-12)
+        shear=points.copy();shear[:,0]+=points[:,1]
+        self.assertGreater(np.linalg.norm(cr@shear.T.reshape(-1)),1)
+
+    def test_joint_lopo_excludes_held_out_observations(self):
+        systems=[dict(name=str(yaw),yaw=yaw,pitch=30,c=np.array([stencil(.5,200)]),
+                      d=np.array([[4.,2.]]),w=np.ones(1),normal=np.array([[1.,0.]])) for yaw in [-45,0,45]]
+        first=solve_joint(systems,regularizer(),held_out='45')
+        systems[-1]['d']*=1000
+        second=solve_joint(systems,regularizer(),held_out='45')
+        for a,b in zip(first,second):np.testing.assert_array_equal(a['du'],b['du'])
+        self.assertGreater(np.linalg.norm(first[-1]['du']),0)
+
     def test_actual_raster_gate_accepts_improvement_and_rejects_regression(self):
         ref=np.zeros((740,1024),bool);ref[40:500,300:700]=True
         face=np.zeros_like(ref);face[200:500,400:600]=True

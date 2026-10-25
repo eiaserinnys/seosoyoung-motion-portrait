@@ -2,7 +2,8 @@
 import {HAIR_SOLVE} from './hair-solve-data.mjs';
 import {domeSection,sphereEase} from './hair-surface.mjs';
 import {clamp,correction} from './geometry.mjs';
-import {frameValue} from './pose-grid.mjs';
+import {frameValue,poseWeights} from './pose-grid.mjs';
+import {smoothstep} from './face-profile.mjs';
 
 export function hairCoordinates([x,y,lambda],posterior=false){
  const {cx,rx}=domeSection(y);
@@ -17,8 +18,9 @@ function linear(nodes,x){
 }
 export function hairPoseWeights(p){
  const yaw=p.ParamAngleX*correction(p,'CorrTurn'),pitch=p.ParamAngleY*correction(p,'CorrTurn');
- const x=clamp(Math.abs(yaw)/45,0,1),y=sphereEase(Math.abs(pitch)/30);
- return HAIR_SOLVE.poses.map(pose=>Math.sign(pose.pitch)!==Math.sign(pitch)?0:y*(pose.yaw===0?1-x:Math.sign(pose.yaw)===Math.sign(yaw)?x:0));
+ const x=poseWeights(yaw,45),y=sphereEase(Math.abs(pitch)/30);
+ const sideFade=1-smoothstep(60,88,Math.abs(yaw));
+ return HAIR_SOLVE.poses.map(pose=>Math.sign(pose.pitch)!==Math.sign(pitch)?0:y*x[pose.yaw/45+1]*sideFade);
 }
 export function hairResidualField(s,y,p){
  if(!p.ParamAngleY||!hairFade(y))return [0,0];

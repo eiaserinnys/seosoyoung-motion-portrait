@@ -24,6 +24,8 @@
   "feature-data.mjs": "14808c03ee352233c1616ba3034f6e2f62ee291f3dbf8d7cc0d8b348b475d8d6",
   "geometry.mjs": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d",
   "hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
+  "hair-solve-data.mjs": "2b06271aa277f3727983abab6852459dd5e1136987bab6c38d5e7eef5e124c96",
+  "hair-solve.mjs": "f62065ab0170eeafaa3d34386616976119a5af3c0b68719f4ffbb417c62a6bfb",
   "hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
   "head-turn.mjs": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf",
   "index.html": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
@@ -36,7 +38,5 @@
   "side-strands.mjs": "da5bcefb883fc6f73fd92545a1a9be937cd06ea1381923efdab05cb60cba496c",
   "stereo-attachments.mjs": "afa1e3790e6e4014b1c0181e9c9c1a0279c31ec6040c7b22828536b1125a52aa",
   "style.css": "631a46373275cbe1aa0f2f8ffd4dbebaa971e7551dc388ed8ab77bf844dec1e0",
-  "viewer-pose.mjs": "9d85bc932b228d520564b75eec18ffc94b6970c208fc4c037740c048e3b7e832",
-  "hair-solve.mjs": "5257a448ea1b6cc77e776d39027db6e09247ba53d64362b828b7bf5604f85acf",
-  "hair-solve-data.mjs": "7ba742fe4e9fa173804b8904865596d38c22f97a3fda8cf047b68b7e3663fb1d"
+  "viewer-pose.mjs": "9d85bc932b228d520564b75eec18ffc94b6970c208fc4c037740c048e3b7e832"
 }

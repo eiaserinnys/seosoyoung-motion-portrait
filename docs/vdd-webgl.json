@@ -1,0 +1,65 @@
+{
+  "baseline": "6915b2751ef94ff80d3b86456befda5a9a958f0c",
+  "angles": [
+    [
+      -22.5,
+      15
+    ],
+    [
+      0,
+      15
+    ],
+    [
+      22.5,
+      15
+    ],
+    [
+      -22.5,
+      -15
+    ],
+    [
+      0,
+      -15
+    ],
+    [
+      22.5,
+      -15
+    ],
+    [
+      -67.5,
+      0
+    ],
+    [
+      -22.5,
+      0
+    ],
+    [
+      22.5,
+      0
+    ],
+    [
+      67.5,
+      0
+    ]
+  ],
+  "variants": [
+    "main",
+    "after"
+  ],
+  "webglSweeps": [
+    {
+      "variant": "main",
+      "frames": 111,
+      "glErrors": 0
+    },
+    {
+      "variant": "after",
+      "frames": 111,
+      "glErrors": 0
+    }
+  ],
+  "pageErrors": [],
+  "sheet": "docs/captures/vdd_unobserved_angles_sheet.png",
+  "sheetSha256": "1e02c6518d8969d0e86bc4c69e75c4cb19949f9557e60e520ca41db902b606e5",
+  "definition": "same WebGL full portraits, frozen motion, scale=1, 720x720 crop resized equally to 320x320; rows main/after for each group of five angles"
+}
