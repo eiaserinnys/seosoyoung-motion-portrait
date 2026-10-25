@@ -1,0 +1,82 @@
+{
+  "baseline": "c18cd691ddde3fb26e18d85bffb6eee3eafcec68",
+  "poses": [
+    {
+      "yaw": -45,
+      "pitch": 30,
+      "changedPixels": 341,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "aaaa68cfa74852858c3735f623f53426edd7e4c467004992c9542e2c20505137",
+      "currentSha256": "db90671cfe08fee1506ee36211b5e25c43f1c99826792725fda39af0e9567e4e"
+    },
+    {
+      "yaw": 0,
+      "pitch": 30,
+      "changedPixels": 0,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "c09fac8be3629ccd1a8d663f21d294e2fb5244401a60d839aad5b3b05e899a94",
+      "currentSha256": "c09fac8be3629ccd1a8d663f21d294e2fb5244401a60d839aad5b3b05e899a94"
+    },
+    {
+      "yaw": 45,
+      "pitch": 30,
+      "changedPixels": 117,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "99702647ff7683719f3e628460727efa73c8a46ee5e6200c675cd462f188c356",
+      "currentSha256": "8f21572f3d3158ff84a25ede9a76553e3a600f1a94cc772900a98acbd3327615"
+    },
+    {
+      "yaw": -45,
+      "pitch": 0,
+      "changedPixels": 0,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "dac6496144f91d0644bdc6bc93e6cddc518de069b1ce55b18a58cdddc010330c",
+      "currentSha256": "dac6496144f91d0644bdc6bc93e6cddc518de069b1ce55b18a58cdddc010330c"
+    },
+    {
+      "yaw": 0,
+      "pitch": 0,
+      "changedPixels": 0,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "e90eab1f15a88b976a7278dd0b04558ef7ae336dd32d4aa1cef690c23af6035a",
+      "currentSha256": "e90eab1f15a88b976a7278dd0b04558ef7ae336dd32d4aa1cef690c23af6035a"
+    },
+    {
+      "yaw": 45,
+      "pitch": 0,
+      "changedPixels": 0,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "ef69e820c9f37ed4d4a3c1aec1c6ac9265778e25674c536062a0850216963397",
+      "currentSha256": "ef69e820c9f37ed4d4a3c1aec1c6ac9265778e25674c536062a0850216963397"
+    },
+    {
+      "yaw": -45,
+      "pitch": -30,
+      "changedPixels": 34,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "ccba0287f2e63640dc564f9a1740b6dc7d2d586fd17585743b0106d48d5024d3",
+      "currentSha256": "8a8524fdcb3c775e84edcc5159eb514dd8141ceda9b69e1676bbb39e267f0971"
+    },
+    {
+      "yaw": 0,
+      "pitch": -30,
+      "changedPixels": 0,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "2c2fd53699fb2e86ec2d5161fba7ec1653305fb8aef3dba6ae02be153690aa82",
+      "currentSha256": "2c2fd53699fb2e86ec2d5161fba7ec1653305fb8aef3dba6ae02be153690aa82"
+    },
+    {
+      "yaw": 45,
+      "pitch": -30,
+      "changedPixels": 39,
+      "geometryMaxDisplacement": 0,
+      "baselineSha256": "58a51a81033fd2d9f5cdefa7c8e23326651639c51f2ea83cd8a663ff17639272",
+      "currentSha256": "c3e504993f2127f02cc085b64f0f8130b4651d0c52240625098d73723bb165d1"
+    }
+  ],
+  "errors": [],
+  "rendererUnchanged": true,
+  "pixelPolicy": "Hair geometry is protected. Shared actual face-skin mask pixel changes are permitted; no dual-mask path.",
+  "faceSolveSha256": "9ca74cf1397482f83a672b596b66e38bfe301f80e6d6e42dcb43d5a24ff47100",
+  "passed": true
+}
