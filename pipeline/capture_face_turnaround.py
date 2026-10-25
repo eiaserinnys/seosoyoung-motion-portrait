@@ -61,7 +61,7 @@ def main():
             ImageDraw.Draw(tile).text((8,8),f"{p['yaw']:+g} deg | {label}",fill='white')
             sheet.paste(tile,(col*480,row*480))
     path=ROOT/'docs/captures/face_turnaround_7angle.png';sheet.save(path)
-    print('PASS seven actual-angle slider inputs, WebGL/console/HTTP errors 0;',path.relative_to(ROOT))
+    print('PASS seven WebGL renders, five actual-angle slider inputs, WebGL/console/HTTP errors 0;',path.relative_to(ROOT))
 
 
 if __name__=='__main__':main()
