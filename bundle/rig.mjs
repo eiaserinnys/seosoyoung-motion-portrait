@@ -4,6 +4,7 @@ import {outlineWorld,applyOutline} from './face-outline.mjs';
 import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './geometry.mjs';
 import {canopyWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
 import {frameValue,FRAME_CACHE} from './pose-grid.mjs';
+import {smoothstep} from './face-profile.mjs';
 export {HEAD_CENTER,HEAD_RADIUS,LEFT_EYE_BALL,RIGHT_EYE_BALL,EYE_BALL_R,spherePoint,sphereWarp,eyeballAngles,headWorld,liftHead,eyeWorld,eyeCenter,rotateXYZ} from './geometry.mjs';
 export function interpolate(keys,value) {
   if(value<=keys[0].value)return keys[0].output;
@@ -96,7 +97,7 @@ function deformLocal(mesh,point,p) {
   return outlineWorld([x,y],p,relief);
 }
 export const deform=(mesh,point,p)=>deform3D(mesh,point,p).slice(0,2);
-export function opacity(mesh,p,state) {
+function baseOpacity(mesh,p,state) {
   const id=mesh.id;
   if(state.hidden.has(id))return 0;
   if(id.startsWith('side-cranium'))return craniumWeight(id.endsWith('left')?'left':'right',p);
@@ -113,6 +114,17 @@ export function opacity(mesh,p,state) {
   if(id==='mouth-open-v1')return p.ParamMouthOpenY>=.12&&p.ParamMouthForm>=-.35?1:0;
   if(id==='mouth-round-v1')return p.ParamMouthOpenY>=.12&&p.ParamMouthForm<-.35?1:0;
   return 1;
+}
+export function opacity(mesh,p,state){
+  const alpha=baseOpacity(mesh,p,state),yaw=p.ParamAngleX*correction(p,'CorrTurn'),angle=Math.abs(yaw);
+  if(angle<=45)return alpha;
+  const far=yaw<0?'left':'right';
+  if(mesh.id.startsWith(`eye-${far}-`))return alpha*(1-smoothstep(50,66,angle));
+  if(mesh.id===`side-hair-${far}`)return alpha*(1-smoothstep(46,60,angle));
+  if(mesh.id.startsWith(`tail-${far}-`))return alpha*(1-smoothstep(45,62,angle));
+  if(mesh.id==='nose-detail')return alpha*(1-smoothstep(50,65,angle));
+  if(mesh.id==='mouth-detail')return alpha*(1-smoothstep(50,65,angle));
+  return alpha;
 }
 export class Pendulum {
   constructor(){this.value=0;this.velocity=0;}

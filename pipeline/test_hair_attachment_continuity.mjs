@@ -1,7 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {createHash} from 'node:crypto';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS,rotateXYZ,NECK_PIVOT} from '../bundle/geometry.mjs';
 import {beadWorld,BEADS} from '../bundle/stereo-attachments.mjs';
@@ -12,12 +11,8 @@ const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json'
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1,ParamBodyAngleX:0,ParamBreath:0};
 const near=(a,b)=>assert(Math.hypot(...a.map((v,i)=>v-b[i]))<1e-8,`${a} != ${b}`);
 
-test('earWorld retains the exact r15 implementation',()=>{
- const source=readFileSync(new URL('../bundle/stereo-attachments.mjs',import.meta.url),'utf8');
- const ear=source.slice(source.indexOf('export function earWorld'),source.indexOf('export const BEADS'));
- const fixture=JSON.parse(readFileSync(new URL('./fixtures/r15-hair-boundary.json',import.meta.url)));
- assert.equal(createHash('sha256').update(ear).digest('hex'),fixture.earWorldSha256);
-});
+// Exact <=45 ear behavior is now compared vertex-by-vertex with pinned main
+// in test_side90.mjs; the 45..90 range intentionally extends the r15 function.
 
 test('both hanging locks end in the neutral gravity frame at the tie height',()=>{
  for(const yaw of [-45,45]){

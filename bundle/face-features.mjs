@@ -4,6 +4,7 @@ import {faceSolveAnchorWorld,turnWeights45} from './face-solve.mjs';
 import {FACE_SOLVE} from './face-solve-data.mjs';
 import {correction,artWorld} from './geometry.mjs';
 import {registeredFeatureWorld} from './face-feature-prior.mjs';
+import {smoothstep} from './face-profile.mjs';
 export {registeredFeatureWorld} from './face-feature-prior.mjs';
 export function featureWorld(id,point,p){
  const q=registeredFeatureWorld(id,point,p);
@@ -35,13 +36,24 @@ export function featureWorld(id,point,p){
   if(id.startsWith('eye-')||id==='closed-eyes-v1'){
    const s67=family.poses.find(pose=>pose.name===(sign<0?'left67':'right67')).eyeWidthScale[side];
    const s90=family.poses.find(pose=>pose.name===(sign<0?'left90':'right90')).eyeWidthScale[side];
-   scale=1+a67*(s67-1)+a90*(s90-1);
+   const near=side===(sign<0?'right':'left');
+   scale=1+a67*((id.endsWith('brow')&&near?.70:s67)-1)+a90*((id.endsWith('brow')&&near?.48:s90)-1);
   }else if(id==='nose-detail'||id==='mouth-detail'){
    scale=1+a67*(.55-1)+a90*(.35-1);
   }
   return {origin,target,scale};
  });
  const local=registeredFeatureWorld(id,point,{...p,ParamAngleZ:0});
- return artWorld([target[0]+(local[0]-origin[0])*scale-502,target[1]+local[1]-origin[1]-326,local[2]],
+ let dx=(local[0]-origin[0])*scale,dy=local[1]-origin[1];
+ if((id.startsWith('eye-')||id==='closed-eyes-v1')&&!id.endsWith('brow')&&side===(yaw<0?'right':'left')){
+  const weight=smoothstep(65,80,Math.abs(yaw)),front=FEATURE_FIT.front[side];
+  const anterior=Math.max(-1,Math.min(1,(point[0]-front[0])/45*Math.sign(yaw)));
+  // A profile eye is a wedge: its nasal corner contracts into the socket,
+  // while the posterior upper arch retains height. All blink/gaze layers
+  // use one field, including the closed lid, so no static eye is baked in.
+  dx*=1-weight*.28*Math.max(0,anterior);
+  dy*=1-weight*.42*Math.max(0,anterior);
+ }
+ return artWorld([target[0]+dx-502,target[1]+dy-326,local[2]],
   {...p,ParamAngleX:0,ParamAngleY:0});
 }
