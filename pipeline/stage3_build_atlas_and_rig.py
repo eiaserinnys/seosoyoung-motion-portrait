@@ -182,8 +182,8 @@ def build():
     for key,parent,pivot in structure:
         channels = {
             'RotRoot': {}, 'WarpBody': {'ParamBreath': [0, 1], 'ParamBodyAngleX': [-10, 0, 10]},
-            'WarpNeck': {'ParamAngleX': [-50, 0, 50], 'ParamAngleY': [-40, 0, 40], 'ParamAngleZ': [-30, 0, 30], 'ParamBreath': [0, 1]},
-            'WarpHead': {'ParamAngleX': [-50, 0, 50], 'ParamAngleY': [-40, 0, 40]},
+            'WarpNeck': {'ParamAngleX': [-90, -50, 0, 50, 90], 'ParamAngleY': [-40, 0, 40], 'ParamAngleZ': [-30, 0, 30], 'ParamBreath': [0, 1]},
+            'WarpHead': {'ParamAngleX': [-90, -50, 0, 50, 90], 'ParamAngleY': [-40, 0, 40]},
             'RotHeadZ': {'ParamAngleZ': [-30, 0, 30]},
             'WarpFace': {}, 'WarpEyeL': {'ParamEyeLOpen': [0, 1, 1.2], 'ParamBrowLY': [-1, 0, 1]},
             'WarpEyeR': {'ParamEyeROpen': [0, 1, 1.2], 'ParamBrowRY': [-1, 0, 1]},
@@ -194,7 +194,7 @@ def build():
             'WarpHairBack': {'ParamHairBack': [-1, 0, 1]}}
         keyforms = {param: [{'value': value, 'output': value} for value in values] for param, values in channels[key].items()}
         deformers.append(dict(id=key,parentId=parent,type='Rotation' if key.startswith('Rot') else 'Warp',pivot=pivot,keyforms=keyforms))
-    parameters=[dict(id='Param'+key,min=lo,max=hi,default=default) for key,lo,hi,default in [('AngleX',-50,50,0),('AngleY',-40,40,0),('AngleZ',-30,30,0),('EyeBallX',-1,1,0),('EyeBallY',-1,1,0),('EyeLOpen',0,1.2,1),('EyeROpen',0,1.2,1),('BrowLY',-1,1,0),('BrowRY',-1,1,0),('MouthOpenY',0,1,0),('MouthForm',-1,1,0),('Breath',0,1,0),('HairFront',-1,1,0),('HairSide',-1,1,0),('HairBack',-1,1,0),('BodyAngleX',-10,10,0)]]
+    parameters=[dict(id='Param'+key,min=lo,max=hi,default=default) for key,lo,hi,default in [('AngleX',-90,90,0),('AngleY',-40,40,0),('AngleZ',-30,30,0),('EyeBallX',-1,1,0),('EyeBallY',-1,1,0),('EyeLOpen',0,1.2,1),('EyeROpen',0,1.2,1),('BrowLY',-1,1,0),('BrowRY',-1,1,0),('MouthOpenY',0,1,0),('MouthForm',-1,1,0),('Breath',0,1,0),('HairFront',-1,1,0),('HairSide',-1,1,0),('HairBack',-1,1,0),('BodyAngleX',-10,10,0)]]
     rig=dict(geometry={'projection':'orthographic','head':{'type':'sphere','center':[502,326,0],'radius':262,'closed':True,'texture':'head-surface.png','beforeTexture':'head-surface-before.png'},'eyes':[{'id':'left','parent':'head','radius':54,'centerXY':[406,438]},{'id':'right','parent':'head','radius':54,'centerXY':[597,438]}],'outsideMapping':'vertical-tangent-strip','neckYawWeight':0},physics={'type':'damped-second-order','stiffness':28,'damping':5,'outputs':['ParamHairFront','ParamHairSide','ParamHairBack']},expressions={'blinkThreshold':.22,'mouthThreshold':.12},schema='pas-web-rig/1',runtime='custom-webgl',nativeCubism=False,canvas=[1024,1536],atlasSize=SIZE,parts=[dict(id=g,label=l) for g,l,_ in GROUPS],deformers=deformers,parameters=parameters,meshes=sorted(meshes,key=lambda m:m['drawOrder']))
     (assets/'seosoyoung-rig.json').write_text(json.dumps(rig,ensure_ascii=False,separators=(',',':')))
     for filename in ['sam3_masks_grid.png','before_after_parts_comparison.png']:

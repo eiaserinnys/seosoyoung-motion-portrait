@@ -1,5 +1,7 @@
 // Read the approved measurements and neutral r11 geometry through their public evaluators.
 import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {faceSolveWorld,faceSolveAnchorWorld} from '../bundle/face-solve.mjs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {faceLift,outlineRow,legacyOutlineWorld} from '../bundle/face-prior.mjs';
 import {registeredFeatureWorld} from '../bundle/face-feature-prior.mjs';
@@ -54,5 +56,43 @@ const poses=OUTLINE_POSES.map(pose=>{
  const pins=pose.pitch?[...samples.flatMap(s=>[s.left,s.right]),...Object.values(anchors)]:points.map((_,i)=>i);
  return {name:pose.name,yaw:pose.yaw,pitch:pose.pitch,obs,weights,pins};
 });
+const p45=Object.fromEntries([-1,1].map(sign=>{
+ const p={...base,ParamAngleX:sign*45,ParamAngleY:0,[FRAME_CACHE]:new Map()};
+ return [sign,points.map((pt,i)=>{
+  const anchor=Object.entries(anchors).find(([,index])=>index===i);
+  return (anchor?faceSolveAnchorWorld(anchor[0],p):faceSolveWorld(pt,p)).slice(0,2);
+ })];
+}));
+const maskRows=JSON.parse(execFileSync('python3',[new URL('./face45_masks.py',import.meta.url).pathname],{
+ input:JSON.stringify(samples.map(s=>s.y)),timeout:60000,
+}));
+const centers={
+ left67:{left:[309,429.8],right:[404,429.2],nose:[302,491],mouth:[316,548],browLeft:[304,345.4],browRight:[412,344.3]},
+ left90:{left:[313,429.8],right:[382,429.2],nose:[293,490],mouth:[308,548],browLeft:[310,345.4],browRight:[390,344.3]},
+ right67:{left:[600,430.6],right:[695,428.4],nose:[702,491],mouth:[688,548],browLeft:[592,346.3],browRight:[700,343.5]},
+ right90:{left:[622,430.6],right:[691,428.4],nose:[711,490],mouth:[696,548],browLeft:[614,346.3],browRight:[694,343.5]},
+};
+function rowAt(rows,y){
+ if(y<=rows[0][0])return rows[0].slice(1);
+ for(let i=1;i<rows.length;i++)if(y<=rows[i][0]){
+  const a=rows[i-1],b=rows[i],t=(y-a[0])/(b[0]-a[0]);
+  return [1,2].map(d=>a[d]+t*(b[d]-a[d]));
+ }
+ return rows.at(-1).slice(1);
+}
+const family45={p45Left:p45[-1],p45Right:p45[1],poses:[
+ ['left67',-67.5,-22.5,.36,.72],['left90',-90,-45,.02,.45],
+ ['right67',67.5,22.5,.72,.36],['right90',90,45,.45,.02],
+].map(([name,yaw,delta,left,right])=>{
+ const rest=p45[Math.sign(yaw)],rows=samples.map(s=>[s.y,rest[s.left][0],rest[s.right][0]]);
+ const obs=points.map((_,i)=>{
+  const y=points[i][1],[l,r]=rowAt(rows,y),[lt,rt]=rowAt(maskRows[name],y);
+  return [lt+(rest[i][0]-l)/Math.max(1,r-l)*(rt-lt),rest[i][1]];
+ });
+ const weights=points.map(()=>4);
+ for(const s of samples)weights[s.left]=weights[s.right]=8;
+ for(const [key,i] of Object.entries(anchors)){obs[i]=centers[name][key];weights[i]=8;}
+ return {name,yaw,delta,pitch:0,obs,weights,pins:points.map((_,i)=>i),eyeWidthScale:{left,right}};
+})};
 process.stdout.write(JSON.stringify({points,evaluationPoints:points.map(contourCoordinates),triangles:skin.triangles,meshCount:skin.positions.length,
- samples,anchors,prior:points.map(pt=>faceLift(pt,0,base)[2]),poses}));
+ samples,anchors,prior:points.map(pt=>faceLift(pt,0,base)[2]),poses,family45}));

@@ -7,6 +7,7 @@ import {featureWorld} from '../bundle/face-features.mjs';
 import {FEATURE_FIT} from '../bundle/feature-data.mjs';
 import {OUTLINE_POSES} from '../bundle/outline-data.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
+import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
@@ -54,4 +55,18 @@ export function geometry(){
    feature:f,outline:OUTLINE_POSES.find(o=>o.name===f.name)};
  });
 }
-if(process.argv[1]===new URL(import.meta.url).pathname)process.stdout.write(JSON.stringify(geometry()));
+export function turnaroundGeometry(){
+ const old=geometry().filter(p=>!p.pitch);
+ const extra=FACE_SOLVE.family45.poses.map(f=>{
+  const p={...base,ParamAngleX:f.yaw,ParamAngleY:0,[FRAME_CACHE]:new Map()};
+  const meshes=rig.meshes.filter(m=>faceOnly(m.id)).sort((a,b)=>a.order-b.order).map(m=>({
+   id:m.id,triangles:m.triangles,rest:m.positions,positions:m.positions.map(pt=>deform3D(m,pt,p)),
+  }));
+  const landmarks=Object.fromEntries(Object.entries(keys).map(([k,id])=>[k,featureWorld(id,FEATURE_FIT.front[k],p)]));
+  const boundary=[];
+  for(let y=218;y<=616;y+=.5)boundary.push({y,points:outlineRow(y).slice(0,2).map(x=>outlineWorld([x,y],p))});
+  return {name:f.name,yaw:f.yaw,pitch:0,meshes,landmarks,boundary};
+ });
+ return [...old,...extra].sort((a,b)=>a.yaw-b.yaw);
+}
+if(process.argv[1]===new URL(import.meta.url).pathname)process.stdout.write(JSON.stringify(process.argv.includes('--turnaround')?turnaroundGeometry():geometry()));

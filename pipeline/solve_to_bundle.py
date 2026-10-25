@@ -19,6 +19,7 @@ def main():
     data = json.loads((ROOT/'source/viewer/face-solve.json').read_text())
     runtime = {k: data[k] for k in ['family', 'restMesh', 'points', 'triangles', 'evaluationTriangles', 'meshCount', 'samples', 'anchors', 'Z']}
     runtime['poses'] = [{k: p[k] for k in ['name', 'yaw', 'pitch', 't', 'du']} for p in data['poses']]
+    runtime['family45'] = data['family45']
     runtime = rounded(runtime)
     # Exact rest coordinates are keys for O(1) mesh/anchor lookup at runtime.
     runtime['points'] = data['points']

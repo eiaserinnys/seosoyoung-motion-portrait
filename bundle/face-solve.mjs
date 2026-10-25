@@ -1,5 +1,5 @@
 import {FACE_SOLVE} from './face-solve-data.mjs';
-import {artWorld,correction} from './geometry.mjs';
+import {artWorld,correction,clamp,radians} from './geometry.mjs';
 import {gridValue,frameValue,FRAME_CACHE} from './pose-grid.mjs';
 import {contourCoordinates} from './face-contour.mjs';
 
@@ -57,34 +57,44 @@ function face0(point,p,relief,weights=stencil(point)){
  // artWorld applies the shared neck-pivot roll after the complete XY solve.
  return artWorld([q[0]-502,q[1]-326,q[2]],{...p,ParamAngleX:0,ParamAngleY:0});
 }
-export function faceSolveAnchorWorld(name,p){
+export function faceSolveAnchorWorld(name,p,family=FACE_SOLVE.family45){
  const index=FACE_SOLVE.anchors[name];
- if(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))>45)return evaluateFace45World(FACE_SOLVE.points[index],p,null,0,[[index,1]]);
+ if(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))>45)return evaluateFace45World(FACE_SOLVE.points[index],p,family,0,[[index,1]]);
  return face0(FACE_SOLVE.points[index],p,0,[[index,1]]);
 }
 
-// D1-D3 may supply {Z, poses:[{yaw,pitch,t,du}]} on the face-0 node ordering.
-// Its rest is the evaluated ±45° face, with a zero residual at the boundary.
-export function evaluateFace45World(point,p,family=null,relief=0,weights=stencil(point)){
+// Trigonometric collocation passes through 0, 22.5 and 45 degree increments.
+export function turnWeights45(delta){
+ const u=radians(clamp(Math.abs(delta),0,45)),u1=Math.PI/8,u2=Math.PI/4;
+ const s=Math.sin(u),c=1-Math.cos(u),s1=Math.sin(u1),c1=1-Math.cos(u1),s2=Math.sin(u2),c2=1-Math.cos(u2);
+ const det=s1*c2-s2*c1;
+ return [(c2*s-s2*c)/det,(-c1*s+s1*c)/det];
+}
+// Side depths use the same node ordering as face-0, in the evaluated ±45° frame.
+export function evaluateFace45World(point,p,family=FACE_SOLVE.family45,relief=0,weights=stencil(point)){
  const gain=correction(p,'CorrTurn'),yaw=p.ParamAngleX*gain,sign=yaw<0?-1:1;
  const edge=frameValue(p,'face45-edge',()=>({...p,ParamAngleX:sign*45/gain,ParamAngleZ:0,[FRAME_CACHE]:new Map()}));
  const rest=frameValue(p,'face45-rest',()=>({...edge,ParamAngleY:0,[FRAME_CACHE]:new Map()}));
  const q=face0(point,edge,relief,weights),p45=face0(point,rest,0,weights);
- const z=family?sample(family.Z,weights):0;
+ const z=family?sample(sign<0?family.ZLeft:family.ZRight,weights):0;
  const delta=yaw-sign*45;
- const pitch=p.ParamAngleY*gain,local=[p45[0]-502,p45[1]-326,z+relief];
- const shifted=artWorld(local,{...p,CorrTurn:1,ParamAngleX:delta,ParamAngleY:pitch,ParamAngleZ:0});
- const seam=artWorld(local,{...p,CorrTurn:1,ParamAngleX:0,ParamAngleY:pitch,ParamAngleZ:0});
- for(const d of [0,1])shifted[d]+=q[d]-seam[d];
- if(family){
-  for(const d of [0,1]){
-   const value=pose=>weights.reduce((sum,[i,w])=>sum+w*pose.du[i][d],0);
-   shifted[d]+=gridValue(family.poses,delta,pitch,value)-gridValue(family.poses,0,pitch,value);
+ const local=[p45[0]-502,p45[1]-326,z+relief];
+ const shifted0=artWorld(local,{...p,CorrTurn:1,ParamAngleX:delta,ParamAngleY:0,ParamAngleZ:0});
+ const [a67,a90]=turnWeights45(delta);
+ const pose67=family?.poses.find(pose=>pose.name===(sign<0?'left67':'right67'));
+ const pose90=family?.poses.find(pose=>pose.name===(sign<0?'left90':'right90'));
+ const pitch=p.ParamAngleY*gain,pitchScale=1-.15*Math.min(1,Math.abs(pitch)/30);
+ for(const d of [0,1]){
+  let residual=0;
+  if(family){
+   const value=pose=>pose.t[d]+weights.reduce((sum,[i,w])=>sum+w*pose.du[i][d],0);
+   residual=a67*value(pose67)+a90*value(pose90);
   }
+  q[d]+=(shifted0[d]-p45[d]+residual)*(d===0?pitchScale:1);
  }
- return artWorld([shifted[0]-502,shifted[1]-326,shifted[2]+q[2]-seam[2]],{...p,ParamAngleX:0,ParamAngleY:0});
+ return artWorld([q[0]-502,q[1]-326,q[2]+shifted0[2]-z-relief],{...p,ParamAngleX:0,ParamAngleY:0});
 }
-export function faceSolveWorld(point,p,relief=0,family45=null){
+export function faceSolveWorld(point,p,relief=0,family45=FACE_SOLVE.family45){
  const yaw=p.ParamAngleX*correction(p,'CorrTurn');
  return Math.abs(yaw)>45?evaluateFace45World(point,p,family45,relief):face0(point,p,relief);
 }

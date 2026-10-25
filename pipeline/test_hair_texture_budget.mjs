@@ -26,8 +26,13 @@ test('V2 rear supplementation leaves all rows above 200 unchanged',()=>{
  }
  }finally{DOME.rearPitch.poses=original;}
 });
-test('P3 limits vertices while preserving every non-hair mesh and all rig metadata',()=>{
+test('P3 preserves non-hair meshes and metadata apart from the approved D2 angle domain',()=>{
  const old=JSON.parse(execFileSync('git',['show',baseline+':bundle/assets/seosoyoung-rig.json'],{maxBuffer:20*1024*1024}));
+ // D2 extends the public control and its identity keys; all other metadata stays protected.
+ const angle=old.parameters.find(p=>p.id==='ParamAngleX');angle.min=-90;angle.max=90;
+ for(const d of old.deformers)if(['WarpNeck','WarpHead'].includes(d.id)){
+  d.keyforms.ParamAngleX=[{value:-90,output:-90},...d.keyforms.ParamAngleX,{value:90,output:90}];
+ }
  const hair=m=>/^(hair-top|hairpin|bangs-|side-hair-|side-cranium-|back-hair-|tail-)/.test(m.id);
  assert.equal(rig.meshes.filter(hair).length,15);
  assert.deepEqual(rig.meshes.filter(m=>!hair(m)),old.meshes.filter(m=>!hair(m)));

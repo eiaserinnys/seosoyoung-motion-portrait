@@ -13,7 +13,7 @@ CROP=(260,220,740,700)
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args):pass
 
-def webgl_renders(poses):
+def webgl_renders(poses,order=ORDER,save_grid=True):
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT/'bundle')))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     errors=[];renders={}
@@ -34,7 +34,7 @@ def webgl_renders(poses):
               window.faceCapture=new Renderer(canvas,overlay,studio.rig,studio.renderer.images);
             }''')
             tiles=[]
-            for name in ORDER:
+            for name in order:
                 p=next(p for p in poses if p['name']==name)
                 data=page.evaluate('''([yaw,pitch])=>{
                   studio.setPose(yaw,pitch,0,'Face-only verification');studio.p.CorrTurn=1;
@@ -59,13 +59,19 @@ def webgl_renders(poses):
             # Verify the existing viewer entry point responds to its actual sliders.
             page.get_by_role('button',name='상 +20°',exact=True).click()
             assert page.evaluate('studio.p.ParamAngleY')==20
+            for yaw in [-90,-67.5,0,67.5,90]:
+                page.locator('#ParamAngleX').evaluate('''(el,value)=>{
+                    studio.p.CorrTurn=1;el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));
+                }''',yaw)
+                assert page.evaluate('studio.p.ParamAngleX*studio.p.CorrTurn')==yaw
             browser.close()
             assert not errors,errors
     finally:
         server.shutdown();server.server_close();thread.join()
-    grid=Image.new('RGB',(1440,1440),BG)
-    for i,tile in enumerate(tiles):grid.paste(tile,((i%3)*480,(i//3)*480))
-    grid.save(ROOT/'docs/captures/viewer_9dir_grid.png')
+    if save_grid:
+        grid=Image.new('RGB',(1440,1440),BG)
+        for i,tile in enumerate(tiles):grid.paste(tile,((i%3)*480,(i//3)*480))
+        grid.save(ROOT/'docs/captures/viewer_9dir_grid.png')
     return renders
 
 def warped_reference(p):
