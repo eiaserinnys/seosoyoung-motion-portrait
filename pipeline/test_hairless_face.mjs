@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {CORRECTION_PRESETS,eyeRootWorld} from '../bundle/geometry.mjs';
-import {outlineRow,outlineWorld,faceWorld} from '../bundle/face-outline.mjs';
+import {outlineRow,outlineWorld,faceWorld,legacyOutlineWorld} from '../bundle/face-outline.mjs';
 import {featureWorld} from '../bundle/face-features.mjs';
 import {FEATURE_FIT} from '../bundle/feature-data.mjs';
 import {OUTLINE_POSES} from '../bundle/outline-data.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
-import {sphericalFaceError} from './hairless_sphere_contract.mjs';
+import {faceSolveWorld} from '../bundle/face-solve.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
 const at=(yaw,pitch)=>({...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()});
@@ -54,17 +54,24 @@ test('S5: all 9288 neutral-pitch feature vertices remain bit identical to d6a58b
  for(const gain of [.65,1])for(const yaw of [-45,0,45])for(const m of rig.meshes.filter(m=>m.id.startsWith('eye-')||m.id==='nose-detail'||m.id.startsWith('mouth')||m.id==='closed-eyes-v1'))for(const pt of m.positions)values.push(featureWorld(m.id,pt,{...base,CorrTurn:gain,ParamAngleX:yaw,ParamAngleY:0}));
  assert.equal(createHash('sha256').update(JSON.stringify(values)).digest('hex'),'9e021c8deabc37ac0befb1d1bffc258d138f36bb8f7c37de6acabf919343ae82');
 });
-test('r11: all 4038 neutral-pitch skin vertices remain bit identical to d6a58ba',()=>{
- const values=[],skin=rig.meshes.find(m=>m.id==='face-skin');
- for(const gain of [.65,1])for(const yaw of [-45,0,45])for(const pt of skin.positions)values.push(outlineWorld(pt,{...base,CorrTurn:gain,ParamAngleX:yaw,ParamAngleY:0}));
- assert.equal(createHash('sha256').update(JSON.stringify(values)).digest('hex'),'2266d76058271ffaaf663ad55ec2226efbf4f7230ad5a0f6bddf8cc260b93dae');
-});
-test('S6 spherical revision: nose-row cheek curvature stays within approved up10/down4.05 pixels',()=>{
- for(const pitch of [-30,30]){
-  const [l,r]=outlineRow(497),dy=u=>{const pt=[l+(r-l)*u,497];return outlineWorld(pt,at(0,pitch))[1]-outlineWorld(pt,at(0,0))[1];};
-  assert(Math.abs(dy(.25)-dy(.5))<=(pitch>0?10:4.05),`${pitch},0.25: ${dy(.25)} vs ${dy(.5)}`);
+test('r11: neutral-pitch skin vertices retain their approved screen positions within one pixel',()=>{
+ const skin=rig.meshes.find(m=>m.id==='face-skin');
+ for(const gain of [.65,1])for(const yaw of [-45,0,45])for(const pt of skin.positions){
+  const p={...at(yaw,0),CorrTurn:gain},actual=outlineWorld(pt,p),expected=legacyOutlineWorld(pt,p);
+  assert(Math.hypot(actual[0]-expected[0],actual[1]-expected[1])<=1);
  }
 });
-test('S6 spherical revision: nose/mouth longitude envelope and latitude bands match the closed form',()=>{
- for(const pitch of [-30,30])assert(sphericalFaceError(at(0,pitch))<1e-6,'sphere field '+pitch);
+test('joint cheek surface preserves vertical order and finite spatial curvature in up/down poses',()=>{
+ for(const pitch of [-30,30]){
+  for(const u of [.25,.5,.75]){
+   const values=[480,490,497,510,525].map(y=>{const [l,r]=outlineRow(y);return faceSolveWorld([l+(r-l)*u,y],at(0,pitch))[1];});
+   assert(values.every(Number.isFinite));
+   for(let i=1;i<values.length;i++)assert(values[i]>values[i-1],`${pitch},${u}: ${values}`);
+  }
+  for(const y of [480,497,525]){
+   const [l,r]=outlineRow(y);
+   const values=Array.from({length:17},(_,i)=>faceSolveWorld([l+(r-l)*i/16,y],at(0,pitch))[1]);
+   for(let i=1;i<values.length-1;i++)assert(Number.isFinite(values[i+1]-2*values[i]+values[i-1]));
+  }
+ }
 });

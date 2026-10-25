@@ -7,7 +7,6 @@ import {featureWorld} from '../bundle/face-features.mjs';
 import {FEATURE_FIT} from '../bundle/feature-data.mjs';
 import {OUTLINE_POSES} from '../bundle/outline-data.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
-import {sphericalFaceError} from './hairless_sphere_contract.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
@@ -47,8 +46,12 @@ export function geometry(){
     heightRatio:span(id,p)/span(id,neutral),measuredHeightRatio:f.scales[side][1],
     ballRatios:Object.fromEntries(['iris','pupil','highlight'].map(part=>{const id='eye-'+side+'-'+part;return [part,span(id,p)/span(id,neutral)];}))};
   }
+  const skin=meshes.find(m=>m.id==='face-skin');
+  const area=(q,t)=>{const [a,b,c]=t.map(i=>q[i]);return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);};
+  const determinants=skin.triangles.map(t=>area(skin.positions,t)/area(skin.rest,t));
   return {name:f.name,yaw:f.yaw,pitch:f.pitch,meshes,landmarks,boundary,comparisonTop,cheeks,eyes,
-   sphericalError:!f.yaw&&f.pitch?sphericalFaceError(p):0,feature:f,outline:OUTLINE_POSES.find(o=>o.name===f.name)};
+   minDetJ:Math.min(...determinants),reversedTriangles:determinants.filter(d=>d<=0).length,
+   feature:f,outline:OUTLINE_POSES.find(o=>o.name===f.name)};
  });
 }
 if(process.argv[1]===new URL(import.meta.url).pathname)process.stdout.write(JSON.stringify(geometry()));

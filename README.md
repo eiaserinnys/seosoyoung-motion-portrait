@@ -28,7 +28,9 @@ The neck stays stationary during pure yaw. Pitch and roll blend the hidden upper
 
 All six front hair layers share a rounded dome, protected in front of the forehead by a smooth depth maximum. The upper backing meets that dome without a depth inset. The rear cranium retains the complete elliptical shell, with a narrow upper seam blend and yaw-only visibility. Crown, bangs and hairpin retain their illustration order. The hair controls adjust volume and far-side occlusion.
 
-The face uses a silhouette mesh. Its calibrated yaw projection stays unchanged; the lower mask pitches as a depth surface fitted from the front artwork and the measured 45° outline depths. A second residual follows the rotated mask height into the 2D pitch references. The neck follows the chin, and the registered feature centers retain the eyes, nose and mouth on the face while local socket and corneal motion adds perspective.
+The face uses a silhouette mesh with jointly optimized shared depth, pose translations and smooth 2D residuals. `pipeline/optimize_3d_2d.py` solves the graph-weighted least-squares system with NumPy and Schur elimination, then pins the measured rim and six separate feature anchors. Neutral yaw keeps the r11 skin; its hair-occluded rows above restY465 use the r11 prior. Skin queries interpolate mesh/rim controls, while feature centers query their dedicated solved nodes. Eyelid, gaze, brow and mouth motion stays in the existing local evaluator. The legacy pitch field remains the hair attachment contract. Hair geometry and the renderer stay unchanged; the shared actual-skin occlusion mask follows the new skin.
+
+`source/viewer/face-solve.json` records depth, translations, residuals, source hashes and eight leave-one-pose-out measurements. `explained3D` is one minus weighted residual SSE divided by weighted displacement SSE from the depth-free rotated rest plane, including translation in the 3D explanation; `duRms` is the unweighted vector RMS over all solve nodes. `stats.rms` measures the pinned rim/anchor controls; `observationRms` also includes the softly fitted mesh priors. `bundle/face-solve-data.mjs` is the compact runtime copy. Runtime pose weights use the existing trigonometric cardinal grid, followed by neck-pivot roll. `evaluateFace45World` accepts a future relative-yaw family (`Z` and `poses` on the same node ordering), with zero residual at the ±45° seam; no side-family fit is supplied yet.
 
 This is a custom WebGL renderer and JSON format. It does not load or produce Cubism binary models.
 
@@ -42,6 +44,10 @@ python3 -m venv .venv
 .venv/bin/python -m playwright install chromium
 .venv/bin/python pipeline/stage2_inpaint_and_clean.py
 .venv/bin/python pipeline/stage3_build_viewer.py
+python3 pipeline/optimize_3d_2d.py
+python3 pipeline/solve_to_bundle.py
+node --test --test-timeout=60000 pipeline/test_face_solve.mjs
+python3 -m pytest --timeout=60 pipeline/test_face_solve.py
 node pipeline/test_sphere_3d.mjs
 node pipeline/test_corrections.mjs
 node pipeline/test_attachment.mjs

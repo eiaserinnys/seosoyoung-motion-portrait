@@ -10,6 +10,7 @@ import {featureWorld} from '../bundle/face-features.mjs';
 import {strandDepth,strandWorld} from '../bundle/side-strands.mjs';
 import {earWorld} from '../bundle/stereo-attachments.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
+import {faceSolveAnchorWorld} from '../bundle/face-solve.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const at=(yaw,pitch)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()});
@@ -87,15 +88,15 @@ test('frame cache keeps neutral feature controls independent of the pitched fram
   for(const point of [[415.7,432.2],[508,497],[504.5,554.5]])assert.deepEqual(outlinePitchShift(point,p),outlinePitchShift(point,uncached));
  }
 });
-test('skin feature controls share pitch residual within the agreed anchor tolerances',()=>{
+test('features use the six dedicated solved anchor nodes without inserting them into the skin mesh',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const [key,id] of Object.entries(ids)){
-  const point=FEATURE_FIT.front[key],p=at(yaw,pitch),p0=at(yaw,0);
-  // Compare the complete outline shift against feature-minus-legacy-skin.
-  const skin=outlineWorld(point,p),skin0=outlineWorld(point,p0);
-  const f=featureWorld(id,point,p),f0=featureWorld(id,point,p0);
+  const point=FEATURE_FIT.front[key],p=at(yaw,pitch);
+  // Dedicated anchors carry feature registration; they are not skin vertices.
+  const anchor=faceSolveAnchorWorld(key,p);
+  const f=featureWorld(id,point,p);
   for(const i of [0,1]){
-   const error=Math.abs(skin[i]-skin0[i]-(f[i]-f0[i]));
-   assert(error<(key==='nose'||key==='mouth'?1e-6:.02),`${key} ${yaw},${pitch} axis ${i}: ${error}`);
+   const error=Math.abs(anchor[i]-f[i]);
+   assert(error<1e-6,`${key} ${yaw},${pitch} axis ${i}: ${error}`);
   }
  }
 });
