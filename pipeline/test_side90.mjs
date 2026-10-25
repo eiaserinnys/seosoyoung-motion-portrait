@@ -8,7 +8,7 @@ import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {frozenRig} from './frozen_rig.mjs';
 import {profileWeights} from '../bundle/face-profile.mjs';
 import {BEADS,beadWorld} from '../bundle/stereo-attachments.mjs';
-import {applyHairSolve} from '../bundle/hair-solve.mjs';
+import {applyHairSolve,applyTailSolve} from '../bundle/hair-solve.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const at=yaw=>({...base,ParamAngleX:yaw,[FRAME_CACHE]:new Map()});
@@ -35,7 +35,7 @@ test('side90 keeps all nine poses unchanged apart from the approved face calibra
     assert.equal(opacity(m,p,state),old.opacity(m,q,state),`${yaw}/${pitch} ${m.id} opacity`);
     const hair=m.id==='hair-top'||m.id.startsWith('bangs')||m.id.startsWith('side-hair')||m.id==='hairpin'||m.id.startsWith('back-hair')||m.id.startsWith('side-cranium');
     for(const point of m.positions){
-     const prior=old.deform3D(m,point,q),expected=hair?applyHairSolve(prior,point,p,m.id.startsWith('side-cranium')):prior;
+     const prior=old.deform3D(m,point,q),expected=hair?applyHairSolve(prior,point,p,m.id.startsWith('side-cranium')):m.id.startsWith('tail-')?applyTailSolve(prior,point,m.id.includes('-left-')?'left':'right',p):prior;
      assert.deepEqual(deform3D(m,point,p),expected,`${yaw}/${pitch} ${m.id}`);
     }
    }
@@ -75,7 +75,7 @@ test('all modified attachment vertices meet the 45 degree seam continuously',{ti
   }
  }
 });
-test('Track D preserves every vertex and alpha at all approved and unobserved <=45 poses',{timeout:60000},async()=>{
+test('bead split preserves non-hair vertices, alpha and all neutral geometry',{timeout:60000},async()=>{
  const old=await frozenRig(false,'3ba80b1fb3ed36e87258367fdaabab8deb0973bc');
  try{
   const poses=[...[-45,0,45].flatMap(y=>[-30,0,30].map(p=>[y,p])),[-44.99,0],[44.99,0],
@@ -84,7 +84,8 @@ test('Track D preserves every vertex and alpha at all approved and unobserved <=
    const p={...at(yaw),ParamAngleY:pitch},q={...p,[old.FRAME_CACHE]:new Map()};delete q[FRAME_CACHE];
    for(const m of rig.meshes){
     assert.equal(opacity(m,p,state),old.opacity(m,q,state),m.id);
-    for(const point of m.positions)assert.deepEqual(deform3D(m,point,p),old.deform3D(m,point,q),`${yaw}/${pitch} ${m.id}`);
+    const hair=/^(hair-top$|bangs-|side-hair-|hairpin$|back-hair-|side-cranium-|tail-)/.test(m.id);
+    if(!pitch||!hair)for(const point of m.positions)assert.deepEqual(deform3D(m,point,p),old.deform3D(m,point,q),`${yaw}/${pitch} ${m.id}`);
    }
   }
  }finally{old.dispose();}
@@ -167,8 +168,8 @@ test('profile eyelids and eye layers still respond to independent blink controls
  }
 });
 test('both tail layers retain the shared root while the hidden side passes behind the skull',()=>{
- for(const yaw of [-90,-67.5,67.5,90])for(const side of ['left','right']){
-  const p=at(yaw),root=beadWorld(side,p);
+ for(const yaw of [-90,-67.5,-45,0,45,67.5,90])for(const pitch of [-30,0,30])for(const side of ['left','right']){
+  const p={...at(yaw),ParamAngleY:pitch},root=beadWorld(side,p);
   for(const suffix of ['tie','hair'])assert.deepEqual(deform3D(mesh(`tail-${side}-${suffix}`),BEADS[side].front,p),root);
   if(Math.abs(yaw)===90&&side===(yaw<0?'left':'right')){
    assert.equal(opacity(mesh(`tail-${side}-hair`),p,state),0);

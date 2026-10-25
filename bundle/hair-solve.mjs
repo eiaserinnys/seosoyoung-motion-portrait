@@ -5,6 +5,7 @@ import {clamp,correction,artWorld} from './geometry.mjs';
 import {frameValue,poseWeights,FRAME_CACHE} from './pose-grid.mjs';
 import {smoothstep} from './face-profile.mjs';
 import {canopyWorld,craniumWorld} from './hair-shell.mjs';
+import {BEADS,beadWorld} from './stereo-attachments.mjs';
 
 export function hairCoordinates([x,y,lambda],posterior=false){
  const {cx,rx}=domeSection(y);
@@ -12,7 +13,10 @@ export function hairCoordinates([x,y,lambda],posterior=false){
  if(Math.abs(Math.abs(s)-1)<1e-12)s=Math.sign(s);
  return [s,y];
 }
-export function hairFade(y){const t=clamp((y-400)/35,0,1);return 1-t*t*(3-2*t);}
+export function upperHairFade(y){return 1-smoothstep(515,545,y);}
+export const hairFade=upperHairFade;
+// Both bead centres are protected, including the small interval between them.
+export function lowerFade(y){return smoothstep(544.2,565,y);}
 function linear(nodes,x){
  let i=0;while(i<nodes.length-2&&x>nodes[i+1])i++;
  return [i,clamp((x-nodes[i])/(nodes[i+1]-nodes[i]),0,1)];
@@ -46,6 +50,21 @@ export function applyHairSolve(world,point,p,posterior=false){
   result=[world[0]+weight*delta[0],world[1]+weight*delta[1],world[2]];
  }
  return extendProfile(result,point,p,posterior,weight);
+}
+
+export function applyTailSolve(world,point,side,p){
+ const weight=correction(p,'CorrOutline')*lowerFade(point[1]);
+ if(!p.ParamAngleY||!weight||!HAIR_SOLVE.lower)return world;
+ const root=BEADS[side].front,anchor=beadWorld(side,p),tau=clamp((point[1]-root[1])/200,0,1);
+ const [i,t]=linear(HAIR_SOLVE.lower.tau,tau),weights=frameValue(p,'hair-solve-weights',()=>hairPoseWeights(p));
+ const roll=(p.ParamAngleZ||0)*Math.PI/180,c=Math.cos(roll),s=Math.sin(roll);
+ const x=(world[0]-anchor[0])*c+(world[1]-anchor[1])*s;
+ let delta=0;
+ for(let k=0;k<weights.length;k++)if(weights[k]){
+  const nodes=HAIR_SOLVE.lower.poses[k][side],a=nodes[i],b=nodes[i+1];
+  delta+=weights[k]*(a[0]*(1-t)+b[0]*t+x*((a[1]-1)*(1-t)+(b[1]-1)*t));
+ }
+ return [world[0]+weight*delta*c,world[1]+weight*delta*s,world[2]];
 }
 
 // Rear canvas coordinates come from left_67/left_90 (+152,+20); the front
