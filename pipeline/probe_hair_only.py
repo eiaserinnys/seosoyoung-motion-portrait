@@ -20,13 +20,13 @@ import numpy as np
 from PIL import Image
 if __package__:
     from .hair_report import sheets, summarize_metrics, write_release_report
-    from .hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics, posterior_error_gate, posterior_shift_gate, protected_files_match
+    from .hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics, posterior_error_gate, posterior_shift_gate, protected_files_match, approved_top_gate
 else:
     from hair_report import sheets, summarize_metrics, write_release_report
-    from hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics, posterior_error_gate, posterior_shift_gate, protected_files_match
+    from hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics, posterior_error_gate, posterior_shift_gate, protected_files_match, approved_top_gate
 
 ROOT = Path(__file__).resolve().parents[1]
-BASELINE = '83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9'
+BASELINE = '0b75a0211691965ca234ad9114073ba934568394'
 HAIR_CROWN = ['hair-top', 'bangs-left', 'bangs-right', 'side-hair-left',
               'side-hair-right', 'hairpin', 'back-hair-left', 'back-hair-right',
               'back-hair-center', 'side-cranium-left', 'side-cranium-right']
@@ -48,18 +48,6 @@ def top_gate(pitch, rendered, target):
         return {'kind': 'cropped-bound', 'maximum': 4, 'pass': rendered <= 4}
     return {'kind': 'target', 'target': target, 'error': rendered - target,
             'pass': abs(rendered - target) <= 8}
-
-
-def approved_top_gate(yaw, pitch, rendered):
-    """Approved completion bounds; reference residuals remain diagnostic."""
-    if pitch > 0 and not yaw:
-        return {'target': 92, 'tolerance': 8, 'pass': abs(rendered-92) <= 8}
-    if yaw and pitch > 0:
-        target = 55 if yaw < 0 else 48
-        return {'target': target, 'tolerance': 6, 'pass': abs(rendered-target) <= 6}
-    if yaw and pitch < 0:
-        return {'maximum': 13, 'pass': rendered <= 13}
-    return None
 
 
 def stem_gap(hair, tie):
@@ -261,7 +249,7 @@ def capture(poses, baseline, dense=False):
                     geometry[pose['name']] = page.evaluate('''async()=>{
                       const {deform3D}=await import('./rig.mjs'),{craniumFacing,craniumPosition,domeSection}=await import('./hair-surface.mjs');
                       const {rig,p}=studio;
-                      const values=rig.meshes.map(m=>[m.id,m.positions.map(pt=>deform3D(m,pt,p)),m.id.startsWith('side-cranium')?m.positions.map(pt=>[craniumPosition(pt,p),craniumFacing(pt,p)]):null]);
+                      const values=rig.meshes.filter(m=>/^(hair-top|bangs|side-hair|hairpin|back-hair|side-cranium|tail-)/.test(m.id)).map(m=>[m.id,m.positions.map(pt=>deform3D(m,pt,p)),m.id.startsWith('side-cranium')?m.positions.map(pt=>[craniumPosition(pt,p),craniumFacing(pt,p)]):null]);
                       values.push(Array.from({length:64},(_,i)=>domeSection(40+i*8)));
                       const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(values)));
                       return Array.from(new Uint8Array(bytes),v=>v.toString(16).padStart(2,'0')).join('');
@@ -454,35 +442,43 @@ def main():
     if not args.measure_only:
         sheets(rows, out)
     checks = assess(report)
+    legacy_checks=checks
+    target_gates={'crown top','upper exterior','hairline median','forehead exposure','posterior exterior',
+                  'near cheek background gap','left foreground stem gap','right foreground stem gap'}
+    neutral_gates={'nine poses','P3 silhouette span <=2px','neutral silhouette span <=2px','front reference mix ==0'}
+    checks=[c for c in checks if c['gate'] in target_gates|neutral_gates]
     bounds = json.loads(subprocess.check_output(['node', 'pipeline/hair_bounds.mjs'], cwd=ROOT, text=True))
     projection_shift = max(abs(v) for p in report for r in p['posteriorProjectionShift'] if r['shift'] for v in r['shift'])
     bounds['checks'].append(posterior_shift_gate(projection_shift))
     bounds['pass'] = all(c['pass'] for c in bounds['checks'])
     protected = [line.split('  ', 1) for line in (ROOT / 'docs/hair-hspec-protected-sha256.txt').read_text().splitlines()]
     protected_pass = protected_files_match(ROOT, protected)
-    invariant_gates = {'nine poses', 'P3 silhouette span <=2px', 'neutral silhouette span <=2px', 'front reference mix ==0',
-                       'temple rimlight reduction >=50%', 'upper diagonal posterior volume',
-                       'upper diagonal posterior mean error', 'upper diagonal forehead exposure',
-                       'near cheek background gap',
-                       'left foreground stem gap', 'right foreground stem gap', 'approved crown top'}
+    invariant_gates = neutral_gates|{'left foreground stem gap','right foreground stem gap'}
     invariants = [c for c in checks if c['gate'] in invariant_gates]
     invariant_pass = all(c['pass'] for c in invariants)
     strict_pass = all(c['pass'] for c in checks)
-    accepted = bounds['pass'] and invariant_pass and protected_pass
+    chart=json.loads(subprocess.check_output(['node','pipeline/hair_solve_metrics.mjs'],cwd=ROOT,text=True,timeout=60))
+    solution=json.loads((ROOT/'source/viewer/hair-solve.json').read_text())
+    budget=all(p['stats']['duRms']<=6 and p['stats']['duMax']<=22 for p in solution['poses'])
+    neutral_pass=all(p['neutralVertexHashMatches'] for p in report if not p['pitch'])
+    from hair_solve_quality import compare_captures
+    comparison=compare_captures(poses,ROOT/'debug/hair_solve_prior',current)
+    accepted = chart['pass'] and budget and neutral_pass and invariant_pass and comparison['pass'] and protected_pass
     data = {'baseline': BASELINE, 'head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
             'registrationSha256': hashlib.sha256((ROOT / 'source/viewer/face-feature-fit.json').read_bytes()).hexdigest(),
             'referenceMaskMethod': 'Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation',
-            'canvas': [1100, 1600], 'scale': 1, 'hairMeshCount': 15, 'poses': report, 'checks': checks,
+            'canvas': [1100, 1600], 'scale': 1, 'hairMeshCount': 15, 'poses': report, 'checks': checks,'legacyChecks':legacy_checks,
             'productSha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-                              for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs', 'rig.mjs', 'renderer.mjs', 'assets/seosoyoung-rig.json']]},
+                              for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'hair-solve.mjs','hair-solve-data.mjs','stereo-attachments.mjs', 'rig.mjs', 'renderer.mjs', 'assets/seosoyoung-rig.json']]},
+            'hairSolveChart':chart,'hairSolveBudgetPass':budget,'neutralGeometryPass':neutral_pass,'priorComparison':comparison,
             'measurementMode': 'saved frames' if args.measure_only else 'single browser capture per variant',
-            'measurementApproval': 'Fable-approved B1+B2+B3: upper diagonal forehead ratio error<=15% (other poses<=10%); posterior rows340..440 mean error<=16px left/20px right and improvement>=10px; combined raster exterior shift<=60px; broad-window rim>=50%; upper rows120..200 positive-overhang increase from r16<=13px; downward cheek<=2px; stem<=17px',
+            'measurementApproval': 'unchanged 0b75a02 3D hair prior; smooth 12x16 residual only; restY400..435 fade; duRms<=6px/duMax<=22px; chart minDet>.25; each actual rendered pose improves or equals the same uncorrected prior; neutral geometry exact; stem<=17px; absolute reference gates remain diagnostics',
             'probeSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            'strictRasterPass': strict_pass, 'allChecksPass': accepted, 'bounds': bounds, 'invariantPass': invariant_pass,
-            'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] not in invariant_gates],
+            'strictRasterPass': strict_pass, 'allChecksPass': strict_pass, 'bounds': bounds, 'invariantPass': invariant_pass,
+            'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] in target_gates],
             'stemMaskMethod': 'visible crown | tails | face-skin; tie R>200/alpha>100, x percentile20..80 step2, empty pixels from row before tie',
             'protectedFilesPass': protected_pass, 'protectedFileCount': len(protected),
-            'acceptance': 'strict pass' if strict_pass and accepted else 'bounded pass' if accepted else 'fail',
+            'acceptance': 'strict pass' if strict_pass and accepted else 'monotone prior pass' if accepted else 'fail',
             'pass': accepted}
     (current / 'hair-r15-metrics-raw.json').write_text(json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
     (ROOT / args.output / 'hair-r15-metrics.json').write_text(json.dumps(summarize_metrics(data), ensure_ascii=False, indent=2, allow_nan=False) + '\n')

@@ -17,6 +17,11 @@ import verify_hairless_face as verify
 
 
 class AngleDomainGateTest(unittest.TestCase):
+    def test_joint_wrapper_is_allowed_but_the_prior_stays_protected(self):
+        paths='bundle/hair-shell.mjs\nbundle/rig.mjs\npipeline/hair_solve_quality.py\n'
+        with patch.object(verify.subprocess,'check_output',return_value=paths):
+            self.assertEqual(verify.protected_changes(),['bundle/hair-shell.mjs'])
+
     def test_only_approved_angle_bounds_are_exempt_from_rig_protection(self):
         old=dict(parameters=[dict(id='ParamAngleX',min=-50,max=50,default=0)],meshes=[dict(id='face-skin')],
                  deformers=[dict(id='WarpHead',keyforms=dict(ParamAngleX=[dict(value=v,output=v) for v in [-50,0,50]]))])
@@ -108,9 +113,9 @@ class DiagonalJawTest(unittest.TestCase):
             ['git','show','f6112b6:source/viewer/outline-traces.json'],text=True,timeout=60))
         old={p['name']:p for p in before['poses']}
         for p in data['poses']:
-            if not p['name'].startswith('up'):
+            if not p['name'].startswith('up') and p['name'] not in {'down-left','down-right'}:
                 self.assertEqual(p['rows'],old[p['name']]['rows'],p['name'])
-            elif p['yaw']:
+            elif p['name'].startswith('up') and p['yaw']:
                 mid=(p['rows'][-1][2]+p['rows'][-1][4])/2
                 mirror=next(q for q in data['poses'] if q['pitch']==p['pitch'] and q['yaw']==-p['yaw'])
                 own=p['priorRows'][-1][1:];other=mirror['priorRows'][-1][1:]
@@ -141,7 +146,16 @@ class DiagonalJawTest(unittest.TestCase):
                 self.assertEqual((shape['peakRestY'],shape['peakCount']),(450,1))
                 self.assertLessEqual(shape['maxLowerWidthIncrease'],.5)
                 self.assertLessEqual(shape['maxLowerHalfWidthIncrease'],.5)
-            if not p['name'].startswith('up'):self.assertEqual(p['yChin'],old[p['name']]['yChin'])
+            if p['name'] in {'down-left','down-right'}:
+                self.assertAlmostEqual(p['yChin'],608.000150279906)
+                dr=next(q for q in data['poses'] if q['name']=='down-right')
+                if p['name']=='down-left':
+                    self.assertEqual(p['rows'],[[sy,yr,1004-xr,yl,1004-xl] for sy,yl,xl,yr,xr in dr['rows']])
+                    for a,b in zip(p['boundarySamples'],dr['boundarySamples']):
+                        for left,right in [('left','right'),('right','left')]:
+                            self.assertEqual(a[left]['xCanvas'],1004-b[right]['xCanvas'])
+                            self.assertEqual(a[left]['validBG'],b[right]['validBG'])
+            elif not p['name'].startswith('up'):self.assertEqual(p['yChin'],old[p['name']]['yChin'])
 
 
 class ApprovedDiagonalGateTest(unittest.TestCase):

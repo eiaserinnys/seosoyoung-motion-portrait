@@ -113,6 +113,21 @@ def symmetrize(rows,poses):
             sy,yl,xl,yr,xr=row;half=max(5.5,(xr-xl)/2)
             row[:]=[sy,(yl+yr)/2,502-half,(yl+yr)/2,502+half]
         neg,pos=group[-45],group[45]
+        if pitch == -30:
+            neg['rows']=[[sy,yr,1004-xr,yl,1004-xl] for sy,yl,xl,yr,xr in pos['rows']]
+            if 'boundarySamples' in pos:
+                neg['boundarySamples']=[dict(restY=s['restY'],neckBounded=s['neckBounded'],
+                    **{a:{**s[b],'xCanvas':1004-s[b]['xCanvas']} for a,b in [('left','right'),('right','left')]}) for s in pos['boundarySamples']]
+                # Raw image coordinates retain their source image; mirrored
+                # observations live in the registered canvas frame.
+                chin=pos['registration']['eyeMid'][1]+(pos['rawYChin']-pos['registration']['referenceEyeMid'][1])*pos['registration']['scale']
+                reg=neg['registration']
+                neg['rawYChin']=reg['referenceEyeMid'][1]+(chin-reg['eyeMid'][1])/reg['scale']
+                for side in ['left','right']:
+                    neg['mapping']['canvasYSpan'][side][1]=chin
+                    neg['mapping']['rawYSpan'][side][1]=neg['rawYChin']
+                neg['canonicalSource']='down-right'
+            continue
         for left,right in zip(neg['rows'],pos['rows']):
             sy=left[0];l=(left[2]+1004-right[4])/2;r=(left[4]+1004-right[2])/2
             yl=(left[1]+right[3])/2;yr=(left[3]+right[1])/2

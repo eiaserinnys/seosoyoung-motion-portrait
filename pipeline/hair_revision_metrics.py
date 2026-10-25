@@ -4,6 +4,18 @@ import hashlib
 import numpy as np
 
 
+def approved_top_gate(yaw, pitch, rendered):
+    """Historical completion bounds; direct reference residuals stay diagnostic."""
+    if pitch > 0 and not yaw:
+        return {'target': 92, 'tolerance': 8, 'pass': abs(rendered-92) <= 8}
+    if yaw and pitch > 0:
+        target = 55 if yaw < 0 else 48
+        return {'target': target, 'tolerance': 6, 'pass': abs(rendered-target) <= 6}
+    if yaw and pitch < 0:
+        return {'maximum': 13, 'pass': rendered <= 13}
+    return None
+
+
 def protected_files_match(root, entries):
     return all(hashlib.sha256((root / path).read_bytes()).hexdigest() == expected
                for expected, path in entries)

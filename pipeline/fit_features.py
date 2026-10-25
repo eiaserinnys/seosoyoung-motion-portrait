@@ -34,6 +34,13 @@ def symmetrize(front,poses):
   scale=[(center['scales']['left'][i]+center['scales']['right'][i])/2 for i in [0,1]]
   center['scales']={'left':scale[:],'right':scale[:]}
   neg,pos=group[-45],group[45]
+  if pitch == -30:
+   pos['centers']={key:value[:] for key,value in pos['registeredCenters'].items()}
+   for a,b in [('nose','nose'),('mouth','mouth'),('left','right'),('right','left'),('browLeft','browRight'),('browRight','browLeft')]:
+    value=pos['registeredCenters'][b]
+    neg['centers'][a]=[front[a][0]-(value[0]-front[b][0]),front[a][1]+value[1]-front[b][1]]
+   neg['scales']={a:pos['scales'][b][:] for a,b in [('left','right'),('right','left')]}
+   continue
   for key in ['nose','mouth']:
    n,p=neg['centers'][key][:],pos['centers'][key][:];f=front[key]
    dx=((p[0]-f[0])-(n[0]-f[0]))/2;dy=(n[1]+p[1])/2-f[1]

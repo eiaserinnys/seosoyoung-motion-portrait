@@ -166,10 +166,13 @@ test('yaw endpoints sweep through pitch without a binocular X jump or discontinu
   }
  }
 });
-test('diagonal near cheeks use the mirror-mean profile at every measured height',()=>{
+test('diagonal cheeks average upward references and mirror the canonical downward right',()=>{
  for(const p of OUTLINE_POSES.filter(p=>p.pitch&&p.yaw)){
   const mirror=OUTLINE_POSES.find(q=>q.yaw===-p.yaw&&q.pitch===p.pitch),index=p.yaw<0?4:2,other=p.yaw<0?2:4;
-  p.rows.forEach((row,i)=>near(row[index],(p.measuredRows[i][index]+1004-mirror.measuredRows[i][other])/2,p.name+' near mean '+row[0]));
+  p.rows.forEach((row,i)=>{
+   const target=p.pitch<0?(p.yaw<0?1004-mirror.measuredRows[i][other]:p.measuredRows[i][index]):(p.measuredRows[i][index]+1004-mirror.measuredRows[i][other])/2;
+   near(row[index],target,p.name+' canonical cheek '+row[0]);
+  });
  }
 });
 test('near ear overlap stays within the measured T-profile 9.4px baseline allowance',()=>{
@@ -181,6 +184,14 @@ test('near ear overlap stays within the measured T-profile 9.4px baseline allowa
    const overlap=side==='right'?edge-q[0]:q[0]-edge;
    const q0=deform3D(mesh('ear-'+side),[x,y],p0),edge0=boundaryX(side,q0[1],p0);
    const baseline=side==='right'?edge0-q0[0]:q0[0]-edge0;
+   if(yaw===-45&&pitch===-30){
+    // This face target intentionally changed from the old pair mean to the
+    // mirrored down-right contour. Its ear stays authored/asymmetric: compare
+    // the new face boundary to that canonical contour, not the obsolete mean.
+    const canonical=1004-boundaryX('left',q[1],at(45,-30));
+    assert(Math.abs(edge-canonical)<=1.2,`canonical down-left ear boundary ${y}: ${edge} vs ${canonical}`);
+    continue;
+   }
    // The prior profile replaces S3's fixed-source-row ear clamp. Full portrait
    // captures retain the unchanged hair/ear composite; measured max is 9.32379px.
    if(overlap<baseline-9.4)failed.push({yaw,pitch,y,overlap,baseline});
