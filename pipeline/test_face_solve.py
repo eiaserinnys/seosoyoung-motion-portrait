@@ -24,6 +24,8 @@ def assert_solution(data):
         s = p['stats']
         assert s['rms'] <= 1
         assert s['reversedTriangles'] == 0 and s['minDetJ'] > 0
+        if p['pitch']:
+            assert s['minDetJ'] > .05
         if p['yaw'] or p['pitch']:
             threshold = .5 if p['yaw'] and p['pitch'] else .9 if p['yaw'] else .6
             limit = 25 if p['yaw'] and p['pitch'] else 16 if p['yaw'] else 12
@@ -77,10 +79,19 @@ class FaceSolveTest(unittest.TestCase):
         with self.assertRaises(AssertionError):
             assert_family45(bad)
 
-    def test_face0_solution_is_unchanged(self):
+    def test_pitch_refit_preserves_neutral_xy_and_the_approved_side_family(self):
         previous = json.loads(subprocess.check_output(
-            ['git', '-C', str(ROOT), 'show', 'df8d295:source/viewer/face-solve.json']))
-        self.assertEqual({k: v for k, v in self.data.items() if k != 'family45'}, previous)
+            ['git', '-C', str(ROOT), 'show', '0b75a02:source/viewer/face-solve.json']))
+        self.assertEqual(self.data['family45'],previous['family45'])
+        for key in ['points','triangles','samples','anchors','meshCount']:
+            self.assertEqual(self.data[key],previous[key])
+        from optimize_3d_2d import projection
+        for old,new in zip(previous['poses'],self.data['poses']):
+            if new['pitch']:continue
+            a,b=projection(np.array(self.data['points']),new['yaw'],0)
+            before=a+np.array(previous['Z'])[:,None]*b+old['t']+old['du']
+            after=a+np.array(self.data['Z'])[:,None]*b+new['t']+new['du']
+            np.testing.assert_allclose(after,before,atol=1e-9)
 
     def test_gates_reject_injected_violations(self):
         for key, value in [('rms', 1.01), ('explained3D', 0), ('duRms', 100),

@@ -34,7 +34,7 @@ test('T4: lower cheeks mirror-average the classified prior profiles without r11 
   const a=OUTLINE_POSES.find(p=>p.pitch===pitch&&p.yaw===-45),b=OUTLINE_POSES.find(p=>p.pitch===pitch&&p.yaw===45);
   for(let i=0;i<a.rows.length;i++){
    const sy=a.rows[i][0];
-   const n=(a.measuredRows[i][4]+1004-b.measuredRows[i][2])/2;
+   const n=pitch<0?1004-b.measuredRows[i][2]:(a.measuredRows[i][4]+1004-b.measuredRows[i][2])/2;
    near(a.rows[i][4],n,'left near '+sy);near(b.rows[i][2],1004-n,'right near '+sy);
   }
  }

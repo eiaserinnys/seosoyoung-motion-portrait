@@ -5,6 +5,7 @@ import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './g
 import {canopyWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
 import {frameValue,FRAME_CACHE} from './pose-grid.mjs';
 import {smoothstep} from './face-profile.mjs';
+import {applyHairSolve} from './hair-solve.mjs';
 export {HEAD_CENTER,HEAD_RADIUS,LEFT_EYE_BALL,RIGHT_EYE_BALL,EYE_BALL_R,spherePoint,sphereWarp,eyeballAngles,headWorld,liftHead,eyeWorld,eyeCenter,rotateXYZ} from './geometry.mjs';
 export function interpolate(keys,value) {
   if(value<=keys[0].value)return keys[0].output;
@@ -31,7 +32,7 @@ export function deform3D(mesh,point,parameters) {
 }
 function deformLocal(mesh,point,p) {
   const id=mesh.id;let [x,y]=point;
-  if(id==='hair-top'||id.startsWith('bangs')||id.startsWith('side-hair')||id==='hairpin')return canopyWorld(point,p);
+  if(id==='hair-top'||id.startsWith('bangs')||id.startsWith('side-hair')||id==='hairpin')return applyHairSolve(canopyWorld(point,p),point,p);
   if(mesh.deformerId==='WarpBody') {
     const upper=clamp((1536-y)/960,0,1);
     return [x+p.ParamBodyAngleX*upper,y-p.ParamBreath*4*upper,-500];
@@ -70,10 +71,10 @@ function deformLocal(mesh,point,p) {
     const inward=(left?1:-1)*(lift*.22+Math.abs(p.ParamHairSide)*6)*weight;
     return [anchor[0]+dx*Math.cos(a)-dy*Math.sin(a)+inward,anchor[1]+dx*Math.sin(a)+dy*Math.cos(a)+sag,anchor[2]-s*35];
   }
-  if(id.startsWith('side-cranium'))return craniumWorld(point,id.endsWith('left')?'left':'right',p);
+  if(id.startsWith('side-cranium'))return applyHairSolve(craniumWorld(point,id.endsWith('left')?'left':'right',p),point,p,true);
   if(id.startsWith('back-hair')) {
     x+=p.ParamHairBack*12*clamp((y-120)/500,0,1)**2;
-    return backWorld([x,y],p);
+    return applyHairSolve(backWorld([x,y],p),[x,y],p);
   }
   let relief=0;
   if(id.startsWith('ear-'))relief=5;

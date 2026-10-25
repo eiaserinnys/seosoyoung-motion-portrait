@@ -15,6 +15,9 @@ def expected_opening(poses,p,side):
         return f['measuredScales'][k][1]*scale
     if not p['pitch']:return 1.0
     if not p['yaw']:return (raw(p,'left')+raw(p,'right'))/2
+    if p['pitch']==-30:
+        canonical=next(q for q in poses if q['yaw']==45 and q['pitch']==-30)
+        return raw(canonical,side if p['yaw']>0 else 'right' if side=='left' else 'left')
     mirror=next(q for q in poses if q['yaw']==-p['yaw'] and q['pitch']==p['pitch'])
     return float(np.sqrt(raw(p,side)*raw(mirror,'right' if side=='left' else 'left')))
 
@@ -126,11 +129,17 @@ def protected_changes():
     # All non-face runtime/artwork/mesh/depth inputs stay byte identical.
     face_modules={'face-features.mjs','face-outline.mjs','face-prior.mjs','face-feature-prior.mjs','face-contour.mjs','face-solve.mjs','face-solve-data.mjs','feature-data.mjs','outline-data.mjs','index.html'}
     forbidden=['hair','dome','cranium','stereo-attachments','side-strands','bead','tail','neck','ear-','fit_depth']
-    return [p for p in paths if (p.startswith('bundle/') and Path(p).name not in face_modules and not approved_angle_domain(p))
+    # This task explicitly combines face calibration with a residual wrapper;
+    # the three 3D prior modules remain protected and have byte-level tests.
+    joint_paths={'bundle/rig.mjs','bundle/hair-solve.mjs','bundle/hair-solve-data.mjs','source/viewer/hair-solve.json',
+                 'pipeline/fit_hair_solve.py','pipeline/hair_solve_inputs.mjs','pipeline/hair_solve_metrics.mjs',
+                 'pipeline/hair_solve_quality.py','pipeline/accept_hair_solve.py','pipeline/capture_hair_solve_prior.py',
+                 'pipeline/hair_report.py','pipeline/probe_hair_only.py','pipeline/hair_revision_metrics.py','pipeline/test_hair_solve.py','pipeline/test_hair_solve.mjs'}
+    return [p for p in paths if p not in joint_paths and ((p.startswith('bundle/') and Path(p).name not in face_modules and not approved_angle_domain(p))
             or (p.startswith(('source/','parts/','sam3_masks/','pipeline/'))
                 # Face-scoped validation may inspect protected hair; its runtime
                 # geometry and renderer still cannot change in this face task.
-                and p not in {'pipeline/test_hair_pixels.py','pipeline/test_hair_r15.mjs','pipeline/verify_face_solve_hair.py','pipeline/test_hair_texture_budget.mjs'} and 'hairless' not in p and any(word in p for word in forbidden))]
+                and p not in {'pipeline/test_hair_pixels.py','pipeline/test_hair_r15.mjs','pipeline/verify_face_solve_hair.py','pipeline/test_hair_texture_budget.mjs'} and 'hairless' not in p and any(word in p for word in forbidden)))]
 
 def angle_domain_only(previous,current):
     """D2 permits AngleX bounds and pass-through keys in the protected rig."""

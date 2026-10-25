@@ -8,6 +8,7 @@ import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {frozenRig} from './frozen_rig.mjs';
 import {profileWeights} from '../bundle/face-profile.mjs';
 import {BEADS,beadWorld} from '../bundle/stereo-attachments.mjs';
+import {applyHairSolve} from '../bundle/hair-solve.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const at=yaw=>({...base,ParamAngleX:yaw,[FRAME_CACHE]:new Map()});
@@ -22,14 +23,21 @@ test('profile skin weights are exactly zero through 45 and reach the side refere
  }
 });
 
-test('every vertex and alpha in the original nine poses equals the pinned main baseline',{timeout:60000},async()=>{
- const old=await frozenRig(false,'0b75a0211691965ca234ad9114073ba934568394');
+test('side90 keeps all nine poses unchanged apart from the approved face calibration and hair residual',{timeout:60000},async()=>{
+ // Compare the side90 code against the old runtime using the same approved
+ // face targets; the independent face/hair tests verify those calibrations.
+ const old=await frozenRig(false,'0b75a0211691965ca234ad9114073ba934568394',
+  ['face-solve-data.mjs','feature-data.mjs','outline-data.mjs']);
  try{
   for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
    const p={...at(yaw),ParamAngleY:pitch},q={...p,[old.FRAME_CACHE]:new Map()};delete q[FRAME_CACHE];
    for(const m of rig.meshes){
     assert.equal(opacity(m,p,state),old.opacity(m,q,state),`${yaw}/${pitch} ${m.id} opacity`);
-    for(const point of m.positions)assert.deepEqual(deform3D(m,point,p),old.deform3D(m,point,q),`${yaw}/${pitch} ${m.id}`);
+    const hair=m.id==='hair-top'||m.id.startsWith('bangs')||m.id.startsWith('side-hair')||m.id==='hairpin'||m.id.startsWith('back-hair')||m.id.startsWith('side-cranium');
+    for(const point of m.positions){
+     const prior=old.deform3D(m,point,q),expected=hair?applyHairSolve(prior,point,p,m.id.startsWith('side-cranium')):prior;
+     assert.deepEqual(deform3D(m,point,p),expected,`${yaw}/${pitch} ${m.id}`);
+    }
    }
   }
   for(const file of ['texture_00.png','texture_before_00.png','seosoyoung-rig.json']){

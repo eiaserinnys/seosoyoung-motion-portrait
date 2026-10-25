@@ -1,0 +1,135 @@
+{
+  "baseline": "0b75a0211691965ca234ad9114073ba934568394",
+  "integratedBase": "420ba51d713d731c26cbc35d0ea10a78c31bfd05",
+  "node": {
+    "passed": 181,
+    "failed": 0,
+    "command": "node --test --test-concurrency=2 --test-timeout=60000 pipeline/test_*.mjs tests/*.test.mjs"
+  },
+  "python": {
+    "passed": 96,
+    "subtestsPassed": 15,
+    "failed": 0,
+    "command": "python3 -m pytest --timeout=60 -q pipeline tests"
+  },
+  "face": {
+    "passed": true,
+    "wideAngleTestsPassed": 14,
+    "canonicalChinY": 608.000150279906
+  },
+  "hair": {
+    "passed": true,
+    "acceptance": "monotone prior pass",
+    "minChartDet": 0.6207664129096734,
+    "maxDuRms": 5.068533954543488,
+    "maxDu": 16.95976038573741,
+    "neutralGeometryUnchanged": true,
+    "actualRasterComparison": {
+      "pass": true,
+      "definition": "actual raster RMS in pixels: head L/R spans at y80..400 step20, topY, and hairline columns step12; fixed reference/prior-visible domain",
+      "poses": [
+        {
+          "name": "up-left",
+          "priorRms": 38.26024246977734,
+          "correctedRms": 35.66133437254934,
+          "sampleCount": 52,
+          "pass": true
+        },
+        {
+          "name": "up",
+          "priorRms": 42.165458919901795,
+          "correctedRms": 37.74402086570946,
+          "sampleCount": 54,
+          "pass": true
+        },
+        {
+          "name": "up-right",
+          "priorRms": 41.27697253358659,
+          "correctedRms": 35.321599406246946,
+          "sampleCount": 52,
+          "pass": true
+        },
+        {
+          "name": "left",
+          "priorRms": 40.25133802454221,
+          "correctedRms": 40.25133802454221,
+          "sampleCount": 47,
+          "pass": true
+        },
+        {
+          "name": "front",
+          "priorRms": 21.990564014148827,
+          "correctedRms": 21.990564014148827,
+          "sampleCount": 53,
+          "pass": true
+        },
+        {
+          "name": "right",
+          "priorRms": 31.506838163545225,
+          "correctedRms": 31.506838163545225,
+          "sampleCount": 47,
+          "pass": true
+        },
+        {
+          "name": "down-left",
+          "priorRms": 52.651369086346335,
+          "correctedRms": 41.796274611842755,
+          "sampleCount": 42,
+          "pass": true
+        },
+        {
+          "name": "down",
+          "priorRms": 22.783566645521265,
+          "correctedRms": 18.68640731071166,
+          "sampleCount": 44,
+          "pass": true
+        },
+        {
+          "name": "down-right",
+          "priorRms": 60.58153143673005,
+          "correctedRms": 54.4775630700271,
+          "sampleCount": 41,
+          "pass": true
+        }
+      ]
+    },
+    "absoluteReferenceGatesPassed": false,
+    "remainingAbsoluteReferenceFailures": 12
+  },
+  "captureSha256": {
+    "viewer_9dir_grid.png": "7e2477023b0c947598509af77fb145d07378764a938c27fddcc7d400eb5e8d5d",
+    "faceless_hair_9dir_comparison.png": "6c134bb79b09d502c30de77679dbc020b8bdf9f895844f8b2089ed2e5e32d403",
+    "hair_only_9dir_overlay.png": "cab715a14049e90d90c0cf154d281e07a57065d53181562004b4bf76054a2bb8",
+    "hairless_face_9dir_comparison.png": "0066fb99bc263895cbf37908af3914db57ba6b83673d8b891a7f4ed0a13f86b0",
+    "face_geom_9dir_overlay.png": "2be37fe3960313dac4f97142ff6d6824cf16a27bf8467a76b991a9f28be20622",
+    "face_turnaround_7angle.png": "ea87caa0ebe802146c2d6701e93e1a3eb05992258beb0061a1a0732fafab7809",
+    "r15_before_after_9dir.png": "9fb2a157739abc579526d40e93b551253e283516332092d4871f8d01e94111c5"
+  },
+  "runtimeSha256": {
+    "bundle/rig.mjs": "7623869dc6985c01f8dd17c829c2323826c1d971d16e13eb9d4d18862538b471",
+    "bundle/hair-solve.mjs": "5257a448ea1b6cc77e776d39027db6e09247ba53d64362b828b7bf5604f85acf",
+    "bundle/hair-solve-data.mjs": "7ba742fe4e9fa173804b8904865596d38c22f97a3fda8cf047b68b7e3663fb1d",
+    "bundle/face-solve-data.mjs": "9f7d414e17ac669bcaa2d89dd7c87a739b86e1bb9882c37a3521182307cb8432",
+    "bundle/feature-data.mjs": "14808c03ee352233c1616ba3034f6e2f62ee291f3dbf8d7cc0d8b348b475d8d6",
+    "bundle/outline-data.mjs": "23f21b51f830a06d3053181ef921aec17b323715bb3e5220c0ab2ca51ed6767f",
+    "bundle/hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
+    "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
+    "bundle/dome-data.mjs": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
+    "bundle/renderer.mjs": "92eba85dd3ec45bc4d85ab0727b12d152c86472bcf3de071786112b88055d024",
+    "bundle/face-features.mjs": "c56b9c9ef8cb63552935cc9ecf3c0377fa9ace48463f70935ad77630529c9a9f",
+    "bundle/face-profile.mjs": "fe30d46b53fa237611b627c8c3aaf8b18c93c946c78978af9c97e7bc3911aa74",
+    "bundle/profile-attachments.mjs": "1dc5cb5f5ba7a6ee4b44e416c4923e38a02004b072006422919e26116749cadc",
+    "bundle/side-strands.mjs": "da5bcefb883fc6f73fd92545a1a9be937cd06ea1381923efdab05cb60cba496c",
+    "bundle/stereo-attachments.mjs": "afa1e3790e6e4014b1c0181e9c9c1a0279c31ec6040c7b22828536b1125a52aa",
+    "bundle/viewer-pose.mjs": "9d85bc932b228d520564b75eec18ffc94b6970c208fc4c037740c048e3b7e832",
+    "bundle/app.mjs": "2c9ae66eb46b0864f1fe1443ecf5abfd37364a26271d32d2fea61756c1c4f8cb"
+  },
+  "codeReview": {
+    "result": "PASS",
+    "model": "gpt-6.1-sol",
+    "reasoning": "high",
+    "scope": "Independent source/data/image review; no actionable defect. Final integration test calibration exception also reviewed."
+  },
+  "scope": "Face targets: down-right canonical / down-left mirrored. Hair: unchanged r15 3D prior plus smooth 2D residuals; original absolute reference mismatches remain diagnostic.",
+  "ui": "Existing viewer, controls, styles and renderer reused; no new UI text, components or dimensions. Nine-pose WebGL and seven-angle/five-slider capture checks ran. Specialist UI/UX review remains with the coordinator."
+}

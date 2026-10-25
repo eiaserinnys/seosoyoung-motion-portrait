@@ -6,6 +6,7 @@ import {CORRECTION_PRESETS,artWorld,correctedLift} from '../bundle/geometry.mjs'
 import {outlineWorld,outlineRow} from '../bundle/face-outline.mjs';
 import {featureWorld} from '../bundle/face-features.mjs';
 import {canopyWorld} from '../bundle/hair-shell.mjs';
+import {applyHairSolve} from '../bundle/hair-solve.mjs';
 import {domeSection} from '../bundle/hair-surface.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
@@ -99,11 +100,12 @@ test('opening envelopes stay finite without height clamps and central pitch pair
   if(!pose.yaw)assert.equal(pose.scales.left[1],pose.scales.right[1]);
  }
 });
-test('forehead and fringe never inherit cheek residuals',()=>{
+test('fringe receives its own hair solve instead of the cheek residual',()=>{
  for(const yaw of [-45,45])for(const pitch of [-30,30]){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch};
   for(const xy of [[400,300],[600,330],[502,245],[674,330]]){
-   assert.deepEqual(at('bangs-left',xy,p),at('bangs-left',xy,{...p,CorrOutline:0}));
+   assert.deepEqual(at('bangs-left',xy,p),applyHairSolve(canopyWorld(xy,p),xy,p));
+   assert.deepEqual(at('bangs-left',xy,{...p,CorrOutline:0}),canopyWorld(xy,{...p,CorrOutline:0}));
   }
  }
 });

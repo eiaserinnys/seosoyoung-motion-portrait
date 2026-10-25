@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {pathToFileURL} from 'node:url';
 export const BASELINE='83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9';
-export async function frozenRig(currentHairSurface=false,baseline=BASELINE){
+export async function frozenRig(currentHairSurface=false,baseline=BASELINE,calibrationFiles=[]){
  const dir=mkdtempSync(join(tmpdir(),'hair-baseline-'));
  try{
   const files=execFileSync('git',['ls-tree','--name-only',baseline,'bundle/'],{encoding:'utf8'}).trim().split('\n').filter(p=>p.endsWith('.mjs'));
@@ -13,6 +13,7 @@ export async function frozenRig(currentHairSurface=false,baseline=BASELINE){
   // Benchmark only P1/P2; approved volume and face calibration inputs must
   // be identical on both sides, including a later reference/face refit.
   if(currentHairSurface)for(const name of ['hair-shell.mjs','hair-surface.mjs','dome-data.mjs','feature-data.mjs','outline-data.mjs'])writeFileSync(join(dir,name),readFileSync(new URL('../bundle/'+name,import.meta.url)));
+  for(const name of calibrationFiles)writeFileSync(join(dir,name),readFileSync(new URL('../bundle/'+name,import.meta.url)));
   const rig=await import(pathToFileURL(join(dir,'rig.mjs')));
   const pose=await import(pathToFileURL(join(dir,'pose-grid.mjs')));
   return {...rig,...pose,dispose:()=>rmSync(dir,{recursive:true,force:true})};
