@@ -38,6 +38,23 @@ class AngleDomainGateTest(unittest.TestCase):
 
 
 class DiagonalJawTest(unittest.TestCase):
+    def test_classified_background_is_an_exact_constraint_even_at_seams(self):
+        target,_=fit.blend_profile([100]*7,[90,91,92,93,94,95,96],
+                                   [False,True,True,False,True,True,False],0)
+        np.testing.assert_allclose(target[[1,2,4,5]],[91,92,94,95],atol=1e-12)
+
+    def test_generated_observations_and_chin_retain_each_source_frame(self):
+        data=json.loads((fit.ROOT/'source/viewer/outline-traces.json').read_text())
+        for p in data['poses']:
+            if not p['pitch']:continue
+            r=p['registration']
+            chin=r['eyeMid'][1]+(p['rawYChin']-r['referenceEyeMid'][1])*r['scale']
+            self.assertAlmostEqual(p['yChin'],chin,delta=.5,msg=p['name'])
+            errors=[row[col]-sample[side]['xCanvas']
+                    for row,sample in zip(p['rows'],p['boundarySamples'])
+                    for side,col in [('left',2),('right',4)] if sample[side]['validBG']]
+            if errors:self.assertLessEqual(float(np.sqrt(np.mean(np.square(errors)))),.5,p['name'])
+
     def pose(self, kind, measured):
         rows=[[450,450,300,450,700],[480,480,310,480,690],
               [548,548,320,548,680],[570,570,330,570,670]]
@@ -81,81 +98,41 @@ class DiagonalJawTest(unittest.TestCase):
         p=self.pose('SKIN',[200,650]);fit.correct_up_diagonal(p)
         self.assertEqual([r[2] for r in p['rows']],[300,310,320,330])
 
-    def test_chin_rows_keep_prior_plus_offset_for_every_class_after_monotone(self):
-        for kind in ['SKIN','HAIR','BG']:
-            p=self.pose(kind,[200,800])
-            p['rows']+=[[y,y,400,y,600] for y in [590,600,610,616]]
-            p['priorRows']=[[r[0],r[2]-2,r[4]+2] for r in p['rows']]
-            p['offsets']={'left':2.,'right':-2.}
-            p['boundarySamples']+=[copy.deepcopy(p['boundarySamples'][-1]) for _ in range(4)]
-            fit.correct_up_diagonal(p)
-            for i,row in enumerate(p['rows']):
-                if row[0] in {600,610,616}:
-                    self.assertEqual(row[2::2],[p['priorRows'][i][1]+2,p['priorRows'][i][2]-2])
-                np.testing.assert_allclose(row[1::2],[row[0]]*2)
-
-    def test_570_to_600_ramp_returns_to_base_at_three_quarters_then_one(self):
-        p=self.pose('SKIN',[350,650])
-        p['rows']+=[[590,590,340,590,660],[600,600,400,600,600],
-                    [610,610,420,610,580],[616,616,440,616,560]]
+    def test_lower_rows_follow_evidence_instead_of_returning_to_prior(self):
+        p=self.pose('SKIN',[450,550])
+        p['rows']+=[[y,y,400,y,600] for y in [590,600,610,616]]
         p['boundarySamples']+=[copy.deepcopy(p['boundarySamples'][-1]) for _ in range(4)]
-        p['priorRows']=[[r[0],r[2],r[4]] for r in p['rows']];p['offsets']={'left':0.,'right':0.}
-        base=copy.deepcopy(p['rows']);fit.correct_up_diagonal(p)
-        # At590 the SKIN result contributes25%, the original contour75%.
-        inward=340+float(fit.sphere_ease(110/136))*10
-        self.assertAlmostEqual(p['rows'][4][2],.25*inward+.75*340)
-        self.assertAlmostEqual(p['rows'][4][4],1000-p['rows'][4][2])
-        for i in [5,6,7]:self.assertEqual(p['rows'][i][2::2],base[i][2::2])
+        fit.correct_up_diagonal(p)
+        self.assertEqual(p['rows'][-1][2::2],[450,550])
+        self.assertGreater(p['rows'][-2][2],400)
+        self.assertLess(p['rows'][-2][4],600)
 
-    def test_generated_rows_match_scope_chin_and_single_peak_contract(self):
+    def test_lower_correction_does_not_fade_to_an_inaccurate_base(self):
+        p=self.pose('SKIN',[350,650])
+        p['rows']+=[[590,590,340,590,660],[600,600,345,600,655]]
+        p['boundarySamples']+=[copy.deepcopy(p['boundarySamples'][-1]) for _ in range(2)]
+        fit.correct_up_diagonal(p)
+        for i,base in [(4,340),(5,345)]:
+            y=p['rows'][i][0]
+            self.assertAlmostEqual(p['rows'][i][2],base+float(fit.sphere_ease((y-480)/136))*(350-base))
+
+    def test_generated_rows_match_measured_chin_and_monotone_contract(self):
         data=json.loads((fit.ROOT/'source/viewer/outline-traces.json').read_text())
-        before=json.loads(subprocess.check_output(
-            ['git','show','f6112b6:source/viewer/outline-traces.json'],text=True,timeout=60))
-        old={p['name']:p for p in before['poses']}
         for p in data['poses']:
-            if not p['name'].startswith('up') and p['name'] not in {'down-left','down-right'}:
-                self.assertEqual(p['rows'],old[p['name']]['rows'],p['name'])
-            elif p['name'].startswith('up') and p['yaw']:
-                mid=(p['rows'][-1][2]+p['rows'][-1][4])/2
-                mirror=next(q for q in data['poses'] if q['pitch']==p['pitch'] and q['yaw']==-p['yaw'])
-                own=p['priorRows'][-1][1:];other=mirror['priorRows'][-1][1:]
-                own_mid=(sum(own)+p['offsets']['left']+p['offsets']['right'])/2
-                other_mid=(sum(other)+mirror['offsets']['left']+mirror['offsets']['right'])/2
-                self.assertAlmostEqual(mid,(own_mid+1004-other_mid)/2)
-                self.assertLessEqual(abs(mid-{'up-left':430.1,'up-right':573.9}[p['name']]),10)
+            if not p['pitch']:continue
+            r=p['registration']
+            expected=r['eyeMid'][1]+(p['rawYChin']-r['referenceEyeMid'][1])*r['scale']
+            self.assertAlmostEqual(p['yChin'],expected)
+            tip=p['boundarySamples'][-1]
+            self.assertAlmostEqual((p['rows'][-1][2]+p['rows'][-1][4])/2,
+                                   (tip['left']['xCanvas']+tip['right']['xCanvas'])/2)
+            shape=verify.outline_shape({'name':p['name'],'outline':p})
+            self.assertTrue(440<=shape['peakRestY']<=490)
+            self.assertEqual(shape['peakCount'],1)
+            self.assertLessEqual(shape['maxLowerWidthIncrease'],.5)
+            if p['name'] in {'up-left','up-right'}:
                 jaw=verify.diagonal_jaw({'name':p['name'],'outline':p})
-                self.assertEqual([r[0] for r in jaw['rows']],[570,590,600,610,616])
-                self.assertEqual(jaw['leftMaxOutwardStep'],0)
-                self.assertEqual(jaw['rightMaxOutwardStep'],0)
-                self.assertLessEqual(jaw['maxSecondDifference'],15)
-                self.assertLessEqual(jaw['maxMidpointReversal'],5)
-                self.assertNotEqual(p['rows'],old[p['name']]['rows'])
-                for i,row in enumerate(p['rows']):
-                    if row[0] in {600,610,616}:
-                        measured=p['measuredRows'][i]
-                        np.testing.assert_allclose(measured[2::2],np.array(p['priorRows'][i][1:])+[p['offsets']['left'],p['offsets']['right']])
-            if p['name'].startswith('up'):
-                mirror=next(q for q in data['poses'] if q['pitch']==p['pitch'] and q['yaw']==-p['yaw'])
-                def chin(q):
-                    r=q['registration']
-                    return r['eyeMid'][1]+(q['rawYChin']-r['referenceEyeMid'][1])*r['scale']
-                self.assertAlmostEqual(p['yChin'],(chin(p)+chin(mirror))/2)
-                self.assertLess(p['yChin'],old[p['name']]['yChin']-30)
-            if p['pitch']:
-                shape=verify.outline_shape({'name':p['name'],'outline':p})
-                self.assertEqual((shape['peakRestY'],shape['peakCount']),(450,1))
-                self.assertLessEqual(shape['maxLowerWidthIncrease'],.5)
-                self.assertLessEqual(shape['maxLowerHalfWidthIncrease'],.5)
-            if p['name'] in {'down-left','down-right'}:
-                self.assertAlmostEqual(p['yChin'],608.000150279906)
-                dr=next(q for q in data['poses'] if q['name']=='down-right')
-                if p['name']=='down-left':
-                    self.assertEqual(p['rows'],[[sy,yr,1004-xr,yl,1004-xl] for sy,yl,xl,yr,xr in dr['rows']])
-                    for a,b in zip(p['boundarySamples'],dr['boundarySamples']):
-                        for left,right in [('left','right'),('right','left')]:
-                            self.assertEqual(a[left]['xCanvas'],1004-b[right]['xCanvas'])
-                            self.assertEqual(a[left]['validBG'],b[right]['validBG'])
-            elif not p['name'].startswith('up'):self.assertEqual(p['yChin'],old[p['name']]['yChin'])
+                for key,limit in verify.DIAGONAL_JAW_LIMITS.items():self.assertLessEqual(jaw[key],limit)
 
 
 class ApprovedDiagonalGateTest(unittest.TestCase):
@@ -184,8 +161,8 @@ class ApprovedDiagonalGateTest(unittest.TestCase):
                 self.assertTrue(verify.failures([row],[]),key)
 
     def test_jaw_summary_measures_injected_outward_step_and_reversal(self):
-        rows=[[y,y,400+i*10,y,600-i*20] for i,y in enumerate([570,590,600,610,616])]
-        p=dict(name='up-left',outline={'rows':rows})
+        rows=[[y,y,400+(y-570),y,600-2*(y-570)] for y in [570,590,600,610,616]]
+        p=dict(name='up-left',outline={'rows':rows,'boundarySamples':[{'left':{'xCanvas':446},'right':{'xCanvas':508}}]})
         summary=verify.diagonal_jaw(p)
         self.assertEqual(summary['leftMaxOutwardStep'],0)
         self.assertEqual(summary['rightMaxOutwardStep'],0)
@@ -193,8 +170,8 @@ class ApprovedDiagonalGateTest(unittest.TestCase):
         self.assertEqual(summary['maxMidpointReversal'],0)
         rows[1][4]=601;summary=verify.diagonal_jaw(p)
         self.assertEqual(summary['rightMaxOutwardStep'],1)
-        self.assertEqual(summary['maxSecondDifference'],42)
-        self.assertEqual(summary['maxMidpointReversal'],5.5)
+        self.assertGreater(summary['maxSecondDifference'],15)
+        self.assertEqual(summary['maxMidpointReversal'],10.5)
 
 
 class SilhouetteDifferenceTest(unittest.TestCase):

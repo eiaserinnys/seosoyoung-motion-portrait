@@ -48,9 +48,13 @@ test('T3/T6: upper up cheeks retain the rotated prior instead of side-hair cutou
  const up=OUTLINE_POSES.find(p=>p.name==='up'),width=y=>{const row=up.rows.find(r=>r[0]===y);return row[4]-row[2];};
  assert(width(450)>width(490)+8,'up pear inversion');
 });
-test('T4: pitched profile mirror pairs use the absolute canvas center',()=>{
- for(const a of OUTLINE_POSES.filter(p=>p.pitch&&p.yaw<=0)){
-  const b=OUTLINE_POSES.find(p=>p.pitch===a.pitch&&p.yaw===-a.yaw);
-  a.rows.forEach((r,i)=>{assert(Math.abs(r[2]+b.rows[i][4]-1004)<1e-7);assert(Math.abs(r[4]+b.rows[i][2]-1004)<1e-7);});
+test('T4: pitched profiles preserve independent background edges and measured chin',()=>{
+ for(const p of OUTLINE_POSES.filter(p=>p.pitch)){
+  p.rows.forEach((r,i)=>{
+   for(const [side,col] of [['left',2],['right',4]])if(p.boundarySamples[i][side].validBG)
+    assert(Math.abs(r[col]-p.boundarySamples[i][side].xCanvas)<.5,p.name+' '+side);
+  });
+  const reg=p.registration,target=reg.eyeMid[1]+(p.rawYChin-reg.referenceEyeMid[1])*reg.scale;
+  assert(Math.abs(p.yChin-target)<.5,p.name+' chin');
  }
 });

@@ -264,38 +264,38 @@
       "pitch": 30,
       "centers": {
         "left": [
-          355.92999999999995,
-          383.2952480182614
+          354.40999999999997,
+          380.22653004241334
         ],
         "right": [
-          499.46999999999997,
-          382.30524801826147
+          500.98999999999995,
+          385.54653004241334
         ],
         "browLeft": [
-          347.9793747465781,
-          309.4883621842638
+          363.59,
+          309.54653004241334
         ],
         "browRight": [
-          490.2293747465781,
-          298.5221338522591
+          502.09,
+          302.54653004241334
         ],
         "nose": [
-          380.37,
-          426.50524801826145
+          383.09,
+          432.54653004241334
         ],
         "mouth": [
-          395.06499999999994,
-          483.50524801826145
+          392.59,
+          486.54653004241334
         ]
       },
       "scales": {
         "left": [
-          0.6055767992272401,
-          0.9199354545783001
+          0.631578947368421,
+          0.9390243902439024
         ],
         "right": [
-          0.9946091251481444,
-          1.0060790833484312
+          0.989247311827957,
+          1.0246913580246915
         ]
       },
       "measuredScales": {
@@ -308,7 +308,7 @@
           1.0246913580246915
         ]
       },
-      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
+      "scalePolicy": "independent connected opening + lashes/liner envelope; registration zoom; no pair averaging",
       "measurements": {
         "left": {
           "center": [
@@ -518,37 +518,37 @@
       "centers": {
         "left": [
           415.71274882757945,
-          379.0705010666575
+          380.0099324748286
         ],
         "right": [
           588.0872511724206,
-          377.67050106665755
+          376.7310696584865
         ],
         "browLeft": [
-          412.14053254792077,
-          304.6423839174367
+          414.30752190629,
+          304.1276787251975
         ],
         "browRight": [
-          583.5782169452355,
-          302.67615558543196
+          585.7452063036047,
+          303.19086077767116
         ],
         "nose": [
-          508,
+          503.30522692128943,
           415.60901448082836
         ],
         "mouth": [
-          504.5,
+          501.43159102623684,
           468.0708195423017
         ]
       },
       "scales": {
         "left": [
-          0.9069161183013618,
-          0.9024030756207968
+          0.9072342228675846,
+          0.8911195110616121
         ],
         "right": [
-          0.9069161183013618,
-          0.9024030756207968
+          0.9065980137351389,
+          0.9136866401799816
         ]
       },
       "measuredScales": {
@@ -561,7 +561,7 @@
           0.9753086419753086
         ]
       },
-      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
+      "scalePolicy": "independent connected opening + lashes/liner envelope; registration zoom; no pair averaging",
       "measurements": {
         "left": {
           "center": [
@@ -770,38 +770,38 @@
       "pitch": 30,
       "centers": {
         "left": [
-          504.33000000000004,
-          383.70524801826144
+          505.85,
+          380.46396599410957
         ],
         "right": [
-          647.87,
-          381.89524801826144
+          646.35,
+          384.96396599410957
         ],
         "browLeft": [
-          505.48937474657816,
-          300.4883621842638
+          517.35,
+          296.46396599410957
         ],
         "browRight": [
-          647.7393747465782,
-          307.5221338522591
+          663.35,
+          307.46396599410957
         ],
         "nose": [
-          635.63,
-          426.50524801826145
+          638.35,
+          420.46396599410957
         ],
         "mouth": [
-          613.9350000000001,
-          483.50524801826145
+          611.46,
+          480.46396599410957
         ]
       },
       "scales": {
         "left": [
-          0.9946091251481444,
-          1.0060790833484312
+          1.0,
+          0.9878048780487805
         ],
         "right": [
-          0.6055767992272401,
-          0.9199354545783001
+          0.5806451612903226,
+          0.9012345679012346
         ]
       },
       "measuredScales": {
@@ -814,7 +814,7 @@
           0.9012345679012346
         ]
       },
-      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
+      "scalePolicy": "independent connected opening + lashes/liner envelope; registration zoom; no pair averaging",
       "measurements": {
         "left": {
           "center": [
@@ -1024,37 +1024,37 @@
       "centers": {
         "left": [
           352.2,
-          434.400150279906
+          436.32758623160237
         ],
         "right": [
           503.2,
-          461.60015027990613
+          459.32758623160237
         ],
         "browLeft": [
-          311.61874949315626,
-          367.9663786119108
+          338.2,
+          358.82758623160237
         ],
         "browRight": [
-          463.61874949315626,
-          384.0339219479014
+          486.2,
+          375.82758623160237
         ],
         "nose": [
-          396.9,
-          511.00015027990605
+          390.2,
+          511.82758623160237
         ],
         "mouth": [
-          428.15999999999997,
-          562.7401502799062
+          411.44,
+          564.8275862316024
         ]
       },
       "scales": {
         "left": [
-          0.5161290322580645,
-          0.7777777777777778
+          0.6210526315789474,
+          0.926829268292683
         ],
         "right": [
-          0.9789473684210527,
-          0.7560975609756098
+          1.075268817204301,
+          0.9259259259259259
         ]
       },
       "measuredScales": {
@@ -1067,7 +1067,7 @@
           0.9259259259259259
         ]
       },
-      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
+      "scalePolicy": "independent connected opening + lashes/liner envelope; registration zoom; no pair averaging",
       "measurements": {
         "left": {
           "center": [
@@ -1276,38 +1276,38 @@
       "pitch": -30,
       "centers": {
         "left": [
-          415.69862320624884,
-          456.99361520735823
+          415.6986232062488,
+          455.7909832727008
         ],
         "right": [
           588.1013767937511,
-          455.59361520735825
+          456.79624714201566
         ],
         "browLeft": [
-          410.90405005084085,
-          394.44773754118046
+          414.1907274022765,
+          395.47515111380784
         ],
         "browRight": [
-          584.8146994423155,
-          392.4815092091757
+          588.1013767937511,
+          391.45409563654835
         ],
         "nose": [
-          508,
+          505.66973950993076,
           520.1278709088533
         ],
         "mouth": [
-          504.5,
+          502.3222108251122,
           559.8357937467912
         ]
       },
       "scales": {
         "left": [
-          0.9464954722010017,
-          0.6228791710577234
+          0.9417735196739426,
+          0.6252250894519391
         ],
         "right": [
-          0.9464954722010017,
-          0.6228791710577234
+          0.9512174247280609,
+          0.6205332526635077
         ]
       },
       "measuredScales": {
@@ -1320,7 +1320,7 @@
           0.6172839506172839
         ]
       },
-      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
+      "scalePolicy": "independent connected opening + lashes/liner envelope; registration zoom; no pair averaging",
       "measurements": {
         "left": {
           "center": [
@@ -1573,7 +1573,7 @@
           0.7777777777777778
         ]
       },
-      "scalePolicy": "connected opening + lashes/liner envelope; registration zoom; paired mirror geometric mean; no manual height clamp",
+      "scalePolicy": "independent connected opening + lashes/liner envelope; registration zoom; no pair averaging",
       "measurements": {
         "left": {
           "center": [
@@ -1871,5 +1871,5 @@
       ]
     }
   },
-  "symmetry": "rest-relative mirrored center displacements; geometric paired eye scales"
+  "symmetry": "neutral yaw calibration only; independent measured pitch centers and opening scales"
 }

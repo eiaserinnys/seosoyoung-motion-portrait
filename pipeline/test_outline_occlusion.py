@@ -22,7 +22,8 @@ class OutlineOcclusionTest(unittest.TestCase):
     def test_cosine_seam_reaches_measured_core_without_a_quartic_fit(self):
         target,weight=blend_profile([0]*10,[10]*10,[False,False,True,True,True,True,True,True,False,False],0)
         self.assertEqual(target[0],0);self.assertEqual(target[4],10)
-        self.assertAlmostEqual(target[2],5);self.assertAlmostEqual(target[7],5)
+        self.assertEqual(target[2],10);self.assertEqual(target[7],10)
+        self.assertTrue(0<target[1]<10 and 0<target[8]<10)
 
     def test_lower_half_width_cannot_rebound_or_cross(self):
         rows=[[y,y,502-w/2,y,502+w/2] for y,w in [(440,310),(450,320),(465,312),(480,314),(490,318),(510,280),(616,-3)]]

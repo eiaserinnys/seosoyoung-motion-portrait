@@ -10,7 +10,8 @@ import {featureWorld} from '../bundle/face-features.mjs';
 import {strandDepth,strandWorld} from '../bundle/side-strands.mjs';
 import {earWorld} from '../bundle/stereo-attachments.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
-import {faceSolveAnchorWorld} from '../bundle/face-solve.mjs';
+import {faceSolveAnchorWorld,faceSolveWorld} from '../bundle/face-solve.mjs';
+import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const at=(yaw,pitch)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()});
@@ -22,7 +23,7 @@ test('cute upper chins use measured registration without the obsolete five pixel
   const p=OUTLINE_POSES.find(p=>p.name===name),f=FEATURE_FIT.poses.find(f=>f.name===name);
   const mirror=OUTLINE_POSES.find(q=>q.pitch===p.pitch&&q.yaw===-p.yaw);
   const chin=q=>q.registration.eyeMid[1]+(q.rawYChin-q.registration.referenceEyeMid[1])*q.registration.scale;
-  near(p.yChin,(chin(p)+chin(mirror))/2,name+' actual chin');
+  near(p.yChin,chin(p),name+' actual chin');
   assert.equal(p.rawYChin,{up:494,'up-left':523,'up-right':528}[name]);
   assert(f.measurements.mouth.center[1]<(name==='up'?404:454),name+' shorter lower face');
  }
@@ -166,14 +167,11 @@ test('yaw endpoints sweep through pitch without a binocular X jump or discontinu
   }
  }
 });
-test('diagonal cheeks average upward references and mirror the canonical downward right',()=>{
- for(const p of OUTLINE_POSES.filter(p=>p.pitch&&p.yaw)){
-  const mirror=OUTLINE_POSES.find(q=>q.yaw===-p.yaw&&q.pitch===p.pitch),index=p.yaw<0?4:2,other=p.yaw<0?2:4;
-  p.rows.forEach((row,i)=>{
-   const target=p.pitch<0?(p.yaw<0?1004-mirror.measuredRows[i][other]:p.measuredRows[i][index]):(p.measuredRows[i][index]+1004-mirror.measuredRows[i][other])/2;
-   near(row[index],target,p.name+' canonical cheek '+row[0]);
-  });
- }
+test('diagonal cheeks retain their own observed background boundaries',()=>{
+ for(const p of OUTLINE_POSES.filter(p=>p.pitch&&p.yaw))p.rows.forEach((row,i)=>{
+  for(const [side,col] of [['left',2],['right',4]])if(p.boundarySamples[i][side].validBG)
+   near(row[col],p.boundarySamples[i][side].xCanvas,p.name+' own cheek '+row[0]);
+ });
 });
 test('near ear overlap stays within the measured T-profile 9.4px baseline allowance',()=>{
  const failed=[];
@@ -185,11 +183,14 @@ test('near ear overlap stays within the measured T-profile 9.4px baseline allowa
    const q0=deform3D(mesh('ear-'+side),[x,y],p0),edge0=boundaryX(side,q0[1],p0);
    const baseline=side==='right'?edge0-q0[0]:q0[0]-edge0;
    if(yaw===-45&&pitch===-30){
-    // This face target intentionally changed from the old pair mean to the
-    // mirrored down-right contour. Its ear stays authored/asymmetric: compare
-    // the new face boundary to that canonical contour, not the obsolete mean.
-    const canonical=1004-boundaryX('left',q[1],at(45,-30));
-    assert(Math.abs(edge-canonical)<=1.2,`canonical down-left ear boundary ${y}: ${edge} vs ${canonical}`);
+    // The down-left face now follows its own artwork. Compare its attachment
+    // boundary to its measured profile instead of the other image's mirror.
+    const samples=FACE_SOLVE.samples.filter(s=>s.y>=347).map(s=>{
+     const world=faceSolveWorld(FACE_SOLVE.points[s.right],p);return [world[1],world[0]];
+    });
+    let i=0;while(i<samples.length-2&&q[1]>samples[i+1][0])i++;
+    const [a,b]=[samples[i],samples[i+1]],t=(q[1]-a[0])/(b[0]-a[0]);
+    assert(Math.abs(edge-a[1]-t*(b[1]-a[1]))<.5,'measured down-left ear boundary '+y);
     continue;
    }
    // The prior profile replaces S3's fixed-source-row ear clamp. Full portrait
