@@ -4149,7 +4149,7 @@
     "pipeline/hair_solve_quality.py": "aa3d330366f0c85e87b872cc0781aebdbdfe8e30dcc3e756ae420b654bf54a93",
     "pipeline/probe_hair_only.py": "197f6c41471349d84317a885b5689b4d93d67e1f42c50176f268c1c7c574e7d0",
     "pipeline/vdd_benchmark.mjs": "61b09d8e45eb34129b327b6df7ef457098cb97d8a7eec089a21646e984988441",
-    "pipeline/update_vdd_evidence.py": "df076da614220d9f7167c148353b92473d1e980061cc80cf86892d309c5111be",
+    "pipeline/update_vdd_evidence.py": "604087543ec07568204211cdbb6cfb697251df4d62a8236ad0572067fca21cf7",
     "source/viewer/hair-solve.json": "7018194d8b60af2a5aae88f057dd0e224e54147cf1aaa17d036aa77faa7aa512"
   },
   "pass": true,

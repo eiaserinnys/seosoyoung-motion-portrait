@@ -50,7 +50,11 @@ def main():
     (docs/'bundle-sha256.txt').write_text(''.join(f'{value}  bundle/{name}\n' for name,value in runtime.items()))
     validation=json.loads((docs/'hair-solve-validation.json').read_text())
     validation.update(integratedBase=report['baseline'],researchEvaluation='docs/vdd-research-evaluation.json',
-                      researchPass=report['pass'],runtimeSha256={'bundle/'+k:v for k,v in runtime.items()})
+                      researchPass=report['pass'],runtimeSha256={'bundle/'+k:v for k,v in runtime.items()},webgl=report['webgl'])
+    validation['codeReview']=dict(result='PASS',model='gpt-6.1-sol',reasoning='high',
+        scope='Independent correction diff and actual image review: rigid pitch-only pin, preserved profile projection, smooth upper fringe and lower spans, exact bead support, frozen face files and final test/manifest evidence. No product defect or excessive design found; no test or browser reruns by reviewer.',
+        limitations=['Absolute reference gates retain 14 failures; no reference pixels or gate formulas excluded.',
+                     'Specialist Selaphiel review, merge and deployment belong to the coordinating session.'])
     validation['hair']=dict(passed=report['pass'],minChartDet=minimum,minLowerTriangleDet=lower_min,
                             maxDuRms=max(p['stats']['duRms'] for p in solve['poses']),
                             maxDu=max(p['stats']['duMax'] for p in solve['poses']),

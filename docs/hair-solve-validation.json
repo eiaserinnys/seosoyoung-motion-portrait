@@ -643,11 +643,10 @@
     "result": "PASS",
     "model": "gpt-6.1-sol",
     "reasoning": "high",
-    "scope": "Independent source/data/image review of this VDD change: A-C requirements, normal-equation preservation, held-out data exclusion, displacement/Jacobian budgets and raster evidence. No actionable defect. No full test or browser reruns.",
+    "scope": "Independent correction diff and actual image review: rigid pitch-only pin, preserved profile projection, smooth upper fringe and lower spans, exact bead support, frozen face files and final test/manifest evidence. No product defect or excessive design found; no test or browser reruns by reviewer.",
     "limitations": [
-      "Intermediate conformal energy increases; recorded explicitly.",
-      "LOPO withholds residual observations, retaining the shared upstream prior.",
-      "Specialist UI/UX review remains with coordinator."
+      "Absolute reference gates retain 14 failures; no reference pixels or gate formulas excluded.",
+      "Specialist Selaphiel review, merge and deployment belong to the coordinating session."
     ]
   },
   "scope": "Upper crown/face envelope fitted independently of lower tails/ties. Rigid pitch-only hairpin translation with the existing profile projection preserved, median-window vertical fringe observations, smooth upper/lower fields. Three raster feedback passes, local determinant projection, independent bead-local span fields. Face frozen at integrated main 17032ea; shell, assets and topology unchanged.",
@@ -655,7 +654,7 @@
   "researchEvaluation": "docs/vdd-research-evaluation.json",
   "researchPass": true,
   "webgl": {
-    "baseline": "6915b2751ef94ff80d3b86456befda5a9a958f0c",
+    "baseline": "17032ea",
     "angles": [
       [
         -22.5,
@@ -716,11 +715,11 @@
     ],
     "pageErrors": [],
     "sheet": "docs/captures/vdd_unobserved_angles_sheet.png",
-    "sheetSha256": "6688e08e686e45d42f687149a89e911eef2e4bab81cdddf22bce0e4edb9eda48",
+    "sheetSha256": "03ffa096d2847f96604344207c079cdeddafdc0b86645a0906c57cf31a705b6f",
     "definition": "same WebGL full portraits, frozen motion, scale=1, 720x720 crop resized equally to 320x320; rows main/after for each group of five angles"
   },
   "researchSha256": {
-    "vdd-research-evaluation.json": "23ad9e143443f617156aaf05208961f01e1d04cb58c0dba637114fa78a445c68"
+    "vdd-research-evaluation.json": "3212b50b7ff7b8617fea0aae25d03d4255800efc07b9070ec8c9aac81185b4a2"
   },
   "profileExtension": "docs/side90-validation.json"
 }
