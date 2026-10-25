@@ -3,23 +3,24 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {canopyWorld,craniumWorld,backWorld} from '../bundle/hair-shell.mjs';
-import {pitchHairDepth,sphereEase} from '../bundle/hair-surface.mjs';
+import {pitchHairDepth,sphereEase,craniumPosition} from '../bundle/hair-surface.mjs';
 import {DOME} from '../bundle/dome-data.mjs';
 import {STRANDS} from '../bundle/side-strands.mjs';
 import {beadWorld,BEADS} from '../bundle/stereo-attachments.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
-test('all three hanging hair layers reach gravity-frame XY at y506',()=>{
+test('hanging layers retain gravity Y and upward diagonal posterior keeps rotated X',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const side of ['left','right']){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch},neutral={...p,ParamAngleY:0},sign=side==='left'?-1:1;
-  for(const y of [506,520,544])for(const [surface,pt] of [
+  for(const y of [506,520,544])for(const [surface,pt,posterior] of [
    [canopyWorld,[side==='left'?300:720,y]],
-   [(pt,p)=>craniumWorld(pt,side,p),[0,y,sign*2.3]],
+   [(pt,p)=>craniumWorld(pt,side,p),[0,y,sign*2.3],true],
    [backWorld,[side==='left'?300:720,y]],
   ]){
    const a=surface(pt,p),b=surface(pt,neutral);
    assert(Math.abs(a[1]-b[1])<1e-8,`${yaw},${pitch},${side},${y} gravity Y`);
-   if(surface!==canopyWorld||yaw*(side==='left'?-1:1)<=0)assert(Math.abs(a[0]-b[0])<1e-8,`${yaw},${pitch},${side},${y} gravity X`);
+   if(posterior&&yaw&&pitch>0)assert.equal(a[0],craniumPosition(pt,p)[0],'B3 upward posterior X');
+   else if(surface!==canopyWorld||yaw*(side==='left'?-1:1)<=0)assert(Math.abs(a[0]-b[0])<1e-8,`${yaw},${pitch},${side},${y} gravity X`);
   }
  }
 });

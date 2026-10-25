@@ -100,7 +100,11 @@ export function posteriorLocal(y,lambda,p,includePosterior=true){
               hairPoseValue(DOME.rearPitch.poses,p,q=>q.rz)*Math.cos(lambda)].map(v=>v*rear*latitude);
  const zero=artWorld([0,0,0],p),world=artWorld(delta,p).map((v,i)=>v-zero[i]);
  const weight=Math.min(1,45/Math.max(1,Math.hypot(...delta),Math.hypot(...world)));
- return local.map((v,i)=>v+delta[i]*weight);
+ const base=local.map((v,i)=>v+delta[i]*weight);
+ const L=DOME.rearLower;if(!L)return base;
+ const lw=sphereEase((y-L.yStart)/(L.yFull-L.yStart))*(1-sphereEase((y-L.yEnd)/L.fade));
+ const amp=Math.min(L.cap,hairPoseValue(L.poses,p,q=>q.amp))*rear*lw;
+ return [base[0]+amp*Math.sin(lambda),base[1],base[2]+amp*Math.cos(lambda)];
 }
 export function craniumPosition([x,y,lambda],p,includePosterior=true){
  lambda=seamLongitude(lambda,p);

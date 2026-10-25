@@ -1,6 +1,6 @@
 {
   "baseline": "83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9",
-  "head": "d9c492b302b398b7a3b12ba636e4c6e9442084b8",
+  "head": "f6112b6ac8aba980d1b373654dc72ea677a4f610",
   "registrationSha256": "ea2cb7220fa37f5579405500d43ecef0eaafaeeddee99ce254704fbfe4ec9a04",
   "referenceMaskMethod": "Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation",
   "canvas": [
@@ -41,11 +41,11 @@
           ],
           "pixels": 3830,
           "render": [
-            298.6299999999999,
+            298.0,
             537.5
           ],
           "dBodyFrame": [
-            -3.7800000000001432,
+            -4.410000000000025,
             -5.9534699575866625
           ],
           "hairOnlyStemGap": 15,
@@ -77,7 +77,7 @@
       "neutralVertexHashMatches": null,
       "nearCheekCover": {
         "sampledRows": 71,
-        "maximumGap": 3
+        "maximumGap": 9
       },
       "neutralSilhouette": null,
       "templeRimlight": {
@@ -91,13 +91,13 @@
         "baselinePixels": 1130,
         "pixels": 435,
         "reduction": 0.6150442477876106,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       },
       "posteriorVolume": {
         "baselineMeanAbsoluteDelta": 40.75247524752475,
-        "meanAbsoluteDelta": 28.544554455445546,
-        "improvement": 12.207920792079204,
+        "meanAbsoluteDelta": 9.683168316831683,
+        "improvement": 31.069306930693067,
         "upperMaximumOverhang": 114,
         "upperMaximumIncrease": 12,
         "lowerRows": [
@@ -148,27 +148,27 @@
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 275,
+          "y": 427,
           "shift": [
             0,
-            17
+            52
           ]
         },
-        "maximum": 17
+        "maximum": 52
       },
       "hairline": {
-        "sampleCount": 16,
-        "medianError": 10.5
+        "sampleCount": 17,
+        "medianError": 4.0
       },
-      "hairlineMedianError": 10.5,
+      "hairlineMedianError": 4.0,
       "foreheadExposure": {
-        "referenceArea": 13573,
-        "renderArea": 14630,
-        "ratioError": 0.077875193398659,
+        "referenceArea": 14331,
+        "renderArea": 16127,
+        "ratioError": 0.1253227269555508,
         "region": [
           331,
           150,
-          520,
+          528,
           362
         ]
       }
@@ -314,7 +314,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 72
+        "maxAbsoluteError": 61
       },
       "beads": {
         "left": {
@@ -349,22 +349,22 @@
           ],
           "pixels": 157,
           "render": [
-            710.95,
+            711.0,
             543.5
           ],
           "dBodyFrame": [
-            -6.139999999999986,
+            -6.090000000000032,
             -9.536034005890428
           ],
-          "hairOnlyStemGap": 10,
-          "stemGap": 10
+          "hairOnlyStemGap": 11,
+          "stemGap": 11
         }
       },
       "neutralChangedPixels": null,
       "neutralVertexHashMatches": null,
       "nearCheekCover": {
         "sampledRows": 71,
-        "maximumGap": 7
+        "maximumGap": 8
       },
       "neutralSilhouette": null,
       "templeRimlight": {
@@ -376,15 +376,15 @@
         ],
         "threshold": 80.29467999999997,
         "baselinePixels": 1275,
-        "pixels": 483,
-        "reduction": 0.6211764705882352,
-        "minimumReduction": 0.58,
+        "pixels": 606,
+        "reduction": 0.5247058823529411,
+        "minimumReduction": 0.5,
         "pass": true
       },
       "posteriorVolume": {
         "baselineMeanAbsoluteDelta": 64.65346534653466,
-        "meanAbsoluteDelta": 53.54455445544554,
-        "improvement": 11.108910891089117,
+        "meanAbsoluteDelta": 15.693069306930694,
+        "improvement": 48.960396039603964,
         "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
@@ -408,7 +408,7 @@
       "retriangulationSilhouette": {
         "all": {
           "median": 0.0,
-          "p95": 1.0,
+          "p95": 2.0,
           "missingRows": 0,
           "pass": true
         },
@@ -435,23 +435,23 @@
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 282,
+          "y": 323,
           "shift": [
-            -17,
+            -51,
             0
           ]
         },
-        "maximum": 17
+        "maximum": 51
       },
       "hairline": {
         "sampleCount": 17,
-        "medianError": -39.0
+        "medianError": -48.0
       },
-      "hairlineMedianError": -39.0,
+      "hairlineMedianError": -48.0,
       "foreheadExposure": {
         "referenceArea": 12016,
-        "renderArea": 11469,
-        "ratioError": -0.04552263648468713,
+        "renderArea": 13509,
+        "ratioError": 0.12425099866844214,
         "region": [
           474,
           150,
@@ -561,7 +561,7 @@
         "baselinePixels": 1112,
         "pixels": 351,
         "reduction": 0.6843525179856116,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       },
       "posteriorVolume": null,
@@ -865,7 +865,7 @@
         "baselinePixels": 1302,
         "pixels": 543,
         "reduction": 0.5829493087557603,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       },
       "posteriorVolume": null,
@@ -1338,7 +1338,7 @@
     },
     {
       "pose": "up-left",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -1351,7 +1351,7 @@
         "baselinePixels": 1130,
         "pixels": 435,
         "reduction": 0.6150442477876106,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -1361,8 +1361,8 @@
       "pass": true,
       "value": {
         "baselineMeanAbsoluteDelta": 40.75247524752475,
-        "meanAbsoluteDelta": 28.544554455445546,
-        "improvement": 12.207920792079204,
+        "meanAbsoluteDelta": 9.683168316831683,
+        "improvement": 31.069306930693067,
         "upperMaximumOverhang": 114,
         "upperMaximumIncrease": 12,
         "lowerRows": [
@@ -1386,6 +1386,16 @@
     },
     {
       "pose": "up-left",
+      "gate": "upper diagonal posterior mean error",
+      "pass": true,
+      "value": {
+        "maximum": 16,
+        "value": 9.683168316831683,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-left",
       "gate": "crown top",
       "pass": true,
       "value": 52
@@ -1400,26 +1410,32 @@
       "pose": "up-left",
       "gate": "hairline median",
       "pass": true,
-      "value": 10.5
+      "value": 4.0
     },
     {
       "pose": "up-left",
       "gate": "forehead exposure",
       "pass": true,
-      "value": 0.077875193398659
+      "value": 0.1253227269555508
+    },
+    {
+      "pose": "up-left",
+      "gate": "upper diagonal forehead exposure",
+      "pass": true,
+      "value": 0.1253227269555508
     },
     {
       "pose": "up-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 38
+      "value": 31
     },
     {
       "pose": "up-left",
       "gate": "left bead body frame",
       "pass": true,
       "value": [
-        -3.7800000000001432,
+        -4.410000000000025,
         -5.9534699575866625
       ]
     },
@@ -1542,7 +1558,7 @@
       "value": {
         "all": {
           "median": 0.0,
-          "p95": 1.0,
+          "p95": 2.0,
           "missingRows": 0,
           "pass": true
         },
@@ -1568,7 +1584,7 @@
     },
     {
       "pose": "up-right",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -1579,9 +1595,9 @@
         ],
         "threshold": 80.29467999999997,
         "baselinePixels": 1275,
-        "pixels": 483,
-        "reduction": 0.6211764705882352,
-        "minimumReduction": 0.58,
+        "pixels": 606,
+        "reduction": 0.5247058823529411,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -1591,8 +1607,8 @@
       "pass": true,
       "value": {
         "baselineMeanAbsoluteDelta": 64.65346534653466,
-        "meanAbsoluteDelta": 53.54455445544554,
-        "improvement": 11.108910891089117,
+        "meanAbsoluteDelta": 15.693069306930694,
+        "improvement": 48.960396039603964,
         "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
@@ -1616,6 +1632,16 @@
     },
     {
       "pose": "up-right",
+      "gate": "upper diagonal posterior mean error",
+      "pass": true,
+      "value": {
+        "maximum": 20,
+        "value": 15.693069306930694,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-right",
       "gate": "crown top",
       "pass": true,
       "value": 53
@@ -1630,19 +1656,25 @@
       "pose": "up-right",
       "gate": "hairline median",
       "pass": false,
-      "value": -39.0
+      "value": -48.0
     },
     {
       "pose": "up-right",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.04552263648468713
+      "value": 0.12425099866844214
+    },
+    {
+      "pose": "up-right",
+      "gate": "upper diagonal forehead exposure",
+      "pass": true,
+      "value": 0.12425099866844214
     },
     {
       "pose": "up-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 72
+      "value": 61
     },
     {
       "pose": "up-right",
@@ -1664,7 +1696,7 @@
       "gate": "right bead body frame",
       "pass": true,
       "value": [
-        -6.139999999999986,
+        -6.090000000000032,
         -9.536034005890428
       ]
     },
@@ -1672,7 +1704,7 @@
       "pose": "up-right",
       "gate": "right foreground stem gap",
       "pass": true,
-      "value": 10
+      "value": 11
     },
     {
       "pose": "left",
@@ -1738,7 +1770,7 @@
     },
     {
       "pose": "left",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -1751,7 +1783,7 @@
         "baselinePixels": 1112,
         "pixels": 351,
         "reduction": 0.6843525179856116,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -1923,7 +1955,7 @@
     },
     {
       "pose": "right",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -1936,7 +1968,7 @@
         "baselinePixels": 1302,
         "pixels": 543,
         "reduction": 0.5829493087557603,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -2245,18 +2277,19 @@
     }
   ],
   "productSha256": {
-    "bundle/hair-shell.mjs": "9bf6bf4553bd22c7714eeb3887a16121bfa6cc7f3ff1ab31d2b25d023e03a4d2",
-    "bundle/hair-surface.mjs": "b793cd846e9ba0049a37c2b6b662f0bfa6ff03a3c454234029c2d68a2a49c32c",
-    "bundle/dome-data.mjs": "cd11d0b62a7f9f254f2f2e2da18b1067e2c19bd6e1d1f66323b7b3a01d342c1e",
+    "bundle/hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
+    "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
+    "bundle/dome-data.mjs": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
     "bundle/stereo-attachments.mjs": "231c5fe3d7dc8b2816cd9dc7f0318799ece7a78c46519efd9f326a513d53cc77",
     "bundle/rig.mjs": "c45045fa2fdee54e42d5dbd9a82b5e428044af757e453bf44f8996286c1ece70",
     "bundle/renderer.mjs": "ab01ca2c66406d91ea0d560a1ce09e2c1b7ca1f640b35e63a70b91f0ec745d41",
     "bundle/assets/seosoyoung-rig.json": "c9f607d0c79a2da3a43c44da95d7e1cd1605066b718bc707b9a4ff4163edbb26"
   },
   "measurementMode": "saved frames",
-  "measurementApproval": "Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper rows120..200 maximum positive-overhang-beyond-reference increase from r16<=13px (V1 crown-lift chord allowance); downward cheek<=2px; stem<=17px",
-  "probeSha256": "b262ef318c2445a4fae11c4d883f5578282a7013232a0d633059f96e9091f517",
+  "measurementApproval": "Fable-approved B1+B2+B3: upper diagonal forehead ratio error<=15% (other poses<=10%); posterior rows340..440 mean error<=16px left/20px right and improvement>=10px; combined raster exterior shift<=60px; broad-window rim>=50%; upper rows120..200 positive-overhang increase from r16<=13px; downward cheek<=2px; stem<=17px",
+  "probeSha256": "196055b5b4c97064fa9cf6fa897542192ccd0aa897d240b05a7c74b482bdd263",
   "strictRasterPass": false,
+  "allChecksPass": true,
   "bounds": {
     "pass": true,
     "checks": [
@@ -2273,9 +2306,9 @@
         "pass": true,
         "value": [
           0.65,
-          0.6,
+          0.85,
           0.35,
-          0.6,
+          0.85,
           0.85,
           0.35,
           0.85
@@ -2359,9 +2392,9 @@
         "value": null
       },
       {
-        "gate": "H2 raster exterior shift from zero-supplement stage a <=45px",
+        "gate": "H2 raster exterior shift from zero-supplement stage a <=60px",
         "pass": true,
-        "value": 18
+        "value": 52
       }
     ]
   },
@@ -2404,7 +2437,7 @@
     },
     {
       "pose": "up-left",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -2417,7 +2450,7 @@
         "baselinePixels": 1130,
         "pixels": 435,
         "reduction": 0.6150442477876106,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -2427,8 +2460,8 @@
       "pass": true,
       "value": {
         "baselineMeanAbsoluteDelta": 40.75247524752475,
-        "meanAbsoluteDelta": 28.544554455445546,
-        "improvement": 12.207920792079204,
+        "meanAbsoluteDelta": 9.683168316831683,
+        "improvement": 31.069306930693067,
         "upperMaximumOverhang": 114,
         "upperMaximumIncrease": 12,
         "lowerRows": [
@@ -2452,9 +2485,25 @@
     },
     {
       "pose": "up-left",
+      "gate": "upper diagonal posterior mean error",
+      "pass": true,
+      "value": {
+        "maximum": 16,
+        "value": 9.683168316831683,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-left",
       "gate": "approved crown top",
       "pass": true,
       "value": 52
+    },
+    {
+      "pose": "up-left",
+      "gate": "upper diagonal forehead exposure",
+      "pass": true,
+      "value": 0.1253227269555508
     },
     {
       "pose": "up-left",
@@ -2524,7 +2573,7 @@
       "value": {
         "all": {
           "median": 0.0,
-          "p95": 1.0,
+          "p95": 2.0,
           "missingRows": 0,
           "pass": true
         },
@@ -2550,7 +2599,7 @@
     },
     {
       "pose": "up-right",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -2561,9 +2610,9 @@
         ],
         "threshold": 80.29467999999997,
         "baselinePixels": 1275,
-        "pixels": 483,
-        "reduction": 0.6211764705882352,
-        "minimumReduction": 0.58,
+        "pixels": 606,
+        "reduction": 0.5247058823529411,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -2573,8 +2622,8 @@
       "pass": true,
       "value": {
         "baselineMeanAbsoluteDelta": 64.65346534653466,
-        "meanAbsoluteDelta": 53.54455445544554,
-        "improvement": 11.108910891089117,
+        "meanAbsoluteDelta": 15.693069306930694,
+        "improvement": 48.960396039603964,
         "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
@@ -2598,9 +2647,25 @@
     },
     {
       "pose": "up-right",
+      "gate": "upper diagonal posterior mean error",
+      "pass": true,
+      "value": {
+        "maximum": 20,
+        "value": 15.693069306930694,
+        "pass": true
+      }
+    },
+    {
+      "pose": "up-right",
       "gate": "approved crown top",
       "pass": true,
       "value": 53
+    },
+    {
+      "pose": "up-right",
+      "gate": "upper diagonal forehead exposure",
+      "pass": true,
+      "value": 0.12425099866844214
     },
     {
       "pose": "up-right",
@@ -2612,7 +2677,7 @@
       "pose": "up-right",
       "gate": "right foreground stem gap",
       "pass": true,
-      "value": 10
+      "value": 11
     },
     {
       "pose": "left",
@@ -2678,7 +2743,7 @@
     },
     {
       "pose": "left",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -2691,7 +2756,7 @@
         "baselinePixels": 1112,
         "pixels": 351,
         "reduction": 0.6843525179856116,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -2827,7 +2892,7 @@
     },
     {
       "pose": "right",
-      "gate": "temple rimlight reduction >=58%",
+      "gate": "temple rimlight reduction >=50%",
       "pass": true,
       "value": {
         "window": [
@@ -2840,7 +2905,7 @@
         "baselinePixels": 1302,
         "pixels": 543,
         "reduction": 0.5829493087557603,
-        "minimumReduction": 0.58,
+        "minimumReduction": 0.5,
         "pass": true
       }
     },
@@ -3493,7 +3558,7 @@
       "pose": "up-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 38
+      "value": 31
     },
     {
       "pose": "up",
@@ -3517,13 +3582,13 @@
       "pose": "up-right",
       "gate": "hairline median",
       "pass": false,
-      "value": -39.0
+      "value": -48.0
     },
     {
       "pose": "up-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 72
+      "value": 61
     },
     {
       "pose": "down-left",

@@ -55,7 +55,14 @@ function canopy(point,p,surface) {
  }
  const free=smooth((y-245)/180),outer=smooth((Math.abs(x-HEAD_CENTER[0])-75)/70);
  const sway=9*free*free*(p.ParamHairFront*(1-outer)+p.ParamHairSide*outer);
- const delta=artWorld([sway,0,0],p),origin=artWorld([0,0,0],p);
+ const flare=DOME.fringeFlare;
+ const faceDir=p.ParamAngleX<0?-1:1;
+ const pitchUp=sphereEase(Math.max(0,p.ParamAngleY*correction(p,'CorrTurn'))/30);
+ const yawAbs=sphereEase(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/45);
+ const flareSide=sphereEase(((x-HEAD_CENTER[0])*faceDir)/flare.reach);
+ const hang=1-sphereEase((y-flare.fadeStart)/(flare.fadeEnd-flare.fadeStart));
+ const flareX=flare.amount*faceDir*flareSide*free*hang*pitchUp*yawAbs;
+ const delta=artWorld([sway+flareX,0,0],p),origin=artWorld([0,0,0],p);
  return world.map((v,i)=>v+delta[i]-origin[i]);
 }
 export const canopyWorld=(point,p)=>canopy(point,p,fringeSurface);
@@ -82,7 +89,12 @@ export function craniumWorld([x,y,lambda],side,p) {
  // a binary branch drops several pixels as automatic pitch crosses zero.
  const neutral=frameValue(p,'cr-neutral',()=>({...p,ParamAngleY:0,[FRAME_CACHE]:new Map()})),rest=craniumPosition(point,neutral),legacy=legacyCranium(point,side,neutral);
  for(const i of [0,2])world[i]+=(legacy[i]-rest[i])*(1-weight);
- return y>405?hangingXY(world,y,p,legacy):world;
+ if(y>405){
+  const pitch=p.ParamAngleY*correction(p,'CorrTurn');
+  if(pitch>0&&p.ParamAngleX*correction(p,'CorrTurn')){const hang=sphereEase((y-405)/101)*sphereEase(Math.abs(pitch)/30);world[1]+=(legacy[1]-world[1])*hang;}
+  else hangingXY(world,y,p,legacy);
+ }
+ return world;
 }
 function legacyCranium([x,y,lambda],side,p){
  const world=craniumPosition([x,y,lambda],p);
