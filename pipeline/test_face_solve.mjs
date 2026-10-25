@@ -109,6 +109,32 @@ test('eyes, brows, iris and closed lids use the additional measured width ratios
   }
  }
 });
+test('profile nose and mouth use approved inset centers and perspective widths',()=>{
+ const targets={
+  left67:{nose:[302,491],mouth:[316,548]},left90:{nose:[293,490],mouth:[308,548]},
+  right67:{nose:[702,491],mouth:[688,548]},right90:{nose:[711,490],mouth:[696,548]},
+ };
+ for(const pose of FACE_SOLVE.family45.poses)for(const key of ['nose','mouth']){
+  const id=key+'-detail',anchor=FEATURE_FIT.front[key],p=at(pose.yaw);
+  near(featureWorld(id,anchor,p),targets[pose.name][key],1e-6);
+  const half=key==='nose'?14:23.5;
+  const ends=[[anchor[0]-half,anchor[1]],[anchor[0]+half,anchor[1]]];
+  const edge=ends.map(pt=>featureWorld(id,pt,at(Math.sign(pose.yaw)*45)));
+  const actual=ends.map(pt=>featureWorld(id,pt,p));
+  const scale=Math.abs(pose.yaw)===67.5?.55:.35;
+  assert(Math.abs((actual[1][0]-actual[0][0])/(edge[1][0]-edge[0][0])-scale)<1e-8,`${pose.name} ${key}`);
+ }
+});
+test('profile mouth compression stays local to mouth-detail in a shared render frame',()=>{
+ const anchor=FEATURE_FIT.front.mouth,point=[anchor[0]+23.5,anchor[1]];
+ for(const yaw of [-90,-67.5,67.5,90])for(const first of ['mouth-detail','mouth-open-v1','mouth-round-v1']){
+  const cached=at(yaw);featureWorld(first,point,cached);
+  for(const id of ['mouth-detail','mouth-open-v1','mouth-round-v1']){
+   const plain=at(yaw);delete plain[FRAME_CACHE];
+   near(featureWorld(id,point,cached),featureWorld(id,point,plain),1e-6);
+  }
+ }
+});
 test('actual-angle controls span [-90,90] without changing recommended correction',()=>{
  const angle=rig.parameters.find(p=>p.id==='ParamAngleX');
  assert.equal(angle.min,-90);assert.equal(angle.max,90);assert.equal(CORRECTION_PRESETS.recommended.CorrTurn,.65);

@@ -23,19 +23,21 @@ export function featureWorld(id,point,p){
   });
   return [q[0]+shift[0],q[1]+shift[1],q[2]];
  }
- const {origin,target,scale}=frameValue(p,'solved-feature:'+key,()=>{
+ const {origin,target,scale}=frameValue(p,'solved-feature:'+key+':'+id,()=>{
   const anchor=FEATURE_FIT.front[key];
   const neutral={...p,ParamEyeBallX:0,ParamEyeBallY:0,ParamEyeLOpen:1,ParamEyeROpen:1,
    ParamBrowLY:0,ParamBrowRY:0,ParamMouthOpenY:0,ParamMouthForm:0};
   // Compress in the unrolled feature frame, then apply the shared neck roll.
   const unrolled={...neutral,ParamAngleZ:0};
   const origin=registeredFeatureWorld(id,anchor,unrolled),target=faceSolveAnchorWorld(key,{...p,ParamAngleZ:0});
+  const family=FACE_SOLVE.family45,sign=yaw<0?-1:1,[a67,a90]=turnWeights45(yaw-sign*45);
   let scale=1;
   if(id.startsWith('eye-')||id==='closed-eyes-v1'){
-   const family=FACE_SOLVE.family45,sign=yaw<0?-1:1,[a67,a90]=turnWeights45(yaw-sign*45);
    const s67=family.poses.find(pose=>pose.name===(sign<0?'left67':'right67')).eyeWidthScale[side];
    const s90=family.poses.find(pose=>pose.name===(sign<0?'left90':'right90')).eyeWidthScale[side];
    scale=1+a67*(s67-1)+a90*(s90-1);
+  }else if(id==='nose-detail'||id==='mouth-detail'){
+   scale=1+a67*(.55-1)+a90*(.35-1);
   }
   return {origin,target,scale};
  });

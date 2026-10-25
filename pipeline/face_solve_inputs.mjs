@@ -67,10 +67,10 @@ const maskRows=JSON.parse(execFileSync('python3',[new URL('./face45_masks.py',im
  input:JSON.stringify(samples.map(s=>s.y)),timeout:60000,
 }));
 const centers={
- left67:{left:[309,429.8],right:[404,429.2],nose:[291,491],mouth:[310,550],browLeft:[304,345.4],browRight:[412,344.3]},
- left90:{left:[313,429.8],right:[382,429.2],nose:[283,490],mouth:[300,550],browLeft:[310,345.4],browRight:[390,344.3]},
- right67:{left:[600,430.6],right:[695,428.4],nose:[713,491],mouth:[694,550],browLeft:[592,346.3],browRight:[700,343.5]},
- right90:{left:[622,430.6],right:[691,428.4],nose:[721,490],mouth:[704,550],browLeft:[614,346.3],browRight:[694,343.5]},
+ left67:{left:[309,429.8],right:[404,429.2],nose:[302,491],mouth:[316,548],browLeft:[304,345.4],browRight:[412,344.3]},
+ left90:{left:[313,429.8],right:[382,429.2],nose:[293,490],mouth:[308,548],browLeft:[310,345.4],browRight:[390,344.3]},
+ right67:{left:[600,430.6],right:[695,428.4],nose:[702,491],mouth:[688,548],browLeft:[592,346.3],browRight:[700,343.5]},
+ right90:{left:[622,430.6],right:[691,428.4],nose:[711,490],mouth:[696,548],browLeft:[614,346.3],browRight:[694,343.5]},
 };
 function rowAt(rows,y){
  if(y<=rows[0][0])return rows[0].slice(1);
