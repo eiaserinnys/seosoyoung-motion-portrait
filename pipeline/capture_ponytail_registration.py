@@ -127,7 +127,8 @@ def main():
     meshes,pixels=webgl(data)
     assert all(p['reversedTriangles']==0 and p['minDetJ']>=.0034 for p in meshes),meshes
     applied=json.loads(subprocess.check_output(['node','--input-type=module','-e',"import {SKIN_FILL as S} from './bundle/skin-fill-data.mjs';process.stdout.write(JSON.stringify(S.poses));"],cwd=ROOT,text=True))
-    metrics=dict(**measured,**diagnostics(data,applied),skinFillPixels=pixels,mesh=meshes,videoFrames=361,holdoutFrames=54,
+    continuity=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/skin_fill_continuity.mjs')],text=True))
+    metrics=dict(**measured,**diagnostics(data,applied),skinFillCenterContinuity=continuity,skinFillPixels=pixels,mesh=meshes,videoFrames=361,holdoutFrames=54,
                  captureSha256={p.name:digest(p) for p in sorted(docs.glob('*.png')) if p.name in ['ponytail_9dir_registration_comparison.png','hairless_face_9dir_comparison.png','face_geom_9dir_overlay.png','viewer_9dir_grid.png','stage4_pose_trajectory_and_fit.png','stage4_9dir_fitted_overlay_1080.png']})
     text=json.dumps(metrics,ensure_ascii=False,indent=2)+'\n'
     (ROOT/'docs/stage4_registration_metrics.json').write_text(text)

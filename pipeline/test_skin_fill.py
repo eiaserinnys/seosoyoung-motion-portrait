@@ -27,6 +27,17 @@ class SkinFillTest(unittest.TestCase):
         result=interpolated_holdout(poses,[3,4,5])
         np.testing.assert_allclose(result[3:6],np.arange(60).reshape(10,6)[3:6])
         np.testing.assert_array_equal(result[[2,6]],poses[[2,6]])
+    def test_point_split_camera_fit_never_reads_the_five_evaluation_points(self):
+        from seedance_diagnostics import point_split_cameras
+        from ponytail_model import predict
+        rng=np.random.default_rng(19)
+        model=dict(points3D=rng.normal(0,40,(9,3)).tolist(),residual=np.zeros((10,9,2)).tolist())
+        true=np.array([[12,-20,2,.05,340,420],[-15,-10,-1,0,345,425]])
+        obs=np.array([predict(model,p) for p in true]);initial=true.copy();initial[:,:2]+=3
+        fitted=point_split_cameras(model,obs,initial)
+        altered=obs.copy();altered[:,[2,3,5,7,8]]+=100
+        np.testing.assert_array_equal(fitted,point_split_cameras(model,altered,initial))
+        np.testing.assert_allclose([predict(model,p) for p in fitted],obs,atol=1e-6)
 
 class PixelGateTest(unittest.TestCase):
     def fixture(self):

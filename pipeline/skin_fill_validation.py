@@ -29,6 +29,6 @@ def validate_pixels(name,rgba,identified,geometry):
         if len(values)!=9 or np.min(alpha)<250:continue
         valleys.append(max(0.,float(min(values[0],values[-1])-np.min(values[2:7]))))
     valley=max(valleys,default=0.)
-    assert valley<=12.75,(name,'Forehead boundary luminance valley',valley)
+    assert valley<=10,(name,'Forehead boundary luminance valley',valley)
     return dict(name=name,exposedPixelsBelowEarLine=protruding,downHalfWidthDifference=halfwidth,
                 maxForeheadLuminanceValley=valley,foreheadProfileCount=len(valleys))

@@ -33,6 +33,7 @@ export function similarity2D(src,dst){
 }
 const smooth=x=>{const t=clamp(x/0.15,0,1);return t*t*(3-2*t);};
 function radialRadius(points,C,theta){
+ theta=Math.atan2(Math.sin(theta),Math.cos(theta));
  const polar=points.map(q=>({a:Math.atan2(q[1]-C[1],q[0]-C[0]),r:Math.hypot(q[0]-C[0],q[1]-C[1])})).sort((a,b)=>a.a-b.a);
  let i=polar.findIndex(q=>q.a>theta);if(i<0)i=0;
  const right=polar[i],left=polar[(i+polar.length-1)%polar.length];
@@ -46,39 +47,37 @@ export function skinFillPositions(p,face){
   const y=yaw/45,v=pitch/30,a=radians(yaw),b=radians(pitch),B=[1,y,v,y*y,y*v,v*v,y*y*y,y*y*v,y*v*v,v*v*v];
   const rotate=([x,h,z])=>[x*Math.cos(a)+h*Math.sin(a)*Math.sin(b)+z*Math.sin(a)*Math.cos(b),h*Math.cos(b)-z*Math.sin(b)];
   const control=(points,res)=>points.map((point,i)=>rotate(point).map((q,d)=>q+B.reduce((s,c,j)=>s+c*res[j][i][d],0)));
-  const A=S.innerRow.map(i=>deform3D(face,face.positions[i],p).slice(0,2)),EL=A[0],ER=A.at(-1),m=S.columns;
+  const A=S.innerRow.map(i=>deform3D(face,face.positions[i],p).slice(0,2)),EL=A[0],ER=A.at(-1),m=S.columns,last=m-1,half=last/2;
   // Anchor helpers return rolled art coordinates; deform3D adds body/breath.
   // Bring the two eyes into that same frame once, before the similarity fit.
   const target=['left','right'].map(k=>{const q=faceSolveAnchorWorld(k,p);return [q[0]+(p.ParamBodyAngleX||0),q[1]-(p.ParamBreath||0)*4];});
-  const source=control(S.eye3D,S.eyeResidual),destination=target;
-  if(requestedYaw===0){
-   // Symmetric controls in the unrolled rig frame preserve the central axis.
-   // Rotate this frame about the neck for roll; the shared boundary stays exact.
-   const roll=radians(p.ParamAngleZ||0),cx=502+(p.ParamBodyAngleX||0),cy=NECK_PIVOT[1]-(p.ParamBreath||0)*4;
-   const unroll=([x,y])=>[cx+(x-cx)*Math.cos(roll)+(y-cy)*Math.sin(roll),cy-(x-cx)*Math.sin(roll)+(y-cy)*Math.cos(roll)];
-   const reroll=([x,y])=>[cx+(x-cx)*Math.cos(roll)-(y-cy)*Math.sin(roll),cy+(x-cx)*Math.sin(roll)+(y-cy)*Math.cos(roll)];
-   for(let i=0;i<2;i+=2){
-    const [l,r]=[unroll(destination[i]),unroll(destination[i+1])],half=(r[0]-l[0])/2,h=(l[1]+r[1])/2;
-    destination[i]=reroll([cx-half,h]);destination[i+1]=reroll([cx+half,h]);
-   }
-  }
+  // Fade the central symmetry constraint over six degrees, rather than
+  // switching frames only at the exact floating-point yaw zero.
+  const sym=1-smooth(Math.abs(requestedYaw)/6*.15),source=control(S.eye3D,S.eyeResidual);
+  const roll=radians(p.ParamAngleZ||0),cx=502+(p.ParamBodyAngleX||0),cy=NECK_PIVOT[1]-(p.ParamBreath||0)*4;
+  const unroll=([x,y])=>[cx+(x-cx)*Math.cos(roll)+(y-cy)*Math.sin(roll),cy-(x-cx)*Math.sin(roll)+(y-cy)*Math.cos(roll)];
+  const reroll=([x,y])=>[cx+(x-cx)*Math.cos(roll)-(y-cy)*Math.sin(roll),cy+(x-cx)*Math.sin(roll)+(y-cy)*Math.cos(roll)];
+  const [l,r]=target.map(unroll),eyeHalf=(r[0]-l[0])/2,h=(l[1]+r[1])/2;
+  const symDst=[reroll([cx-eyeHalf,h]),reroll([cx+eyeHalf,h])];
+  const destination=target.map((q,i)=>q.map((v,d)=>v*(1-sym)+symDst[i][d]*sym));
   const map=similarity2D(source,destination);
   const center=rotate(S.shell.center.point3D).map((q,d)=>q+B.reduce((sum,c,j)=>sum+c*S.shell.center.residual[j][d],0));
   const radii=S.theta.map((theta,i)=>Math.hypot(...rotate([S.shell.front[i]*Math.cos(theta),S.shell.front[i]*Math.sin(theta),S.shell.depth[i]]))+B.reduce((sum,c,j)=>sum+c*S.shell.residual[j][i],0));
   const C=map(center),shell=S.theta.map((th,i)=>map([center[0]+radii[i]*Math.cos(th),center[1]+radii[i]*Math.sin(th)]));
   let left=Math.atan2(EL[1]-C[1],EL[0]-C[0]),right=Math.atan2(ER[1]-C[1],ER[0]-C[0]);
   if(left>0)left-=2*Math.PI;
-  if(requestedYaw===0){left=(left-Math.PI-right)/2;right=-Math.PI-left;}
-  const angles=Array.from({length:m},(_,j)=>j<=48?left+(-Math.PI/2-left)*j/48:-Math.PI/2+(right+Math.PI/2)*(j-48)/48);
+  const leftSym=(left-Math.PI-right)/2,rightSym=-Math.PI-leftSym;
+  left=left*(1-sym)+leftSym*sym;right=right*(1-sym)+rightSym*sym;
+  const angles=Array.from({length:m},(_,j)=>j<=half?left+(-Math.PI/2-left)*j/half:-Math.PI/2+(right+Math.PI/2)*(j-half)/half);
   // Evaluate the boundary in angular coordinates, independent of vertex density.
   const innerPath=A;
   const radiiInner=angles.map(th=>radialRadius(innerPath,C,th,true));
   const outer=angles.map((th,j)=>{
-   const w=smooth(j/96)*smooth(1-j/96),r=radiiInner[j],shellRadius=radialRadius(shell,C,th,true);
+   const w=smooth(j/last)*smooth(1-j/last),r=radiiInner[j],shellRadius=radialRadius(shell,C,th,true);
    return (1-w)*r+w*shellRadius;
   });
   return Array.from({length:6},(_,k)=>angles.map((th,j)=>{
-   const w=smooth(j/96)*smooth(1-j/96),skirt=Math.min(radiiInner[j],outer[j])-24*w-6;
+   const w=smooth(j/last)*smooth(1-j/last),skirt=Math.min(radiiInner[j],outer[j])-24*w-6;
    const r=skirt+k/5*(outer[j]-skirt);
    return [C[0]+r*Math.cos(th),C[1]+r*Math.sin(th),-200];
   })).flat();

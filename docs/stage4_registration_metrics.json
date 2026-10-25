@@ -16940,6 +16940,24 @@
     "reversed": 0
   },
   "holdoutInterpolatedPoseFeatureRms": 20.738485928311132,
+  "holdoutPointSplitFeatureRms": 18.256800250501517,
+  "holdoutPointSplitProtocol": {
+    "cameraLandmarks": [
+      0,
+      1,
+      4,
+      6
+    ],
+    "evaluationLandmarks": [
+      2,
+      3,
+      5,
+      7,
+      8
+    ],
+    "frames": 54,
+    "initialization": "Adjacent training camera interpolation; independent four-point camera least squares; frozen shape"
+  },
   "holdoutConditionalPoseFeatureRms": 7.871381603295232,
   "maxAngularStepWindow": [
     {
@@ -17121,6 +17139,133 @@
       "appliedPitch": -23.18342630169996
     }
   ],
+  "skinFillCenterContinuity": {
+    "pitch": -30,
+    "samples": [
+      {
+        "yaw": -6,
+        "top": [
+          475.2184269120554,
+          254.01402576856222,
+          -200
+        ],
+        "left": [
+          341.72105984957045,
+          470.0276867515686,
+          -200
+        ],
+        "right": [
+          651.2921511000287,
+          477.3313661779235,
+          -200
+        ]
+      },
+      {
+        "yaw": -3,
+        "top": [
+          497.4059571324537,
+          254.58019396583612,
+          -200
+        ],
+        "left": [
+          346.2214053582781,
+          473.5976367589737,
+          -200
+        ],
+        "right": [
+          655.1833122917706,
+          473.56424591117366,
+          -200
+        ]
+      },
+      {
+        "yaw": 0,
+        "top": [
+          502,
+          254.6476853088929,
+          -200
+        ],
+        "left": [
+          350.29241266884804,
+          472.5184689466005,
+          -200
+        ],
+        "right": [
+          658.7011087328962,
+          474.42348455281524,
+          -200
+        ]
+      },
+      {
+        "yaw": 3,
+        "top": [
+          506.68321875206493,
+          254.6157526500729,
+          -200
+        ],
+        "left": [
+          354.98714701550375,
+          473.9373077328492,
+          -200
+        ],
+        "right": [
+          662.6005331855472,
+          472.78158528532094,
+          -200
+        ]
+      },
+      {
+        "yaw": 6,
+        "top": [
+          528.5720873501128,
+          254.30939257292232,
+          -200
+        ],
+        "left": [
+          359.3033821449143,
+          480.0468294912311,
+          -200
+        ],
+        "right": [
+          668.9602133354862,
+          466.90782989479715,
+          -200
+        ]
+      }
+    ],
+    "epsilonSteps": [
+      {
+        "yaw": -6,
+        "deltaYaw": -0.001,
+        "maxDisplacement": 0.0017793126046507614
+      },
+      {
+        "yaw": -6,
+        "deltaYaw": 0.001,
+        "maxDisplacement": 0.0017793631411982726
+      },
+      {
+        "yaw": 0,
+        "deltaYaw": -0.001,
+        "maxDisplacement": 0.0022492057914319415
+      },
+      {
+        "yaw": 0,
+        "deltaYaw": 0.001,
+        "maxDisplacement": 0.002248831594595922
+      },
+      {
+        "yaw": 6,
+        "deltaYaw": -0.001,
+        "maxDisplacement": 0.0017632979764751634
+      },
+      {
+        "yaw": 6,
+        "deltaYaw": 0.001,
+        "maxDisplacement": 0.0017633266181857976
+      }
+    ]
+  },
   "skinFillPixels": [
     {
       "name": "left",
@@ -17236,11 +17381,11 @@
   "videoFrames": 361,
   "holdoutFrames": 54,
   "captureSha256": {
-    "face_geom_9dir_overlay.png": "b2b6a4c396d081ce01c34968db9cfe714e46bea627b777a2e67ed6e807402c06",
-    "hairless_face_9dir_comparison.png": "c182fff7f6e5215d89a758923cb39e416ad37e49e4c3025967f3e821ab7890fe",
-    "ponytail_9dir_registration_comparison.png": "c182fff7f6e5215d89a758923cb39e416ad37e49e4c3025967f3e821ab7890fe",
+    "face_geom_9dir_overlay.png": "e3c4a3334cdd6fe1fbb2d1622ac91f16f3ba2a7c0fa68623a166943a3a248012",
+    "hairless_face_9dir_comparison.png": "cdb9308952e59b348a7a9b68911fef8eb1e5d0486a6a8ea575506fe82732ccb8",
+    "ponytail_9dir_registration_comparison.png": "cdb9308952e59b348a7a9b68911fef8eb1e5d0486a6a8ea575506fe82732ccb8",
     "stage4_9dir_fitted_overlay_1080.png": "19b7678590c6b84650521cec6a5144a7192ede76e9a7f01784f546416dc474ac",
     "stage4_pose_trajectory_and_fit.png": "c53c6fccf1c658d4378a39fca80e56a0580b1dd795418c7d7f1093ae6a8a20cf",
-    "viewer_9dir_grid.png": "fc3aea9d14884a93e514f7c9cbb8c17dcd53cc0fd4db8abdd911aede9dc3d161"
+    "viewer_9dir_grid.png": "4f61d84620d0b1b751afdf0516c25b212a5fd35831c33786fe525eda1812842f"
   }
 }

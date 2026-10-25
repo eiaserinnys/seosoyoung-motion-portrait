@@ -38,3 +38,12 @@ test('UVs use the actual rest ribbon; mask fills its interior; centered domes mi
   }
  }
 });
+test('center tracking has no jump at zero or the six-degree blend boundary',()=>{
+ const outer=yaw=>skinFillPositions(params(yaw,-30),face).slice(5*S.columns);
+ const samples=[-6,-3,0,3,6].map(yaw=>{const q=outer(yaw);return [q[0],q.reduce((a,b)=>a[1]<b[1]?a:b),q.at(-1)];});
+ for(const index of [0,1,2])for(let i=1;i<samples.length;i++)assert(samples[i][index][0]>samples[i-1][index][0]);
+ for(const yaw of [-6,0,6])for(const side of [-1,1]){
+  const a=outer(yaw),b=outer(yaw+side*.001);
+  assert(Math.max(...a.map((q,i)=>Math.hypot(q[0]-b[i][0],q[1]-b[i][1])))<.05,`${yaw} center discontinuity`);
+ }
+});
