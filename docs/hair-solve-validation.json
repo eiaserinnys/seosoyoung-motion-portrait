@@ -1,17 +1,17 @@
 {
   "baseline": "0b75a0211691965ca234ad9114073ba934568394",
-  "integratedBase": "6915b2751ef94ff80d3b86456befda5a9a958f0c",
+  "integratedBase": "17032ea",
   "node": {
-    "passed": 187,
+    "passed": 193,
     "failed": 0,
-    "perTestTimeoutMs": 60000,
     "workers": 2,
+    "perTestTimeoutMs": 60000,
     "command": "node --test --test-concurrency=2 --test-timeout=60000 pipeline/test_*.mjs tests/*.test.mjs"
   },
   "python": {
-    "passed": 99,
-    "subtestsPassed": 15,
+    "passed": 109,
     "failed": 0,
+    "subtestsPassed": 21,
     "command": ".venv/bin/python -m pytest --timeout=60 -q pipeline tests"
   },
   "face": {
@@ -21,14 +21,36 @@
   },
   "hair": {
     "passed": true,
-    "minChartDet": 0.6303843433282114,
-    "maxDuRms": 5.856879426731178,
-    "maxDu": 18.29931975223855,
+    "minChartDet": 0.28533414952189257,
+    "minLowerTriangleDet": 0.5926502972369633,
+    "maxDuRms": 31.831475641455356,
+    "maxDu": 91.87866867514505,
     "neutralGeometryUnchanged": true,
     "actualRasterComparison": {
       "pass": true,
       "definition": "actual raster RMS in pixels: head L/R spans at y80..400 step20, topY, and hairline columns step12; fixed reference/prior-visible domain",
       "poses": [
+        {
+          "name": "up-left",
+          "priorRms": 37.94707853354154,
+          "correctedRms": 23.893191820780565,
+          "sampleCount": 52,
+          "pass": true
+        },
+        {
+          "name": "up",
+          "priorRms": 41.95345745695571,
+          "correctedRms": 22.507200493932473,
+          "sampleCount": 54,
+          "pass": true
+        },
+        {
+          "name": "up-right",
+          "priorRms": 42.43773719770575,
+          "correctedRms": 22.79127700880992,
+          "sampleCount": 52,
+          "pass": true
+        },
         {
           "name": "left",
           "priorRms": 40.25133802454221,
@@ -51,64 +73,529 @@
           "pass": true
         },
         {
-          "name": "up-left",
-          "priorRms": 38.26024246977734,
-          "correctedRms": 35.6931365951495,
-          "sampleCount": 52,
-          "pass": true
-        },
-        {
-          "name": "up",
-          "priorRms": 42.165458919901795,
-          "correctedRms": 36.44503725805121,
-          "sampleCount": 54,
-          "pass": true
-        },
-        {
-          "name": "up-right",
-          "priorRms": 41.27697253358659,
-          "correctedRms": 37.02519931905005,
-          "sampleCount": 52,
-          "pass": true
-        },
-        {
           "name": "down-left",
-          "priorRms": 52.651369086346335,
-          "correctedRms": 42.70273772867273,
+          "priorRms": 53.419053137389454,
+          "correctedRms": 25.88941684862571,
           "sampleCount": 42,
           "pass": true
         },
         {
           "name": "down",
           "priorRms": 22.783566645521265,
-          "correctedRms": 18.748333259252675,
+          "correctedRms": 15.302257706269716,
           "sampleCount": 44,
           "pass": true
         },
         {
           "name": "down-right",
           "priorRms": 60.58153143673005,
-          "correctedRms": 50.652330021286936,
+          "correctedRms": 19.751505036819655,
           "sampleCount": 41,
           "pass": true
         }
-      ],
-      "mainMean": 37.28119993951455,
-      "afterMean": 36.87779569691052,
-      "meanImproved": true
+      ]
+    },
+    "split": {
+      "chart": {
+        "pass": true,
+        "definition": "residual-only local tangent chart (s + dx/h0_cell, restY + dy), 11x15 cells, 9 derivative samples/cell; cell half-width extended from the first authored section y60 above the pole; 3D silhouette projection excluded",
+        "poses": [
+          {
+            "name": "up-left",
+            "minDet": 0.28533414952189257,
+            "reversedCells": 0,
+            "worstCell": {
+              "i": 6,
+              "j": 9,
+              "s": 0.18181818181818166,
+              "y": 327
+            }
+          },
+          {
+            "name": "up",
+            "minDet": 0.29773592790004766,
+            "reversedCells": 0,
+            "worstCell": {
+              "i": 4,
+              "j": 9,
+              "s": -0.5454545454545454,
+              "y": 327
+            }
+          },
+          {
+            "name": "up-right",
+            "minDet": 0.30416271271765044,
+            "reversedCells": 0,
+            "worstCell": {
+              "i": 4,
+              "j": 8,
+              "s": -0.5454545454545454,
+              "y": 290.6666666666667
+            }
+          },
+          {
+            "name": "down-left",
+            "minDet": 0.2962730922556197,
+            "reversedCells": 0,
+            "worstCell": {
+              "i": 6,
+              "j": 7,
+              "s": 0.18181818181818166,
+              "y": 254.33333333333334
+            }
+          },
+          {
+            "name": "down",
+            "minDet": 0.9469970103085082,
+            "reversedCells": 0,
+            "worstCell": {
+              "i": 5,
+              "j": 11,
+              "s": -0.18181818181818166,
+              "y": 399.6666666666667
+            }
+          },
+          {
+            "name": "down-right",
+            "minDet": 0.6119196668460815,
+            "reversedCells": 0,
+            "worstCell": {
+              "i": 4,
+              "j": 8,
+              "s": -0.5454545454545454,
+              "y": 290.6666666666667
+            }
+          }
+        ],
+        "lower": {
+          "pass": true,
+          "definition": "all four tail mesh XY triangles relative to unchanged pendulum; 45 key/intermediate/profile poses",
+          "poses": [
+            {
+              "yaw": -90,
+              "pitch": -30,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -67.5,
+              "pitch": -30,
+              "minDet": 0.9361629569466103,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -45,
+              "pitch": -30,
+              "minDet": 0.9223469220088865,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -22.5,
+              "pitch": -30,
+              "minDet": 0.968749158332492,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 0,
+              "pitch": -30,
+              "minDet": 0.9814107334108472,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 22.5,
+              "pitch": -30,
+              "minDet": 0.9255400412844892,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 45,
+              "pitch": -30,
+              "minDet": 0.8498801763434741,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 67.5,
+              "pitch": -30,
+              "minDet": 0.8764222939440626,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 90,
+              "pitch": -30,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -90,
+              "pitch": -15,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -67.5,
+              "pitch": -15,
+              "minDet": 0.9680814784733087,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -45,
+              "pitch": -15,
+              "minDet": 0.9611734610044397,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -22.5,
+              "pitch": -15,
+              "minDet": 0.9843745791662459,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 0,
+              "pitch": -15,
+              "minDet": 0.9907053667054241,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 22.5,
+              "pitch": -15,
+              "minDet": 0.9627700206422009,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 45,
+              "pitch": -15,
+              "minDet": 0.9249400881718115,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 67.5,
+              "pitch": -15,
+              "minDet": 0.938211146972075,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 90,
+              "pitch": -15,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -90,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -67.5,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -45,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -22.5,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 0,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 22.5,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 45,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 67.5,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 90,
+              "pitch": 0,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -90,
+              "pitch": 15,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -67.5,
+              "pitch": 15,
+              "minDet": 0.9031282209335587,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -45,
+              "pitch": 15,
+              "minDet": 0.8822867396036301,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -22.5,
+              "pitch": 15,
+              "minDet": 0.857532035249826,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 0,
+              "pitch": 15,
+              "minDet": 0.8783714412880601,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 22.5,
+              "pitch": 15,
+              "minDet": 0.8302936190177083,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 45,
+              "pitch": 15,
+              "minDet": 0.796325148618467,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 67.5,
+              "pitch": 15,
+              "minDet": 0.8323361278879858,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 90,
+              "pitch": 15,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -90,
+              "pitch": 30,
+              "minDet": 1,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -67.5,
+              "pitch": 30,
+              "minDet": 0.8062564418671326,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -45,
+              "pitch": 30,
+              "minDet": 0.7645734792072603,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": -22.5,
+              "pitch": 30,
+              "minDet": 0.71506407049966,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 0,
+              "pitch": 30,
+              "minDet": 0.7567428825761543,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 22.5,
+              "pitch": 30,
+              "minDet": 0.6605872380353243,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 45,
+              "pitch": 30,
+              "minDet": 0.5926502972369633,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 67.5,
+              "pitch": 30,
+              "minDet": 0.6646722557759716,
+              "reversedTriangles": 0
+            },
+            {
+              "yaw": 90,
+              "pitch": 30,
+              "minDet": 1,
+              "reversedTriangles": 0
+            }
+          ]
+        }
+      },
+      "comparison": {
+        "upper": {
+          "definition": "crown | face only, row spans80..520 step20 + topY + hairline",
+          "poses": [
+            {
+              "name": "up-left",
+              "priorRms": 38.10737297426838,
+              "correctedRms": 27.046834380385445,
+              "sampleCount": 64,
+              "pass": true
+            },
+            {
+              "name": "up",
+              "priorRms": 41.46594075170901,
+              "correctedRms": 26.15223497025434,
+              "sampleCount": 66,
+              "pass": true
+            },
+            {
+              "name": "up-right",
+              "priorRms": 42.89194271655226,
+              "correctedRms": 27.551372470350728,
+              "sampleCount": 64,
+              "pass": true
+            },
+            {
+              "name": "left",
+              "priorRms": 36.1107054880884,
+              "correctedRms": 36.1107054880884,
+              "sampleCount": 59,
+              "pass": true
+            },
+            {
+              "name": "front",
+              "priorRms": 22.09524835796149,
+              "correctedRms": 22.09524835796149,
+              "sampleCount": 65,
+              "pass": true
+            },
+            {
+              "name": "right",
+              "priorRms": 28.873482057100333,
+              "correctedRms": 28.873482057100333,
+              "sampleCount": 59,
+              "pass": true
+            },
+            {
+              "name": "down-left",
+              "priorRms": 50.72931068882134,
+              "correctedRms": 29.68133220530173,
+              "sampleCount": 54,
+              "pass": true
+            },
+            {
+              "name": "down",
+              "priorRms": 30.386792243623592,
+              "correctedRms": 26.325571490201582,
+              "sampleCount": 56,
+              "pass": true
+            },
+            {
+              "name": "down-right",
+              "priorRms": 59.597391357372125,
+              "correctedRms": 31.11845900050383,
+              "sampleCount": 53,
+              "pass": true
+            }
+          ]
+        },
+        "lower": {
+          "definition": "separate left/right tails | ties, fixed rows550..720 step10",
+          "poses": [
+            {
+              "name": "up-left",
+              "priorRms": 49.42983738117506,
+              "correctedRms": 40.30691080724904,
+              "sampleCount": 68,
+              "pass": true
+            },
+            {
+              "name": "up",
+              "priorRms": 54.67779955983857,
+              "correctedRms": 48.112001682349,
+              "sampleCount": 68,
+              "pass": true
+            },
+            {
+              "name": "up-right",
+              "priorRms": 69.73401847974439,
+              "correctedRms": 56.49877088141928,
+              "sampleCount": 72,
+              "pass": true
+            },
+            {
+              "name": "left",
+              "priorRms": 97.94386147176351,
+              "correctedRms": 97.94386147176351,
+              "sampleCount": 2,
+              "pass": true
+            },
+            {
+              "name": "front",
+              "priorRms": 11.741427132640696,
+              "correctedRms": 11.741427132640696,
+              "sampleCount": 72,
+              "pass": true
+            },
+            {
+              "name": "right",
+              "priorRms": 113.11277558260163,
+              "correctedRms": 113.11277558260163,
+              "sampleCount": 4,
+              "pass": true
+            },
+            {
+              "name": "down-left",
+              "priorRms": 48.57382697159723,
+              "correctedRms": 43.004037278169854,
+              "sampleCount": 72,
+              "pass": true
+            },
+            {
+              "name": "down",
+              "priorRms": 34.64823227814083,
+              "correctedRms": 30.32078495026143,
+              "sampleCount": 60,
+              "pass": true
+            },
+            {
+              "name": "down-right",
+              "priorRms": 71.96725445843904,
+              "correctedRms": 63.661072429367245,
+              "sampleCount": 56,
+              "pass": true
+            }
+          ]
+        }
+      },
+      "upperMean": 21.68914148587301,
+      "lowerTailRms": 46.983929671469305,
+      "priorLowerTailRms": 54.83849485482252
     },
     "absoluteReferenceGatesPassed": false,
-    "remainingAbsoluteReferenceFailures": 12
+    "remainingAbsoluteReferenceFailures": 14
   },
   "captureSha256": {
-    "viewer_9dir_grid.png": "4f45104305ea837c6d02dce5d19801d6cef65063bebd35285826112e49f349a2",
-    "faceless_hair_9dir_comparison.png": "1780d16a3ef380d95840f53aacfc09333dff19905ad447a3dc5955a834d2c80f",
-    "hair_only_9dir_overlay.png": "f36e26ed8106c867bf390ded50f4bc3ee9772bd9fde6278f8e8e305d5b9d7c10",
-    "hairless_face_9dir_comparison.png": "0066fb99bc263895cbf37908af3914db57ba6b83673d8b891a7f4ed0a13f86b0",
-    "face_geom_9dir_overlay.png": "2be37fe3960313dac4f97142ff6d6824cf16a27bf8467a76b991a9f28be20622",
-    "face_turnaround_7angle.png": "3bbc7a9a97f35ebedc49ffb167c78b820804f5fe839d784163a80e85c158c33a",
-    "r15_before_after_9dir.png": "75ad8d8c21f599bbb87c9b44b0cc550fe857ac461fc7f1e9f30ddc3c357c4548",
-    "vdd_unobserved_angles_sheet.png": "6688e08e686e45d42f687149a89e911eef2e4bab81cdddf22bce0e4edb9eda48"
+    "faceless_hair_9dir_comparison.png": "99611e45939d681bb5e511650ab2edcb10eb622fada12ddd329a782a7c6ad964",
+    "hair_only_9dir_overlay.png": "1fc053f5dbd398ae15ccde2f4cce8fbd1757c9880fc6909548ff5c70c18d848a",
+    "r15_before_after_9dir.png": "e5a0b2db4c7c065cc3777af930091e8f6d2b3fe60c1ad6786f934875ede82b01",
+    "viewer_9dir_grid.png": "53b5e04bb75c3049355cb696bae8e352bf8aac72dc139bb6ed9a17f45ddb2dad",
+    "full_turnaround_7angle.png": "175fd38c7e20a6786b5d267d68e051757f9a9d4e0e472f330beadcc71741bfb6",
+    "vdd_unobserved_angles_sheet.png": "03ffa096d2847f96604344207c079cdeddafdc0b86645a0906c57cf31a705b6f"
   },
   "runtimeSha256": {
     "bundle/app.mjs": "2c9ae66eb46b0864f1fe1443ecf5abfd37364a26271d32d2fea61756c1c4f8cb",
@@ -126,27 +613,27 @@
     "bundle/dome-data.mjs": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
     "bundle/face-contour.mjs": "a03cc267de4d7cb337d78fda82e1f9845a8913a9374c6dee7cd9c5dad2261b6a",
     "bundle/face-depth.mjs": "276614c28c2e991c068ffeaa1180670878afaf4165d4fa97e2dbd3584f472327",
-    "bundle/face-feature-prior.mjs": "387540704eb29cf38dfbca39904ca01daee6e308d71987f3e852bd7c21272eae",
-    "bundle/face-features.mjs": "c56b9c9ef8cb63552935cc9ecf3c0377fa9ace48463f70935ad77630529c9a9f",
+    "bundle/face-feature-prior.mjs": "2c1f27b871e77a6ac3faee650798d94655f93c9efdfe5ff680d44ed08dafa7d9",
+    "bundle/face-features.mjs": "ced3c91ef175741c435482e44d2623ed9459476be7bebda656b72dbefe0b142c",
     "bundle/face-outline.mjs": "51d561f4bd60f63c2d6cf19834e4507be830f54720b8b52b9cfa2aac1471cf16",
     "bundle/face-prior.mjs": "99e5062b9ecb9898357702fc785c1c5dcc8396d1fd9e2afe6e35c583c62f902c",
     "bundle/face-profile.mjs": "fe30d46b53fa237611b627c8c3aaf8b18c93c946c78978af9c97e7bc3911aa74",
-    "bundle/face-solve-data.mjs": "9f7d414e17ac669bcaa2d89dd7c87a739b86e1bb9882c37a3521182307cb8432",
-    "bundle/face-solve.mjs": "5c12a902de34043408d3060886050ffeb85676e8ee61f243687a32179ae3888b",
-    "bundle/feature-data.mjs": "14808c03ee352233c1616ba3034f6e2f62ee291f3dbf8d7cc0d8b348b475d8d6",
+    "bundle/face-solve-data.mjs": "4ab2de977ab38ad5348c8daed9ebd0234fe9e8afa9d698732db23d39dc027d7c",
+    "bundle/face-solve.mjs": "985cd719e88782d5f1a129407ad4d88a5d9a8b76bd1a3036f58659cdd46990f5",
+    "bundle/feature-data.mjs": "ede312bbf51cb390be89197d466535ff27d04c4027347dc71615e5473500e9be",
     "bundle/geometry.mjs": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d",
     "bundle/hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
-    "bundle/hair-solve-data.mjs": "2b06271aa277f3727983abab6852459dd5e1136987bab6c38d5e7eef5e124c96",
-    "bundle/hair-solve.mjs": "b86573b95a0b815c12e34b4a3f1942db1d9fbd269c6d56eaa364abea9d4cc85d",
+    "bundle/hair-solve-data.mjs": "f96e5b5311fdc4282acf0ca41de58c945c71d180c6fd552cb2c5b05a18060005",
+    "bundle/hair-solve.mjs": "9c0eb6bcf4844c8c4e0f2354b8b96840d2bfa46882d59eb4d6ba073da2147cc2",
     "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
     "bundle/head-turn.mjs": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf",
     "bundle/index.html": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
     "bundle/og.png": "6c77ba2b2e6ce49606bba730ce9549e9eafcd08cd3722caa536d7c53692a8144",
-    "bundle/outline-data.mjs": "23f21b51f830a06d3053181ef921aec17b323715bb3e5220c0ab2ca51ed6767f",
+    "bundle/outline-data.mjs": "4d509c8ed9c9219661fc45ce9c3d62a43496535002ac6d3bd661e70727ab5702",
     "bundle/pose-grid.mjs": "4e37923756f7924ee4d06cf103ed242fe7824d82604a6d05a0605e9fb9152c44",
     "bundle/profile-attachments.mjs": "1dc5cb5f5ba7a6ee4b44e416c4923e38a02004b072006422919e26116749cadc",
     "bundle/renderer.mjs": "92eba85dd3ec45bc4d85ab0727b12d152c86472bcf3de071786112b88055d024",
-    "bundle/rig.mjs": "a97fbd11bbb22f6083026081e8aff66939b5dbd9908f0952471bc9e1c550270e",
+    "bundle/rig.mjs": "d71eebf21183d8d2c250b6a06ed409e0a3ecdfdfa4997ec3d43367955e2c770c",
     "bundle/side-strands.mjs": "da5bcefb883fc6f73fd92545a1a9be937cd06ea1381923efdab05cb60cba496c",
     "bundle/stereo-attachments.mjs": "afa1e3790e6e4014b1c0181e9c9c1a0279c31ec6040c7b22828536b1125a52aa",
     "bundle/style.css": "631a46373275cbe1aa0f2f8ffd4dbebaa971e7551dc388ed8ab77bf844dec1e0",
@@ -156,19 +643,18 @@
     "result": "PASS",
     "model": "gpt-6.1-sol",
     "reasoning": "high",
-    "scope": "Independent source/data/image review of this VDD change: A-C requirements, normal-equation preservation, held-out data exclusion, displacement/Jacobian budgets and raster evidence. No actionable defect. No full test or browser reruns.",
+    "scope": "Independent correction diff and actual image review: rigid pitch-only pin, preserved profile projection, smooth upper fringe and lower spans, exact bead support, frozen face files and final test/manifest evidence. No product defect or excessive design found; no test or browser reruns by reviewer.",
     "limitations": [
-      "Intermediate conformal energy increases; recorded explicitly.",
-      "LOPO withholds residual observations, retaining the shared upstream prior.",
-      "Specialist UI/UX review remains with coordinator."
+      "Absolute reference gates retain 14 failures; no reference pixels or gate formulas excluded.",
+      "Specialist Selaphiel review, merge and deployment belong to the coordinating session."
     ]
   },
-  "scope": "Unchanged face and r15 3D prior; C1 neutral-yaw interpolation, profile support fade and occlusion-weighted conformal/mirror/view coupled hair residuals. Absolute reference mismatches remain diagnostics.",
-  "ui": "Existing viewer and controls unchanged. Ten before/after angles and 111 WebGL sweep frames per variant; specialist UI/UX review remains with coordinator.",
+  "scope": "Upper crown/face envelope fitted independently of lower tails/ties. Rigid pitch-only hairpin translation with the existing profile projection preserved, median-window vertical fringe observations, smooth upper/lower fields. Three raster feedback passes, local determinant projection, independent bead-local span fields. Face frozen at integrated main 17032ea; shell, assets and topology unchanged.",
+  "ui": "Viewer controls and layout unchanged. Actual WebGL nine-direction hair and full-portrait before/after captures; independent review recorded by coordinator.",
   "researchEvaluation": "docs/vdd-research-evaluation.json",
   "researchPass": true,
   "webgl": {
-    "baseline": "6915b2751ef94ff80d3b86456befda5a9a958f0c",
+    "baseline": "17032ea",
     "angles": [
       [
         -22.5,
@@ -229,12 +715,11 @@
     ],
     "pageErrors": [],
     "sheet": "docs/captures/vdd_unobserved_angles_sheet.png",
-    "sheetSha256": "6688e08e686e45d42f687149a89e911eef2e4bab81cdddf22bce0e4edb9eda48",
+    "sheetSha256": "03ffa096d2847f96604344207c079cdeddafdc0b86645a0906c57cf31a705b6f",
     "definition": "same WebGL full portraits, frozen motion, scale=1, 720x720 crop resized equally to 320x320; rows main/after for each group of five angles"
   },
   "researchSha256": {
-    "vdd-research-evaluation.json": "60f670d91011c4af5d65a79a5ca93976c5054c7c6448b09476ce41b693635a93",
-    "vdd-webgl.json": "9a24c1d482d40ce959dad72967627553c65fb2a59153ba5c7e62c876cd515c13"
+    "vdd-research-evaluation.json": "3212b50b7ff7b8617fea0aae25d03d4255800efc07b9070ec8c9aac81185b4a2"
   },
   "profileExtension": "docs/side90-validation.json"
 }

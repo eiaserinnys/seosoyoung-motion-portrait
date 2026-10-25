@@ -5,7 +5,8 @@ import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './g
 import {canopyWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
 import {frameValue,FRAME_CACHE} from './pose-grid.mjs';
 import {smoothstep} from './face-profile.mjs';
-import {applyHairSolve} from './hair-solve.mjs';
+import {applyHairSolve,applyTailSolve} from './hair-solve.mjs';
+export const HAIRPIN_ANCHOR=[598,290];
 export {HEAD_CENTER,HEAD_RADIUS,LEFT_EYE_BALL,RIGHT_EYE_BALL,EYE_BALL_R,spherePoint,sphereWarp,eyeballAngles,headWorld,liftHead,eyeWorld,eyeCenter,rotateXYZ} from './geometry.mjs';
 export function interpolate(keys,value) {
   if(value<=keys[0].value)return keys[0].output;
@@ -32,7 +33,12 @@ export function deform3D(mesh,point,parameters) {
 }
 function deformLocal(mesh,point,p) {
   const id=mesh.id;let [x,y]=point;
-  if(id==='hair-top'||id.startsWith('bangs')||id.startsWith('side-hair')||id==='hairpin')return applyHairSolve(canopyWorld(point,p),point,p);
+  if(id==='hairpin') {
+    // Keep the approved profile projection; sample only the pitch residual
+    // at one anchor so its nonuniform field cannot squash the accessory.
+    return applyHairSolve(canopyWorld(point,p),point,p,false,HAIRPIN_ANCHOR);
+  }
+  if(id==='hair-top'||id.startsWith('bangs')||id.startsWith('side-hair'))return applyHairSolve(canopyWorld(point,p),point,p);
   if(mesh.deformerId==='WarpBody') {
     const upper=clamp((1536-y)/960,0,1);
     return [x+p.ParamBodyAngleX*upper,y-p.ParamBreath*4*upper,-500];
@@ -69,7 +75,8 @@ function deformLocal(mesh,point,p) {
     const lift=Math.max(0,root[1]-anchor[1]);
     const sag=(lift*.72+Math.max(0,p.ParamHairBack)*16+Math.abs(p.ParamHairSide)*10)*weight;
     const inward=(left?1:-1)*(lift*.22+Math.abs(p.ParamHairSide)*6)*weight;
-    return [anchor[0]+dx*Math.cos(a)-dy*Math.sin(a)+inward,anchor[1]+dx*Math.sin(a)+dy*Math.cos(a)+sag,anchor[2]-s*35];
+    const world=[anchor[0]+dx*Math.cos(a)-dy*Math.sin(a)+inward,anchor[1]+dx*Math.sin(a)+dy*Math.cos(a)+sag,anchor[2]-s*35];
+    return applyTailSolve(world,point,left?'left':'right',p);
   }
   if(id.startsWith('side-cranium'))return applyHairSolve(craniumWorld(point,id.endsWith('left')?'left':'right',p),point,p,true);
   if(id.startsWith('back-hair')) {
