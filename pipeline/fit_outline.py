@@ -67,9 +67,6 @@ def correct_up_diagonal(p):
     if p['pitch']<=0 or not p['yaw']:return
     base_rows=np.asarray(p['rows'],float).copy()
     for row,sample in zip(p['rows'],p['boundarySamples']):
-        if row[0]>570:
-            lift=5.*float(sphere_ease((row[0]-570)/(616-570)))
-            row[1]-=lift;row[3]-=lift
         if row[0]<480 or row[0] in CHIN_ROWS:continue
         ease=float(sphere_ease((row[0]-480)/(616-480)))
         for side,column in [('left',2),('right',4)]:
