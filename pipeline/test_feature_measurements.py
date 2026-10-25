@@ -9,27 +9,34 @@ from PIL import Image
 from fit_features import ROOT,measure,measure_opening,SEEDS
 
 class FeatureMeasurementTest(unittest.TestCase):
-    def test_face_verifier_uses_down_right_openings_for_both_down_diagonals(self):
+    def test_each_pitch_pose_preserves_its_own_registered_measurements(self):
+        data=json.loads((ROOT/'source/viewer/face-feature-fit.json').read_text())
+        for pose in data['poses']:
+            if not pose['pitch']:continue
+            with self.subTest(pose=pose['name']):
+                self.assertEqual(pose['centers'],pose['registeredCenters'])
+                scale=pose['registration']['scale']
+                for side in ['left','right']:
+                    np.testing.assert_allclose(pose['scales'][side],np.array(pose['measuredScales'][side])*scale,atol=1e-12)
+
+    def test_face_verifier_uses_each_independent_measured_opening(self):
         from verify_hairless_face import expected_opening
         data=json.loads((ROOT/'source/viewer/face-feature-fit.json').read_text())
         poses=[dict(yaw=p['yaw'],pitch=p['pitch'],feature=p) for p in data['poses']]
-        dr=next(p for p in poses if p['yaw']==45 and p['pitch']==-30)
-        dl=next(p for p in poses if p['yaw']==-45 and p['pitch']==-30)
-        for side,other in [('left','right'),('right','left')]:
-            self.assertEqual(expected_opening(poses,dr,side),dr['feature']['measuredScales'][side][1])
-            self.assertEqual(expected_opening(poses,dl,other),dr['feature']['measuredScales'][side][1])
+        for p in poses:
+            if not p['pitch']:continue
+            for side in ['left','right']:
+                self.assertEqual(expected_opening(poses,p,side),p['feature']['measuredScales'][side][1]*p['feature']['registration']['scale'])
 
-    def test_down_right_registered_features_are_canonical(self):
+    def test_down_diagonals_keep_their_own_artwork_asymmetry(self):
         data=json.loads((ROOT/'source/viewer/face-feature-fit.json').read_text())
         poses={p['name']:p for p in data['poses']}
         dr,dl=poses['down-right'],poses['down-left']
         self.assertEqual(dr['centers'],dr['registeredCenters'])
         self.assertEqual(dr['scales'],dr['measuredScales'])
         front=data['front']
-        for a,b in [('nose','nose'),('mouth','mouth'),('left','right'),('right','left'),('browLeft','browRight'),('browRight','browLeft')]:
-            self.assertAlmostEqual(dl['centers'][a][0]-front[a][0],front[b][0]-dr['centers'][b][0])
-            self.assertAlmostEqual(dl['centers'][a][1]-front[a][1],dr['centers'][b][1]-front[b][1])
-        self.assertEqual(dl['scales'],{'left':dr['scales']['right'],'right':dr['scales']['left']})
+        self.assertEqual(dl['centers'],dl['registeredCenters'])
+        self.assertNotAlmostEqual(dl['centers']['mouth'][0]-front['mouth'][0],front['mouth'][0]-dr['centers']['mouth'][0])
 
     def test_cute_up_references_preserve_the_protected_upper_pixels(self):
         for name,stop,sha in [
@@ -56,14 +63,15 @@ class FeatureMeasurementTest(unittest.TestCase):
                 self.assertEqual(pose['measurements']['mouth'],measured)
                 self.assertEqual(SEEDS[name][5],seed)
 
-    def test_noncanonical_feature_poses_and_mask_manifest_entries_are_unchanged(self):
+    def test_neutral_feature_poses_and_mask_manifest_entries_are_unchanged(self):
         for path,key in [('source/viewer/face-feature-fit.json','poses'),('sam3_masks/references/manifest.json',None)]:
-            old=json.loads(subprocess.check_output(['git','show','f6112b6:'+path],cwd=ROOT,timeout=60))
+            baseline='4dba92d' if not key else 'f6112b6'
+            old=json.loads(subprocess.check_output(['git','show',baseline+':'+path],cwd=ROOT,timeout=60))
             new=json.loads((ROOT/path).read_text())
             if key:
                 old={p['name']:p for p in old[key]};new={p['name']:p for p in new[key]}
             for name,value in old.items():
-                if not name.startswith('up') and (not key or name not in {'down-left','down-right'}):
+                if not key or name in {'left','front','right'}:
                     self.assertEqual(json.dumps(new[name],ensure_ascii=False),json.dumps(value,ensure_ascii=False),name)
 
     def test_up_masks_end_at_the_new_chin(self):

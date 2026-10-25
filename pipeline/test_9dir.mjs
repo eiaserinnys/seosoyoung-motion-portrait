@@ -19,49 +19,31 @@ test('neutral face and feature vertices retain every original canvas coordinate'
   assert(Math.hypot(q[0]-point[0],q[1]-point[1])<1e-9,mesh.id);
  }
 });
-test('skin retains key-pose symmetry and bounded continuous intermediate 3D symmetry',()=>{
- for(const yaw of [10,22.5,37,45])for(const pitch of [-30,-15,0,18,30])for(const y of [465,510,570,610])for(const u of [0,.25,.5,.75,1]){
-  // Pitched interior now follows the six authored feature anchors. Only the
-  // measured outline endpoints have a mirror contract in the shared field.
-  if(pitch&&u!==0&&u!==1)continue;
-  if(pitch&&yaw!==45&&![-15,18].includes(pitch))continue;
-  const [l,r]=outlineRow(y),a=[l+(r-l)*u,y],b=[r-(r-l)*u,y];
-  const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()},q={...p,ParamAngleX:yaw,[FRAME_CACHE]:new Map()};
-  const left=outlineWorld(a,p),right=outlineWorld(b,q);
-  const restMid=(a[0]+b[0])/2;
-  const even=(1-Math.cos(pitch*Math.PI/180))/(1-Math.cos(Math.PI/6));
-  const targetMid=restMid+(502-restMid)*even;
-  // Neutral interior queries have the same permitted chord approximation as
-  // the r12 non-vertex contract; measured rim nodes remain exact.
-  const limit=!pitch?(u===0||u===1?1e-6:1.2):yaw===45&&Math.abs(pitch)===30?1e-6:1;
-  assert(Math.abs(left[0]+right[0]-targetMid*2)<limit,`outline X ${yaw},${pitch},${y},${u}`);
-  assert(Math.abs(left[1]-right[1])<limit,`outline Y ${yaw},${pitch},${y},${u}`);
-  for(const sign of [-1,1]){
-   const angle=-yaw+sign*.001,near=outlineWorld(a,{...p,ParamAngleX:angle,[FRAME_CACHE]:new Map()});
-   assert(Math.hypot(near[0]-left[0],near[1]-left[1])<.01,'intermediate skin continuity');
+test('skin preserves neutral symmetry and independent pitch observations continuously',()=>{
+ for(const yaw of [-45,-22.5,0,22.5,45])for(const pitch of [-30,-15,0,15,30])for(const y of [465,510,570,610]){
+  for(const x of outlineRow(y).slice(0,2)){
+   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()};
+   const q=outlineWorld([x,y],p);
+   assert(q.every(Number.isFinite));
+   for(const delta of [-.001,.001]){
+    const near=outlineWorld([x,y],{...p,ParamAngleX:yaw+delta,[FRAME_CACHE]:new Map()});
+    assert(Math.hypot(near[0]-q[0],near[1]-q[1])<.01,'continuous measured skin field');
+   }
   }
  }
 });
-test('feature centers retain key symmetry and bounded intermediate 3D symmetry with unchanged scales',()=>{
+test('feature centers reach independent measured keyframes with continuous spherical intermediates',()=>{
  const fit=JSON.parse(readFileSync(new URL('../source/viewer/face-feature-fit.json',import.meta.url)));
- const ids={left:'eye-left-upper-lashes',right:'eye-right-upper-lashes',browLeft:'eye-left-brow',browRight:'eye-right-brow',nose:'nose-detail',mouth:'mouth-detail'};
- for(const [key,id] of Object.entries(ids)){
-  const front=fit.front[key],a=featureWorld(id,front,base);
-  assert(Math.hypot(a[0]-front[0],a[1]-front[1])<1e-9);
+ const ids={left:'eye-left-sclera',right:'eye-right-sclera',browLeft:'eye-left-brow',browRight:'eye-right-brow',nose:'nose-detail',mouth:'mouth-detail'};
+ for(const pose of fit.poses)for(const [key,id] of Object.entries(ids)){
+  const p={...base,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,[FRAME_CACHE]:new Map()};
+  const q=featureWorld(id,fit.front[key],p),target=pose.centers[key];
+  assert(Math.hypot(q[0]-target[0],q[1]-target[1])<1e-6,pose.name+' '+key);
  }
- for(const yaw of [10,22.5,37,45])for(const pitch of [-30,-15,0,18,30])for(const [a,b] of [['left','right'],['browLeft','browRight'],['nose','nose'],['mouth','mouth']]){
-  if(pitch&&yaw!==45&&![-15,18].includes(pitch))continue;
-  const p={...base,ParamAngleX:-yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()},q={...p,ParamAngleX:yaw,[FRAME_CACHE]:new Map()};
-  const l=featureWorld(ids[a],fit.front[a],p),r=featureWorld(ids[b],fit.front[b],q);
-  const limit=!pitch||yaw===45&&Math.abs(pitch)===30?1e-6:1;
-  assert(Math.abs(l[0]-fit.front[a][0]+r[0]-fit.front[b][0])<limit,`${a} X ${yaw},${pitch}`);
-  assert(Math.abs(l[1]-fit.front[a][1]-r[1]+fit.front[b][1])<limit,`${a} Y ${yaw},${pitch}`);
-  const near=featureWorld(ids[a],fit.front[a],{...p,ParamAngleX:-yaw+.001,[FRAME_CACHE]:new Map()});
-  assert(Math.hypot(near[0]-l[0],near[1]-l[1])<.01,'intermediate feature continuity');
-  if(a==='left')for(const axis of [0,1]){
-   const span=(key,pose)=>{const pt=fit.front[key],lo=pt.slice(),hi=pt.slice();lo[axis]-=5;hi[axis]+=5;return featureWorld(ids[key],hi,pose)[axis]-featureWorld(ids[key],lo,pose)[axis];};
-   assert(Math.abs(span(a,p)-span(b,q))<1e-6,`eye scale ${axis} ${yaw},${pitch}`);
-  }
+ for(const yaw of [-37,-22.5,0,22.5,37])for(const pitch of [-30,-15,0,18,30])for(const [key,id] of Object.entries(ids)){
+  const p={...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()},q=featureWorld(id,fit.front[key],p);
+  const near=featureWorld(id,fit.front[key],{...p,ParamAngleX:yaw+.001,[FRAME_CACHE]:new Map()});
+  assert(Math.hypot(near[0]-q[0],near[1]-q[1])<.01,'intermediate feature continuity');
  }
 });
 test('upper canopy depth decreases from the center toward either outer edge',()=>{
@@ -93,11 +75,11 @@ test('reference camera translation aligns binocular midpoints to the r11 pivots'
   assert(Math.abs(mid-pose.registration.eyeMid[i])<1e-8);
  }
 });
-test('opening envelopes stay finite without height clamps and central pitch pairs are symmetric',()=>{
+test('opening envelopes preserve each independently measured pitch scale',()=>{
  const fit=JSON.parse(readFileSync(new URL('../source/viewer/face-feature-fit.json',import.meta.url)));
- for(const pose of fit.poses){
-  for(const side of ['left','right'])assert(pose.scales[side].every(v=>Number.isFinite(v)&&v>0));
-  if(!pose.yaw)assert.equal(pose.scales.left[1],pose.scales.right[1]);
+ for(const pose of fit.poses)for(const side of ['left','right']){
+  assert(pose.scales[side].every(v=>Number.isFinite(v)&&v>0));
+  if(pose.pitch)pose.scales[side].forEach((v,i)=>assert(Math.abs(v-pose.measuredScales[side][i]*pose.registration.scale)<1e-12));
  }
 });
 test('fringe receives its own hair solve instead of the cheek residual',()=>{

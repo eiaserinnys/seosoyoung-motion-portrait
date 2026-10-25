@@ -10,16 +10,9 @@ DIAGONAL_JAW_LIMITS=dict(chinMidpointError=10.,leftMaxOutwardStep=0.,rightMaxOut
 
 def rms(values):return float(np.sqrt(np.mean(np.square(values))))
 def expected_opening(poses,p,side):
-    def raw(q,k):
-        f=q['feature'];scale=f.get('registration',{}).get('scale',1)
-        return f['measuredScales'][k][1]*scale
     if not p['pitch']:return 1.0
-    if not p['yaw']:return (raw(p,'left')+raw(p,'right'))/2
-    if p['pitch']==-30:
-        canonical=next(q for q in poses if q['yaw']==45 and q['pitch']==-30)
-        return raw(canonical,side if p['yaw']>0 else 'right' if side=='left' else 'left')
-    mirror=next(q for q in poses if q['yaw']==-p['yaw'] and q['pitch']==p['pitch'])
-    return float(np.sqrt(raw(p,side)*raw(mirror,'right' if side=='left' else 'left')))
+    f=p['feature']
+    return f['measuredScales'][side][1]*f['registration']['scale']
 
 def outline_shape(p):
     rows=p['outline']['rows']
@@ -39,12 +32,17 @@ def diagonal_jaw(p):
     rows=np.asarray([r for r in p['outline']['rows'] if r[0]>=570],float)
     edges=rows[:,[2,4]];steps=np.diff(edges,axis=0);mid=edges.mean(axis=1)
     r11=R11_CHIN_MIDPOINT[p['name']]
+    tip=p['outline']['boundarySamples'][-1]
+    measured=(tip['left']['xCanvas']+tip['right']['xCanvas'])/2
     reverse=np.diff(mid)*(1 if p['name']=='up-left' else -1)
-    return dict(rows=rows.tolist(),chinMidpoint=float(mid[-1]),r11ChinMidpoint=r11,
-                chinMidpointError=float(abs(mid[-1]-r11)),
+    return dict(rows=rows.tolist(),chinMidpoint=float(mid[-1]),r11ChinMidpoint=r11,measuredChinMidpoint=measured,
+                chinMidpointError=float(abs(mid[-1]-measured)),
                 leftMaxOutwardStep=float(max(0.,np.max(-steps[:,0]))),
                 rightMaxOutwardStep=float(max(0.,np.max(steps[:,1]))),
-                maxSecondDifference=float(np.abs(np.diff(edges,n=2,axis=0)).max()),
+                # Rows are spaced 20,10,10,6px: second differences of raw
+                # displacements confuse unequal sampling with jaw curvature.
+                # Normalize to a 10-rest-pixel slope change before comparison.
+                maxSecondDifference=float(np.abs(np.diff(steps/np.diff(rows[:,0])[:,None],axis=0)).max()*10),
                 maxMidpointReversal=float(max(0.,np.max(reverse))))
 
 def metrics(poses):
@@ -78,16 +76,19 @@ def metrics(poses):
             length_errors={'eyeChin':(chin-eye)-(p['outline']['yChin']-teye),
                            'eyeNose':(lm['nose'][1]-eye)-(target['nose'][1]-teye),
                            'noseMouth':(lm['mouth'][1]-lm['nose'][1])-(target['mouth'][1]-target['nose'][1])}
-        eyes={k:{'shear':v['shear'],'heightRatio':v['heightRatio'],
+        eyes={k:{'shear':v['shear'],'expectedShear':v['expectedShear'],'shearError':abs(v['shear']-v['expectedShear']),
+                 'heightRatio':v['heightRatio'],
                  'expectedOpeningRatio':expected_opening(poses,p,k),
                  'openingRatioError':abs(v['heightRatio']-expected_opening(poses,p,k)),
-                 'ballRatioError':max(abs(r-1) for r in v['ballRatios'].values())} for k,v in p['eyes'].items()}
+                 'expectedBallRatio':v['expectedBallRatio'],
+                 'ballRatioError':max(abs(r-v['expectedBallRatio']) for r in v['ballRatios'].values())} for k,v in p['eyes'].items()}
         cheeks=p['cheeks'];cheek_error=abs(cheeks['0.25']-cheeks['0.5'])
         observations=p['outline'].get('boundarySamples',[])
         bg_errors=[p['outline']['rows'][i][2 if side=='left' else 4]-s[side]['xCanvas']
                    for i,s in enumerate(observations) for side in ['left','right'] if s[side]['validBG']]
         counts={side:{kind:sum(s[side]['class']==kind for s in observations) for kind in ['BG','HAIR','SKIN']} for side in ['left','right']}
         result.append(dict(name=p['name'],yaw=p['yaw'],pitch=p['pitch'],targetRms=rms(target_errors),
+                           featureCenterMaxError=max([0.,*[float(np.linalg.norm(np.array(lm[k][:2])-v)) for k,v in raw.items()]]) if p['pitch'] else 0.,
                            targetChinError=abs(chin-p['outline']['yChin']),rawVisibleRms=rms(raw_errors),
                            rawSampleCount=sample_count,rawChinError=abs(chin-raw_chin),
                            lengthErrors=length_errors,rawLengthErrors=raw_length_errors,eyes=eyes,cheekError=cheek_error,
@@ -101,11 +102,15 @@ def failures(rows,protected):
     for p in rows:
         def check(label,value,limit):
             if abs(value)>limit:failed.append(dict(pose=p['name'],gate=label,value=float(value),limit=limit))
-        check('symmetric outline RMS',p['targetRms'],2.5)
-        check('symmetric chin Y',p['targetChinError'],2)
-        for k,v in p['lengthErrors'].items():check(k,v,5)
+        check('measured outline RMS',p['targetRms'],.5)
+        check('measured chin Y',p['targetChinError'],.5)
+        check('raw chin Y',p['rawChinError'],.5)
+        check('measured feature centers',p['featureCenterMaxError'],.5)
+        if p['bgFitRmsReference'] is not None:check('observed BG RMS',p['bgFitRmsReference'],.5)
+        for k,v in p['lengthErrors'].items():check(k,v,.5)
+        for k,v in p['rawLengthErrors'].items():check('raw '+k,v,.5)
         for k,v in p['eyes'].items():
-            check(k+' shear',v['shear'],1e-7)
+            check(k+' spherical tilt',v['shearError'],1e-7)
             check(k+' opening ratio',v['openingRatioError'],.03)
             check(k+' ball height',v['ballRatioError'],1e-7)
         check('reversed triangles',p['reversedTriangles'],0)
@@ -160,16 +165,19 @@ def approved_angle_domain(path):
 def self_test():
     """Every gate must reject its own injected violation, before trusting it."""
     valid=dict(name='injected',yaw=0,pitch=30,targetRms=0,targetChinError=0,rawVisibleRms=0,rawChinError=0,
+               featureCenterMaxError=0,bgFitRmsReference=0,rawLengthErrors={'eyeChin':0,'eyeNose':0,'noseMouth':0},
                lengthErrors={'eyeChin':0,'eyeNose':0,'noseMouth':0},cheekError=0,minDetJ=1,reversedTriangles=0,
-               eyes={'left':dict(shear=0,openingRatioError=0,ballRatioError=0)},
+               eyes={'left':dict(shear=0,shearError=0,openingRatioError=0,ballRatioError=0)},
                outlineShape=dict(peakRestY=450,peakCount=1,maxLowerWidthIncrease=0,maxLowerHalfWidthIncrease=0,maxUpperPriorError=0,pearMargin=26))
     assert not failures([valid],[])
-    cases=[('targetRms',2.501),('targetChinError',2.01),('minDetJ',-.1),('reversedTriangles',1)]
+    cases=[('targetRms',.501),('targetChinError',.501),('rawChinError',.501),('featureCenterMaxError',.501),
+           ('bgFitRmsReference',.501),('minDetJ',-.1),('reversedTriangles',1)]
     for key,value in cases:
         mutated=json.loads(json.dumps(valid));mutated[key]=value;assert failures([mutated],[]),key
-    for key in valid['lengthErrors']:
-        mutated=json.loads(json.dumps(valid));mutated['lengthErrors'][key]=5.01;assert failures([mutated],[]),key
-    for key,value in [('shear',.1),('openingRatioError',.031),('ballRatioError',.1)]:
+    for group in ['lengthErrors','rawLengthErrors']:
+        for key in valid[group]:
+            mutated=json.loads(json.dumps(valid));mutated[group][key]=.501;assert failures([mutated],[]),key
+    for key,value in [('shearError',.1),('openingRatioError',.031),('ballRatioError',.1)]:
         mutated=json.loads(json.dumps(valid));mutated['eyes']['left'][key]=value;assert failures([mutated],[]),key
     assert failures([valid],['bundle/hair-shell.mjs'])
     down={**valid,'pitch':-30,'minDetJ':0};assert failures([down],[])
@@ -183,14 +191,14 @@ def self_test():
         mutated=json.loads(json.dumps(diagonal));mutated[key]=limit+.001;assert failures([mutated],[]),key
     for key,limit in DIAGONAL_JAW_LIMITS.items():
         mutated=json.loads(json.dumps(diagonal));mutated['diagonalJaw'][key]=limit+.001;assert failures([mutated],[]),key
-    print('PASS gate self-test: 27 injected violations rejected')
+    print('PASS gate self-test: tight measurements, geometry and raster violations rejected')
 
 def write_metrics(poses,differences):
     self_test()
     rows=metrics(poses)
     for p in rows:p.update(differences[p['name']])
     protected=protected_changes();failed=failures(rows,protected)
-    out=dict(definition='visible target registration: pitch restY440..616, neutral yaw restY465..616 (upper SAM is hair occlusion); pitch-only single peak440..490 and monotone lower width; up upper prior±8 and width450>width490+8; r11 XY retained; positive mesh Jacobians replace the old S6 formula; comparison excludes restY<347; raw contours/lengths reference-only; redBg is render-only over registered RGB max<40; redHair is remaining render-only occlusion',
+    out=dict(definition='independent measured registration: centers, BG samples, target/raw chin and lengths <=0.5px; pitch restY440..616, neutral yaw restY465..616; reference keyframes collocate measured opening frames; intermediate cornea/arch/tilt follow spherical prior; positive mesh Jacobians; comparison excludes restY<347; redBg is render-only over registered RGB max<40; redHair is remaining render-only occlusion',
              visibility='face skin + eyes + brows + nose + closed mouth only; all hair/ears/neck/body OFF',
              approvedUpDiagonalLimits={**UP_DIAGONAL_LIMITS,**DIAGONAL_JAW_LIMITS},
              poses=rows,protectedChanges=protected,failures=failed,passed=not failed)

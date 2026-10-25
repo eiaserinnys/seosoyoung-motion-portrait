@@ -26,34 +26,24 @@ class HairPixels(unittest.TestCase):
   np.testing.assert_array_equal(b[5,5,:3],redrawn[5,5])
   for y,x in [(15,15),(30,15),(15,35)]:
    np.testing.assert_array_equal(b[y,x],original[y,x]);self.assertEqual(mask[y,x],0)
- def test_up_averages_and_down_right_is_the_canonical_mirror(self):
+ def test_pitch_outline_observations_are_never_mirror_averaged(self):
+  import copy
   rows=[[465,350,650,330,610,390,670,465]]
-  poses=[dict(yaw=yaw,pitch=pitch,yTop=465,yChin=616,
-              rows=[[465,465,320 if yaw<0 else 420,465,570 if yaw<0 else 680]])
+  poses=[dict(yaw=yaw,pitch=pitch,rows=[[465,465,320+yaw,465,680+yaw]])
          for pitch in [-30,30] for yaw in [-45,0,45]]
+  before=copy.deepcopy(poses)
   symmetrize(rows,poses)
-  up=next(p for p in poses if p['pitch']==30 and p['yaw']==-45)
-  self.assertEqual(up['rows'][0][4],577)
-  # Down-left changes never feed back into the canonical right profile.
-  poses[0]['rows'][0][4]=630
-  symmetrize(rows,poses)
-  self.assertEqual(poses[0]['rows'][0][4],584)
- def test_quartic_chin_endpoint_cannot_cross_its_opposite_edge(self):
-  rows=[[616,497,508,423,436,568,581,615]]
-  poses=[dict(yaw=yaw,pitch=pitch,rows=[[616,615,506,615,499]])
-         for pitch in [-30,30] for yaw in [-45,0,45]]
-  symmetrize(rows,poses)
-  for p in poses:
-   if p['yaw']==0:self.assertGreaterEqual(p['rows'][0][4]-p['rows'][0][2],11)
+  for old,new in zip(before,poses):self.assertEqual(old['rows'],new['rows'])
+ def test_measured_chin_registration_and_monotone_profiles(self):
   import json
   root=Path(__file__).resolve().parents[1]
-  features=json.loads((root/'source/viewer/face-feature-fit.json').read_text())
   traces=json.loads((root/'source/viewer/outline-traces.json').read_text())
   for pose in traces['poses']:
    if not pose['pitch']:continue
-   reg=next(f for f in features['poses'] if f['name']==pose['name'])['registration']
-   actual_chin=reg['eyeMid'][1]+(pose['rawYChin']-reg['referenceEyeMid'][1])*reg['scale']
-   for side in ['left','right']:self.assertAlmostEqual(pose['mapping']['canvasYSpan'][side][1],actual_chin)
+   r=pose['registration']
+   chin=r['eyeMid'][1]+(pose['rawYChin']-r['referenceEyeMid'][1])*r['scale']
+   for side in ['left','right']:self.assertAlmostEqual(pose['mapping']['canvasYSpan'][side][1],chin)
+   self.assertGreaterEqual(pose['rows'][-1][4]-pose['rows'][-1][2],11-1e-7)
  def test_sclera_boundary_fixture_matches_the_actual_opaque_parts(self):
   import json
   root=Path(__file__).resolve().parents[1]

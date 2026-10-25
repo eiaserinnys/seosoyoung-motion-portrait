@@ -242,9 +242,7 @@ def main():
     inputs = json.loads(subprocess.check_output(['node', str(ROOT/'pipeline/face_solve_inputs.mjs')], timeout=60))
     result = solve(inputs)
     path = ROOT/'source/viewer/face-solve.json'
-    # The 45..90 degree family is a separate approved fit. Updating face-0
-    # observations must not refit its depths from a different face-0 prior.
-    result['family45'] = json.loads(path.read_text())['family45']
+    result['family45'] = solve_family45(inputs,result['Z'])
     path.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':'))+'\n')
     for pose in result['poses']+result['family45']['poses']:
         print(pose['name'], json.dumps(pose['stats']))

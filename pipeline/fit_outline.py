@@ -5,7 +5,6 @@ import numpy as np
 from PIL import Image
 import cv2
 ROOT=Path(__file__).resolve().parents[1]
-CHIN_ROWS={600,610,616}
 def interval(mask,y):
     xs=np.flatnonzero(mask[y]>127)
     if not len(xs):raise ValueError(f'Empty silhouette row {y}')
@@ -54,6 +53,10 @@ def blend_profile(prior,measured,valid,offset):
             if w>weight[k]:
                 j=min(end,max(i,k));target[k]=prior[k]+w*(measured[j]-prior[j]);weight[k]=w
         i=end+1
+    # A cosine seam belongs outside the observed segment. Background evidence
+    # itself is a Dirichlet constraint, including each end of a short segment.
+    target[np.asarray(valid,bool)]=measured[np.asarray(valid,bool)]
+    weight[np.asarray(valid,bool)]=1.
     return target,weight
 def monotone_profile(rows):
     values=np.asarray(rows,float);mid=(values[:,2]+values[:,4])/2
@@ -65,9 +68,8 @@ def monotone_profile(rows):
     return values.tolist()
 def correct_up_diagonal(p):
     if p['pitch']<=0 or not p['yaw']:return
-    base_rows=np.asarray(p['rows'],float).copy()
     for row,sample in zip(p['rows'],p['boundarySamples']):
-        if row[0]<480 or row[0] in CHIN_ROWS:continue
+        if row[0]<480:continue
         ease=float(sphere_ease((row[0]-480)/(616-480)))
         for side,column in [('left',2),('right',4)]:
             if sample[side]['validBG']:continue
@@ -86,11 +88,6 @@ def correct_up_diagonal(p):
     pl=int(np.argmin(rows[:,2]));pr=int(np.argmax(rows[:,4]))
     rows[pl:,2]=np.maximum.accumulate(rows[pl:,2])
     rows[pr:,4]=np.minimum.accumulate(rows[pr:,4])
-    # Fade back to the original prior profile before the fixed chin rows.
-    for i,row in enumerate(rows):
-        w=float(sphere_ease((row[0]-570)/30))
-        rows[i,2]=(1.-w)*rows[i,2]+w*base_rows[i,2]
-        rows[i,4]=(1.-w)*rows[i,4]+w*base_rows[i,4]
     p['rows']=rows.tolist()
 def symmetrized_outline_rows(rows):
     result=[row[:] for row in rows]
@@ -105,34 +102,6 @@ def symmetrize(rows,poses):
         if p['pitch']:continue
         i=1 if p['yaw']==0 else 3 if p['yaw']<0 else 5
         p['rows']=[[r[0],r[0] if not p['yaw'] else r[7],r[i],r[0] if not p['yaw'] else r[7],r[i+1]] for r in rows]
-    for pitch in [-30,30]:
-        group={p['yaw']:p for p in poses if p['pitch']==pitch}
-        for p in group.values():p['measuredRows']=[r[:] for r in p['rows']]
-        center=group[0]
-        for row in center['rows']:
-            sy,yl,xl,yr,xr=row;half=max(5.5,(xr-xl)/2)
-            row[:]=[sy,(yl+yr)/2,502-half,(yl+yr)/2,502+half]
-        neg,pos=group[-45],group[45]
-        if pitch == -30:
-            neg['rows']=[[sy,yr,1004-xr,yl,1004-xl] for sy,yl,xl,yr,xr in pos['rows']]
-            if 'boundarySamples' in pos:
-                neg['boundarySamples']=[dict(restY=s['restY'],neckBounded=s['neckBounded'],
-                    **{a:{**s[b],'xCanvas':1004-s[b]['xCanvas']} for a,b in [('left','right'),('right','left')]}) for s in pos['boundarySamples']]
-                # Raw image coordinates retain their source image; mirrored
-                # observations live in the registered canvas frame.
-                chin=pos['registration']['eyeMid'][1]+(pos['rawYChin']-pos['registration']['referenceEyeMid'][1])*pos['registration']['scale']
-                reg=neg['registration']
-                neg['rawYChin']=reg['referenceEyeMid'][1]+(chin-reg['eyeMid'][1])/reg['scale']
-                for side in ['left','right']:
-                    neg['mapping']['canvasYSpan'][side][1]=chin
-                    neg['mapping']['rawYSpan'][side][1]=neg['rawYChin']
-                neg['canonicalSource']='down-right'
-            continue
-        for left,right in zip(neg['rows'],pos['rows']):
-            sy=left[0];l=(left[2]+1004-right[4])/2;r=(left[4]+1004-right[2])/2
-            yl=(left[1]+right[3])/2;yr=(left[3]+right[1])/2
-            left[:]=[sy,yl,l,yr,r]
-            right[:]=[sy,yr,1004-r,yl,1004-l]
     for p in poses:
         p['yTop']=(p['rows'][0][1]+p['rows'][0][3])/2
         p['yChin']=(p['rows'][-1][1]+p['rows'][-1][3])/2
@@ -227,10 +196,39 @@ def build():
                 row[2]=mid-h;row[4]=mid+h
         p['rows']=monotone_profile(p['rows'])
         correct_up_diagonal(p)
+        # The measured chin owns its horizontal position as well as its Y.
+        # Keep a finite 11px cap so the skin mesh cannot collapse at the tip.
+        tip=p['boundarySamples'][-1]
+        mid=(tip['left']['xCanvas']+tip['right']['xCanvas'])/2
+        p['rows'][-1][2:5:2]=[mid-5.5,mid+5.5]
+        if p['pitch']>0 and p['yaw']:
+            # Fit the observed lower jaw smoothly, with the actual chin cap
+            # fixed. These rows were formerly forced back to the yaw prior.
+            ids=[i for i,row in enumerate(p['rows']) if row[0]>=570]
+            s=(np.array([p['rows'][i][0] for i in ids])-616)/(616-570)
+            basis=np.column_stack((s,s*s))
+            for side,col in [('left',2),('right',4)]:
+                target=np.array([p['boundarySamples'][i][side]['xCanvas'] for i in ids])
+                cap=p['rows'][-1][col]
+                coef=np.linalg.lstsq(basis,target-cap,rcond=None)[0]
+                for i,x in zip(ids,cap+basis@coef):p['rows'][i][col]=float(x)
+        p['rows']=monotone_profile(p['rows'])
+        if p['pitch']>0 and p['yaw']:
+            values=np.array(p['rows'])
+            # Converge to the measured cap; a former inward prior must not
+            # force the final observed chin to step outward again.
+            pl=int(np.argmin(values[:,2]));pr=int(np.argmax(values[:,4]))
+            values[pl:,2]=np.maximum.accumulate(np.minimum(values[pl:,2],values[-1,2]))
+            values[pr:,4]=np.minimum.accumulate(np.maximum(values[pr:,4],values[-1,4]))
+            p['rows']=values.tolist()
+        # Fail rather than silently move a classified observation in a shape pass.
+        bg_errors=[row[col]-sample[side]['xCanvas'] for row,sample in zip(p['rows'],p['boundarySamples'])
+                   for side,col in [('left',2),('right',4)] if sample[side]['validBG']]
+        assert not bg_errors or max(map(abs,bg_errors))<=.5,(p['name'],bg_errors)
         p['fitRmsPixels']=float(np.sqrt(np.mean(np.square(bg_errors)))) if bg_errors else 0.
     data['measuredRows']=measured_rows
     symmetrize(rows,poses)
-    data.update(poses=poses,symmetry='pitched profiles use absolute x502 mirror mean; approved neutral r11 rows unchanged',registration='shared feature eye-midpoint and yaw-zero zoom; model-rim-to-actual-chin vertical fractions; BG-only measurements plus rotated r11 prior and per-side translation; cosine seams; monotone half-width below cheek peak')
+    data.update(poses=poses,symmetry='neutral yaw calibration only; independent measured pitch contours',registration='shared feature eye-midpoint and yaw-zero zoom; model-rim-to-actual-chin vertical fractions; exact BG samples and measured chin; rotated r11 prior in occluded regions; monotone half-width below cheek peak')
     (ROOT/'source/viewer/outline-traces.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
     (ROOT/'bundle/outline-data.mjs').write_text('// Generated by pipeline/fit_outline.py from SAM 3 masks.\nexport const OUTLINE_ROWS='+json.dumps(rows)+';\nexport const OUTLINE_POSES='+json.dumps(poses)+';\n')
     print('PASS sampled',len(rows),'rows from independent face masks')
