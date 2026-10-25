@@ -1,22 +1,85 @@
 {
-  "baseline": "0b75a0211691965ca234ad9114073ba934568394",
+  "baseline": "3ba80b1fb3ed36e87258367fdaabab8deb0973bc",
+  "protectedBaseline": "0b75a0211691965ca234ad9114073ba934568394",
   "node": {
-    "passed": 177,
+    "passed": 187,
     "failed": 0,
     "perTestTimeoutMs": 60000,
-    "workers": 2
+    "workers": 2,
+    "command": "node --test --test-concurrency=2 --test-timeout=60000 pipeline/test_*.mjs tests/*.test.mjs"
   },
   "python": {
-    "passed": 88,
+    "passed": 99,
     "subtestsPassed": 15,
     "failed": 0,
-    "runner": "pytest --timeout=60 -q pipeline tests"
+    "command": ".venv/bin/python -m pytest --timeout=60 -q pipeline tests"
   },
   "captures": {
-    "docs/captures/face_turnaround_7angle.png": "162c37837c46f74a33be316b7a2329aa8df3c2dbd1715acfb2d9930df8f8b54e",
-    "docs/captures/full_turnaround_7angle.png": "b96c94fb6c0d97eadb626beebeeb72d45f61dabfa040c7a342f3be833b61f6b4",
-    "docs/captures/profile_blink.png": "51fe27bd4f7e432a9c5efd67ba5b941433604f5575cba5eb8484e600f1f16b54"
+    "docs/captures/full_turnaround_7angle.png": "175fd38c7e20a6786b5d267d68e051757f9a9d4e0e472f330beadcc71741bfb6",
+    "docs/captures/face_turnaround_7angle.png": "3bbc7a9a97f35ebedc49ffb167c78b820804f5fe839d784163a80e85c158c33a",
+    "docs/captures/profile_blink.png": "51fe27bd4f7e432a9c5efd67ba5b941433604f5575cba5eb8484e600f1f16b54",
+    "docs/captures/vdd_unobserved_angles_sheet.png": "6688e08e686e45d42f687149a89e911eef2e4bab81cdddf22bce0e4edb9eda48"
   },
-  "bundleFiles": 38,
-  "codeReview": "self review permitted by delegation; UI/UX specialist re-review pending"
+  "bundleFiles": 40,
+  "sourceSha256": {
+    "bundle/hair-solve.mjs": "b86573b95a0b815c12e34b4a3f1942db1d9fbd269c6d56eaa364abea9d4cc85d",
+    "bundle/rig.mjs": "a97fbd11bbb22f6083026081e8aff66939b5dbd9908f0952471bc9e1c550270e",
+    "pipeline/test_side90.mjs": "026c37ceeb29bda5f860ab80063d1c63abee7eb27360d472193039d73f8a8219",
+    "pipeline/capture_side90.py": "6b9c8cb3788b3552c08c5e261bf979a65acf5c7d049202dded2ac006addb381f"
+  },
+  "protectedSha256": {
+    "bundle/hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
+    "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
+    "bundle/dome-data.mjs": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
+    "bundle/assets/texture_00.png": "d48644960a8712050b879536f3a3098bcdbff54913ced13fc4d58b2e6ca1377b",
+    "bundle/assets/texture_before_00.png": "42200050bf3ccd4785e897cc5bb61e52638602a34c59aef3b28db26b697851da",
+    "bundle/assets/seosoyoung-rig.json": "c87c907669190f99992b0fe152dfbda5f942e09d0792606d30bfa4af96036819"
+  },
+  "profileContract": {
+    "foreheadClearanceAllowedPx": [
+      15,
+      30
+    ],
+    "nearTriangleInversions": 0,
+    "triangleScope": "every triangle wholly on the near half of hair-top, near bangs, near side-hair and hairpin; includes scalp apex",
+    "allBackHairOpacityAtProfile": 0,
+    "posteriorStretchPx": 54,
+    "sharedField": "563 overlapping coordinate groups at four profile yaws and three pitch/roll pairs"
+  },
+  "visualReview": {
+    "status": "PASS",
+    "reviewer": "independent codex-6.1-sol high",
+    "resolved": [
+      "floating frontal wisps",
+      "crown sawtooth and triangle inversions",
+      "67.5-degree black vertical stripe",
+      "posterior horizontal stripe",
+      "neck gap above ties"
+    ],
+    "frames": "seven full/face turns and four open/closed profile pairs; compared with first rejected capture and side references"
+  },
+  "webgl": {
+    "invariantPoses": 23,
+    "changedPixels": 0,
+    "featureClips": 12,
+    "outsideFacePixels": 0,
+    "errors": 0
+  },
+  "vdd": {
+    "passed": true,
+    "meanRasterPx": 36.87779569691052,
+    "webglSweeps": [
+      {
+        "variant": "main",
+        "frames": 111,
+        "glErrors": 0
+      },
+      {
+        "variant": "after",
+        "frames": 111,
+        "glErrors": 0
+      }
+    ]
+  },
+  "codeReview": "PASS: independent gpt-6.1-sol high; no remaining code findings; specialist UI/UX review remains with coordinator"
 }

@@ -13,7 +13,7 @@ from playwright.sync_api import sync_playwright
 from capture_hairless_face import BG,Handler
 from hairless_face_reference import ROOT
 
-BASELINE='0b75a0211691965ca234ad9114073ba934568394'
+BASELINE='3ba80b1fb3ed36e87258367fdaabab8deb0973bc'
 ANGLES=[-90,-67.5,-45,0,45,67.5,90]
 
 
@@ -94,6 +94,11 @@ def main():
             for yaw in [-44.99,44.99]:
                 ims=render(yaw)
                 equal.append(dict(yaw=yaw,pitch=0,changedPixels=changed_pixels(ims['old'],ims['current'])))
+            # Match the VDD benchmark's twelve unobserved <=45 combinations.
+            for yaw in [-30,-22.5,-15,15,22.5,30]:
+                for pitch in ([-15,15] if abs(yaw)==22.5 else [-20,20]):
+                    ims=render(yaw,pitch)
+                    equal.append(dict(yaw=yaw,pitch=pitch,changedPixels=changed_pixels(ims['old'],ims['current'])))
             blink={yaw:render(yaw,blink=0,face=True)['current'] for yaw in [-90,-67.5,67.5,90]}
             for yaw in [-90,-67.5,67.5,90]:
                 skin=np.array(render(yaw,only='skin')['current'])[:,:,3]
@@ -148,7 +153,7 @@ def main():
     (ROOT/'docs/side90-webgl.json').write_text(json.dumps(report,indent=2)+'\n')
     assert all(p['changedPixels']==0 for p in equal),equal
     assert all(p['outsideFacePixels']==0 for p in clipping),clipping
-    print('PASS 7 face/full turns, 4 closed lids, 9 original poses + 44.99 pixel equality; 12 feature clips=0; recommended sliders/presets; errors 0')
+    print('PASS 7 face/full turns, 4 closed lids, 23 original/boundary/unobserved poses pixel equality; 12 feature clips=0; recommended sliders/presets; errors 0')
 
 
 if __name__=='__main__':main()

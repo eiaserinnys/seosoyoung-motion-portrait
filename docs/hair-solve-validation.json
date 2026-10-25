@@ -2,14 +2,16 @@
   "baseline": "0b75a0211691965ca234ad9114073ba934568394",
   "integratedBase": "6915b2751ef94ff80d3b86456befda5a9a958f0c",
   "node": {
-    "passed": 182,
+    "passed": 187,
     "failed": 0,
+    "perTestTimeoutMs": 60000,
+    "workers": 2,
     "command": "node --test --test-concurrency=2 --test-timeout=60000 pipeline/test_*.mjs tests/*.test.mjs"
   },
   "python": {
     "passed": 99,
-    "failed": 0,
     "subtestsPassed": 15,
+    "failed": 0,
     "command": ".venv/bin/python -m pytest --timeout=60 -q pipeline tests"
   },
   "face": {
@@ -104,9 +106,9 @@
     "hair_only_9dir_overlay.png": "f36e26ed8106c867bf390ded50f4bc3ee9772bd9fde6278f8e8e305d5b9d7c10",
     "hairless_face_9dir_comparison.png": "0066fb99bc263895cbf37908af3914db57ba6b83673d8b891a7f4ed0a13f86b0",
     "face_geom_9dir_overlay.png": "2be37fe3960313dac4f97142ff6d6824cf16a27bf8467a76b991a9f28be20622",
-    "face_turnaround_7angle.png": "ea87caa0ebe802146c2d6701e93e1a3eb05992258beb0061a1a0732fafab7809",
+    "face_turnaround_7angle.png": "3bbc7a9a97f35ebedc49ffb167c78b820804f5fe839d784163a80e85c158c33a",
     "r15_before_after_9dir.png": "75ad8d8c21f599bbb87c9b44b0cc550fe857ac461fc7f1e9f30ddc3c357c4548",
-    "vdd_unobserved_angles_sheet.png": "1e02c6518d8969d0e86bc4c69e75c4cb19949f9557e60e520ca41db902b606e5"
+    "vdd_unobserved_angles_sheet.png": "6688e08e686e45d42f687149a89e911eef2e4bab81cdddf22bce0e4edb9eda48"
   },
   "runtimeSha256": {
     "bundle/app.mjs": "2c9ae66eb46b0864f1fe1443ecf5abfd37364a26271d32d2fea61756c1c4f8cb",
@@ -135,7 +137,7 @@
     "bundle/geometry.mjs": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d",
     "bundle/hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
     "bundle/hair-solve-data.mjs": "2b06271aa277f3727983abab6852459dd5e1136987bab6c38d5e7eef5e124c96",
-    "bundle/hair-solve.mjs": "f62065ab0170eeafaa3d34386616976119a5af3c0b68719f4ffbb417c62a6bfb",
+    "bundle/hair-solve.mjs": "b86573b95a0b815c12e34b4a3f1942db1d9fbd269c6d56eaa364abea9d4cc85d",
     "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
     "bundle/head-turn.mjs": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf",
     "bundle/index.html": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
@@ -144,7 +146,7 @@
     "bundle/pose-grid.mjs": "4e37923756f7924ee4d06cf103ed242fe7824d82604a6d05a0605e9fb9152c44",
     "bundle/profile-attachments.mjs": "1dc5cb5f5ba7a6ee4b44e416c4923e38a02004b072006422919e26116749cadc",
     "bundle/renderer.mjs": "92eba85dd3ec45bc4d85ab0727b12d152c86472bcf3de071786112b88055d024",
-    "bundle/rig.mjs": "7623869dc6985c01f8dd17c829c2323826c1d971d16e13eb9d4d18862538b471",
+    "bundle/rig.mjs": "a97fbd11bbb22f6083026081e8aff66939b5dbd9908f0952471bc9e1c550270e",
     "bundle/side-strands.mjs": "da5bcefb883fc6f73fd92545a1a9be937cd06ea1381923efdab05cb60cba496c",
     "bundle/stereo-attachments.mjs": "afa1e3790e6e4014b1c0181e9c9c1a0279c31ec6040c7b22828536b1125a52aa",
     "bundle/style.css": "631a46373275cbe1aa0f2f8ffd4dbebaa971e7551dc388ed8ab77bf844dec1e0",
@@ -227,11 +229,12 @@
     ],
     "pageErrors": [],
     "sheet": "docs/captures/vdd_unobserved_angles_sheet.png",
-    "sheetSha256": "1e02c6518d8969d0e86bc4c69e75c4cb19949f9557e60e520ca41db902b606e5",
+    "sheetSha256": "6688e08e686e45d42f687149a89e911eef2e4bab81cdddf22bce0e4edb9eda48",
     "definition": "same WebGL full portraits, frozen motion, scale=1, 720x720 crop resized equally to 320x320; rows main/after for each group of five angles"
   },
   "researchSha256": {
-    "vdd-research-evaluation.json": "d5c194860b335fd6594433525c39b3b8dc7db21548bb540c403ae65531fa055f",
-    "vdd-webgl.json": "5f389a1a01453f0328742b2e5248750adc697b569c5bc5e55dfa00217368c7ee"
-  }
+    "vdd-research-evaluation.json": "60f670d91011c4af5d65a79a5ca93976c5054c7c6448b09476ce41b693635a93",
+    "vdd-webgl.json": "9a24c1d482d40ce959dad72967627553c65fb2a59153ba5c7e62c876cd515c13"
+  },
+  "profileExtension": "docs/side90-validation.json"
 }

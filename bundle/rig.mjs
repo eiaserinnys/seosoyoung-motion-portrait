@@ -122,6 +122,7 @@ export function opacity(mesh,p,state){
   const far=yaw<0?'left':'right';
   if(mesh.id.startsWith(`eye-${far}-`))return alpha*(1-smoothstep(50,66,angle));
   if(mesh.id===`side-hair-${far}`)return alpha*(1-smoothstep(46,60,angle));
+  if(mesh.id.startsWith('back-hair-')||(mesh.id==='hairpin'&&yaw>0))return alpha*(1-smoothstep(46,60,angle));
   if(mesh.id.startsWith(`tail-${far}-`))return alpha*(1-smoothstep(45,62,angle));
   if(mesh.id==='nose-detail')return alpha*(1-smoothstep(50,65,angle));
   if(mesh.id==='mouth-detail')return alpha*(1-smoothstep(50,65,angle));

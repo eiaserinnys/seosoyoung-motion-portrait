@@ -95,17 +95,17 @@
     {
       "epsilon": 0.01,
       "before": 0.14700090244438427,
-      "after": 3.422142251009665e-05
+      "after": 0.00003422142251009665
     },
     {
       "epsilon": 0.001,
       "before": 0.14700090244484032,
-      "after": 3.422142335752328e-06
+      "after": 0.000003422142335752328
     },
     {
       "epsilon": 0.0001,
       "before": 0.1470009024480281,
-      "after": 3.4222156738096167e-07
+      "after": 3.4222156738096167e-7
     }
   ],
   "crossValidation": {
@@ -987,7 +987,7 @@
       },
       "after": {
         "minDetJ": 0.9991291933742759,
-        "conformalEnergy": 3.447485438944162e-07,
+        "conformalEnergy": 3.447485438944162e-7,
         "mirrorRms": 0.03801331507044502
       }
     },
@@ -1002,7 +1002,7 @@
       },
       "after": {
         "minDetJ": 0.9972597341789802,
-        "conformalEnergy": 3.4113375480707794e-06,
+        "conformalEnergy": 0.0000034113375480707794,
         "mirrorRms": 0.11957678490642462
       }
     },
@@ -1017,7 +1017,7 @@
       },
       "after": {
         "minDetJ": 0.9945966794448753,
-        "conformalEnergy": 1.3249698309056128e-05,
+        "conformalEnergy": 0.000013249698309056128,
         "mirrorRms": 0.23566089342817176
       }
     },
@@ -1032,7 +1032,7 @@
       },
       "after": {
         "minDetJ": 0.9913708909201023,
-        "conformalEnergy": 3.3749435370315955e-05,
+        "conformalEnergy": 0.000033749435370315955,
         "mirrorRms": 0.37611251161046017
       }
     },
@@ -1047,7 +1047,7 @@
       },
       "after": {
         "minDetJ": 0.9878139178662636,
-        "conformalEnergy": 6.721367050083666e-05,
+        "conformalEnergy": 0.00006721367050083666,
         "mirrorRms": 0.5307785104280648
       }
     },
@@ -1947,7 +1947,7 @@
       },
       "after": {
         "minDetJ": 0.980664684586357,
-        "conformalEnergy": 6.545382701870326e-05,
+        "conformalEnergy": 0.00006545382701870326,
         "mirrorRms": 0.530778510428065
       }
     },
@@ -1962,7 +1962,7 @@
       },
       "after": {
         "minDetJ": 0.9863062747225868,
-        "conformalEnergy": 3.286577995593344e-05,
+        "conformalEnergy": 0.00003286577995593344,
         "mirrorRms": 0.3761125116104603
       }
     },
@@ -1977,7 +1977,7 @@
       },
       "after": {
         "minDetJ": 0.9914241207873007,
-        "conformalEnergy": 1.290278383413364e-05,
+        "conformalEnergy": 0.00001290278383413364,
         "mirrorRms": 0.2356608934281717
       }
     },
@@ -1992,7 +1992,7 @@
       },
       "after": {
         "minDetJ": 0.9956502716403266,
-        "conformalEnergy": 3.322019108763099e-06,
+        "conformalEnergy": 0.000003322019108763099,
         "mirrorRms": 0.1195767849064246
       }
     },
@@ -2007,7 +2007,7 @@
       },
       "after": {
         "minDetJ": 0.9986176201499719,
-        "conformalEnergy": 3.357220545894195e-07,
+        "conformalEnergy": 3.357220545894195e-7,
         "mirrorRms": 0.038013315070445
       }
     },
@@ -3177,7 +3177,7 @@
       },
       "after": {
         "minDetJ": 0.9984687086144395,
-        "conformalEnergy": 3.0510237465002667e-07,
+        "conformalEnergy": 3.0510237465002667e-7,
         "mirrorRms": 0.042458336279791495
       }
     },
@@ -3192,7 +3192,7 @@
       },
       "after": {
         "minDetJ": 0.9951833968832543,
-        "conformalEnergy": 3.019032872169435e-06,
+        "conformalEnergy": 0.000003019032872169435,
         "mirrorRms": 0.1335592893017798
       }
     },
@@ -3207,7 +3207,7 @@
       },
       "after": {
         "minDetJ": 0.9905083545293814,
-        "conformalEnergy": 1.1725979671525244e-05,
+        "conformalEnergy": 0.000011725979671525244,
         "mirrorRms": 0.26321749215050233
       }
     },
@@ -3222,7 +3222,7 @@
       },
       "after": {
         "minDetJ": 0.9848531136940297,
-        "conformalEnergy": 2.9868241815546654e-05,
+        "conformalEnergy": 0.000029868241815546654,
         "mirrorRms": 0.42009257722986004
       }
     },
@@ -3237,7 +3237,7 @@
       },
       "after": {
         "minDetJ": 0.9786269939983555,
-        "conformalEnergy": 5.948408149060486e-05,
+        "conformalEnergy": 0.00005948408149060486,
         "mirrorRms": 0.5928441769437555
       }
     },
@@ -4152,7 +4152,7 @@
       },
       "after": {
         "minDetJ": 0.9414686405525052,
-        "conformalEnergy": 6.845462032895172e-05,
+        "conformalEnergy": 0.00006845462032895172,
         "mirrorRms": 0.42009257722986004
       }
     },
@@ -4167,7 +4167,7 @@
       },
       "after": {
         "minDetJ": 0.9633234873302304,
-        "conformalEnergy": 2.6874614560725278e-05,
+        "conformalEnergy": 0.000026874614560725278,
         "mirrorRms": 0.2632174921505022
       }
     },
@@ -4182,7 +4182,7 @@
       },
       "after": {
         "minDetJ": 0.9813889052545842,
-        "conformalEnergy": 6.91928069625309e-06,
+        "conformalEnergy": 0.00000691928069625309,
         "mirrorRms": 0.1335592893017798
       }
     },
@@ -4197,7 +4197,7 @@
       },
       "after": {
         "minDetJ": 0.9940833207049625,
-        "conformalEnergy": 6.992600149401905e-07,
+        "conformalEnergy": 6.992600149401905e-7,
         "mirrorRms": 0.042458336279791474
       }
     },
@@ -4305,15 +4305,10 @@
     "meanImproved": true
   },
   "sources": {
-    "bundle/hair-solve.mjs": "f62065ab0170eeafaa3d34386616976119a5af3c0b68719f4ffbb417c62a6bfb",
+    "bundle/hair-solve.mjs": "b86573b95a0b815c12e34b4a3f1942db1d9fbd269c6d56eaa364abea9d4cc85d",
     "bundle/hair-solve-data.mjs": "2b06271aa277f3727983abab6852459dd5e1136987bab6c38d5e7eef5e124c96",
     "source/viewer/hair-solve.json": "a42b3020ce522fa47b8aa28d97c6cf9ca4c6250959a96f04b61c8733821fb693",
-    "pipeline/fit_hair_solve.py": "cd3c9b9c2dbd80d06df25f49d74b376e7fca6ab1d1671c211c51c0705c66834e",
-    "pipeline/vdd_benchmark.mjs": "8092deadadb0aed30c31cb055a306ac9d7788091e4d3cc0fb5d5bb8ba1b74844",
-    "pipeline/vdd_cross_validation.py": "7ef7c71c5f08bc7bc2b32cefaa106669d17ad18044e6089a2104662a05753f82",
-    "pipeline/vdd_research_notes.mjs": "32568eb21eb8bc7028ddb96d210365b20be9b3ca5b77771e1ffb1771e0b6c2a8",
-    "pipeline/capture_vdd.py": "a7affdf71bebbb11605af2fab0cda47178958d4ee00fcdcb390a23a14a76937e",
-    "pipeline/capture_vdd_baselines.py": "ce1ff7fca8ce0b1298e7599ea365e68bc8397a7c4433fc4433cac20b0fc33766"
+    "pipeline/fit_hair_solve.py": "cd3c9b9c2dbd80d06df25f49d74b376e7fca6ab1d1671c211c51c0705c66834e"
   },
   "pass": true
 }
