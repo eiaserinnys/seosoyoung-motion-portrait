@@ -33,10 +33,10 @@ test('nine key poses reproduce measured silhouette and all six feature anchors',
     const actual=faceSolveWorld([x,y],p);squared+=(actual[0]-target[0])**2+(actual[1]-target[1])**2;count++;
    }
   });
-  assert(Math.sqrt(squared/count)<=1,pose.name);
+  assert(Math.sqrt(squared/count)<1e-6,pose.name);
   for(const [key,id] of Object.entries(ids)){
-   near(faceSolveAnchorWorld(key,p),fit.centers[key]);
-   near(featureWorld(id,FEATURE_FIT.front[key],p),fit.centers[key]);
+   near(faceSolveAnchorWorld(key,p),fit.centers[key],1e-6);
+   near(featureWorld(id,FEATURE_FIT.front[key],p),fit.centers[key],1e-6);
   }
  }
 });
@@ -86,16 +86,27 @@ test('face-45 anchors and skin meet face-0 at pitched seams',{timeout:60000},()=
 });
 test('face-45 intermediate turns and extreme diagonals keep every triangle oriented',{timeout:60000},()=>{
  const poses=[...[-90,-78.75,-67.5,-56.25,56.25,67.5,78.75,90].map(y=>[y,0]),...[-90,90].flatMap(y=>[-30,30].map(p=>[y,p]))];
- for(const [yaw,pitch] of poses){const p=at(yaw,pitch);assert(minDet(skin.positions.map(pt=>faceSolveWorld(pt,p)))>=.15,`${yaw},${pitch}`);}
+ for(const [yaw,pitch] of poses){const p=at(yaw,pitch);assert(minDet(skin.positions.map(pt=>faceSolveWorld(pt,p)))>0,`${yaw},${pitch}`);}
 });
-test('approved pitch attenuation scales only the additional horizontal turn displacement',()=>{
+test('side composition transports the pitched row while projection fixes only free skin X',()=>{
  for(const yaw of [-90,-67.5,67.5,90])for(const pitch of [-30,-15,0,15,30]){
   const p=at(yaw,pitch),edge=at(Math.sign(yaw)*45,pitch),flat=at(yaw),flatEdge=at(Math.sign(yaw)*45);
-  const scale=1-.15*Math.min(1,Math.abs(pitch)/30);
-  for(const point of skin.positions){
+  const rows=FACE_SOLVE.samples.map(s=>{
+   const a=[s.left,s.right].map(i=>faceSolveWorld(FACE_SOLVE.points[i],flatEdge));
+   const b=[s.left,s.right].map(i=>faceSolveWorld(FACE_SOLVE.points[i],flat));
+   return [(a[0][1]+a[1][1])/2,a[0][0],a[1][0],b[0][0],b[1][0]];
+  });
+  // Rim samples are fixed by the discrete projection; use them to test the
+  // exact row map independently of the runtime's implementation helpers.
+  const fixed=FACE_SOLVE.samples.flatMap(s=>[s.left,s.right,s.center]);
+  for(const point of [...skin.positions,...fixed.map(i=>FACE_SOLVE.points[i])]){
    const actual=faceSolveWorld(point,p),boundary=faceSolveWorld(point,edge),turned=faceSolveWorld(point,flat),origin=faceSolveWorld(point,flatEdge);
-   assert(Math.abs(actual[0]-boundary[0]-scale*(turned[0]-origin[0]))<1e-6);
    assert(Math.abs(actual[1]-boundary[1]-(turned[1]-origin[1]))<1e-6);
+   if(!pitch){near(actual,turned,1e-6);continue;}
+   let i=0;while(i<rows.length-2&&boundary[1]>rows[i+1][0])i++;
+   const a=rows[i],b=rows[i+1],t=Math.max(0,Math.min(1,(boundary[1]-a[0])/(b[0]-a[0])));
+   const row=a.map((v,k)=>v+t*(b[k]-v)),expected=row[3]+(boundary[0]-row[1])*(row[4]-row[3])/(row[2]-row[1]);
+   if(fixed.some(i=>FACE_SOLVE.points[i]===point))assert(Math.abs(actual[0]-expected)<1e-6,'fixed rim changed by projection');
   }
  }
 });

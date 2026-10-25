@@ -38,12 +38,15 @@ export function geometry(){
    cheeks[u]=outlineWorld(pt,p)[1]-outlineWorld(pt,{...p,ParamAngleY:0,[FRAME_CACHE]:new Map()})[1];
   }
   const eyes={};
+  const sPhi=f.pitch/30,vScale=1-.08*sPhi*sPhi-.04*Math.max(0,-sPhi);
   for(const side of ['left','right']){
    const [x,y]=FEATURE_FIT.front[side],id='eye-'+side+'-sclera';
    const corners=[[x-40,y-25],[x+40,y-25],[x+40,y+25],[x-40,y+25]].map(pt=>featureWorld(id,pt,p));
    const span=(id,q)=>featureWorld(id,[x,y+20],q)[1]-featureWorld(id,[x,y-20],q)[1];
    const neutral={...p,ParamAngleY:0,[FRAME_CACHE]:new Map()};
    eyes[side]={corners,shear:Math.max(Math.abs(corners[1][1]-corners[0][1]),Math.abs(corners[2][1]-corners[3][1])),
+    expectedShear:Math.abs((corners[1][0]-corners[0][0])*Math.sin(f.yaw*Math.PI/180)*Math.sin(f.pitch*Math.PI/180)*.32),
+    expectedBallRatio:Math.cos(f.pitch*Math.PI/180*.85)*vScale,
     heightRatio:span(id,p)/span(id,neutral),measuredHeightRatio:f.scales[side][1],
     ballRatios:Object.fromEntries(['iris','pupil','highlight'].map(part=>{const id='eye-'+side+'-'+part;return [part,span(id,p)/span(id,neutral)];}))};
   }

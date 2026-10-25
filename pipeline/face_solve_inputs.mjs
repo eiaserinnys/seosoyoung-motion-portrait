@@ -38,7 +38,9 @@ const ids={browLeft:'eye-left-brow',browRight:'eye-right-brow',left:'eye-left-sc
 const poses=OUTLINE_POSES.map(pose=>{
  const p={...base,ParamAngleX:pose.yaw,ParamAngleY:pose.pitch,[FRAME_CACHE]:new Map()};
  const obs=points.map(pt=>legacyOutlineWorld(pt,p).slice(0,2));
- const weights=points.map((pt,i)=>!pose.pitch?4:boundary.has(i)||pt[1]<=347?4:0);
+ // Below the brow, the old boundary is a prior rather than a measurement.
+ // Pinning it would conflict with the newly observed cheek/chin silhouette.
+ const weights=points.map(pt=>!pose.pitch?4:pt[1]<=347?4:0);
  for(const i of boundary)if(!pose.pitch)weights[i]=8;
  samples.forEach(s=>{
   const r=pose.rows.find(r=>r[0]===s.y);
@@ -50,10 +52,10 @@ const poses=OUTLINE_POSES.map(pose=>{
  for(const [key,i] of Object.entries(anchors)){
   obs[i]=pose.pitch?fit.centers[key]:registeredFeatureWorld(ids[key],points[i],p).slice(0,2);
   weights[i]=pose.pitch?4:8;
-  const nearest=skin.positions.map((pt,j)=>[j,Math.hypot(pt[0]-points[i][0],pt[1]-points[i][1])]).sort((a,b)=>a[1]-b[1]).slice(0,3);
-  for(const [j] of nearest)if(!weights[j])weights[j]=2;
  }
- const pins=pose.pitch?[...samples.flatMap(s=>[s.left,s.right]),...Object.values(anchors)]:points.map((_,i)=>i);
+ // Every nonzero observation is an exact boundary condition. Interior skin
+ // nodes with no observation remain free under the shared smooth regularizer.
+ const pins=weights.flatMap((w,i)=>w>0?[i]:[]);
  return {name:pose.name,yaw:pose.yaw,pitch:pose.pitch,obs,weights,pins};
 });
 const p45=Object.fromEntries([-1,1].map(sign=>{

@@ -145,7 +145,7 @@ test('landmark-mapped jaw uses the actual registered chin without a synthetic li
   const reg=featurePose.registration,actualChin=reg.eyeMid[1]+(target.rawYChin-reg.referenceEyeMid[1])*reg.scale;
   const mirror=traces.poses.find(q=>q.yaw===-yaw&&q.pitch===pitch),other=FEATURE_FIT.poses.find(q=>q.yaw===-yaw&&q.pitch===pitch).registration;
   const mirrorChin=other.eyeMid[1]+(mirror.rawYChin-other.referenceEyeMid[1])*other.scale;
-  assert(Math.abs(target.yChin-(actualChin+mirrorChin)/2)<1e-7,`registered actual chin ${yaw},${pitch}`);
+  assert(Math.abs(target.yChin-actualChin)<1e-7,`registered actual chin ${yaw},${pitch}`);
   assert(Math.abs(lip[1]-featurePose.centers.mouth[1])<1e-7,`registered mouth ${yaw},${pitch}`);
  }
  const up=pose(0,30),jaw=outlineWorld([outlineRow(550)[0],550],up),chin=outlineWorld([502.5,616],up);
@@ -192,7 +192,7 @@ test('central fringe remains in front of the forehead without a temple indentati
   }
  }
 });
-test('socket uses measured opening height without diagonal shear',()=>{
+test('socket uses measured opening height with spherical diagonal tilt',()=>{
  for(const side of ['left','right']){
   const id=`eye-${side}-sclera`,[x,y]=FEATURE_FIT.landmarks[side].front;
   const height=p=>featureWorld(id,[x,y+25],p)[1]-featureWorld(id,[x,y-25],p)[1];
@@ -201,8 +201,9 @@ test('socket uses measured opening height without diagonal shear',()=>{
    assert(Math.abs(ratio-fit.scales[side][1])<1e-8,`measured socket height ${pitch}: ${ratio}`);
   }
   for(const yaw of [-45,45])for(const pitch of [-30,30]){
-   const p=pose(yaw,pitch),dy=featureWorld(id,[x+40,y],p)[1]-featureWorld(id,[x-40,y],p)[1];
-   assert(Math.abs(dy)<1e-8,`socket shear ${side},${yaw},${pitch}: ${dy}`);
+   const p=pose(yaw,pitch),a=featureWorld(id,[x-40,y],p),b=featureWorld(id,[x+40,y],p);
+   const expected=(b[0]-a[0])*Math.sin(yaw*Math.PI/180)*Math.sin(pitch*Math.PI/180)*.32;
+   assert(Math.abs(b[1]-a[1]-expected)<1e-8,`spherical socket tilt ${side},${yaw},${pitch}`);
   }
  }
 });
@@ -210,7 +211,11 @@ test('iris rotates inside its socket with head pitch and yaw and retains indepen
  for(const side of ['left','right']){
   const [x,y]=FEATURE_FIT.landmarks[side].front,id=`eye-${side}-iris`,socket=`eye-${side}-sclera`;
   const offset=p=>featureWorld(id,[x,y],p).map((v,i)=>v-featureWorld(socket,[x,y],p)[i]);
-  for(const pitch of [-30,30])assert(Math.abs(offset(pose(0,pitch))[1])<1e-8,'iris and opening share the registered center without extra pitch offset');
+  for(const pitch of [-30,30]){
+   const s=pitch/30,vScale=1-.08*s*s-.04*Math.max(0,-s);
+   const expected=-11*Math.sin(pitch*Math.PI/180*.85)*vScale;
+   assert(Math.abs(offset(pose(0,pitch))[1]-expected)<1e-8,'corneal dome survives the canonical socket origin');
+  }
   for(const yaw of [-45,45]){
    assert(Math.abs(offset(pose(yaw,0))[0])<1e-6,'iris keeps its registered horizontal center');
    const width=(id,p)=>featureWorld(id,[x+20,y],p)[0]-featureWorld(id,[x-20,y],p)[0];

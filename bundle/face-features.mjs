@@ -14,12 +14,14 @@ export function featureWorld(id,point,p){
  const side=id==='closed-eyes-v1'?(point[0]<502?'left':'right'):id.includes('-left-')?'left':'right';
  const key=id.endsWith('brow')?(side==='left'?'browLeft':'browRight'):
   id.startsWith('eye-')||id==='closed-eyes-v1'?side:id==='nose-detail'?'nose':'mouth';
+ const canonicalId={left:'eye-left-sclera',right:'eye-right-sclera',browLeft:'eye-left-brow',
+  browRight:'eye-right-brow',nose:'nose-detail',mouth:'mouth-detail'}[key];
  if(Math.abs(yaw)<=45){
   const shift=frameValue(p,'solved-feature:'+key,()=>{
    const anchor=FEATURE_FIT.front[key];
    const neutral={...p,ParamEyeBallX:0,ParamEyeBallY:0,ParamEyeLOpen:1,ParamEyeROpen:1,
     ParamBrowLY:0,ParamBrowRY:0,ParamMouthOpenY:0,ParamMouthForm:0};
-   const origin=registeredFeatureWorld(id,anchor,neutral),target=faceSolveAnchorWorld(key,p);
+   const origin=registeredFeatureWorld(canonicalId,anchor,neutral),target=faceSolveAnchorWorld(key,p);
    return [target[0]-origin[0],target[1]-origin[1]];
   });
   return [q[0]+shift[0],q[1]+shift[1],q[2]];
@@ -30,7 +32,7 @@ export function featureWorld(id,point,p){
    ParamBrowLY:0,ParamBrowRY:0,ParamMouthOpenY:0,ParamMouthForm:0};
   // Compress in the unrolled feature frame, then apply the shared neck roll.
   const unrolled={...neutral,ParamAngleZ:0};
-  const origin=registeredFeatureWorld(id,anchor,unrolled),target=faceSolveAnchorWorld(key,{...p,ParamAngleZ:0});
+  const origin=registeredFeatureWorld(canonicalId,anchor,unrolled),target=faceSolveAnchorWorld(key,{...p,ParamAngleZ:0});
   const family=FACE_SOLVE.family45,sign=yaw<0?-1:1,[a67,a90]=turnWeights45(yaw-sign*45);
   let scale=1;
   if(id.startsWith('eye-')||id==='closed-eyes-v1'){

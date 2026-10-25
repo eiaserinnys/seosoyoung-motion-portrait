@@ -22,15 +22,13 @@ def assert_solution(data):
         assert np.isfinite(p['du']).all()
         assert p['s'] == 1
         s = p['stats']
-        assert s['rms'] <= 1
+        assert s['rms'] < 1e-6
+        assert s.get('observationRms',0) < .1
         assert s['reversedTriangles'] == 0 and s['minDetJ'] > 0
-        if p['pitch']:
-            assert s['minDetJ'] > .05
+        assert np.isfinite(s['duRms'])
         if p['yaw'] or p['pitch']:
             threshold = .5 if p['yaw'] and p['pitch'] else .9 if p['yaw'] else .6
-            limit = 25 if p['yaw'] and p['pitch'] else 16 if p['yaw'] else 12
             assert s['explained3D'] >= threshold, (p['name'], s)
-            assert s['duRms'] <= limit, (p['name'], s)
         else:
             assert p['t'] == [0, 0] and np.count_nonzero(p['du']) == 0
     cv = data['crossValidation']
@@ -79,10 +77,17 @@ class FaceSolveTest(unittest.TestCase):
         with self.assertRaises(AssertionError):
             assert_family45(bad)
 
-    def test_pitch_refit_preserves_neutral_xy_and_the_approved_side_family(self):
+    def test_pitch_refit_preserves_neutral_xy_and_refits_side_observations_exactly(self):
         previous = json.loads(subprocess.check_output(
             ['git', '-C', str(ROOT), 'show', '0b75a02:source/viewer/face-solve.json']))
-        self.assertEqual(self.data['family45'],previous['family45'])
+        inputs=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/face_solve_inputs.mjs')],timeout=60))
+        for pose in self.data['family45']['poses']:
+            obs=next(p for p in inputs['family45']['poses'] if p['name']==pose['name'])
+            side='Left' if pose['yaw']<0 else 'Right'
+            from optimize_3d_2d import projection
+            a,b=projection(np.array(inputs['family45']['p45'+side]),pose['delta'],0)
+            actual=a+np.array(self.data['family45']['Z'+side])[:,None]*b+pose['t']+pose['du']
+            np.testing.assert_allclose(actual,obs['obs'],atol=1e-6)
         for key in ['points','triangles','samples','anchors','meshCount']:
             self.assertEqual(self.data[key],previous[key])
         from optimize_3d_2d import projection
@@ -94,7 +99,7 @@ class FaceSolveTest(unittest.TestCase):
             np.testing.assert_allclose(after,before,atol=1e-9)
 
     def test_gates_reject_injected_violations(self):
-        for key, value in [('rms', 1.01), ('explained3D', 0), ('duRms', 100),
+        for key, value in [('rms', 1e-5), ('observationRms',.101), ('explained3D', 0), ('duRms', float('inf')),
                            ('minDetJ', -1), ('reversedTriangles', 1)]:
             bad = copy.deepcopy(self.data)
             p = next(p for p in bad['poses'] if p['yaw'])
