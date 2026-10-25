@@ -35,3 +35,11 @@ B1은 좌상·우상 앞머리 끝 피치 추종률을0.85로 높인다. B2는 �
 측정 모드: saved frames. 제품 파일 해시와 측정기 해시는 hair-r15-metrics.json에 기록한다. 원화 대비 엄격한 잔차는 진단값으로 보존한다.
 
 P3는 같은 새 볼륨 수식의 고밀도 토폴로지와 비교하고, 중립 3포즈는 실제 이전 렌더와도 비교한다. 원화 대비 엄격한 잔차는 hair-r15-metrics.json의 rawResidualFailures에 보존한다. UI 마크업·컨트롤·텍스트·레이아웃 변경은 없다. 전문 UI/UX 검수와 머지는 담당 세션에 인계한다.
+
+## PR #13 얼굴 재피팅 통합
+
+origin/main의 3a305b173f4e4f4750b99c411f70e1a66bf90492를 통합했다. viewer_9dir_grid.png는 이 얼굴과 B1+B2+B3 머리카락이 함께 적용된 실제 WebGL 9포즈를 새로 캡처한 결과다. HTTP·console·WebGL 오류 0과 실제 포즈 버튼 동작을 확인했다.
+
+승인된 faceless_hair_9dir_comparison.png, hair_only_9dir_overlay.png 및 hair-r15-metrics.json은 얼굴 재피팅 전의 머리카락 검증 자료로 보존했다. 두 머리카락 시트는 a822f37과 바이트가 같다. 보호 manifest는 경로별 origin/main 실제 파일 SHA로 갱신했다. 통합 그리드 SHA256은 b2f15ef2109d1844d427e5c28328a62d5b5c948465ed1ea504282fbfadd11938이다.
+
+통합 검증은 Node pipeline/test_*.mjs 143 passed, Python pipeline·tests 74 passed·15 subtests passed다. 이전 등록 턱과 성능 동등성 검사도 통과했다. Python 전체 검사에 필요한 triangle 20250106과 shapely 2.1.2는 requirements.txt의 고정 버전으로 워크트리 debug 안에만 설치했다. 코드 리뷰어는 사용자 지시에 따라 재호출하지 않았다.
