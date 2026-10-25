@@ -10,7 +10,7 @@
         "name": "up-left",
         "yaw": -45,
         "pitch": 30,
-        "kappa": 0.6
+        "kappa": 0.85
       },
       {
         "name": "up",
@@ -22,7 +22,7 @@
         "name": "up-right",
         "yaw": 45,
         "pitch": 30,
-        "kappa": 0.6
+        "kappa": 0.85
       },
       {
         "name": "down-left",
@@ -42,6 +42,25 @@
         "pitch": -30,
         "kappa": 0.85
       }
+    ]
+  },
+  "fringeFlare": {
+    "amount": 35,
+    "start": 245,
+    "span": 180,
+    "fadeStart": 380,
+    "fadeEnd": 430,
+    "reach": 150
+  },
+  "rearLower": {
+    "yStart": 300,
+    "yFull": 380,
+    "yEnd": 480,
+    "fade": 60,
+    "cap": 55,
+    "poses": [
+      {"name": "up-left", "yaw": -45, "pitch": 30, "amp": 45},
+      {"name": "up-right", "yaw": 45, "pitch": 30, "amp": 45}
     ]
   },
   "rearPitch": {

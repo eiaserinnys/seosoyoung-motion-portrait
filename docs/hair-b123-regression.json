@@ -1,0 +1,269 @@
+{
+  "baseline": "f6112b6ac8aba980d1b373654dc72ea677a4f610",
+  "productSha256": {
+    "bundle/hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
+    "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
+    "bundle/dome-data.mjs": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
+    "bundle/stereo-attachments.mjs": "231c5fe3d7dc8b2816cd9dc7f0318799ece7a78c46519efd9f326a513d53cc77",
+    "bundle/rig.mjs": "c45045fa2fdee54e42d5dbd9a82b5e428044af757e453bf44f8996286c1ece70",
+    "bundle/renderer.mjs": "ab01ca2c66406d91ea0d560a1ce09e2c1b7ca1f640b35e63a70b91f0ec745d41",
+    "bundle/assets/seosoyoung-rig.json": "c9f607d0c79a2da3a43c44da95d7e1cd1605066b718bc707b9a4ff4163edbb26"
+  },
+  "keyedPosePixels": {
+    "up-left": {
+      "changedPixels": 105333,
+      "beforeSha256": "9b12296187ff0c19cf457cb1dbe9ea1e2f68c6b8c2b0a0d6413ba547c07ef6bc",
+      "afterSha256": "2ae564e9c16b6ce330d1b5d53414d7209ad98f639a0b84ca4cb806939930938a"
+    },
+    "up": {
+      "changedPixels": 0,
+      "beforeSha256": "526876ca0748b744e1f24adf1b86415ddd4f5eb641aab63acf0d4714ffcaf63e",
+      "afterSha256": "526876ca0748b744e1f24adf1b86415ddd4f5eb641aab63acf0d4714ffcaf63e"
+    },
+    "up-right": {
+      "changedPixels": 108869,
+      "beforeSha256": "7d04f79973c28693ab1e7004c5e336896f9821c832e8dbd9453b6aa4f128bd23",
+      "afterSha256": "0958cc82e474200452f1031e770d6f9385c6efdc0d0ec549535f8e0f49d9578d"
+    },
+    "left": {
+      "changedPixels": 0,
+      "beforeSha256": "af4fe5efe61244be221c0aab64b54cfe7d419ff2a808d395f4e1ecdde561c52e",
+      "afterSha256": "af4fe5efe61244be221c0aab64b54cfe7d419ff2a808d395f4e1ecdde561c52e"
+    },
+    "front": {
+      "changedPixels": 0,
+      "beforeSha256": "ce0b5a4770abbe98b393c6c4c59b0d94cbd3f59f260f71b384aa2171d1e0b41b",
+      "afterSha256": "ce0b5a4770abbe98b393c6c4c59b0d94cbd3f59f260f71b384aa2171d1e0b41b"
+    },
+    "right": {
+      "changedPixels": 0,
+      "beforeSha256": "0a5fbc2f3570720c62d515cf2534c8174dba17ccc3018b0e27f51df7fbd11529",
+      "afterSha256": "0a5fbc2f3570720c62d515cf2534c8174dba17ccc3018b0e27f51df7fbd11529"
+    },
+    "down-left": {
+      "changedPixels": 0,
+      "beforeSha256": "971cf3eade8f5be928eba399b29add4919da97921446e5d6147a2d0bfd411dcd",
+      "afterSha256": "971cf3eade8f5be928eba399b29add4919da97921446e5d6147a2d0bfd411dcd"
+    },
+    "down": {
+      "changedPixels": 0,
+      "beforeSha256": "4bdb282cf69ed909f3990ea4af144b0c32b7f7e714581322a857e2ac5be138b3",
+      "afterSha256": "4bdb282cf69ed909f3990ea4af144b0c32b7f7e714581322a857e2ac5be138b3"
+    },
+    "down-right": {
+      "changedPixels": 0,
+      "beforeSha256": "8eaf6b699d238ce9252f453ff4f0bfa76d7c7d3095c4885f7105d9aa26f7e061",
+      "afterSha256": "8eaf6b699d238ce9252f453ff4f0bfa76d7c7d3095c4885f7105d9aa26f7e061"
+    }
+  },
+  "comparison": {
+    "up-left": {
+      "before": {
+        "foreheadExposure": {
+          "referenceArea": 13573,
+          "renderArea": 14630,
+          "ratioError": 0.077875193398659,
+          "region": [
+            331,
+            150,
+            520,
+            362
+          ]
+        },
+        "posteriorVolume": {
+          "baselineMeanAbsoluteDelta": 40.75247524752475,
+          "meanAbsoluteDelta": 28.544554455445546,
+          "improvement": 12.207920792079204,
+          "upperMaximumOverhang": 114,
+          "upperMaximumIncrease": 12,
+          "lowerRows": [
+            340,
+            440
+          ],
+          "upperRows": [
+            120,
+            200
+          ],
+          "missingRows": 0,
+          "upperWorstRow": {
+            "y": 120,
+            "reference": 661,
+            "baseline": 672,
+            "current": 684,
+            "increase": 12
+          },
+          "pass": true
+        },
+        "templeRimlight": {
+          "window": [
+            560,
+            120,
+            860,
+            420
+          ],
+          "threshold": 116.4584,
+          "baselinePixels": 1130,
+          "pixels": 435,
+          "reduction": 0.6150442477876106,
+          "minimumReduction": 0.5,
+          "pass": true
+        }
+      },
+      "after": {
+        "foreheadExposure": {
+          "referenceArea": 14331,
+          "renderArea": 16127,
+          "ratioError": 0.1253227269555508,
+          "region": [
+            331,
+            150,
+            528,
+            362
+          ]
+        },
+        "posteriorVolume": {
+          "baselineMeanAbsoluteDelta": 40.75247524752475,
+          "meanAbsoluteDelta": 9.683168316831683,
+          "improvement": 31.069306930693067,
+          "upperMaximumOverhang": 114,
+          "upperMaximumIncrease": 12,
+          "lowerRows": [
+            340,
+            440
+          ],
+          "upperRows": [
+            120,
+            200
+          ],
+          "missingRows": 0,
+          "upperWorstRow": {
+            "y": 120,
+            "reference": 661,
+            "baseline": 672,
+            "current": 684,
+            "increase": 12
+          },
+          "pass": true
+        },
+        "templeRimlight": {
+          "window": [
+            560,
+            120,
+            860,
+            420
+          ],
+          "threshold": 116.4584,
+          "baselinePixels": 1130,
+          "pixels": 435,
+          "reduction": 0.6150442477876106,
+          "minimumReduction": 0.5,
+          "pass": true
+        }
+      }
+    },
+    "up-right": {
+      "before": {
+        "foreheadExposure": {
+          "referenceArea": 12016,
+          "renderArea": 11469,
+          "ratioError": -0.04552263648468713,
+          "region": [
+            474,
+            150,
+            670,
+            362
+          ]
+        },
+        "posteriorVolume": {
+          "baselineMeanAbsoluteDelta": 64.65346534653466,
+          "meanAbsoluteDelta": 53.54455445544554,
+          "improvement": 11.108910891089117,
+          "upperMaximumOverhang": -19,
+          "upperMaximumIncrease": 0,
+          "lowerRows": [
+            340,
+            440
+          ],
+          "upperRows": [
+            120,
+            200
+          ],
+          "missingRows": 0,
+          "upperWorstRow": {
+            "y": 120,
+            "reference": 277,
+            "baseline": 308,
+            "current": 302,
+            "increase": 0
+          },
+          "pass": true
+        },
+        "templeRimlight": {
+          "window": [
+            164,
+            120,
+            464,
+            420
+          ],
+          "threshold": 80.29467999999997,
+          "baselinePixels": 1275,
+          "pixels": 483,
+          "reduction": 0.6211764705882352,
+          "minimumReduction": 0.5,
+          "pass": true
+        }
+      },
+      "after": {
+        "foreheadExposure": {
+          "referenceArea": 12016,
+          "renderArea": 13509,
+          "ratioError": 0.12425099866844214,
+          "region": [
+            474,
+            150,
+            670,
+            362
+          ]
+        },
+        "posteriorVolume": {
+          "baselineMeanAbsoluteDelta": 64.65346534653466,
+          "meanAbsoluteDelta": 15.693069306930694,
+          "improvement": 48.960396039603964,
+          "upperMaximumOverhang": -19,
+          "upperMaximumIncrease": 0,
+          "lowerRows": [
+            340,
+            440
+          ],
+          "upperRows": [
+            120,
+            200
+          ],
+          "missingRows": 0,
+          "upperWorstRow": {
+            "y": 120,
+            "reference": 277,
+            "baseline": 308,
+            "current": 302,
+            "increase": 0
+          },
+          "pass": true
+        },
+        "templeRimlight": {
+          "window": [
+            164,
+            120,
+            464,
+            420
+          ],
+          "threshold": 80.29467999999997,
+          "baselinePixels": 1275,
+          "pixels": 606,
+          "reduction": 0.5247058823529411,
+          "minimumReduction": 0.5,
+          "pass": true
+        }
+      }
+    }
+  }
+}

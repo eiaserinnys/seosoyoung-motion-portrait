@@ -11,7 +11,7 @@ export async function frozenRig(currentHairSurface=false){
   const files=execFileSync('git',['ls-tree','--name-only',BASELINE,'bundle/'],{encoding:'utf8'}).trim().split('\n').filter(p=>p.endsWith('.mjs'));
   for(const path of files)writeFileSync(join(dir,path.slice(7)),execFileSync('git',['show',BASELINE+':'+path]));
   // Benchmark only P1/P2; approved volume changes must be identical on both sides.
-  if(currentHairSurface)for(const name of ['hair-surface.mjs','dome-data.mjs'])writeFileSync(join(dir,name),readFileSync(new URL('../bundle/'+name,import.meta.url)));
+  if(currentHairSurface)for(const name of ['hair-shell.mjs','hair-surface.mjs','dome-data.mjs'])writeFileSync(join(dir,name),readFileSync(new URL('../bundle/'+name,import.meta.url)));
   const rig=await import(pathToFileURL(join(dir,'rig.mjs')));
   const pose=await import(pathToFileURL(join(dir,'pose-grid.mjs')));
   return {...rig,...pose,dispose:()=>rmSync(dir,{recursive:true,force:true})};

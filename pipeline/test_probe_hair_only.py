@@ -1,6 +1,44 @@
 """Contracts for the hair-only measurements, independent of WebGL fixtures."""
+import hashlib
 import numpy as np
-from pipeline.probe_hair_only import outline_rows, bead_centers, top_gate, neutral_difference, hairline_metrics, assess, stem_gap, cheek_cover_rows, fill_holes, summarize_metrics
+from pipeline.probe_hair_only import outline_rows, bead_centers, top_gate, neutral_difference, hairline_metrics, assess, stem_gap, cheek_cover_rows, fill_holes, summarize_metrics, posterior_error_gate, posterior_shift_gate, protected_files_match
+
+
+def test_b123_posterior_mean_error_accepts_approved_limits_and_rejects_excess():
+    for yaw, limit in [(-45, 16), (45, 20)]:
+        assert posterior_error_gate(yaw, limit)['pass']
+        for error in [limit + .01, None, float('nan'), float('inf')]:
+            assert not posterior_error_gate(yaw, error)['pass']
+
+
+def test_b123_raster_shift_accepts_60_and_rejects_61_pixels():
+    assert posterior_shift_gate(60)['pass']
+    for shift in [61, float('nan'), float('inf')]:
+        assert not posterior_shift_gate(shift)['pass']
+
+
+def test_protected_files_match_the_manifest_and_reject_changed_bytes(tmp_path):
+    path = tmp_path / 'face.mjs'
+    path.write_bytes(b'approved')
+    entries = [(hashlib.sha256(b'approved').hexdigest(), path.name)]
+    assert protected_files_match(tmp_path, entries)
+    path.write_bytes(b'changed')
+    assert not protected_files_match(tmp_path, entries)
+
+
+def test_forehead_gate_only_allows_fifteen_percent_on_upper_diagonals():
+    for yaw in [-45, 0, 45]:
+        for pitch in [-30, 30]:
+            limit = .15 if yaw and pitch > 0 else .10
+            pose = dict(name='probe', yaw=yaw, pitch=pitch, topY=50, topGate={'pass': True},
+                        retriangulationSilhouette={'all': {'pass': True}},
+                        templeRimlight={'pass': True}, posteriorVolume={'pass': True, 'meanAbsoluteDelta': 0},
+                        exterior=[{'y': 340, 'delta': [0, 0]}], hairlineMedianError=0,
+                        nearCheekCover=[], beads={})
+            for ratio, passed in [(limit, True), (-limit, True), (limit + .0001, False), (-limit - .0001, False)]:
+                pose['foreheadExposure'] = {'ratioError': ratio}
+                gates = [c for c in assess([pose]) if c['gate'].endswith('forehead exposure')]
+                assert gates and all(c['pass'] is passed for c in gates)
 
 
 def test_neutral_span_gate_accepts_antialiasing_but_rejects_real_boundary_drift():
@@ -24,12 +62,12 @@ def test_rimlight_uses_frozen_brightness_threshold_and_rejects_unchanged_texture
     b = a.copy()
     b[120:126, 560:860, :3] = 60
     assert rimlight_metrics(a, b, mask, mask, -45)['reduction'] == 1
-    # The approved broad window includes authored highlights: 58% is its bound.
+    # B2 moves authored fringe highlights into the broad temple window: 50%.
     roi = b[120:420, 560:860].copy()
-    roi.reshape(-1, 4)[:756, :3] = 255
+    roi.reshape(-1, 4)[:900, :3] = 255
     b[120:420, 560:860] = roi
     assert rimlight_metrics(a, b, mask, mask, -45)['pass']
-    b[122, 776, :3] = 255
+    b[123, 560, :3] = 255
     assert not rimlight_metrics(a, b, mask, mask, -45)['pass']
 
 
@@ -119,13 +157,19 @@ def test_acceptance_gate_rejects_the_observed_top_bead_and_neutral_regressions()
                   topGate={'pass': True} if pitch else None, neutralChangedPixels=0,
                   neutralSilhouette={'all': {'pass': True}}, referenceMixMaximum=0,
                   retriangulationSilhouette={'all': {'pass': True}},
-                  templeRimlight={'pass': True}, posteriorVolume={'pass': True},
+                  templeRimlight={'pass': True}, posteriorVolume={'pass': True, 'meanAbsoluteDelta': 0},
                   neutralVertexHashMatches=True, exterior=[{'y': y, 'delta': [0, 0]} for y in range(80, 521, 20)],
                   hairlineMedianError=0, foreheadExposure={'ratioError': 0},
                   nearCheekCover=[{'y': 520, 'gap': 0}],
                   beads={s: {'dBodyFrame': [0, 0], 'stemGap': 0} for s in ['left', 'right']})
              for yaw in [-45, 0, 45] for pitch in [-30, 0, 30]]
     assert all(c['pass'] for c in assess(poses))
+    poses[2]['posteriorVolume']['meanAbsoluteDelta'] = 16.01
+    poses[8]['foreheadExposure']['ratioError'] = .1501
+    failures = {c['gate'] for c in assess(poses) if not c['pass']}
+    assert {'upper diagonal posterior mean error', 'upper diagonal forehead exposure'} <= failures
+    poses[2]['posteriorVolume']['meanAbsoluteDelta'] = 0
+    poses[8]['foreheadExposure']['ratioError'] = 0
     poses[0]['beads']['left']['dBodyFrame'][1] = -119
     poses[1]['neutralSilhouette']['all']['pass'] = False
     poses[2]['topGate']['pass'] = False
@@ -136,7 +180,7 @@ def test_acceptance_gate_rejects_the_observed_top_bead_and_neutral_regressions()
     poses[8]['posteriorVolume']['pass'] = False
     poses[6]['retriangulationSilhouette']['all']['pass'] = False
     failures = {c['gate'] for c in assess(poses) if not c['pass']}
-    assert {'front reference mix ==0', 'temple rimlight reduction >=58%', 'upper diagonal posterior volume', 'P3 silhouette span <=2px'} <= failures
+    assert {'front reference mix ==0', 'temple rimlight reduction >=50%', 'upper diagonal posterior volume', 'P3 silhouette span <=2px'} <= failures
     poses[5]['exterior'][1]['delta'] = None
     import json
     serialized = json.dumps(assess(poses), allow_nan=False)
@@ -211,7 +255,7 @@ def test_cheek_gate_only_applies_downward_and_accepts_two_pixel_boundary_drift()
     assert cheek()[0]['pass']
     poses[0]['nearCheekCover'][0]['gap'] = 3
     assert not cheek()[0]['pass']
-    poses[0].update(pitch=30, topY=52, templeRimlight={'pass': True}, posteriorVolume={'pass': True})
+    poses[0].update(pitch=30, topY=52, templeRimlight={'pass': True}, posteriorVolume={'pass': True, 'meanAbsoluteDelta': 0})
     assert cheek() == []
 
 

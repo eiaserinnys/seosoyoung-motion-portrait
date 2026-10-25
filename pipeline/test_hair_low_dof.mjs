@@ -1,19 +1,69 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
 import {artWorld,CORRECTION_PRESETS,correctedLift} from '../bundle/geometry.mjs';
 import {hairLift,fringeSurface,canopyWorld,craniumWorld} from '../bundle/hair-shell.mjs';
 import {beadWorld,beadRotation} from '../bundle/stereo-attachments.mjs';
-import {domeSection,craniumPosition,pitchHairDepth} from '../bundle/hair-surface.mjs';
+import {domeSection,craniumPosition,pitchHairDepth,posteriorLocal} from '../bundle/hair-surface.mjs';
 import {DOME} from '../bundle/dome-data.mjs';
 import {measureHairBounds} from './hair_bounds.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const near=(a,b)=>assert(Math.max(...a.map((v,i)=>Math.abs(v-b[i])))<1e-6,`${a} != ${b}`);
+// Load the approved pre-B1/B2/B3 modules without changing the shared checkout.
+const beforeModules=new Map();
+for(const name of ['dome-data.mjs','hair-surface.mjs','hair-shell.mjs']){
+ const source=execFileSync('git',['show',`f6112b6ac8aba980d1b373654dc72ea677a4f610:bundle/${name}`],{encoding:'utf8',timeout:60000});
+ const resolved=source.replace(/from '(\.\/[^']+)'/g,(_,path)=>`from '${beforeModules.get(path.slice(2))??new URL('../bundle/'+path.slice(2),import.meta.url).href}'`);
+ beforeModules.set(name,'data:text/javascript;base64,'+Buffer.from(resolved).toString('base64'));
+}
+const beforeShell=await import(beforeModules.get('hair-shell.mjs'));
+const beforeSurface=await import(beforeModules.get('hair-surface.mjs'));
+
+test('B1+B2 sweep the upper diagonal free fringe outward and lift its tip',{timeout:60000},()=>{
+ for(const yaw of [-45,45]){
+  const p={...base,ParamAngleX:yaw,ParamAngleY:30},sign=Math.sign(yaw),point=[502+sign*100,360];
+  const actual=canopyWorld(point,p),before=beforeShell.canopyWorld(point,p);
+  assert((actual[0]-before[0])*sign>1,'outer canopy sweeps with gaze');
+  const tip=[502,420];
+  assert(fringeSurface(tip,p)[1]<beforeShell.fringeSurface(tip,p)[1],'tip follows upward pitch');
+ }
+});
+test('B3 expands lower posterior radially and keeps true upward-pitch X',{timeout:60000},()=>{
+ for(const yaw of [-45,45])for(const y of [340,380,420,460])for(const lambda of [-2.5,2.5]){
+  const p={...base,ParamAngleX:yaw,ParamAngleY:30},a=posteriorLocal(y,lambda,p),b=beforeSurface.posteriorLocal(y,lambda,p);
+  const delta=a.map((v,i)=>v-b[i]);
+  assert(delta[0]*Math.sin(lambda)+delta[2]*Math.cos(lambda)>0,'outward radial expansion');
+  assert.equal(delta[1],0);
+  near([delta[0]*Math.cos(lambda)-delta[2]*Math.sin(lambda)],[0]);
+  if(y>405){
+   const pt=[0,y,lambda],world=craniumWorld(pt,lambda<0?'left':'right',p),raw=craniumPosition(pt,p);
+   assert.equal(world[0],raw[0],'upward pitch retains rotated X');
+  }
+ }
+});
+test('B1+B2+B3 leave every other keyed pose exactly unchanged',{timeout:60000},()=>{
+ for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
+  if(pitch===30&&yaw)continue;
+  const p={...base,ParamAngleX:yaw,ParamAngleY:pitch};
+  for(const y of [80,245,340,380,420,460,540]){
+   for(const x of [330,402,502,602,670]){
+    assert.deepEqual(canopyWorld([x,y],p),beforeShell.canopyWorld([x,y],p));
+    assert.deepEqual(fringeSurface([x,y],p),beforeShell.fringeSurface([x,y],p));
+   }
+   for(const lambda of [-Math.PI,-2.5,-Math.PI/2,Math.PI/2,2.5,Math.PI]){
+    const pt=[0,y,lambda],side=lambda<0?'left':'right';
+    assert.deepEqual(posteriorLocal(y,lambda,p),beforeSurface.posteriorLocal(y,lambda,p));
+    assert.deepEqual(craniumWorld(pt,side,p),beforeShell.craniumWorld(pt,side,p),`${yaw},${pitch},${y},${lambda}`);
+   }
+  }
+ }
+});
 test('runtime dome data matches its canonical source',()=>{
  assert.deepEqual(DOME,JSON.parse(readFileSync(new URL('../source/viewer/dome-fit.json',import.meta.url))));
  const config=JSON.parse(readFileSync(new URL('../source/viewer/hair-pitch.json',import.meta.url)));
- for(const key of ['pitchArc','tipLag','rearPitch'])assert.deepEqual(DOME[key],config[key]);
+ for(const key of ['pitchArc','tipLag','rearPitch','fringeFlare','rearLower'])assert.deepEqual(DOME[key],config[key]);
  const upperRight=config.rearPitch.poses.find(p=>p.name==='up-right');
  assert.deepEqual([upperRight.rx,upperRight.rz,upperRight.y],[35,10,0]);
 });

@@ -1,9 +1,6 @@
 """Hair-only WebGL/reference measurements in the frozen r15 registration frame.
-
-Run --baseline to capture the three r15 neutral poses without changing checkout.
-The normal run retains real draw order: non-target meshes are black occluders,
-not hidden geometry. Reference segmentation is a diagnostic color/face mask,
-not a replacement for the original SAM crown masks.
+Run --baseline to capture nine r15 poses without changing checkout.
+Non-target meshes remain black occluders. Reference segmentation is diagnostic.
 """
 import argparse
 import base64
@@ -23,10 +20,10 @@ import numpy as np
 from PIL import Image
 if __package__:
     from .hair_report import sheets, summarize_metrics, write_release_report
-    from .hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics
+    from .hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics, posterior_error_gate, posterior_shift_gate, protected_files_match
 else:
     from hair_report import sheets, summarize_metrics, write_release_report
-    from hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics
+    from hair_revision_metrics import neutral_silhouette, rimlight_metrics, posterior_metrics, posterior_error_gate, posterior_shift_gate, protected_files_match
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = '83d4a80cfe2cd419d8daae90ee2783c2b9b1cbf9'
@@ -243,11 +240,11 @@ def capture(poses, baseline, dense=False):
                 for name, ids in groups.items():
                     data = page.evaluate('''async({ids,attachment,tailIds,stageA})=>{const {renderer,p,state}=studio;
                      const {DOME}=await import('./dome-data.mjs');
-                     const rear=DOME.rearPitch?.poses;
-                     if(stageA)DOME.rearPitch.poses=[];
+                     const rear=DOME.rearPitch?.poses,lower=DOME.rearLower?.poses;
+                     if(stageA){DOME.rearPitch.poses=[];if(lower)DOME.rearLower.poses=[];}
                      renderer.render(p,{...state,grid:false,wire:false,before:false,identify:ids||undefined,hidden:attachment?new Set([...state.hidden,...tailIds]):state.hidden});
                      const result={url:renderer.canvas.toDataURL(),view:renderer.view};
-                     if(stageA)DOME.rearPitch.poses=rear;
+                     if(stageA){DOME.rearPitch.poses=rear;if(lower)DOME.rearLower.poses=lower;}
                      return result;}''',
                      dict(ids=ids, attachment=name == 'attachment-hair', tailIds=TAILS + TIES, stageA=name == 'stage-a-head'))
                     assert data['view']['scale'] == 1, data['view']
@@ -390,10 +387,12 @@ def assess(poses):
                 check('front reference mix ==0', p['referenceMixMaximum'] == 0, p['referenceMixMaximum'])
         if yaw and pitch >= 0:
             rim = p['templeRimlight']
-            check('temple rimlight reduction >=58%', rim is not None and rim['pass'], rim)
+            check('temple rimlight reduction >=50%', rim is not None and rim['pass'], rim)
             if pitch:
                 volume = p['posteriorVolume']
                 check('upper diagonal posterior volume', volume is not None and volume['pass'], volume)
+                error = posterior_error_gate(yaw, volume.get('meanAbsoluteDelta') if volume else None)
+                check('upper diagonal posterior mean error', error['pass'], error)
         if p['topGate']:
             check('crown top', p['topGate']['pass'], p['topY'])
         approved_top = approved_top_gate(yaw, pitch, p['topY'])
@@ -408,7 +407,10 @@ def assess(poses):
             check('hairline median', median is not None and abs(median) <= 12, median)
             area = p['foreheadExposure']
             ratio = area['ratioError'] if area else None
-            check('forehead exposure', ratio is not None and abs(ratio) <= .1, ratio)
+            exposure_limit = .15 if yaw and pitch > 0 else .10
+            check('forehead exposure', ratio is not None and abs(ratio) <= exposure_limit, ratio)
+            if yaw and pitch > 0:
+                check('upper diagonal forehead exposure', ratio is not None and abs(ratio) <= exposure_limit, ratio)
         if yaw and pitch:
             rear = [r for r in p['exterior'] if (80 <= r['y'] <= 320 if pitch < 0 else 340 <= r['y'] <= 520)]
             side = 1 if yaw < 0 else 0
@@ -454,13 +456,13 @@ def main():
     checks = assess(report)
     bounds = json.loads(subprocess.check_output(['node', 'pipeline/hair_bounds.mjs'], cwd=ROOT, text=True))
     projection_shift = max(abs(v) for p in report for r in p['posteriorProjectionShift'] if r['shift'] for v in r['shift'])
-    bounds['checks'].append({'gate': 'H2 raster exterior shift from zero-supplement stage a <=45px',
-                             'pass': projection_shift <= 45, 'value': projection_shift})
+    bounds['checks'].append(posterior_shift_gate(projection_shift))
     bounds['pass'] = all(c['pass'] for c in bounds['checks'])
-    protected = [line.split('  ', 1)[1] for line in (ROOT / 'docs/hair-hspec-protected-sha256.txt').read_text().splitlines()]
-    protected_pass = subprocess.run(['git', 'diff', '--quiet', BASELINE, '--', *protected], cwd=ROOT).returncode == 0
+    protected = [line.split('  ', 1) for line in (ROOT / 'docs/hair-hspec-protected-sha256.txt').read_text().splitlines()]
+    protected_pass = protected_files_match(ROOT, protected)
     invariant_gates = {'nine poses', 'P3 silhouette span <=2px', 'neutral silhouette span <=2px', 'front reference mix ==0',
-                       'temple rimlight reduction >=58%', 'upper diagonal posterior volume',
+                       'temple rimlight reduction >=50%', 'upper diagonal posterior volume',
+                       'upper diagonal posterior mean error', 'upper diagonal forehead exposure',
                        'near cheek background gap',
                        'left foreground stem gap', 'right foreground stem gap', 'approved crown top'}
     invariants = [c for c in checks if c['gate'] in invariant_gates]
@@ -474,9 +476,9 @@ def main():
             'productSha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                               for p in [ROOT / 'bundle' / name for name in ['hair-shell.mjs', 'hair-surface.mjs', 'dome-data.mjs', 'stereo-attachments.mjs', 'rig.mjs', 'renderer.mjs', 'assets/seosoyoung-rig.json']]},
             'measurementMode': 'saved frames' if args.measure_only else 'single browser capture per variant',
-            'measurementApproval': 'Fable-approved broad-window rim >=58%; posterior rows340..440 improvement>=10px; upper rows120..200 maximum positive-overhang-beyond-reference increase from r16<=13px (V1 crown-lift chord allowance); downward cheek<=2px; stem<=17px',
+            'measurementApproval': 'Fable-approved B1+B2+B3: upper diagonal forehead ratio error<=15% (other poses<=10%); posterior rows340..440 mean error<=16px left/20px right and improvement>=10px; combined raster exterior shift<=60px; broad-window rim>=50%; upper rows120..200 positive-overhang increase from r16<=13px; downward cheek<=2px; stem<=17px',
             'probeSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            'strictRasterPass': strict_pass, 'bounds': bounds, 'invariantPass': invariant_pass,
+            'strictRasterPass': strict_pass, 'allChecksPass': accepted, 'bounds': bounds, 'invariantPass': invariant_pass,
             'invariants': invariants, 'rawResidualFailures': [c for c in checks if not c['pass'] and c['gate'] not in invariant_gates],
             'stemMaskMethod': 'visible crown | tails | face-skin; tie R>200/alpha>100, x percentile20..80 step2, empty pixels from row before tie',
             'protectedFilesPass': protected_pass, 'protectedFileCount': len(protected),

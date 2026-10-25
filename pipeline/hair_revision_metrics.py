@@ -1,5 +1,23 @@
 """Raster contracts for neutral silhouettes, temple RGB and posterior volume."""
+import math
+import hashlib
 import numpy as np
+
+
+def protected_files_match(root, entries):
+    return all(hashlib.sha256((root / path).read_bytes()).hexdigest() == expected
+               for expected, path in entries)
+
+
+def posterior_error_gate(yaw, error):
+    limit = 16 if yaw < 0 else 20
+    return {'maximum': limit, 'value': error,
+            'pass': error is not None and math.isfinite(error) and error <= limit}
+
+
+def posterior_shift_gate(shift):
+    return {'gate': 'H2 raster exterior shift from zero-supplement stage a <=60px',
+            'pass': math.isfinite(shift) and shift <= 60, 'value': shift}
 
 
 def row_span(mask, y):
@@ -38,7 +56,7 @@ def rimlight_metrics(before, after, before_mask, after_mask, yaw):
     reduction = 1-count/old_count if old_count else 0
     return {'window': [x0, 120, x1, 420], 'threshold': threshold,
             'baselinePixels': old_count, 'pixels': count, 'reduction': reduction,
-            'minimumReduction': .58, 'pass': reduction >= .58}
+            'minimumReduction': .50, 'pass': reduction >= .50}
 
 
 def posterior_metrics(reference, current, baseline, yaw):
