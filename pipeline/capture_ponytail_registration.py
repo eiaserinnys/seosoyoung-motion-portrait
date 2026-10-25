@@ -1,4 +1,5 @@
 """One actual WebGL capture run plus standalone scientific registration figures."""
+import base64,io
 import argparse
 import hashlib
 import json
@@ -10,6 +11,8 @@ from PIL import Image,ImageDraw,ImageFont
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
+from skin_fill_validation import validate_pixels
+from seedance_diagnostics import diagnostics
 from ponytail_observations import ROOT,THETA,digest
 from ponytail_model import predict,predict_radii,predict_center,measure,assert_registration
 from ponytail_mesh import registered,registration_matrix
@@ -57,10 +60,36 @@ def webgl(data):
         page.evaluate('studio.renderer.render(studio.p,studio.state)')
         page.screenshot(path=str(ROOT/'docs/captures/seedance_viewer_narrow.png'))
         page.get_by_role('button',name='앞머리 숨김',exact=True).click()
-    poses=geometry();renders=webgl_renders(poses,inspect=inspect,include_ears=True)
+    owned={}
+    def inspect_pose(page,pose,data):
+        Image.open(io.BytesIO(base64.b64decode(data['hairless']))).crop((38,32,1062,1056)).save(ROOT/'debug'/f'ribbon-final-{pose["name"]}.png')
+        value=page.evaluate("""()=>{
+          const keep=id=>id==='face-skin'||id.startsWith('eye-')||id==='nose-detail'||id==='mouth-detail'||id.startsWith('ear-');
+          const hidden=new Set(studio.rig.meshes.filter(m=>!keep(m.id)).map(m=>m.id));
+          faceCapture.render(studio.p,{...studio.state,hidden,mode:'normal',wire:false,grid:false,before:false,surfaceOnly:false,identify:'exposed-skin'});
+          if(faceCapture.gl.getError()!==0)throw Error('Ribbon identify WebGL error');
+          return faceCapture.canvas.toDataURL('image/png').split(',')[1];
+        }""")
+        owned[pose['name']]=np.array(Image.open(io.BytesIO(base64.b64decode(value))).crop((38,32,1062,1056)).convert('RGBA'))
+        Image.fromarray(owned[pose['name']]).save(ROOT/'debug'/f'ribbon-owned-{pose["name"]}.png')
+    poses=geometry();renders=webgl_renders(poses,inspect=inspect,include_ears=True,inspect_pose=inspect_pose)
     row=np.flatnonzero(np.array(renders['front'])[300,:,3]>127)
     assert len(row) and row[-1]-row[0]>250,'Exposed forehead is still clipped to the original narrow UV cap'
+    for pose in poses:
+        alpha=np.array(renders[pose['name']])[:,:,3]
+        _,_,stats,_=cv2.connectedComponentsWithStats(np.uint8(alpha>127))
+        # The preserved near ear is already separate in the authored left and
+        # up-left poses (same bbox/5394 and 4673 pixels with fill/clip disabled).
+        # This upper-skin change must preserve those ears, not invent a lower bridge.
+        expected=2 if pose['name'] in ['left','up-left'] else 1
+        assert np.count_nonzero(stats[1:,cv2.CC_STAT_AREA]>100)==expected,(pose['name'],'New disconnected face/forehead surface')
+        brow=np.mean([pose['landmarks'][k][:2] for k in ['browLeft','browRight']],axis=0)
+        eye=np.mean([pose['landmarks'][k][:2] for k in ['left','right']],axis=0)
+        for t in np.linspace(0,1,25):
+            x,y=np.rint((1-t)*brow+t*eye).astype(int)
+            assert alpha[y,x]>250,(pose['name'],'Transparent strip between forehead and eyes')
     fill_geometry=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/skin_fill_geometry.mjs')],timeout=60))
+    pixel_checks=[validate_pixels(p['name'],np.array(renders[p['name']]),owned[p['name']],next(f for f in fill_geometry if f['name']==p['name'])) for p in poses]
     comparison=Image.new('RGB',(2160,1080),BG);overlay=Image.new('RGB',(1440,1440),BG)
     for i,name in enumerate(ORDER):
         row=next(k for k in data['keys'] if k['name']==name);pose=next(p for p in poses if p['name']==name)
@@ -84,7 +113,7 @@ def webgl(data):
     comparison.save(ROOT/'docs/captures/ponytail_9dir_registration_comparison.png')
     comparison.save(ROOT/'docs/captures/hairless_face_9dir_comparison.png')
     overlay.save(ROOT/'docs/captures/face_geom_9dir_overlay.png')
-    return [dict(name=p['name'],minDetJ=p['minDetJ'],reversedTriangles=p['reversedTriangles']) for p in poses]
+    return [dict(name=p['name'],minDetJ=p['minDetJ'],reversedTriangles=p['reversedTriangles']) for p in poses],pixel_checks
 
 
 def main():
@@ -95,9 +124,10 @@ def main():
     sheet=fit_images(data);sheet.save(docs/'stage4_9dir_fitted_overlay_1080.png')
     sheet.save(args.artifacts/'stage4_9dir_fitted_overlay_1080.png')
     fig=trajectory(data);fig.savefig(docs/'stage4_pose_trajectory_and_fit.png',dpi=150);fig.savefig(args.artifacts/'stage4_pose_trajectory_and_fit.png',dpi=150);plt.close(fig)
-    meshes=webgl(data)
+    meshes,pixels=webgl(data)
     assert all(p['reversedTriangles']==0 and p['minDetJ']>=.0034 for p in meshes),meshes
-    metrics=dict(**measured,mesh=meshes,videoFrames=361,holdoutFrames=54,
+    applied=json.loads(subprocess.check_output(['node','--input-type=module','-e',"import {SKIN_FILL as S} from './bundle/skin-fill-data.mjs';process.stdout.write(JSON.stringify(S.poses));"],cwd=ROOT,text=True))
+    metrics=dict(**measured,**diagnostics(data,applied),skinFillPixels=pixels,mesh=meshes,videoFrames=361,holdoutFrames=54,
                  captureSha256={p.name:digest(p) for p in sorted(docs.glob('*.png')) if p.name in ['ponytail_9dir_registration_comparison.png','hairless_face_9dir_comparison.png','face_geom_9dir_overlay.png','viewer_9dir_grid.png','stage4_pose_trajectory_and_fit.png','stage4_9dir_fitted_overlay_1080.png']})
     text=json.dumps(metrics,ensure_ascii=False,indent=2)+'\n'
     (ROOT/'docs/stage4_registration_metrics.json').write_text(text)

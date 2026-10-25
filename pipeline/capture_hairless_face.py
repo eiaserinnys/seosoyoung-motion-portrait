@@ -13,7 +13,7 @@ CROP=(260,220,740,700)
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args):pass
 
-def webgl_renders(poses,order=ORDER,save_grid=True,inspect=None,include_ears=False):
+def webgl_renders(poses,order=ORDER,save_grid=True,inspect=None,include_ears=False,inspect_pose=None):
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT/'bundle')))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     errors=[];renders={}
@@ -49,6 +49,7 @@ def webgl_renders(poses,order=ORDER,save_grid=True,inspect=None,include_ears=Fal
                   if(faceCapture.gl.getError()!==0)throw Error('Full portrait WebGL error');
                   return {hairless,full:faceCapture.canvas.toDataURL('image/png').split(',')[1]};
                 }''',[p['yaw'],p['pitch'],include_ears])
+                if inspect_pose is not None:inspect_pose(page,p,data)
                 # Renderer at scale=1: canvas origin = (38,32).
                 im=Image.open(io.BytesIO(base64.b64decode(data['hairless']))).crop((38,32,1062,1056)).convert('RGBA')
                 renders[name]=im

@@ -1,23 +1,40 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {skinFillMesh,skinFillPositions} from '../bundle/skin-fill.mjs';
+import {readFileSync} from 'node:fs';
+import {skinFillMesh,skinFillPositions,skinFillClipMesh,skinFillClipPositions} from '../bundle/skin-fill.mjs';
+import {SKIN_FILL as S} from '../bundle/skin-fill-data.mjs';
+import {bindRig} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
-const params=(yaw,pitch)=>({...CORRECTION_PRESETS.recommended,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0});
-test('exposed skin reaches the full forehead and stays oriented throughout the registered pose domain',()=>{
- const mesh=skinFillMesh(),neutral=skinFillPositions({...params(0,0),[FRAME_CACHE]:new Map()});
- assert(Math.hypot(mesh.positions[0][0]-502,mesh.positions[0][1]-430)<100,'UV material center must use canonical image coordinates');
- const top=neutral.filter(p=>p[1]<320);
- assert(Math.max(...top.map(p=>p[0]))-Math.min(...top.map(p=>p[0]))>250,'the old 138px forehead cap must be filled');
- const area=(q,t)=>{const [a,b,c]=t.map(i=>q[i]);return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);};
+const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
+const face=rig.meshes.find(m=>m.id==='face-skin');
+const params=(yaw,pitch)=>({...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0,[FRAME_CACHE]:new Map()});
+const area=(q,t)=>{const [a,b,c]=t.map(i=>q[i]);return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);};
+test('97-column upper ribbon has oriented triangles throughout the registered domain',()=>{
+ const mesh=skinFillMesh();assert.equal(S.columns,97);assert.equal(mesh.positions.length,582);
+ const neutral=skinFillPositions(params(0,0),face);
  for(let yaw=-45;yaw<=45;yaw+=5)for(let pitch=-30;pitch<=30;pitch+=5){
-  const points=skinFillPositions({...params(yaw,pitch),[FRAME_CACHE]:new Map()});
-  for(const t of mesh.triangles)assert(area(points,t)/area(neutral,t)>0,`${yaw}/${pitch} skin fill triangle`);
+  const q=skinFillPositions(params(yaw,pitch),face);assert(q.flat().every(Number.isFinite));
+  for(const t of mesh.triangles)assert(area(q,t)*area(neutral,t)>0,`${yaw}/${pitch}`);
  }
 });
-test('skin backing follows the same body translation and breath as the face',()=>{
- const a=skinFillPositions(params(12,8)),b=skinFillPositions({...params(12,8),ParamBodyAngleX:7,ParamBreath:.5});
- for(let i=0;i<a.length;i++){
-  assert(Math.abs(b[i][0]-a[i][0]-7)<1e-9);assert(Math.abs(b[i][1]-a[i][1]+2)<1e-9);
+test('ribbon and its filled silhouette mask follow body and breath exactly once',()=>{
+ for(const fn of [skinFillPositions,skinFillClipPositions]){
+  const a=fn(params(12,8),face),b=fn({...params(12,8),ParamBodyAngleX:7,ParamBreath:.5},face);
+  for(let i=0;i<a.length;i++){
+   assert(Math.abs(b[i][0]-a[i][0]-7)<1e-9);assert(Math.abs(b[i][1]-a[i][1]+2)<1e-9);
+  }
+ }
+});
+test('UVs use the actual rest ribbon; mask fills its interior; centered domes mirror exactly',()=>{
+ const q=skinFillPositions(params(0,0),face),mesh=skinFillMesh();
+ for(let i=0;i<q.length;i++)for(let d=0;d<2;d++)assert(Math.abs(q[i][d]/1024-mesh.uvs[i][d])<1e-9);
+ assert.equal(skinFillClipMesh().triangles.length,98);
+ for(const pitch of [-30,0,30]){
+  const o=skinFillPositions(params(0,pitch),face).slice(485);
+  for(let j=15;j<=81;j++){
+   assert(Math.abs(o[j][0]+o[96-j][0]-1004)<1e-8);
+   assert(Math.abs(o[j][1]-o[96-j][1])<1e-8);
+  }
  }
 });
