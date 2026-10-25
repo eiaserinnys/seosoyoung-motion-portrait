@@ -41,12 +41,12 @@ export function hairSolveField(s,y,p){
  const delta=hairResidualField(s,y,p),roll=(p.ParamAngleZ||0)*Math.PI/180;
  return [delta[0]*Math.cos(roll)-delta[1]*Math.sin(roll),delta[0]*Math.sin(roll)+delta[1]*Math.cos(roll)];
 }
-export function applyHairSolve(world,point,p,posterior=false){
+export function applyHairSolve(world,point,p,posterior=false,anchor=point){
  const weight=correction(p,'CorrOutline');
  if(!weight)return world;
  let result=world;
- if(p.ParamAngleY&&hairFade(point[1])){
-  const [s,y]=hairCoordinates(point,posterior===true),delta=hairSolveField(s,y,p);
+ if(p.ParamAngleY&&hairFade(anchor[1])){
+  const [s,y]=hairCoordinates(anchor,posterior===true),delta=hairSolveField(s,y,p);
   result=[world[0]+weight*delta[0],world[1]+weight*delta[1],world[2]];
  }
  return extendProfile(result,point,p,posterior,weight);

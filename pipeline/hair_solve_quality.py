@@ -195,6 +195,27 @@ def compare_split_captures(poses,prior_dir,current_dir):
                 lower=dict(definition='separate left/right tails | ties, fixed rows550..720 step10',poses=lower))
 
 
+def attachment_chart_nodes(pose,grid,captures,atlas):
+    """Keep the prior's alpha-supported bead joins exactly in their body frame."""
+    from probe_hair_only import read_mask
+    name=pose['name'];hair=read_mask(captures/(name+'-crown.png'),40)
+    tie=read_mask(captures/(name+'-ties.png'),alpha_threshold=100)
+    sample=raster_stencil_sampler(pose,np.array([v['xy'] for v in pose['vertices']]),grid,atlas)
+    nodes=set()
+    for lo,hi in [(0,502),(502,1024)]:
+        yy,xx=np.where(tie[:,lo:hi])
+        if not len(xx):continue
+        left,right=[int(np.percentile(xx,p))+lo for p in [20,80]]
+        for x in range(left,right+1,2):
+            top=int(np.flatnonzero(tie[:,x])[0]);start=max(0,top-80)
+            above=np.flatnonzero(hair[start:top,x])
+            if not len(above):continue
+            c=sample([x,start+int(above[-1])],False)
+            if c is not None:nodes.update(np.flatnonzero(c))
+    if not pose['yaw']:nodes.update((n//12)*12+11-n%12 for n in list(nodes))
+    return sorted(int(n) for n in nodes)
+
+
 def bare_face_limits(root,features):
     """Record reference hairlines above the immutable skin's alpha support."""
     import json

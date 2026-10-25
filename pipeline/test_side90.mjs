@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
+import {bindRig,deform3D,opacity,HAIRPIN_ANCHOR} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {frozenRig} from './frozen_rig.mjs';
@@ -35,8 +35,14 @@ test('side90 keeps all nine poses unchanged apart from the approved face calibra
     assert.equal(opacity(m,p,state),old.opacity(m,q,state),`${yaw}/${pitch} ${m.id} opacity`);
     const hair=m.id==='hair-top'||m.id.startsWith('bangs')||m.id.startsWith('side-hair')||m.id==='hairpin'||m.id.startsWith('back-hair')||m.id.startsWith('side-cranium');
     for(const point of m.positions){
-     const prior=old.deform3D(m,point,q),expected=hair?applyHairSolve(prior,point,p,m.id.startsWith('side-cranium')):m.id.startsWith('tail-')?applyTailSolve(prior,point,m.id.includes('-left-')?'left':'right',p):prior;
-     assert.deepEqual(deform3D(m,point,p),expected,`${yaw}/${pitch} ${m.id}`);
+     const prior=old.deform3D(m,point,q);let expected;
+     if(m.id==='hairpin'){
+      const a=old.deform3D(m,HAIRPIN_ANCHOR,q),b=applyHairSolve(a,HAIRPIN_ANCHOR,p);
+      expected=[prior[0]+(b[0]-a[0]),prior[1]+(b[1]-a[1]),prior[2]];
+     }else expected=hair?applyHairSolve(prior,point,p,m.id.startsWith('side-cranium')):m.id.startsWith('tail-')?applyTailSolve(prior,point,m.id.includes('-left-')?'left':'right',p):prior;
+     const actual=deform3D(m,point,p);
+     if(m.id==='hairpin'&&pitch)assert(Math.hypot(...actual.map((v,i)=>v-expected[i]))<1e-10,`${yaw}/${pitch} rigid pin`);
+     else assert.deepEqual(actual,expected,`${yaw}/${pitch} ${m.id}`);
     }
    }
   }
@@ -119,8 +125,9 @@ test('profile posterior follows the rounded reference and reaches the bead top',
   }
  }
 });
-test('all overlapping front hair layers share the profile field including pitch and roll',{timeout:60000},()=>{
- const layers=rig.meshes.filter(m=>/^(hair-top$|bangs-|side-hair-|hairpin$)/.test(m.id)),groups=new Map();
+test('overlapping flexible front hair layers share the profile field including pitch and roll',{timeout:60000},()=>{
+ // The rigid pin follows one anchor translation; it is not a flexible seam.
+ const layers=rig.meshes.filter(m=>/^(hair-top$|bangs-|side-hair-)/.test(m.id)),groups=new Map();
  for(const m of layers)for(const v of m.positions){
   const key=v.slice(0,2).join(',');if(!groups.has(key))groups.set(key,[]);groups.get(key).push([m,v]);
  }

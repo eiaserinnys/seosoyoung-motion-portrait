@@ -11,7 +11,7 @@ import {domeSection} from '../bundle/hair-surface.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
-const ids=['hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','hairpin'];
+const ids=['hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right'];
 const at=(id,xy,p)=>deform3D(rig.meshes.find(m=>m.id===id),xy,p);
 test('neutral face and feature vertices retain every original canvas coordinate',()=>{
  for(const mesh of rig.meshes.filter(m=>m.id==='face-skin'||m.id.startsWith('eye-')||m.id==='nose-detail'||m.id.startsWith('mouth-')||m.id==='closed-eyes-v1'))for(const point of mesh.positions){
@@ -53,7 +53,7 @@ test('upper canopy depth decreases from the center toward either outer edge',()=
   for(let dx=0;dx<=280;dx+=5){const z=canopyWorld([502+cx+sign*dx,y],base)[2];assert(z<=previous+1e-9,`ridge ${sign},${y},${dx}`);previous=z;}
  }
 });
-test('all six canopy layers share the same XYZ at every seam, including physics',()=>{
+test('all five flexible canopy layers share the same XYZ at every seam, including physics',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const physics of [0,1]){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch,ParamHairFront:physics,ParamHairSide:-physics};
   for(const xy of [[490,80],[501,120],[512,180],[502,210],[502,245],[330,180],[674,220],[380,300],[625,400]]){

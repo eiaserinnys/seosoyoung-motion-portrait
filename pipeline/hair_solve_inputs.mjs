@@ -5,7 +5,7 @@ import {hairCoordinates} from '../bundle/hair-solve.mjs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {beadWorld} from '../bundle/stereo-attachments.mjs';
-import {bindRig,deform3D} from '../bundle/rig.mjs';
+import {bindRig,deform3D,HAIRPIN_ANCHOR} from '../bundle/rig.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 const bare=process.argv.includes('--bare-face');if(bare)bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
@@ -27,7 +27,7 @@ for(const pitch of [30,-30])for(const yaw of [-45,0,45]){
    if(point[1]>=545)continue;
    const world=posterior?craniumWorld(point,m.id.endsWith('left')?'left':'right',p):back?backWorld(point,p):canopyWorld(point,p);
    const xy=world.slice(0,2);
-   const [s,y]=hairCoordinates(point,posterior);
+   const [s,y]=hairCoordinates(m.id==='hairpin'?HAIRPIN_ANCHOR:point,posterior);
    indices.set(index,vertices.length);
    vertices.push({s,y,x:point[0],xy,front,cull:front||back,clipFromY:back?(m.id==='back-hair-center'?407:310):null,uv:m.uvs[index],facing:posterior?craniumFacing(point,p):1,order:m.drawOrder});
   }

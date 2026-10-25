@@ -6,7 +6,7 @@ from unittest.mock import patch
 import numpy as np
 from fit_hair_solve import ROOT,stencil,regularizer,solve_residual,conformal_rows,solve_joint,silhouette_weight,S,Y
 from fit_hair_solve import chart_derivatives,project_orientation
-from fit_hair_solve import observations
+from fit_hair_solve import observations,fit_lower
 from hair_solve_quality import compare_arrays,lower_span_comparison,raster_stencil_sampler
 
 
@@ -24,6 +24,47 @@ def assert_budget(data):
 
 
 class HairSolveTest(unittest.TestCase):
+    def test_attachment_support_stays_exact_under_conflicting_observations(self):
+        c=stencil(-1,490);fixed=np.flatnonzero(c).tolist()
+        systems=[dict(name=str(yaw),yaw=yaw,pitch=-30,c=np.array([c]),d=np.array([[20.,30.]]),
+                      w=np.array([1000.]),normal=np.array([[0.,1.]]),fixed=fixed) for yaw in [-45,0,45]]
+        for pose in solve_joint(systems,regularizer()):
+            np.testing.assert_array_equal(np.array(pose['du'])[fixed],0)
+
+    def test_spiky_hairline_does_not_apply_horizontal_shear(self):
+        import probe_hair_only as probe
+        crown=np.zeros((740,1024),bool);crown[100:521,300:700]=True
+        face=np.zeros_like(crown);face[350:600,400:600]=True
+        ref=face.copy();ref[280:350,400:600]=True
+        ref[:410,414]=False  # a narrow gap between two fringe strands
+        pose=dict(name='fixture',yaw=45,pitch=30,vertices=[dict(s=(x-500)/200,y=300,xy=[x,350],front=True) for x in range(400,601,10)])
+        def mask(path):return crown if path.name.endswith('-crown.png') else face
+        with patch.object(probe,'read_mask',side_effect=mask),patch.object(probe,'reference',return_value=dict(head=crown,face=ref)):
+            result=observations(pose,{},ROOT/'debug/current')
+        hairline=(result['d'][:,1]!=0)&(result['w']<100)
+        self.assertGreater(hairline.sum(),20)
+        np.testing.assert_array_equal(result['normal'][hairline],np.tile([0,1],(hairline.sum(),1)))
+        np.testing.assert_array_equal(result['d'][hairline,1],-70)
+        self.assertLessEqual(result['w'][hairline].max(),8)
+
+    def test_tail_fit_rejects_alternating_width_and_center_spikes(self):
+        import probe_hair_only as probe
+        current=np.zeros((740,1024),bool);tie=np.zeros_like(current);ref=np.zeros_like(current)
+        tie[530:555,290:310]=True;tie[530:555,690:710]=True
+        for y in range(550,721):
+            # Deliberately noisy row measurements must yield one smooth lock.
+            shift=55 if (y//24)%2 else -45;width=150 if (y//24)%2 else 30
+            for x in [300,700]:
+                current[y,x-50:x+50]=True;ref[y,x+shift-width//2:x+shift+width//2]=True
+        def mask(path):return tie if path.name.endswith('-ties.png') else current
+        with patch.object(probe,'read_mask',side_effect=mask),patch.object(probe,'reference',return_value=dict(mask=ref)):
+            data=fit_lower([dict(name='fixture',yaw=45,pitch=30)],{'fixture':{}},ROOT/'debug/current')
+        for side in ['left','right']:
+            q=np.array(data['poses'][0][side]);np.testing.assert_array_equal(q[:3],[[0,1]]*3)
+            self.assertTrue(np.all((q[:,1]>=.75)&(q[:,1]<=1.35)))
+            # No alternating turns: curvature is small relative to the lock length.
+            self.assertLess(np.abs(np.diff(q[:,0],2)).max(),5)
+
     def test_raster_correspondence_uses_visible_alpha_and_paint_order(self):
         xy=np.array([[0,0],[10,0],[0,10]]*2,float)
         pose=dict(triangles=[[0,1,2],[3,4,5]],vertices=[dict(uv=[.25,.25] if i<3 else [.75,.75],facing=1,front=True,order=10 if i<3 else 1) for i in range(6)])

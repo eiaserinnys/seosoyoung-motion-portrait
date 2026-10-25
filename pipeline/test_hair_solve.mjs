@@ -10,8 +10,24 @@ import * as split from '../bundle/hair-solve.mjs';
 import {BEADS,beadWorld} from '../bundle/stereo-attachments.mjs';
 import {hairSolveMetrics} from './hair_solve_metrics.mjs';
 import {HAIR_SOLVE} from '../bundle/hair-solve-data.mjs';
+import {bindRig,deform3D} from '../bundle/rig.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
+test('hairpin keeps the canopy shape under a nonuniform residual field',()=>{
+ bindRig(rig);const pin=rig.meshes.find(m=>m.id==='hairpin');
+ const saved=HAIR_SOLVE.poses.map(p=>p.du);
+ try{
+  for(const yaw of [-90,-67.5,-45,0,45,67.5,90])for(const pitch of [-30,0,30]){
+   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch};
+   for(const pose of HAIR_SOLVE.poses)pose.du=HAIR_SOLVE.y.flatMap(()=>HAIR_SOLVE.s.map(()=>[0,0]));
+   const prior=pin.positions.map(pt=>deform3D(pin,pt,p));
+   // Inject compression/shear over the unchanged canopy + profile projection.
+   for(const pose of HAIR_SOLVE.poses)pose.du=HAIR_SOLVE.y.flatMap(y=>HAIR_SOLVE.s.map(s=>[s*20,-y*.25]));
+   const offsets=pin.positions.map((pt,n)=>{const a=deform3D(pin,pt,p);return a.map((v,i)=>v-prior[n][i]);});
+   for(const delta of offsets)for(let i=0;i<3;i++)assert(Math.abs(delta[i]-offsets[0][i])<1e-9,`${yaw}/${pitch} pin shape`);
+  }
+ }finally{HAIR_SOLVE.poses.forEach((p,i)=>p.du=saved[i]);}
+});
 test('hair weights preserve nine keys, cross neutral smoothly and fade before profile parts',()=>{
  const weights=(yaw,pitch=30)=>hairPoseWeights({...base,ParamAngleX:yaw,ParamAngleY:pitch});
  for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])

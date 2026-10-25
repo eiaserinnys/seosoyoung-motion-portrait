@@ -1,8 +1,8 @@
-"""Fit smooth minimum-norm residuals over the unchanged r15 3D prior.
+"""Fit smooth upper hair and independent bead-local hanging locks.
 
-Raster silhouette normals and visible hairline samples transfer boundary motion
-to a shared 12x16 chart. Horizontal pitch keys and the hanging lower locks stay
-exact. Production fits couple each pitch triplet with conformal and mirror priors.
+Raster silhouette normals and smoothed vertical fringe observations transfer
+boundary motion to a shared 12x16 chart. Neutral poses and bead roots stay exact.
+Production fits couple each pitch triplet with conformal and mirror priors.
 """
 import os
 os.environ.setdefault('OPENBLAS_NUM_THREADS','1')
@@ -36,7 +36,7 @@ def regularizer():
     rows=[]
     for j in range(16):
         for i in range(12):
-            for step,bound,index,weight in [(1,i,12,2),(12,j,16,50)]:
+            for step,bound,index,weight in [(1,i,12,28),(12,j,16,50)]:
                 if 0<bound<index-1:
                     r=np.zeros(192);k=j*12+i
                     r[k-step],r[k],r[k+step]=1,-2,1
@@ -46,7 +46,7 @@ def regularizer():
 
 
 def empty_data():
-    return dict(s=S.tolist(),y=Y.tolist(),regularization=dict(ridge=.5,xSecondDifference=2,ySecondDifference=50),poses=[
+    return dict(s=S.tolist(),y=Y.tolist(),regularization=dict(ridge=.5,xSecondDifference=28,ySecondDifference=50),poses=[
         dict(name=direction+suffix,yaw=yaw,pitch=pitch,du=np.zeros((192,2)).tolist())
         for direction,pitch in [('up',30),('down',-30)]
         for suffix,yaw in [('-left',-45),('',0),('-right',45)]])
@@ -88,7 +88,7 @@ def observations(pose,feature,captures,current_du=None,basis=None):
         if current and target:
             for side in [0,1]:
                 lo,hi=span(ref['head'],y-4),span(ref['head'],y+4)
-                slope=(hi[side]-lo[side])/8 if lo and hi else 0
+                slope=np.clip((hi[side]-lo[side])/8,-1.2,1.2) if lo and hi else 0
                 add([current[side],y],[target[side]-current[side],0],silhouette_weight(y,slope),normal=(1,-slope))
     yy,xx=np.where(head);top=int(yy.min());top_x=xx[yy==top]
     top_x=top_x[::max(1,len(top_x)//8)]
@@ -97,11 +97,14 @@ def observations(pose,feature,captures,current_du=None,basis=None):
     columns=np.flatnonzero(ref['face'][:550].any(axis=0)&prior_face[:550].any(axis=0))
     if len(columns):
         for x in range(int(columns[0])+6,int(columns[-1])-6,8):
-            old,new=np.flatnonzero(face[:700,x]),np.flatnonzero(ref['face'][:700,x])
-            if len(old) and len(new) and 150<=new[0]<=450:
-                lo,hi=np.flatnonzero(ref['face'][:700,x-4]),np.flatnonzero(ref['face'][:700,x+4])
-                slope=(int(hi[0])-int(lo[0]))/8 if len(lo) and len(hi) else 0
-                add([x,int(old[0])-1],[0,int(new[0])-int(old[0])],20*(1+slope**2),True,normal=(-slope,1))
+            old=np.flatnonzero(face[:700,x])
+            window=ref['face'][:700,max(0,x-12):x+13]
+            tops=np.argmax(window,axis=0)[window.any(axis=0)]
+            target=float(np.median(tops)) if len(tops) else None
+            if len(old) and target is not None and 150<=target<=450:
+                # Strand gaps create spurious horizontal normals. Only fit the
+                # vertically smoothed fringe boundary, never its gap slopes.
+                add([x,int(old[0])-1],[0,target-int(old[0])],6,True,normal=(0,1))
     if pose['yaw'] and pose['pitch']<0:
         right=pose['yaw']<0
         for y in range(480,546,5):
@@ -123,7 +126,9 @@ def observations(pose,feature,captures,current_du=None,basis=None):
                     if np.linalg.norm(rest[i]-pixel)<35:
                         for n in [(1.,0.),(0.,1.)]:rows.append((grid[i],np.zeros(2),30,np.array(n)))
     c,d,w,n=map(np.array,zip(*rows))
-    return dict(name=name,yaw=pose['yaw'],pitch=pose['pitch'],c=c,d=d,w=w,normal=n)
+    from hair_solve_quality import attachment_chart_nodes
+    fixed=attachment_chart_nodes(pose,grid,ROOT/'debug/hair_solve_prior',ROOT/'bundle/assets/texture_00.png') if sample is not None else []
+    return dict(name=name,yaw=pose['yaw'],pitch=pose['pitch'],c=c,d=d,w=w,normal=n,fixed=fixed)
 
 
 def silhouette_weight(y,slope):
@@ -180,6 +185,11 @@ def solve_joint(systems,r,conformal=.5,symmetry=.2,view=.05,held_out=None):
     by_yaw={p['yaw']:k for k,p in enumerate(systems)}
     couple(by_yaw[-45],by_yaw[45],symmetry,mirror)
     for a,b in [(-45,0),(0,45)]:couple(by_yaw[a],by_yaw[b],view,identity)
+    for k,p in enumerate(systems):
+        nodes=set(p.get('fixed',[]))
+        if not p['yaw']:nodes.update((n//12)*12+11-n%12 for n in list(nodes))
+        ids=[k*size+axis*192+n for axis in [0,1] for n in nodes]
+        matrix[ids,:]=0;matrix[:,ids]=0;matrix[ids,ids]=1;rhs[ids]=0
     q=np.linalg.solve(matrix,rhs);poses=[]
     for k,p in enumerate(systems):
         v=projections[k]@q[k*size:(k+1)*size];du=v.reshape(2,192).T
@@ -222,7 +232,7 @@ def fit_joint(group,conformal=.5,symmetry=.2,view=.05,scale=1.,held_out=None):
         scales[exceeded]*=2
     else:raise ValueError('Residual budget infeasible')
     for pose,v in zip(result,scales):
-        pose['regularization']=dict(ridge=.5*v,xSecondDifference=2*v,ySecondDifference=50*v,
+        pose['regularization']=dict(ridge=.5*v,xSecondDifference=28*v,ySecondDifference=50*v,
                                     conformal=conformal,symmetry=symmetry,view=view,scale=v)
     return result
 
@@ -245,7 +255,7 @@ def fit_lower(poses,features,captures):
                 a,b=span(current[:,lo:hi],y),span(ref['mask'][:,lo:hi],y)
                 if a and b and a[1]-a[0]>8 and b[1]-b[0]>8:
                     a=np.array(a,float)+lo;b=np.array(b,float)+lo
-                    scale=np.clip((b[1]-b[0])/(a[1]-a[0]),.3,3.)
+                    scale=np.clip((b[1]-b[0])/(a[1]-a[0]),.75,1.35)
                     shift=float(b.mean()-anchor_x-scale*(a.mean()-anchor_x))
                     # sag is present in the base rig; map its vertical length
                     # back to the authored tau using the unchanged pendulum.
@@ -257,11 +267,12 @@ def fit_lower(poses,features,captures):
                     if f>.2:samples.append((c*f,[shift,scale-1]))
             c=np.array([s[0] for s in samples]);d=np.array([s[1] for s in samples])
             smooth=np.diff(np.eye(8),2,axis=0)
-            reg=.05*np.eye(8)+2*smooth.T@smooth;reg[0,0]+=1000
+            first=np.diff(np.eye(8),axis=0)
+            reg=.05*np.eye(8)+120*smooth.T@smooth+8*first.T@first
             # The first three nodes include the complete bead/tie footprint.
             # Eliminate them from the solve so the tie silhouette stays exact.
             q=np.zeros((8,2));q[3:]=np.linalg.solve((c.T@c+reg)[3:,3:],(c.T@d)[3:])
-            q[:,1]=np.clip(q[:,1],-.7,2)
+            q[:,1]=np.clip(q[:,1],-.25,.35)
             row[side]=np.c_[q[:,0],1+q[:,1]].tolist()
         result.append(row)
     return dict(tau=tau.tolist(),poses=result,frame='bead-local horizontal affine spans; restY<=544.2 fixed; fade to565')
@@ -325,6 +336,8 @@ def limit_orientation(poses,systems=None):
             mobility=np.linalg.inv(h)
             if not pose['yaw']:
                 projection=(np.eye(384)+mirror_operator())/2;mobility=projection@mobility@projection
+            ids=[axis*192+n for axis in [0,1] for n in system.get('fixed',[])]
+            mobility[ids,:]=0;mobility[:,ids]=0
         pose['du']=project_orientation(pose['du'],pose['yaw'],ds,dy,mobility)
     data=empty_data();data['poses']=poses
     for _ in range(30):
@@ -406,10 +419,10 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--captures',default='debug/hair_solve_prior')
     parser.add_argument('--initialize',action='store_true')
-    parser.add_argument('--conformal',type=float,default=.05)
+    parser.add_argument('--conformal',type=float,default=.35)
     parser.add_argument('--symmetry',type=float,default=.02)
     parser.add_argument('--view',type=float,default=.005)
-    parser.add_argument('--scale',type=float,default=.02)
+    parser.add_argument('--scale',type=float,default=.15)
     parser.add_argument('--passes',type=int,default=3)
     parser.add_argument('--capture-prior',action='store_true')
     parser.add_argument('--capture-base')

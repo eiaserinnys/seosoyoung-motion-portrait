@@ -1,5 +1,5 @@
 {
-  "baseline": "4dba92d65c74d1ac13dfa31ac791bf2f568c2140",
+  "baseline": "17032ea",
   "research": {
     "papers": [
       {
@@ -95,17 +95,17 @@
     {
       "epsilon": 0.01,
       "before": 3.53183353690783e-05,
-      "after": 0.00026949764575314486
+      "after": 0.00016628377660957649
     },
     {
       "epsilon": 0.001,
       "before": 3.5318335511320483e-06,
-      "after": 2.6949765857499305e-05
+      "after": 1.662837896016573e-05
     },
     {
       "epsilon": 0.0001,
       "before": 3.5319139373656e-07,
-      "after": 2.6950276437182844e-06
+      "after": 1.6628700008413434e-06
     }
   ],
   "crossValidation": {
@@ -137,36 +137,36 @@
           },
           {
             "name": "up-left",
-            "priorRms": 38.26024246977734,
-            "correctedRms": 35.6931365951495,
+            "priorRms": 37.94707853354154,
+            "correctedRms": 35.36648783153992,
             "sampleCount": 52,
             "pass": true
           },
           {
             "name": "up",
-            "priorRms": 42.165458919901795,
-            "correctedRms": 36.44503725805121,
+            "priorRms": 41.95345745695571,
+            "correctedRms": 36.39953194652269,
             "sampleCount": 54,
             "pass": true
           },
           {
             "name": "up-right",
-            "priorRms": 41.27697253358659,
-            "correctedRms": 37.02519931905005,
+            "priorRms": 42.43773719770575,
+            "correctedRms": 38.281598310817294,
             "sampleCount": 52,
             "pass": true
           },
           {
             "name": "down-left",
-            "priorRms": 52.651369086346335,
-            "correctedRms": 42.70273772867273,
+            "priorRms": 53.419053137389454,
+            "correctedRms": 47.786977704132305,
             "sampleCount": 42,
             "pass": true
           },
           {
             "name": "down",
             "priorRms": 22.783566645521265,
-            "correctedRms": 18.748333259252675,
+            "correctedRms": 18.798573446843342,
             "sampleCount": 44,
             "pass": true
           },
@@ -206,43 +206,43 @@
           },
           {
             "name": "up-left",
-            "priorRms": 38.26024246977734,
-            "correctedRms": 22.282711477044952,
+            "priorRms": 37.94707853354154,
+            "correctedRms": 23.893191820780565,
             "sampleCount": 52,
             "pass": true
           },
           {
             "name": "up",
-            "priorRms": 42.165458919901795,
-            "correctedRms": 18.49324200890693,
+            "priorRms": 41.95345745695571,
+            "correctedRms": 22.507200493932473,
             "sampleCount": 54,
             "pass": true
           },
           {
             "name": "up-right",
-            "priorRms": 41.27697253358659,
-            "correctedRms": 17.299399722800523,
+            "priorRms": 42.43773719770575,
+            "correctedRms": 22.79127700880992,
             "sampleCount": 52,
             "pass": true
           },
           {
             "name": "down-left",
-            "priorRms": 52.651369086346335,
-            "correctedRms": 34.882114396376615,
+            "priorRms": 53.419053137389454,
+            "correctedRms": 25.88941684862571,
             "sampleCount": 42,
             "pass": true
           },
           {
             "name": "down",
             "priorRms": 22.783566645521265,
-            "correctedRms": 14.187862930880554,
+            "correctedRms": 15.302257706269716,
             "sampleCount": 44,
             "pass": true
           },
           {
             "name": "down-right",
             "priorRms": 60.58153143673005,
-            "correctedRms": 15.751113007518223,
+            "correctedRms": 19.751505036819655,
             "sampleCount": 41,
             "pass": true
           }
@@ -254,85 +254,85 @@
       "folds": [
         {
           "heldOut": "up-left",
-          "sampleCount": 194,
+          "sampleCount": 193,
           "before": {
-            "pinRms": 10.775129485544293,
-            "lopoRms": 11.911311164862422
+            "pinRms": 10.264850913789763,
+            "lopoRms": 11.391781550982328
           },
           "after": {
-            "pinRms": 7.340097071029799,
-            "lopoRms": 11.438733231978583
+            "pinRms": 5.7962524685187455,
+            "lopoRms": 11.042903402687593
           }
         },
         {
           "heldOut": "up",
-          "sampleCount": 206,
+          "sampleCount": 204,
           "before": {
-            "pinRms": 10.356180019727615,
-            "lopoRms": 11.965138330898887
+            "pinRms": 8.812444491196711,
+            "lopoRms": 10.363946610917568
           },
           "after": {
-            "pinRms": 7.675577597723478,
-            "lopoRms": 11.199687306310757
+            "pinRms": 5.752371010209922,
+            "lopoRms": 10.22330991712771
           }
         },
         {
           "heldOut": "up-right",
-          "sampleCount": 197,
+          "sampleCount": 200,
           "before": {
-            "pinRms": 9.844419589215947,
-            "lopoRms": 11.334891289712955
+            "pinRms": 10.060567480788304,
+            "lopoRms": 11.685274100149684
           },
           "after": {
-            "pinRms": 11.973945451275227,
-            "lopoRms": 10.18418762980742
+            "pinRms": 7.270969333389012,
+            "lopoRms": 11.548052827247536
           }
         },
         {
           "heldOut": "down-left",
-          "sampleCount": 176,
+          "sampleCount": 170,
           "before": {
-            "pinRms": 12.549593211464758,
-            "lopoRms": 12.27981924177041
+            "pinRms": 12.180708139144409,
+            "lopoRms": 12.172686333838096
           },
           "after": {
-            "pinRms": 8.55502809404517,
-            "lopoRms": 12.254177908989496
+            "pinRms": 7.854239828518753,
+            "lopoRms": 11.635076886870083
           }
         },
         {
           "heldOut": "down",
           "sampleCount": 203,
           "before": {
-            "pinRms": 3.736188735317193,
-            "lopoRms": 4.5299002388816
+            "pinRms": 5.220344403013497,
+            "lopoRms": 6.466351854629769
           },
           "after": {
-            "pinRms": 4.256769252124449,
-            "lopoRms": 4.236815780581289
+            "pinRms": 4.92264660509457,
+            "lopoRms": 6.095179965588577
           }
         },
         {
           "heldOut": "down-right",
-          "sampleCount": 179,
+          "sampleCount": 180,
           "before": {
-            "pinRms": 8.811648622325704,
-            "lopoRms": 9.28852538420082
+            "pinRms": 10.291371131093179,
+            "lopoRms": 10.94791902022431
           },
           "after": {
-            "pinRms": 14.74101692720432,
-            "lopoRms": 9.51417259602893
+            "pinRms": 7.2926241262405,
+            "lopoRms": 10.548520550006957
           }
         }
       ],
       "mean": {
         "before": {
-          "pinRms": 9.345526610599252,
-          "lopoRms": 10.218264275054516
+          "pinRms": 9.471714426504311,
+          "lopoRms": 10.504659911790293
         },
         "after": {
-          "pinRms": 9.09040573223374,
-          "lopoRms": 9.804629075616079
+          "pinRms": 6.481517228661917,
+          "lopoRms": 10.18217392492141
         }
       },
       "heldOutPolicy": "held-out pose data excluded from joint fit"
@@ -349,12 +349,12 @@
         "mirrorRms": 2.7588549058456233
       },
       "after": {
-        "minDetJ": 0.2753130765633408,
-        "conformalEnergy": 0.21831473189946898,
-        "mirrorRms": 38.170192522119066
+        "minDetJ": 0.28533414952189257,
+        "conformalEnergy": 0.0791025956777294,
+        "mirrorRms": 20.17824918224192
       },
-      "duRms": 30.747268554776618,
-      "duMax": 97.36721435844538
+      "duRms": 22.727922934497336,
+      "duMax": 71.33755412326254
     },
     {
       "name": "up",
@@ -366,12 +366,12 @@
         "mirrorRms": 1.2561273574054332e-15
       },
       "after": {
-        "minDetJ": 0.2747842545192388,
-        "conformalEnergy": 0.18496636555909163,
-        "mirrorRms": 8.532599324276824e-15
+        "minDetJ": 0.29773592790004766,
+        "conformalEnergy": 0.06796802172869,
+        "mirrorRms": 4.009433994238956e-15
       },
-      "duRms": 32.11255301034943,
-      "duMax": 73.98951555253589
+      "duRms": 20.863143109336537,
+      "duMax": 51.0032518051933
     },
     {
       "name": "up-right",
@@ -383,12 +383,12 @@
         "mirrorRms": 2.7588549058456238
       },
       "after": {
-        "minDetJ": 0.2810573021086377,
-        "conformalEnergy": 0.1915865794194677,
-        "mirrorRms": 38.17019252211908
+        "minDetJ": 0.30416271271765044,
+        "conformalEnergy": 0.04436698353365838,
+        "mirrorRms": 20.17824918224193
       },
-      "duRms": 28.01853881146379,
-      "duMax": 105.22381836296067
+      "duRms": 23.991454142363484,
+      "duMax": 67.30000424957595
     },
     {
       "name": "down-left",
@@ -400,12 +400,12 @@
         "mirrorRms": 2.459782468719481
       },
       "after": {
-        "minDetJ": 0.29387764238629044,
-        "conformalEnergy": 0.11236441338562567,
-        "mirrorRms": 33.07329824395809
+        "minDetJ": 0.2962730922556197,
+        "conformalEnergy": 0.0760931662527589,
+        "mirrorRms": 26.117170082357788
       },
-      "duRms": 25.450622202074427,
-      "duMax": 95.2611414368744
+      "duRms": 28.407301635102684,
+      "duMax": 72.47172760111151
     },
     {
       "name": "down",
@@ -417,12 +417,12 @@
         "mirrorRms": 1.0296677188584404e-15
       },
       "after": {
-        "minDetJ": 0.48062288501551004,
-        "conformalEnergy": 0.11932878429037352,
-        "mirrorRms": 4.7650863350589486e-15
+        "minDetJ": 0.9469970103085082,
+        "conformalEnergy": 0.004993060195737354,
+        "mirrorRms": 1.3770079951605322e-15
       },
-      "duRms": 24.02541253255461,
-      "duMax": 67.14739762309492
+      "duRms": 10.219326621661958,
+      "duMax": 18.2408629893628
     },
     {
       "name": "down-right",
@@ -434,12 +434,12 @@
         "mirrorRms": 2.4597824687194803
       },
       "after": {
-        "minDetJ": 0.2917802564534178,
-        "conformalEnergy": 0.2945891187508698,
-        "mirrorRms": 33.073298243958085
+        "minDetJ": 0.6119196668460815,
+        "conformalEnergy": 0.04569513534204227,
+        "mirrorRms": 26.11717008235778
       },
-      "duRms": 42.31186943231573,
-      "duMax": 107.06915641680844
+      "duRms": 31.831475641455352,
+      "duMax": 91.87866867514505
     }
   ],
   "intermediate": [
@@ -448,9 +448,9 @@
       "pitch": -20,
       "before": {
         "face": {
-          "minDetJ": 0.46190917749808075,
-          "conformalEnergy": 0.07758463671228376,
-          "mirrorRms": 1.7844472924305803
+          "minDetJ": 0.46969793936800436,
+          "conformalEnergy": 0.06737145704488293,
+          "mirrorRms": 3.7947920616032653
         },
         "hair": {
           "minDetJ": 0.9794474667137797,
@@ -460,14 +460,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.46190917749808075,
-          "conformalEnergy": 0.07758463671228376,
-          "mirrorRms": 1.7844472924305803
+          "minDetJ": 0.46969793936800436,
+          "conformalEnergy": 0.06737145704488293,
+          "mirrorRms": 3.7947920616032653
         },
         "hair": {
-          "minDetJ": 0.6468100599146112,
-          "conformalEnergy": 0.03892049677243254,
-          "mirrorRms": 15.991171248446772
+          "minDetJ": 0.7490569066883566,
+          "conformalEnergy": 0.011811581174988896,
+          "mirrorRms": 10.386890449040493
         }
       }
     },
@@ -476,9 +476,9 @@
       "pitch": 20,
       "before": {
         "face": {
-          "minDetJ": 0.42596922870230264,
-          "conformalEnergy": 0.054008428795664455,
-          "mirrorRms": 1.6575214667314575
+          "minDetJ": 0.4383118383823292,
+          "conformalEnergy": 0.0527045198226766,
+          "mirrorRms": 3.6738942669512116
         },
         "hair": {
           "minDetJ": 0.9145585540343757,
@@ -488,14 +488,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.42596922870230264,
-          "conformalEnergy": 0.054008428795664455,
-          "mirrorRms": 1.6575214667314575
+          "minDetJ": 0.4383118383823292,
+          "conformalEnergy": 0.0527045198226766,
+          "mirrorRms": 3.6738942669512116
         },
         "hair": {
-          "minDetJ": 0.3884328485827118,
-          "conformalEnergy": 0.07399262456138053,
-          "mirrorRms": 18.150038294865514
+          "minDetJ": 0.42489020833614666,
+          "conformalEnergy": 0.04123764668082791,
+          "mirrorRms": 8.253244435575159
         }
       }
     },
@@ -504,9 +504,9 @@
       "pitch": -15,
       "before": {
         "face": {
-          "minDetJ": 0.5777675845285035,
-          "conformalEnergy": 0.0398751510197367,
-          "mirrorRms": 1.1589216027320117
+          "minDetJ": 0.5861718403921199,
+          "conformalEnergy": 0.035999852669942004,
+          "mirrorRms": 1.977190130022103
         },
         "hair": {
           "minDetJ": 0.9836143770558122,
@@ -516,14 +516,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.5777675845285035,
-          "conformalEnergy": 0.0398751510197367,
-          "mirrorRms": 1.1589216027320117
+          "minDetJ": 0.5861718403921199,
+          "conformalEnergy": 0.035999852669942004,
+          "mirrorRms": 1.977190130022103
         },
         "hair": {
-          "minDetJ": 0.8180145320517342,
-          "conformalEnergy": 0.020155971342469364,
-          "mirrorRms": 7.887265278827035
+          "minDetJ": 0.9064224263341039,
+          "conformalEnergy": 0.002473501073338522,
+          "mirrorRms": 4.585607092058751
         }
       }
     },
@@ -532,9 +532,9 @@
       "pitch": 15,
       "before": {
         "face": {
-          "minDetJ": 0.5682484057911209,
-          "conformalEnergy": 0.02979954039547389,
-          "mirrorRms": 1.1629342955362045
+          "minDetJ": 0.6282263817586387,
+          "conformalEnergy": 0.028352195966392647,
+          "mirrorRms": 1.7720040044210592
         },
         "hair": {
           "minDetJ": 0.9255122929335409,
@@ -544,14 +544,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.5682484057911209,
-          "conformalEnergy": 0.02979954039547389,
-          "mirrorRms": 1.1629342955362045
+          "minDetJ": 0.6282263817586387,
+          "conformalEnergy": 0.028352195966392647,
+          "mirrorRms": 1.7720040044210592
         },
         "hair": {
-          "minDetJ": 0.5541364253320749,
-          "conformalEnergy": 0.034681999299849935,
-          "mirrorRms": 8.88865073489841
+          "minDetJ": 0.6091398390753276,
+          "conformalEnergy": 0.01822027203520626,
+          "mirrorRms": 3.7191212693628937
         }
       }
     },
@@ -560,9 +560,9 @@
       "pitch": -20,
       "before": {
         "face": {
-          "minDetJ": 0.5350550102676601,
-          "conformalEnergy": 0.04404148652168425,
-          "mirrorRms": 1.5113190539230854
+          "minDetJ": 0.5492672905759128,
+          "conformalEnergy": 0.03934402411481287,
+          "mirrorRms": 2.230019098235756
         },
         "hair": {
           "minDetJ": 0.9741990659436037,
@@ -572,14 +572,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.5350550102676601,
-          "conformalEnergy": 0.04404148652168425,
-          "mirrorRms": 1.5113190539230854
+          "minDetJ": 0.5492672905759128,
+          "conformalEnergy": 0.03934402411481287,
+          "mirrorRms": 2.230019098235756
         },
         "hair": {
-          "minDetJ": 0.6798229837375396,
-          "conformalEnergy": 0.054949496410772916,
-          "mirrorRms": 7.80540956283793
+          "minDetJ": 0.9452879979302099,
+          "conformalEnergy": 0.002970590701424676,
+          "mirrorRms": 4.077835743630283
         }
       }
     },
@@ -588,9 +588,9 @@
       "pitch": 20,
       "before": {
         "face": {
-          "minDetJ": 0.5042215821709093,
-          "conformalEnergy": 0.03251917673963918,
-          "mirrorRms": 1.6688384519278037
+          "minDetJ": 0.5125101084162706,
+          "conformalEnergy": 0.029184718638577464,
+          "mirrorRms": 1.9058767641802608
         },
         "hair": {
           "minDetJ": 0.8633107756475696,
@@ -600,14 +600,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.5042215821709093,
-          "conformalEnergy": 0.03251917673963918,
-          "mirrorRms": 1.6688384519278037
+          "minDetJ": 0.5125101084162706,
+          "conformalEnergy": 0.029184718638577464,
+          "mirrorRms": 1.9058767641802608
         },
         "hair": {
-          "minDetJ": 0.37409501958943997,
-          "conformalEnergy": 0.08876598741101756,
-          "mirrorRms": 8.747396424286434
+          "minDetJ": 0.4277211349644543,
+          "conformalEnergy": 0.040717439443455086,
+          "mirrorRms": 3.386035446832443
         }
       }
     },
@@ -616,9 +616,9 @@
       "pitch": -20,
       "before": {
         "face": {
-          "minDetJ": 0.48899510679687175,
-          "conformalEnergy": 0.04231110269656907,
-          "mirrorRms": 1.269875467942383
+          "minDetJ": 0.5072092693650103,
+          "conformalEnergy": 0.039556738185376916,
+          "mirrorRms": 2.2574974734014326
         },
         "hair": {
           "minDetJ": 0.9599337939270983,
@@ -628,14 +628,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.48899510679687175,
-          "conformalEnergy": 0.04231110269656907,
-          "mirrorRms": 1.269875467942383
+          "minDetJ": 0.5072092693650103,
+          "conformalEnergy": 0.039556738185376916,
+          "mirrorRms": 2.2574974734014326
         },
         "hair": {
-          "minDetJ": 0.5596956589509151,
-          "conformalEnergy": 0.0660520878561608,
-          "mirrorRms": 7.805409562837935
+          "minDetJ": 0.9568373207005255,
+          "conformalEnergy": 0.004154204907774383,
+          "mirrorRms": 4.077835743630283
         }
       }
     },
@@ -644,9 +644,9 @@
       "pitch": 20,
       "before": {
         "face": {
-          "minDetJ": 0.6112292225174362,
-          "conformalEnergy": 0.03239482155856153,
-          "mirrorRms": 1.6740076047848427
+          "minDetJ": 0.4303058462205646,
+          "conformalEnergy": 0.027164728656036526,
+          "mirrorRms": 1.90768493043358
         },
         "hair": {
           "minDetJ": 0.7671011562147766,
@@ -656,14 +656,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.6112292225174362,
-          "conformalEnergy": 0.03239482155856153,
-          "mirrorRms": 1.6740076047848427
+          "minDetJ": 0.4303058462205646,
+          "conformalEnergy": 0.027164728656036526,
+          "mirrorRms": 1.90768493043358
         },
         "hair": {
-          "minDetJ": 0.4241452732862791,
-          "conformalEnergy": 0.09331962051698131,
-          "mirrorRms": 8.747396424286434
+          "minDetJ": 0.4674358017955465,
+          "conformalEnergy": 0.032505799574249976,
+          "mirrorRms": 3.3860354468324427
         }
       }
     },
@@ -672,9 +672,9 @@
       "pitch": -15,
       "before": {
         "face": {
-          "minDetJ": 0.5372641399163725,
-          "conformalEnergy": 0.03930749036958225,
-          "mirrorRms": 1.0026051011794064
+          "minDetJ": 0.5574167133420131,
+          "conformalEnergy": 0.037320880492268685,
+          "mirrorRms": 2.02537272077728
         },
         "hair": {
           "minDetJ": 0.964252160220903,
@@ -684,14 +684,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.5372641399163725,
-          "conformalEnergy": 0.03930749036958225,
-          "mirrorRms": 1.0026051011794064
+          "minDetJ": 0.5574167133420131,
+          "conformalEnergy": 0.037320880492268685,
+          "mirrorRms": 2.02537272077728
         },
         "hair": {
-          "minDetJ": 0.7041820785629019,
-          "conformalEnergy": 0.030271995179742058,
-          "mirrorRms": 7.887265278827035
+          "minDetJ": 0.9737832832692299,
+          "conformalEnergy": 0.00245680238733829,
+          "mirrorRms": 4.58560709205875
         }
       }
     },
@@ -700,9 +700,9 @@
       "pitch": 15,
       "before": {
         "face": {
-          "minDetJ": 0.6487118754663809,
-          "conformalEnergy": 0.029981525994906753,
-          "mirrorRms": 1.1666352973344158
+          "minDetJ": 0.5326874729529422,
+          "conformalEnergy": 0.027126463263709245,
+          "mirrorRms": 1.7608759245956258
         },
         "hair": {
           "minDetJ": 0.829319970961061,
@@ -712,14 +712,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.6487118754663809,
-          "conformalEnergy": 0.029981525994906753,
-          "mirrorRms": 1.1666352973344158
+          "minDetJ": 0.5326874729529422,
+          "conformalEnergy": 0.027126463263709245,
+          "mirrorRms": 1.7608759245956258
         },
         "hair": {
-          "minDetJ": 0.6094848610158743,
-          "conformalEnergy": 0.036600783990311955,
-          "mirrorRms": 8.888650734898413
+          "minDetJ": 0.6450777602730695,
+          "conformalEnergy": 0.01293719361270336,
+          "mirrorRms": 3.719121269362892
         }
       }
     },
@@ -728,9 +728,9 @@
       "pitch": -20,
       "before": {
         "face": {
-          "minDetJ": 0.40879215506623445,
-          "conformalEnergy": 0.07527717391644231,
-          "mirrorRms": 1.3868698877188959
+          "minDetJ": 0.4357369126234763,
+          "conformalEnergy": 0.07260640212585456,
+          "mirrorRms": 3.894970514245196
         },
         "hair": {
           "minDetJ": 0.9352453574193257,
@@ -740,14 +740,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.40879215506623445,
-          "conformalEnergy": 0.07527717391644231,
-          "mirrorRms": 1.3868698877188959
+          "minDetJ": 0.4357369126234763,
+          "conformalEnergy": 0.07260640212585456,
+          "mirrorRms": 3.894970514245196
         },
         "hair": {
-          "minDetJ": 0.5458932103266928,
-          "conformalEnergy": 0.08006623820103011,
-          "mirrorRms": 15.991171248446772
+          "minDetJ": 0.9160650475187953,
+          "conformalEnergy": 0.008548713785028882,
+          "mirrorRms": 10.38689044904049
         }
       }
     },
@@ -756,9 +756,9 @@
       "pitch": 20,
       "before": {
         "face": {
-          "minDetJ": 0.5171159065497751,
-          "conformalEnergy": 0.05461777176548463,
-          "mirrorRms": 1.6579794895973246
+          "minDetJ": 0.37793719893840527,
+          "conformalEnergy": 0.050921452252564614,
+          "mirrorRms": 3.6762580375178877
         },
         "hair": {
           "minDetJ": 0.7237659734142348,
@@ -768,14 +768,14 @@
       },
       "after": {
         "face": {
-          "minDetJ": 0.5171159065497751,
-          "conformalEnergy": 0.05461777176548463,
-          "mirrorRms": 1.6579794895973246
+          "minDetJ": 0.37793719893840527,
+          "conformalEnergy": 0.050921452252564614,
+          "mirrorRms": 3.6762580375178877
         },
         "hair": {
-          "minDetJ": 0.43495448478191584,
-          "conformalEnergy": 0.07529063964901413,
-          "mirrorRms": 18.15003829486551
+          "minDetJ": 0.4747506627116982,
+          "conformalEnergy": 0.026164345787826237,
+          "mirrorRms": 8.25324443557516
         }
       }
     }
@@ -784,7 +784,7 @@
     {
       "yaw": -90,
       "pitch": -15,
-      "faceMinDetJ": 0.25580954740942946,
+      "faceMinDetJ": 0.2517458903448471,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -799,1072 +799,1072 @@
     {
       "yaw": -87.5,
       "pitch": -15,
-      "faceMinDetJ": 0.2591945061314004,
+      "faceMinDetJ": 0.25453093049881714,
       "before": {
         "minDetJ": 0.9999743518250276,
         "conformalEnergy": 2.9681175216331555e-10,
         "mirrorRms": 0.0011625475179009945
       },
       "after": {
-        "minDetJ": 0.999593188411777,
-        "conformalEnergy": 2.509902271156356e-08,
-        "mirrorRms": 0.015631171158939444
+        "minDetJ": 0.9996898281877153,
+        "conformalEnergy": 1.6997054943195735e-08,
+        "mirrorRms": 0.012343551366820398
       }
     },
     {
       "yaw": -85,
       "pitch": -15,
-      "faceMinDetJ": 0.26448305776396047,
+      "faceMinDetJ": 0.2587833492333068,
       "before": {
         "minDetJ": 0.9991321403654443,
         "conformalEnergy": 3.397184351007421e-07,
         "mirrorRms": 0.03933052325621982
       },
       "after": {
-        "minDetJ": 0.9862754079658111,
-        "conformalEnergy": 2.8727301584250382e-05,
-        "mirrorRms": 0.5288232363169324
+        "minDetJ": 0.9894949685702732,
+        "conformalEnergy": 1.945412492784719e-05,
+        "mirrorRms": 0.4175987016630641
       }
     },
     {
       "yaw": -82.5,
       "pitch": -15,
-      "faceMinDetJ": 0.2716651352484937,
+      "faceMinDetJ": 0.2644950518275678,
       "before": {
         "minDetJ": 0.9972689842246836,
         "conformalEnergy": 3.3615638817264187e-06,
         "mirrorRms": 0.12372026777855731
       },
       "after": {
-        "minDetJ": 0.9570941222825483,
-        "conformalEnergy": 0.00028426087443915964,
-        "mirrorRms": 1.6634956005653316
+        "minDetJ": 0.9668747538929165,
+        "conformalEnergy": 0.00019250142750829003,
+        "mirrorRms": 1.313621556905214
       }
     },
     {
       "yaw": -80,
       "pitch": -15,
-      "faceMinDetJ": 0.2807270670923138,
+      "faceMinDetJ": 0.27165516573108095,
       "before": {
         "minDetJ": 0.994614852772696,
         "conformalEnergy": 1.3056376465789547e-05,
         "mirrorRms": 0.24382683363400068
       },
       "after": {
-        "minDetJ": 0.9161902571317233,
-        "conformalEnergy": 0.001104074508697848,
-        "mirrorRms": 3.2784027413835983
+        "minDetJ": 0.9344925509776217,
+        "conformalEnergy": 0.0007476791148951709,
+        "mirrorRms": 2.588874002332842
       }
     },
     {
       "yaw": -77.5,
       "pitch": -15,
-      "faceMinDetJ": 0.29165160339310586,
+      "faceMinDetJ": 0.28025006126006513,
       "before": {
         "minDetJ": 0.9913997861150589,
         "conformalEnergy": 3.32570088333446e-05,
         "mirrorRms": 0.3891452733716365
       },
       "after": {
-        "minDetJ": 0.8676863789045539,
-        "conformalEnergy": 0.002812282242672738,
-        "mirrorRms": 5.232299136251176
+        "minDetJ": 0.8950172311149756,
+        "conformalEnergy": 0.0019044771720308437,
+        "mirrorRms": 4.131817923185507
       }
     },
     {
       "yaw": -75,
       "pitch": -15,
-      "faceMinDetJ": 0.30441794867511046,
+      "faceMinDetJ": 0.29026337754238574,
       "before": {
         "minDetJ": 0.9878545256249057,
         "conformalEnergy": 6.623297868646969e-05,
         "mirrorRms": 0.5491706395405502
       },
       "after": {
-        "minDetJ": 0.8155230402989746,
-        "conformalEnergy": 0.005600799241237024,
-        "mirrorRms": 7.383939262647518
+        "minDetJ": 0.8511722365384167,
+        "conformalEnergy": 0.003792860523815934,
+        "mirrorRms": 5.830915204702783
       }
     },
     {
       "yaw": -72.5,
       "pitch": -15,
-      "faceMinDetJ": 0.3190018014744899,
+      "faceMinDetJ": 0.3016760536613728,
       "before": {
         "minDetJ": 0.9842109270498618,
         "conformalEnergy": 0.00011176952943105915,
         "mirrorRms": 0.7133979846898295
       },
       "after": {
-        "minDetJ": 0.7633515585336947,
-        "conformalEnergy": 0.009451465237505457,
-        "mirrorRms": 9.592077598052082
+        "minDetJ": 0.8057677274193386,
+        "conformalEnergy": 0.006400531039860229,
+        "mirrorRms": 7.574627732124236
       }
     },
     {
       "yaw": -70,
       "pitch": -15,
-      "faceMinDetJ": 0.3302868417577166,
+      "faceMinDetJ": 0.3144663649393907,
       "before": {
         "minDetJ": 0.9807021561951187,
         "conformalEnergy": 0.00016673139574569857,
         "mirrorRms": 0.8713223613685617
       },
       "after": {
-        "minDetJ": 0.7144832260784676,
-        "conformalEnergy": 0.014099155636708889,
-        "mirrorRms": 11.71546861994433
+        "minDetJ": 0.7617158093985336,
+        "conformalEnergy": 0.009547946378779558,
+        "mirrorRms": 9.251417390689417
       }
     },
     {
       "yaw": -67.5,
       "pitch": -15,
-      "faceMinDetJ": 0.33243200938572565,
+      "faceMinDetJ": 0.3286099642919693,
       "before": {
         "minDetJ": 0.9775626671800569,
         "conformalEnergy": 0.00022511127407398658,
         "mirrorRms": 1.0124388221258307
       },
       "after": {
-        "minDetJ": 0.671894953904556,
-        "conformalEnergy": 0.01903588028246732,
-        "mirrorRms": 13.612866805803675
+        "minDetJ": 0.7220288416416719,
+        "conformalEnergy": 0.012891095672183451,
+        "mirrorRms": 10.749746065637922
       }
     },
     {
       "yaw": -65,
       "pitch": -15,
-      "faceMinDetJ": 0.33481159336382527,
+      "faceMinDetJ": 0.344079928573867,
       "before": {
         "minDetJ": 0.9750279632714631,
         "conformalEnergy": 0.00027856299804007934,
         "mirrorRms": 1.1262424195107266
       },
       "after": {
-        "minDetJ": 0.6382913472514261,
-        "conformalEnergy": 0.023555869885383385,
-        "mirrorRms": 15.143026633109628
+        "minDetJ": 0.6898008254041588,
+        "conformalEnergy": 0.01595203204832947,
+        "mirrorRms": 11.958075642209277
       }
     },
     {
       "yaw": -62.5,
       "pitch": -15,
-      "faceMinDetJ": 0.3374210640185276,
+      "faceMinDetJ": 0.35927513616460505,
       "before": {
         "minDetJ": 0.9733341402914318,
         "conformalEnergy": 0.0003174194187857947,
         "mirrorRms": 1.2022282060723335
       },
       "after": {
-        "minDetJ": 0.6162232139482018,
-        "conformalEnergy": 0.02684165011367355,
-        "mirrorRms": 16.16470257934159
+        "minDetJ": 0.6681718731483588,
+        "conformalEnergy": 0.01817716199513609,
+        "mirrorRms": 12.764868005643088
       }
     },
     {
       "yaw": -60,
       "pitch": -15,
-      "faceMinDetJ": 0.34025545407427826,
+      "faceMinDetJ": 0.36368937160578385,
       "before": {
         "minDetJ": 0.972717212600114,
         "conformalEnergy": 0.000332194990229409,
         "mirrorRms": 1.2298912343597406
       },
       "after": {
-        "minDetJ": 0.6082625051778497,
-        "conformalEnergy": 0.028091103346395484,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.660275758180563,
+        "conformalEnergy": 0.01902329156319876,
+        "mirrorRms": 13.058585041178892
       }
     },
     {
       "yaw": -57.5,
       "pitch": -15,
-      "faceMinDetJ": 0.34330936810848495,
+      "faceMinDetJ": 0.3684862676781939,
       "before": {
         "minDetJ": 0.972717212600114,
         "conformalEnergy": 0.000332194990229409,
         "mirrorRms": 1.2298912343597406
       },
       "after": {
-        "minDetJ": 0.6082625051778497,
-        "conformalEnergy": 0.028091103346395484,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.660275758180563,
+        "conformalEnergy": 0.01902329156319876,
+        "mirrorRms": 13.058585041178892
       }
     },
     {
       "yaw": -55,
       "pitch": -15,
-      "faceMinDetJ": 0.34657699282209,
+      "faceMinDetJ": 0.3736566932175148,
       "before": {
         "minDetJ": 0.972717212600114,
         "conformalEnergy": 0.000332194990229409,
         "mirrorRms": 1.2298912343597406
       },
       "after": {
-        "minDetJ": 0.6082625051778497,
-        "conformalEnergy": 0.028091103346395484,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.660275758180563,
+        "conformalEnergy": 0.01902329156319876,
+        "mirrorRms": 13.058585041178892
       }
     },
     {
       "yaw": -52.5,
       "pitch": -15,
-      "faceMinDetJ": 0.3500521081058053,
+      "faceMinDetJ": 0.3774537235067273,
       "before": {
         "minDetJ": 0.972717212600114,
         "conformalEnergy": 0.000332194990229409,
         "mirrorRms": 1.2298912343597406
       },
       "after": {
-        "minDetJ": 0.6082625051778497,
-        "conformalEnergy": 0.028091103346395484,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.660275758180563,
+        "conformalEnergy": 0.01902329156319876,
+        "mirrorRms": 13.058585041178892
       }
     },
     {
       "yaw": -50,
       "pitch": -15,
-      "faceMinDetJ": 0.3537280988802476,
+      "faceMinDetJ": 0.3806912236639306,
       "before": {
         "minDetJ": 0.972717212600114,
         "conformalEnergy": 0.000332194990229409,
         "mirrorRms": 1.2298912343597406
       },
       "after": {
-        "minDetJ": 0.6082625051778497,
-        "conformalEnergy": 0.028091103346395484,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.660275758180563,
+        "conformalEnergy": 0.01902329156319876,
+        "mirrorRms": 13.058585041178892
       }
     },
     {
       "yaw": -47.5,
       "pitch": -15,
-      "faceMinDetJ": 0.35759796768792584,
+      "faceMinDetJ": 0.38405584939169934,
       "before": {
         "minDetJ": 0.972717212600114,
         "conformalEnergy": 0.000332194990229409,
         "mirrorRms": 1.2298912343597406
       },
       "after": {
-        "minDetJ": 0.6082625051778497,
-        "conformalEnergy": 0.028091103346395484,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.660275758180563,
+        "conformalEnergy": 0.01902329156319876,
+        "mirrorRms": 13.058585041178892
       }
     },
     {
       "yaw": -45,
       "pitch": -15,
-      "faceMinDetJ": 0.3616543480136623,
+      "faceMinDetJ": 0.38754119593373615,
       "before": {
         "minDetJ": 0.972717212600114,
         "conformalEnergy": 0.000332194990229409,
         "mirrorRms": 1.2298912343597406
       },
       "after": {
-        "minDetJ": 0.6082625051778497,
-        "conformalEnergy": 0.028091103346395484,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.660275758180563,
+        "conformalEnergy": 0.01902329156319876,
+        "mirrorRms": 13.058585041178892
       }
     },
     {
       "yaw": -42.5,
       "pitch": -15,
-      "faceMinDetJ": 0.3906742290824933,
+      "faceMinDetJ": 0.41616881392166344,
       "before": {
         "minDetJ": 0.9791678510519379,
         "conformalEnergy": 0.0002610522734248677,
         "mirrorRms": 1.162039587505226
       },
       "after": {
-        "minDetJ": 0.6347683375449749,
-        "conformalEnergy": 0.02388073502441354,
-        "mirrorRms": 15.525311126321618
+        "minDetJ": 0.694963965017791,
+        "conformalEnergy": 0.015750956998272104,
+        "mirrorRms": 11.906839134672957
       }
     },
     {
       "yaw": -40,
       "pitch": -15,
-      "faceMinDetJ": 0.41878475815289207,
+      "faceMinDetJ": 0.44386065579190903,
       "before": {
         "minDetJ": 0.9840021562888596,
         "conformalEnergy": 0.00020802519523213376,
         "mirrorRms": 1.0940638222034667
       },
       "after": {
-        "minDetJ": 0.6620875880512882,
-        "conformalEnergy": 0.020821750896718616,
-        "mirrorRms": 14.526824769364936
+        "minDetJ": 0.7264966060580564,
+        "conformalEnergy": 0.012911943566525827,
+        "mirrorRms": 10.805075626758592
       }
     },
     {
       "yaw": -37.5,
       "pitch": -15,
-      "faceMinDetJ": 0.4459418200800611,
+      "faceMinDetJ": 0.47057275651963815,
       "before": {
         "minDetJ": 0.9879242950494384,
         "conformalEnergy": 0.00017126342333582403,
         "mirrorRms": 1.0259831755082125
       },
       "after": {
-        "minDetJ": 0.6900007145847766,
-        "conformalEnergy": 0.01877196860171704,
-        "mirrorRms": 13.541248133890267
+        "minDetJ": 0.7558382669816901,
+        "conformalEnergy": 0.010474728865395919,
+        "mirrorRms": 9.754815959020084
       }
     },
     {
       "yaw": -35,
       "pitch": -15,
-      "faceMinDetJ": 0.47210496159261284,
+      "faceMinDetJ": 0.4956556749129355,
       "before": {
         "minDetJ": 0.9891753261689822,
         "conformalEnergy": 0.00014889742504357637,
         "mirrorRms": 0.957814955420409
       },
       "after": {
-        "minDetJ": 0.7155482951574362,
-        "conformalEnergy": 0.017591463827497326,
-        "mirrorRms": 12.56852096464652
+        "minDetJ": 0.7839648082382616,
+        "conformalEnergy": 0.008407049590522143,
+        "mirrorRms": 8.757351483974052
       }
     },
     {
       "yaw": -32.5,
       "pitch": -15,
-      "faceMinDetJ": 0.4972373756855285,
+      "faceMinDetJ": 0.514829856233865,
       "before": {
         "minDetJ": 0.9876451380884125,
         "conformalEnergy": 0.00013905678689686338,
         "mirrorRms": 0.8895745905060836
       },
       "after": {
-        "minDetJ": 0.7391337411756105,
-        "conformalEnergy": 0.017143931269932168,
-        "mirrorRms": 11.608464264916137
+        "minDetJ": 0.8108171253801273,
+        "conformalEnergy": 0.006676243802637981,
+        "mirrorRms": 7.813706676408483
       }
     },
     {
       "yaw": -30,
       "pitch": -15,
-      "faceMinDetJ": 0.521305862962824,
+      "faceMinDetJ": 0.5334919750160958,
       "before": {
         "minDetJ": 0.9863218641007176,
         "conformalEnergy": 0.0001398883341075912,
         "mirrorRms": 0.8212756913555229
       },
       "after": {
-        "minDetJ": 0.7627913613175539,
-        "conformalEnergy": 0.017297998565532297,
-        "mirrorRms": 10.660780832297855
+        "minDetJ": 0.8365311855667511,
+        "conformalEnergy": 0.005249591633326085,
+        "mirrorRms": 6.924593632693659
       }
     },
     {
       "yaw": -27.5,
       "pitch": -15,
-      "faceMinDetJ": 0.5442807707939048,
+      "faceMinDetJ": 0.55161783255815,
       "before": {
         "minDetJ": 0.9852077722774141,
         "conformalEnergy": 0.00014957390452331924,
         "mirrorRms": 0.7529301236682975
       },
       "after": {
-        "minDetJ": 0.7863785712308617,
-        "conformalEnergy": 0.017928482672562102,
-        "mirrorRms": 9.725056811264473
+        "minDetJ": 0.8610636706093497,
+        "conformalEnergy": 0.004094651661708259,
+        "mirrorRms": 6.090355816953869
       }
     },
     {
       "yaw": -25,
       "pitch": -15,
-      "faceMinDetJ": 0.561331215804178,
+      "faceMinDetJ": 0.5691848116278971,
       "before": {
         "minDetJ": 0.9843047650106777,
         "conformalEnergy": 0.00016634763486707282,
         "mirrorRms": 0.6845480926552072
       },
       "after": {
-        "minDetJ": 0.8097586668696054,
-        "conformalEnergy": 0.0189175786507918,
-        "mirrorRms": 8.800764330385924
+        "minDetJ": 0.8843736122087569,
+        "conformalEnergy": 0.0031795902354712327,
+        "mirrorRms": 5.31089893309897
       }
     },
     {
       "yaw": -22.5,
       "pitch": -15,
-      "faceMinDetJ": 0.5777675845285035,
+      "faceMinDetJ": 0.5861718403921199,
       "before": {
         "minDetJ": 0.9836143770558122,
         "conformalEnergy": 0.0001885126211279001,
         "mirrorRms": 0.6161382383535454
       },
       "after": {
-        "minDetJ": 0.8180145320517342,
-        "conformalEnergy": 0.020155971342469364,
-        "mirrorRms": 7.887265278827035
+        "minDetJ": 0.9064224263341039,
+        "conformalEnergy": 0.002473501073338522,
+        "mirrorRms": 4.585607092058751
       }
     },
     {
       "yaw": -20,
       "pitch": -15,
-      "faceMinDetJ": 0.5936542284739341,
+      "faceMinDetJ": 0.6025593480578589,
       "before": {
         "minDetJ": 0.9831377740111051,
         "conformalEnergy": 0.00021445682017260138,
         "mirrorRms": 0.5477077413573339
       },
       "after": {
-        "minDetJ": 0.8072382086047416,
-        "conformalEnergy": 0.021543861085167364,
-        "mirrorRms": 6.983816259780885
+        "minDetJ": 0.9271739426220551,
+        "conformalEnergy": 0.0019467125689951986,
+        "mirrorRms": 3.9132434277705155
       }
     },
     {
       "yaw": -17.5,
       "pitch": -15,
-      "faceMinDetJ": 0.6089778369296861,
+      "faceMinDetJ": 0.6183292128747583,
       "before": {
         "minDetJ": 0.9828757512292243,
         "conformalEnergy": 0.00024266806587547055,
         "mirrorRms": 0.47926243837082894
       },
       "after": {
-        "minDetJ": 0.7973592150392583,
-        "conformalEnergy": 0.02299189528102816,
-        "mirrorRms": 6.0895747380313185
+        "minDetJ": 0.9465944290840697,
+        "conformalEnergy": 0.0015710803208278537,
+        "mirrorRms": 3.291836444440204
       }
     },
     {
       "yaw": -15,
       "pitch": -15,
-      "faceMinDetJ": 0.6237264817502255,
+      "faceMinDetJ": 0.6334647032099894,
       "before": {
         "minDetJ": 0.9828287331553941,
         "conformalEnergy": 0.00027174808024898583,
         "mirrorRms": 0.41080694690283925
       },
       "after": {
-        "minDetJ": 0.7884171853006079,
-        "conformalEnergy": 0.0244219984047773,
-        "mirrorRms": 5.203606375225284
+        "minDetJ": 0.964624561635609,
+        "conformalEnergy": 0.0013202625339638406,
+        "mirrorRms": 2.7185571624201903
       }
     },
     {
       "yaw": -12.5,
       "pitch": -15,
-      "faceMinDetJ": 0.6378895176559182,
+      "faceMinDetJ": 0.6479504124640119,
       "before": {
         "minDetJ": 0.9829967730853955,
         "conformalEnergy": 0.0003004253681859261,
         "mirrorRms": 0.3423447983326729
       },
       "after": {
-        "minDetJ": 0.7804529137406185,
-        "conformalEnergy": 0.025768093849132295,
-        "mirrorRms": 4.324893520297338
+        "minDetJ": 0.9787730011908046,
+        "conformalEnergy": 0.0011699760822137157,
+        "mirrorRms": 2.1895979171222053
       }
     },
     {
       "yaw": -10,
       "pitch": -15,
-      "faceMinDetJ": 0.631675229337256,
+      "faceMinDetJ": 0.6617721886455785,
       "before": {
         "minDetJ": 0.9833795533382925,
         "conformalEnergy": 0.00032756689337384864,
         "mirrorRms": 0.27387857849724023
       },
       "after": {
-        "minDetJ": 0.7735080965283455,
-        "conformalEnergy": 0.02697671186995947,
-        "mirrorRms": 3.4523447946771184
+        "minDetJ": 0.97982415954507,
+        "conformalEnergy": 0.0010982311752855628,
+        "mirrorRms": 1.7000711737636311
       }
     },
     {
       "yaw": -7.5,
       "pitch": -15,
-      "faceMinDetJ": 0.6252972677915494,
+      "faceMinDetJ": 0.6749170594695121,
       "before": {
         "minDetJ": 0.9839763858460243,
         "conformalEnergy": 0.0003521884427360448,
         "mirrorRms": 0.20541007487423815
       },
       "after": {
-        "minDetJ": 0.7676250503314529,
-        "conformalEnergy": 0.028007478804611765,
-        "mirrorRms": 2.584805683494761
+        "minDetJ": 0.9796580255752027,
+        "conformalEnergy": 0.0010855427504108878,
+        "mirrorRms": 1.2439543825392723
       }
     },
     {
       "yaw": -5,
       "pitch": -15,
-      "faceMinDetJ": 0.6197094489784394,
+      "faceMinDetJ": 0.683671263884906,
       "before": {
         "minDetJ": 0.9847862131532708,
         "conformalEnergy": 0.0003734635971862028,
         "mirrorRms": 0.1369404293697773
       },
       "after": {
-        "minDetJ": 0.7628464103225495,
-        "conformalEnergy": 0.02883348368445793,
-        "mirrorRms": 1.721070016199572
+        "minDetJ": 0.9784682272247914,
+        "conformalEnergy": 0.0011151168957567817,
+        "mirrorRms": 0.8141113681123671
       }
     },
     {
       "yaw": -2.5,
       "pitch": -15,
-      "faceMinDetJ": 0.6149225507149823,
+      "faceMinDetJ": 0.675933784203288,
       "before": {
         "minDetJ": 0.9858076098330356,
         "conformalEnergy": 0.0003907312376101493,
         "mirrorRms": 0.06847029566137486
       },
       "after": {
-        "minDetJ": 0.7592148097618081,
-        "conformalEnergy": 0.0294415193364685,
-        "mirrorRms": 0.8598921941376589
+        "minDetJ": 0.9754968495015778,
+        "conformalEnergy": 0.001173010814208514,
+        "mirrorRms": 0.4024173769739047
       }
     },
     {
       "yaw": 0,
       "pitch": -15,
-      "faceMinDetJ": 0.6109451549673616,
+      "faceMinDetJ": 0.6674835038266214,
       "before": {
         "minDetJ": 0.9864482742866539,
         "conformalEnergy": 0.0004035015266513996,
         "mirrorRms": 5.184456489404082e-16
       },
       "after": {
-        "minDetJ": 0.7567725436145376,
-        "conformalEnergy": 0.029832196072581783,
-        "mirrorRms": 2.4261661648517743e-15
+        "minDetJ": 0.9733482758748538,
+        "conformalEnergy": 0.00124826504893415,
+        "mirrorRms": 6.96862312781231e-16
       }
     },
     {
       "yaw": 2.5,
       "pitch": -15,
-      "faceMinDetJ": 0.6077784070043639,
+      "faceMinDetJ": 0.658320771550342,
       "before": {
         "minDetJ": 0.9860365926907672,
         "conformalEnergy": 0.0004114603189326208,
         "mirrorRms": 0.06847029566137486
       },
       "after": {
-        "minDetJ": 0.7478888053438041,
-        "conformalEnergy": 0.03001992707395976,
-        "mirrorRms": 0.8598921941376587
+        "minDetJ": 0.9711480317373191,
+        "conformalEnergy": 0.0013330069147125868,
+        "mirrorRms": 0.4024173769739046
       }
     },
     {
       "yaw": 5,
       "pitch": -15,
-      "faceMinDetJ": 0.6054100549112928,
+      "faceMinDetJ": 0.6484459655288126,
       "before": {
         "minDetJ": 0.9852038968934369,
         "conformalEnergy": 0.0004144719648823657,
         "mirrorRms": 0.13694042936977727
       },
       "after": {
-        "minDetJ": 0.7401489881548137,
-        "conformalEnergy": 0.030032785601874785,
-        "mirrorRms": 1.7210700161995713
+        "minDetJ": 0.9699750120402936,
+        "conformalEnergy": 0.00142252430968108,
+        "mirrorRms": 0.814111368112367
       }
     },
     {
       "yaw": 7.5,
       "pitch": -15,
-      "faceMinDetJ": 0.6038257497177769,
+      "faceMinDetJ": 0.6378599472134289,
       "before": {
         "minDetJ": 0.9838254807671748,
         "conformalEnergy": 0.0004125804860297799,
         "mirrorRms": 0.20541007487423815
       },
       "after": {
-        "minDetJ": 0.7336038251445203,
-        "conformalEnergy": 0.029912235184622674,
-        "mirrorRms": 2.5848056834947597
+        "minDetJ": 0.9700025490781126,
+        "conformalEnergy": 0.0015153093193644674,
+        "mirrorRms": 1.2439543825392723
       }
     },
     {
       "yaw": 10,
       "pitch": -15,
-      "faceMinDetJ": 0.6030096348019497,
+      "faceMinDetJ": 0.62656400493273,
       "before": {
         "minDetJ": 0.9801550553410712,
         "conformalEnergy": 0.0004060091125413799,
         "mirrorRms": 0.2738785784972402
       },
       "after": {
-        "minDetJ": 0.7282998049156467,
-        "conformalEnergy": 0.029712734940628344,
-        "mirrorRms": 3.452344794677118
+        "minDetJ": 0.9712313931312829,
+        "conformalEnergy": 0.0016130712663646014,
+        "mirrorRms": 1.7000711737636316
       }
     },
     {
       "yaw": 12.5,
       "pitch": -15,
-      "faceMinDetJ": 0.5992816103088731,
+      "faceMinDetJ": 0.6145600053551402,
       "before": {
         "minDetJ": 0.976643422343646,
         "conformalEnergy": 0.00039515818677738306,
         "mirrorRms": 0.3423447983326728
       },
       "after": {
-        "minDetJ": 0.7217628571203113,
-        "conformalEnergy": 0.029501223191659785,
-        "mirrorRms": 4.324893520297337
+        "minDetJ": 0.971210777873462,
+        "conformalEnergy": 0.0017207191033771188,
+        "mirrorRms": 2.1895979171222053
       }
     },
     {
       "yaw": 15,
       "pitch": -15,
-      "faceMinDetJ": 0.5854521337052303,
+      "faceMinDetJ": 0.6018505481051755,
       "before": {
         "minDetJ": 0.9732971614522845,
         "conformalEnergy": 0.0003806014495735376,
         "mirrorRms": 0.41080694690283925
       },
       "after": {
-        "minDetJ": 0.7153413722409453,
-        "conformalEnergy": 0.02935648349163245,
-        "mirrorRms": 5.203606375225282
+        "minDetJ": 0.9711723460359039,
+        "conformalEnergy": 0.0018463132923403091,
+        "mirrorRms": 2.7185571624201894
       }
     },
     {
       "yaw": 17.5,
       "pitch": -15,
-      "faceMinDetJ": 0.5705018741322567,
+      "faceMinDetJ": 0.5884391220188134,
       "before": {
         "minDetJ": 0.9701225548436172,
         "conformalEnergy": 0.0003630807387738175,
         "mirrorRms": 0.4792624383708288
       },
       "after": {
-        "minDetJ": 0.7102463123192846,
-        "conformalEnergy": 0.029368398131072063,
-        "mirrorRms": 6.089574738031315
+        "minDetJ": 0.9716647894727359,
+        "conformalEnergy": 0.002000987556394082,
+        "mirrorRms": 3.2918364444402037
       }
     },
     {
       "yaw": 20,
       "pitch": -15,
-      "faceMinDetJ": 0.5544364373909189,
+      "faceMinDetJ": 0.574069003192204,
       "before": {
         "minDetJ": 0.9671000752482046,
         "conformalEnergy": 0.00034349914215673017,
         "mirrorRms": 0.5477077413573338
       },
       "after": {
-        "minDetJ": 0.7065145727311697,
-        "conformalEnergy": 0.029637095079609137,
-        "mirrorRms": 6.983816259780884
+        "minDetJ": 0.9726880284176666,
+        "conformalEnergy": 0.002198841132312049,
+        "mirrorRms": 3.9132434277705164
       }
     },
     {
       "yaw": 22.5,
       "pitch": -15,
-      "faceMinDetJ": 0.5372641399163725,
+      "faceMinDetJ": 0.5574167133420131,
       "before": {
         "minDetJ": 0.964252160220903,
         "conformalEnergy": 0.00032291265913628246,
         "mirrorRms": 0.6161382383535453
       },
       "after": {
-        "minDetJ": 0.7041820785629019,
-        "conformalEnergy": 0.030271995179742058,
-        "mirrorRms": 7.887265278827035
+        "minDetJ": 0.9737832832692299,
+        "conformalEnergy": 0.00245680238733829,
+        "mirrorRms": 4.58560709205875
       }
     },
     {
       "yaw": 25,
       "pitch": -15,
-      "faceMinDetJ": 0.5189961907002569,
+      "faceMinDetJ": 0.5398631848987782,
       "before": {
         "minDetJ": 0.9615928588885815,
         "conformalEnergy": 0.00030252043749887277,
         "mirrorRms": 0.6845480926552069
       },
       "after": {
-        "minDetJ": 0.7032834968843108,
-        "conformalEnergy": 0.0313907672066127,
-        "mirrorRms": 8.800764330385924
+        "minDetJ": 0.9646620679088855,
+        "conformalEnergy": 0.0027944648935944367,
+        "mirrorRms": 5.310898933098973
       }
     },
     {
       "yaw": 27.5,
       "pitch": -15,
-      "faceMinDetJ": 0.49964685834340195,
+      "faceMinDetJ": 0.5208458816694346,
       "before": {
         "minDetJ": 0.959127247722212,
         "conformalEnergy": 0.00028365366275982996,
         "mirrorRms": 0.7529301236682976
       },
       "after": {
-        "minDetJ": 0.703851940710793,
-        "conformalEnergy": 0.03311819915048895,
-        "mirrorRms": 9.725056811264476
+        "minDetJ": 0.9548214205426117,
+        "conformalEnergy": 0.003233897274571086,
+        "mirrorRms": 6.090355816953869
       }
     },
     {
       "yaw": 30,
       "pitch": -15,
-      "faceMinDetJ": 0.479233621451428,
+      "faceMinDetJ": 0.49990658399569926,
       "before": {
         "minDetJ": 0.9568600405665325,
         "conformalEnergy": 0.0002677631884745015,
         "mirrorRms": 0.8212756913555228
       },
       "after": {
-        "minDetJ": 0.7059186669689901,
-        "conformalEnergy": 0.03558499475599724,
-        "mirrorRms": 10.660780832297858
+        "minDetJ": 0.9442727924952518,
+        "conformalEnergy": 0.003799428348904128,
+        "mirrorRms": 6.924593632693659
       }
     },
     {
       "yaw": 32.5,
       "pitch": -15,
-      "faceMinDetJ": 0.4577773007166509,
+      "faceMinDetJ": 0.4779396828957424,
       "before": {
         "minDetJ": 0.9547955795111522,
         "conformalEnergy": 0.0002564060059113613,
         "mirrorRms": 0.8895745905060835
       },
       "after": {
-        "minDetJ": 0.7095127708983073,
-        "conformalEnergy": 0.038926504959866645,
-        "mirrorRms": 11.608464264916137
+        "minDetJ": 0.9330285818105818,
+        "conformalEnergy": 0.004517409295927212,
+        "mirrorRms": 7.813706676408483
       }
     },
     {
       "yaw": 35,
       "pitch": -15,
-      "faceMinDetJ": 0.4353021711833742,
+      "faceMinDetJ": 0.45496501001713513,
       "before": {
         "minDetJ": 0.9529378264254864,
         "conformalEnergy": 0.0002512306608025235,
         "mirrorRms": 0.9578149554204091
       },
       "after": {
-        "minDetJ": 0.7146608792649093,
-        "conformalEnergy": 0.04328140440338187,
-        "mirrorRms": 12.56852096464652
+        "minDetJ": 0.9211021681092839,
+        "conformalEnergy": 0.005415954753354635,
+        "mirrorRms": 8.75735148397405
       }
     },
     {
       "yaw": 37.5,
       "pitch": -15,
-      "faceMinDetJ": 0.41183605335230256,
+      "faceMinDetJ": 0.43100534130610885,
       "before": {
         "minDetJ": 0.9512903551721481,
         "conformalEnergy": 0.0002539617333387818,
         "mirrorRms": 1.0259831755082127
       },
       "after": {
-        "minDetJ": 0.696605057231345,
-        "conformalEnergy": 0.048790323650438956,
-        "mirrorRms": 13.54124813389027
+        "minDetJ": 0.8994865491704729,
+        "conformalEnergy": 0.006524664928537439,
+        "mirrorRms": 9.754815959020089
       }
     },
     {
       "yaw": 40,
       "pitch": -15,
-      "faceMinDetJ": 0.3874103819537878,
+      "faceMinDetJ": 0.4060865140637654,
       "before": {
         "minDetJ": 0.9498563445192301,
         "conformalEnergy": 0.0002663835052194445,
         "mirrorRms": 1.0940638222034669
       },
       "after": {
-        "minDetJ": 0.6753732054664496,
-        "conformalEnergy": 0.05559444811547513,
-        "mirrorRms": 14.526824769364925
+        "minDetJ": 0.8722100222702298,
+        "conformalEnergy": 0.00787433095994778,
+        "mirrorRms": 10.805075626758594
       }
     },
     {
       "yaw": 42.5,
       "pitch": -15,
-      "faceMinDetJ": 0.36206025140253667,
+      "faceMinDetJ": 0.3802375268516623,
       "before": {
         "minDetJ": 0.9486385717636595,
         "conformalEnergy": 0.00029032294414351514,
         "mirrorRms": 1.1620395875052263
       },
       "after": {
-        "minDetJ": 0.6526806911298284,
-        "conformalEnergy": 0.06383409499363807,
-        "mirrorRms": 15.52531112632162
+        "minDetJ": 0.8431462155854302,
+        "conformalEnergy": 0.009496625903182947,
+        "mirrorRms": 11.906839134672957
       }
     },
     {
       "yaw": 45,
       "pitch": -15,
-      "faceMinDetJ": 0.33582443713195215,
+      "faceMinDetJ": 0.3534906210180263,
       "before": {
         "minDetJ": 0.9476394070829033,
         "conformalEnergy": 0.00032763214178376806,
         "mirrorRms": 1.2298912343597401
       },
       "after": {
-        "minDetJ": 0.6236252153269626,
-        "conformalEnergy": 0.07364727968769551,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.8123293996577957,
+        "conformalEnergy": 0.01142378383550532,
+        "mirrorRms": 13.05858504117889
       }
     },
     {
       "yaw": 47.5,
       "pitch": -15,
-      "faceMinDetJ": 0.3347424959527442,
+      "faceMinDetJ": 0.3504061531459224,
       "before": {
         "minDetJ": 0.9476394070829033,
         "conformalEnergy": 0.00032763214178376806,
         "mirrorRms": 1.2298912343597401
       },
       "after": {
-        "minDetJ": 0.6236252153269626,
-        "conformalEnergy": 0.07364727968769551,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.8123293996577957,
+        "conformalEnergy": 0.01142378383550532,
+        "mirrorRms": 13.05858504117889
       }
     },
     {
       "yaw": 50,
       "pitch": -15,
-      "faceMinDetJ": 0.3336424832939468,
+      "faceMinDetJ": 0.3474263854833629,
       "before": {
         "minDetJ": 0.9476394070829033,
         "conformalEnergy": 0.00032763214178376806,
         "mirrorRms": 1.2298912343597401
       },
       "after": {
-        "minDetJ": 0.6236252153269626,
-        "conformalEnergy": 0.07364727968769551,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.8123293996577957,
+        "conformalEnergy": 0.01142378383550532,
+        "mirrorRms": 13.05858504117889
       }
     },
     {
       "yaw": 52.5,
       "pitch": -15,
-      "faceMinDetJ": 0.33252649309222126,
+      "faceMinDetJ": 0.3445569901873796,
       "before": {
         "minDetJ": 0.9476394070829033,
         "conformalEnergy": 0.00032763214178376806,
         "mirrorRms": 1.2298912343597401
       },
       "after": {
-        "minDetJ": 0.6236252153269626,
-        "conformalEnergy": 0.07364727968769551,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.8123293996577957,
+        "conformalEnergy": 0.01142378383550532,
+        "mirrorRms": 13.05858504117889
       }
     },
     {
       "yaw": 55,
       "pitch": -15,
-      "faceMinDetJ": 0.3313966496981405,
+      "faceMinDetJ": 0.34180342931481766,
       "before": {
         "minDetJ": 0.9476394070829033,
         "conformalEnergy": 0.00032763214178376806,
         "mirrorRms": 1.2298912343597401
       },
       "after": {
-        "minDetJ": 0.6236252153269626,
-        "conformalEnergy": 0.07364727968769551,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.8123293996577957,
+        "conformalEnergy": 0.01142378383550532,
+        "mirrorRms": 13.05858504117889
       }
     },
     {
       "yaw": 57.5,
       "pitch": -15,
-      "faceMinDetJ": 0.33025510383312573,
+      "faceMinDetJ": 0.3385541973404601,
       "before": {
         "minDetJ": 0.9476394070829033,
         "conformalEnergy": 0.00032763214178376806,
         "mirrorRms": 1.2298912343597401
       },
       "after": {
-        "minDetJ": 0.6236252153269626,
-        "conformalEnergy": 0.07364727968769551,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.8123293996577957,
+        "conformalEnergy": 0.01142378383550532,
+        "mirrorRms": 13.05858504117889
       }
     },
     {
       "yaw": 60,
       "pitch": -15,
-      "faceMinDetJ": 0.3291040284944976,
+      "faceMinDetJ": 0.3314426576542488,
       "before": {
         "minDetJ": 0.9476394070829033,
         "conformalEnergy": 0.00032763214178376806,
         "mirrorRms": 1.2298912343597401
       },
       "after": {
-        "minDetJ": 0.6236252153269626,
-        "conformalEnergy": 0.07364727968769551,
-        "mirrorRms": 16.536649121979043
+        "minDetJ": 0.8123293996577957,
+        "conformalEnergy": 0.01142378383550532,
+        "mirrorRms": 13.05858504117889
       }
     },
     {
       "yaw": 62.5,
       "pitch": -15,
-      "faceMinDetJ": 0.32794561481937273,
+      "faceMinDetJ": 0.3250161802318386,
       "before": {
         "minDetJ": 0.9488196296751982,
         "conformalEnergy": 0.0003130595194974462,
         "mirrorRms": 1.2022282060723342
       },
       "after": {
-        "minDetJ": 0.6315079728880241,
-        "conformalEnergy": 0.07037155105029783,
-        "mirrorRms": 16.164702579341583
+        "minDetJ": 0.8166672939971334,
+        "conformalEnergy": 0.010915669808534641,
+        "mirrorRms": 12.764868005643084
       }
     },
     {
       "yaw": 65,
       "pitch": -15,
-      "faceMinDetJ": 0.32678206791424985,
+      "faceMinDetJ": 0.3192869982381573,
       "before": {
         "minDetJ": 0.9520609113927346,
         "conformalEnergy": 0.0002747368092654338,
         "mirrorRms": 1.1262424195107268
       },
       "after": {
-        "minDetJ": 0.6532986174192927,
-        "conformalEnergy": 0.0617571234687248,
-        "mirrorRms": 15.143026633109626
+        "minDetJ": 0.8285551255270625,
+        "conformalEnergy": 0.00957944450631091,
+        "mirrorRms": 11.958075642209273
       }
     },
     {
       "yaw": 67.5,
       "pitch": -15,
-      "faceMinDetJ": 0.32561560265684886,
+      "faceMinDetJ": 0.31426601749685945,
       "before": {
         "minDetJ": 0.9569137323962719,
         "conformalEnergy": 0.00022201926890496438,
         "mirrorRms": 1.0124388221258305
       },
       "after": {
-        "minDetJ": 0.6832160298472473,
-        "conformalEnergy": 0.04990693252510188,
-        "mirrorRms": 13.612866805803675
+        "minDetJ": 0.8462836530364518,
+        "conformalEnergy": 0.007741304383244199,
+        "mirrorRms": 10.749746065637925
       }
     },
     {
       "yaw": 70,
       "pitch": -15,
-      "faceMinDetJ": 0.3244484394799441,
+      "faceMinDetJ": 0.3099627957300968,
       "before": {
         "minDetJ": 0.9629285103191637,
         "conformalEnergy": 0.00016444126461073502,
         "mirrorRms": 0.8713223613685616
       },
       "after": {
-        "minDetJ": 0.7212785391414023,
-        "conformalEnergy": 0.03696417494652177,
-        "mirrorRms": 11.715468619944334
+        "minDetJ": 0.8681407321637078,
+        "conformalEnergy": 0.0057336909935759486,
+        "mirrorRms": 9.251417390689419
       }
     },
     {
       "yaw": 72.5,
       "pitch": -15,
-      "faceMinDetJ": 0.32328280014497157,
+      "faceMinDetJ": 0.3063855243651065,
       "before": {
         "minDetJ": 0.9696561176195115,
         "conformalEnergy": 0.00011023432439010458,
         "mirrorRms": 0.7133979846898294
       },
       "after": {
-        "minDetJ": 0.7662142550927157,
-        "conformalEnergy": 0.02477918703375535,
-        "mirrorRms": 9.592077598052075
+        "minDetJ": 0.8924353360221635,
+        "conformalEnergy": 0.0038436189020634656,
+        "mirrorRms": 7.574627732124237
       }
     },
     {
       "yaw": 75,
       "pitch": -15,
-      "faceMinDetJ": 0.3221209035126613,
+      "faceMinDetJ": 0.30354101294120595,
       "before": {
         "minDetJ": 0.9766482320441802,
         "conformalEnergy": 6.53232387664662e-05,
         "mirrorRms": 0.5491706395405502
       },
       "after": {
-        "minDetJ": 0.8155645390100714,
-        "conformalEnergy": 0.014683781662381924,
-        "mirrorRms": 7.383939262647518
+        "minDetJ": 0.9175138272077065,
+        "conformalEnergy": 0.0022776720105647423,
+        "mirrorRms": 5.830915204702782
       }
     },
     {
       "yaw": 77.5,
       "pitch": -15,
-      "faceMinDetJ": 0.32046309729260003,
+      "faceMinDetJ": 0.30143467614761715,
       "before": {
         "minDetJ": 0.983457520205637,
         "conformalEnergy": 3.2800208774590224e-05,
         "mirrorRms": 0.3891452733716365
       },
       "after": {
-        "minDetJ": 0.8662228457418863,
-        "conformalEnergy": 0.0073730438542321105,
-        "mirrorRms": 5.232299136251174
+        "minDetJ": 0.9417684812415601,
+        "conformalEnergy": 0.001143668300547777,
+        "mirrorRms": 4.131817923185506
       }
     },
     {
       "yaw": 80,
       "pitch": -15,
-      "faceMinDetJ": 0.31918502556886175,
+      "faceMinDetJ": 0.30007052351613117,
       "before": {
         "minDetJ": 0.9896376542701854,
         "conformalEnergy": 1.287704122949875e-05,
         "mirrorRms": 0.2438268336340007
       },
       "after": {
-        "minDetJ": 0.9144237891483875,
-        "conformalEnergy": 0.002894584920195262,
-        "mirrorRms": 3.2784027413835997
+        "minDetJ": 0.9636382614286182,
+        "conformalEnergy": 0.0004489929914860068,
+        "mirrorRms": 2.5888740023328416
       }
     },
     {
       "yaw": 82.5,
       "pitch": -15,
-      "faceMinDetJ": 0.31867972633322095,
+      "faceMinDetJ": 0.2994511517887746,
       "before": {
         "minDetJ": 0.9947431617594981,
         "conformalEnergy": 3.315391281339682e-06,
         "mirrorRms": 0.1237202677785573
       },
       "after": {
-        "minDetJ": 0.9558415527482418,
-        "conformalEnergy": 0.0007452551744207334,
-        "mirrorRms": 1.663495600565332
+        "minDetJ": 0.9816018451347657,
+        "conformalEnergy": 0.00011560011518390577,
+        "mirrorRms": 1.3136215569052139
       }
     },
     {
       "yaw": 85,
       "pitch": -15,
-      "faceMinDetJ": 0.31755478361507844,
+      "faceMinDetJ": 0.29957773997490933,
       "before": {
         "minDetJ": 0.998329108463731,
         "conformalEnergy": 3.350522487370396e-07,
         "mirrorRms": 0.03933052325621983
       },
       "after": {
-        "minDetJ": 0.985797645499185,
-        "conformalEnergy": 7.531521949701051e-05,
-        "mirrorRms": 0.5288232363169325
+        "minDetJ": 0.9941629014812914,
+        "conformalEnergy": 1.1682506003022517e-05,
+        "mirrorRms": 0.4175987016630643
       }
     },
     {
       "yaw": 87.5,
       "pitch": -15,
-      "faceMinDetJ": 0.31644448720457796,
+      "faceMinDetJ": 0.3004500471066531,
       "before": {
         "minDetJ": 0.9999506144671826,
         "conformalEnergy": 2.927349084969233e-10,
         "mirrorRms": 0.0011625475179009945
       },
       "after": {
-        "minDetJ": 0.9995780027364765,
-        "conformalEnergy": 6.580285305036775e-08,
-        "mirrorRms": 0.015631171158939448
+        "minDetJ": 0.9998276204614516,
+        "conformalEnergy": 1.0206997083867264e-08,
+        "mirrorRms": 0.012343551366820398
       }
     },
     {
       "yaw": 90,
       "pitch": -15,
-      "faceMinDetJ": 0.3153509506141256,
+      "faceMinDetJ": 0.3000117820247168,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1879,7 +1879,7 @@
     {
       "yaw": -90,
       "pitch": 0,
-      "faceMinDetJ": 0.23256416122987578,
+      "faceMinDetJ": 0.23256416120797577,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1894,7 +1894,7 @@
     {
       "yaw": -87.5,
       "pitch": 0,
-      "faceMinDetJ": 0.23686505077346592,
+      "faceMinDetJ": 0.23686505076019101,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1909,7 +1909,7 @@
     {
       "yaw": -85,
       "pitch": 0,
-      "faceMinDetJ": 0.24356636013820593,
+      "faceMinDetJ": 0.2435663601322713,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1924,7 +1924,7 @@
     {
       "yaw": -82.5,
       "pitch": 0,
-      "faceMinDetJ": 0.25265533300083187,
+      "faceMinDetJ": 0.25265533300096943,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1939,7 +1939,7 @@
     {
       "yaw": -80,
       "pitch": 0,
-      "faceMinDetJ": 0.2641146679849405,
+      "faceMinDetJ": 0.26411466798981736,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1954,7 +1954,7 @@
     {
       "yaw": -77.5,
       "pitch": 0,
-      "faceMinDetJ": 0.2779225515950585,
+      "faceMinDetJ": 0.27792255160338886,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1969,7 +1969,7 @@
     {
       "yaw": -75,
       "pitch": 0,
-      "faceMinDetJ": 0.29405269973995785,
+      "faceMinDetJ": 0.29405269975040343,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1984,7 +1984,7 @@
     {
       "yaw": -72.5,
       "pitch": 0,
-      "faceMinDetJ": 0.31247440776585433,
+      "faceMinDetJ": 0.31247440777712476,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -1999,7 +1999,7 @@
     {
       "yaw": -70,
       "pitch": 0,
-      "faceMinDetJ": 0.3331526089045199,
+      "faceMinDetJ": 0.3331526089152752,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2014,7 +2014,7 @@
     {
       "yaw": -67.5,
       "pitch": 0,
-      "faceMinDetJ": 0.3560479410247903,
+      "faceMinDetJ": 0.35604794103372145,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2029,7 +2029,7 @@
     {
       "yaw": -65,
       "pitch": 0,
-      "faceMinDetJ": 0.3811168215607112,
+      "faceMinDetJ": 0.38111682156648247,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2044,7 +2044,7 @@
     {
       "yaw": -62.5,
       "pitch": 0,
-      "faceMinDetJ": 0.4046884972495106,
+      "faceMinDetJ": 0.4046884972238364,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2059,7 +2059,7 @@
     {
       "yaw": -60,
       "pitch": 0,
-      "faceMinDetJ": 0.4074325820177857,
+      "faceMinDetJ": 0.4074325821205586,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2074,7 +2074,7 @@
     {
       "yaw": -57.5,
       "pitch": 0,
-      "faceMinDetJ": 0.4094567063885866,
+      "faceMinDetJ": 0.4094567064955565,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2089,7 +2089,7 @@
     {
       "yaw": -55,
       "pitch": 0,
-      "faceMinDetJ": 0.4120698762854242,
+      "faceMinDetJ": 0.41206987639770887,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2104,7 +2104,7 @@
     {
       "yaw": -52.5,
       "pitch": 0,
-      "faceMinDetJ": 0.4152671173908781,
+      "faceMinDetJ": 0.4152671175095861,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2119,7 +2119,7 @@
     {
       "yaw": -50,
       "pitch": 0,
-      "faceMinDetJ": 0.4190423435747353,
+      "faceMinDetJ": 0.4190423437011456,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2134,7 +2134,7 @@
     {
       "yaw": -47.5,
       "pitch": 0,
-      "faceMinDetJ": 0.42338836847949324,
+      "faceMinDetJ": 0.423388368614629,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2149,7 +2149,7 @@
     {
       "yaw": -45,
       "pitch": 0,
-      "faceMinDetJ": 0.42829691919968127,
+      "faceMinDetJ": 0.42829691934470776,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2164,7 +2164,7 @@
     {
       "yaw": -42.5,
       "pitch": 0,
-      "faceMinDetJ": 0.47101844614822613,
+      "faceMinDetJ": 0.47101844627720385,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2179,7 +2179,7 @@
     {
       "yaw": -40,
       "pitch": 0,
-      "faceMinDetJ": 0.5128295619254857,
+      "faceMinDetJ": 0.5128295620392862,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2194,7 +2194,7 @@
     {
       "yaw": -37.5,
       "pitch": 0,
-      "faceMinDetJ": 0.5536506766961414,
+      "faceMinDetJ": 0.5536506767955606,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2209,7 +2209,7 @@
     {
       "yaw": -35,
       "pitch": 0,
-      "faceMinDetJ": 0.5933940991623239,
+      "faceMinDetJ": 0.5933940991363329,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2224,7 +2224,7 @@
     {
       "yaw": -32.5,
       "pitch": 0,
-      "faceMinDetJ": 0.6319576692730574,
+      "faceMinDetJ": 0.6319576692495839,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2239,7 +2239,7 @@
     {
       "yaw": -30,
       "pitch": 0,
-      "faceMinDetJ": 0.6693114736251113,
+      "faceMinDetJ": 0.6693114736040413,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2254,7 +2254,7 @@
     {
       "yaw": -27.5,
       "pitch": 0,
-      "faceMinDetJ": 0.7053844071287634,
+      "faceMinDetJ": 0.7053844071100321,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2269,7 +2269,7 @@
     {
       "yaw": -25,
       "pitch": 0,
-      "faceMinDetJ": 0.7400826652951386,
+      "faceMinDetJ": 0.7400826654484073,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2284,7 +2284,7 @@
     {
       "yaw": -22.5,
       "pitch": 0,
-      "faceMinDetJ": 0.7733616635688918,
+      "faceMinDetJ": 0.7733616637077034,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2299,7 +2299,7 @@
     {
       "yaw": -20,
       "pitch": 0,
-      "faceMinDetJ": 0.805168523961053,
+      "faceMinDetJ": 0.8051685240850853,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2314,7 +2314,7 @@
     {
       "yaw": -17.5,
       "pitch": 0,
-      "faceMinDetJ": 0.8306199369900975,
+      "faceMinDetJ": 0.8306199370281493,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2329,7 +2329,7 @@
     {
       "yaw": -15,
       "pitch": 0,
-      "faceMinDetJ": 0.8556383016507696,
+      "faceMinDetJ": 0.855638301683221,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2344,7 +2344,7 @@
     {
       "yaw": -12.5,
       "pitch": 0,
-      "faceMinDetJ": 0.8804608205494454,
+      "faceMinDetJ": 0.8804608205763347,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2359,7 +2359,7 @@
     {
       "yaw": -10,
       "pitch": 0,
-      "faceMinDetJ": 0.9050402426105798,
+      "faceMinDetJ": 0.9050402426319409,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2374,7 +2374,7 @@
     {
       "yaw": -7.5,
       "pitch": 0,
-      "faceMinDetJ": 0.9293297795072542,
+      "faceMinDetJ": 0.9293297795231624,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2389,7 +2389,7 @@
     {
       "yaw": -5,
       "pitch": 0,
-      "faceMinDetJ": 0.9532831947254813,
+      "faceMinDetJ": 0.9532831947360009,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2404,7 +2404,7 @@
     {
       "yaw": -2.5,
       "pitch": 0,
-      "faceMinDetJ": 0.97685489157796,
+      "faceMinDetJ": 0.9768548915831672,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2434,7 +2434,7 @@
     {
       "yaw": 2.5,
       "pitch": 0,
-      "faceMinDetJ": 0.9757812723318287,
+      "faceMinDetJ": 0.9757812723306567,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2449,7 +2449,7 @@
     {
       "yaw": 5,
       "pitch": 0,
-      "faceMinDetJ": 0.9513688536336318,
+      "faceMinDetJ": 0.9513688536314504,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2464,7 +2464,7 @@
     {
       "yaw": 7.5,
       "pitch": 0,
-      "faceMinDetJ": 0.926809214331883,
+      "faceMinDetJ": 0.9268092143288852,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2479,7 +2479,7 @@
     {
       "yaw": 10,
       "pitch": 0,
-      "faceMinDetJ": 0.9021491050958839,
+      "faceMinDetJ": 0.90214910509227,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2494,7 +2494,7 @@
     {
       "yaw": 12.5,
       "pitch": 0,
-      "faceMinDetJ": 0.877435467845136,
+      "faceMinDetJ": 0.8774354678411367,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2509,7 +2509,7 @@
     {
       "yaw": 15,
       "pitch": 0,
-      "faceMinDetJ": 0.8527153463928009,
+      "faceMinDetJ": 0.8527153463885861,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2524,7 +2524,7 @@
     {
       "yaw": 17.5,
       "pitch": 0,
-      "faceMinDetJ": 0.8280357968950514,
+      "faceMinDetJ": 0.8280357968908213,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2539,7 +2539,7 @@
     {
       "yaw": 20,
       "pitch": 0,
-      "faceMinDetJ": 0.8034437982770614,
+      "faceMinDetJ": 0.8034437982730389,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2554,7 +2554,7 @@
     {
       "yaw": 22.5,
       "pitch": 0,
-      "faceMinDetJ": 0.7739768233063842,
+      "faceMinDetJ": 0.7739768232159653,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2569,7 +2569,7 @@
     {
       "yaw": 25,
       "pitch": 0,
-      "faceMinDetJ": 0.7407620198658833,
+      "faceMinDetJ": 0.7407620197661041,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2584,7 +2584,7 @@
     {
       "yaw": 27.5,
       "pitch": 0,
-      "faceMinDetJ": 0.7061371338184775,
+      "faceMinDetJ": 0.7061371337094519,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2599,7 +2599,7 @@
     {
       "yaw": 30,
       "pitch": 0,
-      "faceMinDetJ": 0.6701680756026462,
+      "faceMinDetJ": 0.6701680754845635,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2614,7 +2614,7 @@
     {
       "yaw": 32.5,
       "pitch": 0,
-      "faceMinDetJ": 0.6329233143650299,
+      "faceMinDetJ": 0.6329233142381554,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2629,7 +2629,7 @@
     {
       "yaw": 35,
       "pitch": 0,
-      "faceMinDetJ": 0.5944580208727075,
+      "faceMinDetJ": 0.5944580207574859,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2644,7 +2644,7 @@
     {
       "yaw": 37.5,
       "pitch": 0,
-      "faceMinDetJ": 0.5548380621939047,
+      "faceMinDetJ": 0.5548380620684839,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2659,7 +2659,7 @@
     {
       "yaw": 40,
       "pitch": 0,
-      "faceMinDetJ": 0.5141570428687682,
+      "faceMinDetJ": 0.5141570427329286,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2674,7 +2674,7 @@
     {
       "yaw": 42.5,
       "pitch": 0,
-      "faceMinDetJ": 0.47249240152970223,
+      "faceMinDetJ": 0.47249240138333043,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2689,7 +2689,7 @@
     {
       "yaw": 45,
       "pitch": 0,
-      "faceMinDetJ": 0.4299234491895569,
+      "faceMinDetJ": 0.42992344903257973,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2704,7 +2704,7 @@
     {
       "yaw": 47.5,
       "pitch": 0,
-      "faceMinDetJ": 0.4260621715214776,
+      "faceMinDetJ": 0.42606217136534497,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2719,7 +2719,7 @@
     {
       "yaw": 50,
       "pitch": 0,
-      "faceMinDetJ": 0.4222868635641167,
+      "faceMinDetJ": 0.42228686333984505,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2734,7 +2734,7 @@
     {
       "yaw": 52.5,
       "pitch": 0,
-      "faceMinDetJ": 0.4167745820477973,
+      "faceMinDetJ": 0.41677458181298527,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2749,7 +2749,7 @@
     {
       "yaw": 55,
       "pitch": 0,
-      "faceMinDetJ": 0.41175668252662945,
+      "faceMinDetJ": 0.4117566822796367,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2764,7 +2764,7 @@
     {
       "yaw": 57.5,
       "pitch": 0,
-      "faceMinDetJ": 0.40724271685756513,
+      "faceMinDetJ": 0.40724271659671885,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2779,7 +2779,7 @@
     {
       "yaw": 60,
       "pitch": 0,
-      "faceMinDetJ": 0.403241277630871,
+      "faceMinDetJ": 0.40324127735457943,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2794,7 +2794,7 @@
     {
       "yaw": 62.5,
       "pitch": 0,
-      "faceMinDetJ": 0.3956569613920911,
+      "faceMinDetJ": 0.395656961559334,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2809,7 +2809,7 @@
     {
       "yaw": 65,
       "pitch": 0,
-      "faceMinDetJ": 0.3872747583326626,
+      "faceMinDetJ": 0.38727475852216997,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2824,7 +2824,7 @@
     {
       "yaw": 67.5,
       "pitch": 0,
-      "faceMinDetJ": 0.37997412022329674,
+      "faceMinDetJ": 0.37997412043855777,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2839,7 +2839,7 @@
     {
       "yaw": 70,
       "pitch": 0,
-      "faceMinDetJ": 0.37376894424374163,
+      "faceMinDetJ": 0.37376894448746567,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2854,7 +2854,7 @@
     {
       "yaw": 72.5,
       "pitch": 0,
-      "faceMinDetJ": 0.36867104229900644,
+      "faceMinDetJ": 0.3686710425743748,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2869,7 +2869,7 @@
     {
       "yaw": 75,
       "pitch": 0,
-      "faceMinDetJ": 0.3575732140227071,
+      "faceMinDetJ": 0.35757321400678205,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2884,7 +2884,7 @@
     {
       "yaw": 77.5,
       "pitch": 0,
-      "faceMinDetJ": 0.34130622543366895,
+      "faceMinDetJ": 0.34130622542356465,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2899,7 +2899,7 @@
     {
       "yaw": 80,
       "pitch": 0,
-      "faceMinDetJ": 0.32683423522094945,
+      "faceMinDetJ": 0.32683423521724936,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2914,7 +2914,7 @@
     {
       "yaw": 82.5,
       "pitch": 0,
-      "faceMinDetJ": 0.3141847916404286,
+      "faceMinDetJ": 0.31418479164363117,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2929,7 +2929,7 @@
     {
       "yaw": 85,
       "pitch": 0,
-      "faceMinDetJ": 0.30338197362693853,
+      "faceMinDetJ": 0.3033819736375572,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2944,7 +2944,7 @@
     {
       "yaw": 87.5,
       "pitch": 0,
-      "faceMinDetJ": 0.29444634495854377,
+      "faceMinDetJ": 0.29444634497707056,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2959,7 +2959,7 @@
     {
       "yaw": 90,
       "pitch": 0,
-      "faceMinDetJ": 0.28739491511228604,
+      "faceMinDetJ": 0.28739491513917137,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2974,7 +2974,7 @@
     {
       "yaw": -90,
       "pitch": 15,
-      "faceMinDetJ": 0.3149464681265274,
+      "faceMinDetJ": 0.17621058748911733,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -2989,1072 +2989,1072 @@
     {
       "yaw": -87.5,
       "pitch": 15,
-      "faceMinDetJ": 0.319244714681597,
+      "faceMinDetJ": 0.181871510450497,
       "before": {
         "minDetJ": 0.9999547477769853,
         "conformalEnergy": 2.7891064354179483e-10,
         "mirrorRms": 0.0013038957565664252
       },
       "after": {
-        "minDetJ": 0.9995612747827773,
-        "conformalEnergy": 4.876531856584437e-08,
-        "mirrorRms": 0.01804007595740501
+        "minDetJ": 0.999646987786031,
+        "conformalEnergy": 1.766927611364916e-08,
+        "mirrorRms": 0.009536686191041551
       }
     },
     {
       "yaw": -85,
       "pitch": 15,
-      "faceMinDetJ": 0.32593990397359374,
+      "faceMinDetJ": 0.19040549133676052,
       "before": {
         "minDetJ": 0.9984691015410774,
         "conformalEnergy": 3.1922956778617765e-07,
         "mirrorRms": 0.04411252149926266
       },
       "after": {
-        "minDetJ": 0.9852129893522784,
-        "conformalEnergy": 5.58147633631599e-05,
-        "mirrorRms": 0.6103196781734599
+        "minDetJ": 0.9880656005634803,
+        "conformalEnergy": 2.0223521430497734e-05,
+        "mirrorRms": 0.3226387328246592
       }
     },
     {
       "yaw": -82.5,
       "pitch": 15,
-      "faceMinDetJ": 0.3350192913291688,
+      "faceMinDetJ": 0.20179628523024046,
       "before": {
         "minDetJ": 0.9951846287366557,
         "conformalEnergy": 3.158823526108392e-06,
         "mirrorRms": 0.13876278575604942
       },
       "after": {
-        "minDetJ": 0.9538721762996255,
-        "conformalEnergy": 0.00055229529281461,
-        "mirrorRms": 1.9198553124309687
+        "minDetJ": 0.9625174141706453,
+        "conformalEnergy": 0.00020011471906683577,
+        "mirrorRms": 1.0149102304274265
       }
     },
     {
       "yaw": -80,
       "pitch": 15,
-      "faceMinDetJ": 0.34646559361846185,
+      "faceMinDetJ": 0.21602220910735007,
       "before": {
         "minDetJ": 0.9905107705916416,
         "conformalEnergy": 1.2268929164194e-05,
         "mirrorRms": 0.27347249795554274
       },
       "after": {
-        "minDetJ": 0.910177221241412,
-        "conformalEnergy": 0.002145125161078372,
-        "mirrorRms": 3.7836342441750674
+        "minDetJ": 0.9262949107384153,
+        "conformalEnergy": 0.0007772492805159034,
+        "mirrorRms": 2.0001763037790825
       }
     },
     {
       "yaw": -77.5,
       "pitch": 15,
-      "faceMinDetJ": 0.36025702215449534,
+      "faceMinDetJ": 0.23305618311344697,
       "before": {
         "minDetJ": 0.9848569471835431,
         "conformalEnergy": 3.1251234724933286e-05,
         "mirrorRms": 0.4364594675263585
       },
       "after": {
-        "minDetJ": 0.8587398937942853,
-        "conformalEnergy": 0.005464031051603114,
-        "mirrorRms": 6.038643738850859
+        "minDetJ": 0.8826865202685876,
+        "conformalEnergy": 0.001979797860110335,
+        "mirrorRms": 3.192262077659367
       }
     },
     {
       "yaw": -75,
       "pitch": 15,
-      "faceMinDetJ": 0.37636732416919655,
+      "faceMinDetJ": 0.2528657821108617,
       "before": {
         "minDetJ": 0.9786323689047891,
         "conformalEnergy": 6.223838030161226e-05,
         "mirrorRms": 0.6159415038971119
       },
       "after": {
-        "minDetJ": 0.8039080942915595,
-        "conformalEnergy": 0.010881888205805988,
-        "mirrorRms": 8.52187106190348
+        "minDetJ": 0.8349405002076278,
+        "conformalEnergy": 0.003942865401089126,
+        "mirrorRms": 4.50499267684802
       }
     },
     {
       "yaw": -72.5,
       "pitch": 15,
-      "faceMinDetJ": 0.3914106116673646,
+      "faceMinDetJ": 0.27541329740198445,
       "before": {
         "minDetJ": 0.9722459129397675,
         "conformalEnergy": 0.00010502856155381449,
         "mirrorRms": 0.8001364164964188
       },
       "after": {
-        "minDetJ": 0.7496104119771483,
-        "conformalEnergy": 0.01836341273194392,
-        "mirrorRms": 11.070303478778065
+        "minDetJ": 0.7862412703391815,
+        "conformalEnergy": 0.0066536673909225056,
+        "mirrorRms": 5.85219322612477
       }
     },
     {
       "yaw": -70,
       "pitch": 15,
-      "faceMinDetJ": 0.39330438372042553,
+      "faceMinDetJ": 0.3006558085099579,
       "before": {
         "minDetJ": 0.9661060647556083,
         "conformalEnergy": 0.0001566756051505784,
         "mirrorRms": 0.9772620147528963
       },
       "after": {
-        "minDetJ": 0.699282494679085,
-        "conformalEnergy": 0.027393489540769075,
-        "mirrorRms": 13.5209282549197
+        "minDetJ": 0.7396982030064584,
+        "conformalEnergy": 0.009925560719118215,
+        "mirrorRms": 7.147688850269365
       }
     },
     {
       "yaw": -67.5,
       "pitch": 15,
-      "faceMinDetJ": 0.3952781324304802,
+      "faceMinDetJ": 0.3285452648801892,
       "before": {
         "minDetJ": 0.9606209246008851,
         "conformalEnergy": 0.0002115345159444561,
         "mirrorRms": 1.1355361080951576
       },
       "after": {
-        "minDetJ": 0.6558752299553201,
-        "conformalEnergy": 0.036985135908428196,
-        "mirrorRms": 15.71073265577356
+        "minDetJ": 0.6983468686318488,
+        "conformalEnergy": 0.01340092913746635,
+        "mirrorRms": 8.305304674061551
       }
     },
     {
       "yaw": -65,
       "pitch": 15,
-      "faceMinDetJ": 0.39732810065470375,
+      "faceMinDetJ": 0.35902857734735966,
       "before": {
         "minDetJ": 0.9561982790212108,
         "conformalEnergy": 0.00026176249587158773,
         "mirrorRms": 1.263176505951821
       },
       "after": {
-        "minDetJ": 0.6219447377177296,
-        "conformalEnergy": 0.045767100665926486,
-        "mirrorRms": 17.47670394678472
+        "minDetJ": 0.6651627365718181,
+        "conformalEnergy": 0.016582923322758597,
+        "mirrorRms": 9.238865822281053
       }
     },
     {
       "yaw": -62.5,
       "pitch": 15,
-      "faceMinDetJ": 0.39945038616206324,
+      "faceMinDetJ": 0.36583849338795227,
       "before": {
         "minDetJ": 0.953245737383135,
         "conformalEnergy": 0.0002982754345840889,
         "mirrorRms": 1.348401017751499
       },
       "after": {
-        "minDetJ": 0.5998241743327256,
-        "conformalEnergy": 0.05215109901561455,
-        "mirrorRms": 18.655829393398346
+        "minDetJ": 0.6430873312975667,
+        "conformalEnergy": 0.018896055541870557,
+        "mirrorRms": 9.862197419707613
       }
     },
     {
       "yaw": -60,
       "pitch": 15,
-      "faceMinDetJ": 0.4016409490614643,
+      "faceMinDetJ": 0.36860766717037846,
       "before": {
         "minDetJ": 0.9521709334101064,
         "conformalEnergy": 0.00031215987180765537,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.5918773482011221,
-        "conformalEnergy": 0.05457868297484378,
-        "mirrorRms": 19.08509626105953
+        "minDetJ": 0.6350668438584791,
+        "conformalEnergy": 0.019775648919426913,
+        "mirrorRms": 10.089124591120958
       }
     },
     {
       "yaw": -57.5,
       "pitch": 15,
-      "faceMinDetJ": 0.4038956194919197,
+      "faceMinDetJ": 0.37153313899445806,
       "before": {
         "minDetJ": 0.9521709334101064,
         "conformalEnergy": 0.00031215987180765537,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.5918773482011221,
-        "conformalEnergy": 0.05457868297484378,
-        "mirrorRms": 19.08509626105953
+        "minDetJ": 0.6350668438584791,
+        "conformalEnergy": 0.019775648919426913,
+        "mirrorRms": 10.089124591120958
       }
     },
     {
       "yaw": -55,
       "pitch": 15,
-      "faceMinDetJ": 0.4062101055601453,
+      "faceMinDetJ": 0.37460934005830165,
       "before": {
         "minDetJ": 0.9521709334101064,
         "conformalEnergy": 0.00031215987180765537,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.5918773482011221,
-        "conformalEnergy": 0.05457868297484378,
-        "mirrorRms": 19.08509626105953
+        "minDetJ": 0.6350668438584791,
+        "conformalEnergy": 0.019775648919426913,
+        "mirrorRms": 10.089124591120958
       }
     },
     {
       "yaw": -52.5,
       "pitch": 15,
-      "faceMinDetJ": 0.4085800015103283,
+      "faceMinDetJ": 0.3778304146383402,
       "before": {
         "minDetJ": 0.9521709334101064,
         "conformalEnergy": 0.00031215987180765537,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.5918773482011221,
-        "conformalEnergy": 0.05457868297484378,
-        "mirrorRms": 19.08509626105953
+        "minDetJ": 0.6350668438584791,
+        "conformalEnergy": 0.019775648919426913,
+        "mirrorRms": 10.089124591120958
       }
     },
     {
       "yaw": -50,
       "pitch": 15,
-      "faceMinDetJ": 0.4110007961108508,
+      "faceMinDetJ": 0.38119023123604373,
       "before": {
         "minDetJ": 0.9521709334101064,
         "conformalEnergy": 0.00031215987180765537,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.5918773482011221,
-        "conformalEnergy": 0.05457868297484378,
-        "mirrorRms": 19.08509626105953
+        "minDetJ": 0.6350668438584791,
+        "conformalEnergy": 0.019775648919426913,
+        "mirrorRms": 10.089124591120958
       }
     },
     {
       "yaw": -47.5,
       "pitch": 15,
-      "faceMinDetJ": 0.4134678812416073,
+      "faceMinDetJ": 0.3846823942495469,
       "before": {
         "minDetJ": 0.9521709334101064,
         "conformalEnergy": 0.00031215987180765537,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.5918773482011221,
-        "conformalEnergy": 0.05457868297484378,
-        "mirrorRms": 19.08509626105953
+        "minDetJ": 0.6350668438584791,
+        "conformalEnergy": 0.019775648919426913,
+        "mirrorRms": 10.089124591120958
       }
     },
     {
       "yaw": -45,
       "pitch": 15,
-      "faceMinDetJ": 0.4159765606658127,
+      "faceMinDetJ": 0.3883002561480857,
       "before": {
         "minDetJ": 0.9521709334101064,
         "conformalEnergy": 0.00031215987180765537,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.5918773482011221,
-        "conformalEnergy": 0.05457868297484378,
-        "mirrorRms": 19.08509626105953
+        "minDetJ": 0.6350668438584791,
+        "conformalEnergy": 0.019775648919426913,
+        "mirrorRms": 10.089124591120958
       }
     },
     {
       "yaw": -42.5,
       "pitch": 15,
-      "faceMinDetJ": 0.433380214343766,
+      "faceMinDetJ": 0.4167006355090007,
       "before": {
         "minDetJ": 0.9504508991955266,
         "conformalEnergy": 0.0003345059116233393,
         "mirrorRms": 1.2980491011785318
       },
       "after": {
-        "minDetJ": 0.6090521009917793,
-        "conformalEnergy": 0.04751938694420926,
-        "mirrorRms": 17.866189625663328
+        "minDetJ": 0.630207835965577,
+        "conformalEnergy": 0.01932996704021329,
+        "mirrorRms": 9.232639174658358
       }
     },
     {
       "yaw": -40,
       "pitch": 15,
-      "faceMinDetJ": 0.4507226083636828,
+      "faceMinDetJ": 0.4448623160239756,
       "before": {
         "minDetJ": 0.9488668662841765,
         "conformalEnergy": 0.0003595628402503602,
         "mirrorRms": 1.217316247055158
       },
       "after": {
-        "minDetJ": 0.5991555647155486,
-        "conformalEnergy": 0.04206255280945193,
-        "mirrorRms": 16.669261014393847
+        "minDetJ": 0.6250882702919053,
+        "conformalEnergy": 0.01898492117872005,
+        "mirrorRms": 8.411872423131314
       }
     },
     {
       "yaw": -37.5,
       "pitch": 15,
-      "faceMinDetJ": 0.46797756276715385,
+      "faceMinDetJ": 0.4727012218678035,
       "before": {
         "minDetJ": 0.9474215872633381,
         "conformalEnergy": 0.00038690325657376475,
         "mirrorRms": 1.137236764085725
       },
       "after": {
-        "minDetJ": 0.590040565530224,
-        "conformalEnergy": 0.0380395123680141,
-        "mirrorRms": 15.494386784506501
+        "minDetJ": 0.6206732576085843,
+        "conformalEnergy": 0.018726201225006886,
+        "mirrorRms": 7.627785833830899
       }
     },
     {
       "yaw": -35,
       "pitch": 15,
-      "faceMinDetJ": 0.4851191840784311,
+      "faceMinDetJ": 0.5001325969107877,
       "before": {
         "minDetJ": 0.9461175626159514,
         "conformalEnergy": 0.00041609423754354206,
         "mirrorRms": 1.0578115640862908
       },
       "after": {
-        "minDetJ": 0.5817550686396056,
-        "conformalEnergy": 0.035280873927029596,
-        "mirrorRms": 14.341456060857446
+        "minDetJ": 0.6169668289214476,
+        "conformalEnergy": 0.018539638379238495,
+        "mirrorRms": 6.881148734097823
       }
     },
     {
       "yaw": -32.5,
       "pitch": 15,
-      "faceMinDetJ": 0.5021219258181562,
+      "faceMinDetJ": 0.5270715090470306,
       "before": {
         "minDetJ": 0.9449570378770256,
         "conformalEnergy": 0.0004467010609919225,
         "mirrorRms": 0.9790346549897622
       },
       "after": {
-        "minDetJ": 0.5743427996728031,
-        "conformalEnergy": 0.033618192205762475,
-        "mirrorRms": 13.21016716551829
+        "minDetJ": 0.6139720722701356,
+        "conformalEnergy": 0.018411343704096323,
+        "mirrorRms": 6.172509740186153
       }
     },
     {
       "yaw": -30,
       "pitch": 15,
-      "faceMinDetJ": 0.5189606457180753,
+      "faceMinDetJ": 0.5534333612254284,
       "before": {
         "minDetJ": 0.9429931257829038,
         "conformalEnergy": 0.0004782909187525957,
         "mirrorRms": 0.9008932507839073
       },
       "after": {
-        "minDetJ": 0.5678429487076142,
-        "conformalEnergy": 0.03288561091609659,
-        "mirrorRms": 12.100025529910328
+        "minDetJ": 0.6116911570568403,
+        "conformalEnergy": 0.018327842969239696,
+        "mirrorRms": 5.502162957050109
       }
     },
     {
       "yaw": -27.5,
       "pitch": 15,
-      "faceMinDetJ": 0.5356106591203411,
+      "faceMinDetJ": 0.5791344049968932,
       "before": {
         "minDetJ": 0.9371038885741308,
         "conformalEnergy": 0.0005104365910535854,
         "mirrorRms": 0.8233679356663675
       },
       "after": {
-        "minDetJ": 0.5622899048064105,
-        "conformalEnergy": 0.032921464833571494,
-        "mirrorRms": 11.010343311546794
+        "minDetJ": 0.61012535677916,
+        "conformalEnergy": 0.018276206705795932,
+        "mirrorRms": 4.870108261984494
       }
     },
     {
       "yaw": -25,
       "pitch": 15,
-      "faceMinDetJ": 0.5520477880870248,
+      "faceMinDetJ": 0.6040922523674116,
       "before": {
         "minDetJ": 0.9312817682562259,
         "conformalEnergy": 0.0005427200535154677,
         "mirrorRms": 0.7464328839418745
       },
       "after": {
-        "minDetJ": 0.5577130229734899,
-        "conformalEnergy": 0.03356982851919572,
-        "mirrorRms": 9.940240931770107
+        "minDetJ": 0.6092750699692229,
+        "conformalEnergy": 0.01824417442913282,
+        "mirrorRms": 4.2760052870178935
       }
     },
     {
       "yaw": -22.5,
       "pitch": 15,
-      "faceMinDetJ": 0.5682484057911209,
+      "faceMinDetJ": 0.6282263817586387,
       "before": {
         "minDetJ": 0.9255122929335409,
         "conformalEnergy": 0.0005747359885922026,
         "mirrorRms": 0.6700561364956039
       },
       "after": {
-        "minDetJ": 0.5541364253320749,
-        "conformalEnergy": 0.034681999299849935,
-        "mirrorRms": 8.88865073489841
+        "minDetJ": 0.6091398390753276,
+        "conformalEnergy": 0.01822027203520626,
+        "mirrorRms": 3.7191212693628937
       }
     },
     {
       "yaw": -20,
       "pitch": 15,
-      "faceMinDetJ": 0.5841894758137673,
+      "faceMinDetJ": 0.6514586339263924,
       "before": {
         "minDetJ": 0.9198276168178832,
         "conformalEnergy": 0.0006060951741351554,
         "mirrorRms": 0.5941999338897577
       },
       "after": {
-        "minDetJ": 0.5515788379464419,
-        "conformalEnergy": 0.03611790265644014,
-        "mirrorRms": 7.854322941542603
+        "minDetJ": 0.6097183671478794,
+        "conformalEnergy": 0.018193921430970934,
+        "mirrorRms": 3.198273897246462
       }
     },
     {
       "yaw": -17.5,
       "pitch": 15,
-      "faceMinDetJ": 0.5998485860294054,
+      "faceMinDetJ": 0.6731951404898714,
       "before": {
         "minDetJ": 0.9142444008686091,
         "conformalEnergy": 0.0006364277226918487,
         "mirrorRms": 0.5188211052618085
       },
       "after": {
-        "minDetJ": 0.5500534644158509,
-        "conformalEnergy": 0.03774740880307095,
-        "mirrorRms": 6.835834028669685
+        "minDetJ": 0.6110085321194755,
+        "conformalEnergy": 0.018155541522505522,
+        "mirrorRms": 2.711771751013052
       }
     },
     {
       "yaw": -15,
       "pitch": 15,
-      "faceMinDetJ": 0.6152039768229182,
+      "faceMinDetJ": 0.669027992778052,
       "before": {
         "minDetJ": 0.9087729899814946,
         "conformalEnergy": 0.0006653861463682058,
         "mirrorRms": 0.4438715112712487
       },
       "after": {
-        "minDetJ": 0.5495678973639108,
-        "conformalEnergy": 0.03945154996045752,
-        "mirrorRms": 5.831597616190956
+        "minDetJ": 0.6130073986270765,
+        "conformalEnergy": 0.018096639752666784,
+        "mirrorRms": 2.257356964554963
       }
     },
     {
       "yaw": -12.5,
       "pitch": 15,
-      "faceMinDetJ": 0.6302345634483509,
+      "faceMinDetJ": 0.6641794935615498,
       "before": {
         "minDetJ": 0.9034235154014219,
         "conformalEnergy": 0.000692648223447553,
         "mirrorRms": 0.3692985383709705
       },
       "after": {
-        "minDetJ": 0.550124068290054,
-        "conformalEnergy": 0.04112362862747004,
-        "mirrorRms": 4.839877875345183
+        "minDetJ": 0.6157112272484899,
+        "conformalEnergy": 0.018009893456677032,
+        "mirrorRms": 1.8321571721625625
       }
     },
     {
       "yaw": -10,
       "pitch": 15,
-      "faceMinDetJ": 0.6449199524081678,
+      "faceMinDetJ": 0.658660166313081,
       "before": {
         "minDetJ": 0.8982058775973113,
         "conformalEnergy": 0.0007179196445356307,
         "mirrorRms": 0.29504564069791683
       },
       "after": {
-        "minDetJ": 0.5517182361903903,
-        "conformalEnergy": 0.04267020803013984,
-        "mirrorRms": 3.8588053999282144
+        "minDetJ": 0.6191154811099295,
+        "conformalEnergy": 0.017889220384618213,
+        "mirrorRms": 1.4326562221291264
       }
     },
     {
       "yaw": -7.5,
       "pitch": 15,
-      "faceMinDetJ": 0.6592404518028397,
+      "faceMinDetJ": 0.6524805646291075,
       "before": {
         "minDetJ": 0.8931297295663205,
         "conformalEnergy": 0.0007409364177105323,
         "mirrorRms": 0.22105292491674775
       },
       "after": {
-        "minDetJ": 0.5543410151396193,
-        "conformalEnergy": 0.04401197687027659,
-        "mirrorRms": 2.8863954006199886
+        "minDetJ": 0.623214829892957,
+        "conformalEnergy": 0.01772983782540792,
+        "mirrorRms": 1.0546947099842578
       }
     },
     {
       "yaw": -5,
       "pitch": 15,
-      "faceMinDetJ": 0.6731770756739904,
+      "faceMinDetJ": 0.645651253269458,
       "before": {
         "minDetJ": 0.8882044605837502,
         "conformalEnergy": 0.0007614670140844898,
         "mirrorRms": 0.14725777244338709
       },
       "after": {
-        "minDetJ": 0.55797744045113,
-        "conformalEnergy": 0.045084481500389274,
-        "mirrorRms": 1.920567999418818
+        "minDetJ": 0.6280031512224745,
+        "conformalEnergy": 0.01752830985874581,
+        "mirrorRms": 0.6935109922031747
       }
     },
     {
       "yaw": -2.5,
       "pitch": 15,
-      "faceMinDetJ": 0.6867115424379973,
+      "faceMinDetJ": 0.638182798394632,
       "before": {
         "minDetJ": 0.8834391804096484,
         "conformalEnergy": 0.0007793142371393842,
         "mirrorRms": 0.07359549265589478
       },
       "after": {
-        "minDetJ": 0.5626070731070308,
-        "conformalEnergy": 0.045838719707327086,
-        "mirrorRms": 0.9591703204070687
+        "minDetJ": 0.6333927292019834,
+        "conformalEnergy": 0.017282582353776513,
+        "mirrorRms": 0.34382994308084236
       }
     },
     {
       "yaw": 0,
       "pitch": 15,
-      "faceMinDetJ": 0.6928719749699613,
+      "faceMinDetJ": 0.630085766924103,
       "before": {
         "minDetJ": 0.8788427039723182,
         "conformalEnergy": 0.0007943168014721938,
         "mirrorRms": 6.52137668842091e-16
       },
       "after": {
-        "minDetJ": 0.5682041414899178,
-        "conformalEnergy": 0.046241591389753124,
-        "mirrorRms": 4.333632569783641e-15
+        "minDetJ": 0.6375578175500259,
+        "conformalEnergy": 0.016992005432170672,
+        "mirrorRms": 1.963643577599221e-15
       }
     },
     {
       "yaw": 2.5,
       "pitch": 15,
-      "faceMinDetJ": 0.699703102159956,
+      "faceMinDetJ": 0.6213958694852689,
       "before": {
         "minDetJ": 0.8728447402467555,
         "conformalEnergy": 0.000806350608721017,
         "mirrorRms": 0.07359549265589473
       },
       "after": {
-        "minDetJ": 0.5695829012078434,
-        "conformalEnergy": 0.04627620255112881,
-        "mirrorRms": 0.9591703204070685
+        "minDetJ": 0.6367034243204751,
+        "conformalEnergy": 0.016657343211033637,
+        "mirrorRms": 0.3438299430808424
       }
     },
     {
       "yaw": 5,
       "pitch": 15,
-      "faceMinDetJ": 0.7072658705016928,
+      "faceMinDetJ": 0.6121490828631017,
       "before": {
         "minDetJ": 0.8669457038734167,
         "conformalEnergy": 0.0008153297109196725,
         "mirrorRms": 0.14725777244338709
       },
       "after": {
-        "minDetJ": 0.5723470116317525,
-        "conformalEnergy": 0.045942020195107375,
-        "mirrorRms": 1.9205679994188172
+        "minDetJ": 0.6353886526459882,
+        "conformalEnergy": 0.016280770742602698,
+        "mirrorRms": 0.6935109922031746
       }
     },
     {
       "yaw": 7.5,
       "pitch": 15,
-      "faceMinDetJ": 0.7155454749041716,
+      "faceMinDetJ": 0.6023560893118196,
       "before": {
         "minDetJ": 0.8611565960150546,
         "conformalEnergy": 0.0008212069538769846,
         "mirrorRms": 0.22105292491674783
       },
       "after": {
-        "minDetJ": 0.5764807410404902,
-        "conformalEnergy": 0.04525487689538299,
-        "mirrorRms": 2.8863954006199886
+        "minDetJ": 0.6351515237499934,
+        "conformalEnergy": 0.01586585816878578,
+        "mirrorRms": 1.0546947099842576
       }
     },
     {
       "yaw": 10,
       "pitch": 15,
-      "faceMinDetJ": 0.7245305345744978,
+      "faceMinDetJ": 0.5920272139955688,
       "before": {
         "minDetJ": 0.8554882259792155,
         "conformalEnergy": 0.0008239742957395762,
         "mirrorRms": 0.2950456406979169
       },
       "after": {
-        "minDetJ": 0.5819721818595566,
-        "conformalEnergy": 0.04424682500346722,
-        "mirrorRms": 3.8588053999282126
+        "minDetJ": 0.6359947570804224,
+        "conformalEnergy": 0.015417542209789487,
+        "mirrorRms": 1.4326562221291264
       }
     },
     {
       "yaw": 12.5,
       "pitch": 15,
-      "faceMinDetJ": 0.7168975579771758,
+      "faceMinDetJ": 0.5811724692260163,
       "before": {
         "minDetJ": 0.849951192247718,
         "conformalEnergy": 0.0008236627983383854,
         "mirrorRms": 0.36929853837097043
       },
       "after": {
-        "minDetJ": 0.5888133040866529,
-        "conformalEnergy": 0.04296584165197393,
-        "mirrorRms": 4.839877875345183
+        "minDetJ": 0.637920390766799,
+        "conformalEnergy": 0.014942085206195187,
+        "mirrorRms": 1.832157172162563
       }
     },
     {
       "yaw": 15,
       "pitch": 15,
-      "faceMinDetJ": 0.700411785999355,
+      "faceMinDetJ": 0.569801609757875,
       "before": {
         "minDetJ": 0.8445558637566575,
         "conformalEnergy": 0.000820342291589918,
         "mirrorRms": 0.4438715112712487
       },
       "after": {
-        "minDetJ": 0.5947530311313728,
-        "conformalEnergy": 0.04147538689643186,
-        "mirrorRms": 5.8315976161909555
+        "minDetJ": 0.640929750017187,
+        "conformalEnergy": 0.014447022033011554,
+        "mirrorRms": 2.2573569645549627
       }
     },
     {
       "yaw": 17.5,
       "pitch": 15,
-      "faceMinDetJ": 0.6835301660237645,
+      "faceMinDetJ": 0.5579241984658103,
       "before": {
         "minDetJ": 0.8393123614638944,
         "conformalEnergy": 0.0008141207136279446,
         "mirrorRms": 0.5188211052618085
       },
       "after": {
-        "minDetJ": 0.5981270676280005,
-        "conformalEnergy": 0.039853818504203324,
-        "mirrorRms": 6.835834028669685
+        "minDetJ": 0.6436559059042309,
+        "conformalEnergy": 0.013941095299586833,
+        "mirrorRms": 2.711771751013053
       }
     },
     {
       "yaw": 20,
       "pitch": 15,
-      "faceMinDetJ": 0.6662858020353462,
+      "faceMinDetJ": 0.5455496816284021,
       "before": {
         "minDetJ": 0.8342305402174905,
         "conformalEnergy": 0.0008051431319636165,
         "mirrorRms": 0.5941999338897577
       },
       "after": {
-        "minDetJ": 0.6030389061812546,
-        "conformalEnergy": 0.038193668038551454,
-        "mirrorRms": 7.854322941542601
+        "minDetJ": 0.644321946654972,
+        "conformalEnergy": 0.013434179343253666,
+        "mirrorRms": 3.1982738972464624
       }
     },
     {
       "yaw": 22.5,
       "pitch": 15,
-      "faceMinDetJ": 0.6487118754663809,
+      "faceMinDetJ": 0.5326874729529422,
       "before": {
         "minDetJ": 0.829319970961061,
         "conformalEnergy": 0.0007935904534281757,
         "mirrorRms": 0.6700561364956039
       },
       "after": {
-        "minDetJ": 0.6094848610158743,
-        "conformalEnergy": 0.036600783990311955,
-        "mirrorRms": 8.888650734898413
+        "minDetJ": 0.6450777602730695,
+        "conformalEnergy": 0.01293719361270336,
+        "mirrorRms": 3.719121269362892
       }
     },
     {
       "yaw": 25,
       "pitch": 15,
-      "faceMinDetJ": 0.6308415411599467,
+      "faceMinDetJ": 0.5193470453900637,
       "before": {
         "minDetJ": 0.824589923293603,
         "conformalEnergy": 0.0007796778330585016,
         "mirrorRms": 0.7464328839418743
       },
       "after": {
-        "minDetJ": 0.6141760571173782,
-        "conformalEnergy": 0.03519334876949927,
-        "mirrorRms": 9.940240931770107
+        "minDetJ": 0.6459222762220479,
+        "conformalEnergy": 0.012462006122260508,
+        "mirrorRms": 4.2760052870178935
       }
     },
     {
       "yaw": 27.5,
       "pitch": 15,
-      "faceMinDetJ": 0.6127078268220643,
+      "faceMinDetJ": 0.5055380297109776,
       "before": {
         "minDetJ": 0.8200493484191468,
         "conformalEnergy": 0.0007636527944376347,
         "mirrorRms": 0.8233679356663677
       },
       "after": {
-        "minDetJ": 0.613410375606205,
-        "conformalEnergy": 0.03410077737529083,
-        "mirrorRms": 11.010343311546794
+        "minDetJ": 0.646854277019985,
+        "conformalEnergy": 0.012021327737886242,
+        "mirrorRms": 4.870108261984492
       }
     },
     {
       "yaw": 30,
       "pitch": 15,
-      "faceMinDetJ": 0.594343536667788,
+      "faceMinDetJ": 0.49127031875159877,
       "before": {
         "minDetJ": 0.815706862508084,
         "conformalEnergy": 0.0007457930762752573,
         "mirrorRms": 0.9008932507839069
       },
       "after": {
-        "minDetJ": 0.6135767518673261,
-        "conformalEnergy": 0.03346250651067842,
-        "mirrorRms": 12.100025529910331
+        "minDetJ": 0.6478723975720083,
+        "conformalEnergy": 0.011628598127916969,
+        "mirrorRms": 5.5021629570501105
       }
     },
     {
       "yaw": 32.5,
       "pitch": 15,
-      "faceMinDetJ": 0.5757811599356036,
+      "faceMinDetJ": 0.4765541761688502,
       "before": {
         "minDetJ": 0.8115707305012816,
         "conformalEnergy": 0.0007264042221126663,
         "mirrorRms": 0.9790346549897624
       },
       "after": {
-        "minDetJ": 0.6146887411112298,
-        "conformalEnergy": 0.033426683787691314,
-        "mirrorRms": 13.21016716551829
+        "minDetJ": 0.6489751246671426,
+        "conformalEnergy": 0.011297864280138748,
+        "mirrorRms": 6.172509740186153
       }
     },
     {
       "yaw": 35,
       "pitch": 15,
-      "faceMinDetJ": 0.5570527849069091,
+      "faceMinDetJ": 0.4614003485065311,
       "before": {
         "minDetJ": 0.8076488503887482,
         "conformalEnergy": 0.0007058169320730705,
         "mirrorRms": 1.0578115640862913
       },
       "after": {
-        "minDetJ": 0.6167585657893561,
-        "conformalEnergy": 0.034148767473999996,
-        "mirrorRms": 14.341456060857444
+        "minDetJ": 0.6501607966192231,
+        "conformalEnergy": 0.011043652546109856,
+        "mirrorRms": 6.881148734097824
       }
     },
     {
       "yaw": 37.5,
       "pitch": 15,
-      "faceMinDetJ": 0.538190019020739,
+      "faceMinDetJ": 0.44582017932646645,
       "before": {
         "minDetJ": 0.803948737985056,
         "conformalEnergy": 0.0006843841974145772,
         "mirrorRms": 1.1372367640857253
       },
       "after": {
-        "minDetJ": 0.6197969831923298,
-        "conformalEnergy": 0.03579004795672066,
-        "mirrorRms": 15.494386784506503
+        "minDetJ": 0.6513226143114837,
+        "conformalEnergy": 0.010880835226464682,
+        "mirrorRms": 7.627785833830901
       }
     },
     {
       "yaw": 40,
       "pitch": 15,
-      "faceMinDetJ": 0.5192239156251196,
+      "faceMinDetJ": 0.4298257241349437,
       "before": {
         "minDetJ": 0.8004775122420162,
         "conformalEnergy": 0.0006624782403696212,
         "mirrorRms": 1.217316247055158
       },
       "after": {
-        "minDetJ": 0.6150924333407192,
-        "conformalEnergy": 0.03851610273910278,
-        "mirrorRms": 16.669261014393847
+        "minDetJ": 0.6522470798098345,
+        "conformalEnergy": 0.01082449275627095,
+        "mirrorRms": 8.411872423131314
       }
     },
     {
       "yaw": 42.5,
       "pitch": 15,
-      "faceMinDetJ": 0.5001849078492284,
+      "faceMinDetJ": 0.41342986481393373,
       "before": {
         "minDetJ": 0.7972418811204128,
         "conformalEnergy": 0.0006404872832624167,
         "mirrorRms": 1.2980491011785322
       },
       "after": {
-        "minDetJ": 0.5802719325645028,
-        "conformalEnergy": 0.0424951973318411,
-        "mirrorRms": 17.866189625663335
+        "minDetJ": 0.6532166679820289,
+        "conformalEnergy": 0.01088977258621064,
+        "mirrorRms": 9.232639174658356
       }
     },
     {
       "yaw": 45,
       "pitch": 15,
-      "faceMinDetJ": 0.4726631980880953,
+      "faceMinDetJ": 0.39664642226075747,
       "before": {
         "minDetJ": 0.7942481280596593,
         "conformalEnergy": 0.0006188121722554005,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.544547171224845,
-        "conformalEnergy": 0.04789664485486002,
-        "mirrorRms": 19.08509626105954
+        "minDetJ": 0.6542297744042832,
+        "conformalEnergy": 0.01109174588340948,
+        "mirrorRms": 10.089124591120964
       }
     },
     {
       "yaw": 47.5,
       "pitch": 15,
-      "faceMinDetJ": 0.47009842017253817,
+      "faceMinDetJ": 0.3929485557685271,
       "before": {
         "minDetJ": 0.7942481280596593,
         "conformalEnergy": 0.0006188121722554005,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.544547171224845,
-        "conformalEnergy": 0.04789664485486002,
-        "mirrorRms": 19.08509626105954
+        "minDetJ": 0.6542297744042832,
+        "conformalEnergy": 0.01109174588340948,
+        "mirrorRms": 10.089124591120964
       }
     },
     {
       "yaw": 50,
       "pitch": 15,
-      "faceMinDetJ": 0.46168893942696987,
+      "faceMinDetJ": 0.38937917347777656,
       "before": {
         "minDetJ": 0.7942481280596593,
         "conformalEnergy": 0.0006188121722554005,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.544547171224845,
-        "conformalEnergy": 0.04789664485486002,
-        "mirrorRms": 19.08509626105954
+        "minDetJ": 0.6542297744042832,
+        "conformalEnergy": 0.01109174588340948,
+        "mirrorRms": 10.089124591120964
       }
     },
     {
       "yaw": 52.5,
       "pitch": 15,
-      "faceMinDetJ": 0.45330648366176934,
+      "faceMinDetJ": 0.3859450699105686,
       "before": {
         "minDetJ": 0.7942481280596593,
         "conformalEnergy": 0.0006188121722554005,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.544547171224845,
-        "conformalEnergy": 0.04789664485486002,
-        "mirrorRms": 19.08509626105954
+        "minDetJ": 0.6542297744042832,
+        "conformalEnergy": 0.01109174588340948,
+        "mirrorRms": 10.089124591120964
       }
     },
     {
       "yaw": 55,
       "pitch": 15,
-      "faceMinDetJ": 0.4458742934062781,
+      "faceMinDetJ": 0.38265278207824605,
       "before": {
         "minDetJ": 0.7942481280596593,
         "conformalEnergy": 0.0006188121722554005,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.544547171224845,
-        "conformalEnergy": 0.04789664485486002,
-        "mirrorRms": 19.08509626105954
+        "minDetJ": 0.6542297744042832,
+        "conformalEnergy": 0.01109174588340948,
+        "mirrorRms": 10.089124591120964
       }
     },
     {
       "yaw": 57.5,
       "pitch": 15,
-      "faceMinDetJ": 0.439406516257027,
+      "faceMinDetJ": 0.37950857703782553,
       "before": {
         "minDetJ": 0.7942481280596593,
         "conformalEnergy": 0.0006188121722554005,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.544547171224845,
-        "conformalEnergy": 0.04789664485486002,
-        "mirrorRms": 19.08509626105954
+        "minDetJ": 0.6542297744042832,
+        "conformalEnergy": 0.01109174588340948,
+        "mirrorRms": 10.089124591120964
       }
     },
     {
       "yaw": 60,
       "pitch": 15,
-      "faceMinDetJ": 0.4339154639954441,
+      "faceMinDetJ": 0.35168487904435836,
       "before": {
         "minDetJ": 0.7942481280596593,
         "conformalEnergy": 0.0006188121722554005,
         "mirrorRms": 1.3794274529228112
       },
       "after": {
-        "minDetJ": 0.544547171224845,
-        "conformalEnergy": 0.04789664485486002,
-        "mirrorRms": 19.08509626105954
+        "minDetJ": 0.6542297744042832,
+        "conformalEnergy": 0.01109174588340948,
+        "mirrorRms": 10.089124591120964
       }
     },
     {
       "yaw": 62.5,
       "pitch": 15,
-      "faceMinDetJ": 0.4294115891515941,
+      "faceMinDetJ": 0.31511272598872403,
       "before": {
         "minDetJ": 0.798874598816937,
         "conformalEnergy": 0.0005912882669271851,
         "mirrorRms": 1.348401017751499
       },
       "after": {
-        "minDetJ": 0.5524689428107272,
-        "conformalEnergy": 0.04576626866375651,
-        "mirrorRms": 18.655829393398342
+        "minDetJ": 0.6619973891274823,
+        "conformalEnergy": 0.010598400443048975,
+        "mirrorRms": 9.862197419707607
       }
     },
     {
       "yaw": 65,
       "pitch": 15,
-      "faceMinDetJ": 0.42444776190152295,
+      "faceMinDetJ": 0.280751212259547,
       "before": {
         "minDetJ": 0.8115830730771996,
         "conformalEnergy": 0.0005189066030410373,
         "mirrorRms": 1.2631765059518203
       },
       "after": {
-        "minDetJ": 0.574778723642927,
-        "conformalEnergy": 0.040163859718660336,
-        "mirrorRms": 17.47670394678472
+        "minDetJ": 0.6833360072163738,
+        "conformalEnergy": 0.009301013193023958,
+        "mirrorRms": 9.238865822281051
       }
     },
     {
       "yaw": 67.5,
       "pitch": 15,
-      "faceMinDetJ": 0.41567914505900877,
+      "faceMinDetJ": 0.24866574695120197,
       "before": {
         "minDetJ": 0.8306173809548747,
         "conformalEnergy": 0.00041933683711683855,
         "mirrorRms": 1.1355361080951574
       },
       "after": {
-        "minDetJ": 0.6097002505763046,
-        "conformalEnergy": 0.0324570660734053,
-        "mirrorRms": 15.710732655773562
+        "minDetJ": 0.7153009611901984,
+        "conformalEnergy": 0.007516299525744134,
+        "mirrorRms": 8.30530467406155
       }
     },
     {
       "yaw": 70,
       "pitch": 15,
-      "faceMinDetJ": 0.4094850603720417,
+      "faceMinDetJ": 0.21891740657051484,
       "before": {
         "minDetJ": 0.8542213862061471,
         "conformalEnergy": 0.00031058691497162945,
         "mirrorRms": 0.9772620147528962
       },
       "after": {
-        "minDetJ": 0.6555150050592473,
-        "conformalEnergy": 0.024039719691930993,
-        "mirrorRms": 13.520928254919705
+        "minDetJ": 0.7549478207172501,
+        "conformalEnergy": 0.005567038416558791,
+        "mirrorRms": 7.147688850269361
       }
     },
     {
       "yaw": 72.5,
       "pitch": 15,
-      "faceMinDetJ": 0.4058772986328843,
+      "faceMinDetJ": 0.19156281877417725,
       "before": {
         "minDetJ": 0.8806387078821146,
         "conformalEnergy": 0.0002082040588615655,
         "mirrorRms": 0.8001364164964188
       },
       "after": {
-        "minDetJ": 0.7100844331287289,
-        "conformalEnergy": 0.016115190217211847,
-        "mirrorRms": 11.070303478778063
+        "minDetJ": 0.7993304304461261,
+        "conformalEnergy": 0.003731902209306914,
+        "mirrorRms": 5.852193226124769
       }
     },
     {
       "yaw": 75,
       "pitch": 15,
-      "faceMinDetJ": 0.39723004448481025,
+      "faceMinDetJ": 0.16665405457480825,
       "before": {
         "minDetJ": 0.9081125317709586,
         "conformalEnergy": 0.0001233786619948086,
         "mirrorRms": 0.6159415038971117
       },
       "after": {
-        "minDetJ": 0.7705262879959754,
-        "conformalEnergy": 0.009549624621456239,
-        "mirrorRms": 8.521871061903482
+        "minDetJ": 0.8454995808180958,
+        "conformalEnergy": 0.0022114703421139497,
+        "mirrorRms": 4.504992676848021
       }
     },
     {
       "yaw": 77.5,
       "pitch": 15,
-      "faceMinDetJ": 0.3802485032656137,
+      "faceMinDetJ": 0.14423852922078648,
       "before": {
         "minDetJ": 0.9348855116301356,
         "conformalEnergy": 6.195109042610746e-05,
         "mirrorRms": 0.43645946752635845
       },
       "after": {
-        "minDetJ": 0.8330450951893434,
-        "conformalEnergy": 0.004795072737011499,
-        "mirrorRms": 6.038643738850857
+        "minDetJ": 0.8905023117986177,
+        "conformalEnergy": 0.0011104270132594777,
+        "mirrorRms": 3.1922620776593678
       }
     },
     {
       "yaw": 80,
       "pitch": 15,
-      "faceMinDetJ": 0.36525799153768496,
+      "faceMinDetJ": 0.12435891193861252,
       "before": {
         "minDetJ": 0.9591997602077887,
         "conformalEnergy": 2.432139231536278e-05,
         "mirrorRms": 0.27347249795554274
       },
       "after": {
-        "minDetJ": 0.8912352478989862,
-        "conformalEnergy": 0.0018824986681484524,
-        "mirrorRms": 3.7836342441750683
+        "minDetJ": 0.9313818495977901,
+        "conformalEnergy": 0.00043594278714542743,
+        "mirrorRms": 2.000176303779082
       }
     },
     {
       "yaw": 82.5,
       "pitch": 15,
-      "faceMinDetJ": 0.3522870445921087,
+      "faceMinDetJ": 0.10705304470970213,
       "before": {
         "minDetJ": 0.9792969300528483,
         "conformalEnergy": 6.261914565250572e-06,
         "mirrorRms": 0.13876278575604942
       },
       "after": {
-        "minDetJ": 0.9413809278307546,
-        "conformalEnergy": 0.00048467808406263754,
-        "mirrorRms": 1.9198553124309685
+        "minDetJ": 0.965178176316532,
+        "conformalEnergy": 0.00011224014041021259,
+        "mirrorRms": 1.0149102304274265
       }
     },
     {
       "yaw": 85,
       "pitch": 15,
-      "faceMinDetJ": 0.3413603533636408,
+      "faceMinDetJ": 0.09235387023590758,
       "before": {
         "minDetJ": 0.9934183841142981,
         "conformalEnergy": 6.328268305150351e-07,
         "mirrorRms": 0.044112521499262654
       },
       "after": {
-        "minDetJ": 0.9805987738965735,
-        "conformalEnergy": 4.898139260146495e-05,
-        "mirrorRms": 0.6103196781734602
+        "minDetJ": 0.9889292325705316,
+        "conformalEnergy": 1.1342948162589979e-05,
+        "mirrorRms": 0.32263873282465916
       }
     },
     {
       "yaw": 87.5,
       "pitch": 15,
-      "faceMinDetJ": 0.33249871743002346,
+      "faceMinDetJ": 0.08028936923130192,
       "before": {
         "minDetJ": 0.9998054561298417,
         "conformalEnergy": 5.529003462094854e-10,
         "mirrorRms": 0.0013038957565664256
       },
       "after": {
-        "minDetJ": 0.9994162863244994,
-        "conformalEnergy": 4.2795007451121164e-08,
-        "mirrorRms": 0.018040075957405012
+        "minDetJ": 0.9996727530523466,
+        "conformalEnergy": 9.910325643166828e-09,
+        "mirrorRms": 0.009536686191041555
       }
     },
     {
       "yaw": 90,
       "pitch": 15,
-      "faceMinDetJ": 0.3257190054189528,
+      "faceMinDetJ": 0.07088250715920172,
       "before": {
         "minDetJ": 1,
         "conformalEnergy": 0,
@@ -4094,63 +4094,63 @@
       },
       {
         "name": "up-left",
-        "priorRms": 38.26024246977734,
-        "correctedRms": 22.282711477044952,
+        "priorRms": 37.94707853354154,
+        "correctedRms": 23.893191820780565,
         "sampleCount": 52,
         "pass": true
       },
       {
         "name": "up",
-        "priorRms": 42.165458919901795,
-        "correctedRms": 18.49324200890693,
+        "priorRms": 41.95345745695571,
+        "correctedRms": 22.507200493932473,
         "sampleCount": 54,
         "pass": true
       },
       {
         "name": "up-right",
-        "priorRms": 41.27697253358659,
-        "correctedRms": 17.299399722800523,
+        "priorRms": 42.43773719770575,
+        "correctedRms": 22.79127700880992,
         "sampleCount": 52,
         "pass": true
       },
       {
         "name": "down-left",
-        "priorRms": 52.651369086346335,
-        "correctedRms": 34.882114396376615,
+        "priorRms": 53.419053137389454,
+        "correctedRms": 25.88941684862571,
         "sampleCount": 42,
         "pass": true
       },
       {
         "name": "down",
         "priorRms": 22.783566645521265,
-        "correctedRms": 14.187862930880554,
+        "correctedRms": 15.302257706269716,
         "sampleCount": 44,
         "pass": true
       },
       {
         "name": "down-right",
         "priorRms": 60.58153143673005,
-        "correctedRms": 15.751113007518223,
+        "correctedRms": 19.751505036819655,
         "sampleCount": 41,
         "pass": true
       }
     ],
-    "mainMean": 36.87779569691052,
-    "afterMean": 20.482740590587966,
+    "mainMean": 37.880916543523746,
+    "afterMean": 21.68914148587301,
     "meanImproved": true
   },
   "sources": {
-    "bundle/hair-solve.mjs": "9df2d6bba7e4285ce7fe3434d57bff6ffc24eeb3948c7c33519294f761df4c64",
-    "bundle/hair-solve-data.mjs": "992d4bd1c37cd0b5148db74186462ee5dceda10aca772a3693ae68faa0301b50",
-    "bundle/rig.mjs": "b6c99de5854d3355138579a3f45cccdc39562f634ab2626201ebc81802284c76",
-    "pipeline/fit_hair_solve.py": "330b0a76bc0e15b5d9ed0549d3bf2ebe4c21e5e1fea8ce1bdab706b16c76b562",
-    "pipeline/hair_solve_inputs.mjs": "a5fdb1431feb00b929a4da28108f6f31303444a6d47d2092a39c554cefea5516",
+    "bundle/hair-solve.mjs": "9c0eb6bcf4844c8c4e0f2354b8b96840d2bfa46882d59eb4d6ba073da2147cc2",
+    "bundle/hair-solve-data.mjs": "f96e5b5311fdc4282acf0ca41de58c945c71d180c6fd552cb2c5b05a18060005",
+    "bundle/rig.mjs": "d71eebf21183d8d2c250b6a06ed409e0a3ecdfdfa4997ec3d43367955e2c770c",
+    "pipeline/fit_hair_solve.py": "801917d94551a8cbb1a044c356e38cb2b38d242b6b78e45c2581107347586501",
+    "pipeline/hair_solve_inputs.mjs": "6f012f5750528b273e82894263b92e0ce714e5a44add8b92e3ee4cde9abfa38b",
     "pipeline/hair_solve_metrics.mjs": "cd7472888a75dbcb278845eb65db96b20f274aaba1c6f1cc3b9d366ca8136989",
-    "pipeline/hair_solve_quality.py": "83da0aa077027dc83861f95f671b349495b8edbb3c9ee11f5736ec195c1ff2fa",
-    "pipeline/probe_hair_only.py": "e845144d01a811e2b6b9346599c649afc62ae8063881b61fa0c612c4beb9b9b1",
-    "pipeline/vdd_benchmark.mjs": "f769af3abe790b41caee700ea7c79bd532466ca30e53f9e23dbc5b1baec10f2d",
-    "pipeline/update_vdd_evidence.py": "62698b667b3d572c4c646065daa6e9a24e895a9d19451ad7e68e32a000f523ac",
-    "source/viewer/hair-solve.json": "f3ce7ebb88f62dc5a000243d2da96e4f9236a666c3efe5410d7c825a844b5d82"
+    "pipeline/hair_solve_quality.py": "aa3d330366f0c85e87b872cc0781aebdbdfe8e30dcc3e756ae420b654bf54a93",
+    "pipeline/probe_hair_only.py": "197f6c41471349d84317a885b5689b4d93d67e1f42c50176f268c1c7c574e7d0",
+    "pipeline/vdd_benchmark.mjs": "61b09d8e45eb34129b327b6df7ef457098cb97d8a7eec089a21646e984988441",
+    "pipeline/update_vdd_evidence.py": "df076da614220d9f7167c148353b92473d1e980061cc80cf86892d309c5111be",
+    "source/viewer/hair-solve.json": "7018194d8b60af2a5aae88f057dd0e224e54147cf1aaa17d036aa77faa7aa512"
   },
   "pass": true,
   "split": {
@@ -4160,68 +4160,68 @@
       "poses": [
         {
           "name": "up-left",
-          "minDet": 0.2753130765633408,
+          "minDet": 0.28533414952189257,
           "reversedCells": 0,
           "worstCell": {
             "i": 6,
-            "j": 7,
-            "s": 0.18181818181818166,
-            "y": 254.33333333333334
-          }
-        },
-        {
-          "name": "up",
-          "minDet": 0.2747842545192388,
-          "reversedCells": 0,
-          "worstCell": {
-            "i": 5,
-            "j": 8,
-            "s": -0.18181818181818166,
-            "y": 290.6666666666667
-          }
-        },
-        {
-          "name": "up-right",
-          "minDet": 0.2810573021086377,
-          "reversedCells": 0,
-          "worstCell": {
-            "i": 5,
             "j": 9,
-            "s": -0.18181818181818166,
+            "s": 0.18181818181818166,
             "y": 327
           }
         },
         {
+          "name": "up",
+          "minDet": 0.29773592790004766,
+          "reversedCells": 0,
+          "worstCell": {
+            "i": 4,
+            "j": 9,
+            "s": -0.5454545454545454,
+            "y": 327
+          }
+        },
+        {
+          "name": "up-right",
+          "minDet": 0.30416271271765044,
+          "reversedCells": 0,
+          "worstCell": {
+            "i": 4,
+            "j": 8,
+            "s": -0.5454545454545454,
+            "y": 290.6666666666667
+          }
+        },
+        {
           "name": "down-left",
-          "minDet": 0.29387764238629044,
+          "minDet": 0.2962730922556197,
           "reversedCells": 0,
           "worstCell": {
             "i": 6,
-            "j": 6,
+            "j": 7,
             "s": 0.18181818181818166,
-            "y": 218
+            "y": 254.33333333333334
           }
         },
         {
           "name": "down",
-          "minDet": 0.48062288501551004,
+          "minDet": 0.9469970103085082,
           "reversedCells": 0,
           "worstCell": {
-            "i": 7,
-            "j": 12,
-            "s": 0.5454545454545454,
-            "y": 436
+            "i": 5,
+            "j": 11,
+            "s": -0.18181818181818166,
+            "y": 399.6666666666667
           }
         },
         {
           "name": "down-right",
-          "minDet": 0.2917802564534178,
+          "minDet": 0.6119196668460815,
           "reversedCells": 0,
           "worstCell": {
-            "i": 5,
-            "j": 7,
-            "s": -0.18181818181818166,
-            "y": 254.33333333333334
+            "i": 4,
+            "j": 8,
+            "s": -0.5454545454545454,
+            "y": 290.6666666666667
           }
         }
       ],
@@ -4238,43 +4238,43 @@
           {
             "yaw": -67.5,
             "pitch": -30,
-            "minDet": 0.778858703633556,
+            "minDet": 0.9361629569466103,
             "reversedTriangles": 0
           },
           {
             "yaw": -45,
             "pitch": -30,
-            "minDet": 0.730989474229708,
+            "minDet": 0.9223469220088865,
             "reversedTriangles": 0
           },
           {
             "yaw": -22.5,
             "pitch": -30,
-            "minDet": 0.8252842909612289,
+            "minDet": 0.968749158332492,
             "reversedTriangles": 0
           },
           {
             "yaw": 0,
             "pitch": -30,
-            "minDet": 0.9051949616588469,
+            "minDet": 0.9814107334108472,
             "reversedTriangles": 0
           },
           {
             "yaw": 22.5,
             "pitch": -30,
-            "minDet": 0.6389073579786971,
+            "minDet": 0.9255400412844892,
             "reversedTriangles": 0
           },
           {
             "yaw": 45,
             "pitch": -30,
-            "minDet": 0.26949637974130014,
+            "minDet": 0.8498801763434741,
             "reversedTriangles": 0
           },
           {
             "yaw": 67.5,
             "pitch": -30,
-            "minDet": 0.3986539588288918,
+            "minDet": 0.8764222939440626,
             "reversedTriangles": 0
           },
           {
@@ -4292,43 +4292,43 @@
           {
             "yaw": -67.5,
             "pitch": -15,
-            "minDet": 0.8894293518167701,
+            "minDet": 0.9680814784733087,
             "reversedTriangles": 0
           },
           {
             "yaw": -45,
             "pitch": -15,
-            "minDet": 0.8654947371148584,
+            "minDet": 0.9611734610044397,
             "reversedTriangles": 0
           },
           {
             "yaw": -22.5,
             "pitch": -15,
-            "minDet": 0.912642145480614,
+            "minDet": 0.9843745791662459,
             "reversedTriangles": 0
           },
           {
             "yaw": 0,
             "pitch": -15,
-            "minDet": 0.9525974808294233,
+            "minDet": 0.9907053667054241,
             "reversedTriangles": 0
           },
           {
             "yaw": 22.5,
             "pitch": -15,
-            "minDet": 0.8194536789893486,
+            "minDet": 0.9627700206422009,
             "reversedTriangles": 0
           },
           {
             "yaw": 45,
             "pitch": -15,
-            "minDet": 0.6347481898706937,
+            "minDet": 0.9249400881718115,
             "reversedTriangles": 0
           },
           {
             "yaw": 67.5,
             "pitch": -15,
-            "minDet": 0.6993269794144154,
+            "minDet": 0.938211146972075,
             "reversedTriangles": 0
           },
           {
@@ -4400,43 +4400,43 @@
           {
             "yaw": -67.5,
             "pitch": 15,
-            "minDet": 0.6913258362176032,
+            "minDet": 0.9031282209335587,
             "reversedTriangles": 0
           },
           {
             "yaw": -45,
             "pitch": 15,
-            "minDet": 0.6279455967671596,
+            "minDet": 0.8822867396036301,
             "reversedTriangles": 0
           },
           {
             "yaw": -22.5,
             "pitch": 15,
-            "minDet": 0.7612790115097192,
+            "minDet": 0.857532035249826,
             "reversedTriangles": 0
           },
           {
             "yaw": 0,
             "pitch": 15,
-            "minDet": 0.7033956433869416,
+            "minDet": 0.8783714412880601,
             "reversedTriangles": 0
           },
           {
             "yaw": 22.5,
             "pitch": 15,
-            "minDet": 0.7186506932320593,
+            "minDet": 0.8302936190177083,
             "reversedTriangles": 0
           },
           {
             "yaw": 45,
             "pitch": 15,
-            "minDet": 0.6370526820715073,
+            "minDet": 0.796325148618467,
             "reversedTriangles": 0
           },
           {
             "yaw": 67.5,
             "pitch": 15,
-            "minDet": 0.7012240230750262,
+            "minDet": 0.8323361278879858,
             "reversedTriangles": 0
           },
           {
@@ -4454,43 +4454,43 @@
           {
             "yaw": -67.5,
             "pitch": 30,
-            "minDet": 0.3826516724351979,
+            "minDet": 0.8062564418671326,
             "reversedTriangles": 0
           },
           {
             "yaw": -45,
             "pitch": 30,
-            "minDet": 0.2558911935343132,
+            "minDet": 0.7645734792072603,
             "reversedTriangles": 0
           },
           {
             "yaw": -22.5,
             "pitch": 30,
-            "minDet": 0.5225580230194302,
+            "minDet": 0.71506407049966,
             "reversedTriangles": 0
           },
           {
             "yaw": 0,
             "pitch": 30,
-            "minDet": 0.40679128677388293,
+            "minDet": 0.7567428825761543,
             "reversedTriangles": 0
           },
           {
             "yaw": 22.5,
             "pitch": 30,
-            "minDet": 0.4373013864641029,
+            "minDet": 0.6605872380353243,
             "reversedTriangles": 0
           },
           {
             "yaw": 45,
             "pitch": 30,
-            "minDet": 0.2741053641429535,
+            "minDet": 0.5926502972369633,
             "reversedTriangles": 0
           },
           {
             "yaw": 67.5,
             "pitch": 30,
-            "minDet": 0.40244804615011376,
+            "minDet": 0.6646722557759716,
             "reversedTriangles": 0
           },
           {
@@ -4508,22 +4508,22 @@
         "poses": [
           {
             "name": "up-left",
-            "priorRms": 38.36095019678214,
-            "correctedRms": 25.717212135066273,
+            "priorRms": 38.10737297426838,
+            "correctedRms": 27.046834380385445,
             "sampleCount": 64,
             "pass": true
           },
           {
             "name": "up",
-            "priorRms": 41.6415075557448,
-            "correctedRms": 23.463382173725574,
+            "priorRms": 41.46594075170901,
+            "correctedRms": 26.15223497025434,
             "sampleCount": 66,
             "pass": true
           },
           {
             "name": "up-right",
-            "priorRms": 41.96147786958891,
-            "correctedRms": 22.57245279095739,
+            "priorRms": 42.89194271655226,
+            "correctedRms": 27.551372470350728,
             "sampleCount": 64,
             "pass": true
           },
@@ -4550,22 +4550,22 @@
           },
           {
             "name": "down-left",
-            "priorRms": 50.10119389425395,
-            "correctedRms": 32.135707611684914,
+            "priorRms": 50.72931068882134,
+            "correctedRms": 29.68133220530173,
             "sampleCount": 54,
             "pass": true
           },
           {
             "name": "down",
             "priorRms": 30.386792243623592,
-            "correctedRms": 25.1111813455964,
+            "correctedRms": 26.325571490201582,
             "sampleCount": 56,
             "pass": true
           },
           {
             "name": "down-right",
             "priorRms": 59.597391357372125,
-            "correctedRms": 28.366536224193652,
+            "correctedRms": 31.11845900050383,
             "sampleCount": 53,
             "pass": true
           }
@@ -4577,21 +4577,21 @@
           {
             "name": "up-left",
             "priorRms": 49.42983738117506,
-            "correctedRms": 35.21780966566573,
+            "correctedRms": 40.30691080724904,
             "sampleCount": 68,
             "pass": true
           },
           {
             "name": "up",
             "priorRms": 54.67779955983857,
-            "correctedRms": 42.9563732174866,
+            "correctedRms": 48.112001682349,
             "sampleCount": 68,
             "pass": true
           },
           {
             "name": "up-right",
             "priorRms": 69.73401847974439,
-            "correctedRms": 51.09006209082589,
+            "correctedRms": 56.49877088141928,
             "sampleCount": 72,
             "pass": true
           },
@@ -4618,31 +4618,31 @@
           },
           {
             "name": "down-left",
-            "priorRms": 48.63255082760928,
-            "correctedRms": 35.88407260424417,
+            "priorRms": 48.57382697159723,
+            "correctedRms": 43.004037278169854,
             "sampleCount": 72,
             "pass": true
           },
           {
             "name": "down",
             "priorRms": 34.64823227814083,
-            "correctedRms": 24.330365115769773,
+            "correctedRms": 30.32078495026143,
             "sampleCount": 60,
             "pass": true
           },
           {
             "name": "down-right",
             "priorRms": 71.96725445843904,
-            "correctedRms": 50.647768248674375,
+            "correctedRms": 63.661072429367245,
             "sampleCount": 56,
             "pass": true
           }
         ]
       }
     },
-    "upperMean": 20.482740590587966,
-    "lowerTailRms": 40.02107515711109,
-    "priorLowerTailRms": 54.848282164157865
+    "upperMean": 21.68914148587301,
+    "lowerTailRms": 46.983929671469305,
+    "priorLowerTailRms": 54.83849485482252
   },
   "remainingEvidence": {
     "tieRow520": [
@@ -4667,8 +4667,8 @@
             640
           ],
           "face": [
-            341,
-            535
+            343,
+            533
           ],
           "ties": [
             255,
@@ -4699,7 +4699,7 @@
               -5.9534699575866625
             ],
             "hairOnlyStemGap": 80,
-            "stemGap": 15
+            "stemGap": 14
           },
           "right": {
             "refFrame": [
@@ -4742,11 +4742,11 @@
         "groups": {
           "crown": [
             310,
-            730
+            714
           ],
           "face": [
-            468,
-            663
+            478,
+            662
           ],
           "ties": [
             263,
@@ -4798,7 +4798,7 @@
               0.9639659941095715
             ],
             "hairOnlyStemGap": 80,
-            "stemGap": 13
+            "stemGap": 15
           }
         }
       }
@@ -4812,14 +4812,14 @@
             {
               "x": 331,
               "referenceTop": 308,
-              "bareFaceTop": 321,
-              "minimumGap": 13
+              "bareFaceTop": 315,
+              "minimumGap": 7
             },
             {
               "x": 523,
               "referenceTop": 256,
-              "bareFaceTop": 294,
-              "minimumGap": 38
+              "bareFaceTop": 279,
+              "minimumGap": 23
             }
           ]
         },
@@ -4829,8 +4829,8 @@
             {
               "x": 386,
               "referenceTop": 293,
-              "bareFaceTop": 303,
-              "minimumGap": 10
+              "bareFaceTop": 304,
+              "minimumGap": 11
             }
           ]
         },
@@ -4838,10 +4838,16 @@
           "name": "up-right",
           "columns": [
             {
+              "x": 499,
+              "referenceTop": 290,
+              "bareFaceTop": 298,
+              "minimumGap": 8
+            },
+            {
               "x": 511,
               "referenceTop": 257,
-              "bareFaceTop": 264,
-              "minimumGap": 7
+              "bareFaceTop": 281,
+              "minimumGap": 24
             }
           ]
         },
@@ -4903,7 +4909,7 @@
         "pose": "up-left",
         "gate": "crown top",
         "pass": false,
-        "value": 36
+        "value": 29
       },
       {
         "pose": "up-left",
@@ -4915,19 +4921,19 @@
         "pose": "up",
         "gate": "upper exterior",
         "pass": false,
-        "value": 62
+        "value": 47
       },
       {
         "pose": "up",
         "gate": "forehead exposure",
         "pass": false,
-        "value": -0.208248601931876
+        "value": -0.1886329305135952
       },
       {
         "pose": "up-right",
         "gate": "forehead exposure",
         "pass": false,
-        "value": -0.4196534737557329
+        "value": -0.2193907687115011
       },
       {
         "pose": "up-right",
@@ -4943,51 +4949,51 @@
       },
       {
         "pose": "down-left",
+        "gate": "hairline median",
+        "pass": false,
+        "value": 20.0
+      },
+      {
+        "pose": "down-left",
         "gate": "forehead exposure",
         "pass": false,
-        "value": -0.21015307446164488
+        "value": -0.2457437493919642
       },
       {
         "pose": "down-left",
         "gate": "posterior exterior",
         "pass": false,
-        "value": 46
+        "value": 23
       },
       {
         "pose": "down",
         "gate": "upper exterior",
         "pass": false,
-        "value": 20
-      },
-      {
-        "pose": "down",
-        "gate": "forehead exposure",
-        "pass": false,
-        "value": -0.11393588980528868
+        "value": 21
       },
       {
         "pose": "down-right",
         "gate": "hairline median",
         "pass": false,
-        "value": 68.5
+        "value": -18.0
       },
       {
         "pose": "down-right",
         "gate": "forehead exposure",
         "pass": false,
-        "value": -0.5244698205546492
+        "value": -0.20520787098683235
       },
       {
         "pose": "down-right",
         "gate": "posterior exterior",
         "pass": false,
-        "value": 13
+        "value": 25
       }
     ],
-    "decision": "Approved 20.48px candidate: down-left hairline becomes measurable with median 2px; the 19.54px candidate lost all visible skin at row330. Preserve all reference pixels and formulas; other crown/exterior fitting residuals remain explicit."
+    "decision": "Integrated Track F face calibration at 17032ea; face files remain byte-identical. Prefer smooth strand flow over the former 20.48px candidate: rigid pin translation, vertical median-window hairline samples, stronger horizontal/conformal regularization, smooth bounded lower spans. Reference pixels and gate formulas remain unchanged; all remaining residuals are retained."
   },
   "webgl": {
-    "baseline": "4dba92d65c74d1ac13dfa31ac791bf2f568c2140",
+    "baseline": "17032ea",
     "angles": [
       [
         -22.5,
@@ -5048,7 +5054,7 @@
     ],
     "pageErrors": [],
     "sheet": "docs/captures/vdd_unobserved_angles_sheet.png",
-    "sheetSha256": "57229633757dcd264deb9d8e7d15c23c24bbd61e82779211ad9ad654a458fddc",
+    "sheetSha256": "03ffa096d2847f96604344207c079cdeddafdc0b86645a0906c57cf31a705b6f",
     "definition": "same WebGL full portraits, frozen motion, scale=1, 720x720 crop resized equally to 320x320; rows main/after for each group of five angles"
   }
 }

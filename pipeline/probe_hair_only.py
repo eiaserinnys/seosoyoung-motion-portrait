@@ -359,7 +359,7 @@ def main():
     parser.add_argument('--output', default='docs', help='Directory for this measurement snapshot')
     parser.add_argument('--capture-unobserved',action='store_true')
     parser.add_argument('--capture-only',choices=['current','dense'])
-    parser.add_argument('--comparison-base',default='4dba92d65c74d1ac13dfa31ac791bf2f568c2140')
+    parser.add_argument('--comparison-base',default='17032ea')
     args = parser.parse_args()
     if args.capture_unobserved:
         import shutil
@@ -393,7 +393,7 @@ def main():
     import shutil
     generated=current/'sheets';generated.mkdir(exist_ok=True)
     sheets(rows, generated)
-    for name in ['faceless_hair_9dir_comparison.png','hair_only_9dir_overlay.png']:
+    for name in ['faceless_hair_9dir_comparison.png','hair_only_9dir_overlay.png','viewer_9dir_grid.png']:
         shutil.copyfile(generated/name,out/name)
     checks = assess(report)
     legacy_checks=checks

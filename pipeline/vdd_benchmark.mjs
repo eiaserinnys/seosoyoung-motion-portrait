@@ -10,7 +10,7 @@ import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {research} from './vdd_research_notes.mjs';
 
-const root=new URL('../',import.meta.url),baseline=process.argv[2]||'4dba92d65c74d1ac13dfa31ac791bf2f568c2140';
+const root=new URL('../',import.meta.url),baseline=process.argv[2]||'17032ea';
 const read=name=>readFileSync(new URL(name,root));
 const prior=name=>execFileSync('git',['show',`${baseline}:${name}`],{cwd:root,maxBuffer:32*1024*1024});
 const dataUrl=source=>'data:text/javascript;base64,'+Buffer.from(source).toString('base64');
