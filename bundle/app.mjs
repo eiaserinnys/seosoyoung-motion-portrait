@@ -1,6 +1,7 @@
 import {CORRECTION_CONTROLS,CORRECTION_PRESETS} from './corrections.mjs';
 import {Renderer} from './renderer.mjs';
 import {Pendulum} from './rig.mjs';
+import {viewerPose,sliderForYaw} from './viewer-pose.mjs';
 const $=id=>document.getElementById(id);
 const loadImage=src=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('이미지 로드 실패: '+src));im.src=src;});
 const eyeIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -25,12 +26,15 @@ async function main(){
   }
   function setCorrection(name){Object.assign(p,CORRECTION_PRESETS[name]);sync();}
   for(const name of ['pure','recommended'])$('correction-'+name).onclick=()=>setCorrection(name);
-  function sync(){for(const [name,values]of Object.entries(CORRECTION_PRESETS))pressed('correction-'+name,Object.entries(values).every(([k,v])=>Math.abs(p[k]-v)<.00001));for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}$('angles').textContent=`X ${(p.ParamAngleX*p.CorrTurn).toFixed(0)}° / Y ${(p.ParamAngleY*p.CorrTurn).toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
+  function sync(){const view=viewerPose(p);for(const [name,values]of Object.entries(CORRECTION_PRESETS))pressed('correction-'+name,Object.entries(values).every(([k,v])=>Math.abs(p[k]-v)<.00001));for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}$('angles').textContent=`X ${(view.ParamAngleX*view.CorrTurn).toFixed(Math.abs(p.ParamAngleX)>45?1:0).replace(/\.0$/,'')}° / Y ${(p.ParamAngleY*p.CorrTurn).toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
   function pressed(id,value){$(id).setAttribute('aria-pressed',String(value));}
   function stopMotion(){state.auto=false;state.track=false;pressed('auto',false);pressed('track',false);}
   function setPose(x,y,z,name){stopMotion();p.ParamAngleX=x;p.ParamAngleY=y;p.ParamAngleZ=z;$('pose-label').textContent=name;sync();}
   const presets=[['정면 0°',0,0,0],['좌 -25°',-25,0,0],['우 +25°',25,0,0],['상 +20°',0,20,0],['하 -20°',0,-20,0],['기울임 ±15°',0,0,15],['3/4 좌상',-25,18,0],['3/4 우하',25,-18,0]];
   for(const [name,x,y,z]of presets){const b=document.createElement('button');b.textContent=name;b.onclick=()=>setPose(x,y,name==='기울임 ±15°'&&p.ParamAngleZ===15?-15:z,name);$('presets').append(b);}
+  for(const [name,yaw]of [['좌 67.5°',-67.5],['우 67.5°',67.5],['좌 90°',-90],['우 90°',90]]){
+    const b=document.createElement('button');b.textContent=name;b.onclick=()=>setPose(sliderForYaw(yaw,p.CorrTurn),0,0,name);$('presets').append(b);
+  }
   for(const name of ['auto','track','wire','grid','masks','bangs'])$(name).onclick=()=>{state[name]=!state[name];if(name==='auto'&&state.auto){state.track=false;pressed('track',false);}if(name==='track'&&state.track){state.auto=false;pressed('auto',false);}pressed(name,state[name]);};
   $('compare').onclick=()=>{state.before=!state.before;pressed('compare',state.before);$('compare').textContent=state.before?'복원 전 (기존 파츠)':'복원 후 (SAM3+Inpaint)';$('version-label').textContent=state.before?'BEFORE':'AFTER';};
   for(const name of ['shirt','sweater'])$(name).onclick=()=>{state.outfit=name;pressed('shirt',name==='shirt');pressed('sweater',name==='sweater');};
@@ -57,9 +61,9 @@ async function main(){
   function frame(now){const dt=Math.min((now-last)/1000,.033),t=now/1000;last=now;
     if(state.auto){p.ParamAngleX=Math.sin(t*.48)*50;p.ParamAngleY=Math.sin(t*.96)*28;p.ParamAngleZ=Math.sin(t*.64+1.1)*14;const phase=t%4.3,blink=phase<.18?Math.abs(phase-.09)/.09:1;p.ParamEyeLOpen=p.ParamEyeROpen=blink;p.ParamBreath=(1+Math.sin(t*1.6))*.5;p.ParamBodyAngleX=Math.sin(t*.48-.4)*6;p.ParamEyeBallX=0;p.ParamEyeBallY=0;p.ParamHairFront=springs[0].step(Math.sin(t*.48+.5)*.75-p.ParamAngleZ/30,dt);p.ParamHairSide=springs[1].step(-p.ParamAngleX/50-p.ParamAngleZ/28,dt);p.ParamHairBack=springs[2].step(.30+Math.sin(t*.96-.5)*.55+Math.abs(p.ParamAngleZ)/28,dt);sync();}
     if(state.track){const f=1-Math.exp(-dt*9);for(const[key,target]of [['ParamAngleX',pointer.x*30],['ParamAngleY',pointer.y*24],['ParamEyeBallX',pointer.x],['ParamEyeBallY',-pointer.y]])p[key]+=(target-p[key])*f;sync();}
-    if(state.auto||state.track)renderer.render(p,state);requestAnimationFrame(frame);
+    if(state.auto||state.track)renderer.render(viewerPose(p),state);requestAnimationFrame(frame);
   }
-  const redraw=()=>renderer.render(p,state);
+  const redraw=()=>renderer.render(viewerPose(p),state);
   document.addEventListener('click',redraw);document.addEventListener('input',redraw);window.addEventListener('resize',redraw);
   choose('face-skin');sync();redraw();$('status').textContent=rig.meshes.length+' 파츠 / 준비됨';requestAnimationFrame(frame);
   window.studio={rig,p,state,renderer,choose,setPose,setCorrection,sync,ready:true};

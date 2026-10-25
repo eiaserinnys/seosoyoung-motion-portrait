@@ -119,8 +119,9 @@ export function opacity(mesh,p,state){
   const alpha=baseOpacity(mesh,p,state),yaw=p.ParamAngleX*correction(p,'CorrTurn'),angle=Math.abs(yaw);
   if(angle<=45)return alpha;
   const far=yaw<0?'left':'right';
-  if(mesh.id.startsWith(`eye-${far}-`))return alpha*(1-smoothstep(60,78,angle));
-  if(mesh.id.startsWith(`tail-${far}-`))return alpha*(1-smoothstep(60,85,angle));
+  if(mesh.id.startsWith(`eye-${far}-`))return alpha*(1-smoothstep(50,66,angle));
+  if(mesh.id===`side-hair-${far}`)return alpha*(1-smoothstep(46,60,angle));
+  if(mesh.id.startsWith(`tail-${far}-`))return alpha*(1-smoothstep(45,62,angle));
   if(mesh.id==='nose-detail')return alpha*(1-smoothstep(50,65,angle));
   if(mesh.id==='mouth-detail')return alpha*(1-smoothstep(50,65,angle));
   return alpha;

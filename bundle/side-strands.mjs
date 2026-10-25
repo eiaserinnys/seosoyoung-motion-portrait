@@ -66,7 +66,13 @@ function strandBase(point,side,p){
 export function strandWorld(point,side,p){
  const world=strandBase(point,side,p),yaw=p.ParamAngleX*correction(p,'CorrTurn');
  if(Math.abs(yaw)<=45)return world;
- const extended=profileExtension(world,point,side,p,strandBase,a=>strandProfileTarget(point,side,a,STRANDS[side],yaw));
- const weight=smoothstep(340,407,point[1]);
+ // The far lock already follows its 3D orbit and is hidden by opacity.
+ // A screen-space fold here also moves shared crown/bang pixels into a spike.
+ if(side!==(yaw<0?'right':'left'))return world;
+ // Extend the first measured row's displacement upward as one translation;
+ // do not flatten every upper point onto that row's absolute target X.
+ const sample=[point[0],Math.max(407,point[1])];
+ const extended=profileExtension(world,sample,side,p,strandBase,a=>strandProfileTarget(sample,side,a,STRANDS[side]));
+ const weight=smoothstep(240,400,point[1]);
  return world.map((v,i)=>v+(extended[i]-v)*weight);
 }

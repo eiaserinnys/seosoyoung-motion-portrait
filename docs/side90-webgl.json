@@ -66,5 +66,79 @@
     45,
     67.5,
     90
-  ]
+  ],
+  "clipping": [
+    {
+      "yaw": -90,
+      "eyeOpen": 1,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": -90,
+      "eyeOpen": 0,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": -90,
+      "eyeOpen": 0.5,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": -67.5,
+      "eyeOpen": 1,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": -67.5,
+      "eyeOpen": 0,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": -67.5,
+      "eyeOpen": 0.5,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": 67.5,
+      "eyeOpen": 1,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": 67.5,
+      "eyeOpen": 0,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": 67.5,
+      "eyeOpen": 0.5,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": 90,
+      "eyeOpen": 1,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": 90,
+      "eyeOpen": 0,
+      "outsideFacePixels": 0
+    },
+    {
+      "yaw": 90,
+      "eyeOpen": 0.5,
+      "outsideFacePixels": 0
+    }
+  ],
+  "viewerRecommended": {
+    "sliderEndpoints": [
+      -90,
+      90
+    ],
+    "presetAngles": [
+      -90,
+      -67.5,
+      67.5,
+      90
+    ]
+  }
 }

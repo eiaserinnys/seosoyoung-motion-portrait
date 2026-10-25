@@ -42,13 +42,20 @@ test('far eyes and brows fade on the specified side, and the frontal nose disapp
   const far=sign<0?'left':'right',near=sign<0?'right':'left';
   for(const kind of ['sclera','iris','pupil','highlight','upper-lashes','lower-line','brow']){
    const m=mesh(`eye-${far}-${kind}`);
-   assert.equal(opacity(m,at(sign*60),state),1);
-   assert(opacity(m,at(sign*67.5),state)>0&&opacity(m,at(sign*67.5),state)<1);
+   assert.equal(opacity(m,at(sign*50),state),1);
+   assert(opacity(m,at(sign*58),state)>0&&opacity(m,at(sign*58),state)<1);
+   assert.equal(opacity(m,at(sign*67.5),state),0);
    assert.equal(opacity(m,at(sign*90),state),0);
    assert.equal(opacity(mesh(`eye-${near}-${kind}`),at(sign*90),state),1);
   }
   assert.equal(opacity(mesh('nose-detail'),at(sign*50),state),1);
   assert.equal(opacity(mesh('nose-detail'),at(sign*90),state),0);
+ }
+});
+test('distant side locks and tails disappear before the rejected 67.5 degree poses',()=>{
+ for(const yaw of [-67.5,-90,67.5,90]){
+  const far=yaw<0?'left':'right';
+  for(const id of [`side-hair-${far}`,`tail-${far}-tie`,`tail-${far}-hair`])assert.equal(opacity(mesh(id),at(yaw),state),0,id);
  }
 });
 test('all modified attachment vertices meet the 45 degree seam continuously',{timeout:60000},()=>{
@@ -77,6 +84,9 @@ test('both tail layers retain the shared root while the hidden side passes behin
  for(const yaw of [-90,-67.5,67.5,90])for(const side of ['left','right']){
   const p=at(yaw),root=beadWorld(side,p);
   for(const suffix of ['tie','hair'])assert.deepEqual(deform3D(mesh(`tail-${side}-${suffix}`),BEADS[side].front,p),root);
-  if(Math.abs(yaw)===90&&side===(yaw<0?'left':'right'))assert.equal(opacity(mesh(`tail-${side}-hair`),p,state),0);
+  if(Math.abs(yaw)===90&&side===(yaw<0?'left':'right')){
+   assert.equal(opacity(mesh(`tail-${side}-hair`),p,state),0);
+   assert(Math.abs(root[0]-502)>180,'hidden root stays behind the side of the skull');
+  }
  }
 });

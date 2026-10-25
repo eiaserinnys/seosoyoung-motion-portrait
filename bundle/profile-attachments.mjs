@@ -25,7 +25,7 @@ export function earProfileTarget(point,side,angle){
 export function beadProfileTarget(side,angle,yaw){
  const near=side===(yaw<0?'right':'left');
  if(near)return side==='right'?(angle===90?[686,565]:[689,563]):(angle===90?[326,565]:[322,563]);
- return angle===90?[side==='left'?486:518,555]:[side==='left'?304:708,554];
+ return [side==='left'?304:708,554];
 }
 const STRAND_TARGETS={
  left:{p67:[[407,468,550],[430,470,548],[460,480,545],[490,496,545],[515,510,543]],
@@ -33,12 +33,11 @@ const STRAND_TARGETS={
  right:{p67:[[407,462,538],[430,460,530],[460,450,515],[490,439,492],[515,430,473]],
         p90:[[407,440,520],[430,438,513],[460,435,499],[490,430,480],[515,426,460]]},
 };
-export function strandProfileTarget(point,side,angle,rows,yaw){
- const y=point[1],near=side===(yaw<0?'right':'left');let i=0;
+export function strandProfileTarget(point,side,angle,rows){
+ const y=point[1];let i=0;
  while(i<rows.length-2&&y>rows[i+1][0])i++;
  const a=rows[i],b=rows[i+1],t=clamp((y-a[0])/(b[0]-a[0]),0,1),lerp=(x,z)=>x+(z-x)*t;
  const u=(point[0]-lerp(a[1],b[1]))/(lerp(a[2],b[2])-lerp(a[1],b[1]));
- if(!near){const edge=yaw<0?(angle===90?330:321):(angle===90?674:683);return [edge+(u-.5)*(angle===90?2:14),y];}
  const targets=STRAND_TARGETS[side][angle===90?'p90':'p67'],lo=lerp(targets[i][1],targets[i+1][1]),hi=lerp(targets[i][2],targets[i+1][2]);
  return [lo+u*(hi-lo),y];
 }

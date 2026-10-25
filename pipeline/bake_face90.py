@@ -42,9 +42,10 @@ def clean_skin(rgb,mask,name):
     mouth=(316,548) if name=='left67' else (308,548) if name=='left90' else (688,548) if name=='right67' else (696,548)
     x,y=mouth[0]-152,mouth[1]-20
     detail[y-12:y+14,x-24:x+24]=True
-    detail&=np.min(rgb,axis=2)<240
+    interior=cv2.erode((mask>127).astype(np.uint8),np.ones((7,7),np.uint8)).astype(bool)
+    detail&=interior&(cv2.cvtColor(rgb,cv2.COLOR_RGB2GRAY)<190)
     # Feather the window so its edge cannot become a rectangular decal seam.
-    blend=cv2.GaussianBlur(detail.astype(float),(0,0),.8)
+    blend=cv2.GaussianBlur(detail.astype(float),(0,0),.8)*detail
     out=out*(1-blend[:,:,None])+rgb*blend[:,:,None]
     return out.clip(0,255).astype(np.uint8)
 
@@ -73,16 +74,26 @@ def bake_uv(source,rest,solved,triangles):
     return baked
 
 
+def profile_canvas(name):
+    # The approved inset nose/mouth centers are exact mirrors around x502.
+    # Use one clean left-side detail source so neither the right reference's
+    # +20px registration nor background hair can create an asymmetric decal.
+    left=name.replace('right','left');file=left.replace('67','_67').replace('90','_90')
+    rgb=np.array(Image.open(ROOT/f'source/references/{file}_no_rimlight.png').convert('RGB'))
+    mask=np.array(Image.open(ROOT/f'sam3_masks/references/{file}-face.png').convert('L'))
+    clean=clean_skin(rgb,mask,left)
+    canvas=np.full((1024,1024,3),[255,222,196],np.uint8);canvas[20:740,152:872]=clean
+    if name.startswith('right'):
+        canvas=cv2.warpAffine(canvas,np.array([[-1.,0.,1004.],[0.,1.,0.]]),(1024,1024),borderMode=cv2.BORDER_REPLICATE)
+    return canvas
+
+
 def build():
     geometry=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/profile_geometry.mjs')],timeout=60))
     atlas=Image.new('RGB',(2048,2048))
     for i,pose in enumerate(geometry['poses']):
         name=('left' if pose['yaw']<0 else 'right')+('67' if abs(pose['yaw'])==67.5 else '90')
-        file=name.replace('67','_67').replace('90','_90')
-        rgb=np.array(Image.open(ROOT/f'source/references/{file}_no_rimlight.png').convert('RGB'))
-        mask=np.array(Image.open(ROOT/f'sam3_masks/references/{file}-face.png').convert('L'))
-        clean=clean_skin(rgb,mask,name)
-        canvas=np.full((1024,1024,3),[255,222,196],np.uint8);canvas[20:740,152:872]=clean
+        canvas=profile_canvas(name)
         baked=bake_uv(canvas,geometry['rest'],pose['positions'],geometry['triangles'])
         atlas.paste(Image.fromarray(baked),((i%2)*1024,(i//2)*1024))
     path=ROOT/'bundle/assets/face-profile.png';atlas.save(path)
