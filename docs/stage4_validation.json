@@ -1,0 +1,661 @@
+{
+  "base": "f5d3c9f779295f288ab127367f0653f640aaa0e1",
+  "registrationSha256": "bdb97e88ac4632112e3d7fbe15df817a553da74e039895c6c29aa9e879fd8eed",
+  "metrics": {
+    "keyframes": {
+      "front": {
+        "featureRms": 0.48999999959347224,
+        "contourRms": 1.5082739260266886
+      },
+      "left": {
+        "featureRms": 3.449999992122561,
+        "contourRms": 3.0757226378386293
+      },
+      "right": {
+        "featureRms": 3.4499998866807826,
+        "contourRms": 2.6943402524075957
+      },
+      "up": {
+        "featureRms": 3.4499999792065412,
+        "contourRms": 4.22377856464762
+      },
+      "down": {
+        "featureRms": 3.449999847428218,
+        "contourRms": 4.389534782041084
+      },
+      "up-left": {
+        "featureRms": 3.4499634230028255,
+        "contourRms": 2.158094489448612
+      },
+      "up-right": {
+        "featureRms": 3.195458902633842,
+        "contourRms": 3.329296762927106
+      },
+      "down-left": {
+        "featureRms": 2.9116075430387363,
+        "contourRms": 5.067132116083127
+      },
+      "down-right": {
+        "featureRms": 3.2440725010826195,
+        "contourRms": 2.773430748025595
+      }
+    },
+    "frontCanonicalRms": 0.0,
+    "holdoutFeatureRms": 7.871381603295232,
+    "trainingFeatureRms": 8.413629742473946,
+    "maxAngularStep": 8.710115098258928,
+    "holdoutInterpolatedPoseFeatureRms": 20.738485928311132,
+    "holdoutPointSplitFeatureRms": 18.256800250501517,
+    "holdoutPointSplitProtocol": {
+      "cameraLandmarks": [
+        0,
+        1,
+        4,
+        6
+      ],
+      "evaluationLandmarks": [
+        2,
+        3,
+        5,
+        7,
+        8
+      ],
+      "frames": 54,
+      "initialization": "Adjacent training camera interpolation; independent four-point camera least squares; frozen shape"
+    },
+    "holdoutConditionalPoseFeatureRms": 7.871381603295232,
+    "maxAngularStepWindow": [
+      {
+        "frameIndex": 94,
+        "yaw": -0.603636533605441,
+        "pitch": 26.121641396457708,
+        "roll": 0.010440907543490642,
+        "stepDeg": 0.11944961206563565
+      },
+      {
+        "frameIndex": 95,
+        "yaw": -0.3689709266428094,
+        "pitch": 25.234923037434523,
+        "roll": 0.010196006459907883,
+        "stepDeg": 0.8867183590231846
+      },
+      {
+        "frameIndex": 96,
+        "yaw": -0.14239974380415188,
+        "pitch": 22.293775856608633,
+        "roll": -0.017730151694303378,
+        "stepDeg": 2.94114718082589
+      },
+      {
+        "frameIndex": 97,
+        "yaw": -0.148014865655117,
+        "pitch": 16.09930020165715,
+        "roll": -0.05226437031525261,
+        "stepDeg": 6.194475654951482
+      },
+      {
+        "frameIndex": 98,
+        "yaw": -0.3306492462947902,
+        "pitch": 7.9531990556928704,
+        "roll": -0.03385376151387557,
+        "stepDeg": 8.14610114596428
+      },
+      {
+        "frameIndex": 99,
+        "yaw": -0.4631891750904468,
+        "pitch": -0.7569160425660568,
+        "roll": 0.17594700285939102,
+        "stepDeg": 8.710115098258928
+      },
+      {
+        "frameIndex": 100,
+        "yaw": -0.29450788062505623,
+        "pitch": -8.392187024561009,
+        "roll": 0.583732117981279,
+        "stepDeg": 7.635270981994952
+      },
+      {
+        "frameIndex": 101,
+        "yaw": -0.14477562502883942,
+        "pitch": -14.100703732981124,
+        "roll": 1.0365286054948024,
+        "stepDeg": 5.708516708420115
+      },
+      {
+        "frameIndex": 102,
+        "yaw": -0.19913596566379507,
+        "pitch": -17.410845191403464,
+        "roll": 1.1943653817871507,
+        "stepDeg": 3.31014145842234
+      },
+      {
+        "frameIndex": 103,
+        "yaw": -0.20540003534124593,
+        "pitch": -18.82892694335143,
+        "roll": 1.2346266446297267,
+        "stepDeg": 1.418081751947966
+      },
+      {
+        "frameIndex": 104,
+        "yaw": -0.16198087051563195,
+        "pitch": -19.24606545800283,
+        "roll": 1.2440089995292147,
+        "stepDeg": 0.4171385146513984
+      }
+    ],
+    "achievedAngleRange": [
+      {
+        "name": "front",
+        "requestedAngles": [
+          0,
+          0
+        ],
+        "sourceYaw": -1.016282113547139,
+        "sourcePitch": 1.287185042771068,
+        "appliedYaw": 0,
+        "appliedPitch": 0
+      },
+      {
+        "name": "left",
+        "requestedAngles": [
+          -45,
+          0
+        ],
+        "sourceYaw": -36.82991693704355,
+        "sourcePitch": 0.7006801983402771,
+        "appliedYaw": -37.25179440132561,
+        "appliedPitch": 1.386762841658816
+      },
+      {
+        "name": "right",
+        "requestedAngles": [
+          45,
+          0
+        ],
+        "sourceYaw": 37.673671865607666,
+        "sourcePitch": 2.072845484977355,
+        "appliedYaw": 37.25179440132561,
+        "appliedPitch": 1.386762841658816
+      },
+      {
+        "name": "up",
+        "requestedAngles": [
+          0,
+          30
+        ],
+        "sourceYaw": 1.3089814586488127,
+        "sourcePitch": 28.83288170662574,
+        "appliedYaw": 0,
+        "appliedPitch": 28.83288170662574
+      },
+      {
+        "name": "down",
+        "requestedAngles": [
+          0,
+          -30
+        ],
+        "sourceYaw": 14.253565453750118,
+        "sourcePitch": -25.345294313197353,
+        "appliedYaw": 0,
+        "appliedPitch": -25.345294313197353
+      },
+      {
+        "name": "up-left",
+        "requestedAngles": [
+          -45,
+          30
+        ],
+        "sourceYaw": -41.167166482660775,
+        "sourcePitch": 27.996669331747192,
+        "appliedYaw": -38.77185786444906,
+        "appliedPitch": 24.429330429818197
+      },
+      {
+        "name": "up-right",
+        "requestedAngles": [
+          45,
+          30
+        ],
+        "sourceYaw": 36.376549246237346,
+        "sourcePitch": 20.861991527889202,
+        "appliedYaw": 38.77185786444906,
+        "appliedPitch": 24.429330429818197
+      },
+      {
+        "name": "down-left",
+        "requestedAngles": [
+          -45,
+          -30
+        ],
+        "sourceYaw": -32.93852359358867,
+        "sourcePitch": -26.218616017809893,
+        "appliedYaw": -28.222332009014053,
+        "appliedPitch": -23.18342630169996
+      },
+      {
+        "name": "down-right",
+        "requestedAngles": [
+          45,
+          -30
+        ],
+        "sourceYaw": 23.506140424439433,
+        "sourcePitch": -20.148236585590023,
+        "appliedYaw": 28.222332009014053,
+        "appliedPitch": -23.18342630169996
+      }
+    ],
+    "skinFillCenterContinuity": {
+      "pitch": -30,
+      "samples": [
+        {
+          "yaw": -6,
+          "top": [
+            475.2184269120554,
+            254.01402576856222,
+            -200
+          ],
+          "left": [
+            341.72105984957045,
+            470.0276867515686,
+            -200
+          ],
+          "right": [
+            651.2921511000287,
+            477.3313661779235,
+            -200
+          ]
+        },
+        {
+          "yaw": -3,
+          "top": [
+            497.4059571324537,
+            254.58019396583612,
+            -200
+          ],
+          "left": [
+            346.2214053582781,
+            473.5976367589737,
+            -200
+          ],
+          "right": [
+            655.1833122917706,
+            473.56424591117366,
+            -200
+          ]
+        },
+        {
+          "yaw": 0,
+          "top": [
+            502,
+            254.6476853088929,
+            -200
+          ],
+          "left": [
+            350.29241266884804,
+            472.5184689466005,
+            -200
+          ],
+          "right": [
+            658.7011087328962,
+            474.42348455281524,
+            -200
+          ]
+        },
+        {
+          "yaw": 3,
+          "top": [
+            506.68321875206493,
+            254.6157526500729,
+            -200
+          ],
+          "left": [
+            354.98714701550375,
+            473.9373077328492,
+            -200
+          ],
+          "right": [
+            662.6005331855472,
+            472.78158528532094,
+            -200
+          ]
+        },
+        {
+          "yaw": 6,
+          "top": [
+            528.5720873501128,
+            254.30939257292232,
+            -200
+          ],
+          "left": [
+            359.3033821449143,
+            480.0468294912311,
+            -200
+          ],
+          "right": [
+            668.9602133354862,
+            466.90782989479715,
+            -200
+          ]
+        }
+      ],
+      "epsilonSteps": [
+        {
+          "yaw": -6,
+          "deltaYaw": -0.001,
+          "maxDisplacement": 0.0017793126046507614
+        },
+        {
+          "yaw": -6,
+          "deltaYaw": 0.001,
+          "maxDisplacement": 0.0017793631411982726
+        },
+        {
+          "yaw": 0,
+          "deltaYaw": -0.001,
+          "maxDisplacement": 0.0022492057914319415
+        },
+        {
+          "yaw": 0,
+          "deltaYaw": 0.001,
+          "maxDisplacement": 0.002248831594595922
+        },
+        {
+          "yaw": 6,
+          "deltaYaw": -0.001,
+          "maxDisplacement": 0.0017632979764751634
+        },
+        {
+          "yaw": 6,
+          "deltaYaw": 0.001,
+          "maxDisplacement": 0.0017633266181857976
+        }
+      ]
+    },
+    "skinFillPixels": [
+      {
+        "name": "left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 2
+      },
+      {
+        "name": "front",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0
+      },
+      {
+        "name": "right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 3
+      },
+      {
+        "name": "up-left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0
+      },
+      {
+        "name": "up",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0
+      },
+      {
+        "name": "up-right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0
+      },
+      {
+        "name": "down-left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.71520000000001,
+        "foreheadProfileCount": 10
+      },
+      {
+        "name": "down",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 2,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 10
+      },
+      {
+        "name": "down-right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 10
+      }
+    ],
+    "mesh": [
+      {
+        "name": "left",
+        "minDetJ": 0.42829691934470776,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "front",
+        "minDetJ": 0.9999999999999932,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "right",
+        "minDetJ": 0.42992344903257973,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "up-left",
+        "minDetJ": 0.04966671775574017,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "up",
+        "minDetJ": 0.06688968374664901,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "up-right",
+        "minDetJ": 0.1290562605455427,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "down-left",
+        "minDetJ": 0.003449648537460901,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "down",
+        "minDetJ": 0.24784377954577896,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "down-right",
+        "minDetJ": 0.1911464651375664,
+        "reversedTriangles": 0
+      }
+    ],
+    "videoFrames": 361,
+    "holdoutFrames": 54,
+    "captureSha256": {
+      "face_geom_9dir_overlay.png": "e3c4a3334cdd6fe1fbb2d1622ac91f16f3ba2a7c0fa68623a166943a3a248012",
+      "hairless_face_9dir_comparison.png": "cdb9308952e59b348a7a9b68911fef8eb1e5d0486a6a8ea575506fe82732ccb8",
+      "ponytail_9dir_registration_comparison.png": "cdb9308952e59b348a7a9b68911fef8eb1e5d0486a6a8ea575506fe82732ccb8",
+      "stage4_9dir_fitted_overlay_1080.png": "19b7678590c6b84650521cec6a5144a7192ede76e9a7f01784f546416dc474ac",
+      "stage4_pose_trajectory_and_fit.png": "c53c6fccf1c658d4378a39fca80e56a0580b1dd795418c7d7f1093ae6a8a20cf",
+      "viewer_9dir_grid.png": "4f61d84620d0b1b751afdf0516c25b212a5fd35831c33786fe525eda1812842f"
+    }
+  },
+  "commands": [
+    {
+      "log": "debug/seedance-temporal-python.txt",
+      "result": "52 passed; 21 subtests passed; affected registration, face solve, hairless, features, profile bake"
+    },
+    {
+      "log": "debug/seedance-temporal-node.tap",
+      "result": "96 passed, 0 failed; one file cancelled at the 60-second file limit"
+    },
+    {
+      "log": "debug/seedance-temporal-perf.tap",
+      "result": "isolated performance file: 2 passed, 0 failed; 120-second file bound; displacement 0px; existing per-test bound unchanged"
+    },
+    {
+      "log": "debug/seedance-ribbon-baseline-ears.txt",
+      "result": "existing left near-ear bbox [587,395,91,107], area5394 and up-left bbox [587,361,91,88], area4673 unchanged when new ribbon and upper clipping disabled"
+    },
+    {
+      "log": "debug/seedance-ribbon-baseline-ears.txt",
+      "result": "existing left near-ear bbox [587,395,91,107], area5394 and up-left bbox [587,361,91,88], area4673 unchanged when new ribbon and upper clipping disabled"
+    },
+    {
+      "log": "debug/seedance-center-node.tap",
+      "result": "6 passed; 247 pose grid ribbon orientation, original anchor/assets, five center samples monotone in X, both sides of yaw0 and yaw±6 with0.001degree step below0.05px"
+    },
+    {
+      "log": "debug/seedance-center-python.txt",
+      "result": "7 passed; includes poisoning all five evaluation points without changing four-point fitted cameras"
+    },
+    {
+      "log": "debug/seedance-center-build.txt",
+      "result": "node build.mjs passed; ribbon assets regenerated with normalized angular radius evaluation"
+    },
+    {
+      "log": "debug/seedance-center-capture.txt",
+      "result": "9 actual WebGL poses; real pose button/five yaw sliders;6 regenerated captures; HTTP/console/GL0; exposed fill belowear0/downhalfwidth2/luminancevalley<=10"
+    }
+  ],
+  "reusedFullSuiteEvidence": [
+    {
+      "log": "debug/seedance-python-final.txt",
+      "result": "114 passed and 21 subtests before temporal update; affected subset rerun above"
+    },
+    {
+      "log": "debug/seedance-node-corrected.tap",
+      "result": "194 passed; one obsolete protected-geometry assertion subsequently corrected with an explicit upper-skin-only allowance"
+    },
+    {
+      "log": "debug/seedance-side90-final.tap",
+      "result": "14 passed; includes a mutation guard rejecting drift outside the explicitly registered upper-skin delta"
+    }
+  ],
+  "scope": {
+    "originalSkinVertices": 673,
+    "originalSolveNodes": 740,
+    "fillVertices": 582,
+    "fillPoseMapping": "97 angular columns, 6 ribbon rows; symmetric centered two-eye placement; measured video representative pose mapping with mirrored export; registration JSON frozen",
+    "cv": "Conditional shape reconstruction: held-out images infer camera only; 54 frames excluded from shape/contour systems and representative selection",
+    "baseStatistics": "Legacy explained3D/CV describe preserved base fit; integrated displacement/determinants and Stage4 errors measured separately",
+    "ui": "Existing controls and layout; no new product text or controls; same renderer used by face-only and full viewer",
+    "skinComposite": "Immutable original atlas/hard alpha; upper RGB rim repair; upper silhouette clip with lower-face pass-through; 24px+6px interior skirt"
+  },
+  "coverage": {
+    "poses": [
+      "front",
+      "left",
+      "right",
+      "up",
+      "down",
+      "up-left",
+      "up-right",
+      "down-left",
+      "down-right"
+    ],
+    "exactAnchors": [
+      "left",
+      "right",
+      "browLeft",
+      "browRight",
+      "nose",
+      "mouth"
+    ],
+    "materialDomains": [
+      "original skin: 673 vertices; lower/neutral geometry and six exact anchors protected",
+      "upper ribbon: 582 vertices; 247 positive-orientation pose samples; symmetric 97-column dome"
+    ],
+    "rendererPaths": [
+      "normal full portrait",
+      "face-only with original ears",
+      "bangs hidden; wide/narrow",
+      "before/solo/hidden/surface-only retain their existing visibility semantics"
+    ],
+    "platform": "Standalone WebGL viewer; no native app in this repository",
+    "existingEarSeparation": {
+      "left": {
+        "bbox": [
+          587,
+          395,
+          91,
+          107
+        ],
+        "area": 5394
+      },
+      "up-left": {
+        "bbox": [
+          587,
+          361,
+          91,
+          88
+        ],
+        "area": 4673
+      }
+    }
+  },
+  "captureSha256": {
+    "face_geom_9dir_overlay.png": "e3c4a3334cdd6fe1fbb2d1622ac91f16f3ba2a7c0fa68623a166943a3a248012",
+    "hairless_face_9dir_comparison.png": "cdb9308952e59b348a7a9b68911fef8eb1e5d0486a6a8ea575506fe82732ccb8",
+    "ponytail_9dir_registration_comparison.png": "cdb9308952e59b348a7a9b68911fef8eb1e5d0486a6a8ea575506fe82732ccb8",
+    "stage4_9dir_fitted_overlay_1080.png": "19b7678590c6b84650521cec6a5144a7192ede76e9a7f01784f546416dc474ac",
+    "stage4_pose_trajectory_and_fit.png": "c53c6fccf1c658d4378a39fca80e56a0580b1dd795418c7d7f1093ae6a8a20cf",
+    "viewer_9dir_grid.png": "4f61d84620d0b1b751afdf0516c25b212a5fd35831c33786fe525eda1812842f"
+  },
+  "externalArtifactSha256": {
+    "stage4_pose_trajectory_and_fit.png": "c53c6fccf1c658d4378a39fca80e56a0580b1dd795418c7d7f1093ae6a8a20cf",
+    "stage4_9dir_fitted_overlay_1080.png": "19b7678590c6b84650521cec6a5144a7192ede76e9a7f01784f546416dc474ac",
+    "stage4_registration_metrics.json": "cacc8f664acfeb5d0320fbc64c8bbb4e5fbccfa432b212205b59d315ea5c5e26"
+  },
+  "visualInspection": "Opened regenerated9direction comparison,geometry and fullviewer: smooth forehead, no new below-ear fill or seam; downhalfwidth2px. Existing left/up-left lower-ear separation preserved.",
+  "seamSampling": "Profiles use authored rest upper-boundary vertices. A zero profile count means that old boundary was entirely clipped outside the new dome; that pose was also inspected visually.",
+  "independentIncrementalReview": {
+    "result": "PASS",
+    "implementationCommit": "1d710f1cd8c080419738d565005775903f4968f0",
+    "report": "debug/seedance-ribbon-independent-review.txt",
+    "reportSha256": "a82b4ee0a9bb5d41e27387d826ae57fccec30e9b0a2021fbd8d44e6e8f7294c0",
+    "scope": "e5cc3d7..1d710f1 ribbon, upper mask, clean RGB, diagnostics and six captures; no blocking findings",
+    "verification": "Reviewer opened six capture files, wide/narrow viewer and original-ear baseline; checked frozen R2/protected assets/capture hashes; did not repeat passed tests or build",
+    "specialistUiReview": "coordinating session follows up in the same worktree"
+  },
+  "centerContinuityCorrection": {
+    "symDegrees": 6,
+    "angularRadius": "atan2(sin(theta),cos(theta)) before periodic interpolation",
+    "approval": "User explicitly released b708e2fc key-pixel invariance to remove the previously incorrect angular extrapolation",
+    "maxCentralEpsilonStep": 0.0022492057914319415,
+    "diagnostics": "Point-split cameras use only eyes/nose/chin; eyebrows/mouth/ears are prediction-only; training-camera interpolation initialization; shape frozen"
+  },
+  "specialistReviewReportedByCoordinator": {
+    "session": "58199252-3720-419a-9066-310b9f3b9cf1",
+    "result": "PASS at b708e2fc before this specifically requested continuity/angular-wrap correction"
+  },
+  "centerIncrementalReview": {
+    "result": "PASS",
+    "baseCommit": "b708e2fc4c6e69e1580755471dd09689513bd98a",
+    "scope": "Central symmetry Hermite fade, periodic radius normalization, point-split camera diagnostic, regenerated capture checks",
+    "report": "debug/seedance-center-independent-review.txt",
+    "reportSha256": "0f0b615a6434c5be95449936be6e5dd854ff651ef81b3e5d12b6e9c0e9169a47",
+    "runtimeSha256": {
+      "bundle/skin-fill.mjs": "5b716bb8dd134e93c8aac429334c76811a0d2bc5a1118fb5c700cea90deec284",
+      "bundle/skin-fill-data.mjs": "d010c83f22d3c7137285eba1a0f1d1ab230b91058249e439374147a15addf778",
+      "pipeline/seedance_diagnostics.py": "9955aa82eb2f7897f379f80541ef20eabcffd702cda11966dcf43caad4fc9d29",
+      "pipeline/skin_fill_continuity.mjs": "5629861213dfd6c98928b6dfad7e90a482655c8e267a1d21fca198d7ee8d0146",
+      "pipeline/skin_fill_validation.py": "9263d9b66b99d797672b6af617c0022b92162fea465c510e9f3139588964d0ec"
+    },
+    "verification": "Read-only review; source, test/build/capture logs and3 images checked; no blocking findings; no repeated test/build/browser execution"
+  }
+}

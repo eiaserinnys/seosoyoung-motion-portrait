@@ -2,6 +2,7 @@ import {FACE_SOLVE} from './face-solve-data.mjs';
 import {artWorld,correction,clamp,radians} from './geometry.mjs';
 import {gridValue,frameValue,FRAME_CACHE} from './pose-grid.mjs';
 import {contourCoordinates} from './face-contour.mjs';
+import {ponytailSkinDelta} from './ponytail-skin.mjs';
 
 const key=point=>point[0]+','+point[1];
 const anchors=new Set(Object.values(FACE_SOLVE.anchors));
@@ -55,6 +56,10 @@ function face0(point,p,relief,weights=stencil(point)){
  const {residualAt}=frame(p);
  q[0]+=weights.reduce((sum,[i,w])=>sum+w*residualAt(i)[0],0);
  q[1]+=weights.reduce((sum,[i,w])=>sum+w*residualAt(i)[1],0);
+ if(FACE_SOLVE.ponytail&&!weights.every(([i])=>anchors.has(i))){
+  const delta=ponytailSkinDelta(point,p.ParamAngleX*correction(p,'CorrTurn'),p.ParamAngleY*correction(p,'CorrTurn'),p);
+  q[0]+=delta[0];q[1]+=delta[1];
+ }
  // artWorld applies the shared neck-pivot roll after the complete XY solve.
  return artWorld([q[0]-502,q[1]-326,q[2]],{...p,ParamAngleX:0,ParamAngleY:0});
 }
