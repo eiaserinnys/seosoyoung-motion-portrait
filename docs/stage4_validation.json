@@ -1,0 +1,199 @@
+{
+  "base": "f5d3c9f779295f288ab127367f0653f640aaa0e1",
+  "registrationSha256": "bdb97e88ac4632112e3d7fbe15df817a553da74e039895c6c29aa9e879fd8eed",
+  "metrics": {
+    "keyframes": {
+      "front": {
+        "featureRms": 0.48999999959347224,
+        "contourRms": 1.5082739260266886
+      },
+      "left": {
+        "featureRms": 3.449999992122561,
+        "contourRms": 3.0757226378386293
+      },
+      "right": {
+        "featureRms": 3.4499998866807826,
+        "contourRms": 2.6943402524075957
+      },
+      "up": {
+        "featureRms": 3.4499999792065412,
+        "contourRms": 4.22377856464762
+      },
+      "down": {
+        "featureRms": 3.449999847428218,
+        "contourRms": 4.389534782041084
+      },
+      "up-left": {
+        "featureRms": 3.4499634230028255,
+        "contourRms": 2.158094489448612
+      },
+      "up-right": {
+        "featureRms": 3.195458902633842,
+        "contourRms": 3.329296762927106
+      },
+      "down-left": {
+        "featureRms": 2.9116075430387363,
+        "contourRms": 5.067132116083127
+      },
+      "down-right": {
+        "featureRms": 3.2440725010826195,
+        "contourRms": 2.773430748025595
+      }
+    },
+    "frontCanonicalRms": 0.0,
+    "holdoutFeatureRms": 7.871381603295232,
+    "trainingFeatureRms": 8.413629742473946,
+    "maxAngularStep": 8.710115098258928,
+    "mesh": [
+      {
+        "name": "left",
+        "minDetJ": 0.42829691934470776,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "front",
+        "minDetJ": 0.9999999999999932,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "right",
+        "minDetJ": 0.42992344903257973,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "up-left",
+        "minDetJ": 0.04966671775574017,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "up",
+        "minDetJ": 0.06688968374664901,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "up-right",
+        "minDetJ": 0.1290562605455427,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "down-left",
+        "minDetJ": 0.003449648537460901,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "down",
+        "minDetJ": 0.24784377954577896,
+        "reversedTriangles": 0
+      },
+      {
+        "name": "down-right",
+        "minDetJ": 0.1911464651375664,
+        "reversedTriangles": 0
+      }
+    ],
+    "videoFrames": 361,
+    "holdoutFrames": 54,
+    "captureSha256": {
+      "face_geom_9dir_overlay.png": "638d5ed65b240e22c8cd65252880caa9dd153d41d881df2bb4e862e4ec25da52",
+      "hairless_face_9dir_comparison.png": "35f6c85492e4796b778568a9b9dc1ef7d26c838b1f857a3d7c4232356f8b283f",
+      "ponytail_9dir_registration_comparison.png": "35f6c85492e4796b778568a9b9dc1ef7d26c838b1f857a3d7c4232356f8b283f",
+      "stage4_9dir_fitted_overlay_1080.png": "19b7678590c6b84650521cec6a5144a7192ede76e9a7f01784f546416dc474ac",
+      "stage4_pose_trajectory_and_fit.png": "c53c6fccf1c658d4378a39fca80e56a0580b1dd795418c7d7f1093ae6a8a20cf",
+      "viewer_9dir_grid.png": "df238f731e5298abc68efd21764bdf8408f06860c61f82abc1f37d70db8c0200"
+    }
+  },
+  "commands": [
+    {
+      "log": "debug/seedance-temporal-python.txt",
+      "result": "52 passed; 21 subtests passed; affected registration, face solve, hairless, features, profile bake"
+    },
+    {
+      "log": "debug/seedance-temporal-node.tap",
+      "result": "96 passed, 0 failed; one file cancelled at the 60-second file limit"
+    },
+    {
+      "log": "debug/seedance-temporal-perf.tap",
+      "result": "isolated performance file: 2 passed, 0 failed; 120-second file bound; displacement 0px; existing per-test bound unchanged"
+    },
+    {
+      "log": "debug/seedance-skin-fill-node.tap",
+      "result": "2 passed; all 247 skin-fill pose samples oriented, full forehead, body/breath coupling"
+    },
+    {
+      "log": "debug/seedance-skin-fill-python.txt",
+      "result": "23 passed; 9 subtests passed; clean RGBA backing, lower-face alpha fade, existing hairless pipeline"
+    },
+    {
+      "log": "debug/seedance-skin-fill-capture.txt",
+      "result": "9 actual WebGL poses, real pose button and five yaw sliders; 6 capture files; HTTP/console/GL errors 0; front Y300 skin width >250px"
+    }
+  ],
+  "reusedFullSuiteEvidence": [
+    {
+      "log": "debug/seedance-python-final.txt",
+      "result": "114 passed and 21 subtests before temporal update; affected subset rerun above"
+    },
+    {
+      "log": "debug/seedance-node-corrected.tap",
+      "result": "194 passed; one obsolete protected-geometry assertion subsequently corrected with an explicit upper-skin-only allowance"
+    },
+    {
+      "log": "debug/seedance-side90-final.tap",
+      "result": "14 passed; includes a mutation guard rejecting drift outside the explicitly registered upper-skin delta"
+    }
+  ],
+  "scope": {
+    "originalSkinVertices": 673,
+    "originalSolveNodes": 740,
+    "fillVertices": 1153,
+    "fillPoseMapping": "Authored direction grid maps to measured final Seedance representative angles; neutral maps to canonical rest",
+    "cv": "Conditional shape reconstruction: held-out images infer camera only; 54 frames excluded from shape/contour systems and representative selection",
+    "baseStatistics": "Legacy explained3D/CV describe preserved base fit; integrated displacement/determinants and Stage4 errors measured separately",
+    "ui": "Existing controls and layout; no new product text or controls; same renderer used by face-only and full viewer"
+  },
+  "coverage": {
+    "poses": [
+      "front",
+      "left",
+      "right",
+      "up",
+      "down",
+      "up-left",
+      "up-right",
+      "down-left",
+      "down-right"
+    ],
+    "exactAnchors": [
+      "left",
+      "right",
+      "browLeft",
+      "browRight",
+      "nose",
+      "mouth"
+    ],
+    "materialDomains": [
+      "original skin: 673 vertices; lower/neutral/anchors protected",
+      "polar backing: 1153 vertices; 247 pose samples; positive triangle areas"
+    ],
+    "rendererPaths": [
+      "normal full portrait",
+      "face-only with original ears",
+      "bangs hidden; wide/narrow",
+      "before/solo/hidden/surface-only retain their existing visibility semantics"
+    ],
+    "platform": "Standalone WebGL viewer; no native app in this repository"
+  },
+  "captureSha256": {
+    "face_geom_9dir_overlay.png": "638d5ed65b240e22c8cd65252880caa9dd153d41d881df2bb4e862e4ec25da52",
+    "hairless_face_9dir_comparison.png": "35f6c85492e4796b778568a9b9dc1ef7d26c838b1f857a3d7c4232356f8b283f",
+    "ponytail_9dir_registration_comparison.png": "35f6c85492e4796b778568a9b9dc1ef7d26c838b1f857a3d7c4232356f8b283f",
+    "stage4_9dir_fitted_overlay_1080.png": "19b7678590c6b84650521cec6a5144a7192ede76e9a7f01784f546416dc474ac",
+    "stage4_pose_trajectory_and_fit.png": "c53c6fccf1c658d4378a39fca80e56a0580b1dd795418c7d7f1093ae6a8a20cf",
+    "viewer_9dir_grid.png": "df238f731e5298abc68efd21764bdf8408f06860c61f82abc1f37d70db8c0200"
+  },
+  "externalArtifactSha256": {
+    "stage4_pose_trajectory_and_fit.png": "c53c6fccf1c658d4378a39fca80e56a0580b1dd795418c7d7f1093ae6a8a20cf",
+    "stage4_9dir_fitted_overlay_1080.png": "19b7678590c6b84650521cec6a5144a7192ede76e9a7f01784f546416dc474ac",
+    "stage4_registration_metrics.json": "bc06ca88bf8ba780100a15f01feff3333ed00efd7ac19f0b865b7d7c7553c5a9"
+  }
+}

@@ -239,8 +239,12 @@ def solve(inputs):
 
 
 def main():
-    inputs = json.loads(subprocess.check_output(['node', str(ROOT/'pipeline/face_solve_inputs.mjs')], timeout=60))
+    inputs = json.loads(subprocess.check_output(['node', str(ROOT/'pipeline/face_solve_inputs.mjs'), '--base'], timeout=60))
     result = solve(inputs)
+    registration = ROOT/'source/viewer/ponytail-seedance-registration.json'
+    if registration.exists():
+        from ponytail_mesh import integrate
+        result = integrate(result, inputs, laplacian(np.array(inputs['points']), inputs['triangles'], inputs['meshCount']))
     path = ROOT/'source/viewer/face-solve.json'
     result['family45'] = solve_family45(inputs,result['Z'])
     path.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':'))+'\n')

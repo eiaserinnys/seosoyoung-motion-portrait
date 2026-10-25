@@ -13,7 +13,7 @@ CROP=(260,220,740,700)
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args):pass
 
-def webgl_renders(poses,order=ORDER,save_grid=True):
+def webgl_renders(poses,order=ORDER,save_grid=True,inspect=None,include_ears=False):
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT/'bundle')))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     errors=[];renders={}
@@ -36,10 +36,10 @@ def webgl_renders(poses,order=ORDER,save_grid=True):
             tiles=[]
             for name in order:
                 p=next(p for p in poses if p['name']==name)
-                data=page.evaluate('''([yaw,pitch])=>{
+                data=page.evaluate('''([yaw,pitch,includeEars])=>{
                   studio.setPose(yaw,pitch,0,'Face-only verification');studio.p.CorrTurn=1;
                   Object.assign(studio.p,{ParamBodyAngleX:0,ParamBreath:0,ParamEyeLOpen:1,ParamEyeROpen:1,ParamEyeBallX:0,ParamEyeBallY:0});
-                  const keep=id=>id==='face-skin'||id.startsWith('eye-')||id==='nose-detail'||id==='mouth-detail';
+                  const keep=id=>id==='face-skin'||id.startsWith('eye-')||id==='nose-detail'||id==='mouth-detail'||(includeEars&&id.startsWith('ear-'));
                   const hidden=new Set(studio.rig.meshes.filter(m=>!keep(m.id)).map(m=>m.id));
                   const state={...studio.state,hidden,mode:'normal',wire:false,grid:false,before:false,surfaceOnly:false,identify:null};
                   faceCapture.render(studio.p,state);
@@ -48,7 +48,7 @@ def webgl_renders(poses,order=ORDER,save_grid=True):
                   faceCapture.render(studio.p,{...state,hidden:new Set()});
                   if(faceCapture.gl.getError()!==0)throw Error('Full portrait WebGL error');
                   return {hairless,full:faceCapture.canvas.toDataURL('image/png').split(',')[1]};
-                }''',[p['yaw'],p['pitch']])
+                }''',[p['yaw'],p['pitch'],include_ears])
                 # Renderer at scale=1: canvas origin = (38,32).
                 im=Image.open(io.BytesIO(base64.b64decode(data['hairless']))).crop((38,32,1062,1056)).convert('RGBA')
                 renders[name]=im
@@ -64,6 +64,7 @@ def webgl_renders(poses,order=ORDER,save_grid=True):
                     studio.p.CorrTurn=1;el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));
                 }''',yaw)
                 assert page.evaluate('studio.p.ParamAngleX*studio.p.CorrTurn')==yaw
+            if inspect is not None:inspect(page)
             browser.close()
             assert not errors,errors
     finally:

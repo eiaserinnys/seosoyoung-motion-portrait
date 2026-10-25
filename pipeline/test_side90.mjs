@@ -9,11 +9,19 @@ import {frozenRig} from './frozen_rig.mjs';
 import {profileWeights} from '../bundle/face-profile.mjs';
 import {BEADS,beadWorld} from '../bundle/stereo-attachments.mjs';
 import {applyHairSolve,applyTailSolve} from '../bundle/hair-solve.mjs';
+import {ponytailSkinDelta} from '../bundle/ponytail-skin.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const at=yaw=>({...base,ParamAngleX:yaw,[FRAME_CACHE]:new Map()});
 const state={hidden:new Set(),outfit:'sweater'};
 const mesh=id=>rig.meshes.find(m=>m.id===id);
+function assertProtectedGeometry(actual,expected,id,point,p){
+ if(id==='face-skin'&&point[1]<410&&p.ParamAngleY){
+  const delta=ponytailSkinDelta(point,p.ParamAngleX*p.CorrTurn,p.ParamAngleY*p.CorrTurn,p);
+  for(const d of [0,1])assert(Math.abs(actual[d]-expected[d]-delta[d])<1e-10,'only the registered upper-skin prior may change');
+  assert.equal(actual[2],expected[2]);
+ }else assert.deepEqual(actual,expected);
+}
 test('profile skin weights are exactly zero through 45 and reach the side references',()=>{
  for(const yaw of [-45,-44.99,0,44.99,45])assert.equal(profileWeights(at(yaw)).skin,0);
  for(const sign of [-1,1]){
@@ -81,7 +89,7 @@ test('all modified attachment vertices meet the 45 degree seam continuously',{ti
   }
  }
 });
-test('bead split preserves non-hair vertices, alpha and all neutral geometry',{timeout:60000},async()=>{
+test('bead split preserves non-hair geometry with only the registered upper-skin prior added',{timeout:60000},async()=>{
  const old=await frozenRig(false,'3ba80b1fb3ed36e87258367fdaabab8deb0973bc',
   ['face-solve-data.mjs','feature-data.mjs','outline-data.mjs','face-feature-prior.mjs','face-features.mjs','face-profile.mjs']);
  try{
@@ -92,12 +100,21 @@ test('bead split preserves non-hair vertices, alpha and all neutral geometry',{t
    for(const m of rig.meshes){
     assert.equal(opacity(m,p,state),old.opacity(m,q,state),m.id);
     const hair=/^(hair-top$|bangs-|side-hair-|hairpin$|back-hair-|side-cranium-|tail-)/.test(m.id);
-    if(!pitch||!hair)for(const point of m.positions)assert.deepEqual(deform3D(m,point,p),old.deform3D(m,point,q),`${yaw}/${pitch} ${m.id}`);
+    if(!pitch||!hair)for(const point of m.positions)assertProtectedGeometry(deform3D(m,point,p),old.deform3D(m,point,q),m.id,point,p);
    }
   }
  }finally{old.dispose();}
  for(const name of ['hair-shell.mjs','hair-surface.mjs','dome-data.mjs','assets/texture_00.png','assets/texture_before_00.png','assets/seosoyoung-rig.json'])
   assert.deepEqual(readFileSync(new URL('../bundle/'+name,import.meta.url)),execFileSync('git',['show',`0b75a0211691965ca234ad9114073ba934568394:bundle/${name}`],{maxBuffer:16*1024*1024}));
+});
+test('geometry protection rejects extra drift in upper skin, lower skin, neutral and other parts',()=>{
+ for(const [id,point,pitch] of [['face-skin',[400,300],15],['face-skin',[400,497],15],['face-skin',[400,300],0],['eye-left-sclera',[400,300],15]]){
+  const p={...at(22.5),ParamAngleY:pitch},expected=[10,20,30];
+  const delta=id==='face-skin'&&point[1]<410&&pitch?ponytailSkinDelta(point,22.5,pitch,p):[0,0];
+  const valid=[expected[0]+delta[0],expected[1]+delta[1],expected[2]];
+  assertProtectedGeometry(valid,expected,id,point,p);
+  assert.throws(()=>assertProtectedGeometry([valid[0]+1,valid[1],valid[2]],expected,id,point,p));
+ }
 });
 const bounds=points=>[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))];
 test('profile rabbit pin matches reference canvas boxes and far attachments disappear',()=>{

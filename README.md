@@ -71,6 +71,24 @@ Stage 2 reconstructs the 40 cropped RGBA parts from `source/character/` and the 
 
 The optional `stage1_sam3_segment.py` uses the existing cached masks without network calls. Generating a missing mask calls the paid fal.ai SAM 3 endpoint and requires `FAL_KEY` in the environment. No credentials are included. Keep all masks to reproduce the provided build offline.
 
+## Seedance skin registration
+
+`source/references/seedance_9dir/` contains camera-normalized representatives of the same 361-frame Seedance clip. Manually inspected seed patches, frame IDs and image hashes are recorded in `source/viewer/seedance-reference-frames.json`; independent generated side portraits are excluded from fitting. The canonical front input fixes the rest coordinates. The tracker combines [OpenCV NCC](https://docs.opencv.org/4.x/d4/dc6/tutorial_py_template_matching.html), bidirectional [pyramidal optical flow](https://docs.opencv.org/3.4.0/dc/d6b/group__video__track.html) between seeds and skin segmentation. Occluded ear controls follow the corresponding facial side boundary.
+
+SciPy alternates shared 3D depths, weak-perspective cameras and cubic image residuals with temporal velocity/acceleration priors. Representatives are selected from the final training trajectory, checking nose-side and eye-to-ear-height direction cues. Near-frontal selection also checks neutral feature consistency so a drifting mouth patch cannot win solely on a near-zero inferred angle. [Clarabel](https://clarabel.org/stable/python/getting_started_py/) fits the final ten-term cubic coefficients with key/video weights 10:1, image-space RMS cones and polar material-area inequalities. The final report includes training error as well as the held-out error; the trajectory figure shows every frame.
+
+```sh
+OPENBLAS_NUM_THREADS=1 .venv/bin/python pipeline/solve_ponytail_seedance_registration.py --inputs ../../.local/artifacts/20261025-ponytail-seedance-reg
+PATH="$PWD/.venv/bin:$PATH" node build.mjs
+.venv/bin/python pipeline/capture_ponytail_registration.py --artifacts ../../.local/artifacts/20261025-ponytail-seedance-reg
+```
+
+On the shared host, run each command through the configured `heavy_verify.py` runner. An observations cache may be supplied with `--observations` to repeat fitting without decoding/tracking the clip. Three contiguous 18-frame blocks are excluded from shape fitting and representative selection. Held-out camera poses are inferred from tracked image points, initialized from adjacent training poses; the reported error measures conditional shape reconstruction. Every gate recomputes predictions from saved coefficients.
+
+The skin solve changes the previously unobserved forehead/temple region, with the six feature controls and lower rim fixed. Its additional continuous correction vanishes at all nine authored poses, throughout neutral pitch, and below rest Y=410. A separate 12×96 polar skin backing fills the original mesh's narrow upper UV cap. It uses the same learned silhouette, maps the authored direction grid to the measured representative angles, aligns to the preserved eye controls, and fades to transparency inside the original face by rest Y=500. The clean neutral RGBA texture removes features/hair/ear ink and matches the original neutral forehead tone. The renderer draws it after back hair and before ears/face/front hair, including ears in face-only inspection. Hair geometry, bead attachments, the 673 original skin vertices, rig and original atlas remain unchanged. Separate masks feather the original upper UV edge into the backing and clip it to the measured upper silhouette while retaining the original lower face. The registration measurements and capture hashes are in `docs/stage4_registration_metrics.json`.
+
+The legacy `explained3D` and cross-validation diagnostics in `face-solve.json` describe the preserved base solve before the upper-skin step. Integrated displacement and triangle-orientation statistics are refreshed after that step; Stage 4 has its own independently recomputed registration errors.
+
 ## Validation
 
 The browser check starts and stops its own local HTTP server. It writes screenshots and `viewer_metrics.json` under ignored `debug/`.

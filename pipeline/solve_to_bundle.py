@@ -10,6 +10,8 @@ def main():
     runtime = {k: data[k] for k in ['family', 'restMesh', 'points', 'triangles', 'evaluationTriangles', 'meshCount', 'samples', 'anchors', 'Z']}
     runtime['poses'] = [{k: p[k] for k in ['name', 'yaw', 'pitch', 't', 'du']} for p in data['poses']]
     runtime['family45'] = data['family45']
+    if 'ponytail' in data:
+        runtime['ponytail'] = data['ponytail']
     # Preserve solved double precision: rounding the residual/depth terms
     # breaks exact landmark and Dirichlet pins in the compiled evaluator.
     text = json.dumps(runtime, ensure_ascii=False, separators=(',', ':'))

@@ -53,6 +53,10 @@ const poses=OUTLINE_POSES.map(pose=>{
   obs[i]=pose.pitch?fit.centers[key]:registeredFeatureWorld(ids[key],points[i],p).slice(0,2);
   weights[i]=pose.pitch?4:8;
  }
+ if(!process.argv.includes('--base')&&trace.ponytail){
+  const upper=trace.ponytail.meshTargets.find(q=>q.name===pose.name).upper;
+  for(const [i,xy] of Object.entries(upper))obs[Number(i)]=xy;
+ }
  // Every nonzero observation is an exact boundary condition. Interior skin
  // nodes with no observation remain free under the shared smooth regularizer.
  const pins=weights.flatMap((w,i)=>w>0?[i]:[]);
