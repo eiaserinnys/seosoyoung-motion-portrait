@@ -1,0 +1,22 @@
+{
+  "baseline": "0b75a0211691965ca234ad9114073ba934568394",
+  "node": {
+    "passed": 174,
+    "failed": 0,
+    "perTestTimeoutMs": 60000,
+    "workers": 2
+  },
+  "python": {
+    "passed": 85,
+    "subtestsPassed": 15,
+    "failed": 0,
+    "runner": "pytest --timeout=60 -q pipeline tests"
+  },
+  "captures": {
+    "docs/captures/face_turnaround_7angle.png": "a83754c102415cab49d5a0edc378019a2528e9c477c207f181298832ad7d2274",
+    "docs/captures/full_turnaround_7angle.png": "31a8504071ca26be1c5c8d943f1bd00b7a2b43bd90b121e19c75abfaf290e827",
+    "docs/captures/profile_blink.png": "3a3831f490a26b1b798c43b13eb57d9e75b833118d7cf54be613395059cfab3c"
+  },
+  "bundleFiles": 37,
+  "codeReview": "self review permitted by delegation; UI/UX specialist review pending"
+}

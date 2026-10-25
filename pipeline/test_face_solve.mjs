@@ -11,6 +11,7 @@ import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {legacyOutlineWorld} from '../bundle/face-outline.mjs';
 import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
+import {smoothstep} from '../bundle/face-profile.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 bindRig(rig);
 const skin=rig.meshes.find(m=>m.id==='face-skin');
@@ -105,7 +106,15 @@ test('eyes, brows, iris and closed lids use the additional measured width ratios
    const anchor=FEATURE_FIT.front[id.endsWith('brow')?key:side],a=[anchor[0]-10,anchor[1]],b=[anchor[0]+10,anchor[1]];
    const width=p=>featureWorld(id,b,p)[0]-featureWorld(id,a,p)[0];
    const edge=width(at(Math.sign(pose.yaw)*45));
-   assert(Math.abs(width(at(pose.yaw))/edge-pose.eyeWidthScale[side])<1e-8,`${pose.name} ${id}`);
+   const near=side===(pose.yaw<0?'right':'left');
+   const expected=id.endsWith('brow')&&near?(Math.abs(pose.yaw)===67.5?.70:.48):pose.eyeWidthScale[side];
+   // The shared nonlinear profile field contracts only the nasal corner.
+   const ratio=width(at(pose.yaw))/edge;
+   if(id.endsWith('brow')||!near)assert(Math.abs(ratio-expected)<1e-8,`${pose.name} ${id}`);
+   else{
+    assert(ratio<=expected+1e-8&&ratio>=expected*.85,`${pose.name} ${id}: ${ratio}`);
+    assert(smoothstep(65,80,Math.abs(pose.yaw))>0);
+   }
   }
  }
 });

@@ -1,5 +1,6 @@
 import {craniumFacing,craniumSeam,referenceHairSample} from './hair-surface.mjs';
 import {FRAME_CACHE,frameValue} from './pose-grid.mjs';
+import {profileWeights,smoothstep} from './face-profile.mjs';
 import {deform3D,opacity,bindRig} from './rig.mjs';
 import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction} from './geometry.mjs';
 export class Renderer {
@@ -10,15 +11,16 @@ export class Renderer {
     const shader=(type,source)=>{const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;};
     this.program=gl.createProgram();
     gl.attachShader(this.program,shader(gl.VERTEX_SHADER,`attribute vec3 a_pos;attribute vec2 a_uv;attribute float a_rawX;attribute float a_rawY;attribute float a_facing;attribute float a_seam;attribute vec2 a_refUV;attribute float a_refMix;uniform vec4 u_view;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){gl_Position=vec4(a_pos.xy*u_view.xy+u_view.zw,-a_pos.z/1024.,1.);v_uv=a_uv;v_rawX=a_rawX;v_rawY=a_rawY;v_facing=a_facing;v_seam=a_seam;v_refUV=a_refUV;v_refMix=a_refMix;}`));
-    gl.attachShader(this.program,shader(gl.FRAGMENT_SHADER,`precision highp float;uniform sampler2D u_tex;uniform sampler2D u_mask;uniform bool u_neck;uniform bool u_solid;uniform bool u_clip;uniform bool u_closed;uniform bool u_tint;uniform vec2 u_eye;uniform vec2 u_res;uniform float u_opacity;uniform float u_farBack;uniform float u_backStart;uniform float u_identify;uniform vec4 u_refRect;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){if(v_facing<=0.000001)discard;vec4 c=u_solid?vec4(.28,.35,.42,1.):texture2D(u_tex,v_uv);c.a*=v_seam;if(!u_solid&&v_refMix>0.&&all(greaterThanEqual(v_refUV,u_refRect.xy))&&all(lessThanEqual(v_refUV,u_refRect.zw)))c.rgb=mix(c.rgb,texture2D(u_tex,v_refUV).rgb,v_refMix);if(u_closed&&((v_rawX<502.&&u_eye.x>=.22)||(v_rawX>=502.&&u_eye.y>=.22)))discard;if(u_neck)c.a*=mix(texture2D(u_mask,gl_FragCoord.xy/u_res).a,1.,smoothstep(550.,590.,v_rawY));if(u_clip)c.a*=texture2D(u_mask,gl_FragCoord.xy/u_res).a;if(u_farBack!=0.&&(v_rawX-502.)*u_farBack>0.&&v_rawY>u_backStart)c.a*=mix(1.,texture2D(u_mask,gl_FragCoord.xy/u_res).a,abs(u_farBack));if(c.a*u_opacity<.01)discard;if(u_identify>0.)c.rgb=vec3(u_identify>1.5?1.:0.);if(u_tint)c.rgb=mix(c.rgb,vec3(.1,1.,.8),.7);gl_FragColor=vec4(c.rgb,c.a*u_opacity);}`));
+    gl.attachShader(this.program,shader(gl.FRAGMENT_SHADER,`precision highp float;uniform sampler2D u_tex;uniform sampler2D u_profileTex;uniform vec3 u_profileMix;uniform vec2 u_lidAlpha;uniform sampler2D u_mask;uniform bool u_neck;uniform bool u_solid;uniform bool u_clip;uniform bool u_closed;uniform bool u_tint;uniform vec2 u_eye;uniform vec2 u_res;uniform float u_opacity;uniform float u_farBack;uniform float u_backStart;uniform float u_identify;uniform vec4 u_refRect;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){if(v_facing<=0.000001)discard;vec4 c=u_solid?vec4(.28,.35,.42,1.):texture2D(u_tex,v_uv);c.a*=v_seam;if(!u_solid&&u_profileMix.x>0.){vec2 uv=vec2(v_rawX/2048.,v_rawY/2048.+u_profileMix.z);vec3 c67=texture2D(u_profileTex,uv).rgb;vec3 c90=texture2D(u_profileTex,uv+vec2(.5,0.)).rgb;c.rgb=mix(c.rgb,mix(c67,c90,u_profileMix.y),u_profileMix.x);}if(!u_solid&&v_refMix>0.&&all(greaterThanEqual(v_refUV,u_refRect.xy))&&all(lessThanEqual(v_refUV,u_refRect.zw)))c.rgb=mix(c.rgb,texture2D(u_tex,v_refUV).rgb,v_refMix);if(u_closed)c.a*=v_rawX<502.?u_lidAlpha.x:u_lidAlpha.y;if(u_closed&&((v_rawX<502.&&u_eye.x>=.22)||(v_rawX>=502.&&u_eye.y>=.22)))discard;if(u_neck)c.a*=mix(texture2D(u_mask,gl_FragCoord.xy/u_res).a,1.,smoothstep(550.,590.,v_rawY));if(u_clip)c.a*=texture2D(u_mask,gl_FragCoord.xy/u_res).a;if(u_farBack!=0.&&(v_rawX-502.)*u_farBack>0.&&v_rawY>u_backStart)c.a*=mix(1.,texture2D(u_mask,gl_FragCoord.xy/u_res).a,abs(u_farBack));if(c.a*u_opacity<.01)discard;if(u_identify>0.)c.rgb=vec3(u_identify>1.5?1.:0.);if(u_tint)c.rgb=mix(c.rgb,vec3(.1,1.,.8),.7);gl_FragColor=vec4(c.rgb,c.a*u_opacity);}`));
     gl.linkProgram(this.program);if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(this.program));gl.useProgram(this.program);
-    this.loc={};for(const name of ['neck','solid','view','tex','mask','clip','closed','tint','eye','res','opacity','farBack','backStart','identify','refRect'])this.loc[name]=gl.getUniformLocation(this.program,'u_'+name);
+    this.loc={};for(const name of ['neck','solid','view','tex','mask','clip','closed','tint','eye','res','opacity','farBack','backStart','identify','refRect','profileTex','profileMix'])this.loc[name]=gl.getUniformLocation(this.program,'u_'+name);
     this.buffer=gl.createBuffer();this.indices=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);
     for(const [name,size,offset] of [['pos',3,0],['uv',2,12],['rawX',1,20],['rawY',1,24],['facing',1,28],['seam',1,32],['refUV',2,36],['refMix',1,44]]){const loc=gl.getAttribLocation(this.program,'a_'+name);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,size,gl.FLOAT,false,48,offset);}
     this.textures=images.map(im=>{const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);this.textureParams();gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);return tex;});
     this.maskTexture=gl.createTexture();this.framebuffer=gl.createFramebuffer();this.width=0;
     gl.depthFunc(gl.LEQUAL);gl.frontFace(gl.CW);gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
-    gl.uniform1i(this.loc.tex,0);gl.uniform1i(this.loc.mask,1);
+    this.loc.lidAlpha=gl.getUniformLocation(this.program,'u_lidAlpha');
+    gl.uniform1i(this.loc.tex,0);gl.uniform1i(this.loc.mask,1);gl.uniform1i(this.loc.profileTex,2);
   }
   textureParams(){const gl=this.gl;gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);}
   resize(){
@@ -29,6 +31,8 @@ export class Renderer {
     gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,this.maskTexture,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
   }
   draw(mesh,p,alpha,{clip=false,tint=false}={}) {
+    const weights=profileWeights(p);
+    this.gl.uniform3f(this.loc.profileMix,mesh.id==='face-skin'?weights.skin:0,weights.profile,weights.row);
     const gl=this.gl;gl.uniform1f(this.loc.backStart,mesh.id==='back-hair-center'?407:310);gl.uniform1f(this.loc.identify,this.identify?((Array.isArray(this.identify)?this.identify.includes(mesh.id):mesh.id===this.identify)?2:1):0);gl.uniform1f(this.loc.farBack,mesh.id.startsWith('back-hair')?Math.sign(p.ParamAngleX)*Math.min(1,correction(p,'CorrHairOcclusion')/.8)*Math.min(1,Math.abs(p.ParamAngleX)/25)**2*(3-2*Math.min(1,Math.abs(p.ParamAngleX)/25)):0);
     const points=frameValue(p,'pos:'+mesh.id,()=>mesh.positions.map(pt=>mesh.surface?headWorld(pt,p):deform3D(mesh,pt,p)));
     const ref=this.rig.meshes.find(m=>m.id==='side-cranium-'+(p.ParamAngleX<0?'right':'left'));
@@ -56,6 +60,9 @@ export class Renderer {
     this.view={scale,ox,oy};
     gl.viewport(0,0,w,h);gl.uniform4f(this.loc.view,scale*2/w,-scale*2/h,ox*2/w-1,1-oy*2/h);gl.uniform2f(this.loc.res,w,h);gl.uniform2f(this.loc.eye,p.ParamEyeLOpen,p.ParamEyeROpen);
     gl.uniform1i(this.loc.solid,!!state.surfaceOnly);
+    const yaw=p.ParamAngleX*correction(p,'CorrTurn'),farLid=1-smoothstep(60,78,Math.abs(yaw));
+    gl.uniform2f(this.loc.lidAlpha,yaw<0?farLid:1,yaw>0?farLid:1);
+    gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,this.textures[4]);gl.activeTexture(gl.TEXTURE0);
     gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.clearColor(0,0,0,0);gl.clearDepth(1);gl.depthMask(true);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
     const ctx=this.overlay.getContext('2d');ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,w,h);ctx.setTransform(scale,0,0,scale,ox,oy);ctx.lineWidth=1/scale;
     const texture=index=>{gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.textures[index]);};

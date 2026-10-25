@@ -1,6 +1,8 @@
 import {outlineRow} from './face-outline.mjs';
 import {earWorld} from './stereo-attachments.mjs';
 import {artWorld,HEAD_CENTER,radians,clamp,correction} from './geometry.mjs';
+import {profileExtension,strandProfileTarget} from './profile-attachments.mjs';
+import {smoothstep} from './face-profile.mjs';
 // Canvas-space alpha spans: front restored side-hair, near-view SAM crown's
 // connected lock between cheek and ear. The broad posterior hair is supplied
 // by the temporal surface, not by stretching this front lock across the ear.
@@ -16,7 +18,7 @@ export function strandDepth([x,y],side){
  const target=v[3]+u*(v[4]-v[3]),angle=radians(side==='left'?45:-45);
  return (target-HEAD_CENTER[0]-(x-HEAD_CENTER[0])*Math.cos(angle))/Math.sin(angle);
 }
-export function strandWorld(point,side,p){
+function strandBase(point,side,p){
  const rest={...p,ParamAngleX:0,ParamAngleY:0,ParamAngleZ:0};
  // Constrained fit: a lock crossing the ear in the front drawing must stay
  // anterior to it in rest space. This small depth separation rotates with it.
@@ -60,4 +62,11 @@ export function strandWorld(point,side,p){
   for(let i=0;i<3;i++)world[i]+=delta[i]-origin[i];
  }
  return world;
+}
+export function strandWorld(point,side,p){
+ const world=strandBase(point,side,p),yaw=p.ParamAngleX*correction(p,'CorrTurn');
+ if(Math.abs(yaw)<=45)return world;
+ const extended=profileExtension(world,point,side,p,strandBase,a=>strandProfileTarget(point,side,a,STRANDS[side],yaw));
+ const weight=smoothstep(340,407,point[1]);
+ return world.map((v,i)=>v+(extended[i]-v)*weight);
 }

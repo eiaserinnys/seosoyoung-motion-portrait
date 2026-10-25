@@ -48,6 +48,7 @@ python3 -m venv .venv
 .venv/bin/python pipeline/stage3_build_viewer.py
 python3 pipeline/optimize_3d_2d.py
 python3 pipeline/solve_to_bundle.py
+python3 pipeline/bake_face90.py
 node --test --test-timeout=60000 pipeline/test_face_solve.mjs
 python3 -m pytest --timeout=60 pipeline/test_face_solve.py
 node pipeline/test_sphere_3d.mjs
@@ -71,6 +72,14 @@ The browser check starts and stops its own local HTTP server. It writes screensh
 Checks cover the rendered sphere silhouette at yaw, pitch and combined extremes; radius preservation for the head and child eyes; stationary neck under pure yaw; composited ear, nose, mouth and hair-tie visibility; eye clipping; independent gaze; before/after portrait textures and live correction controls; image and console errors; image enlargement; and narrow layout overflow.
 
 The checked-in [metrics](docs/viewer_metrics.json) and [capture index](docs/validation.md) describe the current implementation. Sphere-grid and normal renders are available for front, left, right, up and down poses.
+
+## Side parts beyond 45 degrees
+
+`pipeline/bake_face90.py` samples the four approved no-rimlight 67.5°/90° references through the exact solved `face-skin` triangles. It reconstructs occluded skin from a smooth 2D color field, removes stationary eyes/hair, and retains the anterior nose and lip detail. The additional `face-profile.png` contains four RGB tiles in rest-canvas UVs; the original atlas, skin alpha, mesh topology and depth remain unchanged. RGB blending starts strictly above 45°, reaching the 67.5° tile before blending to the 90° tile with `smoothstep(60,85,abs(yaw))`.
+
+Canvas-side labels determine occlusion: negative yaw hides the left eye/brow, positive yaw the right. Their alpha fades at 60°–78°; frontal nose and closed-mouth decals fade at 50°–65° to avoid doubling the profile artwork. Near eyes transition to a shared asymmetric eyelid field at 65°–80°, retaining independent gaze and blink controls. Near brow width reaches 0.70/0.48 of its 45° width at 67.5°/90°. Ears, side locks and hanging roots have additional reference-calibrated displacement strictly beyond 45°; distant tails fade behind the skull by 85°. Hair shell/dome/pitch priors are untouched.
+
+Run `python3 pipeline/bake_face90.py` again after changing the face solution or reference images. `python3 pipeline/capture_side90.py` produces [face](docs/captures/face_turnaround_7angle.png), [full portrait](docs/captures/full_turnaround_7angle.png) and [blink](docs/captures/profile_blink.png) sheets. It also renders the pinned pre-change renderer from Git and requires zero changed pixels for all nine original poses and ±44.99°. Results are in [side90-webgl.json](docs/side90-webgl.json). `pipeline/test_side90.mjs` independently compares every original mesh vertex and alpha against that baseline.
 
 ## Files
 

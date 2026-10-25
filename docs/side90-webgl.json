@@ -1,0 +1,70 @@
+{
+  "baseline": "0b75a0211691965ca234ad9114073ba934568394",
+  "invariance": [
+    {
+      "yaw": -45,
+      "pitch": -30,
+      "changedPixels": 0
+    },
+    {
+      "yaw": -45,
+      "pitch": 0,
+      "changedPixels": 0
+    },
+    {
+      "yaw": -45,
+      "pitch": 30,
+      "changedPixels": 0
+    },
+    {
+      "yaw": 0,
+      "pitch": -30,
+      "changedPixels": 0
+    },
+    {
+      "yaw": 0,
+      "pitch": 0,
+      "changedPixels": 0
+    },
+    {
+      "yaw": 0,
+      "pitch": 30,
+      "changedPixels": 0
+    },
+    {
+      "yaw": 45,
+      "pitch": -30,
+      "changedPixels": 0
+    },
+    {
+      "yaw": 45,
+      "pitch": 0,
+      "changedPixels": 0
+    },
+    {
+      "yaw": 45,
+      "pitch": 30,
+      "changedPixels": 0
+    },
+    {
+      "yaw": -44.99,
+      "pitch": 0,
+      "changedPixels": 0
+    },
+    {
+      "yaw": 44.99,
+      "pitch": 0,
+      "changedPixels": 0
+    }
+  ],
+  "errors": [],
+  "angles": [
+    -90,
+    -67.5,
+    -45,
+    0,
+    45,
+    67.5,
+    90
+  ]
+}

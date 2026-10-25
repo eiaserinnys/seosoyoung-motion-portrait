@@ -6,7 +6,7 @@ const loadImage=src=>new Promise((resolve,reject)=>{const im=new Image();im.onlo
 const eyeIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
 async function main(){
   const response=await fetch('./assets/seosoyoung-rig.json');if(!response.ok)throw Error('리그 로드 실패');const rig=await response.json();
-  const images=await Promise.all(['texture_00.png','texture_before_00.png','head-surface.png','head-surface-before.png'].map(file=>loadImage('./assets/'+file)));
+  const images=await Promise.all(['texture_00.png','texture_before_00.png','head-surface.png','head-surface-before.png','face-profile.png'].map(file=>loadImage('./assets/'+file)));
   const p=Object.fromEntries(rig.parameters.map(param=>[param.id,param.default]));
   Object.assign(p,CORRECTION_PRESETS.recommended);
   const state={selected:'face-skin',selectedIds:new Set(['face-skin']),hidden:new Set(),mode:'all',before:false,bangs:false,outfit:'sweater',wire:false,grid:false,masks:false,auto:false,track:false,tab:'parts'};
