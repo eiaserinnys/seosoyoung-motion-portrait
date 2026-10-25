@@ -16,6 +16,16 @@ const at=(yaw,pitch)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:
 const mesh=id=>rig.meshes.find(m=>m.id===id);
 const near=(a,b,msg)=>assert(Math.abs(a-b)<1e-7,`${msg}: ${a} vs ${b}`);
 const ids={left:'eye-left-sclera',right:'eye-right-sclera',browLeft:'eye-left-brow',browRight:'eye-right-brow',nose:'nose-detail',mouth:'mouth-detail'};
+test('cute upper chins use measured registration without the obsolete five pixel lift',()=>{
+ for(const name of ['up-left','up','up-right']){
+  const p=OUTLINE_POSES.find(p=>p.name===name),f=FEATURE_FIT.poses.find(f=>f.name===name);
+  const mirror=OUTLINE_POSES.find(q=>q.pitch===p.pitch&&q.yaw===-p.yaw);
+  const chin=q=>q.registration.eyeMid[1]+(q.rawYChin-q.registration.referenceEyeMid[1])*q.registration.scale;
+  near(p.yChin,(chin(p)+chin(mirror))/2,name+' actual chin');
+  assert.equal(p.rawYChin,{up:494,'up-left':523,'up-right':528}[name]);
+  assert(f.measurements.mouth.center[1]<(name==='up'?404:454),name+' shorter lower face');
+ }
+});
 // Alpha >127 outer spans measured from the project's own parts, excluding the
 // transparent padding of the rectangular ArtMesh. No third-party mesh data.
 const scleraBoundary=JSON.parse(readFileSync(new URL('./fixtures/sclera-alpha-boundary.json',import.meta.url)));

@@ -101,54 +101,54 @@
       185,
       150,
       540,
-      560
+      515
     ],
     "upscale": 1,
     "num_masks_returned": 1,
-    "score": 0.9350336194038391,
-    "area_px": 91380,
+    "score": 0.9276971817016602,
+    "area_px": 79587,
     "source": "up_ref_720.png",
-    "sha256": "85f4fbe3f4d95bbb8741481d92c287c946586fe139bb66173ef543d3b46a3fa0",
+    "sha256": "a8ee13b0fd05528cf26005f6544973289e3a97ba7979573648a60c61e7b425e6",
     "endpoint": "fal-ai/sam-3/image",
     "jawConstraint": [
       [
         210,
-        448
+        404
       ],
       [
         232,
-        472
+        428
       ],
       [
         270,
-        499
+        449
       ],
       [
         315,
-        518
-      ],
-      [
-        358,
-        529
-      ],
-      [
-        399,
-        518
-      ],
-      [
-        444,
-        496
-      ],
-      [
-        480,
         466
       ],
       [
+        358,
+        474
+      ],
+      [
+        399,
+        466
+      ],
+      [
+        444,
+        450
+      ],
+      [
+        480,
+        432
+      ],
+      [
         503,
-        435
+        407
       ]
     ],
-    "maskSha256": "d12a7b9218a5ce751976b4d8b35e9589b60a71ba63858b5f3c29d36c5c7f4f8c"
+    "maskSha256": "829e3f9f9a0d4e2835d8775622570a91d09fc8c5b405fbc11ba2dbe6839b7971"
   },
   "up-left-face": {
     "prompt": "face skin of anime girl excluding ears neck and hair",
@@ -156,54 +156,54 @@
       125,
       180,
       455,
-      565
+      525
     ],
     "upscale": 1,
     "num_masks_returned": 1,
-    "score": 0.9447280168533325,
-    "area_px": 75141,
+    "score": 0.936398983001709,
+    "area_px": 65351,
     "source": "up_left_ref_720.png",
-    "sha256": "c3e2895da38444d78b72277182e05e77667e2a34863d34987783ddaa9470e0ee",
+    "sha256": "74279089d6dac474ae26dba26cea5f4c7edf4998648230ab95da5ac306e00120",
     "endpoint": "fal-ai/sam-3/image",
     "jawConstraint": [
       [
         144,
-        425
+        412
       ],
       [
         151,
-        473
+        438
       ],
       [
         176,
-        514
+        465
       ],
       [
         213,
-        547
+        499
       ],
       [
         250,
-        550
+        503
       ],
       [
         296,
-        538
+        493
       ],
       [
         345,
-        516
+        475
       ],
       [
         384,
-        485
+        452
       ],
       [
         410,
-        443
+        418
       ]
     ],
-    "maskSha256": "55ff7b4e99348382649ce2e22c11e6e6fcc1ad42699e5a3b8cf9ed104c1ceb63"
+    "maskSha256": "2f6d3ebc4e0245f2542bb449f964bbf4916fd83a3a34f1e46a6bc0a566a82aba"
   },
   "up-right-face": {
     "prompt": "face skin of anime girl excluding ears neck and hair",
@@ -211,54 +211,54 @@
       275,
       180,
       610,
-      575
+      530
     ],
     "upscale": 1,
     "num_masks_returned": 1,
-    "score": 0.90509432554245,
-    "area_px": 74321,
+    "score": 0.936863899230957,
+    "area_px": 63180,
     "source": "up_right_ref_720.png",
-    "sha256": "964ad730b8799d4d7d362fd5441ebd64742f44ab9c4c41cc13f26d643d3d0716",
+    "sha256": "26c16fdb0bb5b339677498df67b2be51b90f4dd04732ace9febfeefa64bd3411",
     "endpoint": "fal-ai/sam-3/image",
     "jawConstraint": [
       [
         339,
-        448
+        420
       ],
       [
         360,
-        490
+        455
       ],
       [
         403,
-        523
+        482
       ],
       [
         453,
-        544
+        501
       ],
       [
         500,
-        551
+        508
       ],
       [
         541,
-        551
+        503
       ],
       [
         566,
-        515
+        471
       ],
       [
         586,
-        469
+        446
       ],
       [
         593,
-        426
+        412
       ]
     ],
-    "maskSha256": "8f394ecec50cd9d4eab906e63d7865b9642bda1ee70ff08a1d0b348239fa7064"
+    "maskSha256": "a254c9636491a66fc3399220d7bf9613d7a5edc44b887736b7ac831664a62d47"
   },
   "down-face": {
     "prompt": "face skin of anime girl excluding ears neck and hair",

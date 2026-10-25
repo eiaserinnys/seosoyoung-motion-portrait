@@ -71,8 +71,7 @@ class DiagonalJawTest(unittest.TestCase):
             for i,row in enumerate(p['rows']):
                 if row[0] in {600,610,616}:
                     self.assertEqual(row[2::2],[p['priorRows'][i][1]+2,p['priorRows'][i][2]-2])
-                shift=5.*float(fit.sphere_ease((row[0]-570)/46)) if row[0]>570 else 0.
-                np.testing.assert_allclose(row[1::2],[row[0]-shift]*2)
+                np.testing.assert_allclose(row[1::2],[row[0]]*2)
 
     def test_570_to_600_ramp_returns_to_base_at_three_quarters_then_one(self):
         p=self.pose('SKIN',[350,650])
@@ -90,12 +89,12 @@ class DiagonalJawTest(unittest.TestCase):
     def test_generated_rows_match_scope_chin_and_single_peak_contract(self):
         data=json.loads((fit.ROOT/'source/viewer/outline-traces.json').read_text())
         before=json.loads(subprocess.check_output(
-            ['git','show','83d4a80:source/viewer/outline-traces.json'],text=True,timeout=60))
+            ['git','show','f6112b6:source/viewer/outline-traces.json'],text=True,timeout=60))
         old={p['name']:p for p in before['poses']}
         for p in data['poses']:
-            if p['name'] not in ['up-left','up-right']:
+            if not p['name'].startswith('up'):
                 self.assertEqual(p['rows'],old[p['name']]['rows'],p['name'])
-            else:
+            elif p['yaw']:
                 mid=(p['rows'][-1][2]+p['rows'][-1][4])/2
                 mirror=next(q for q in data['poses'] if q['pitch']==p['pitch'] and q['yaw']==-p['yaw'])
                 own=p['priorRows'][-1][1:];other=mirror['priorRows'][-1][1:]
@@ -110,20 +109,23 @@ class DiagonalJawTest(unittest.TestCase):
                 self.assertLessEqual(jaw['maxSecondDifference'],15)
                 self.assertLessEqual(jaw['maxMidpointReversal'],5)
                 self.assertNotEqual(p['rows'],old[p['name']]['rows'])
-                self.assertAlmostEqual(p['yChin'],old[p['name']]['yChin']-5)
                 for i,row in enumerate(p['rows']):
-                    shift=5.*float(fit.sphere_ease((row[0]-570)/46)) if row[0]>570 else 0.
-                    np.testing.assert_allclose(row[1::2],np.array(old[p['name']]['rows'][i][1::2])-shift)
                     if row[0] in {600,610,616}:
-                        self.assertAlmostEqual(row[4]-row[2],old[p['name']]['rows'][i][4]-old[p['name']]['rows'][i][2])
                         measured=p['measuredRows'][i]
                         np.testing.assert_allclose(measured[2::2],np.array(p['priorRows'][i][1:])+[p['offsets']['left'],p['offsets']['right']])
+            if p['name'].startswith('up'):
+                mirror=next(q for q in data['poses'] if q['pitch']==p['pitch'] and q['yaw']==-p['yaw'])
+                def chin(q):
+                    r=q['registration']
+                    return r['eyeMid'][1]+(q['rawYChin']-r['referenceEyeMid'][1])*r['scale']
+                self.assertAlmostEqual(p['yChin'],(chin(p)+chin(mirror))/2)
+                self.assertLess(p['yChin'],old[p['name']]['yChin']-30)
             if p['pitch']:
                 shape=verify.outline_shape({'name':p['name'],'outline':p})
                 self.assertEqual((shape['peakRestY'],shape['peakCount']),(450,1))
                 self.assertLessEqual(shape['maxLowerWidthIncrease'],.5)
                 self.assertLessEqual(shape['maxLowerHalfWidthIncrease'],.5)
-            if p['name'] not in ['up-left','up-right']:self.assertEqual(p['yChin'],old[p['name']]['yChin'])
+            if not p['name'].startswith('up'):self.assertEqual(p['yChin'],old[p['name']]['yChin'])
 
 
 class ApprovedDiagonalGateTest(unittest.TestCase):
