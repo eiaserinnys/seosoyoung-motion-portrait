@@ -60,6 +60,6 @@
   ],
   "pageErrors": [],
   "sheet": "docs/captures/vdd_unobserved_angles_sheet.png",
-  "sheetSha256": "1e02c6518d8969d0e86bc4c69e75c4cb19949f9557e60e520ca41db902b606e5",
+  "sheetSha256": "6688e08e686e45d42f687149a89e911eef2e4bab81cdddf22bce0e4edb9eda48",
   "definition": "same WebGL full portraits, frozen motion, scale=1, 720x720 crop resized equally to 320x320; rows main/after for each group of five angles"
 }

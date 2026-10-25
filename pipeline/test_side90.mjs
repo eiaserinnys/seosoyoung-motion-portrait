@@ -69,9 +69,87 @@ test('distant side locks and tails disappear before the rejected 67.5 degree pos
 test('all modified attachment vertices meet the 45 degree seam continuously',{timeout:60000},()=>{
  for(const sign of [-1,1]){
   const p=at(sign*45),q=at(sign*45.000001);
-  for(const m of rig.meshes.filter(m=>/^(ear-|side-hair-|tail-)/.test(m.id)))for(const point of m.positions){
+  for(const m of rig.meshes.filter(m=>/^(ear-|hair-top$|bangs-|side-hair-|side-cranium-|back-hair-|hairpin$|tail-)/.test(m.id)))for(const point of m.positions){
    const a=deform3D(m,point,p),b=deform3D(m,point,q);
    assert(Math.hypot(...a.map((v,i)=>v-b[i]))<.001,`${m.id} seam`);
+  }
+ }
+});
+test('Track D preserves every vertex and alpha at all approved and unobserved <=45 poses',{timeout:60000},async()=>{
+ const old=await frozenRig(false,'3ba80b1fb3ed36e87258367fdaabab8deb0973bc');
+ try{
+  const poses=[...[-45,0,45].flatMap(y=>[-30,0,30].map(p=>[y,p])),[-44.99,0],[44.99,0],
+   ...[-30,-22.5,-15,15,22.5,30].flatMap(y=>(Math.abs(y)===22.5?[-15,15]:[-20,20]).map(p=>[y,p]))];
+  for(const [yaw,pitch]of poses){
+   const p={...at(yaw),ParamAngleY:pitch},q={...p,[old.FRAME_CACHE]:new Map()};delete q[FRAME_CACHE];
+   for(const m of rig.meshes){
+    assert.equal(opacity(m,p,state),old.opacity(m,q,state),m.id);
+    for(const point of m.positions)assert.deepEqual(deform3D(m,point,p),old.deform3D(m,point,q),`${yaw}/${pitch} ${m.id}`);
+   }
+  }
+ }finally{old.dispose();}
+ for(const name of ['hair-shell.mjs','hair-surface.mjs','dome-data.mjs','assets/texture_00.png','assets/texture_before_00.png','assets/seosoyoung-rig.json'])
+  assert.deepEqual(readFileSync(new URL('../bundle/'+name,import.meta.url)),execFileSync('git',['show',`0b75a0211691965ca234ad9114073ba934568394:bundle/${name}`],{maxBuffer:16*1024*1024}));
+});
+const bounds=points=>[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))];
+test('profile rabbit pin matches reference canvas boxes and far attachments disappear',()=>{
+ for(const [yaw,target]of [[-67.5,[457,252,525,310]],[-90,[457,260,525,320]]]){
+  const actual=bounds(mesh('hairpin').positions.map(v=>deform3D(mesh('hairpin'),v,at(yaw))));
+  actual.forEach((v,i)=>assert(Math.abs(v-target[i])<=4,`${yaw} pin ${actual}`));
+ }
+ for(const yaw of [-90,-67.5,67.5,90]){
+  for(const id of ['back-hair-left','back-hair-center','back-hair-right'])assert.equal(opacity(mesh(id),at(yaw),state),0,`${yaw} ${id}`);
+  if(yaw>0)assert.equal(opacity(mesh('hairpin'),at(yaw),state),0);
+ }
+});
+test('profile posterior follows the rounded reference and reaches the bead top',()=>{
+ for(const yaw of [-90,-67.5,67.5,90]){
+  const sign=yaw<0?1:-1,m=mesh('side-cranium-'+(sign>0?'right':'left'));
+  for(const [y,x]of [[420,801],[460,794],[500,776],[540,736]]){
+   const q=deform3D(m,[502,y,sign*Math.PI],at(yaw));
+   assert(Math.abs(q[0]-(sign>0?x:1004-x))<=3,`${yaw}/${y}: ${q}`);
+  }
+  const bottom=deform3D(m,[502,500,sign*Math.PI],at(yaw));
+  assert(bottom[1]>=535,`${yaw} posterior ends ${bottom}`);
+  for(const [y,x]of [[300,450],[420,505],[460,535],[500,565],[540,605]]){
+   const q=deform3D(m,[502,y,sign*88*Math.PI/180],at(yaw));
+   assert(Math.abs(q[0]-(sign>0?x:1004-x))<=3,`${yaw}/${y} front ${q}`);
+  }
+ }
+});
+test('all overlapping front hair layers share the profile field including pitch and roll',{timeout:60000},()=>{
+ const layers=rig.meshes.filter(m=>/^(hair-top$|bangs-|side-hair-|hairpin$)/.test(m.id)),groups=new Map();
+ for(const m of layers)for(const v of m.positions){
+  const key=v.slice(0,2).join(',');if(!groups.has(key))groups.set(key,[]);groups.get(key).push([m,v]);
+ }
+ const shared=[...groups.values()].filter(g=>g.length>1);assert(shared.length>0);
+ for(const yaw of [-90,-67.5,67.5,90])for(const [pitch,roll]of [[0,0],[15,10],[-15,-10]]){
+  const p={...at(yaw),ParamAngleY:pitch,ParamAngleZ:roll};
+  for(const group of shared){
+   const [m,v]=group[0],expected=deform3D(m,v,p);
+   for(const [layer,point]of group.slice(1))assert.deepEqual(deform3D(layer,point,p),expected,`${yaw}/${pitch}/${roll} ${m.id}/${layer.id} ${v}`);
+  }
+ }
+});
+test('profile bangs precede the forehead and the near front chart stays oriented',()=>{
+ for(const yaw of [-90,-67.5,67.5,90]){
+  const p=at(yaw),sign=yaw<0?1:-1;
+  for(const y of [260,300,340,380]){
+   const hair=deform3D(mesh('hair-top'),[502,y],p)[0];
+   const skin=mesh('face-skin').positions.filter(v=>Math.abs(v[1]-y)<12).map(v=>deform3D(mesh('face-skin'),v,p)[0]);
+   assert(skin.length);
+   const diff=sign>0?Math.min(...skin)-hair:hair-Math.max(...skin);
+   assert(diff>=15&&diff<=30,`${yaw}/${y}: forehead clearance ${diff}px`);
+  }
+  for(const m of [mesh('hair-top'),mesh('bangs-'+(sign>0?'right':'left')),mesh('side-hair-'+(sign>0?'right':'left')),mesh('hairpin')]){
+   let checked=0;
+   for(const ids of m.triangles){
+    const rest=ids.map(i=>m.positions[i]);
+    if(!rest.every(([x])=>sign*(x-502)>=0))continue;
+    const q=rest.map(v=>deform3D(m,v,p)),area=([a,b,c])=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+    assert(area(q)/area(rest)>0,`${yaw} ${m.id} inverted ${JSON.stringify(rest)}`);checked++;
+   }
+   if(m.id!=='hairpin'||sign>0)assert(checked>0);
   }
  }
 });
