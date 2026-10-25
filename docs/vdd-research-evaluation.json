@@ -1,0 +1,4319 @@
+{
+  "baseline": "6915b2751ef94ff80d3b86456befda5a9a958f0c",
+  "research": {
+    "papers": [
+      {
+        "title": "View-Dependent Deformation for 2.5-D Cartoon Models",
+        "authors": "Fukusato & Maejima",
+        "year": 2022,
+        "url": "https://doi.org/10.1109/MCG.2022.3174202",
+        "preprint": "https://arxiv.org/abs/2103.15472",
+        "idea": "Blend authored view-dependent 2D shapes",
+        "adaptation": "Reuse the existing trigonometric cardinal basis through yaw=0; this basis is a project choice, not a reproduction of the paper"
+      },
+      {
+        "title": "3D Character Reconstruction from Hand-drawn Model Sheets",
+        "authors": "Yoon et al. (POSTECH)",
+        "year": 2026,
+        "url": "https://doi.org/10.1111/cgf.70323",
+        "code": "https://github.com/hjyoon02/ModelSheetTo3D",
+        "idea": "Separate shared 3D geometry from per-view screen correspondence corrections",
+        "adaptation": "Keep authored 3D geometry and constrain the residual chart with discrete CR energy. This linear conformal regularizer is a project adaptation, not the full mesh/Jacobian reconstruction pipeline",
+        "codeReuse": "No code copied; official repository root has no license file in the inspected main tree"
+      },
+      {
+        "title": "Inverse Rig Optimization from Line Drawings",
+        "year": 2026,
+        "url": "https://arxiv.org/html/2609.00732v1",
+        "idea": "Screen-space contour-normal loss and controlled rig deviation (§3.5)",
+        "adaptation": "Retain the existing normal-distance loss, attenuate lower/steep silhouette samples as a visibility confidence heuristic; y/slope weights are project-specific, not learned occlusion or surface-normal estimation"
+      },
+      {
+        "title": "View-Dependent Deformation Fields for 2D Editing of 3D Models",
+        "authors": "El Mqirmi & Aigerman",
+        "year": 2025,
+        "url": "https://arxiv.org/html/2504.05544v1",
+        "idea": "Smooth, view-dependent 2D corrections lifted/composed over existing geometry",
+        "adaptation": "Smooth neutral-yaw interpolation and independent 60..88 degree support fade; keep the existing additive residual rather than introducing compositional 3D deformation layers"
+      }
+    ],
+    "applied": [
+      "C1 trigonometric yaw weights through zero; cardinal nine keys unchanged; smoothstep fade from 60 to 88 degrees isolates profile parts",
+      "Silhouette confidence: 1.25 at y<=220, 0.55 at 260..360, otherwise 0.85; divide by 1+0.5*slope^2",
+      "Area-weighted cell-center Cauchy-Riemann energy on (160*s,restY) pixels (lambda=0.5); mirror coupling between diagonal charts (lambda=0.2); weak adjacent-yaw chart prior (lambda=0.05) also predicts neutral LOPO",
+      "Separate pin, held-out normal-observation prediction, raster error, sampled Jacobians, neutral-yaw derivatives and actual WebGL sweep"
+    ],
+    "deferred": [
+      {
+        "item": "POSTECH full 3D mesh reconstruction and ray deformation pipeline",
+        "reason": "Would replace the approved authored 3D prior, topology and texture workflow; residual chart improvements meet the present scope"
+      },
+      {
+        "item": "Inverse Rig neural MLP surrogate",
+        "reason": "The existing linear normal-equation solve is directly differentiable and small; training a surrogate adds approximation error and dependencies"
+      },
+      {
+        "item": "Fixed contour vertex IDs at +/-90 degrees",
+        "reason": "Visible silhouette identities change with occlusion and dedicated profile parts; preserve the existing measured profile path"
+      },
+      {
+        "item": "Full nonlinear ARAP",
+        "reason": "Discrete CR penalizes shear/anisotropic scale with a single linear solve; it permits uniform scale and rotation, so it is documented as conformal rather than equated to ARAP"
+      }
+    ],
+    "limitations": [
+      "Twelve unobserved angle combinations have no independent reference drawings; their metrics measure orientation, conformal distortion and mirror consistency, not held-out image accuracy",
+      "LOPO evaluates normal-distance observations on a fixed prior-visible domain; it is separate from the actual raster acceptance metric",
+      "The unchanged shared 3D prior and face fit were calibrated from all original drawings. LOPO here withholds residual-chart observations, not every upstream drawing-derived asset",
+      "C1 is guaranteed through yaw=0; the existing clamp at +/-45 remains. Support fading is C1 at 60 and 88",
+      "Conformal energy at intermediate views can increase while raster error and symmetry improve; report measured before/after values without using this diagnostic as a fitted success claim"
+    ],
+    "selection": {
+      "discarded": "Uniform regularizer scale per pitch triplet: raster mean 37.359px exceeded main 37.281px",
+      "adopted": "Pose-specific budget multipliers with the same conformal, symmetry and view coefficients; no raster-driven hyperparameter grid search",
+      "units": "du in pixels; chart x=160*s; CR rows area weighted; symmetry/view sum squared chart-node displacement"
+    },
+    "reproduction": [
+      "python3 pipeline/capture_vdd_baselines.py",
+      "OPENBLAS_NUM_THREADS=1 python3 pipeline/fit_hair_solve.py",
+      "python3 pipeline/accept_hair_solve.py",
+      "node pipeline/vdd_benchmark.mjs",
+      "python3 pipeline/capture_vdd.py",
+      "python3 pipeline/probe_hair_only.py",
+      "python3 pipeline/update_vdd_evidence.py"
+    ]
+  },
+  "definitions": {
+    "hair": "local residual tangent chart (s + dx/h_cell, y + dy), 11x15 cells, nine derivative samples/cell; Jacobian excludes 3D silhouette foreshortening",
+    "conformalEnergy": "mean squared Cauchy-Riemann residual of pixel-coordinate Jacobian",
+    "face": "actual skin XY triangle Jacobian relative to rest mesh; identical before/after",
+    "mirrorRms": "RMS of mirrored screen displacements; original asymmetric artwork can have nonzero error",
+    "sweep": "219 numeric poses, yaw -90..90 step2.5 at pitch -15/0/15; sampled continuity and orientation, not a global injectivity proof"
+  },
+  "protectedPriorUnchanged": true,
+  "continuity": [
+    {
+      "epsilon": 0.01,
+      "before": 0.14700090244438427,
+      "after": 3.422142251009665e-05
+    },
+    {
+      "epsilon": 0.001,
+      "before": 0.14700090244484032,
+      "after": 3.422142335752328e-06
+    },
+    {
+      "epsilon": 0.0001,
+      "before": 0.1470009024480281,
+      "after": 3.4222156738096167e-07
+    }
+  ],
+  "crossValidation": {
+    "rasterCaptures": {
+      "main": {
+        "pass": true,
+        "definition": "actual raster RMS in pixels: head L/R spans at y80..400 step20, topY, and hairline columns step12; fixed reference/prior-visible domain",
+        "poses": [
+          {
+            "name": "left",
+            "priorRms": 40.25133802454221,
+            "correctedRms": 40.25133802454221,
+            "sampleCount": 47,
+            "pass": true
+          },
+          {
+            "name": "front",
+            "priorRms": 21.990564014148827,
+            "correctedRms": 21.990564014148827,
+            "sampleCount": 53,
+            "pass": true
+          },
+          {
+            "name": "right",
+            "priorRms": 31.506838163545225,
+            "correctedRms": 31.506838163545225,
+            "sampleCount": 47,
+            "pass": true
+          },
+          {
+            "name": "up-left",
+            "priorRms": 38.26024246977734,
+            "correctedRms": 35.66133437254934,
+            "sampleCount": 52,
+            "pass": true
+          },
+          {
+            "name": "up",
+            "priorRms": 42.165458919901795,
+            "correctedRms": 37.74402086570946,
+            "sampleCount": 54,
+            "pass": true
+          },
+          {
+            "name": "up-right",
+            "priorRms": 41.27697253358659,
+            "correctedRms": 35.321599406246946,
+            "sampleCount": 52,
+            "pass": true
+          },
+          {
+            "name": "down-left",
+            "priorRms": 52.651369086346335,
+            "correctedRms": 41.796274611842755,
+            "sampleCount": 42,
+            "pass": true
+          },
+          {
+            "name": "down",
+            "priorRms": 22.783566645521265,
+            "correctedRms": 18.68640731071166,
+            "sampleCount": 44,
+            "pass": true
+          },
+          {
+            "name": "down-right",
+            "priorRms": 60.58153143673005,
+            "correctedRms": 54.4775630700271,
+            "sampleCount": 41,
+            "pass": true
+          }
+        ]
+      },
+      "after": {
+        "pass": true,
+        "definition": "actual raster RMS in pixels: head L/R spans at y80..400 step20, topY, and hairline columns step12; fixed reference/prior-visible domain",
+        "poses": [
+          {
+            "name": "left",
+            "priorRms": 40.25133802454221,
+            "correctedRms": 40.25133802454221,
+            "sampleCount": 47,
+            "pass": true
+          },
+          {
+            "name": "front",
+            "priorRms": 21.990564014148827,
+            "correctedRms": 21.990564014148827,
+            "sampleCount": 53,
+            "pass": true
+          },
+          {
+            "name": "right",
+            "priorRms": 31.506838163545225,
+            "correctedRms": 31.506838163545225,
+            "sampleCount": 47,
+            "pass": true
+          },
+          {
+            "name": "up-left",
+            "priorRms": 38.26024246977734,
+            "correctedRms": 35.6931365951495,
+            "sampleCount": 52,
+            "pass": true
+          },
+          {
+            "name": "up",
+            "priorRms": 42.165458919901795,
+            "correctedRms": 36.44503725805121,
+            "sampleCount": 54,
+            "pass": true
+          },
+          {
+            "name": "up-right",
+            "priorRms": 41.27697253358659,
+            "correctedRms": 37.02519931905005,
+            "sampleCount": 52,
+            "pass": true
+          },
+          {
+            "name": "down-left",
+            "priorRms": 52.651369086346335,
+            "correctedRms": 42.70273772867273,
+            "sampleCount": 42,
+            "pass": true
+          },
+          {
+            "name": "down",
+            "priorRms": 22.783566645521265,
+            "correctedRms": 18.748333259252675,
+            "sampleCount": 44,
+            "pass": true
+          },
+          {
+            "name": "down-right",
+            "priorRms": 60.58153143673005,
+            "correctedRms": 50.652330021286936,
+            "sampleCount": 41,
+            "pass": true
+          }
+        ]
+      }
+    },
+    "hair": {
+      "definition": "weighted normal-distance RMS on identical baseline prior-visible observations; not raster RMS; independent baseline LOPO predicts zero residual",
+      "folds": [
+        {
+          "heldOut": "up-left",
+          "sampleCount": 60,
+          "before": {
+            "pinRms": 45.59119207867654,
+            "lopoRms": 49.79541661152987
+          },
+          "after": {
+            "pinRms": 45.637825896966554,
+            "lopoRms": 49.03461748905235
+          },
+          "predictionDuRms": 1.3550323373216249
+        },
+        {
+          "heldOut": "up",
+          "sampleCount": 64,
+          "before": {
+            "pinRms": 32.51291746881992,
+            "lopoRms": 37.413094019142
+          },
+          "after": {
+            "pinRms": 30.77410167963855,
+            "lopoRms": 36.89892904408627
+          },
+          "predictionDuRms": 0.5126243031093248
+        },
+        {
+          "heldOut": "up-right",
+          "sampleCount": 60,
+          "before": {
+            "pinRms": 41.74393432390599,
+            "lopoRms": 48.2369965142778
+          },
+          "after": {
+            "pinRms": 41.84762487905152,
+            "lopoRms": 47.04350979302379
+          },
+          "predictionDuRms": 1.423975996783056
+        },
+        {
+          "heldOut": "down-left",
+          "sampleCount": 45,
+          "before": {
+            "pinRms": 47.80696616655809,
+            "lopoRms": 52.16933191152046
+          },
+          "after": {
+            "pinRms": 48.23919301366104,
+            "lopoRms": 51.589497186416864
+          },
+          "predictionDuRms": 1.4197582170178225
+        },
+        {
+          "heldOut": "down",
+          "sampleCount": 49,
+          "before": {
+            "pinRms": 18.820349872816063,
+            "lopoRms": 24.38289319726152
+          },
+          "after": {
+            "pinRms": 19.077807544343603,
+            "lopoRms": 24.357818608624168
+          },
+          "predictionDuRms": 0.5494801717419431
+        },
+        {
+          "heldOut": "down-right",
+          "sampleCount": 44,
+          "before": {
+            "pinRms": 42.40455650031719,
+            "lopoRms": 45.78584370463176
+          },
+          "after": {
+            "pinRms": 40.43112406534668,
+            "lopoRms": 44.99899297425476
+          },
+          "predictionDuRms": 0.9731076763117688
+        }
+      ],
+      "mean": {
+        "before": {
+          "pinRms": 38.1466527351823,
+          "lopoRms": 42.963929326393895
+        },
+        "after": {
+          "pinRms": 37.667946179834665,
+          "lopoRms": 42.32056084924304
+        }
+      },
+      "heldOutPolicy": "remove all data terms for the held-out chart; fit other charts and predict via mirror/adjacent-yaw priors; budget selection uses predicted displacements only"
+    },
+    "face": {
+      "definition": "stored face solve: pin observation RMS and eight leave-one-pose-out silhouette/feature RMS; face files unchanged",
+      "before": {
+        "pin": [
+          {
+            "name": "left",
+            "observationRms": 3.643351919345553e-14
+          },
+          {
+            "name": "right",
+            "observationRms": 6.841663713290364e-14
+          },
+          {
+            "name": "up-left",
+            "observationRms": 5.39914913008821e-14
+          },
+          {
+            "name": "up",
+            "observationRms": 3.8407047480414813e-14
+          },
+          {
+            "name": "up-right",
+            "observationRms": 3.5804095705440894e-14
+          },
+          {
+            "name": "down-left",
+            "observationRms": 4.7410688707049024e-14
+          },
+          {
+            "name": "down",
+            "observationRms": 3.455618064403602e-14
+          },
+          {
+            "name": "down-right",
+            "observationRms": 4.2735417284581686e-14
+          }
+        ],
+        "lopo": [
+          {
+            "heldOut": "left",
+            "silhouetteRms": 27.049564268079,
+            "featureRms": 21.444418884549897
+          },
+          {
+            "heldOut": "right",
+            "silhouetteRms": 26.994964012107793,
+            "featureRms": 22.532705706463027
+          },
+          {
+            "heldOut": "up-left",
+            "silhouetteRms": 26.37482416166443,
+            "featureRms": 20.42954237316549
+          },
+          {
+            "heldOut": "up",
+            "silhouetteRms": 19.291083863772773,
+            "featureRms": 18.587198152345554
+          },
+          {
+            "heldOut": "up-right",
+            "silhouetteRms": 26.4163481159406,
+            "featureRms": 20.11210148321461
+          },
+          {
+            "heldOut": "down-left",
+            "silhouetteRms": 17.595090090015766,
+            "featureRms": 23.052374127851625
+          },
+          {
+            "heldOut": "down",
+            "silhouetteRms": 18.568744048734196,
+            "featureRms": 19.895449731011162
+          },
+          {
+            "heldOut": "down-right",
+            "silhouetteRms": 17.530483346924555,
+            "featureRms": 23.3561823174246
+          }
+        ]
+      },
+      "after": {
+        "pin": [
+          {
+            "name": "left",
+            "observationRms": 3.643351919345553e-14
+          },
+          {
+            "name": "right",
+            "observationRms": 6.841663713290364e-14
+          },
+          {
+            "name": "up-left",
+            "observationRms": 5.39914913008821e-14
+          },
+          {
+            "name": "up",
+            "observationRms": 3.8407047480414813e-14
+          },
+          {
+            "name": "up-right",
+            "observationRms": 3.5804095705440894e-14
+          },
+          {
+            "name": "down-left",
+            "observationRms": 4.7410688707049024e-14
+          },
+          {
+            "name": "down",
+            "observationRms": 3.455618064403602e-14
+          },
+          {
+            "name": "down-right",
+            "observationRms": 4.2735417284581686e-14
+          }
+        ],
+        "lopo": [
+          {
+            "heldOut": "left",
+            "silhouetteRms": 27.049564268079,
+            "featureRms": 21.444418884549897
+          },
+          {
+            "heldOut": "right",
+            "silhouetteRms": 26.994964012107793,
+            "featureRms": 22.532705706463027
+          },
+          {
+            "heldOut": "up-left",
+            "silhouetteRms": 26.37482416166443,
+            "featureRms": 20.42954237316549
+          },
+          {
+            "heldOut": "up",
+            "silhouetteRms": 19.291083863772773,
+            "featureRms": 18.587198152345554
+          },
+          {
+            "heldOut": "up-right",
+            "silhouetteRms": 26.4163481159406,
+            "featureRms": 20.11210148321461
+          },
+          {
+            "heldOut": "down-left",
+            "silhouetteRms": 17.595090090015766,
+            "featureRms": 23.052374127851625
+          },
+          {
+            "heldOut": "down",
+            "silhouetteRms": 18.568744048734196,
+            "featureRms": 19.895449731011162
+          },
+          {
+            "heldOut": "down-right",
+            "silhouetteRms": 17.530483346924555,
+            "featureRms": 23.3561823174246
+          }
+        ]
+      }
+    }
+  },
+  "keys": [
+    {
+      "name": "up-left",
+      "yaw": -45,
+      "pitch": 30,
+      "before": {
+        "minDetJ": 0.9029858238112592,
+        "conformalEnergy": 0.0012417398649564528,
+        "mirrorRms": 2.9539229265352613
+      },
+      "after": {
+        "minDetJ": 0.904408776398667,
+        "conformalEnergy": 0.001193382164684843,
+        "mirrorRms": 2.655399994341834
+      },
+      "duRms": 3.613912043418674,
+      "duMax": 13.75292065952004
+    },
+    {
+      "name": "up",
+      "yaw": 0,
+      "pitch": 30,
+      "before": {
+        "minDetJ": 0.7882334231289232,
+        "conformalEnergy": 0.0017300690271968594,
+        "mirrorRms": 8.947266931861741e-16
+      },
+      "after": {
+        "minDetJ": 0.7559698120489534,
+        "conformalEnergy": 0.003211182553687775,
+        "mirrorRms": 1.2345763122541711e-15
+      },
+      "duRms": 5.856879426731178,
+      "duMax": 18.29931975223855
+    },
+    {
+      "name": "up-right",
+      "yaw": 45,
+      "pitch": 30,
+      "before": {
+        "minDetJ": 0.6207664129096734,
+        "conformalEnergy": 0.002902969998186233,
+        "mirrorRms": 2.9539229265352613
+      },
+      "after": {
+        "minDetJ": 0.6303843433282114,
+        "conformalEnergy": 0.0027350964779039987,
+        "mirrorRms": 2.655399994341834
+      },
+      "duRms": 4.960066575514268,
+      "duMax": 16.715376509014483
+    },
+    {
+      "name": "down-left",
+      "yaw": -45,
+      "pitch": -30,
+      "before": {
+        "minDetJ": 0.9444360090861045,
+        "conformalEnergy": 0.0017304531809751004,
+        "mirrorRms": 2.3173913780627418
+      },
+      "after": {
+        "minDetJ": 0.9449635934446569,
+        "conformalEnergy": 0.001348454806541454,
+        "mirrorRms": 2.3774025425253793
+      },
+      "duRms": 4.349581856205976,
+      "duMax": 11.522191320542147
+    },
+    {
+      "name": "down",
+      "yaw": 0,
+      "pitch": -30,
+      "before": {
+        "minDetJ": 0.9640815423457368,
+        "conformalEnergy": 0.0018518455450159033,
+        "mirrorRms": 1.152385216766921e-15
+      },
+      "after": {
+        "minDetJ": 0.9725403225613971,
+        "conformalEnergy": 0.0015337700764652118,
+        "mirrorRms": 1.0006542727694219e-15
+      },
+      "duRms": 4.659405115961577,
+      "duMax": 12.93944891157757
+    },
+    {
+      "name": "down-right",
+      "yaw": 45,
+      "pitch": -30,
+      "before": {
+        "minDetJ": 0.9482256516846537,
+        "conformalEnergy": 0.0005274333430267006,
+        "mirrorRms": 2.3173913780627413
+      },
+      "after": {
+        "minDetJ": 0.9128382452632949,
+        "conformalEnergy": 0.0013131484561437143,
+        "mirrorRms": 2.3774025425253793
+      },
+      "duRms": 5.32303330998222,
+      "duMax": 16.253454512107588
+    }
+  ],
+  "intermediate": [
+    {
+      "yaw": -30,
+      "pitch": -20,
+      "before": {
+        "face": {
+          "minDetJ": 0.46190917749808075,
+          "conformalEnergy": 0.07758463671228376,
+          "mirrorRms": 1.7844472924305803
+        },
+        "hair": {
+          "minDetJ": 0.9858523858478422,
+          "conformalEnergy": 0.0003818818087549839,
+          "mirrorRms": 1.1586956890313707
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.46190917749808075,
+          "conformalEnergy": 0.07758463671228376,
+          "mirrorRms": 1.7844472924305803
+        },
+        "hair": {
+          "minDetJ": 0.9788185680235963,
+          "conformalEnergy": 0.00031881289903018815,
+          "mirrorRms": 1.1908626784275882
+        }
+      }
+    },
+    {
+      "yaw": -30,
+      "pitch": 20,
+      "before": {
+        "face": {
+          "minDetJ": 0.42596922870230264,
+          "conformalEnergy": 0.054008428795664455,
+          "mirrorRms": 1.6575214667314575
+        },
+        "hair": {
+          "minDetJ": 0.911704794031632,
+          "conformalEnergy": 0.0006640697518327682,
+          "mirrorRms": 1.4769614632676302
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.42596922870230264,
+          "conformalEnergy": 0.054008428795664455,
+          "mirrorRms": 1.6575214667314575
+        },
+        "hair": {
+          "minDetJ": 0.8945190761669788,
+          "conformalEnergy": 0.0010455635997163061,
+          "mirrorRms": 1.2993491608934116
+        }
+      }
+    },
+    {
+      "yaw": -22.5,
+      "pitch": -15,
+      "before": {
+        "face": {
+          "minDetJ": 0.5777675845285035,
+          "conformalEnergy": 0.0398751510197367,
+          "mirrorRms": 1.1589216027320117
+        },
+        "hair": {
+          "minDetJ": 0.9884918842616308,
+          "conformalEnergy": 0.00014065775384837294,
+          "mirrorRms": 0.5793478445156854
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.5777675845285035,
+          "conformalEnergy": 0.0398751510197367,
+          "mirrorRms": 1.1589216027320117
+        },
+        "hair": {
+          "minDetJ": 0.9831479975929113,
+          "conformalEnergy": 0.00018409234896937855,
+          "mirrorRms": 0.5956457556560975
+        }
+      }
+    },
+    {
+      "yaw": -22.5,
+      "pitch": 15,
+      "before": {
+        "face": {
+          "minDetJ": 0.5682484057911209,
+          "conformalEnergy": 0.02979954039547389,
+          "mirrorRms": 1.1629342955362045
+        },
+        "hair": {
+          "minDetJ": 0.9292823046242293,
+          "conformalEnergy": 0.00030849079145623087,
+          "mirrorRms": 0.7384807316338153
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.5682484057911209,
+          "conformalEnergy": 0.02979954039547389,
+          "mirrorRms": 1.1629342955362045
+        },
+        "hair": {
+          "minDetJ": 0.9146729257816677,
+          "conformalEnergy": 0.0005641162049719394,
+          "mirrorRms": 0.6440148162991194
+        }
+      }
+    },
+    {
+      "yaw": -15,
+      "pitch": -20,
+      "before": {
+        "face": {
+          "minDetJ": 0.5350550102676601,
+          "conformalEnergy": 0.04404148652168425,
+          "mirrorRms": 1.5113190539230854
+        },
+        "hair": {
+          "minDetJ": 0.979507883745869,
+          "conformalEnergy": 0.0004046428770131031,
+          "mirrorRms": 0.5793478445156856
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.5350550102676601,
+          "conformalEnergy": 0.04404148652168425,
+          "mirrorRms": 1.5113190539230854
+        },
+        "hair": {
+          "minDetJ": 0.9734772307925138,
+          "conformalEnergy": 0.0005863868211158043,
+          "mirrorRms": 0.5957443453182555
+        }
+      }
+    },
+    {
+      "yaw": -15,
+      "pitch": 20,
+      "before": {
+        "face": {
+          "minDetJ": 0.5042215821709093,
+          "conformalEnergy": 0.03251917673963918,
+          "mirrorRms": 1.6688384519278037
+        },
+        "hair": {
+          "minDetJ": 0.8764368006428244,
+          "conformalEnergy": 0.0007556314697524123,
+          "mirrorRms": 0.7384807316338152
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.5042215821709093,
+          "conformalEnergy": 0.03251917673963918,
+          "mirrorRms": 1.6688384519278037
+        },
+        "hair": {
+          "minDetJ": 0.8514788958988587,
+          "conformalEnergy": 0.0014840273340002757,
+          "mirrorRms": 0.6397328181753704
+        }
+      }
+    },
+    {
+      "yaw": 15,
+      "pitch": -20,
+      "before": {
+        "face": {
+          "minDetJ": 0.48899510679687175,
+          "conformalEnergy": 0.04231110269656907,
+          "mirrorRms": 1.269875467942383
+        },
+        "hair": {
+          "minDetJ": 0.9746567140682416,
+          "conformalEnergy": 0.0005069149686883024,
+          "mirrorRms": 0.5793478445156854
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.48899510679687175,
+          "conformalEnergy": 0.04231110269656907,
+          "mirrorRms": 1.269875467942383
+        },
+        "hair": {
+          "minDetJ": 0.9604732349120072,
+          "conformalEnergy": 0.0008155406336370366,
+          "mirrorRms": 0.5957443453182557
+        }
+      }
+    },
+    {
+      "yaw": 15,
+      "pitch": 20,
+      "before": {
+        "face": {
+          "minDetJ": 0.6112292225174362,
+          "conformalEnergy": 0.03239482155856153,
+          "mirrorRms": 1.6740076047848427
+        },
+        "hair": {
+          "minDetJ": 0.7991700935425217,
+          "conformalEnergy": 0.0011177445610815707,
+          "mirrorRms": 0.7384807316338152
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.6112292225174362,
+          "conformalEnergy": 0.03239482155856153,
+          "mirrorRms": 1.6740076047848427
+        },
+        "hair": {
+          "minDetJ": 0.7752277673047272,
+          "conformalEnergy": 0.001906604286724871,
+          "mirrorRms": 0.6397328181753706
+        }
+      }
+    },
+    {
+      "yaw": 22.5,
+      "pitch": -15,
+      "before": {
+        "face": {
+          "minDetJ": 0.5372641399163725,
+          "conformalEnergy": 0.03930749036958225,
+          "mirrorRms": 1.0026051011794064
+        },
+        "hair": {
+          "minDetJ": 0.9826844700958791,
+          "conformalEnergy": 0.00015419942975031895,
+          "mirrorRms": 0.5793478445156853
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.5372641399163725,
+          "conformalEnergy": 0.03930749036958225,
+          "mirrorRms": 1.0026051011794064
+        },
+        "hair": {
+          "minDetJ": 0.9698948112663539,
+          "conformalEnergy": 0.0003094399471043051,
+          "mirrorRms": 0.5956457556560976
+        }
+      }
+    },
+    {
+      "yaw": 22.5,
+      "pitch": 15,
+      "before": {
+        "face": {
+          "minDetJ": 0.6487118754663809,
+          "conformalEnergy": 0.029981525994906753,
+          "mirrorRms": 1.1666352973344158
+        },
+        "hair": {
+          "minDetJ": 0.8520315330784788,
+          "conformalEnergy": 0.0005414607787840037,
+          "mirrorRms": 0.7384807316338152
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.6487118754663809,
+          "conformalEnergy": 0.029981525994906753,
+          "mirrorRms": 1.1666352973344158
+        },
+        "hair": {
+          "minDetJ": 0.8383309713668805,
+          "conformalEnergy": 0.000830584472014444,
+          "mirrorRms": 0.6440148162991193
+        }
+      }
+    },
+    {
+      "yaw": 30,
+      "pitch": -20,
+      "before": {
+        "face": {
+          "minDetJ": 0.40879215506623445,
+          "conformalEnergy": 0.07527717391644231,
+          "mirrorRms": 1.3868698877188959
+        },
+        "hair": {
+          "minDetJ": 0.9733826326539798,
+          "conformalEnergy": 0.00025858768081501646,
+          "mirrorRms": 1.1586956890313707
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.40879215506623445,
+          "conformalEnergy": 0.07527717391644231,
+          "mirrorRms": 1.3868698877188959
+        },
+        "hair": {
+          "minDetJ": 0.9521659500292624,
+          "conformalEnergy": 0.00058521125488009,
+          "mirrorRms": 1.1908626784275878
+        }
+      }
+    },
+    {
+      "yaw": 30,
+      "pitch": 20,
+      "before": {
+        "face": {
+          "minDetJ": 0.5171159065497751,
+          "conformalEnergy": 0.05461777176548463,
+          "mirrorRms": 1.6579794895973246
+        },
+        "hair": {
+          "minDetJ": 0.7573747476998174,
+          "conformalEnergy": 0.0013376634931430266,
+          "mirrorRms": 1.4769614632676304
+        }
+      },
+      "after": {
+        "face": {
+          "minDetJ": 0.5171159065497751,
+          "conformalEnergy": 0.05461777176548463,
+          "mirrorRms": 1.6579794895973246
+        },
+        "hair": {
+          "minDetJ": 0.7432206960160008,
+          "conformalEnergy": 0.0017835093625945227,
+          "mirrorRms": 1.2993491608934116
+        }
+      }
+    }
+  ],
+  "sweep": [
+    {
+      "yaw": -90,
+      "pitch": -15,
+      "faceMinDetJ": 0.25580954740942946,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -87.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.2591945061314004,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9999742646309382,
+        "conformalEnergy": 3.0120655459455607e-10,
+        "mirrorRms": 0.001123612945458223
+      }
+    },
+    {
+      "yaw": -85,
+      "pitch": -15,
+      "faceMinDetJ": 0.26448305776396047,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9991291933742759,
+        "conformalEnergy": 3.447485438944162e-07,
+        "mirrorRms": 0.03801331507044502
+      }
+    },
+    {
+      "yaw": -82.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.2716651352484937,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9972597341789802,
+        "conformalEnergy": 3.4113375480707794e-06,
+        "mirrorRms": 0.11957678490642462
+      }
+    },
+    {
+      "yaw": -80,
+      "pitch": -15,
+      "faceMinDetJ": 0.2807270670923138,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9945966794448753,
+        "conformalEnergy": 1.3249698309056128e-05,
+        "mirrorRms": 0.23566089342817176
+      }
+    },
+    {
+      "yaw": -77.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.29165160339310586,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9913708909201023,
+        "conformalEnergy": 3.3749435370315955e-05,
+        "mirrorRms": 0.37611251161046017
+      }
+    },
+    {
+      "yaw": -75,
+      "pitch": -15,
+      "faceMinDetJ": 0.30441794867511046,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9878139178662636,
+        "conformalEnergy": 6.721367050083666e-05,
+        "mirrorRms": 0.5307785104280648
+      }
+    },
+    {
+      "yaw": -72.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.3190018014744899,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9841584020638912,
+        "conformalEnergy": 0.00011342446726978324,
+        "mirrorRms": 0.6895057608557595
+      }
+    },
+    {
+      "yaw": -70,
+      "pitch": -15,
+      "faceMinDetJ": 0.3302868417577166,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9806382696565694,
+        "conformalEnergy": 0.00016920013742468518,
+        "mirrorRms": 0.8421411338683187
+      }
+    },
+    {
+      "yaw": -67.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.33243200938572565,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9774887098351983,
+        "conformalEnergy": 0.000228444429069782,
+        "mirrorRms": 0.978531500440517
+      }
+    },
+    {
+      "yaw": -65,
+      "pitch": -15,
+      "faceMinDetJ": 0.33481159336382527,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9749459403605706,
+        "conformalEnergy": 0.00028268759665203453,
+        "mirrorRms": 1.0885237315471281
+      }
+    },
+    {
+      "yaw": -62.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.3374210640185276,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9732467599278262,
+        "conformalEnergy": 0.0003221193527447812,
+        "mirrorRms": 1.1619646981629286
+      }
+    },
+    {
+      "yaw": -60,
+      "pitch": -15,
+      "faceMinDetJ": 0.34025545407427826,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9726278873672408,
+        "conformalEnergy": 0.0003371137016353145,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": -57.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.34330936810848495,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9726278873672408,
+        "conformalEnergy": 0.0003371137016353145,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": -55,
+      "pitch": -15,
+      "faceMinDetJ": 0.34657699282209,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9726278873672408,
+        "conformalEnergy": 0.0003371137016353145,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": -52.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.3500521081058053,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9726278873672408,
+        "conformalEnergy": 0.0003371137016353145,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": -50,
+      "pitch": -15,
+      "faceMinDetJ": 0.3537280988802476,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9726278873672408,
+        "conformalEnergy": 0.0003371137016353145,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": -47.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.35759796768792584,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9726278873672408,
+        "conformalEnergy": 0.0003371137016353145,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": -45,
+      "pitch": -15,
+      "faceMinDetJ": 0.3616543480136623,
+      "before": {
+        "minDetJ": 0.9724430725132922,
+        "conformalEnergy": 0.0004326132952435078,
+        "mirrorRms": 1.1586956890313709
+      },
+      "after": {
+        "minDetJ": 0.9726278873672408,
+        "conformalEnergy": 0.0003371137016353145,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": -42.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.3906742290824933,
+      "before": {
+        "minDetJ": 0.9764101449564772,
+        "conformalEnergy": 0.00036984000428364887,
+        "mirrorRms": 1.0943237063074047
+      },
+      "after": {
+        "minDetJ": 0.9789153126090623,
+        "conformalEnergy": 0.00026683723241902795,
+        "mirrorRms": 1.123158309653187
+      }
+    },
+    {
+      "yaw": -40,
+      "pitch": -15,
+      "faceMinDetJ": 0.41878475815289207,
+      "before": {
+        "minDetJ": 0.9799170720342643,
+        "conformalEnergy": 0.00031465015991395554,
+        "mirrorRms": 1.029951723583441
+      },
+      "after": {
+        "minDetJ": 0.9841595100778038,
+        "conformalEnergy": 0.00021401747243921594,
+        "mirrorRms": 1.0574898581764425
+      }
+    },
+    {
+      "yaw": -37.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.4459418200800611,
+      "before": {
+        "minDetJ": 0.9834227380987226,
+        "conformalEnergy": 0.00026704376213376393,
+        "mirrorRms": 0.965579740859476
+      },
+      "after": {
+        "minDetJ": 0.9891875729466111,
+        "conformalEnergy": 0.0001768824208567466,
+        "mirrorRms": 0.9917146425010103
+      }
+    },
+    {
+      "yaw": -35,
+      "pitch": -15,
+      "faceMinDetJ": 0.47210496159261284,
+      "before": {
+        "minDetJ": 0.9869271431510229,
+        "conformalEnergy": 0.00022702081094432653,
+        "mirrorRms": 0.9012077581355112
+      },
+      "after": {
+        "minDetJ": 0.9888057732523018,
+        "conformalEnergy": 0.0001536416684112456,
+        "mirrorRms": 0.9258495542937231
+      }
+    },
+    {
+      "yaw": -32.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.4972373756855285,
+      "before": {
+        "minDetJ": 0.9904302871906854,
+        "conformalEnergy": 0.0001945813063448159,
+        "mirrorRms": 0.8368357754115453
+      },
+      "after": {
+        "minDetJ": 0.9872490879742661,
+        "conformalEnergy": 0.00014250396964457155,
+        "mirrorRms": 0.8599096985697249
+      }
+    },
+    {
+      "yaw": -30,
+      "pitch": -15,
+      "faceMinDetJ": 0.521305862962824,
+      "before": {
+        "minDetJ": 0.9905823654044238,
+        "conformalEnergy": 0.00016972524833573993,
+        "mirrorRms": 0.7724637926875813
+      },
+      "after": {
+        "minDetJ": 0.9859028458734976,
+        "conformalEnergy": 0.00014169462179143403,
+        "mirrorRms": 0.7939084522850584
+      }
+    },
+    {
+      "yaw": -27.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.5442807707939048,
+      "before": {
+        "minDetJ": 0.9899066017832975,
+        "conformalEnergy": 0.00015245263691638207,
+        "mirrorRms": 0.7080918099636154
+      },
+      "after": {
+        "minDetJ": 0.9847693550376132,
+        "conformalEnergy": 0.0001494725109415203,
+        "mirrorRms": 0.7278575339627731
+      }
+    },
+    {
+      "yaw": -25,
+      "pitch": -15,
+      "faceMinDetJ": 0.561331215804178,
+      "before": {
+        "minDetJ": 0.9892096290592893,
+        "conformalEnergy": 0.00014276347208734883,
+        "mirrorRms": 0.6437198272396502
+      },
+      "after": {
+        "minDetJ": 0.9838505515706804,
+        "conformalEnergy": 0.00016414668900212705,
+        "mirrorRms": 0.6617670840552548
+      }
+    },
+    {
+      "yaw": -22.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.5777675845285035,
+      "before": {
+        "minDetJ": 0.9884918842616308,
+        "conformalEnergy": 0.00014065775384837294,
+        "mirrorRms": 0.5793478445156854
+      },
+      "after": {
+        "minDetJ": 0.9831479975929113,
+        "conformalEnergy": 0.00018409234896937855,
+        "mirrorRms": 0.5956457556560975
+      }
+    },
+    {
+      "yaw": -20,
+      "pitch": -15,
+      "faceMinDetJ": 0.5936542284739341,
+      "before": {
+        "minDetJ": 0.9877742181402728,
+        "conformalEnergy": 0.00014613548219995418,
+        "mirrorRms": 0.5149758617917205
+      },
+      "after": {
+        "minDetJ": 0.9826628796918162,
+        "conformalEnergy": 0.00020776607101580572,
+        "mirrorRms": 0.5295008150856504
+      }
+    },
+    {
+      "yaw": -17.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6089778369296861,
+      "before": {
+        "minDetJ": 0.9870566306952785,
+        "conformalEnergy": 0.00015919665714091112,
+        "mirrorRms": 0.45060387906775556
+      },
+      "after": {
+        "minDetJ": 0.9823960078078608,
+        "conformalEnergy": 0.00023372021787741092,
+        "mirrorRms": 0.46333825178638277
+      }
+    },
+    {
+      "yaw": -15,
+      "pitch": -15,
+      "faceMinDetJ": 0.6237264817502255,
+      "before": {
+        "minDetJ": 0.9863391219266872,
+        "conformalEnergy": 0.00017984127867271538,
+        "mirrorRms": 0.3862318963437905
+      },
+      "after": {
+        "minDetJ": 0.9823478145603421,
+        "conformalEnergy": 0.00026061636494054287,
+        "mirrorRms": 0.39716289687883694
+      }
+    },
+    {
+      "yaw": -12.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6378895176559182,
+      "before": {
+        "minDetJ": 0.9856216918343659,
+        "conformalEnergy": 0.0002080693467939696,
+        "mirrorRms": 0.32185991361982513
+      },
+      "after": {
+        "minDetJ": 0.9825183549925272,
+        "conformalEnergy": 0.0002872376582245831,
+        "mirrorRms": 0.3309785496473791
+      }
+    },
+    {
+      "yaw": -10,
+      "pitch": -15,
+      "faceMinDetJ": 0.631675229337256,
+      "before": {
+        "minDetJ": 0.9849043404184495,
+        "conformalEnergy": 0.0002438808615057736,
+        "mirrorRms": 0.2574879308958603
+      },
+      "after": {
+        "minDetJ": 0.9829073067521367,
+        "conformalEnergy": 0.0003125000020776032,
+        "mirrorRms": 0.26478811114853995
+      }
+    },
+    {
+      "yaw": -7.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6252972677915494,
+      "before": {
+        "minDetJ": 0.9841870676787798,
+        "conformalEnergy": 0.00028727582280778743,
+        "mirrorRms": 0.1931159481718953
+      },
+      "after": {
+        "minDetJ": 0.983513970682277,
+        "conformalEnergy": 0.0003354619877658074,
+        "mirrorRms": 0.19859372406466155
+      }
+    },
+    {
+      "yaw": -5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6197094489784394,
+      "before": {
+        "minDetJ": 0.9834698736155605,
+        "conformalEnergy": 0.00033825423069991465,
+        "mirrorRms": 0.12874396544793018
+      },
+      "after": {
+        "minDetJ": 0.9843372718412263,
+        "conformalEnergy": 0.00035533348421152894,
+        "mirrorRms": 0.13239691786304617
+      }
+    },
+    {
+      "yaw": -2.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6149225507149823,
+      "before": {
+        "minDetJ": 0.9827527582286668,
+        "conformalEnergy": 0.0003968160851820938,
+        "mirrorRms": 0.06437198272396509
+      },
+      "after": {
+        "minDetJ": 0.9853757609415605,
+        "conformalEnergy": 0.0003714828227621702,
+        "mirrorRms": 0.06619875826689733
+      }
+    },
+    {
+      "yaw": 0,
+      "pitch": -15,
+      "faceMinDetJ": 0.6109451549673616,
+      "before": {
+        "minDetJ": 0.9820357215181191,
+        "conformalEnergy": 0.0004629613862542918,
+        "mirrorRms": 5.718312247840392e-16
+      },
+      "after": {
+        "minDetJ": 0.9862455384446659,
+        "conformalEnergy": 0.0003834425191158798,
+        "mirrorRms": 5.078245201180019e-16
+      }
+    },
+    {
+      "yaw": 2.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6077784070043639,
+      "before": {
+        "minDetJ": 0.9826505386924406,
+        "conformalEnergy": 0.0004145102620747778,
+        "mirrorRms": 0.06437198272396512
+      },
+      "after": {
+        "minDetJ": 0.9840820612181059,
+        "conformalEnergy": 0.00039091348707663933,
+        "mirrorRms": 0.06619875826689732
+      }
+    },
+    {
+      "yaw": 5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6054100549112928,
+      "before": {
+        "minDetJ": 0.9832653174967997,
+        "conformalEnergy": 0.00036959519792542075,
+        "mirrorRms": 0.1287439654479302
+      },
+      "after": {
+        "minDetJ": 0.9815922317634022,
+        "conformalEnergy": 0.00039376771084497674,
+        "mirrorRms": 0.13239691786304622
+      }
+    },
+    {
+      "yaw": 7.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.6038257497177769,
+      "before": {
+        "minDetJ": 0.9835160510718041,
+        "conformalEnergy": 0.00032821619380745326,
+        "mirrorRms": 0.1931159481718953
+      },
+      "after": {
+        "minDetJ": 0.9792999684278725,
+        "conformalEnergy": 0.0003920493547506731,
+        "mirrorRms": 0.1985937240646616
+      }
+    },
+    {
+      "yaw": 10,
+      "pitch": -15,
+      "faceMinDetJ": 0.6030096348019497,
+      "before": {
+        "minDetJ": 0.9833791371800904,
+        "conformalEnergy": 0.00029037324972046573,
+        "mirrorRms": 0.25748793089586025
+      },
+      "after": {
+        "minDetJ": 0.9772096207562913,
+        "conformalEnergy": 0.00038597430171837227,
+        "mirrorRms": 0.26478811114854
+      }
+    },
+    {
+      "yaw": 12.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.5992816103088731,
+      "before": {
+        "minDetJ": 0.9832422047429664,
+        "conformalEnergy": 0.0002560663656644156,
+        "mirrorRms": 0.3218599136198253
+      },
+      "after": {
+        "minDetJ": 0.9753251575077502,
+        "conformalEnergy": 0.00037592812420853396,
+        "mirrorRms": 0.3309785496473792
+      }
+    },
+    {
+      "yaw": 15,
+      "pitch": -15,
+      "faceMinDetJ": 0.5854521337052303,
+      "before": {
+        "minDetJ": 0.983105253760439,
+        "conformalEnergy": 0.0002252955416396318,
+        "mirrorRms": 0.38623189634379057
+      },
+      "after": {
+        "minDetJ": 0.9736501591797977,
+        "conformalEnergy": 0.0003624625038391291,
+        "mirrorRms": 0.3971628968788368
+      }
+    },
+    {
+      "yaw": 17.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.5705018741322567,
+      "before": {
+        "minDetJ": 0.9829682842324662,
+        "conformalEnergy": 0.00019806077764542409,
+        "mirrorRms": 0.4506038790677556
+      },
+      "after": {
+        "minDetJ": 0.9721824002499212,
+        "conformalEnergy": 0.0003462901281319585,
+        "mirrorRms": 0.46333825178638255
+      }
+    },
+    {
+      "yaw": 20,
+      "pitch": -15,
+      "faceMinDetJ": 0.5544364373909189,
+      "before": {
+        "minDetJ": 0.9828268841770864,
+        "conformalEnergy": 0.0001743620736827021,
+        "mirrorRms": 0.5149758617917206
+      },
+      "after": {
+        "minDetJ": 0.9709297040114782,
+        "conformalEnergy": 0.0003282781049746062,
+        "mirrorRms": 0.5295008150856502
+      }
+    },
+    {
+      "yaw": 22.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.5372641399163725,
+      "before": {
+        "minDetJ": 0.9826844700958791,
+        "conformalEnergy": 0.00015419942975031895,
+        "mirrorRms": 0.5793478445156853
+      },
+      "after": {
+        "minDetJ": 0.9698948112663539,
+        "conformalEnergy": 0.0003094399471043051,
+        "mirrorRms": 0.5956457556560976
+      }
+    },
+    {
+      "yaw": 25,
+      "pitch": -15,
+      "faceMinDetJ": 0.5189961907002569,
+      "before": {
+        "minDetJ": 0.9825420493107507,
+        "conformalEnergy": 0.00013757284584928634,
+        "mirrorRms": 0.6437198272396503
+      },
+      "after": {
+        "minDetJ": 0.9690797020124717,
+        "conformalEnergy": 0.0002909261903323443,
+        "mirrorRms": 0.6617670840552552
+      }
+    },
+    {
+      "yaw": 27.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.49964685834340195,
+      "before": {
+        "minDetJ": 0.9823996218217017,
+        "conformalEnergy": 0.00012448232197924451,
+        "mirrorRms": 0.7080918099636156
+      },
+      "after": {
+        "minDetJ": 0.9684859397080885,
+        "conformalEnergy": 0.0002740137200712491,
+        "mirrorRms": 0.7278575339627729
+      }
+    },
+    {
+      "yaw": 30,
+      "pitch": -15,
+      "faceMinDetJ": 0.479233621451428,
+      "before": {
+        "minDetJ": 0.9822571876287317,
+        "conformalEnergy": 0.00011492785814026491,
+        "mirrorRms": 0.7724637926875813
+      },
+      "after": {
+        "minDetJ": 0.9681146682055433,
+        "conformalEnergy": 0.0002600938910576972,
+        "mirrorRms": 0.7939084522850584
+      }
+    },
+    {
+      "yaw": 32.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.4577773007166509,
+      "before": {
+        "minDetJ": 0.9821147467318483,
+        "conformalEnergy": 0.00010890945433212553,
+        "mirrorRms": 0.8368357754115451
+      },
+      "after": {
+        "minDetJ": 0.9679666094704532,
+        "conformalEnergy": 0.00025065953479236314,
+        "mirrorRms": 0.8599096985697248
+      }
+    },
+    {
+      "yaw": 35,
+      "pitch": -15,
+      "faceMinDetJ": 0.4353021711833742,
+      "before": {
+        "minDetJ": 0.981958691557581,
+        "conformalEnergy": 0.00010642711055498557,
+        "mirrorRms": 0.9012077581355112
+      },
+      "after": {
+        "minDetJ": 0.9680420620914674,
+        "conformalEnergy": 0.0002472909581620399,
+        "mirrorRms": 0.9258495542937233
+      }
+    },
+    {
+      "yaw": 37.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.41183605335230256,
+      "before": {
+        "minDetJ": 0.9806765659145303,
+        "conformalEnergy": 0.00010748082680896813,
+        "mirrorRms": 0.9655797408594757
+      },
+      "after": {
+        "minDetJ": 0.9658945419974075,
+        "conformalEnergy": 0.0002516410448225266,
+        "mirrorRms": 0.9917146425010103
+      }
+    },
+    {
+      "yaw": 40,
+      "pitch": -15,
+      "faceMinDetJ": 0.3874103819537878,
+      "before": {
+        "minDetJ": 0.9785181999117037,
+        "conformalEnergy": 0.00011207060309392962,
+        "mirrorRms": 1.0299517235834412
+      },
+      "after": {
+        "minDetJ": 0.9627579960277389,
+        "conformalEnergy": 0.0002654195782000664,
+        "mirrorRms": 1.0574898581764425
+      }
+    },
+    {
+      "yaw": 42.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.36206025140253667,
+      "before": {
+        "minDetJ": 0.9763592885086633,
+        "conformalEnergy": 0.0001201964394096025,
+        "mirrorRms": 1.094323706307405
+      },
+      "after": {
+        "minDetJ": 0.9596573689173461,
+        "conformalEnergy": 0.00029037691131654665,
+        "mirrorRms": 1.123158309653187
+      }
+    },
+    {
+      "yaw": 45,
+      "pitch": -15,
+      "faceMinDetJ": 0.33582443713195215,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9565984670596243,
+        "conformalEnergy": 0.0003282871140360035,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": 47.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.3347424959527442,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9565984670596243,
+        "conformalEnergy": 0.0003282871140360035,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": 50,
+      "pitch": -15,
+      "faceMinDetJ": 0.3336424832939468,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9565984670596243,
+        "conformalEnergy": 0.0003282871140360035,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": 52.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.33252649309222126,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9565984670596243,
+        "conformalEnergy": 0.0003282871140360035,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": 55,
+      "pitch": -15,
+      "faceMinDetJ": 0.3313966496981405,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9565984670596243,
+        "conformalEnergy": 0.0003282871140360035,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": 57.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.33025510383312573,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9565984670596243,
+        "conformalEnergy": 0.0003282871140360035,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": 60,
+      "pitch": -15,
+      "faceMinDetJ": 0.3291040284944976,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9565984670596243,
+        "conformalEnergy": 0.0003282871140360035,
+        "mirrorRms": 1.1887012712626897
+      }
+    },
+    {
+      "yaw": 62.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.32794561481937273,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.957578608572143,
+        "conformalEnergy": 0.0003136853594933059,
+        "mirrorRms": 1.1619646981629286
+      }
+    },
+    {
+      "yaw": 65,
+      "pitch": -15,
+      "faceMinDetJ": 0.32678206791424985,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9602699622237093,
+        "conformalEnergy": 0.00027528603799986364,
+        "mirrorRms": 1.0885237315471283
+      }
+    },
+    {
+      "yaw": 67.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.32561560265684886,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.964298230585386,
+        "conformalEnergy": 0.0002224631095477595,
+        "mirrorRms": 0.9785315004405168
+      }
+    },
+    {
+      "yaw": 70,
+      "pitch": -15,
+      "faceMinDetJ": 0.3244484394799441,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9692890181859092,
+        "conformalEnergy": 0.00016477000056703663,
+        "mirrorRms": 0.8421411338683193
+      }
+    },
+    {
+      "yaw": 72.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.32328280014497157,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.974868642721443,
+        "conformalEnergy": 0.00011045469478233015,
+        "mirrorRms": 0.6895057608557595
+      }
+    },
+    {
+      "yaw": 75,
+      "pitch": -15,
+      "faceMinDetJ": 0.3221209035126613,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.980664684586357,
+        "conformalEnergy": 6.545382701870326e-05,
+        "mirrorRms": 0.530778510428065
+      }
+    },
+    {
+      "yaw": 77.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.32046309729260003,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9863062747225868,
+        "conformalEnergy": 3.286577995593344e-05,
+        "mirrorRms": 0.3761125116104603
+      }
+    },
+    {
+      "yaw": 80,
+      "pitch": -15,
+      "faceMinDetJ": 0.31918502556886175,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9914241207873007,
+        "conformalEnergy": 1.290278383413364e-05,
+        "mirrorRms": 0.2356608934281717
+      }
+    },
+    {
+      "yaw": 82.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.31867972633322095,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9956502716403266,
+        "conformalEnergy": 3.322019108763099e-06,
+        "mirrorRms": 0.1195767849064246
+      }
+    },
+    {
+      "yaw": 85,
+      "pitch": -15,
+      "faceMinDetJ": 0.31755478361507844,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9986176201499719,
+        "conformalEnergy": 3.357220545894195e-07,
+        "mirrorRms": 0.038013315070445
+      }
+    },
+    {
+      "yaw": 87.5,
+      "pitch": -15,
+      "faceMinDetJ": 0.31644448720457796,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 0.9999591443180913,
+        "conformalEnergy": 2.933201173874545e-10,
+        "mirrorRms": 0.001123612945458223
+      }
+    },
+    {
+      "yaw": 90,
+      "pitch": -15,
+      "faceMinDetJ": 0.3153509506141256,
+      "before": {
+        "minDetJ": 0.9741998317050227,
+        "conformalEnergy": 0.0001318583357566532,
+        "mirrorRms": 1.1586956890313707
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -90,
+      "pitch": 0,
+      "faceMinDetJ": 0.23256416122987578,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -87.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.23686505077346592,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -85,
+      "pitch": 0,
+      "faceMinDetJ": 0.24356636013820593,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -82.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.25265533300083187,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -80,
+      "pitch": 0,
+      "faceMinDetJ": 0.2641146679849405,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -77.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.2779225515950585,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -75,
+      "pitch": 0,
+      "faceMinDetJ": 0.29405269973995785,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -72.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.31247440776585433,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -70,
+      "pitch": 0,
+      "faceMinDetJ": 0.3331526089045199,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -67.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.3560479410247903,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -65,
+      "pitch": 0,
+      "faceMinDetJ": 0.3811168215607112,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -62.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.4046884972495106,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -60,
+      "pitch": 0,
+      "faceMinDetJ": 0.4074325820177857,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -57.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.4094567063885866,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -55,
+      "pitch": 0,
+      "faceMinDetJ": 0.4120698762854242,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -52.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.4152671173908781,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -50,
+      "pitch": 0,
+      "faceMinDetJ": 0.4190423435747353,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -47.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.42338836847949324,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -45,
+      "pitch": 0,
+      "faceMinDetJ": 0.42829691919968127,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -42.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.47101844614822613,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -40,
+      "pitch": 0,
+      "faceMinDetJ": 0.5128295619254857,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -37.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.5536506766961414,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -35,
+      "pitch": 0,
+      "faceMinDetJ": 0.5933940991623239,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -32.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.6319576692730574,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -30,
+      "pitch": 0,
+      "faceMinDetJ": 0.6693114736251113,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -27.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.7053844071287634,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -25,
+      "pitch": 0,
+      "faceMinDetJ": 0.7400826652951386,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -22.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.7733616635688918,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -20,
+      "pitch": 0,
+      "faceMinDetJ": 0.805168523961053,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -17.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.8306199369900975,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -15,
+      "pitch": 0,
+      "faceMinDetJ": 0.8556383016507696,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -12.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.8804608205494454,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -10,
+      "pitch": 0,
+      "faceMinDetJ": 0.9050402426105798,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -7.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.9293297795072542,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -5,
+      "pitch": 0,
+      "faceMinDetJ": 0.9532831947254813,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -2.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.97685489157796,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 0,
+      "pitch": 0,
+      "faceMinDetJ": 0.9999999999999932,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 2.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.9757812723318287,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 5,
+      "pitch": 0,
+      "faceMinDetJ": 0.9513688536336318,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 7.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.926809214331883,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 10,
+      "pitch": 0,
+      "faceMinDetJ": 0.9021491050958839,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 12.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.877435467845136,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 15,
+      "pitch": 0,
+      "faceMinDetJ": 0.8527153463928009,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 17.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.8280357968950514,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 20,
+      "pitch": 0,
+      "faceMinDetJ": 0.8034437982770614,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 22.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.7739768233063842,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 25,
+      "pitch": 0,
+      "faceMinDetJ": 0.7407620198658833,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 27.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.7061371338184775,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 30,
+      "pitch": 0,
+      "faceMinDetJ": 0.6701680756026462,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 32.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.6329233143650299,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 35,
+      "pitch": 0,
+      "faceMinDetJ": 0.5944580208727075,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 37.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.5548380621939047,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 40,
+      "pitch": 0,
+      "faceMinDetJ": 0.5141570428687682,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 42.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.47249240152970223,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 45,
+      "pitch": 0,
+      "faceMinDetJ": 0.4299234491895569,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 47.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.4260621715214776,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 50,
+      "pitch": 0,
+      "faceMinDetJ": 0.4222868635641167,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 52.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.4167745820477973,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 55,
+      "pitch": 0,
+      "faceMinDetJ": 0.41175668252662945,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 57.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.40724271685756513,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 60,
+      "pitch": 0,
+      "faceMinDetJ": 0.403241277630871,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 62.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.3956569613920911,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 65,
+      "pitch": 0,
+      "faceMinDetJ": 0.3872747583326626,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 67.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.37997412022329674,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 70,
+      "pitch": 0,
+      "faceMinDetJ": 0.37376894424374163,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 72.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.36867104229900644,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 75,
+      "pitch": 0,
+      "faceMinDetJ": 0.3575732140227071,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 77.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.34130622543366895,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 80,
+      "pitch": 0,
+      "faceMinDetJ": 0.32683423522094945,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 82.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.3141847916404286,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 85,
+      "pitch": 0,
+      "faceMinDetJ": 0.30338197362693853,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 87.5,
+      "pitch": 0,
+      "faceMinDetJ": 0.29444634495854377,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": 90,
+      "pitch": 0,
+      "faceMinDetJ": 0.28739491511228604,
+      "before": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -90,
+      "pitch": 15,
+      "faceMinDetJ": 0.3149464681265274,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    },
+    {
+      "yaw": -87.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.319244714681597,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9999547361450289,
+        "conformalEnergy": 2.665677250696077e-10,
+        "mirrorRms": 0.0012550006806347667
+      }
+    },
+    {
+      "yaw": -85,
+      "pitch": 15,
+      "faceMinDetJ": 0.32593990397359374,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9984687086144395,
+        "conformalEnergy": 3.0510237465002667e-07,
+        "mirrorRms": 0.042458336279791495
+      }
+    },
+    {
+      "yaw": -82.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.3350192913291688,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9951833968832543,
+        "conformalEnergy": 3.019032872169435e-06,
+        "mirrorRms": 0.1335592893017798
+      }
+    },
+    {
+      "yaw": -80,
+      "pitch": 15,
+      "faceMinDetJ": 0.34646559361846185,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9905083545293814,
+        "conformalEnergy": 1.1725979671525244e-05,
+        "mirrorRms": 0.26321749215050233
+      }
+    },
+    {
+      "yaw": -77.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.36025702215449534,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9848531136940297,
+        "conformalEnergy": 2.9868241815546654e-05,
+        "mirrorRms": 0.42009257722986004
+      }
+    },
+    {
+      "yaw": -75,
+      "pitch": 15,
+      "faceMinDetJ": 0.37636732416919655,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9786269939983555,
+        "conformalEnergy": 5.948408149060486e-05,
+        "mirrorRms": 0.5928441769437555
+      }
+    },
+    {
+      "yaw": -72.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.3914106116673646,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9722389773505795,
+        "conformalEnergy": 0.00010038062501022448,
+        "mirrorRms": 0.7701319236960897
+      }
+    },
+    {
+      "yaw": -70,
+      "pitch": 15,
+      "faceMinDetJ": 0.39330438372042553,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9660976486441439,
+        "conformalEnergy": 0.00014974207907098052,
+        "mirrorRms": 0.9406154498907645
+      }
+    },
+    {
+      "yaw": -67.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.3952781324304802,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9606112023473584,
+        "conformalEnergy": 0.00020217326227837636,
+        "mirrorRms": 1.0929543879316832
+      }
+    },
+    {
+      "yaw": -65,
+      "pitch": 15,
+      "faceMinDetJ": 0.39732810065470375,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9561875149815594,
+        "conformalEnergy": 0.000250178451947917,
+        "mirrorRms": 1.2158083702227471
+      }
+    },
+    {
+      "yaw": -62.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.39945038616206324,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9532342834933303,
+        "conformalEnergy": 0.000285075546173631,
+        "mirrorRms": 1.2978370291678574
+      }
+    },
+    {
+      "yaw": -60,
+      "pitch": 15,
+      "faceMinDetJ": 0.4016409490614643,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9521592295199447,
+        "conformalEnergy": 0.000298345541170951,
+        "mirrorRms": 1.3276999971709167
+      }
+    },
+    {
+      "yaw": -57.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.4038956194919197,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9521592295199447,
+        "conformalEnergy": 0.000298345541170951,
+        "mirrorRms": 1.3276999971709167
+      }
+    },
+    {
+      "yaw": -55,
+      "pitch": 15,
+      "faceMinDetJ": 0.4062101055601453,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9521592295199447,
+        "conformalEnergy": 0.000298345541170951,
+        "mirrorRms": 1.3276999971709167
+      }
+    },
+    {
+      "yaw": -52.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.4085800015103283,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9521592295199447,
+        "conformalEnergy": 0.000298345541170951,
+        "mirrorRms": 1.3276999971709167
+      }
+    },
+    {
+      "yaw": -50,
+      "pitch": 15,
+      "faceMinDetJ": 0.4110007961108508,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9521592295199447,
+        "conformalEnergy": 0.000298345541170951,
+        "mirrorRms": 1.3276999971709167
+      }
+    },
+    {
+      "yaw": -47.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.4134678812416073,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9521592295199447,
+        "conformalEnergy": 0.000298345541170951,
+        "mirrorRms": 1.3276999971709167
+      }
+    },
+    {
+      "yaw": -45,
+      "pitch": 15,
+      "faceMinDetJ": 0.4159765606658127,
+      "before": {
+        "minDetJ": 0.9514441115113037,
+        "conformalEnergy": 0.0003104349662388189,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9521592295199447,
+        "conformalEnergy": 0.000298345541170951,
+        "mirrorRms": 1.3276999971709167
+      }
+    },
+    {
+      "yaw": -42.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.433380214343766,
+      "before": {
+        "minDetJ": 0.952216286734339,
+        "conformalEnergy": 0.0003039981744666989,
+        "mirrorRms": 1.3949080486416503
+      },
+      "after": {
+        "minDetJ": 0.9504211097763171,
+        "conformalEnergy": 0.0003202018704754916,
+        "mirrorRms": 1.249146585601112
+      }
+    },
+    {
+      "yaw": -40,
+      "pitch": 15,
+      "faceMinDetJ": 0.4507226083636828,
+      "before": {
+        "minDetJ": 0.9529879848263465,
+        "conformalEnergy": 0.0002991165757828892,
+        "mirrorRms": 1.312854634015671
+      },
+      "after": {
+        "minDetJ": 0.9488196942074367,
+        "conformalEnergy": 0.0003449759294245416,
+        "mirrorRms": 1.1712473083981123
+      }
+    },
+    {
+      "yaw": -37.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.46797756276715385,
+      "before": {
+        "minDetJ": 0.952878263952866,
+        "conformalEnergy": 0.0002957901701863791,
+        "mirrorRms": 1.2308012193896904
+      },
+      "after": {
+        "minDetJ": 0.9453442300137792,
+        "conformalEnergy": 0.000372243850277418,
+        "mirrorRms": 1.0940093982526016
+      }
+    },
+    {
+      "yaw": -35,
+      "pitch": 15,
+      "faceMinDetJ": 0.4851191840784311,
+      "before": {
+        "minDetJ": 0.9489425218123417,
+        "conformalEnergy": 0.00029401895767810045,
+        "mirrorRms": 1.1487478047637116
+      },
+      "after": {
+        "minDetJ": 0.9400068190815397,
+        "conformalEnergy": 0.0004015751402214722,
+        "mirrorRms": 1.0174331689866747
+      }
+    },
+    {
+      "yaw": -32.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.5021219258181562,
+      "before": {
+        "minDetJ": 0.9450080125727632,
+        "conformalEnergy": 0.00029380293825769324,
+        "mirrorRms": 1.0666943901377324
+      },
+      "after": {
+        "minDetJ": 0.9347491523997962,
+        "conformalEnergy": 0.0004325363821270371,
+        "mirrorRms": 0.9415120668492427
+      }
+    },
+    {
+      "yaw": -30,
+      "pitch": 15,
+      "faceMinDetJ": 0.5189606457180753,
+      "before": {
+        "minDetJ": 0.9410747362341801,
+        "conformalEnergy": 0.0002951421119254331,
+        "mirrorRms": 0.9846409755117534
+      },
+      "after": {
+        "minDetJ": 0.9295809188846669,
+        "conformalEnergy": 0.0004646949332063692,
+        "mirrorRms": 0.8662327739289416
+      }
+    },
+    {
+      "yaw": -27.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.5356106591203411,
+      "before": {
+        "minDetJ": 0.9371426927965305,
+        "conformalEnergy": 0.0002980364786813091,
+        "mirrorRms": 0.902587560885774
+      },
+      "after": {
+        "minDetJ": 0.9245116257928998,
+        "conformalEnergy": 0.0004976225927128226,
+        "mirrorRms": 0.7915753659565787
+      }
+    },
+    {
+      "yaw": -25,
+      "pitch": 15,
+      "faceMinDetJ": 0.5520477880870248,
+      "before": {
+        "minDetJ": 0.9332118822598885,
+        "conformalEnergy": 0.00030248603852510816,
+        "mirrorRms": 0.8205341462597939
+      },
+      "after": {
+        "minDetJ": 0.9195505831412996,
+        "conformalEnergy": 0.000530899210019587,
+        "mirrorRms": 0.7175135261804871
+      }
+    },
+    {
+      "yaw": -22.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.5682484057911209,
+      "before": {
+        "minDetJ": 0.9292823046242293,
+        "conformalEnergy": 0.00030849079145623087,
+        "mirrorRms": 0.7384807316338153
+      },
+      "after": {
+        "minDetJ": 0.9146729257816677,
+        "conformalEnergy": 0.0005641162049719394,
+        "mirrorRms": 0.6440148162991194
+      }
+    },
+    {
+      "yaw": -20,
+      "pitch": 15,
+      "faceMinDetJ": 0.5841894758137673,
+      "before": {
+        "minDetJ": 0.9253539598897864,
+        "conformalEnergy": 0.0003160507374762857,
+        "mirrorRms": 0.6564273170078356
+      },
+      "after": {
+        "minDetJ": 0.9099058295125334,
+        "conformalEnergy": 0.0005968799730979174,
+        "mirrorRms": 0.5710410046338105
+      }
+    },
+    {
+      "yaw": -17.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.5998485860294054,
+      "before": {
+        "minDetJ": 0.9214268480563388,
+        "conformalEnergy": 0.00032516587658338995,
+        "mirrorRms": 0.5743739023818559
+      },
+      "after": {
+        "minDetJ": 0.9052774791087677,
+        "conformalEnergy": 0.000628815149203684,
+        "mirrorRms": 0.4985484508343387
+      }
+    },
+    {
+      "yaw": -15,
+      "pitch": 15,
+      "faceMinDetJ": 0.6152039768229182,
+      "before": {
+        "minDetJ": 0.9175009691236712,
+        "conformalEnergy": 0.000335836208778541,
+        "mirrorRms": 0.49232048775587683
+      },
+      "after": {
+        "minDetJ": 0.9007962540563471,
+        "conformalEnergy": 0.0006595677039993983,
+        "mirrorRms": 0.426488545450247
+      }
+    },
+    {
+      "yaw": -12.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.6302345634483509,
+      "before": {
+        "minDetJ": 0.9135763230921145,
+        "conformalEnergy": 0.0003480617340621088,
+        "mirrorRms": 0.41026707312989685
+      },
+      "after": {
+        "minDetJ": 0.8964702593671047,
+        "conformalEnergy": 0.0006888078497441987,
+        "mirrorRms": 0.3548082016965198
+      }
+    },
+    {
+      "yaw": -10,
+      "pitch": 15,
+      "faceMinDetJ": 0.6449199524081678,
+      "before": {
+        "minDetJ": 0.9096447943889716,
+        "conformalEnergy": 0.0003618424524333763,
+        "mirrorRms": 0.3282136585039178
+      },
+      "after": {
+        "minDetJ": 0.8923073133847894,
+        "conformalEnergy": 0.0007162327323775603,
+        "mirrorRms": 0.28345039572288816
+      }
+    },
+    {
+      "yaw": -7.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.6592404518028397,
+      "before": {
+        "minDetJ": 0.9056575323099706,
+        "conformalEnergy": 0.00037717836389285935,
+        "mirrorRms": 0.2461602438779385
+      },
+      "after": {
+        "minDetJ": 0.8883149360713334,
+        "conformalEnergy": 0.0007415688893097397,
+        "mirrorRms": 0.21235475069490647
+      }
+    },
+    {
+      "yaw": -5,
+      "pitch": 15,
+      "faceMinDetJ": 0.6731770756739904,
+      "before": {
+        "minDetJ": 0.9016720510464467,
+        "conformalEnergy": 0.0003940694684405089,
+        "mirrorRms": 0.16410682925195896
+      },
+      "after": {
+        "minDetJ": 0.8845003377726692,
+        "conformalEnergy": 0.0007645744538907027,
+        "mirrorRms": 0.1414581590475761
+      }
+    },
+    {
+      "yaw": -2.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.6867115424379973,
+      "before": {
+        "minDetJ": 0.8976883505984107,
+        "conformalEnergy": 0.00041251576607564456,
+        "mirrorRms": 0.08205341462597955
+      },
+      "after": {
+        "minDetJ": 0.880870408454892,
+        "conformalEnergy": 0.0007850410894991518,
+        "mirrorRms": 0.07069543641434402
+      }
+    },
+    {
+      "yaw": 0,
+      "pitch": 15,
+      "faceMinDetJ": 0.6928719749699613,
+      "before": {
+        "minDetJ": 0.8937064309654963,
+        "conformalEnergy": 0.0004325172567988627,
+        "mirrorRms": 4.541933189236068e-16
+      },
+      "after": {
+        "minDetJ": 0.8774317074142522,
+        "conformalEnergy": 0.0008027956384219132,
+        "mirrorRms": 6.200151693095703e-16
+      }
+    },
+    {
+      "yaw": 2.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.699703102159956,
+      "before": {
+        "minDetJ": 0.8890807303356777,
+        "conformalEnergy": 0.0004409016876972464,
+        "mirrorRms": 0.08205341462597958
+      },
+      "after": {
+        "minDetJ": 0.8724699973954999,
+        "conformalEnergy": 0.0008177014727889372,
+        "mirrorRms": 0.070695436414344
+      }
+    },
+    {
+      "yaw": 5,
+      "pitch": 15,
+      "faceMinDetJ": 0.7072658705016928,
+      "before": {
+        "minDetJ": 0.8844538188104955,
+        "conformalEnergy": 0.00045021621981534233,
+        "mirrorRms": 0.16410682925195896
+      },
+      "after": {
+        "minDetJ": 0.8676427555083903,
+        "conformalEnergy": 0.0008296595372638033,
+        "mirrorRms": 0.14145815904757617
+      }
+    },
+    {
+      "yaw": 7.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.7155454749041716,
+      "before": {
+        "minDetJ": 0.8798256963906178,
+        "conformalEnergy": 0.00046046085315235675,
+        "mirrorRms": 0.24616024387793825
+      },
+      "after": {
+        "minDetJ": 0.8629588623320456,
+        "conformalEnergy": 0.0008386090755209432,
+        "mirrorRms": 0.21235475069490656
+      }
+    },
+    {
+      "yaw": 10,
+      "pitch": 15,
+      "faceMinDetJ": 0.7245305345744978,
+      "before": {
+        "minDetJ": 0.8751963630760586,
+        "conformalEnergy": 0.0004716355877085481,
+        "mirrorRms": 0.3282136585039179
+      },
+      "after": {
+        "minDetJ": 0.8584269573327669,
+        "conformalEnergy": 0.0008445280350690791,
+        "mirrorRms": 0.28345039572288816
+      }
+    },
+    {
+      "yaw": 12.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.7168975579771758,
+      "before": {
+        "minDetJ": 0.8705658188668105,
+        "conformalEnergy": 0.0004837404234848213,
+        "mirrorRms": 0.410267073129897
+      },
+      "after": {
+        "minDetJ": 0.8540554245285513,
+        "conformalEnergy": 0.0008474331473821141,
+        "mirrorRms": 0.3548082016965197
+      }
+    },
+    {
+      "yaw": 15,
+      "pitch": 15,
+      "faceMinDetJ": 0.700411785999355,
+      "before": {
+        "minDetJ": 0.8659340637619837,
+        "conformalEnergy": 0.0004967753604803911,
+        "mirrorRms": 0.49232048775587645
+      },
+      "after": {
+        "minDetJ": 0.8498523783708073,
+        "conformalEnergy": 0.000847379682988795,
+        "mirrorRms": 0.426488545450247
+      }
+    },
+    {
+      "yaw": 17.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.6835301660237645,
+      "before": {
+        "minDetJ": 0.8613010977626937,
+        "conformalEnergy": 0.0005107403986951862,
+        "mirrorRms": 0.5743739023818557
+      },
+      "after": {
+        "minDetJ": 0.8458256498778229,
+        "conformalEnergy": 0.0008444608835170446,
+        "mirrorRms": 0.49854845083433885
+      }
+    },
+    {
+      "yaw": 20,
+      "pitch": 15,
+      "faceMinDetJ": 0.6662858020353462,
+      "before": {
+        "minDetJ": 0.8566669208678198,
+        "conformalEnergy": 0.0005256355381307307,
+        "mirrorRms": 0.6564273170078356
+      },
+      "after": {
+        "minDetJ": 0.8419827730183473,
+        "conformalEnergy": 0.0008388070753599674,
+        "mirrorRms": 0.5710410046338106
+      }
+    },
+    {
+      "yaw": 22.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.6487118754663809,
+      "before": {
+        "minDetJ": 0.8520315330784788,
+        "conformalEnergy": 0.0005414607787840037,
+        "mirrorRms": 0.7384807316338152
+      },
+      "after": {
+        "minDetJ": 0.8383309713668805,
+        "conformalEnergy": 0.000830584472014444,
+        "mirrorRms": 0.6440148162991193
+      }
+    },
+    {
+      "yaw": 25,
+      "pitch": 15,
+      "faceMinDetJ": 0.6308415411599467,
+      "before": {
+        "minDetJ": 0.8473949343944535,
+        "conformalEnergy": 0.0005582161206578992,
+        "mirrorRms": 0.8205341462597943
+      },
+      "after": {
+        "minDetJ": 0.8348771450510752,
+        "conformalEnergy": 0.0008199936746042878,
+        "mirrorRms": 0.7175135261804872
+      }
+    },
+    {
+      "yaw": 27.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.6127078268220643,
+      "before": {
+        "minDetJ": 0.8427571248152902,
+        "conformalEnergy": 0.0005759015637503886,
+        "mirrorRms": 0.9025875608857739
+      },
+      "after": {
+        "minDetJ": 0.8316278580099213,
+        "conformalEnergy": 0.0008072678824523229,
+        "mirrorRms": 0.7915753659565785
+      }
+    },
+    {
+      "yaw": 30,
+      "pitch": 15,
+      "faceMinDetJ": 0.594343536667788,
+      "before": {
+        "minDetJ": 0.8381181043412186,
+        "conformalEnergy": 0.0005945171080628307,
+        "mirrorRms": 0.9846409755117528
+      },
+      "after": {
+        "minDetJ": 0.8285893255739165,
+        "conformalEnergy": 0.0007926708278193961,
+        "mirrorRms": 0.866232773928941
+      }
+    },
+    {
+      "yaw": 32.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.5757811599356036,
+      "before": {
+        "minDetJ": 0.8334778729722312,
+        "conformalEnergy": 0.0006140627535945749,
+        "mirrorRms": 1.066694390137732
+      },
+      "after": {
+        "minDetJ": 0.8257674024100952,
+        "conformalEnergy": 0.0007764944510684292,
+        "mirrorRms": 0.9415120668492425
+      }
+    },
+    {
+      "yaw": 35,
+      "pitch": 15,
+      "faceMinDetJ": 0.5570527849069091,
+      "before": {
+        "minDetJ": 0.8288364307090083,
+        "conformalEnergy": 0.0006345385003455196,
+        "mirrorRms": 1.1487478047637112
+      },
+      "after": {
+        "minDetJ": 0.8231675708371896,
+        "conformalEnergy": 0.0007590563345729316,
+        "mirrorRms": 1.0174331689866747
+      }
+    },
+    {
+      "yaw": 37.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.538190019020739,
+      "before": {
+        "minDetJ": 0.8241937775493144,
+        "conformalEnergy": 0.0006559443483170304,
+        "mirrorRms": 1.2308012193896904
+      },
+      "after": {
+        "minDetJ": 0.820794929545746,
+        "conformalEnergy": 0.0007406969155360385,
+        "mirrorRms": 1.0940093982526011
+      }
+    },
+    {
+      "yaw": 40,
+      "pitch": 15,
+      "faceMinDetJ": 0.5192239156251196,
+      "before": {
+        "minDetJ": 0.8195499134953798,
+        "conformalEnergy": 0.0006782802975082081,
+        "mirrorRms": 1.3128546340156713
+      },
+      "after": {
+        "minDetJ": 0.8186541827591428,
+        "conformalEnergy": 0.0007217764996441423,
+        "mirrorRms": 1.1712473083981123
+      }
+    },
+    {
+      "yaw": 42.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.5001849078492284,
+      "before": {
+        "minDetJ": 0.8149048385471893,
+        "conformalEnergy": 0.0007015463479169869,
+        "mirrorRms": 1.39490804864165
+      },
+      "after": {
+        "minDetJ": 0.8167496298415481,
+        "conformalEnergy": 0.0007026720990412531,
+        "mirrorRms": 1.249146585601112
+      }
+    },
+    {
+      "yaw": 45,
+      "pitch": 15,
+      "faceMinDetJ": 0.4726631980880953,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.81508515541206,
+        "conformalEnergy": 0.0006837741194758503,
+        "mirrorRms": 1.327699997170917
+      }
+    },
+    {
+      "yaw": 47.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.47009842017253817,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.81508515541206,
+        "conformalEnergy": 0.0006837741194758503,
+        "mirrorRms": 1.327699997170917
+      }
+    },
+    {
+      "yaw": 50,
+      "pitch": 15,
+      "faceMinDetJ": 0.46168893942696987,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.81508515541206,
+        "conformalEnergy": 0.0006837741194758503,
+        "mirrorRms": 1.327699997170917
+      }
+    },
+    {
+      "yaw": 52.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.45330648366176934,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.81508515541206,
+        "conformalEnergy": 0.0006837741194758503,
+        "mirrorRms": 1.327699997170917
+      }
+    },
+    {
+      "yaw": 55,
+      "pitch": 15,
+      "faceMinDetJ": 0.4458742934062781,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.81508515541206,
+        "conformalEnergy": 0.0006837741194758503,
+        "mirrorRms": 1.327699997170917
+      }
+    },
+    {
+      "yaw": 57.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.439406516257027,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.81508515541206,
+        "conformalEnergy": 0.0006837741194758503,
+        "mirrorRms": 1.327699997170917
+      }
+    },
+    {
+      "yaw": 60,
+      "pitch": 15,
+      "faceMinDetJ": 0.4339154639954441,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.81508515541206,
+        "conformalEnergy": 0.0006837741194758503,
+        "mirrorRms": 1.327699997170917
+      }
+    },
+    {
+      "yaw": 62.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.4294115891515941,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.8192419545063959,
+        "conformalEnergy": 0.0006533607970268863,
+        "mirrorRms": 1.2978370291678571
+      }
+    },
+    {
+      "yaw": 65,
+      "pitch": 15,
+      "faceMinDetJ": 0.42444776190152295,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.8306605547902289,
+        "conformalEnergy": 0.0005733806177257255,
+        "mirrorRms": 1.2158083702227473
+      }
+    },
+    {
+      "yaw": 67.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.41567914505900877,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.8477636731504758,
+        "conformalEnergy": 0.0004633581713785712,
+        "mirrorRms": 1.0929543879316832
+      }
+    },
+    {
+      "yaw": 70,
+      "pitch": 15,
+      "faceMinDetJ": 0.4094850603720417,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.8689740849773961,
+        "conformalEnergy": 0.0003431918501721346,
+        "mirrorRms": 0.9406154498907648
+      }
+    },
+    {
+      "yaw": 72.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.4058772986328843,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.8927141401072943,
+        "conformalEnergy": 0.0002300609997703645,
+        "mirrorRms": 0.7701319236960894
+      }
+    },
+    {
+      "yaw": 75,
+      "pitch": 15,
+      "faceMinDetJ": 0.39723004448481025,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9174054349156194,
+        "conformalEnergy": 0.0001363307635984256,
+        "mirrorRms": 0.5928441769437554
+      }
+    },
+    {
+      "yaw": 77.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.3802485032656137,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9414686405525052,
+        "conformalEnergy": 6.845462032895172e-05,
+        "mirrorRms": 0.42009257722986004
+      }
+    },
+    {
+      "yaw": 80,
+      "pitch": 15,
+      "faceMinDetJ": 0.36525799153768496,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9633234873302304,
+        "conformalEnergy": 2.6874614560725278e-05,
+        "mirrorRms": 0.2632174921505022
+      }
+    },
+    {
+      "yaw": 82.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.3522870445921087,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9813889052545842,
+        "conformalEnergy": 6.91928069625309e-06,
+        "mirrorRms": 0.1335592893017798
+      }
+    },
+    {
+      "yaw": 85,
+      "pitch": 15,
+      "faceMinDetJ": 0.3413603533636408,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9940833207049625,
+        "conformalEnergy": 6.992600149401905e-07,
+        "mirrorRms": 0.042458336279791474
+      }
+    },
+    {
+      "yaw": 87.5,
+      "pitch": 15,
+      "faceMinDetJ": 0.33249871743002346,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 0.9998251092605028,
+        "conformalEnergy": 6.1094297161201e-10,
+        "mirrorRms": 0.0012550006806347665
+      }
+    },
+    {
+      "yaw": 90,
+      "pitch": 15,
+      "faceMinDetJ": 0.3257190054189528,
+      "before": {
+        "minDetJ": 0.8102585527036522,
+        "conformalEnergy": 0.0007257424995461176,
+        "mirrorRms": 1.4769614632676304
+      },
+      "after": {
+        "minDetJ": 1,
+        "conformalEnergy": 0,
+        "mirrorRms": 0
+      }
+    }
+  ],
+  "raster": {
+    "pass": true,
+    "definition": "actual raster RMS in pixels: head L/R spans at y80..400 step20, topY, and hairline columns step12; fixed reference/prior-visible domain",
+    "poses": [
+      {
+        "name": "left",
+        "priorRms": 40.25133802454221,
+        "correctedRms": 40.25133802454221,
+        "sampleCount": 47,
+        "pass": true
+      },
+      {
+        "name": "front",
+        "priorRms": 21.990564014148827,
+        "correctedRms": 21.990564014148827,
+        "sampleCount": 53,
+        "pass": true
+      },
+      {
+        "name": "right",
+        "priorRms": 31.506838163545225,
+        "correctedRms": 31.506838163545225,
+        "sampleCount": 47,
+        "pass": true
+      },
+      {
+        "name": "up-left",
+        "priorRms": 38.26024246977734,
+        "correctedRms": 35.6931365951495,
+        "sampleCount": 52,
+        "pass": true
+      },
+      {
+        "name": "up",
+        "priorRms": 42.165458919901795,
+        "correctedRms": 36.44503725805121,
+        "sampleCount": 54,
+        "pass": true
+      },
+      {
+        "name": "up-right",
+        "priorRms": 41.27697253358659,
+        "correctedRms": 37.02519931905005,
+        "sampleCount": 52,
+        "pass": true
+      },
+      {
+        "name": "down-left",
+        "priorRms": 52.651369086346335,
+        "correctedRms": 42.70273772867273,
+        "sampleCount": 42,
+        "pass": true
+      },
+      {
+        "name": "down",
+        "priorRms": 22.783566645521265,
+        "correctedRms": 18.748333259252675,
+        "sampleCount": 44,
+        "pass": true
+      },
+      {
+        "name": "down-right",
+        "priorRms": 60.58153143673005,
+        "correctedRms": 50.652330021286936,
+        "sampleCount": 41,
+        "pass": true
+      }
+    ],
+    "mainMean": 37.28119993951455,
+    "afterMean": 36.87779569691052,
+    "meanImproved": true
+  },
+  "sources": {
+    "bundle/hair-solve.mjs": "f62065ab0170eeafaa3d34386616976119a5af3c0b68719f4ffbb417c62a6bfb",
+    "bundle/hair-solve-data.mjs": "2b06271aa277f3727983abab6852459dd5e1136987bab6c38d5e7eef5e124c96",
+    "source/viewer/hair-solve.json": "a42b3020ce522fa47b8aa28d97c6cf9ca4c6250959a96f04b61c8733821fb693",
+    "pipeline/fit_hair_solve.py": "cd3c9b9c2dbd80d06df25f49d74b376e7fca6ab1d1671c211c51c0705c66834e",
+    "pipeline/vdd_benchmark.mjs": "8092deadadb0aed30c31cb055a306ac9d7788091e4d3cc0fb5d5bb8ba1b74844",
+    "pipeline/vdd_cross_validation.py": "7ef7c71c5f08bc7bc2b32cefaa106669d17ad18044e6089a2104662a05753f82",
+    "pipeline/vdd_research_notes.mjs": "32568eb21eb8bc7028ddb96d210365b20be9b3ca5b77771e1ffb1771e0b6c2a8",
+    "pipeline/capture_vdd.py": "a7affdf71bebbb11605af2fab0cda47178958d4ee00fcdcb390a23a14a76937e",
+    "pipeline/capture_vdd_baselines.py": "ce1ff7fca8ce0b1298e7599ea365e68bc8397a7c4433fc4433cac20b0fc33766"
+  },
+  "pass": true
+}

@@ -1,6 +1,6 @@
 {
   "baseline": "0b75a0211691965ca234ad9114073ba934568394",
-  "head": "baeff8a85d857e4fa93401738f56a6d5ab4f03d7",
+  "head": "6915b2751ef94ff80d3b86456befda5a9a958f0c",
   "registrationSha256": "74700a07d5d43807cc1357630033096ed533997a78f688813281510f723ab63b",
   "referenceMaskMethod": "Fable probe/analyze2: frozen SAM face, foreground-minus-skin/white/blue, filled head silhouette; diagnostic segmentation",
   "canvas": [
@@ -89,16 +89,16 @@
         ],
         "threshold": 85.65079999999999,
         "baselinePixels": 1311,
-        "pixels": 1302,
-        "reduction": 0.006864988558352381,
+        "pixels": 1305,
+        "reduction": 0.004576659038901587,
         "minimumReduction": 0.5,
         "pass": false
       },
       "posteriorVolume": {
         "baselineMeanAbsoluteDelta": 10.297029702970297,
-        "meanAbsoluteDelta": 10.178217821782178,
-        "improvement": 0.11881188118811892,
-        "upperMaximumOverhang": 110,
+        "meanAbsoluteDelta": 10.207920792079207,
+        "improvement": 0.08910891089109008,
+        "upperMaximumOverhang": 111,
         "upperMaximumIncrease": -2,
         "lowerRows": [
           340,
@@ -110,10 +110,10 @@
         ],
         "missingRows": 0,
         "upperWorstRow": {
-          "y": 187,
-          "reference": 741,
-          "baseline": 755,
-          "current": 753,
+          "y": 161,
+          "reference": 719,
+          "baseline": 731,
+          "current": 729,
           "increase": -2
         },
         "pass": false
@@ -163,8 +163,8 @@
       "hairlineMedianError": -4.0,
       "foreheadExposure": {
         "referenceArea": 13659,
-        "renderArea": 15073,
-        "ratioError": 0.1035214876638113,
+        "renderArea": 15068,
+        "ratioError": 0.1031554286550993,
         "region": [
           332,
           150,
@@ -190,7 +190,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 78
+        "maxAbsoluteError": 74
       },
       "beads": {
         "left": {
@@ -282,15 +282,15 @@
       },
       "hairline": {
         "sampleCount": 20,
-        "medianError": -4.0
+        "medianError": -8.5
       },
-      "hairlineMedianError": -4.0,
+      "hairlineMedianError": -8.5,
       "foreheadExposure": {
-        "referenceArea": 15663,
-        "renderArea": 14897,
-        "ratioError": -0.04890506288705865,
+        "referenceArea": 15626,
+        "renderArea": 14177,
+        "ratioError": -0.0927300652758224,
         "region": [
-          390,
+          391,
           150,
           625,
           358
@@ -305,11 +305,11 @@
         -56.64999999999998,
         28.46396599410957
       ],
-      "topY": 52,
+      "topY": 53,
       "topGate": {
         "kind": "target",
         "target": 48,
-        "error": 4,
+        "error": 5,
         "pass": true
       },
       "exterior": {
@@ -376,15 +376,15 @@
         ],
         "threshold": 73.74254399999982,
         "baselinePixels": 1457,
-        "pixels": 1398,
-        "reduction": 0.04049416609471512,
+        "pixels": 1430,
+        "reduction": 0.018531228551818768,
         "minimumReduction": 0.5,
         "pass": false
       },
       "posteriorVolume": {
         "baselineMeanAbsoluteDelta": 15.673267326732674,
-        "meanAbsoluteDelta": 15.603960396039604,
-        "improvement": 0.06930693069307026,
+        "meanAbsoluteDelta": 15.643564356435643,
+        "improvement": 0.029702970297030618,
         "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
@@ -435,7 +435,7 @@
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 329,
+          "y": 319,
           "shift": [
             -51,
             0
@@ -445,13 +445,13 @@
       },
       "hairline": {
         "sampleCount": 17,
-        "medianError": -31.0
+        "medianError": -33.0
       },
-      "hairlineMedianError": -31.0,
+      "hairlineMedianError": -33.0,
       "foreheadExposure": {
         "referenceArea": 11851,
-        "renderArea": 11514,
-        "ratioError": -0.02843641886760606,
+        "renderArea": 11546,
+        "ratioError": -0.025736224791156892,
         "region": [
           475,
           150,
@@ -932,7 +932,7 @@
         13.199999999999989,
         -15.172413768397632
       ],
-      "topY": 13,
+      "topY": 12,
       "topGate": {
         "kind": "cropped-bound",
         "maximum": 4,
@@ -940,7 +940,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 63
+        "maxAbsoluteError": 64
       },
       "beads": {
         "left": {
@@ -1025,7 +1025,7 @@
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 416,
+          "y": 411,
           "shift": [
             0,
             18
@@ -1035,13 +1035,13 @@
       },
       "hairline": {
         "sampleCount": 7,
-        "medianError": -5.0
+        "medianError": -7.0
       },
-      "hairlineMedianError": -5.0,
+      "hairlineMedianError": -7.0,
       "foreheadExposure": {
         "referenceArea": 3594,
-        "renderArea": 3907,
-        "ratioError": 0.08708959376739012,
+        "renderArea": 3923,
+        "ratioError": 0.09154145798553137,
         "region": [
           345,
           150,
@@ -1058,7 +1058,7 @@
         -3.3500000000000227,
         -43.20638479264176
       ],
-      "topY": 2,
+      "topY": 3,
       "topGate": {
         "kind": "cropped-bound",
         "maximum": 4,
@@ -1158,15 +1158,15 @@
       },
       "hairline": {
         "sampleCount": 12,
-        "medianError": 1.5
+        "medianError": -6.5
       },
-      "hairlineMedianError": 1.5,
+      "hairlineMedianError": -6.5,
       "foreheadExposure": {
-        "referenceArea": 11645,
-        "renderArea": 10947,
-        "ratioError": -0.0599398883641048,
+        "referenceArea": 11632,
+        "renderArea": 10887,
+        "ratioError": -0.06404745529573586,
         "region": [
-          459,
+          460,
           150,
           594,
           436
@@ -1181,7 +1181,7 @@
         -47.89999999999998,
         -50.99984972009395
       ],
-      "topY": 10,
+      "topY": 9,
       "topGate": {
         "kind": "cropped-bound",
         "maximum": 4,
@@ -1189,7 +1189,7 @@
       },
       "exterior": {
         "sampledRows": 23,
-        "maxAbsoluteError": 121
+        "maxAbsoluteError": 111
       },
       "beads": {
         "left": {
@@ -1274,27 +1274,27 @@
       "posteriorProjectionShift": {
         "sampledRows": 441,
         "worstRow": {
-          "y": 426,
+          "y": 459,
           "shift": [
-            -18,
+            -19,
             0
           ]
         },
-        "maximum": 18
+        "maximum": 19
       },
       "hairline": {
         "sampleCount": 6,
-        "medianError": -10.5
+        "medianError": -9.0
       },
-      "hairlineMedianError": -10.5,
+      "hairlineMedianError": -9.0,
       "foreheadExposure": {
-        "referenceArea": 6386,
-        "renderArea": 4608,
-        "ratioError": -0.2784215471343564,
+        "referenceArea": 6556,
+        "renderArea": 4606,
+        "ratioError": -0.29743746186699205,
         "region": [
           611,
           150,
-          681,
+          682,
           428
         ]
       }
@@ -1352,7 +1352,7 @@
       "pose": "up-left",
       "gate": "forehead exposure",
       "pass": true,
-      "value": 0.1035214876638113
+      "value": 0.1031554286550993
     },
     {
       "pose": "up-left",
@@ -1413,19 +1413,19 @@
       "pose": "up",
       "gate": "upper exterior",
       "pass": false,
-      "value": 78
+      "value": 74
     },
     {
       "pose": "up",
       "gate": "hairline median",
       "pass": true,
-      "value": -4.0
+      "value": -8.5
     },
     {
       "pose": "up",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.04890506288705865
+      "value": -0.0927300652758224
     },
     {
       "pose": "up",
@@ -1474,19 +1474,19 @@
       "pose": "up-right",
       "gate": "crown top",
       "pass": true,
-      "value": 52
+      "value": 53
     },
     {
       "pose": "up-right",
       "gate": "hairline median",
       "pass": false,
-      "value": -31.0
+      "value": -33.0
     },
     {
       "pose": "up-right",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.02843641886760606
+      "value": -0.025736224791156892
     },
     {
       "pose": "up-right",
@@ -1733,25 +1733,25 @@
       "pose": "down-left",
       "gate": "crown top",
       "pass": false,
-      "value": 13
+      "value": 12
     },
     {
       "pose": "down-left",
       "gate": "hairline median",
       "pass": true,
-      "value": -5.0
+      "value": -7.0
     },
     {
       "pose": "down-left",
       "gate": "forehead exposure",
       "pass": true,
-      "value": 0.08708959376739012
+      "value": 0.09154145798553137
     },
     {
       "pose": "down-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 63
+      "value": 64
     },
     {
       "pose": "down-left",
@@ -1809,7 +1809,7 @@
       "pose": "down",
       "gate": "crown top",
       "pass": true,
-      "value": 2
+      "value": 3
     },
     {
       "pose": "down",
@@ -1821,13 +1821,13 @@
       "pose": "down",
       "gate": "hairline median",
       "pass": true,
-      "value": 1.5
+      "value": -6.5
     },
     {
       "pose": "down",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.0599398883641048
+      "value": -0.06404745529573586
     },
     {
       "pose": "down",
@@ -1876,25 +1876,25 @@
       "pose": "down-right",
       "gate": "crown top",
       "pass": false,
-      "value": 10
+      "value": 9
     },
     {
       "pose": "down-right",
       "gate": "hairline median",
       "pass": true,
-      "value": -10.5
+      "value": -9.0
     },
     {
       "pose": "down-right",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.2784215471343564
+      "value": -0.29743746186699205
     },
     {
       "pose": "down-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 121
+      "value": 111
     },
     {
       "pose": "down-right",
@@ -1967,8 +1967,8 @@
         ],
         "threshold": 85.65079999999999,
         "baselinePixels": 1311,
-        "pixels": 1302,
-        "reduction": 0.006864988558352381,
+        "pixels": 1305,
+        "reduction": 0.004576659038901587,
         "minimumReduction": 0.5,
         "pass": false
       }
@@ -1979,9 +1979,9 @@
       "pass": false,
       "value": {
         "baselineMeanAbsoluteDelta": 10.297029702970297,
-        "meanAbsoluteDelta": 10.178217821782178,
-        "improvement": 0.11881188118811892,
-        "upperMaximumOverhang": 110,
+        "meanAbsoluteDelta": 10.207920792079207,
+        "improvement": 0.08910891089109008,
+        "upperMaximumOverhang": 111,
         "upperMaximumIncrease": -2,
         "lowerRows": [
           340,
@@ -1993,10 +1993,10 @@
         ],
         "missingRows": 0,
         "upperWorstRow": {
-          "y": 187,
-          "reference": 741,
-          "baseline": 755,
-          "current": 753,
+          "y": 161,
+          "reference": 719,
+          "baseline": 731,
+          "current": 729,
           "increase": -2
         },
         "pass": false
@@ -2008,7 +2008,7 @@
       "pass": true,
       "value": {
         "maximum": 16,
-        "value": 10.178217821782178,
+        "value": 10.207920792079207,
         "pass": true
       }
     },
@@ -2034,13 +2034,13 @@
       "pose": "up-left",
       "gate": "forehead exposure",
       "pass": true,
-      "value": 0.1035214876638113
+      "value": 0.1031554286550993
     },
     {
       "pose": "up-left",
       "gate": "upper diagonal forehead exposure",
       "pass": true,
-      "value": 0.1035214876638113
+      "value": 0.1031554286550993
     },
     {
       "pose": "up-left",
@@ -2125,19 +2125,19 @@
       "pose": "up",
       "gate": "upper exterior",
       "pass": false,
-      "value": 78
+      "value": 74
     },
     {
       "pose": "up",
       "gate": "hairline median",
       "pass": true,
-      "value": -4.0
+      "value": -8.5
     },
     {
       "pose": "up",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.04890506288705865
+      "value": -0.0927300652758224
     },
     {
       "pose": "up",
@@ -2213,8 +2213,8 @@
         ],
         "threshold": 73.74254399999982,
         "baselinePixels": 1457,
-        "pixels": 1398,
-        "reduction": 0.04049416609471512,
+        "pixels": 1430,
+        "reduction": 0.018531228551818768,
         "minimumReduction": 0.5,
         "pass": false
       }
@@ -2225,8 +2225,8 @@
       "pass": false,
       "value": {
         "baselineMeanAbsoluteDelta": 15.673267326732674,
-        "meanAbsoluteDelta": 15.603960396039604,
-        "improvement": 0.06930693069307026,
+        "meanAbsoluteDelta": 15.643564356435643,
+        "improvement": 0.029702970297030618,
         "upperMaximumOverhang": -19,
         "upperMaximumIncrease": 0,
         "lowerRows": [
@@ -2254,7 +2254,7 @@
       "pass": true,
       "value": {
         "maximum": 20,
-        "value": 15.603960396039604,
+        "value": 15.643564356435643,
         "pass": true
       }
     },
@@ -2262,31 +2262,31 @@
       "pose": "up-right",
       "gate": "crown top",
       "pass": true,
-      "value": 52
+      "value": 53
     },
     {
       "pose": "up-right",
       "gate": "approved crown top",
       "pass": true,
-      "value": 52
+      "value": 53
     },
     {
       "pose": "up-right",
       "gate": "hairline median",
       "pass": false,
-      "value": -31.0
+      "value": -33.0
     },
     {
       "pose": "up-right",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.02843641886760606
+      "value": -0.025736224791156892
     },
     {
       "pose": "up-right",
       "gate": "upper diagonal forehead exposure",
       "pass": true,
-      "value": -0.02843641886760606
+      "value": -0.025736224791156892
     },
     {
       "pose": "up-right",
@@ -2643,31 +2643,31 @@
       "pose": "down-left",
       "gate": "crown top",
       "pass": false,
-      "value": 13
+      "value": 12
     },
     {
       "pose": "down-left",
       "gate": "approved crown top",
       "pass": true,
-      "value": 13
+      "value": 12
     },
     {
       "pose": "down-left",
       "gate": "hairline median",
       "pass": true,
-      "value": -5.0
+      "value": -7.0
     },
     {
       "pose": "down-left",
       "gate": "forehead exposure",
       "pass": true,
-      "value": 0.08708959376739012
+      "value": 0.09154145798553137
     },
     {
       "pose": "down-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 63
+      "value": 64
     },
     {
       "pose": "down-left",
@@ -2743,7 +2743,7 @@
       "pose": "down",
       "gate": "crown top",
       "pass": true,
-      "value": 2
+      "value": 3
     },
     {
       "pose": "down",
@@ -2755,13 +2755,13 @@
       "pose": "down",
       "gate": "hairline median",
       "pass": true,
-      "value": 1.5
+      "value": -6.5
     },
     {
       "pose": "down",
       "gate": "forehead exposure",
       "pass": true,
-      "value": -0.0599398883641048
+      "value": -0.06404745529573586
     },
     {
       "pose": "down",
@@ -2828,31 +2828,31 @@
       "pose": "down-right",
       "gate": "crown top",
       "pass": false,
-      "value": 10
+      "value": 9
     },
     {
       "pose": "down-right",
       "gate": "approved crown top",
       "pass": true,
-      "value": 10
+      "value": 9
     },
     {
       "pose": "down-right",
       "gate": "hairline median",
       "pass": true,
-      "value": -10.5
+      "value": -9.0
     },
     {
       "pose": "down-right",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.2784215471343564
+      "value": -0.29743746186699205
     },
     {
       "pose": "down-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 121
+      "value": 111
     },
     {
       "pose": "down-right",
@@ -2898,8 +2898,8 @@
     "bundle/hair-shell.mjs": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
     "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
     "bundle/dome-data.mjs": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
-    "bundle/hair-solve.mjs": "5257a448ea1b6cc77e776d39027db6e09247ba53d64362b828b7bf5604f85acf",
-    "bundle/hair-solve-data.mjs": "7ba742fe4e9fa173804b8904865596d38c22f97a3fda8cf047b68b7e3663fb1d",
+    "bundle/hair-solve.mjs": "f62065ab0170eeafaa3d34386616976119a5af3c0b68719f4ffbb417c62a6bfb",
+    "bundle/hair-solve-data.mjs": "2b06271aa277f3727983abab6852459dd5e1136987bab6c38d5e7eef5e124c96",
     "bundle/stereo-attachments.mjs": "afa1e3790e6e4014b1c0181e9c9c1a0279c31ec6040c7b22828536b1125a52aa",
     "bundle/rig.mjs": "7623869dc6985c01f8dd17c829c2323826c1d971d16e13eb9d4d18862538b471",
     "bundle/renderer.mjs": "92eba85dd3ec45bc4d85ab0727b12d152c86472bcf3de071786112b88055d024",
@@ -2911,32 +2911,32 @@
     "poses": [
       {
         "name": "up-left",
-        "minDet": 0.9029858238112592,
+        "minDet": 0.904408776398667,
         "reversedCells": 0
       },
       {
         "name": "up",
-        "minDet": 0.7882334231289232,
+        "minDet": 0.7559698120489534,
         "reversedCells": 0
       },
       {
         "name": "up-right",
-        "minDet": 0.6207664129096734,
+        "minDet": 0.6303843433282114,
         "reversedCells": 0
       },
       {
         "name": "down-left",
-        "minDet": 0.9444360090861045,
+        "minDet": 0.9449635934446569,
         "reversedCells": 0
       },
       {
         "name": "down",
-        "minDet": 0.9640815423457368,
+        "minDet": 0.9725403225613971,
         "reversedCells": 0
       },
       {
         "name": "down-right",
-        "minDet": 0.9482256516846537,
+        "minDet": 0.9128382452632949,
         "reversedCells": 0
       }
     ]
@@ -2950,21 +2950,21 @@
       {
         "name": "up-left",
         "priorRms": 38.26024246977734,
-        "correctedRms": 35.66133437254934,
+        "correctedRms": 35.6931365951495,
         "sampleCount": 52,
         "pass": true
       },
       {
         "name": "up",
         "priorRms": 42.165458919901795,
-        "correctedRms": 37.74402086570946,
+        "correctedRms": 36.44503725805121,
         "sampleCount": 54,
         "pass": true
       },
       {
         "name": "up-right",
         "priorRms": 41.27697253358659,
-        "correctedRms": 35.321599406246946,
+        "correctedRms": 37.02519931905005,
         "sampleCount": 52,
         "pass": true
       },
@@ -2992,21 +2992,21 @@
       {
         "name": "down-left",
         "priorRms": 52.651369086346335,
-        "correctedRms": 41.796274611842755,
+        "correctedRms": 42.70273772867273,
         "sampleCount": 42,
         "pass": true
       },
       {
         "name": "down",
         "priorRms": 22.783566645521265,
-        "correctedRms": 18.68640731071166,
+        "correctedRms": 18.748333259252675,
         "sampleCount": 44,
         "pass": true
       },
       {
         "name": "down-right",
         "priorRms": 60.58153143673005,
-        "correctedRms": 54.4775630700271,
+        "correctedRms": 50.652330021286936,
         "sampleCount": 41,
         "pass": true
       }
@@ -3593,13 +3593,13 @@
       "pose": "up",
       "gate": "upper exterior",
       "pass": false,
-      "value": 78
+      "value": 74
     },
     {
       "pose": "up-right",
       "gate": "hairline median",
       "pass": false,
-      "value": -31.0
+      "value": -33.0
     },
     {
       "pose": "up-right",
@@ -3611,13 +3611,13 @@
       "pose": "down-left",
       "gate": "crown top",
       "pass": false,
-      "value": 13
+      "value": 12
     },
     {
       "pose": "down-left",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 63
+      "value": 64
     },
     {
       "pose": "down-left",
@@ -3638,19 +3638,19 @@
       "pose": "down-right",
       "gate": "crown top",
       "pass": false,
-      "value": 10
+      "value": 9
     },
     {
       "pose": "down-right",
       "gate": "forehead exposure",
       "pass": false,
-      "value": -0.2784215471343564
+      "value": -0.29743746186699205
     },
     {
       "pose": "down-right",
       "gate": "posterior exterior",
       "pass": false,
-      "value": 121
+      "value": 111
     },
     {
       "pose": "down-right",
