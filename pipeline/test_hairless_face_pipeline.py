@@ -16,6 +16,22 @@ import fit_outline as fit
 import verify_hairless_face as verify
 
 
+class AngleDomainGateTest(unittest.TestCase):
+    def test_only_approved_angle_bounds_are_exempt_from_rig_protection(self):
+        old=dict(parameters=[dict(id='ParamAngleX',min=-50,max=50,default=0)],meshes=[dict(id='face-skin')],
+                 deformers=[dict(id='WarpHead',keyforms=dict(ParamAngleX=[dict(value=v,output=v) for v in [-50,0,50]]))])
+        current=copy.deepcopy(old);current['parameters'][0].update(min=-90,max=90)
+        current['deformers'][0]['keyforms']['ParamAngleX']=[dict(value=v,output=v) for v in [-90,-50,0,50,90]]
+        self.assertTrue(verify.angle_domain_only(old,current))
+        for target,key,value in [(current['meshes'][0],'id','changed'),(current['parameters'][0],'max',91),
+                                 (current['parameters'][0],'default',1)]:
+            saved=target[key];target[key]=value
+            self.assertFalse(verify.angle_domain_only(old,current))
+            target[key]=saved
+        current['deformers'][0]['keyforms']['ParamAngleX'][0]['output']=-89
+        self.assertFalse(verify.angle_domain_only(old,current))
+
+
 class DiagonalJawTest(unittest.TestCase):
     def pose(self, kind, measured):
         rows=[[450,450,300,450,700],[480,480,310,480,690],

@@ -126,11 +126,27 @@ def protected_changes():
     # All non-face runtime/artwork/mesh/depth inputs stay byte identical.
     face_modules={'face-features.mjs','face-outline.mjs','face-prior.mjs','face-feature-prior.mjs','face-contour.mjs','face-solve.mjs','face-solve-data.mjs','feature-data.mjs','outline-data.mjs','index.html'}
     forbidden=['hair','dome','cranium','stereo-attachments','side-strands','bead','tail','neck','ear-','fit_depth']
-    return [p for p in paths if (p.startswith('bundle/') and Path(p).name not in face_modules)
+    return [p for p in paths if (p.startswith('bundle/') and Path(p).name not in face_modules and not approved_angle_domain(p))
             or (p.startswith(('source/','parts/','sam3_masks/','pipeline/'))
                 # Face-scoped validation may inspect protected hair; its runtime
                 # geometry and renderer still cannot change in this face task.
-                and p not in {'pipeline/test_hair_pixels.py','pipeline/test_hair_r15.mjs','pipeline/verify_face_solve_hair.py'} and 'hairless' not in p and any(word in p for word in forbidden))]
+                and p not in {'pipeline/test_hair_pixels.py','pipeline/test_hair_r15.mjs','pipeline/verify_face_solve_hair.py','pipeline/test_hair_texture_budget.mjs'} and 'hairless' not in p and any(word in p for word in forbidden))]
+
+def angle_domain_only(previous,current):
+    """D2 permits AngleX bounds and pass-through keys in the protected rig."""
+    expected=json.loads(json.dumps(previous))
+    angle=next(p for p in expected['parameters'] if p['id']=='ParamAngleX')
+    angle.update(min=-90,max=90)
+    for deformer in expected['deformers']:
+        if deformer['id'] in ['WarpNeck','WarpHead']:
+            keys=deformer['keyforms']['ParamAngleX']
+            deformer['keyforms']['ParamAngleX']=[dict(value=-90,output=-90),*keys,dict(value=90,output=90)]
+    return expected==current
+
+def approved_angle_domain(path):
+    if path!='bundle/assets/seosoyoung-rig.json':return False
+    previous=json.loads(subprocess.check_output(['git','-C',str(ROOT),'show','origin/main:'+path],text=True,timeout=60))
+    return angle_domain_only(previous,json.loads((ROOT/path).read_text()))
 
 def self_test():
     """Every gate must reject its own injected violation, before trusting it."""

@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import json
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -36,6 +37,23 @@ def assert_solution(data):
         assert all(np.isfinite(p[k]) and p[k] > 0 for k in ['silhouetteRms', 'featureRms'])
 
 
+def assert_family45(data):
+    family = data['family45']
+    n = len(data['points'])
+    for side in ['Left', 'Right']:
+        assert np.shape(family['Z'+side]) == (n,)
+        assert np.isfinite(family['Z'+side]).all()
+    assert [p['name'] for p in family['poses']] == ['left67', 'left90', 'right67', 'right90']
+    for p in family['poses']:
+        assert np.shape(p['du']) == (n, 2)
+        assert np.isfinite(p['du']).all()
+        s = p['stats']
+        threshold = .35 if abs(p['yaw']) == 67.5 else .22
+        assert s['reversedTriangles'] == 0 and s['minDetJ'] >= threshold
+        assert s['explained3D'] >= .90
+        assert s['rms'] < 1e-6 and s['observationRms'] < 1e-6
+
+
 class FaceSolveTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -43,6 +61,26 @@ class FaceSolveTest(unittest.TestCase):
 
     def test_solution_gates(self):
         assert_solution(self.data)
+
+    def test_family45_gates(self):
+        assert_family45(self.data)
+
+    def test_family45_gate_rejects_violations(self):
+        for key, value in [('rms', 1e-5), ('observationRms', 1e-5),
+                           ('explained3D', .89), ('minDetJ', .349), ('reversedTriangles', 1)]:
+            bad = copy.deepcopy(self.data)
+            bad['family45']['poses'][0]['stats'][key] = value
+            with self.assertRaises(AssertionError, msg=key):
+                assert_family45(bad)
+        bad = copy.deepcopy(self.data)
+        bad['family45']['poses'][1]['stats']['minDetJ'] = .219
+        with self.assertRaises(AssertionError):
+            assert_family45(bad)
+
+    def test_face0_solution_is_unchanged(self):
+        previous = json.loads(subprocess.check_output(
+            ['git', '-C', str(ROOT), 'show', 'df8d295:source/viewer/face-solve.json']))
+        self.assertEqual({k: v for k, v in self.data.items() if k != 'family45'}, previous)
 
     def test_gates_reject_injected_violations(self):
         for key, value in [('rms', 1.01), ('explained3D', 0), ('duRms', 100),

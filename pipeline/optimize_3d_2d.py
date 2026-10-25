@@ -110,6 +110,57 @@ def determinants(rest, deformed, triangles):
     return area(deformed)/area(rest)
 
 
+def solve_family45(inputs, z0):
+    """Each side shares depth in its evaluated 45-degree rest frame."""
+    points = np.array(inputs['points'])
+    lap = laplacian(points, inputs['triangles'], inputs['meshCount'])
+    family = inputs['family45']
+    result = {}
+    solved = {}
+    for sign, side in [(-1, 'Left'), (1, 'Right')]:
+        rest = np.array(family['p45'+side])
+        angle = np.radians(sign*45)
+        prior = -(points[:, 0]-502)*np.sin(angle)+np.array(z0)*np.cos(angle)
+        systems = []
+        for pose in family['poses']:
+            if np.sign(pose['yaw']) != sign:
+                continue
+            weights = np.array(pose['weights'])
+            r = .05*lap+np.diag(.2*np.where(weights > 0, 1., 1e-4))
+            effective, inverse_w = schur_pose(weights, r)
+            ones = effective.sum(axis=1)
+            total = ones.sum()
+            centered = effective-np.outer(ones, ones)/total
+            a, b = projection(rest, pose['delta'], 0)
+            d = np.array(pose['obs'])-a
+            systems.append(dict(pose=pose, a=a, b=b, d=d, r=r, inverse_w=inverse_w,
+                                ones=ones, total=total, h=np.dot(b, b)*centered, g=centered@d@b))
+        h = .05*lap+.001*np.eye(len(points))
+        g = .001*prior
+        for s in systems:
+            h = h+s['h']
+            g = g+s['g']
+        z = np.linalg.solve(h, g)
+        result['Z'+side] = z.tolist()
+        for s in systems:
+            pose = s['pose']
+            t, du = recover(s, z)
+            actual = s['a']+z[:, None]*s['b']+t+du
+            error = actual-np.array(pose['obs'])
+            det = determinants(points, actual, inputs['triangles'])
+            w = np.array(pose['weights'])[:, None]
+            stats = dict(rms=float(np.sqrt(np.mean(np.sum(error**2, axis=1)))),
+                         observationRms=float(np.sqrt(np.mean(np.sum(error**2, axis=1)))),
+                         explained3D=float(1-np.sum(w*du**2)/np.sum(w*s['d']**2)),
+                         duRms=float(np.sqrt(np.mean(np.sum(du**2, axis=1)))),
+                         duMax=float(np.linalg.norm(du, axis=1).max()),
+                         minDetJ=float(det.min()), reversedTriangles=int(np.count_nonzero(det <= 0)))
+            solved[pose['name']] = dict(name=pose['name'], yaw=pose['yaw'], delta=pose['delta'], pitch=0,
+                                       t=t.tolist(), du=du.tolist(), stats=stats, eyeWidthScale=pose['eyeWidthScale'])
+    result['poses'] = [solved[p['name']] for p in family['poses']]
+    return result
+
+
 def solve(inputs):
     points = np.array(inputs['points'])
     lap, systems = prepare(inputs)
@@ -191,9 +242,10 @@ def solve(inputs):
 def main():
     inputs = json.loads(subprocess.check_output(['node', str(ROOT/'pipeline/face_solve_inputs.mjs')], timeout=60))
     result = solve(inputs)
+    result['family45'] = solve_family45(inputs, result['Z'])
     path = ROOT/'source/viewer/face-solve.json'
     path.write_text(json.dumps(result, ensure_ascii=False, separators=(',', ':'))+'\n')
-    for pose in result['poses']:
+    for pose in result['poses']+result['family45']['poses']:
         print(pose['name'], json.dumps(pose['stats']))
 
 
