@@ -47,17 +47,16 @@ def build():
   x,y,w,h=parts[key]['bbox'];union[y:y+h,x:x+w]=np.maximum(union[y:y+h,x:x+w],images[key][:,:,3])
  for key in sorted(IDS):
   part=parts[key];x,y,w,h=part['bbox'];a=images[key];domain=a[:,:,3]>128
-  if not key.startswith('bangs') and key not in {'back-hair-left','back-hair-right'}:
+  # Preserve the authored right temple notch, including its partial alpha.
+  if not key.startswith('bangs') and key not in {'side-hair-right','back-hair-left','back-hair-right'}:
    for row in range(h):
-    limit=250 if key=='hair-top' else 407 if key=='back-hair-center' else 406 if key=='side-hair-right' else 350
+    limit=250 if key=='hair-top' else 407 if key=='back-hair-center' else 350
     if not 60<=row+y<=limit:continue
     line=union[row+y] if key=='hair-top' else a[row,:,3]
     edges=np.diff(np.pad(line>128,(1,1)).astype(int));runs=[(l,r) for l,r in zip(np.where(edges==1)[0],np.where(edges==-1)[0]) if r-l>=20]
     if not runs:continue
     left,right=runs[0][0],runs[-1][1]
     if key=='hair-top':left-=x;right-=x
-    # Restore the pin cutout below the accessory, stopping before the ear.
-    if key=='side-hair-right' and 340<=row+y<=406:left=min(left,634-x)
     if key=='back-hair-center' and 350<=row+y<=407:right=max(right,min(w,700-x))
     domain[row,max(0,left):min(w,right)]=True
    if key=='back-hair-center':

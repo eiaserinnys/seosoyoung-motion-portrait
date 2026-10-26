@@ -6,6 +6,25 @@ from pipeline.hair_albedo import delight, transfer_redrawn_hair
 from pipeline.fit_outline import symmetrize
 
 class HairPixels(unittest.TestCase):
+ def test_atlas_changes_only_the_1767_added_temple_texels(self):
+  import io,json,subprocess
+  root=Path(__file__).resolve().parents[1]
+  rig=json.loads((root/'bundle/assets/seosoyoung-rig.json').read_text())
+  m=next(m for m in rig['meshes'] if m['id']=='side-hair-right')
+  ax,ay,w,h=m['atlas'];bx,by=m['bbox'][:2]
+  original=np.array(Image.open(root/'source/front-hair-inputs/side-hair-right.png'))
+  before=np.array(Image.open(io.BytesIO(subprocess.check_output(['git','show','1458c77:bundle/assets/texture_00.png'],cwd=root))))
+  after=np.array(Image.open(root/'bundle/assets/texture_00.png'))
+  expected=before.copy();count=0
+  for row in range(340-by,407-by):
+   edges=np.diff(np.pad(original[row,:,3]>128,(1,1)).astype(int))
+   runs=[(l,r) for l,r in zip(np.where(edges==1)[0],np.where(edges==-1)[0]) if r-l>=20]
+   if not runs:continue
+   cols=np.arange(max(0,634-bx),runs[0][0]);cols=cols[original[row,cols,3]<255]
+   expected[ay+row,ax+cols]=original[row,cols];count+=len(cols)
+  self.assertEqual(count,1767)
+  self.assertEqual(int(np.any(before!=after,axis=2).sum()),1767)
+  np.testing.assert_array_equal(after,expected)
  def test_rim_is_reduced_without_changing_alpha_or_erasing_texture(self):
   a=np.zeros((100,100,4),np.uint8);a[5:95,5:95]=[65,48,44,255]
   a[8:20,10:90,:3]=[220,160,125]
@@ -81,13 +100,29 @@ class HairPixels(unittest.TestCase):
    self.assertTrue((alpha[:416]==255).all())
    self.assertTrue((alpha[505:]==0).all())
    self.assertTrue(((alpha[466:505]>0)&(alpha[466:505]<255)).any())
- def test_hairpin_notch_has_opaque_side_hair_and_backing_before_the_ear(self):
+ def test_temple_notch_keeps_source_transparency_and_backing_reaches_the_ear(self):
   import json
   root=Path(__file__).resolve().parents[1]
   parts={p['id']:p for p in json.loads((root/'parts/parts_index.json').read_text())}
   p=parts['side-hair-right'];x,y,_,_=p['bbox']
-  a=np.array(Image.open(root/p['file']))[:,:,3]
-  self.assertTrue((a[340-y:407-y,634-x:660-x]==255).all())
+  rig=json.loads((root/'bundle/assets/seosoyoung-rig.json').read_text())
+  m=next(m for m in rig['meshes'] if m['id']=='side-hair-right')
+  ax,ay,w,h=m['atlas']
+  atlas=np.array(Image.open(root/'bundle/assets/texture_00.png'))[ay:ay+h,ax:ax+w]
+  source=np.array(Image.open(root/'source/front-hair-inputs/side-hair-right.png'))
+  a=atlas[:,:,3];original=source[:,:,3]
+  # This original notch became an opaque black wedge after the x634 fill.
+  self.assertEqual(original[390-y,638-x],0)
+  self.assertEqual(a[390-y,638-x],original[390-y,638-x])
+  restored=0
+  for row in range(340-y,407-y):
+   edges=np.diff(np.pad(original[row]>128,(1,1)).astype(int))
+   runs=[(l,r) for l,r in zip(np.where(edges==1)[0],np.where(edges==-1)[0]) if r-l>=20]
+   if not runs:continue
+   cols=np.arange(max(0,634-x),runs[0][0]);cols=cols[original[row,cols]<255]
+   np.testing.assert_array_equal(atlas[row,cols],source[row,cols])
+   restored+=len(cols)
+  self.assertEqual(restored,1767)
   p=parts['back-hair-center'];x,y,w,_=p['bbox']
   self.assertGreaterEqual(x+w,700,'backing crop must contain the requested canvas x700 endpoint')
   a=np.array(Image.open(root/p['file']))[:,:,3];end=min(w,700-x)
