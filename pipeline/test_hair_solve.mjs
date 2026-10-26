@@ -38,8 +38,8 @@ test('hair weights preserve nine keys, cross neutral smoothly and fade before pr
  for(const yaw of [-90,-88,88,90])assert(weights(yaw).every(v=>v===0));
  assert(Math.abs(weights(74).reduce((a,b)=>a+b,0)-.5)<1e-12);
 });
-test('the three approved prior modules are byte-identical to main',()=>{
- for(const name of ['hair-shell.mjs','hair-surface.mjs','dome-data.mjs'])assert.deepEqual(readFileSync(new URL('../bundle/'+name,import.meta.url)),execFileSync('git',['show','0b75a02:bundle/'+name]));
+test('the approved surface and dome stay byte-identical while the attachment gets its local limiter',()=>{
+ for(const name of ['hair-surface.mjs','dome-data.mjs'])assert.deepEqual(readFileSync(new URL('../bundle/'+name,import.meta.url)),execFileSync('git',['show','0b75a02:bundle/'+name]));
 });
 test('shared residual preserves the upper seam and protects neutral/lower geometry',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const y of [60,230,325,435,470,584])for(const sign of [-1,1]){

@@ -48,8 +48,14 @@ class PixelGateTest(unittest.TestCase):
     def test_gates_reject_visible_ear_lobes(self):
         from skin_fill_validation import validate_pixels
         a,b,g=self.fixture();validate_pixels('front',a,b,g)
-        b[310,600]=[255,0,0,255]
+        b[310,600]=[255,255,255,255]
         with self.assertRaisesRegex(AssertionError,'ear attachment'):validate_pixels('front',a,b,g)
+    def test_identify_black_occluders_and_white_above_ear_are_not_exposure(self):
+        from skin_fill_validation import validate_pixels
+        a,b,g=self.fixture()
+        b[290,500]=[255,255,255,255]
+        b[310,600]=[0,0,0,255]
+        self.assertEqual(validate_pixels('front',a,b,g)['exposedPixelsBelowEarLine'],0)
     def test_gates_reject_asymmetric_dome(self):
         from skin_fill_validation import validate_pixels
         a,b,g=self.fixture();validate_pixels('down',a,b,g)

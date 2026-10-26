@@ -6,6 +6,7 @@ import {frameValue,poseWeights,FRAME_CACHE} from './pose-grid.mjs';
 import {smoothstep} from './face-profile.mjs';
 import {canopyWorld,craniumWorld} from './hair-shell.mjs';
 import {BEADS,beadWorld} from './stereo-attachments.mjs';
+import {hairStageScale} from './hair-limits.mjs';
 
 export function hairCoordinates([x,y,lambda],posterior=false){
  const {cx,rx}=domeSection(y);
@@ -46,8 +47,10 @@ export function applyHairSolve(world,point,p,posterior=false,anchor=point){
  if(!weight)return world;
  let result=world;
  if(p.ParamAngleY&&hairFade(anchor[1])){
+  const protectedAnchor=anchor!==point;
   const [s,y]=hairCoordinates(anchor,posterior===true),delta=hairSolveField(s,y,p);
-  result=[world[0]+weight*delta[0],world[1]+weight*delta[1],world[2]];
+  const scale=posterior===true||protectedAnchor?1:hairStageScale('residual',anchor,p);
+  result=[world[0]+weight*scale*delta[0],world[1]+weight*scale*delta[1],world[2]];
  }
  return extendProfile(result,point,p,posterior,weight);
 }

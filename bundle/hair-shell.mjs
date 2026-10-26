@@ -5,6 +5,7 @@ import {outlinePitchShift} from './face-outline.mjs';
 import {HEAD_CENTER,clamp,correction,artWorld} from './geometry.mjs';
 import {DOME} from './dome-data.mjs';
 import {frameValue,FRAME_CACHE} from './pose-grid.mjs';
+import {hairStageScale} from './hair-limits.mjs';
 export {hairLift,pitchHairDepth} from './hair-surface.mjs';
 
 const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
@@ -43,27 +44,41 @@ export function fringeSurface(point,p,relief=0){
 }
 // One coordinate field owns every overlapping front-hair pixel. Layer order
 // belongs to the renderer; it must never alter the rotated geometry.
-function canopy(point,p,surface) {
- const [x,y]=point,world=surface(point,p);
- const smooth=t=>pitchEase(t,p);
+export function rawAttachmentWorld(point,p,surface=fringeSurface){
+ const [x,y]=point,world=surface(point,p),smooth=t=>pitchEase(t,p);
  const side=x<HEAD_CENTER[0]?'left':'right';
  const lower=smooth((y-405)/55),xStart=126-42*lower,width=14;
- const lockWeight=smooth((Math.abs(x-HEAD_CENTER[0])-xStart)/width)*smooth((y-340)/67);
- if(lockWeight){
-  const lock=templeWorld(point,side,p,surface);
-  for(let i=0;i<3;i++)world[i]+=(lock[i]-world[i])*lockWeight;
+ const weight=smooth((Math.abs(x-HEAD_CENTER[0])-xStart)/width)*smooth((y-340)/67);
+ if(weight){
+  const target=templeWorld(point,side,p,surface);
+  for(let i=0;i<3;i++)world[i]+=(target[i]-world[i])*weight;
  }
- const free=smooth((y-245)/180),outer=smooth((Math.abs(x-HEAD_CENTER[0])-75)/70);
- const sway=9*free*free*(p.ParamHairFront*(1-outer)+p.ParamHairSide*outer);
- const flare=DOME.fringeFlare;
+ return world;
+}
+export function attachmentWorld(point,p,surface=fringeSurface){
+ const reference=surface(point,p),target=rawAttachmentWorld(point,p,surface),scale=hairStageScale('attachment',point,p);
+ return reference.map((v,i)=>v+scale*(target[i]-v));
+}
+export function flareDisplacement(point,p){
+ const [x,y]=point,smooth=t=>pitchEase(t,p);
+ const free=smooth((y-245)/180),flare=DOME.fringeFlare;
  const faceDir=p.ParamAngleX<0?-1:1;
  const pitchUp=sphereEase(Math.max(0,p.ParamAngleY*correction(p,'CorrTurn'))/30);
  const yawAbs=sphereEase(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))/45);
  const flareSide=sphereEase(((x-HEAD_CENTER[0])*faceDir)/flare.reach);
  const hang=1-sphereEase((y-flare.fadeStart)/(flare.fadeEnd-flare.fadeStart));
- const flareX=flare.amount*faceDir*flareSide*free*hang*pitchUp*yawAbs;
- const delta=artWorld([sway+flareX,0,0],p),origin=artWorld([0,0,0],p);
- return world.map((v,i)=>v+delta[i]-origin[i]);
+ const amount=flare.amount*faceDir*flareSide*free*hang*pitchUp*yawAbs;
+ const delta=artWorld([amount,0,0],p),origin=artWorld([0,0,0],p);
+ return delta.map((v,i)=>v-origin[i]);
+}
+function canopy(point,p,surface) {
+ const [x,y]=point,world=attachmentWorld(point,p,surface);
+ const smooth=t=>pitchEase(t,p);
+ const free=smooth((y-245)/180),outer=smooth((Math.abs(x-HEAD_CENTER[0])-75)/70);
+ const sway=9*free*free*(p.ParamHairFront*(1-outer)+p.ParamHairSide*outer);
+ const delta=artWorld([sway,0,0],p),origin=artWorld([0,0,0],p);
+ const flare=flareDisplacement(point,p),scale=hairStageScale('flare',point,p);
+ return world.map((v,i)=>v+delta[i]-origin[i]+scale*flare[i]);
 }
 export const canopyWorld=(point,p)=>canopy(point,p,fringeSurface);
 const referenceCanopy=(point,p)=>canopy(point,p,referenceFringe);

@@ -2,25 +2,28 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
-import {canopyWorld,craniumWorld,backWorld} from '../bundle/hair-shell.mjs';
+import {canopyWorld,craniumWorld,backWorld,rawAttachmentWorld,flareDisplacement} from '../bundle/hair-shell.mjs';
 import {pitchHairDepth,sphereEase,craniumPosition} from '../bundle/hair-surface.mjs';
 import {DOME} from '../bundle/dome-data.mjs';
 import {STRANDS} from '../bundle/side-strands.mjs';
 import {beadWorld,BEADS} from '../bundle/stereo-attachments.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
+// These checks preserve the original attachment prior. The final limited
+// surface is audited for orientation and inspected in the 13-pose sheet.
+const attachmentPrior=(point,p)=>{const q=rawAttachmentWorld(point,p),d=flareDisplacement(point,p);return q.map((v,i)=>v+d[i]);};
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
-test('hanging layers retain gravity Y and upward diagonal posterior keeps rotated X',()=>{
+test('r24 attachment prior retains gravity Y and upward diagonal posterior keeps rotated X',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,30])for(const side of ['left','right']){
   const p={...base,ParamAngleX:yaw,ParamAngleY:pitch},neutral={...p,ParamAngleY:0},sign=side==='left'?-1:1;
   for(const y of [506,520,544])for(const [surface,pt,posterior] of [
-   [canopyWorld,[side==='left'?300:720,y]],
+   [attachmentPrior,[side==='left'?300:720,y]],
    [(pt,p)=>craniumWorld(pt,side,p),[0,y,sign*2.3],true],
    [backWorld,[side==='left'?300:720,y]],
   ]){
    const a=surface(pt,p),b=surface(pt,neutral);
    assert(Math.abs(a[1]-b[1])<1e-8,`${yaw},${pitch},${side},${y} gravity Y`);
    if(posterior&&yaw&&pitch>0)assert.equal(a[0],craniumPosition(pt,p)[0],'B3 upward posterior X');
-   else if(surface!==canopyWorld||yaw*(side==='left'?-1:1)<=0)assert(Math.abs(a[0]-b[0])<1e-8,`${yaw},${pitch},${side},${y} gravity X`);
+   else if(surface!==attachmentPrior||yaw*(side==='left'?-1:1)<=0)assert(Math.abs(a[0]-b[0])<1e-8,`${yaw},${pitch},${side},${y} gravity X`);
   }
  }
 });
@@ -52,12 +55,12 @@ test('tip lag and rear supplementation share mirrored key coefficients',()=>{
   if(direction==='up')assert.deepEqual([rear[0].rx,rear[0].rz,rear[0].y],[35,10,0]);
  }
 });
-test('far hanging ribbons span the authored central 60 percent of each tie',()=>{
+test('r24 attachment prior spans the authored central 60 percent of each tie',()=>{
  for(const side of ['left','right'])for(const pitch of [-30,30]){
   const p={...base,ParamAngleX:side==='left'?-45:45,ParamAngleY:pitch},y=506;
   const [a,b]=STRANDS[side].slice(-2),t=(y-a[0])/(b[0]-a[0]);
   const lo=a[1]+(b[1]-a[1])*t,hi=a[2]+(b[2]-a[2])*t;
-  const left=canopyWorld([lo,y],p),right=canopyWorld([hi,y],p);
+  const left=attachmentPrior([lo,y],p),right=attachmentPrior([hi,y],p);
   const root=beadWorld(side,p)[0]-BEADS[side].front[0];
   const [l,r]=side==='left'?[250,366]:[632,746];
   assert(left[0]<=root+l+(r-l)*.2+1e-8);

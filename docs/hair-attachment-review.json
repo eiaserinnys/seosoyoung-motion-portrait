@@ -1,0 +1,1232 @@
+{
+  "base": "1458c77a77af6016dda236aaad06c00ce1c8cbd4",
+  "scope": "r24 attachment prior plus attachment/flare/residual local area projection; forehead band alignment deferred",
+  "selection": "positive fringeSurface triangle signed area; atlas UV-centroid alpha >127",
+  "displacementUnit": "Euclidean screen XY pixels; vertex indices are zero-based; tiny roundoff is retained",
+  "rowWidthMethod": "opaque S horizontal edge chains in authored Y 340..515; smallest r24/fringe screen-X width ratio, same endpoints measured after limiting",
+  "poses": [
+    {
+      "name": "left",
+      "bangsMaximum": 6.648084307974841,
+      "bangsVertex": {
+        "mesh": "bangs-right",
+        "vertex": 415,
+        "rest": [
+          648,
+          420
+        ]
+      },
+      "sideMaximum": 19.414755835828032,
+      "sideVertex": {
+        "mesh": "side-hair-right",
+        "vertex": 297,
+        "rest": [
+          684,
+          468
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-right",
+        "row": 480.0,
+        "restEndpoints": [
+          [
+            660,
+            480
+          ],
+          [
+            684,
+            480
+          ]
+        ],
+        "r24Width": 3.356200527704573,
+        "candidateWidth": 24.514594159131775,
+        "referenceWidth": 122.57297079568241,
+        "r24CompressionRatio": 0.027381244869221964
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "left",
+        "attachment": {
+          "triggered": 55,
+          "vertices": 48,
+          "minimum": 0.1999999999999495,
+          "maxDisplacementChange": 19.41475583582798
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        }
+      }
+    },
+    {
+      "name": "front",
+      "bangsMaximum": 0.0,
+      "bangsVertex": null,
+      "sideMaximum": 0.0,
+      "sideVertex": null,
+      "mostCompressedRow": {
+        "mesh": "side-hair-left",
+        "row": 396.0,
+        "restEndpoints": [
+          [
+            216,
+            396
+          ],
+          [
+            240,
+            396
+          ]
+        ],
+        "r24Width": 24.0,
+        "candidateWidth": 24.0,
+        "referenceWidth": 24.0,
+        "r24CompressionRatio": 1.0
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "front",
+        "attachment": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        }
+      }
+    },
+    {
+      "name": "right",
+      "bangsMaximum": 1.1368683772161603e-13,
+      "bangsVertex": {
+        "mesh": "bangs-left",
+        "vertex": 2,
+        "rest": [
+          444,
+          84
+        ]
+      },
+      "sideMaximum": 22.258182579920685,
+      "sideVertex": {
+        "mesh": "side-hair-left",
+        "vertex": 343,
+        "rest": [
+          324,
+          480
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-left",
+        "row": 492.0,
+        "restEndpoints": [
+          [
+            324,
+            492
+          ],
+          [
+            348,
+            492
+          ]
+        ],
+        "r24Width": 4.599006387508837,
+        "candidateWidth": 27.21993208784511,
+        "referenceWidth": 136.0996604392194,
+        "r24CompressionRatio": 0.033791461144480235
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "right",
+        "attachment": {
+          "triggered": 47,
+          "vertices": 43,
+          "minimum": 0.19999999999999152,
+          "maxDisplacementChange": 22.258182579920685
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        }
+      }
+    },
+    {
+      "name": "up-left",
+      "bangsMaximum": 3.952656350652081,
+      "bangsVertex": {
+        "mesh": "bangs-right",
+        "vertex": 413,
+        "rest": [
+          672,
+          408
+        ]
+      },
+      "sideMaximum": 16.297883843170933,
+      "sideVertex": {
+        "mesh": "side-hair-left",
+        "vertex": 201,
+        "rest": [
+          252,
+          372
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-right",
+        "row": 480.0,
+        "restEndpoints": [
+          [
+            660,
+            480
+          ],
+          [
+            684,
+            480
+          ]
+        ],
+        "r24Width": 3.3645851140549894,
+        "candidateWidth": 14.947129273103087,
+        "referenceWidth": 122.57297079568241,
+        "r24CompressionRatio": 0.02744964972468062
+      },
+      "reversed": {
+        "rawAttachment": 4,
+        "attachment": 0,
+        "rawFlare": 9,
+        "flare": 0,
+        "rawResidual": 3,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "up-left",
+        "attachment": {
+          "triggered": 52,
+          "vertices": 74,
+          "minimum": 0.19999999999634968,
+          "maxDisplacementChange": 15.982757398828712
+        },
+        "flare": {
+          "triggered": 10,
+          "vertices": 116,
+          "minimum": 0.19999999999989887,
+          "maxDisplacementChange": 0.7634461461149963
+        },
+        "residual": {
+          "triggered": 47,
+          "vertices": 37,
+          "minimum": 0.1999999999998992,
+          "maxDisplacementChange": 0.9138012059752915
+        }
+      }
+    },
+    {
+      "name": "up",
+      "bangsMaximum": 1.2710574864626038e-13,
+      "bangsVertex": {
+        "mesh": "bangs-right",
+        "vertex": 382,
+        "rest": [
+          636,
+          384
+        ]
+      },
+      "sideMaximum": 1.2710574864626038e-13,
+      "sideVertex": {
+        "mesh": "side-hair-right",
+        "vertex": 196,
+        "rest": [
+          636,
+          384
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-right",
+        "row": 348.0,
+        "restEndpoints": [
+          [
+            636,
+            348
+          ],
+          [
+            660,
+            348
+          ]
+        ],
+        "r24Width": 22.911605489830436,
+        "candidateWidth": 22.911605489830436,
+        "referenceWidth": 24.0,
+        "r24CompressionRatio": 0.9546502287429348
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 1,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "up",
+        "attachment": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 0.46951752527819557
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 1,
+          "vertices": 3,
+          "minimum": 0.20000000000364504,
+          "maxDisplacementChange": 4.112362194748821
+        }
+      }
+    },
+    {
+      "name": "up-right",
+      "bangsMaximum": 2.3437142008433856e-13,
+      "bangsVertex": {
+        "mesh": "bangs-right",
+        "vertex": 192,
+        "rest": [
+          564,
+          240
+        ]
+      },
+      "sideMaximum": 15.450128079628945,
+      "sideVertex": {
+        "mesh": "side-hair-left",
+        "vertex": 357,
+        "rest": [
+          324,
+          492
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-left",
+        "row": 492.0,
+        "restEndpoints": [
+          [
+            324,
+            492
+          ],
+          [
+            348,
+            492
+          ]
+        ],
+        "r24Width": 4.571417595678724,
+        "candidateWidth": 18.369919387045798,
+        "referenceWidth": 136.0996604392194,
+        "r24CompressionRatio": 0.03358875092653349
+      },
+      "reversed": {
+        "rawAttachment": 1,
+        "attachment": 0,
+        "rawFlare": 7,
+        "flare": 0,
+        "rawResidual": 6,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "up-right",
+        "attachment": {
+          "triggered": 36,
+          "vertices": 52,
+          "minimum": 0.1999999999976124,
+          "maxDisplacementChange": 15.450128079628929
+        },
+        "flare": {
+          "triggered": 12,
+          "vertices": 11,
+          "minimum": 0.19999999999997164,
+          "maxDisplacementChange": 0.6500159515037376
+        },
+        "residual": {
+          "triggered": 10,
+          "vertices": 10,
+          "minimum": 0.1999999999985742,
+          "maxDisplacementChange": 0.3370449219774052
+        }
+      }
+    },
+    {
+      "name": "down-left",
+      "bangsMaximum": 17.312993256023923,
+      "bangsVertex": {
+        "mesh": "bangs-right",
+        "vertex": 398,
+        "rest": [
+          648,
+          396
+        ]
+      },
+      "sideMaximum": 30.306593711873948,
+      "sideVertex": {
+        "mesh": "side-hair-right",
+        "vertex": 283,
+        "rest": [
+          684,
+          456
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-right",
+        "row": 480.0,
+        "restEndpoints": [
+          [
+            660,
+            480
+          ],
+          [
+            684,
+            480
+          ]
+        ],
+        "r24Width": 3.3552946570141557,
+        "candidateWidth": 25.09661037785179,
+        "referenceWidth": 122.57297079568241,
+        "r24CompressionRatio": 0.02737385440879226
+      },
+      "reversed": {
+        "rawAttachment": 21,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 1,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "down-left",
+        "attachment": {
+          "triggered": 133,
+          "vertices": 101,
+          "minimum": 0.19999999999862159,
+          "maxDisplacementChange": 30.306593711873898
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 2,
+          "vertices": 8,
+          "minimum": 0.19999999999589824,
+          "maxDisplacementChange": 0.3009950031161519
+        }
+      }
+    },
+    {
+      "name": "down",
+      "bangsMaximum": 1.2710574864626038e-13,
+      "bangsVertex": {
+        "mesh": "bangs-right",
+        "vertex": 397,
+        "rest": [
+          636,
+          396
+        ]
+      },
+      "sideMaximum": 1.2710574864626038e-13,
+      "sideVertex": {
+        "mesh": "side-hair-right",
+        "vertex": 211,
+        "rest": [
+          636,
+          396
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-left",
+        "row": 420.0,
+        "restEndpoints": [
+          [
+            312,
+            420
+          ],
+          [
+            348,
+            420
+          ]
+        ],
+        "r24Width": 35.7496162310411,
+        "candidateWidth": 35.7496162310411,
+        "referenceWidth": 36.0,
+        "r24CompressionRatio": 0.9930448953066973
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "down",
+        "attachment": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 0.3890489969310154
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 0.9400282588436392
+        }
+      }
+    },
+    {
+      "name": "down-right",
+      "bangsMaximum": 3.1528480558044736,
+      "bangsVertex": {
+        "mesh": "bangs-left",
+        "vertex": 438,
+        "rest": [
+          348,
+          420
+        ]
+      },
+      "sideMaximum": 51.82940544406028,
+      "sideVertex": {
+        "mesh": "side-hair-left",
+        "vertex": 326,
+        "rest": [
+          300,
+          468
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-left",
+        "row": 492.0,
+        "restEndpoints": [
+          [
+            324,
+            492
+          ],
+          [
+            348,
+            492
+          ]
+        ],
+        "r24Width": 4.602625130637307,
+        "candidateWidth": 36.06243621378593,
+        "referenceWidth": 136.0996604392194,
+        "r24CompressionRatio": 0.033818050065545814
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "down-right",
+        "attachment": {
+          "triggered": 96,
+          "vertices": 91,
+          "minimum": 0.1999999999992721,
+          "maxDisplacementChange": 51.82940544406028
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 1,
+          "vertices": 1,
+          "minimum": 0.19999999999999357,
+          "maxDisplacementChange": 0.10806638551251994
+        }
+      }
+    },
+    {
+      "name": "yaw-30",
+      "bangsMaximum": 2.291240663505505,
+      "bangsVertex": {
+        "mesh": "bangs-left",
+        "vertex": 411,
+        "rest": [
+          360,
+          396
+        ]
+      },
+      "sideMaximum": 12.808918022382954,
+      "sideVertex": {
+        "mesh": "side-hair-right",
+        "vertex": 270,
+        "rest": [
+          684,
+          444
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-right",
+        "row": 480.0,
+        "restEndpoints": [
+          [
+            660,
+            480
+          ],
+          [
+            684,
+            480
+          ]
+        ],
+        "r24Width": 6.534810116240919,
+        "candidateWidth": 19.091357706126928,
+        "referenceWidth": 95.45678853063419,
+        "r24CompressionRatio": 0.06845830680909357
+      },
+      "reversed": {
+        "rawAttachment": 2,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "yaw-30",
+        "attachment": {
+          "triggered": 40,
+          "vertices": 35,
+          "minimum": 0.19999999999997156,
+          "maxDisplacementChange": 12.808918022382874
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        }
+      }
+    },
+    {
+      "name": "yaw-15",
+      "bangsMaximum": 0.6076479555188712,
+      "bangsVertex": {
+        "mesh": "bangs-left",
+        "vertex": 411,
+        "rest": [
+          360,
+          396
+        ]
+      },
+      "sideMaximum": 0.6076479555188712,
+      "sideVertex": {
+        "mesh": "side-hair-left",
+        "vertex": 240,
+        "rest": [
+          360,
+          396
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-right",
+        "row": 480.0,
+        "restEndpoints": [
+          [
+            660,
+            480
+          ],
+          [
+            684,
+            480
+          ]
+        ],
+        "r24Width": 14.093939968291465,
+        "candidateWidth": 14.09393996829158,
+        "referenceWidth": 61.83538387702504,
+        "r24CompressionRatio": 0.22792678050355042
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "yaw-15",
+        "attachment": {
+          "triggered": 4,
+          "vertices": 2,
+          "minimum": 0.20000000000001086,
+          "maxDisplacementChange": 0.6076479555188753
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        }
+      }
+    },
+    {
+      "name": "yaw+15",
+      "bangsMaximum": 1.1368683772161603e-13,
+      "bangsVertex": {
+        "mesh": "bangs-left",
+        "vertex": 17,
+        "rest": [
+          492,
+          96
+        ]
+      },
+      "sideMaximum": 1.1368683772161603e-13,
+      "sideVertex": {
+        "mesh": "side-hair-right",
+        "vertex": 1,
+        "rest": [
+          672,
+          112
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-left",
+        "row": 492.0,
+        "restEndpoints": [
+          [
+            324,
+            492
+          ],
+          [
+            348,
+            492
+          ]
+        ],
+        "r24Width": 14.808817405279854,
+        "candidateWidth": 14.808817405279797,
+        "referenceWidth": 66.78649591566739,
+        "r24CompressionRatio": 0.22173370832300046
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "yaw+15",
+        "attachment": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 0.20160038632585878
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        }
+      }
+    },
+    {
+      "name": "yaw+30",
+      "bangsMaximum": 1.1368683772161603e-13,
+      "bangsVertex": {
+        "mesh": "bangs-left",
+        "vertex": 18,
+        "rest": [
+          504,
+          96
+        ]
+      },
+      "sideMaximum": 14.07020269542079,
+      "sideVertex": {
+        "mesh": "side-hair-left",
+        "vertex": 343,
+        "rest": [
+          324,
+          480
+        ]
+      },
+      "mostCompressedRow": {
+        "mesh": "side-hair-left",
+        "row": 492.0,
+        "restEndpoints": [
+          [
+            324,
+            492
+          ],
+          [
+            348,
+            492
+          ]
+        ],
+        "r24Width": 7.640899168842907,
+        "candidateWidth": 21.00432050091547,
+        "referenceWidth": 105.02160250458508,
+        "r24CompressionRatio": 0.07275549969359225
+      },
+      "reversed": {
+        "rawAttachment": 0,
+        "attachment": 0,
+        "rawFlare": 0,
+        "flare": 0,
+        "rawResidual": 0,
+        "residual": 0
+      },
+      "stageProjection": {
+        "name": "yaw+30",
+        "attachment": {
+          "triggered": 35,
+          "vertices": 27,
+          "minimum": 0.1999999999999661,
+          "maxDisplacementChange": 14.07020269542084
+        },
+        "flare": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        },
+        "residual": {
+          "triggered": 0,
+          "vertices": 0,
+          "minimum": 1.0
+        }
+      }
+    }
+  ],
+  "stage4": {
+    "poses": [
+      {
+        "name": "up-left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          422.70642865718344,
+          267.43406936959667,
+          76.16699197424559
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 359.2999999523163
+      },
+      {
+        "name": "up",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          501.815615366257,
+          261.09721193204837,
+          111.03010155412555
+        ],
+        "hairHiddenPixelsBelowEarLine": 5,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 469
+      },
+      {
+        "name": "up-right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          605.4008414316189,
+          264.67735078683745,
+          76.16699197424559
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 692.8999999761581
+      },
+      {
+        "name": "left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 2,
+        "foreheadCenter": [
+          412.18091746173405,
+          310,
+          97.18767094642352
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 228
+      },
+      {
+        "name": "front",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          502,
+          310,
+          137.44412234788575
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 583
+      },
+      {
+        "name": "right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 3,
+        "foreheadCenter": [
+          592.8375252239604,
+          310,
+          97.18767094642352
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 91.5
+      },
+      {
+        "name": "down-left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.71520000000001,
+        "foreheadProfileCount": 10,
+        "foreheadCenter": [
+          401.76805259442557,
+          348.30161714687347,
+          92.16699197424559
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 299.89999997615814
+      },
+      {
+        "name": "down",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 2,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 10,
+        "foreheadCenter": [
+          500.6958379022908,
+          370.3038683697577,
+          127.03010155412555
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 374.8000000715256
+      },
+      {
+        "name": "down-right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 10,
+        "foreheadCenter": [
+          607.7617690254149,
+          354.8571374705513,
+          92.16699197424559
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 304.3000000715256
+      },
+      {
+        "name": "yaw-30",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          438.36117074141947,
+          310,
+          119.03010155412555
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 129.20000004768372
+      },
+      {
+        "name": "yaw-15",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          468.9967871305649,
+          310,
+          132.76082744745736
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 228.60000002384186
+      },
+      {
+        "name": "yaw+15",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          535.1216949330608,
+          310,
+          132.76082744745736
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 104.5
+      },
+      {
+        "name": "yaw+30",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "foreheadCenter": [
+          566.1046831562479,
+          310,
+          119.03010155412555
+        ],
+        "hairHiddenPixelsBelowEarLine": 0,
+        "hiddenRibbonPixelsStillVisible": 0,
+        "fullFrameMilliseconds": 247.10000002384186
+      }
+    ],
+    "frontChangedPixels": 0,
+    "pageErrors": [],
+    "r24Performance": [
+      {
+        "name": "up-left",
+        "milliseconds": 238.5
+      },
+      {
+        "name": "up",
+        "milliseconds": 593.6000000238419
+      },
+      {
+        "name": "up-right",
+        "milliseconds": 423.09999990463257
+      },
+      {
+        "name": "left",
+        "milliseconds": 127.5
+      },
+      {
+        "name": "front",
+        "milliseconds": 139
+      },
+      {
+        "name": "right",
+        "milliseconds": 105.40000009536743
+      },
+      {
+        "name": "down-left",
+        "milliseconds": 434.39999997615814
+      },
+      {
+        "name": "down",
+        "milliseconds": 128.10000002384186
+      },
+      {
+        "name": "down-right",
+        "milliseconds": 269.10000002384186
+      },
+      {
+        "name": "yaw-30",
+        "milliseconds": 89.20000004768372
+      },
+      {
+        "name": "yaw-15",
+        "milliseconds": 156.29999995231628
+      },
+      {
+        "name": "yaw+15",
+        "milliseconds": 158.40000009536743
+      },
+      {
+        "name": "yaw+30",
+        "milliseconds": 162
+      }
+    ],
+    "timingMethod": "median of three warm full WebGL frames per pose, gl.finish before/after; PNG encoding excluded; software renderer"
+  },
+  "cpuPerformance": {
+    "method": "all mesh vertices, fresh frame cache, one warmup and five alternating paired CPU frames per pose; medians",
+    "checksum": 776859482.7088736,
+    "poses": [
+      {
+        "name": "left",
+        "r24Milliseconds": 120.75744099999974,
+        "candidateMilliseconds": 153.89950099999987
+      },
+      {
+        "name": "front",
+        "r24Milliseconds": 124.46080799999982,
+        "candidateMilliseconds": 171.03079699999944
+      },
+      {
+        "name": "right",
+        "r24Milliseconds": 108.28404799999953,
+        "candidateMilliseconds": 354.6059690000002
+      },
+      {
+        "name": "up-left",
+        "r24Milliseconds": 288.1799920000012,
+        "candidateMilliseconds": 362.40548300000046
+      },
+      {
+        "name": "up",
+        "r24Milliseconds": 137.30045100000098,
+        "candidateMilliseconds": 193.3059890000004
+      },
+      {
+        "name": "up-right",
+        "r24Milliseconds": 169.7059509999981,
+        "candidateMilliseconds": 328.88386399999945
+      },
+      {
+        "name": "down-left",
+        "r24Milliseconds": 218.20407899999918,
+        "candidateMilliseconds": 209.8556200000021
+      },
+      {
+        "name": "down",
+        "r24Milliseconds": 215.04998900000282,
+        "candidateMilliseconds": 313.33674600000086
+      },
+      {
+        "name": "down-right",
+        "r24Milliseconds": 351.91697600000043,
+        "candidateMilliseconds": 209.91194600000017
+      },
+      {
+        "name": "yaw-30",
+        "r24Milliseconds": 85.26255400000082,
+        "candidateMilliseconds": 118.52642300000298
+      },
+      {
+        "name": "yaw-15",
+        "r24Milliseconds": 66.34869700000127,
+        "candidateMilliseconds": 92.15707699999984
+      },
+      {
+        "name": "yaw+15",
+        "r24Milliseconds": 66.48292600000059,
+        "candidateMilliseconds": 86.18462200000067
+      },
+      {
+        "name": "yaw+30",
+        "r24Milliseconds": 55.9537049999999,
+        "candidateMilliseconds": 82.76509900000019
+      }
+    ]
+  },
+  "tests": {
+    "nodeRegression": 7,
+    "nodeHairSolve": 8,
+    "nodeShellAndSkin": 34,
+    "nodeGravity": 6,
+    "pythonProjection": 3,
+    "pythonSkin": 8
+  },
+  "visualReviewFlags": [
+    "up-left, left, down-left: viewer-right temple retains a dark wedge and angular strand contours; strands overlap the cheek edge in both r24 and candidate",
+    "down-right: viewer-left eye-corner/upper-cheek strands require Fable judgement after widening",
+    "forehead band alignment remains deferred; 13 r24/candidate forehead crops are provided",
+    "Fable, parent code review and Selaphiel review are pending"
+  ],
+  "runtimeSha256": {
+    "bundle/app.mjs": "7e21eddf5b1ddeb39fc211e0731a1364cbef0e3336436b5563cb6fca3176124b",
+    "bundle/corrections.mjs": "b953c4f6f781606e0ed992b8fd7139154aa53b88ab2a21c03937b6049d5baf25",
+    "bundle/cranium-surface.mjs": "f0e7a51ba30b6944c09d81a5a9ce0c041e730b04ffd646db4985f5f687dc9c7f",
+    "bundle/dome-data.mjs": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
+    "bundle/face-contour.mjs": "a03cc267de4d7cb337d78fda82e1f9845a8913a9374c6dee7cd9c5dad2261b6a",
+    "bundle/face-depth.mjs": "276614c28c2e991c068ffeaa1180670878afaf4165d4fa97e2dbd3584f472327",
+    "bundle/face-feature-prior.mjs": "2c1f27b871e77a6ac3faee650798d94655f93c9efdfe5ff680d44ed08dafa7d9",
+    "bundle/face-features.mjs": "ced3c91ef175741c435482e44d2623ed9459476be7bebda656b72dbefe0b142c",
+    "bundle/face-outline.mjs": "51d561f4bd60f63c2d6cf19834e4507be830f54720b8b52b9cfa2aac1471cf16",
+    "bundle/face-prior.mjs": "99e5062b9ecb9898357702fc785c1c5dcc8396d1fd9e2afe6e35c583c62f902c",
+    "bundle/face-profile.mjs": "fe30d46b53fa237611b627c8c3aaf8b18c93c946c78978af9c97e7bc3911aa74",
+    "bundle/face-solve-data.mjs": "eb234a18410b3480bd6cb39f9485c73f1ba37851cd7a6fe94e4ca08641335370",
+    "bundle/face-solve.mjs": "385da50e260eb0b9316996692b3affe41763812a0e9cc9a4a79b50453418ffba",
+    "bundle/feature-data.mjs": "ede312bbf51cb390be89197d466535ff27d04c4027347dc71615e5473500e9be",
+    "bundle/geometry.mjs": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d",
+    "bundle/hair-limits-data.mjs": "5044806edbc6d2e741c02dfb6a80ae6721bcfe2375e110188be1aa6759c565ba",
+    "bundle/hair-limits.mjs": "dde3066e568de8599c593d9c6867bf5a33b2e53232aeb9999c49a0b111da9149",
+    "bundle/hair-shell.mjs": "f24bfce2511b77d6730b93aa8f83d4b8db1a82bb829138200a3792c005147d94",
+    "bundle/hair-solve-data.mjs": "f96e5b5311fdc4282acf0ca41de58c945c71d180c6fd552cb2c5b05a18060005",
+    "bundle/hair-solve.mjs": "ab2e4f665e0ca24477e4dd07ef0835889aec5d52b7bb532fb26b785ac77814e8",
+    "bundle/hair-surface.mjs": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
+    "bundle/head-turn.mjs": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf",
+    "bundle/outline-data.mjs": "4d509c8ed9c9219661fc45ce9c3d62a43496535002ac6d3bd661e70727ab5702",
+    "bundle/ponytail-skin.mjs": "87a55807da252ce051d03af354ed8401773da4bb7cad8ccc9dad631f16d5111e",
+    "bundle/pose-grid.mjs": "4e37923756f7924ee4d06cf103ed242fe7824d82604a6d05a0605e9fb9152c44",
+    "bundle/profile-attachments.mjs": "1dc5cb5f5ba7a6ee4b44e416c4923e38a02004b072006422919e26116749cadc",
+    "bundle/renderer.mjs": "a9e96b9683ed1062a4d81754c3ab30516efbbf07adbfef79e52604dc0eaee8c7",
+    "bundle/rig.mjs": "d71eebf21183d8d2c250b6a06ed409e0a3ecdfdfa4997ec3d43367955e2c770c",
+    "bundle/side-strands.mjs": "da5bcefb883fc6f73fd92545a1a9be937cd06ea1381923efdab05cb60cba496c",
+    "bundle/skin-fill-data.mjs": "d010c83f22d3c7137285eba1a0f1d1ab230b91058249e439374147a15addf778",
+    "bundle/skin-fill.mjs": "5b716bb8dd134e93c8aac429334c76811a0d2bc5a1118fb5c700cea90deec284",
+    "bundle/stereo-attachments.mjs": "afa1e3790e6e4014b1c0181e9c9c1a0279c31ec6040c7b22828536b1125a52aa",
+    "bundle/viewer-pose.mjs": "9d85bc932b228d520564b75eec18ffc94b6970c208fc4c037740c048e3b7e832"
+  }
+}
