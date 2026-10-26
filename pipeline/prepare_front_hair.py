@@ -4,7 +4,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 from PIL import Image
-from hair_albedo import delight,neutralize_outline,transfer_redrawn_hair,smoothstep
+from hair_albedo import delight,neutralize_outline,transfer_redrawn_hair
 ROOT=Path(__file__).resolve().parents[1]
 IDS={'hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','back-hair-center','back-hair-left','back-hair-right'}
 
@@ -17,10 +17,37 @@ def copy_bangs_rgb(a,part,parts,images):
   mask=source[:,:,3]>200;target[mask,:3]=source[mask,:3];seed[top-y:bottom-y,left-x:right-x]|=mask
  return seed
 
-def taper_added(a,original,canvas_y):
- added=original[:,:,3]==0
- fade=np.broadcast_to(1-smoothstep(230,250,np.arange(a.shape[0])[:,None]+canvas_y),added.shape)
- a[:,:,3]=np.where(added,np.rint(a[:,:,3]*fade),a[:,:,3]).astype(np.uint8)
+def bangs_alpha(parts,images):
+ """Place the immutable fringe alpha in source-canvas coordinates."""
+ alpha=np.zeros((1536,1024),np.uint8)
+ for key in ['bangs-left','bangs-right']:
+  x,y,w,h=parts[key]['bbox']
+  alpha[y:y+h,x:x+w]=np.maximum(alpha[y:y+h,x:x+w],images[key][:,:,3])
+ return alpha
+
+def taper_added(a,original,canvas_x,canvas_y,bangs,backing_alpha):
+ """C: replace hidden backing with a sharp, source-derived curved hairline.
+
+ The immutable backing mask preserves the previously visible top/side alpha.
+ The approved central gap (source x519..566, y226..244) is the only visible
+ exception: rendering it reduces RGB error against the original illustration.
+ """
+ h,w=a.shape[:2];added=original[:,:,3]==0
+ sx=np.arange(350,651)
+ bottom=np.array([np.flatnonzero(bangs[:,xx]>128).max() for xx in sx],float)
+ teeth=bottom-cv2.GaussianBlur(bottom[None,:],(0,0),16)[0]
+ teeth/=np.max(np.abs(teeth))
+ xx=np.arange(canvas_x,canvas_x+w)+.5;yy=(np.arange(canvas_y,canvas_y+h)+.5)[:,None]
+ edge=232-26*((xx-502)/200)**2+6*np.interp(np.linspace(350,650,w),sx,teeth)
+ sharp=np.rint(np.clip((edge[None,:]-yy)/1.5+.5,0,1)*255).astype(np.uint8)
+ # A's source-strand interior supplies its 1.5px antialiased endpoints.
+ interior=cv2.erode((bangs==255).astype(np.uint8),np.ones((3,3),np.uint8))
+ interior=interior[canvas_y:canvas_y+h,canvas_x:canvas_x+w]>0
+ sharp=np.where((backing_alpha>0)&interior,sharp,0)
+ covered=bangs[canvas_y:canvas_y+h,canvas_x:canvas_x+w]>=250
+ gap=(xx[None,:]>=519)&(xx[None,:]<567)&(yy>=226)&(yy<245)
+ target=np.where(covered|gap,sharp,backing_alpha)
+ a[:,:,3]=np.where(added,target,a[:,:,3]).astype(np.uint8)
 
 def build():
  parts={p['id']:p for p in json.loads((ROOT/'parts/parts_index.json').read_text())}
@@ -39,6 +66,8 @@ def build():
    parts[key]['bbox'][2]=width
   original[key]=a
  images={key:neutralize_outline(a) for key,a in original.items()}
+ fringe=bangs_alpha(parts,original)
+ backing=np.array(Image.open(source/'hair-top-backing-alpha.png'))
  still=np.array(Image.open(ROOT/'source/character/still.png').convert('RGB'))
  redrawn=np.array(Image.open(ROOT/'source/references/still_no_rimlight.png').convert('RGB'))
  redrawn[20:740,152:872]=np.array(Image.open(ROOT/'source/references/head_front_no_rimlight.png').convert('RGB'))
@@ -66,7 +95,7 @@ def build():
    repair=domain&(a[:,:,3]==0 if key=='hair-top' else a[:,:,3]<255)&~seed
    rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
    a[repair,:3]=rgb[repair];a[domain,3]=255
-   if key=='hair-top':taper_added(a,original[key],y)
+   if key=='hair-top':taper_added(a,original[key],x,y,fringe,backing)
   fallback=delight(a,y,key.startswith('back-hair'))
   # Visible redrawn texels retain their authored tone; correction only supplies
   # hidden backing and the soft inward edge of the safe transfer mask.
@@ -90,7 +119,9 @@ def fill_seam():
  images={key:np.array(Image.open(ROOT/parts[key]['file']).convert('RGBA')) for key in ['bangs-left','bangs-right']}
  seed=copy_bangs_rgb(a,part,parts,images);repair=domain&(a[:,:,3]==0)&~seed
  rgb=cv2.inpaint(a[:,:,:3].copy(),repair.astype(np.uint8)*255,5,cv2.INPAINT_TELEA)
- a[repair,:3]=rgb[repair];a[domain,3]=255;taper_added(a,original,y)
+ backing=np.array(Image.open(ROOT/'source/front-hair-inputs/hair-top-backing-alpha.png'))
+ a[repair,:3]=rgb[repair];a[domain,3]=255
+ taper_added(a,original,x,y,bangs_alpha(parts,images),backing)
  copy_bangs_rgb(a,part,parts,images);Image.fromarray(a).save(ROOT/part['file'])
 
 if __name__=='__main__':build()

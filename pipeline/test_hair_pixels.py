@@ -6,25 +6,23 @@ from pipeline.hair_albedo import delight, transfer_redrawn_hair
 from pipeline.fit_outline import symmetrize
 
 class HairPixels(unittest.TestCase):
- def test_atlas_changes_only_the_1767_added_temple_texels(self):
-  import io,json,subprocess
+ def test_atlas_preserves_the_authored_temple_notch(self):
+  import json
   root=Path(__file__).resolve().parents[1]
   rig=json.loads((root/'bundle/assets/seosoyoung-rig.json').read_text())
   m=next(m for m in rig['meshes'] if m['id']=='side-hair-right')
   ax,ay,w,h=m['atlas'];bx,by=m['bbox'][:2]
   original=np.array(Image.open(root/'source/front-hair-inputs/side-hair-right.png'))
-  before=np.array(Image.open(io.BytesIO(subprocess.check_output(['git','show','1458c77:bundle/assets/texture_00.png'],cwd=root))))
   after=np.array(Image.open(root/'bundle/assets/texture_00.png'))
-  expected=before.copy();count=0
+  notch=np.zeros((h,w),bool)
   for row in range(340-by,407-by):
    edges=np.diff(np.pad(original[row,:,3]>128,(1,1)).astype(int))
    runs=[(l,r) for l,r in zip(np.where(edges==1)[0],np.where(edges==-1)[0]) if r-l>=20]
    if not runs:continue
    cols=np.arange(max(0,634-bx),runs[0][0]);cols=cols[original[row,cols,3]<255]
-   expected[ay+row,ax+cols]=original[row,cols];count+=len(cols)
-  self.assertEqual(count,1767)
-  self.assertEqual(int(np.any(before!=after,axis=2).sum()),1767)
-  np.testing.assert_array_equal(after,expected)
+   notch[row,cols]=True
+  self.assertTrue(notch.any())
+  np.testing.assert_array_equal(after[ay:ay+h,ax:ax+w][notch],original[notch])
  def test_rim_is_reduced_without_changing_alpha_or_erasing_texture(self):
   a=np.zeros((100,100,4),np.uint8);a[5:95,5:95]=[65,48,44,255]
   a[8:20,10:90,:3]=[220,160,125]
@@ -127,5 +125,53 @@ class HairPixels(unittest.TestCase):
   self.assertGreaterEqual(x+w,700,'backing crop must contain the requested canvas x700 endpoint')
   a=np.array(Image.open(root/p['file']))[:,:,3];end=min(w,700-x)
   self.assertTrue((a[350-y:408-y,end-2:end]==255).all())
+
+ def test_hairline_alpha_changes_only_added_top_pixels(self):
+  import json
+  from prepare_front_hair import taper_added, bangs_alpha
+  root=Path(__file__).resolve().parents[1]
+  parts={p['id']:p for p in json.loads((root/'parts/parts_index.json').read_text())}
+  original=np.array(Image.open(root/'source/front-hair-inputs/hair-top.png').convert('RGBA'))
+  backing=np.array(Image.open(root/'source/front-hair-inputs/hair-top-backing-alpha.png'))
+  images={key:np.array(Image.open(root/'source/front-hair-inputs'/f'{key}.png').convert('RGBA'))
+          for key in ['bangs-left','bangs-right']}
+  before=original.copy();before[:,:,3]=backing;after=before.copy()
+  x,y,w,h=parts['hair-top']['bbox']
+  taper_added(after,original,x,y,bangs_alpha(parts,images),backing)
+  self.assertTrue(np.any(after!=before),'the old horizontal backing must change')
+  np.testing.assert_array_equal(after[:,:,:3],before[:,:,:3])
+  np.testing.assert_array_equal(after[original[:,:,3]>0],before[original[:,:,3]>0])
+  rig=json.loads((root/'bundle/assets/seosoyoung-rig.json').read_text())
+  mesh=next(m for m in rig['meshes'] if m['id']=='hair-top');ax,ay,_,_=mesh['atlas']
+  atlas=np.array(Image.open(root/'bundle/assets/texture_00.png').convert('RGBA'))
+  np.testing.assert_array_equal(atlas[ay:ay+h,ax:ax+w,3],after[:,:,3])
+
+ def test_hairline_neutral_improves_gap_and_preserves_outside_within_one_lsb(self):
+  import json
+  from pipeline.hairline_render import render_neutral_pair,neutral_metrics
+  root=Path(__file__).resolve().parents[1]
+  rig=json.loads((root/'bundle/assets/seosoyoung-rig.json').read_text())
+  mesh=next(m for m in rig['meshes'] if m['id']=='hair-top');ax,ay,w,h=mesh['atlas']
+  atlas=np.array(Image.open(root/'bundle/assets/texture_00.png').convert('RGBA'))
+  atlas[ay:ay+h,ax:ax+w,3]=np.array(Image.open(root/'source/front-hair-inputs/hair-top-backing-alpha.png'))
+  before,after=render_neutral_pair(root,atlas)
+  still=np.array(Image.open(root/'source/character/still.png').convert('RGB'))[:1024]
+  gap=np.zeros(before.shape[:2],bool);gap[226:245,519:567]=True
+  result=neutral_metrics(before,after,still,gap)
+  print('neutral hairline:',result,flush=True)
+  self.assertLess(result['afterMAE'],result['beforeMAE'])
+  self.assertLessEqual(result['outsideMaxLSB'],1)
+
+ def test_neutral_metric_detects_a_two_lsb_violation_and_missing_improvement(self):
+  from pipeline.hairline_render import neutral_metrics
+  a=np.zeros((2,2,4),np.uint8);b=a.copy();still=np.ones((2,2,3))*10
+  gap=np.zeros((2,2),bool);gap[0,0]=True
+  flat=neutral_metrics(a,b,still,gap)
+  self.assertEqual(flat['afterMAE'],flat['beforeMAE'])
+  b[0,0,:3]=10;b[1,1,0]=1
+  good=neutral_metrics(a,b,still,gap)
+  self.assertLess(good['afterMAE'],good['beforeMAE']);self.assertEqual(good['outsideMaxLSB'],1)
+  b[1,1,0]=2
+  self.assertEqual(neutral_metrics(a,b,still,gap)['outsideMaxLSB'],2)
 
 if __name__=='__main__':unittest.main()
