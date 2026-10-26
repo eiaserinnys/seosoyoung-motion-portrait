@@ -6,7 +6,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from capture_sam3_eyes import ROOT,SETUP,Handler
 
-OUT=ROOT/'debug/sam3-eye-v292/alpha'
+OUT=ROOT/'debug/sam3-eye-v293/alpha'
 ALPHA_SETUP='''async()=>{
  const {FRAME_CACHE}=await import('./pose-grid.mjs');
  // Geometry is state-independent; reuse the real renderer's frame cache for
@@ -49,7 +49,7 @@ def alpha_report(cases,V_own):
 def main():
     pitch,sign=map(int,sys.argv[1].split(','));OUT.mkdir(parents=True,exist_ok=True)
     geometry=json.loads((ROOT/'docs/sam3-eye-junction-v2.json').read_text())
-    digest=hashlib.sha256((ROOT/'bundle/renderer.mjs').read_bytes()+geometry['inputSha'].encode()).hexdigest()
+    digest=hashlib.sha256((ROOT/'bundle/renderer.mjs').read_bytes()+(ROOT/'bundle/assets/texture_00.png').read_bytes()+geometry['inputSha'].encode()).hexdigest()
     signature=OUT/'inputs.sha256'
     if signature.exists():assert signature.read_text().strip()==digest,'Alpha cache belongs to other runtime inputs'
     signature.write_text(digest+'\n')

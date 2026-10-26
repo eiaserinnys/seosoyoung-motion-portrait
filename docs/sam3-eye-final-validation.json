@@ -1,34 +1,12 @@
 {
-  "runtimeRevision": "v2.9.2 requested 52..67 junction",
-  "inputSha": "46d5bd8a510ff90be1ecd24b233ce562f7c6d2495419464068052bbba3602593",
-  "J0": {
-    "V_own": 7.240357154381933,
-    "own": {
-      "sam3": {
-        "distancePx": 6.22078660612518,
-        "pitch": 0,
-        "fromYaw": 45,
-        "toYaw": 46,
-        "mesh": "eye-left-iris",
-        "vertex": 72,
-        "rest": [
-          380,
-          478
-        ]
-      },
-      "legacy": {
-        "distancePx": 7.240357154381933,
-        "pitch": 0,
-        "fromYaw": -45,
-        "toYaw": -46,
-        "mesh": "eye-right-upper-lashes",
-        "vertex": 8,
-        "rest": [
-          675,
-          372
-        ]
-      }
-    }
+  "runtimeRevision": "v2.9.3 F-A iris law + F-B face-skin source",
+  "complete": false,
+  "status": "STOP_R4_A_PROTRUSION",
+  "baseMain": "a29bb358231566d0c90b1b058bc8a153cfc57410",
+  "r24Comparison": "1458c77a77af6016dda236aaad06c00ce1c8cbd4",
+  "R1": {
+    "maxErrorPx": 8.265626605580337e-15,
+    "aLaw": "Fable F-A cos(max(theta,0)); independent audit for other terms"
   },
   "J1": {
     "distancePx": 0.06927192446320186,
@@ -259,373 +237,114 @@
     "poses": 5406,
     "peaks": {
       "far": {
-        "difference": 40.752941176470586,
+        "difference": 37.576470588235225,
         "side": "left",
-        "pitch": 0,
+        "pitch": -30,
         "fromYaw": -60,
         "toYaw": -60.1,
-        "fromAlpha": 1210.721568627451,
-        "toAlpha": 1169.9686274509804
+        "fromAlpha": 1061.521568627451,
+        "toAlpha": 1023.9450980392157
       },
       "near": {
-        "difference": 22.858823529411893,
+        "difference": 21.83529411764721,
         "side": "left",
         "pitch": 0,
-        "fromYaw": 62.9,
-        "toYaw": 63,
-        "fromAlpha": 5763.619607843138,
-        "toAlpha": 5740.760784313726
+        "fromYaw": 61.3,
+        "toYaw": 61.4,
+        "fromAlpha": 6075.054901960784,
+        "toAlpha": 6053.219607843137
       }
     },
     "passed": true,
-    "inputSha": "910f3f86d5c39a032197de2479723cd549540e3b7b58497dac4b5811f684ba78"
-  },
-  "J4": {
-    "passed": true,
-    "evidence": "pipeline/test_eye_clip_contract.mjs: three tests passed; fixed maskId, eyeFaceMask source, continuous soft strengths"
-  },
-  "J5": {
-    "passed": true,
-    "poses": 36,
-    "maxOutsidePixels": 0
-  },
-  "J6": {
-    "distancePx": 0,
-    "xyzMaxErrorPx": 0,
-    "xyStepDeg": 1,
-    "xyzStepDeg": 1,
-    "limitPx": 1e-06
-  },
-  "J7": {
-    "maxWeight": 0,
-    "limit": 0.05,
-    "poses": [
-      {
-        "name": "front",
-        "requested": [
-          -1.3058707682272463,
-          1.5480214716376788
-        ],
-        "s": 0
-      },
-      {
-        "name": "left",
-        "requested": [
-          -47.61660424600042,
-          0.32643746760535375
-        ],
-        "s": 0
-      },
-      {
-        "name": "right",
-        "requested": [
-          48.30864868359759,
-          1.9607457790839389
-        ],
-        "s": 0
-      },
-      {
-        "name": "up",
-        "requested": [
-          1.4487257139741638,
-          33.61648637349459
-        ],
-        "s": 0
-      },
-      {
-        "name": "down",
-        "requested": [
-          21.97680704042867,
-          -31.638613075805154
-        ],
-        "s": 0
-      },
-      {
-        "name": "up-left",
-        "requested": [
-          -45.83872508935118,
-          32.22091859371879
-        ],
-        "s": 0
-      },
-      {
-        "name": "up-right",
-        "requested": [
-          41.97782361066015,
-          24.15351813281776
-        ],
-        "s": 0
-      },
-      {
-        "name": "down-left",
-        "requested": [
-          -51.295645849108304,
-          -33.28737527145702
-        ],
-        "s": 0
-      },
-      {
-        "name": "down-right",
-        "requested": [
-          34.88569731719818,
-          -25.180988581439273
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0276",
-        "requested": [
-          -0.1316471753661597,
-          -35.27593686319509
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0275",
-        "requested": [
-          3.423029926745324,
-          -34.79532075415544
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0277",
-        "requested": [
-          -4.181266677125033,
-          -35.468759359037044
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0017",
-        "requested": [
-          -20.660051638026818,
-          8.436096537393329
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0213",
-        "requested": [
-          30.44990175653519,
-          27.189167494704396
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0048",
-        "requested": [
-          -31.441741562845888,
-          -5.060624139996259
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0255",
-        "requested": [
-          36.335075962587034,
-          -21.392617500992888
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0342",
-        "requested": [
-          -23.549451411999836,
-          -0.7715580500254465
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0074",
-        "requested": [
-          22.76111440389865,
-          3.050541697290215
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0086",
-        "requested": [
-          0.06149148824259608,
-          17.687110510018808
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0102",
-        "requested": [
-          -0.2892513206684326,
-          -21.431895999144032
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0043",
-        "requested": [
-          -47.44229055079851,
-          -1.4550831460781348
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0241",
-        "requested": [
-          47.97311156083558,
-          0.047614838889337575
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0093",
-        "requested": [
-          -0.8107655931882455,
-          30.626160355312347
-        ],
-        "s": 0
-      },
-      {
-        "name": "aux-0103",
-        "requested": [
-          -0.30140803123711707,
-          -23.21953890292815
-        ],
-        "s": 0
-      }
-    ],
-    "passed": true
-  },
-  "R1": {
-    "maxErrorPx": 8.265626605580337e-15
-  },
-  "R2Ratio": {
-    "dTemp": {
-      "r24": 10.23817902249429,
-      "v291": 5.2513035401756625,
-      "limit": 3.759995664880529,
-      "passed": false,
-      "betterThanR24": true
-    },
-    "dNas": {
-      "r24": 6.144262069414464,
-      "v291": 3.8757188050723514,
-      "limit": 3.0257798801506213,
-      "passed": false,
-      "betterThanR24": true
-    },
-    "h": {
-      "r24": 5.339688101439596,
-      "v291": 2.976624803050544,
-      "limit": 3.7260039699061562,
-      "passed": true,
-      "betterThanR24": true
-    },
-    "deltaY": {
-      "r24": 2.169371725528979,
-      "v291": 2.024473576533968,
-      "limit": 2.0,
-      "passed": false,
-      "betterThanR24": true
-    },
-    "a": {
-      "r24": 4.69542398477026,
-      "v291": 2.623156442263271,
-      "limit": 2.0,
-      "passed": false,
-      "betterThanR24": true
-    }
-  },
-  "R3Ratio": {
-    "limitPx": 4.538669820225932,
-    "excluded": [
-      "aux-0213:left",
-      "up-left:right",
-      "up-right:left"
-    ]
-  },
-  "R3Summary": {
-    "v291": {
-      "maxEyeErrorPx": 7.6103805459993605,
-      "maxPairedErrorPx": 10.215001582131944,
-      "allEyesMaxErrorPx": 12.440253428768402,
-      "passed": false
-    },
-    "r24": {
-      "maxEyeErrorPx": 14.539872507706207,
-      "maxPairedErrorPx": 19.11562304864816,
-      "allEyesMaxErrorPx": 14.539872507706207,
-      "passed": false
-    }
-  },
-  "frontOffsets": {
-    "left": {
-      "v291": {
-        "dTemp": 12.589780119278373,
-        "dNas": 6.94730163444774,
-        "h": -0.14106196212077293,
-        "a": 0.16121367099515282
-      },
-      "r24": {
-        "dTemp": 12.82152477133394,
-        "dNas": 6.715556982392172,
-        "h": -0.21159294318113098,
-        "a": -0.32242734199030565
-      }
-    },
-    "right": {
-      "v291": {
-        "dTemp": 8.188002701226594,
-        "dNas": 2.5563254878829866,
-        "h": -0.8246211251234854,
-        "a": 0.20858063753126999
-      },
-      "r24": {
-        "dTemp": 9.458889376417005,
-        "dNas": 1.3824530627070999,
-        "h": -0.8052182751205805,
-        "a": 0.4608176875690617
-      }
-    }
+    "inputSha": "853c130f834b74c2fa9026974476ea0c537bde60d91161004b1920e616f60a81"
   },
   "R4": {
-    "poses": 48,
-    "mandatoryPoses": 38,
-    "farOutsidePixels": 0
+    "expectedPoses": 48,
+    "measuredPoses": 2,
+    "pose": "left",
+    "requested": [
+      -47.61660424600042,
+      0.32643746760535375
+    ],
+    "achieved": [
+      -36.82991693704355,
+      0.7006801983402772
+    ],
+    "farSide": "left",
+    "farOutsidePixels": 1,
+    "nearOutsidePixels": 207,
+    "r24FarOutsidePixels": 0,
+    "samples": [
+      {
+        "coordinate720": [
+          171,
+          323
+        ],
+        "coordinateArtwork": [
+          323,
+          343
+        ],
+        "faceMaskRGBA": [
+          125,
+          125,
+          125,
+          255
+        ],
+        "eyeIdentifyRGBA": [
+          144,
+          144,
+          144,
+          220
+        ],
+        "colorRGBA": [
+          163,
+          133,
+          125,
+          220
+        ]
+      }
+    ],
+    "maskBasis": "face-skin for both revisions; unchanged face geometry, original r24 eye rendering"
   },
   "R5": {
+    "baseline": "a29bb358231566d0c90b1b058bc8a153cfc57410",
+    "scope": "full canvas, hair on, neutral",
+    "canvasSize": [
+      1100,
+      1600
+    ],
     "changedPixels": 0,
     "maxChannelDifferenceLSB": 0,
     "passed": true
   },
-  "Stage4Evidence": "Reused: original up 5px matches r24; hair-on 0px; excluded by Fable junction v2",
-  "R7PoseNames": [
-    "up-left",
-    "up",
-    "up-right",
-    "left",
-    "front",
-    "right",
-    "down-left",
-    "down",
-    "down-right",
-    "aux-0213",
-    "aux-0255",
-    "aux-0074",
-    "aux-0102",
-    "aux-0276",
-    "aux-0277",
-    "aux-0043",
-    "aux-0241"
-  ],
-  "captureSha256": {
-    "sam3_eye_R7_comparison.png": "275fb5ca09baca71897f537445dd91a657f1a5756d8cf114433cb662eea87c47",
-    "sam3_eye_R7_temporal_sweep.png": "51fc0c7039ae4489118217463c9250e87a2c17d09cd5d93f3bf3bf06ca7778e7",
-    "sam3_eye_R7_outside_regressions_4x.png": "6e21f6f07f70aee7770ac7997663ef103b5e18b248bad2c8b7581f942ee0094b",
-    "sam3_eye_9dir_grid.png": "1d480245050f9b1396568b1307d93d9e1ff360d50054b1f4b20bf7cd37f6d0df",
-    "sam3_eye_viewer_wide.png": "6d762119e953a3cfd7a6dc4be49037ebbce3e599150f0a76d1fcdf6a0b8672d0",
-    "sam3_eye_viewer_narrow.png": "5cddb7a7799c4763fbe3ecc94a60a7ce20e109d10691a33b8e032d6e0df00799"
+  "J5": {
+    "runtimeRevision": "v2.9.3",
+    "status": "not rerun in this review",
+    "maskSource": "face-skin",
+    "scope": "Fable r25 1.3: J1/J2 geometry; R4 and J3 mask checks",
+    "evidence": [
+      "sam3-eye-far-clip-contract.json",
+      "sam3-eye-junction-alpha.json"
+    ]
   },
-  "viewerHtmlSha256": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
-  "tests": "7 Node integration/clip/junction + 1 Node fault judge + 2 Node R1/front + 4 Python ratio/alpha = 14 valid tests; unchanged audit replay reused",
-  "reviews": "Delegator/Fable re-review pending, then Selaphiel on this same worktree; no merge/deployment/cleanup"
+  "Stage4": {
+    "status": "excluded by Fable r25 1.3; no old candidate metrics carried forward"
+  },
+  "R2Ratio": {
+    "status": "not measured: F-C stopped at mandatory R4 gate"
+  },
+  "R3Ratio": {
+    "status": "not measured: F-C stopped at mandatory R4 gate"
+  },
+  "FAIris": {
+    "status": "not visually verified in four required poses"
+  },
+  "FBTemporal": {
+    "status": "eight poses not measured"
+  },
+  "R7": {
+    "status": "not regenerated: F-C stopped; old images removed from current outputs"
+  },
+  "tests": "19 previously passed on unchanged relevant code; no test reruns at this stop",
+  "failureOverlay": "docs/captures/sam3_eye_clip_failure_left.png"
 }

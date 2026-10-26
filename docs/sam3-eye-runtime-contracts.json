@@ -10,10 +10,10 @@
     }
   ],
   "R1": {
-    "maxErrorPx": 8.265626605580337e-15
+    "maxErrorPx": 8.265626605580337e-15,
+    "aLaw": "Fable F-A cos(max(theta,0)); independent audit for other terms"
   },
   "R6": {
-    "source": "featureWorld Float32 vertices; requested 0..±90; pitch -30/0/30",
     "J1": {
       "distancePx": 0.06927192446320186,
       "pitch": 0,
@@ -238,6 +238,6 @@
       "limitPx": 7.240357154381933
     },
     "V_own": 7.240357154381933,
-    "passed": true
+    "source": "actual featureWorld Float32 vertices"
   }
 }

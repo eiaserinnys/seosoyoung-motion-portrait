@@ -1,6 +1,6 @@
 {
   "complete": true,
-  "inputSha": "46d5bd8a510ff90be1ecd24b233ce562f7c6d2495419464068052bbba3602593",
+  "inputSha": "71b239f3c7955cdf06a08c1b8fd41bc75ca5adcc983a5eba5aee1e5f0901addc",
   "J0": {
     "V_own": 7.240357154381933,
     "own": {
@@ -459,6 +459,7 @@
     ],
     "passed": true
   },
+  "reusedFrom": "798df34: J0,J6,J7; Fable 1.3 only J1/J2 geometry sweep rerun",
   "passed": {
     "J1": true,
     "J2": true,

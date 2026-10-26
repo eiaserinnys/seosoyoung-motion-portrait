@@ -4,13 +4,15 @@ import http.server
 import json
 import threading
 import csv
+import base64
+import io
 import numpy as np
 from PIL import Image
 from playwright.sync_api import sync_playwright
 from capture_sam3_eyes import ROOT, ROWS, BOOT, SETUP, Handler, image, binary
 from eye_capture_angles import inverse_achieved, achieved
 
-OUT=ROOT/'debug/sam3-eye-v292/far-clip-contract'
+OUT=ROOT/'debug/sam3-eye-v293/far-clip-contract'
 BASELINE=ROOT/'debug/sam3-eye-v291/far-clip-contract'
 DOC=ROOT/'docs/captures'
 SIDE_SETUP='''async()=>{
@@ -59,9 +61,9 @@ def save_report(report):
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     previous=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
-    report=dict(rendererContract='v2: eye soft clip far0..15/near52..67; fixed authored masks and exposed-skin-clip; nose/mouth retain profile fallback',
+    report=dict(rendererContract='v2: eye soft clip far0..15/near52..67; fixed authored masks and face-skin eye silhouette; nose/mouth retain profile fallback',
                 R4Definition='a: achieved theta_far>=15, zero far side only; all other counts report-only against r24',
-                R5=previous['R5'],poses=[])
+                R5=previous['R5'],maskBasis='face-skin for both revisions; unchanged face geometry, original r24 eye rendering',poses=[])
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT)))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     try:
@@ -73,10 +75,17 @@ def main():
                 page.goto(f'http://127.0.0.1:{server.server_port}/{path}/',wait_until='networkidle')
                 page.wait_for_function('window.studio?.ready',timeout=30000);page.evaluate('window.requestAnimationFrame=()=>0');page.evaluate(SETUP);page.evaluate(SIDE_SETUP)
                 pages[rev]=page
-            neutral={rev:image(page.evaluate('(a)=>captureEyes(a)',[0,0,False,False])['color']) for rev,page in pages.items()}
-            for rev,im in neutral.items():im.save(OUT/f'{rev}-neutral.png')
-            diff=np.abs(np.array(neutral['v291']).astype(int)-np.array(neutral['r24']).astype(int))
-            report['R5']=dict(changedPixels=int(np.any(diff,axis=2).sum()),maxChannelDifferenceLSB=int(diff.max()),passed=not np.any(diff))
+            baseline_page=browser.new_page(viewport=dict(width=1440,height=1000),device_scale_factor=1)
+            baseline_page.goto(f'http://127.0.0.1:{server.server_port}/debug/r5-a29/bundle/',wait_until='networkidle')
+            baseline_page.wait_for_function('window.studio?.ready',timeout=30000);baseline_page.evaluate('window.requestAnimationFrame=()=>0');baseline_page.evaluate(SETUP)
+            neutral={rev:page.evaluate('(a)=>captureEyes(a)',[0,0,False,True]) for rev,page in [('r5-a29',baseline_page),('v291',pages['v291'])]}
+            neutral_full={rev:Image.open(io.BytesIO(base64.b64decode(raw['full']))).convert('RGBA') for rev,raw in neutral.items()}
+            for rev,raw in neutral.items():
+                image(raw['color']).save(OUT/f'{rev}-neutral.png')
+                neutral_full[rev].save(OUT/f'{rev}-neutral-full.png')
+            diff=np.abs(np.array(neutral_full['v291']).astype(int)-np.array(neutral_full['r5-a29']).astype(int))
+            report['R5']=dict(baseline='a29bb358231566d0c90b1b058bc8a153cfc57410',scope='full canvas, hair on, neutral',canvasSize=list(neutral_full['v291'].size),changedPixels=int(np.any(diff,axis=2).sum()),maxChannelDifferenceLSB=int(diff.max()),passed=not np.any(diff))
+            baseline_page.close()
             print('R5',json.dumps(report['R5']),flush=True)
             if not report['R5']['passed']:
                 report['status']='STOP_R5';save_report(report);browser.close();return
@@ -105,7 +114,11 @@ def main():
                         captures[rev]={k:image(raw[k]) for k in ['color','faceMask','left','right']}
                         controls[rev]=raw['controls']
                         for k,im in captures[rev].items():im.save(OUT/f"{rev}-{pose['name']}-{k}.png")
-                    evidence[rev]={side:pixel_evidence(captures[rev],side) for side in ['left','right']}
+                # Compare both eye renders against the same face silhouette.
+                # Face geometry is unchanged; r24 itself retains its authored clip.
+                captures['r24']['faceMask']=captures['v291']['faceMask']
+                captures['r24']['faceMask'].save(OUT/f"r24-{pose['name']}-faceMask.png")
+                evidence={rev:{side:pixel_evidence(captures[rev],side) for side in ['left','right']} for rev in captures}
                 row={**pose,'actualAchieved':achieved(BOOT['achieved']['c'],*pose['requested']),'controls':controls,
                      'thetaFarAchieved':abs(pose['targetAchieved'][0])}
                 row['sides']={side:{**evidence['v291'][side],

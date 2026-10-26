@@ -2,6 +2,30 @@
 import numpy as np
 
 
+def model_fidelity(records,measurement,fit):
+    """Fable per_eye2's front-normalized render/model split, in still pixels."""
+    reference={(r['name'],r['side']):r for r in measurement['records']}
+    front={r['side']:r['v291'] for r in records if r['name']=='front'}
+    unclipped={'aux-0017','aux-0342','aux-0048','aux-0213','aux-0255','down','down-right','aux-0074'}
+    iris_poses={'up-left':'left','down-left':'left','right':'right','up-right':'right'}
+    temporal=[];iris=[]
+    for row in records:
+        name,side=row['name'],row['side'];ref=reference[name,side];b=fit[side]
+        theta=np.clip(ref['yaw']*(-1 if side=='left' else 1),-45,45)
+        rT=float(np.exp(np.interp(theta,b['knotsDeg'],b['r_T'])))
+        rN=float(np.exp(np.interp(theta,b['knotsDeg'],b['r_N'])))
+        render=row['v291']
+        if name in unclipped and theta>0:
+            error=float(np.log((render['dTemp']/front[side]['dTemp'])/rT)*measurement['rest'][side]['dTemp'])
+            temporal.append(dict(name=name,side=side,theta=float(theta),renderDTemp=render['dTemp'],modelDTemp=b['rest']['dTemp']*rT,
+                rawErrorPx=render['dTemp']-b['rest']['dTemp']*rT,normalizedErrorPx=error,passed=abs(error)<=2,
+                scope='eye clip' if abs(error)<=2 else 'remaining face silhouette limitation; outside this eye PR per Fable 1.3'))
+        if iris_poses.get(name)==side:
+            iris.append(dict(name=name,side=side,theta=float(theta),modelIrisDiameter=2*b['rest']['a']*float(np.cos(np.deg2rad(max(theta,0)))),
+                modelOpeningWidth=b['rest']['dTemp']*rT+b['rest']['dNas']*rN,renderIrisChord=2*render['a'],renderOpeningWidth=render['dTemp']+render['dNas']))
+    return dict(FBTemporal=temporal,FAIris=iris,modelComparison='per_eye2: log((render/render-front)/model-ratio) × measured still dTemp; raw width difference also retained')
+
+
 def ratio_error(render,render_front,reference,rest,field,w0):
     if field=='deltaY':
         d=(np.array(render['cI'])-render['cO'])@np.array(render['E'])

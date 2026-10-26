@@ -142,7 +142,7 @@ def sheets(colors):
         rows.append((name,tiles,width*2,height*2))
     cell_width=max(r[2] for r in rows)+20;sheet=Image.new('RGB',(cell_width*3,sum(r[3]+26 for r in rows)),'#eeeeee');y=0
     for name,tiles,width,height in rows:
-        for j,(im,label) in enumerate(zip(tiles,['reference','v2.9.2','r24'])):
+        for j,(im,label) in enumerate(zip(tiles,['reference','v2.9.3','r24'])):
             sheet.paste(im,(j*cell_width,y));ImageDraw.Draw(sheet).text((j*cell_width+4,y+height+3),name+' | '+label,fill='black')
         y+=height+26
     sheet.save(DOC/'sam3_eye_R7_comparison.png')

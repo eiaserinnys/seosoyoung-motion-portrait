@@ -9,7 +9,7 @@ import http.server
 import json
 import threading
 import shutil
-from eye_render_ratios import ratio_gates
+from eye_render_ratios import ratio_gates,model_fidelity
 import numpy as np
 from PIL import Image, ImageDraw
 from playwright.sync_api import sync_playwright
@@ -17,7 +17,7 @@ import capture_sam3_eyes as c
 from eye_capture_angles import inverse_achieved, achieved
 
 ROOT=c.ROOT
-OUT=ROOT/'debug/sam3-eye-v292/final-render'
+OUT=ROOT/'debug/sam3-eye-v293/final-render'
 DOC=c.DOC
 def clipped_measure(captures,row,side):
     q=c.measure(captures,row,side)
@@ -50,7 +50,7 @@ def stage_measure(name,rgba,owned,geometry):
 
 def regression_sheet():
     report=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
-    cache=ROOT/'debug/sam3-eye-v292/far-clip-contract';tiles=[]
+    cache=ROOT/'debug/sam3-eye-v293/far-clip-contract';tiles=[]
     for row in report['poses']:
         for side in row['increasedSides']:
             coords=row['sides'][side]['coordinates720']+row['sides'][side]['r24Coordinates720']
@@ -74,7 +74,7 @@ def regression_sheet():
     sheet=Image.new('RGB',(width*2,sum(pair[0].height+24 for _,pair in tiles)),'#eeeeee');y=0
     for label,pair in tiles:
         for j,im in enumerate(pair):
-            sheet.paste(im,(width*j,y));ImageDraw.Draw(sheet).text((width*j+4,y+im.height+3),label+' | '+['v2.9.2','r24'][j],fill='black')
+            sheet.paste(im,(width*j,y));ImageDraw.Draw(sheet).text((width*j+4,y+im.height+3),label+' | '+['v2.9.3','r24'][j],fill='black')
         y+=pair[0].height+24
     sheet.save(DOC/'sam3_eye_R7_outside_regressions_4x.png')
 
@@ -83,13 +83,14 @@ def main():
     OUT.mkdir(parents=True,exist_ok=True);c.OUT=OUT
     r4=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
     junction=json.loads((ROOT/'docs/sam3-eye-junction-v2.json').read_text())
-    j5=json.loads((ROOT/'docs/sam3-eye-junction-profile.json').read_text())
+    j5=dict(runtimeRevision='v2.9.3',status='not rerun in this review',maskSource='face-skin',
+            scope='Fable r25 1.3: J1/J2 geometry; R4 and J3 mask checks',
+            evidence=['sam3-eye-far-clip-contract.json','sam3-eye-junction-alpha.json'])
     assert junction['complete'] and junction['passed']['J1'] and junction['passed']['J6']
-    assert r4['status']=='R4_PASS' and r4['R5']['passed'] and j5['passed']
-    old_metrics=json.loads((ROOT/'docs/sam3-eye-render-metrics.json').read_text())
+    assert r4['status']=='R4_PASS' and r4['R5']['passed']
     baseline=ROOT/'debug/sam3-eye-v291/final-render'
     for path in baseline.glob('r24-*.png'):shutil.copyfile(path,OUT/path.name)
-    neutral={rev:Image.open(ROOT/f'debug/sam3-eye-v292/far-clip-contract/{rev}-neutral.png').convert('RGBA') for rev in ['r24','v291']}
+    neutral={rev:Image.open(ROOT/f'debug/sam3-eye-v293/far-clip-contract/{key}-neutral.png').convert('RGBA') for rev,key in [('r24','r5-a29'),('v291','v291')]}
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(c.Handler,directory=str(ROOT)))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     colors={r:{} for r in ['r24','v291']};records={r:{} for r in colors};inputs=[]
@@ -117,7 +118,7 @@ def main():
                     records[rev][row['name']]={side:clipped_measure(captures,row,side) for side in ['left','right']}
                     colors[rev][row['name']]=captures['color']
                     if rev=='v291':inputs.append(dict(name=row['name'],requested=requested,targetAchieved=[row['yaw'],row['pitch']],actualAchieved=achieved(c.BOOT['achieved']['c'],*requested)))
-                    print('MATCHED v292',rev,row['name'],flush=True)
+                    print('MATCHED v293',rev,row['name'],flush=True)
                 if page is not None:
                     sweep=[]
                     for yaw in [15,17,19,21,23,25,27,29,30]:
@@ -136,11 +137,17 @@ def main():
         server.shutdown();server.server_close();thread.join()
     combined=[dict(name=r['name'],side=side,**{rev:records[rev][r['name']][side] for rev in records}) for r in c.ROWS for side in ['left','right']]
     report=c.gates(combined,neutral)
-    report['runtimeRevision']='v2.9.2 requested 52..67 junction'
+    report['runtimeRevision']='v2.9.3 F-A far iris disk + F-B face-skin mask, requested 52..67 junction'
     report['absoluteForm']='Reference only: SAM vs identify constant offsets; ratio form is authoritative'
     report.update(ratio_gates(combined,c.M,c.AUDIT));report['R5']=r4['R5']
+    report.update(model_fidelity(combined,c.M,json.loads((ROOT/'source/viewer/sam3-eye-fit.json').read_text())))
+    accepted={'dNas':report['R2Ratio']['dNas']['passed'],'R3':report['R3Ratio']['v291']['passed'],'deltaY':report['R2Ratio']['deltaY']['passed']}
+    report['FableAcceptedExcess']={k:'PASS' if passed else '한계 초과이나 렌더에서 결함이 아님' for k,passed in accepted.items()}
+    report['FableAcceptanceReason']='r25-impl-review-fable.md 1.2: dNas/R3 residual is reference nasal-line extension and beta omission plus approved nasal outlier, not iris/lid misalignment; deltaY excess is subpixel. Limits unchanged.'
     report['Junction']=junction;report['J3']=json.loads((ROOT/'docs/sam3-eye-junction-alpha.json').read_text());report['J5']=j5
-    report['Stage4']=old_metrics['Stage4'];report['Stage4Evidence']='Reused: original up 5px matches r24; hair-on 0px; excluded by Fable junction v2'
+    (ROOT/'docs/sam3-eye-junction-profile.json').write_text(json.dumps(j5,ensure_ascii=False,indent=2)+'\n')
+    report['Stage4']=dict(status='excluded by Fable r25 1.3; not remeasured in this review')
+    report['Stage4Evidence']='Historical finding only: original up 5px matches r24; hair-on 0px. Previous candidate metrics are not carried forward.'
     report['R4']=dict(status=r4['status'],poses=len(r4['poses']));report['records']=combined;report['poseInputs']=inputs
     (ROOT/'docs/sam3-eye-render-metrics.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     c.sheets(colors);regression_sheet()

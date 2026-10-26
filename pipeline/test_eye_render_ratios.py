@@ -1,11 +1,25 @@
 import unittest
 import copy
 import numpy as np
-from eye_render_ratios import ratio_error,ratio_gates
+from eye_render_ratios import ratio_error,ratio_gates,model_fidelity
 from capture_eye_alpha_junction import alpha_report
 
 
 class RatioErrorTest(unittest.TestCase):
+    def test_fable_temporal_comparison_reports_face_limit_after_injected_clip(self):
+        records=[];measurement=dict(records=[],rest={});fit={}
+        for side in ['left','right']:
+            fit[side]=dict(knotsDeg=[-45,0,45],r_T=[0,0,0],r_N=[0,0,0],rest=dict(dTemp=30,dNas=20,a=10))
+            measurement['rest'][side]=dict(dTemp=30)
+            for name in ['front','aux-0017']:
+                measurement['records'].append(dict(name=name,side=side,yaw=-20 if name!='front' else 0))
+                records.append(dict(name=name,side=side,v291=dict(dTemp=30,dNas=20,a=10)))
+        self.assertTrue(model_fidelity(records,measurement,fit)['FBTemporal'][0]['passed'])
+        records[1]['v291']['dTemp']*=np.exp(-3/30)
+        result=model_fidelity(records,measurement,fit)['FBTemporal'][0]
+        self.assertFalse(result['passed']);self.assertAlmostEqual(result['normalizedErrorPx'],-3)
+        self.assertIn('outside this eye PR',result['scope'])
+
     def test_constant_identify_scale_cancels_and_changed_shape_does_not(self):
         self.assertAlmostEqual(ratio_error({'dNas':60},{'dNas':50},{'dNas':24},{'dNas':20},'dNas',100),0)
         self.assertGreater(abs(ratio_error({'dNas':90},{'dNas':50},{'dNas':24},{'dNas':20},'dNas',100)),4)

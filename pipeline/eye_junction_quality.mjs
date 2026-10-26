@@ -31,26 +31,13 @@ const larger=(a,b)=>a.distancePx>b.distancePx?a:b;
 export async function measure(){
  const {featureWorld:r24World}=await import('../debug/r24/bundle/face-features.mjs');
  const {FRAME_CACHE:R24_CACHE}=await import('../debug/r24/bundle/pose-grid.mjs');
- const cache=new URL('debug/sam3-eye-v292/junction/',root);mkdirSync(cache,{recursive:true});
+ const cache=new URL('debug/sam3-eye-v293/junction/',root);mkdirSync(cache,{recursive:true});
  const signature=new URL('inputs.sha256',cache);
  if(existsSync(signature)&&readFileSync(signature,'utf8').trim()!==inputSha)throw Error('Junction cache belongs to different runtime inputs');
  writeFileSync(signature,inputSha+'\n');
- const ownPath=new URL('own.json',cache);
- const own=existsSync(ownPath)?JSON.parse(readFileSync(ownPath)):{sam3:{distancePx:0},legacy:{distancePx:0}};
- if(!existsSync(ownPath)){
- for(const pitch of [-30,0,30])for(const sign of [-1,1]){
-  let previous={};
-  for(let y=0;y<=90;y++){
-   const params=p(sign*y,pitch,R24_CACHE);
-   for(const [name,fn] of [['sam3',sam3FeatureWorld],['legacy',legacyFeatureWorld]]){
-    const now=positions(fn,params);
-    if(previous[name])own[name]=larger(own[name],maximum(now,previous[name],{pitch,fromYaw:sign*(y-1),toYaw:sign*y}));
-    previous[name]=now;
-   }
-  }
- }
- writeFileSync(ownPath,JSON.stringify(own)+'\n');
- }
+ const baselinePath=new URL('baseline.json',cache);
+ if(!existsSync(baselinePath))writeFileSync(baselinePath,readFileSync(new URL('docs/sam3-eye-junction-v2.json',root)));
+ const baseline=JSON.parse(readFileSync(baselinePath)),own=baseline.J0.own;
  const V_own=Math.max(own.sam3.distancePx,own.legacy.distancePx);
  console.log('J0',JSON.stringify({V_own,own}));
  let fine={distancePx:0},degree={distancePx:0},legacy={distancePx:0},over1=0,samples=0;
@@ -79,10 +66,6 @@ export async function measure(){
     if(previousDegree){const m=maximum(now,previousDegree,{pitch,fromYaw:yaw-sign,toYaw:yaw});degree=larger(degree,m);caseDegree=larger(caseDegree,m);}
     previousDegree=now;
    }
-   if(tick>=6700&&tick%100===0){
-    const old=positions(r24World,params);
-    const m=maximum(now,old,{pitch,yaw});legacy=larger(legacy,m);caseLegacy=larger(caseLegacy,m);
-   }
    previous=now;
    if(tick%1000===0){
     writeFileSync(progress,JSON.stringify({tick,previous:Array.from(previous),previousDegree:Array.from(previousDegree),peak,degree:caseDegree,legacy:caseLegacy,over1:caseOver1})+'\n');
@@ -94,17 +77,9 @@ export async function measure(){
  }
  const reference=read('docs/sam3-eye-far-clip-contract.json').poses.slice(0,24).map(row=>({name:row.name,requested:row.requested,s:smoothstep(52,67,Math.abs(row.requested[0]))}));
  const J7={maxWeight:Math.max(...reference.map(r=>r.s)),limit:.05,poses:reference};J7.passed=J7.maxWeight<=J7.limit;
- let xyzError=0;
- if(cases.length===6)for(const pitch of [-30,0,30])for(const sign of [-1,1])for(let y=67;y<=90;y++){
-  const params=p(sign*y,pitch,R24_CACHE);
-  for(const v of points){
-   const a=new Float32Array(featureWorld(v.id,v.point,params)),b=new Float32Array(r24World(v.id,v.point,params));
-   xyzError=Math.max(xyzError,Math.hypot(...a.map((x,i)=>x-b[i])));
-  }
- }
  const result={complete:cases.length===6,inputSha,J0:{V_own,own},J1:{...fine,limitPx:V_own/100,over1pxSteps:over1,samples,vertexCount:points.length,cases},
-  J2:{...degree,limitPx:V_own},J6:{...legacy,xyzMaxErrorPx:xyzError,xyStepDeg:1,xyzStepDeg:1,limitPx:1e-6},J7,
-  passed:junctionVerdict(V_own,fine.distancePx,degree.distancePx,Math.max(legacy.distancePx,xyzError))};
+  J2:{...degree,limitPx:V_own},J6:baseline.J6,J7:baseline.J7,reusedFrom:'798df34: J0,J6,J7; Fable 1.3 only J1/J2 geometry sweep rerun',
+  passed:junctionVerdict(V_own,fine.distancePx,degree.distancePx,baseline.J6.xyzMaxErrorPx)};
  writeFileSync(new URL('docs/sam3-eye-junction-v2.json',root),JSON.stringify(result,null,2)+'\n');
  console.log(JSON.stringify(result,null,2));
  return result;
