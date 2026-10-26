@@ -6,11 +6,14 @@ from pathlib import Path
 import numpy as np
 from scipy.optimize import nnls
 from functools import partial
+from fit_eye_sam3 import temporal_huber_weights
 json.dumps=partial(json.dumps,default=lambda x:x.item() if isinstance(x,np.generic) else x.tolist())
 
-P=Path(__file__).resolve().parents[1];OUT=P/'debug/sam3-eye-v291'
+P=Path(__file__).resolve().parents[1];OUT=P/'debug/sam3-eye-v295'
+OUT.mkdir(parents=True,exist_ok=True)
 D=json.loads((P/'source/viewer/sam3-eye-measurements.json').read_text());rest=D['rest'];K=D['K']
 rows=[r for r in D['records'] if 'q' in r];N=len(rows)
+censored_temporal=np.array([r['q']['temporalAtFaceEdge'] for r in rows])
 groups=json.loads((P/'source/references/seedance/eye-bootstrap.json').read_text())['groups']
 fields=['dTemp','dNas','h','deltaY','a','bI'];core=fields[:4]
 theta=np.array([-r['yaw']*(1 if r['side']=='left' else -1) for r in rows])
@@ -33,6 +36,7 @@ for f in fields:
     for group in groups:
         for side,sm in side_masks.items():
             valid=sm&np.array([r['name'] in group and not r['q']['measurementFailed'] for r in rows])&np.isfinite(VALUES[f])
+            if f=='dTemp':valid&=~censored_temporal
             if f=='a':valid&=W[f]>0
             if f=='bI':valid&=np.array([r['q']['bObserved'] for r in rows])
             x=VALUES[f][valid]
@@ -61,7 +65,8 @@ def solve(f,mask):
         pred=offset+X@c;beta=c[-2]-c[-1] if is_table else c[-1];run=pred-beta
         scale=BASE[f] if f=='deltaY' else BASE[f]*np.exp(np.clip(run,-20,20))
         err=(pred-Y[f])*scale
-        ww=weights*np.minimum(1.,k/np.maximum(abs(err),1e-12))*scale**2
+        huber=temporal_huber_weights(err,censored_temporal,k) if f=='dTemp' else np.minimum(1.,k/np.maximum(abs(err),1e-12))
+        ww=weights*huber*scale**2
         good=ww>0;A=X[good]*np.sqrt(ww[good,None]);b=(Y[f]-offset)[good]*np.sqrt(ww[good])
         if is_table:new=nnls(A,b,maxiter=1000)[0]
         else:
@@ -87,7 +92,8 @@ def gate(name,value,limit,kind='max',sigma=None,warnable=False):
 for side,sm in side_masks.items():
     fits[side]={};models[side]={}
     for f in fields:
-        m=solve(f,sm);models[side][f]=m;ok=sm&(W[f]>0)
+        m=solve(f,sm);models[side][f]=m;fit_ok=sm&(W[f]>0);ok=fit_ok.copy()
+        if f=='dTemp':ok&=~censored_temporal
         drop=ok&(abs(m['errors'])>4*noise[f]['sigma']);keep=ok&~drop
         cv=np.full(N,np.nan);fold_results=[]
         for group in groups:
@@ -97,19 +103,21 @@ for side,sm in side_masks.items():
         weight=W[f][keep];ee=m['errors'][keep];cc=cv[keep]
         rms=float(np.sqrt(np.average(ee**2,weights=weight)));median=float(np.median(abs(ee)))
         loco=float(np.sqrt(np.average(cc**2,weights=weight)))
-        X,_=design(f);rank=int(np.linalg.matrix_rank(X[ok]));wsum=float(W[f][ok].sum())
+        X,_=design(f);rank=int(np.linalg.matrix_rank(X[fit_ok]));wsum=float(W[f][fit_ok].sum())
         beta_px=float(m['beta']*BASE[f][sm][0]);sig=noise[f]['sigma']
         item=dict(coefficients=m['coeff'].tolist(),beta=float(m['beta']),betaPx=beta_px,
             iterations=m['iterations'],converged=m['converged'],coefficientChange=m['coefficientChange'],folds=fold_results,
-            eligible=int(ok.sum()),weightSum=wsum,rank=rank,rms=rms,median=median,loco=loco,
+            eligible=int(fit_ok.sum()),weightSum=wsum,rank=rank,rms=rms,median=median,loco=loco,
             outliers=[dict(eye=ids[i],residualPx=float(m['errors'][i])) for i in np.flatnonzero(drop)],
             outlierFraction=float(drop.sum()/ok.sum()),reportOnly=f not in core,
-            residuals=[dict(eye=ids[i],residualPx=float(m['errors'][i]),locoPx=float(cv[i]),weight=float(W[f][i]),outlier=bool(drop[i])) for i in np.flatnonzero(sm)])
+            residuals=[dict(eye=ids[i],residualPx=float(m['errors'][i]),locoPx=float(cv[i]),weight=float(W[f][i]),outlier=bool(drop[i])) for i in np.flatnonzero(sm&(~censored_temporal if f=='dTemp' else True))])
         name=side+':'+f
         if f in ['dTemp','dNas']:
             logs=table_design(knots)@m['coeff']-m['beta'];ratios=np.exp(logs)
             # Half-open intervals; last interval includes +45. No sample is exactly a knot.
-            counts=[int(np.sum(keep&(theta>=lo)&(theta<(hi if hi<45 else hi+1e-9)))) for lo,hi in zip(knots[:-1],knots[1:])]
+            # Coverage includes lower-bound fitting observations; residual
+            # statistics and outlier rejection above use uncensored eyes only.
+            counts=[int(np.sum((fit_ok&~drop)&(theta>=lo)&(theta<(hi if hi<45 else hi+1e-9)))) for lo,hi in zip(knots[:-1],knots[1:])]
             item.update(knotsDeg=knots.tolist(),knotLogs=logs.tolist(),knotRatios=ratios.tolist(),intervalCounts=counts)
             gate(name+':identification',min(counts),2,kind='min')
             gate(name+':monotone',float(np.max(np.diff(logs))),1e-12)

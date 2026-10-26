@@ -116,9 +116,10 @@ export class Renderer {
       if(source==='skin-silhouette'){
         // Eyes clip to geometry, including skin hidden under the painted hair.
         const skinClip=this.skinClip;this.skinClip=false;
-        gl.disable(gl.CULL_FACE);gl.depthMask(false);gl.uniform1i(this.loc.solid,1);
+        gl.enable(gl.CULL_FACE);gl.depthMask(false);gl.uniform1i(this.loc.solid,1);
         this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);
-        this.draw(skinFillClipMesh(),p,1);
+        gl.disable(gl.CULL_FACE);
+        this.draw(skinFillClipMesh(),p,1-smoothstep(45,50,Math.abs(yaw)));
         gl.uniform1i(this.loc.solid,0);gl.depthMask(true);this.skinClip=skinClip;
       }else if(source==='exposed-skin-clip'){
         gl.disable(gl.CULL_FACE);gl.uniform1i(this.loc.solid,1);gl.depthMask(false);texture(6);this.draw(skinFillClipMesh(),p,1);
