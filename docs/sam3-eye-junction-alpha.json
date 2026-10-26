@@ -1,0 +1,27 @@
+{
+  "limitAlphaPixels": 362.0178577190967,
+  "stepRequestedDeg": 0.1,
+  "poses": 5406,
+  "peaks": {
+    "far": {
+      "difference": 47.10196078431363,
+      "side": "left",
+      "pitch": 30,
+      "fromYaw": -57.4,
+      "toYaw": -57.5,
+      "fromAlpha": 2276.4745098039216,
+      "toAlpha": 2229.372549019608
+    },
+    "near": {
+      "difference": 21.61960784313669,
+      "side": "left",
+      "pitch": 0,
+      "fromYaw": 63.5,
+      "toYaw": 63.6,
+      "fromAlpha": 5648.3372549019605,
+      "toAlpha": 5626.717647058824
+    }
+  },
+  "passed": true,
+  "inputSha": "51cb87f692b6b920c93f4de786e1d60d7360fae0ca144f4025b72638a18b7de3"
+}

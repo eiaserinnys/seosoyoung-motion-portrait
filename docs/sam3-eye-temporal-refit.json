@@ -1,0 +1,889 @@
+{
+  "design": "F-T1: one-sided Huber for censored temporal lower bounds; uncensored sigma/outliers/LOCO; original all-input interval coverage retained",
+  "status": "CONSENSUS PASS-WARN",
+  "measurementSha256": "c99d1feb7555e96c23724bb62286850c25f29cf8b1095699a80f53925fe6aa26",
+  "otherDeformationCoefficientsUnchanged": true,
+  "noise": {
+    "pooledSD": 1.9082259119481266,
+    "df": 13,
+    "ss": 47.33723970339337,
+    "sigma": 1.9082259119481266,
+    "floorApplied": false,
+    "clusters": [
+      {
+        "group": [
+          "left",
+          "aux-0043"
+        ],
+        "side": "right",
+        "n": 2,
+        "ss": 0.10842352941177141
+      },
+      {
+        "group": [
+          "right",
+          "aux-0241"
+        ],
+        "side": "left",
+        "n": 2,
+        "ss": 0.01599302030457356
+      },
+      {
+        "group": [
+          "up",
+          "aux-0093"
+        ],
+        "side": "left",
+        "n": 2,
+        "ss": 0.22957170050761838
+      },
+      {
+        "group": [
+          "up",
+          "aux-0093"
+        ],
+        "side": "right",
+        "n": 2,
+        "ss": 1.1673529411764099
+      },
+      {
+        "group": [
+          "down-right",
+          "aux-0255"
+        ],
+        "side": "left",
+        "n": 2,
+        "ss": 0.06397208121827391
+      },
+      {
+        "group": [
+          "aux-0276",
+          "aux-0275",
+          "aux-0277"
+        ],
+        "side": "left",
+        "n": 3,
+        "ss": 7.075308798646196
+      },
+      {
+        "group": [
+          "aux-0276",
+          "aux-0275",
+          "aux-0277"
+        ],
+        "side": "right",
+        "n": 3,
+        "ss": 9.322211764705699
+      },
+      {
+        "group": [
+          "aux-0048",
+          "aux-0342"
+        ],
+        "side": "left",
+        "n": 2,
+        "ss": 10.916957487309563
+      },
+      {
+        "group": [
+          "aux-0048",
+          "aux-0342"
+        ],
+        "side": "right",
+        "n": 2,
+        "ss": 0.21124705882354633
+      },
+      {
+        "group": [
+          "aux-0102",
+          "aux-0103"
+        ],
+        "side": "left",
+        "n": 2,
+        "ss": 13.65997779187797
+      },
+      {
+        "group": [
+          "aux-0102",
+          "aux-0103"
+        ],
+        "side": "right",
+        "n": 2,
+        "ss": 4.566223529411749
+      }
+    ]
+  },
+  "tables": {
+    "left": {
+      "knotsDeg": [
+        -45,
+        -30,
+        -15,
+        0,
+        15,
+        30,
+        45
+      ],
+      "oldRatios": [
+        1.1180895828354938,
+        1.1180895828354938,
+        1.0756165981468153,
+        1.0,
+        0.9188952191403331,
+        0.6467520681037305,
+        0.3263323552628152
+      ],
+      "newRatios": [
+        1.1168940740290496,
+        1.1168940740290496,
+        1.0742985230439932,
+        1.0,
+        0.8948060491346979,
+        0.7086628938455745,
+        0.7086628938455745
+      ],
+      "fit": {
+        "coefficients": [
+          0.11114828906860895,
+          0.2332270435242438,
+          0.0,
+          0.0716679118816265,
+          0.038883772937945066,
+          0.0,
+          0.060193635042230964,
+          0.0
+        ],
+        "beta": 0.060193635042230964,
+        "betaPx": 3.694053912542249,
+        "iterations": 11,
+        "converged": true,
+        "coefficientChange": 5.964747307185547e-10,
+        "folds": [
+          {
+            "group": [
+              "front"
+            ],
+            "iterations": 12,
+            "converged": true,
+            "coefficientChange": 3.1899312358252274e-10
+          },
+          {
+            "group": [
+              "left",
+              "aux-0043"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.964747307185547e-10
+          },
+          {
+            "group": [
+              "right",
+              "aux-0241"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.877888314964608e-10
+          },
+          {
+            "group": [
+              "up",
+              "aux-0093"
+            ],
+            "iterations": 17,
+            "converged": true,
+            "coefficientChange": 3.2851946163425794e-10
+          },
+          {
+            "group": [
+              "down"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.895072069384e-10
+          },
+          {
+            "group": [
+              "up-left"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.964747307185547e-10
+          },
+          {
+            "group": [
+              "up-right"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.982744993859868e-10
+          },
+          {
+            "group": [
+              "down-left"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.964747307185547e-10
+          },
+          {
+            "group": [
+              "down-right",
+              "aux-0255"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.973374850309909e-10
+          },
+          {
+            "group": [
+              "aux-0276",
+              "aux-0275",
+              "aux-0277"
+            ],
+            "iterations": 9,
+            "converged": true,
+            "coefficientChange": 7.825204650924178e-10
+          },
+          {
+            "group": [
+              "aux-0017"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 6.130726759590033e-10
+          },
+          {
+            "group": [
+              "aux-0213"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 5.940924002745263e-10
+          },
+          {
+            "group": [
+              "aux-0048",
+              "aux-0342"
+            ],
+            "iterations": 8,
+            "converged": true,
+            "coefficientChange": 8.678002066941914e-10
+          },
+          {
+            "group": [
+              "aux-0074"
+            ],
+            "iterations": 11,
+            "converged": true,
+            "coefficientChange": 6.612691089147305e-10
+          },
+          {
+            "group": [
+              "aux-0086"
+            ],
+            "iterations": 12,
+            "converged": true,
+            "coefficientChange": 4.4644249408420933e-10
+          },
+          {
+            "group": [
+              "aux-0102",
+              "aux-0103"
+            ],
+            "iterations": 14,
+            "converged": true,
+            "coefficientChange": 9.026198538597541e-10
+          }
+        ],
+        "eligible": 24,
+        "weightSum": 24.0,
+        "rank": 7,
+        "rms": 2.2739234768896726,
+        "median": 0.6687537854358032,
+        "loco": 3.28991572311982,
+        "outliers": [],
+        "outlierFraction": 0.0,
+        "reportOnly": false,
+        "residuals": [
+          {
+            "eye": "front:left",
+            "residualPx": 2.665071722601375,
+            "locoPx": 3.1162197582190285,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "right:left",
+            "residualPx": 0.4858356180767748,
+            "locoPx": 1.0507492179088134,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "up:left",
+            "residualPx": -0.6421069978477985,
+            "locoPx": -0.9389394444884521,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "down:left",
+            "residualPx": -0.6818653369445604,
+            "locoPx": -1.3301387267038998,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "up-right:left",
+            "residualPx": -0.22704904515035979,
+            "locoPx": -0.3008841551673051,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "down-right:left",
+            "residualPx": -0.30596685884711994,
+            "locoPx": -0.31116538479211714,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0276:left",
+            "residualPx": -4.7899165608084004,
+            "locoPx": -6.180881813844751,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0275:left",
+            "residualPx": -1.6172275551813158,
+            "locoPx": -2.836430222048331,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0277:left",
+            "residualPx": -2.720765210376,
+            "locoPx": -3.937605123649966,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0017:left",
+            "residualPx": 0.4948844569676157,
+            "locoPx": 1.306235553729951,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0213:left",
+            "residualPx": -1.58815842874622,
+            "locoPx": -1.8425948504829062,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0048:left",
+            "residualPx": -0.052662233113504056,
+            "locoPx": -6.722456685828308,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0255:left",
+            "residualPx": 0.2958952330437231,
+            "locoPx": 0.29387694377826384,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0342:left",
+            "residualPx": -0.13150125348601482,
+            "locoPx": -2.013533773967051,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0074:left",
+            "residualPx": 1.600891013824287,
+            "locoPx": 2.4859205789522467,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0086:left",
+            "residualPx": 0.5932721530272693,
+            "locoPx": 0.7144135409321046,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0102:left",
+            "residualPx": 7.195413787711835,
+            "locoPx": 8.278729356855427,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0241:left",
+            "residualPx": 0.6556422339270459,
+            "locoPx": 1.221914552842772,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0093:left",
+            "residualPx": -0.7161751476133553,
+            "locoPx": -1.021161532655718,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0103:left",
+            "residualPx": 1.8936376688329206,
+            "locoPx": 2.977834993346564,
+            "weight": 1.0,
+            "outlier": false
+          }
+        ],
+        "knotsDeg": [
+          -45,
+          -30,
+          -15,
+          0,
+          15,
+          30,
+          45
+        ],
+        "knotLogs": [
+          0.11055168481957156,
+          0.11055168481957156,
+          0.0716679118816265,
+          0.0,
+          -0.11114828906860895,
+          -0.34437533259285275,
+          -0.34437533259285275
+        ],
+        "knotRatios": [
+          1.1168940740290496,
+          1.1168940740290496,
+          1.0742985230439932,
+          1.0,
+          0.8948060491346979,
+          0.7086628938455745,
+          0.7086628938455745
+        ],
+        "intervalCounts": [
+          3,
+          4,
+          4,
+          6,
+          3,
+          4
+        ]
+      }
+    },
+    "right": {
+      "knotsDeg": [
+        -45,
+        -30,
+        -15,
+        0,
+        15,
+        30,
+        45
+      ],
+      "oldRatios": [
+        1.051723047081477,
+        1.051723047081477,
+        1.051723047081477,
+        1.0,
+        0.9106083320287839,
+        0.5022145025266406,
+        0.31899235212182914
+      ],
+      "newRatios": [
+        1.0511321486336542,
+        1.0511321486336542,
+        1.0511321486336542,
+        1.0,
+        0.9024980570381627,
+        0.6049297630803572,
+        0.6049297630803572
+      ],
+      "fit": {
+        "coefficients": [
+          0.10258874164372025,
+          0.40005418012906907,
+          0.0,
+          0.049867820083609696,
+          0.0,
+          0.0,
+          0.0,
+          0.0021439626108762165
+        ],
+        "beta": -0.0021439626108762165,
+        "betaPx": -0.1455444485961614,
+        "iterations": 18,
+        "converged": true,
+        "coefficientChange": 7.690692110928765e-10,
+        "folds": [
+          {
+            "group": [
+              "front"
+            ],
+            "iterations": 19,
+            "converged": true,
+            "coefficientChange": 9.003948316099741e-10
+          },
+          {
+            "group": [
+              "left",
+              "aux-0043"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.570241655763255e-10
+          },
+          {
+            "group": [
+              "right",
+              "aux-0241"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.690692110928765e-10
+          },
+          {
+            "group": [
+              "up",
+              "aux-0093"
+            ],
+            "iterations": 20,
+            "converged": true,
+            "coefficientChange": 8.97274921030089e-10
+          },
+          {
+            "group": [
+              "down"
+            ],
+            "iterations": 17,
+            "converged": true,
+            "coefficientChange": 4.3921954083741416e-10
+          },
+          {
+            "group": [
+              "up-left"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.683317454487693e-10
+          },
+          {
+            "group": [
+              "up-right"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.690692110928765e-10
+          },
+          {
+            "group": [
+              "down-left"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.718354705366082e-10
+          },
+          {
+            "group": [
+              "down-right",
+              "aux-0255"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.690692110928765e-10
+          },
+          {
+            "group": [
+              "aux-0276",
+              "aux-0275",
+              "aux-0277"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.729738932260588e-10
+          },
+          {
+            "group": [
+              "aux-0017"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.717133598816872e-10
+          },
+          {
+            "group": [
+              "aux-0213"
+            ],
+            "iterations": 17,
+            "converged": true,
+            "coefficientChange": 3.8093047119436285e-10
+          },
+          {
+            "group": [
+              "aux-0048",
+              "aux-0342"
+            ],
+            "iterations": 18,
+            "converged": true,
+            "coefficientChange": 7.729865358907517e-10
+          },
+          {
+            "group": [
+              "aux-0074"
+            ],
+            "iterations": 17,
+            "converged": true,
+            "coefficientChange": 3.7158784686394664e-10
+          },
+          {
+            "group": [
+              "aux-0086"
+            ],
+            "iterations": 29,
+            "converged": true,
+            "coefficientChange": 8.745354579398068e-10
+          },
+          {
+            "group": [
+              "aux-0102",
+              "aux-0103"
+            ],
+            "iterations": 19,
+            "converged": true,
+            "coefficientChange": 7.009268720992168e-10
+          }
+        ],
+        "eligible": 24,
+        "weightSum": 23.0,
+        "rank": 7,
+        "rms": 2.737149751436139,
+        "median": 1.7980227717000155,
+        "loco": 4.448757124144641,
+        "outliers": [
+          {
+            "eye": "aux-0103:right",
+            "residualPx": 8.477807555062451
+          }
+        ],
+        "outlierFraction": 0.05263157894736842,
+        "reportOnly": false,
+        "residuals": [
+          {
+            "eye": "front:right",
+            "residualPx": -0.4588473519613036,
+            "locoPx": -0.6074690104872122,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "left:right",
+            "residualPx": 2.6547735076315053,
+            "locoPx": 3.6680184883955294,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "up:right",
+            "residualPx": 2.4027860761423097,
+            "locoPx": 3.930726250678775,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "down:right",
+            "residualPx": -1.8770693800854372,
+            "locoPx": -5.8634158724263665,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "up-left:right",
+            "residualPx": 0.57146747466603,
+            "locoPx": 0.6674003806297706,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "down-left:right",
+            "residualPx": -1.7189761633145937,
+            "locoPx": -1.9965398568934882,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0276:right",
+            "residualPx": -3.662405675440666,
+            "locoPx": -5.76504908956147,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0275:right",
+            "residualPx": -4.1896668982749015,
+            "locoPx": -6.014568543634733,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0277:right",
+            "residualPx": -6.370705512593626,
+            "locoPx": -8.176537551129757,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0017:right",
+            "residualPx": -1.6097479713647478,
+            "locoPx": -1.8701646229243358,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0213:right",
+            "residualPx": -0.8795860230927574,
+            "locoPx": -7.9421044814593476,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0048:right",
+            "residualPx": -0.5033435766647484,
+            "locoPx": -0.8285713091008243,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0342:right",
+            "residualPx": -1.1472415356303454,
+            "locoPx": -1.4694189961368307,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0074:right",
+            "residualPx": 3.4200267472780292,
+            "locoPx": 5.395303432405309,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0086:right",
+            "residualPx": 1.6139126797700993,
+            "locoPx": 2.277892423450482,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0102:right",
+            "residualPx": 5.1290946352196,
+            "locoPx": 5.967787775134775,
+            "weight": 0.5,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0043:right",
+            "residualPx": 2.1720531149862925,
+            "locoPx": 3.178547676198983,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0093:right",
+            "residualPx": 1.6166035569719337,
+            "locoPx": 3.2201884799988774,
+            "weight": 1.0,
+            "outlier": false
+          },
+          {
+            "eye": "aux-0103:right",
+            "residualPx": 8.477807555062451,
+            "locoPx": 9.315550430050163,
+            "weight": 0.5,
+            "outlier": true
+          }
+        ],
+        "knotsDeg": [
+          -45,
+          -30,
+          -15,
+          0,
+          15,
+          30,
+          45
+        ],
+        "knotLogs": [
+          0.049867820083609696,
+          0.049867820083609696,
+          0.049867820083609696,
+          0.0,
+          -0.10258874164372025,
+          -0.5026429217727894,
+          -0.5026429217727894
+        ],
+        "knotRatios": [
+          1.0511321486336542,
+          1.0511321486336542,
+          1.0511321486336542,
+          1.0,
+          0.9024980570381627,
+          0.6049297630803572,
+          0.6049297630803572
+        ],
+        "intervalCounts": [
+          4,
+          3,
+          5,
+          4,
+          4,
+          3
+        ]
+      }
+    }
+  },
+  "warnings": [
+    {
+      "name": "left:dTemp:G2",
+      "value": 3.694053912542249,
+      "limit": 3.0,
+      "status": "WARN"
+    },
+    {
+      "name": "left:dNas:median",
+      "value": 1.703042391662499,
+      "limit": 1.5128899400753106,
+      "status": "WARN"
+    },
+    {
+      "name": "left:dNas:G2",
+      "value": 3.016971811405358,
+      "limit": 3.0,
+      "status": "WARN"
+    },
+    {
+      "name": "right:dTemp:LOCO",
+      "value": 4.448757124144641,
+      "limit": 3.8164518238962533,
+      "status": "WARN"
+    },
+    {
+      "name": "right:h:LOCO",
+      "value": 4.441618035736448,
+      "limit": 3.7260039699061562,
+      "status": "WARN"
+    }
+  ],
+  "failures": []
+}

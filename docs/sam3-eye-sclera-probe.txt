@@ -1,0 +1,22 @@
+left rest sclera x 358.0 454.0 iris x 380.0 454.0 cO [ '415.3', '429.4' ] cI [ '415.8', '437.2' ] rest a 25.8 dTemp 61.4 | outer gap at rest (sclera-iris, temporal) 22.0  nasal gap 0.0
+  left FAR  req -30 achieved -23.2 rT 0.788 rN 0.804 a scale 0.919 | outer sclera px 12.9  nasal sclera px -4.1  opening w 77.4  iris w 68.5
+  left FAR  req -40 achieved -30.9 rT 0.709 rN 0.792 a scale 0.858 | outer sclera px 10.5  nasal sclera px -2.4  opening w 72.5  iris w 64.4
+  left FAR  req -47.6 achieved -36.8 rT 0.709 rN 0.717 a scale 0.801 | outer sclera px 12.3  nasal sclera px -3.1  opening w 69.7  iris w 60.5
+  left FAR  req -52 achieved -40.2 rT 0.709 rN 0.676 a scale 0.764 | outer sclera px 13.5  nasal sclera px -3.2  opening w 68.2  iris w 58.0
+  left FAR  req -56 achieved -43.2 rT 0.709 rN 0.642 a scale 0.728 | outer sclera px 14.0  nasal sclera px -2.5  opening w 63.7  iris w 52.2
+  left near req 30 achieved 23.2 rT 1.097 rN 1.215 a scale 1.000 | outer sclera px 27.9  nasal sclera px 8.8  opening w 110.8  iris w 74.0
+  left near req 40 achieved 30.9 rT 1.117 rN 1.215 a scale 1.000 | outer sclera px 29.1  nasal sclera px 8.9  opening w 112.0  iris w 74.0
+  left near req 47.6 achieved 36.8 rT 1.117 rN 1.215 a scale 1.000 | outer sclera px 29.1  nasal sclera px 9.0  opening w 112.1  iris w 74.0
+  left near req 52 achieved 40.2 rT 1.117 rN 1.215 a scale 1.000 | outer sclera px 29.2  nasal sclera px 9.0  opening w 112.2  iris w 74.0
+  left near req 56 achieved 43.2 rT 1.117 rN 1.215 a scale 1.000 | outer sclera px 27.7  nasal sclera px 7.6  opening w 107.8  iris w 72.5
+right rest sclera x 550.0 644.0 iris x 551.0 623.0 cO [ '587.2', '429.3' ] cI [ '586.9', '435.3' ] rest a 25.3 dTemp 67.9 | outer gap at rest (sclera-iris, temporal) 21.0  nasal gap 1.0
+  right near req -30 achieved -23.2 rT 1.051 rN 1.165 a scale 1.000 | outer sclera px 24.0  nasal sclera px 7.4  opening w 103.4  iris w 72.0
+  right near req -40 achieved -30.9 rT 1.051 rN 1.185 a scale 1.000 | outer sclera px 24.1  nasal sclera px 8.2  opening w 104.2  iris w 72.0
+  right near req -47.6 achieved -36.8 rT 1.051 rN 1.185 a scale 1.000 | outer sclera px 24.1  nasal sclera px 8.2  opening w 104.3  iris w 72.0
+  right near req -52 achieved -40.2 rT 1.051 rN 1.185 a scale 1.000 | outer sclera px 24.1  nasal sclera px 8.2  opening w 104.3  iris w 72.0
+  right near req -56 achieved -43.2 rT 1.051 rN 1.185 a scale 1.000 | outer sclera px 23.4  nasal sclera px 7.1  opening w 101.0  iris w 70.5
+  right FAR  req 30 achieved 23.2 rT 0.726 rN 0.760 a scale 0.919 | outer sclera px 8.5  nasal sclera px -4.8  opening w 70.2  iris w 66.5
+  right FAR  req 40 achieved 30.9 rT 0.605 rN 0.691 a scale 0.858 | outer sclera px 3.9  nasal sclera px -5.1  opening w 61.1  iris w 62.2
+  right FAR  req 47.6 achieved 36.8 rT 0.605 rN 0.683 a scale 0.801 | outer sclera px 5.8  nasal sclera px -3.5  opening w 60.7  iris w 58.3
+  right FAR  req 52 achieved 40.2 rT 0.605 rN 0.678 a scale 0.764 | outer sclera px 7.1  nasal sclera px -2.4  opening w 60.5  iris w 55.8
+  right FAR  req 56 achieved 43.2 rT 0.605 rN 0.674 a scale 0.728 | outer sclera px 8.8  nasal sclera px -0.9  opening w 58.0  iris w 50.2

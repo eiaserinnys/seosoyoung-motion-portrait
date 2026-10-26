@@ -1,0 +1,81 @@
+{
+  "status": "ON HOLD: approach change; do not merge; F-B3 is the reusable component",
+  "approachPaused": true,
+  "mergeAllowed": false,
+  "verificationComplete": true,
+  "passed": false,
+  "directIdentifyPassed": true,
+  "gates": {
+    "J1": true,
+    "J2": true,
+    "J3": true,
+    "R4": false,
+    "R5": true,
+    "identify": true
+  },
+  "apertureDifference": {
+    "gating": false,
+    "ownerDecision": "report only; direct scleraTemporal gate is authoritative",
+    "rows": [
+      {
+        "achievedAbsDeg": 23.2,
+        "left": {
+          "requestedYaw": -30.0,
+          "achievedYaw": -23.2,
+          "temporalGapPx": 12.9,
+          "openingWidthPx": 77.4
+        },
+        "right": {
+          "requestedYaw": 30.0,
+          "achievedYaw": 23.2,
+          "temporalGapPx": 8.5,
+          "openingWidthPx": 70.2
+        },
+        "differencePx": 7.2,
+        "limitPx": 5,
+        "passed": false,
+        "temporalSignsMatch": true
+      },
+      {
+        "achievedAbsDeg": 30.9,
+        "left": {
+          "requestedYaw": -40.0,
+          "achievedYaw": -30.9,
+          "temporalGapPx": 10.5,
+          "openingWidthPx": 72.5
+        },
+        "right": {
+          "requestedYaw": 40.0,
+          "achievedYaw": 30.9,
+          "temporalGapPx": 3.9,
+          "openingWidthPx": 61.1
+        },
+        "differencePx": 11.4,
+        "limitPx": 5,
+        "passed": false,
+        "temporalSignsMatch": true
+      },
+      {
+        "achievedAbsDeg": 36.8,
+        "left": {
+          "requestedYaw": -47.6,
+          "achievedYaw": -36.8,
+          "temporalGapPx": 12.3,
+          "openingWidthPx": 69.7
+        },
+        "right": {
+          "requestedYaw": 47.6,
+          "achievedYaw": 36.8,
+          "temporalGapPx": 5.8,
+          "openingWidthPx": 60.7
+        },
+        "differencePx": 9.0,
+        "limitPx": 5,
+        "passed": false,
+        "temporalSignsMatch": true
+      }
+    ]
+  },
+  "identifyFailedPairs": [],
+  "currentSummary": "sam3-eye-final-validation.json"
+}

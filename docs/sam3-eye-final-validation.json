@@ -1,0 +1,447 @@
+{
+  "runtimeRevision": "F-B3/F-T1 frozen at 724d3d7",
+  "productInputCommit": "724d3d718e97a1104cc8e96666afeb8722d21d15",
+  "verificationComplete": true,
+  "passed": false,
+  "directIdentifyPassed": true,
+  "gates": {
+    "J1": true,
+    "J2": true,
+    "J3": true,
+    "R4": false,
+    "R5": true,
+    "identify": true
+  },
+  "status": "ON HOLD: approach change; do not merge; F-B3 is the reusable component",
+  "baselineMain": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+  "R1": {
+    "maxErrorPx": 1.5073658198898532e-14
+  },
+  "J1": {
+    "distancePx": 0.0691804081746263,
+    "pitch": 0,
+    "fromYaw": 60.28,
+    "toYaw": 60.29,
+    "mesh": "eye-left-upper-lashes",
+    "vertex": 72,
+    "rest": [
+      331,
+      465
+    ],
+    "limitPx": 0.07240357154381934,
+    "over1pxSteps": 0,
+    "samples": 54006,
+    "vertexCount": 1062,
+    "cases": [
+      {
+        "pitch": -30,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.042274689204829206,
+          "pitch": -30,
+          "fromYaw": -61.09,
+          "toYaw": -61.1,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
+          "rest": [
+            331,
+            375
+          ]
+        },
+        "degree": {
+          "distancePx": 4.20516295653113,
+          "pitch": -30,
+          "fromYaw": -61,
+          "toYaw": -62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
+          "rest": [
+            331,
+            375
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": -30,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.04399933144009997,
+          "pitch": -30,
+          "fromYaw": 61,
+          "toYaw": 61.01,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "degree": {
+          "distancePx": 4.382699544448922,
+          "pitch": -30,
+          "fromYaw": 61,
+          "toYaw": 62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 0,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.06438581969481617,
+          "pitch": 0,
+          "fromYaw": -60.59,
+          "toYaw": -60.6,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 80,
+          "rest": [
+            675,
+            464
+          ]
+        },
+        "degree": {
+          "distancePx": 6.434204856338258,
+          "pitch": 0,
+          "fromYaw": -60,
+          "toYaw": -61,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 80,
+          "rest": [
+            675,
+            464
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 0,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.0691804081746263,
+          "pitch": 0,
+          "fromYaw": 60.28,
+          "toYaw": 60.29,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "degree": {
+          "distancePx": 6.909347733587128,
+          "pitch": 0,
+          "fromYaw": 60,
+          "toYaw": 61,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 30,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.03925060044652429,
+          "pitch": 30,
+          "fromYaw": -61.29,
+          "toYaw": -61.3,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 8,
+          "rest": [
+            675,
+            372
+          ]
+        },
+        "degree": {
+          "distancePx": 3.914757974210596,
+          "pitch": 30,
+          "fromYaw": -61,
+          "toYaw": -62,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 8,
+          "rest": [
+            675,
+            372
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 30,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.04075458884657055,
+          "pitch": 30,
+          "fromYaw": 61.29,
+          "toYaw": 61.3,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
+          "rest": [
+            331,
+            375
+          ]
+        },
+        "degree": {
+          "distancePx": 4.063731277580403,
+          "pitch": 30,
+          "fromYaw": 61,
+          "toYaw": 62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      }
+    ]
+  },
+  "J2": {
+    "distancePx": 6.909347733587128,
+    "pitch": 0,
+    "fromYaw": 60,
+    "toYaw": 61,
+    "mesh": "eye-left-upper-lashes",
+    "vertex": 72,
+    "rest": [
+      331,
+      465
+    ],
+    "limitPx": 7.240357154381933
+  },
+  "J3": {
+    "limitAlphaPixels": 362.0178577190967,
+    "stepRequestedDeg": 0.1,
+    "poses": 5406,
+    "peaks": {
+      "far": {
+        "difference": 47.10196078431363,
+        "side": "left",
+        "pitch": 30,
+        "fromYaw": -57.4,
+        "toYaw": -57.5,
+        "fromAlpha": 2276.4745098039216,
+        "toAlpha": 2229.372549019608
+      },
+      "near": {
+        "difference": 21.61960784313669,
+        "side": "left",
+        "pitch": 0,
+        "fromYaw": 63.5,
+        "toYaw": 63.6,
+        "fromAlpha": 5648.3372549019605,
+        "toAlpha": 5626.717647058824
+      }
+    },
+    "passed": true,
+    "inputSha": "51cb87f692b6b920c93f4de786e1d60d7360fae0ca144f4025b72638a18b7de3"
+  },
+  "R4": {
+    "poses": 90,
+    "meshObservations": 1350,
+    "outsidePixels": 86,
+    "passed": false,
+    "definition": "Eye identify >127; full portrait with all eye meshes hidden has alpha exactly 0. No face-mask reference or edge-band exclusion.",
+    "report": "sam3-eye-visible-outline.json",
+    "table": "sam3-eye-R4-poses.csv",
+    "pixelEvidence": "sam3-eye-R4-visible-pixels.json",
+    "uniquePosePixels": 86,
+    "violatingPoses": 16,
+    "violatingMeshObservations": 21,
+    "outsidePixelsDefinition": "Sum of individual mesh pixels over poses; overlaps between meshes are counted separately"
+  },
+  "R5": {
+    "baseline": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+    "baselineImageSha256": "a8c00c581c0af4bd15cdf867ef6e4f2de4ee642ce7559f46283a760b2db16560",
+    "scope": "full canvas, hair on, neutral",
+    "canvasSize": [
+      1100,
+      1600
+    ],
+    "changedPixels": 0,
+    "maxChannelDifferenceLSB": 0,
+    "passed": true
+  },
+  "identify": {
+    "pairs": 45,
+    "poses": 90,
+    "failedPairs": 0,
+    "passed": true,
+    "report": "sam3-eye-sclera-identify.json",
+    "table": "sam3-eye-sclera-identify.csv"
+  },
+  "apertureDifference": {
+    "gating": false,
+    "ownerDecision": "report only; direct scleraTemporal gate is authoritative",
+    "rows": [
+      {
+        "achievedAbsDeg": 23.2,
+        "left": {
+          "requestedYaw": -30.0,
+          "achievedYaw": -23.2,
+          "temporalGapPx": 12.9,
+          "openingWidthPx": 77.4
+        },
+        "right": {
+          "requestedYaw": 30.0,
+          "achievedYaw": 23.2,
+          "temporalGapPx": 8.5,
+          "openingWidthPx": 70.2
+        },
+        "differencePx": 7.2,
+        "limitPx": 5,
+        "passed": false,
+        "temporalSignsMatch": true
+      },
+      {
+        "achievedAbsDeg": 30.9,
+        "left": {
+          "requestedYaw": -40.0,
+          "achievedYaw": -30.9,
+          "temporalGapPx": 10.5,
+          "openingWidthPx": 72.5
+        },
+        "right": {
+          "requestedYaw": 40.0,
+          "achievedYaw": 30.9,
+          "temporalGapPx": 3.9,
+          "openingWidthPx": 61.1
+        },
+        "differencePx": 11.4,
+        "limitPx": 5,
+        "passed": false,
+        "temporalSignsMatch": true
+      },
+      {
+        "achievedAbsDeg": 36.8,
+        "left": {
+          "requestedYaw": -47.6,
+          "achievedYaw": -36.8,
+          "temporalGapPx": 12.3,
+          "openingWidthPx": 69.7
+        },
+        "right": {
+          "requestedYaw": 47.6,
+          "achievedYaw": 36.8,
+          "temporalGapPx": 5.8,
+          "openingWidthPx": 60.7
+        },
+        "differencePx": 9.0,
+        "limitPx": 5,
+        "passed": false,
+        "temporalSignsMatch": true
+      }
+    ]
+  },
+  "fitReport": "sam3-eye-temporal-refit.json",
+  "coefficientInvariance": "Product and fitter files exactly equal 724d3d7; r_N/iris-centre/gaze/kappa unchanged from pre-F-T1 as recorded in temporal-refit report",
+  "tests": {
+    "currentTurnPassed": 7,
+    "unchangedWipTestsReused": 4,
+    "details": "6 runtime/formula tests +1 direct identify gate test; earlier fit3/outline1 unchanged"
+  },
+  "R7": {
+    "poses": [
+      "up-left",
+      "up",
+      "up-right",
+      "left",
+      "front",
+      "right",
+      "down-left",
+      "down",
+      "down-right",
+      "aux-0213",
+      "aux-0255",
+      "aux-0074",
+      "aux-0102",
+      "aux-0276",
+      "aux-0277",
+      "aux-0043",
+      "aux-0241"
+    ],
+    "focusEyes": [
+      [
+        "right",
+        "right"
+      ],
+      [
+        "aux-0241",
+        "right"
+      ],
+      [
+        "up-right",
+        "right"
+      ],
+      [
+        "aux-0213",
+        "right"
+      ]
+    ],
+    "highYawRequested": [
+      50,
+      52,
+      54,
+      56,
+      58
+    ],
+    "highPitch": [
+      -30,
+      0,
+      30
+    ],
+    "referenceAndR24Reused": true
+  },
+  "noseHighlight": {
+    "status": "visual follow-up review; no nose code changes",
+    "sheet": "captures/sam3_eye_nose_overlap_p30_2x.png"
+  },
+  "captureSha256": {
+    "sam3_eye_R7_comparison.png": "8a0e88820786e92bd2e1ae677bc59ca59860451da0afa1710aea175efee2ec86",
+    "sam3_eye_9dir_grid.png": "7b2dfee8545b93bce728feb6ecc43e9605c73c6ff056f0c179f3ee9f49db91a1",
+    "sam3_eye_far_sclera_2x.png": "f591324ccd4d0e426dc7fb485a3546dc7e9984c21d8b4d4590e2e2f2a29d1773",
+    "sam3_eye_high_turn_p-30_2x.png": "ca04e4c87359971d690b28231d2a9826155f94b93d8f6dd23b10e0e51820ab87",
+    "sam3_eye_high_turn_p0_2x.png": "b0ac1873611087d561e18118387097449b5de8b3b70b82e94a380a02bddf74c2",
+    "sam3_eye_high_turn_p30_2x.png": "646988296888f02bed5c59436987dd56ca9a64fe0f4af7ae0f2abab8c1e5e9bc",
+    "sam3_eye_sclera_identify_pairs_2x.png": "caa8f0768741f973019b473d465366a0dd3650367750b6b0a54d750dc8510123",
+    "sam3_eye_sclera_identify_failures_2x.png": "9a36c79e2318f892492800d33b836563019c6e52d5f4ae0c8e247504bc1e12b4",
+    "sam3_eye_nose_overlap_p30_2x.png": "8418f0aa81cfef74bea5b4379dc0b5a60aae5e8de8a4dab8e38b351cf6b1dd5e",
+    "sam3_eye_R4_visible_outside_4x.png": "f5ba070971b3246853dd26e923052d4dda09c120105357dc409410033f52a25f"
+  },
+  "approachPaused": true,
+  "mergeAllowed": false,
+  "reusableComponent": "F-B3 clip mask",
+  "nextApproach": "Image registration first, then inverse 3D coordinates and transforms; not implemented in this run",
+  "repeatPolicy": "Preserve this already-running F-T1/identify/R7 run; no further fits or repeated renders"
+}

@@ -1,0 +1,468 @@
+{
+  "complete": true,
+  "inputSha": "8c06ebd397a7943c6828a7c04ce39d3c5a3b5d6b2a5d3cc0bce5f90a9a0fc189",
+  "J0": {
+    "V_own": 7.240357154381933,
+    "own": {
+      "sam3": {
+        "distancePx": 6.22078660612518,
+        "pitch": 0,
+        "fromYaw": 45,
+        "toYaw": 46,
+        "mesh": "eye-left-iris",
+        "vertex": 72,
+        "rest": [
+          380,
+          478
+        ]
+      },
+      "legacy": {
+        "distancePx": 7.240357154381933,
+        "pitch": 0,
+        "fromYaw": -45,
+        "toYaw": -46,
+        "mesh": "eye-right-upper-lashes",
+        "vertex": 8,
+        "rest": [
+          675,
+          372
+        ]
+      }
+    }
+  },
+  "J1": {
+    "distancePx": 0.0691804081746263,
+    "pitch": 0,
+    "fromYaw": 60.28,
+    "toYaw": 60.29,
+    "mesh": "eye-left-upper-lashes",
+    "vertex": 72,
+    "rest": [
+      331,
+      465
+    ],
+    "limitPx": 0.07240357154381934,
+    "over1pxSteps": 0,
+    "samples": 54006,
+    "vertexCount": 1062,
+    "cases": [
+      {
+        "pitch": -30,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.042274689204829206,
+          "pitch": -30,
+          "fromYaw": -61.09,
+          "toYaw": -61.1,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
+          "rest": [
+            331,
+            375
+          ]
+        },
+        "degree": {
+          "distancePx": 4.20516295653113,
+          "pitch": -30,
+          "fromYaw": -61,
+          "toYaw": -62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
+          "rest": [
+            331,
+            375
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": -30,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.04399933144009997,
+          "pitch": -30,
+          "fromYaw": 61,
+          "toYaw": 61.01,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "degree": {
+          "distancePx": 4.382699544448922,
+          "pitch": -30,
+          "fromYaw": 61,
+          "toYaw": 62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 0,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.06438581969481617,
+          "pitch": 0,
+          "fromYaw": -60.59,
+          "toYaw": -60.6,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 80,
+          "rest": [
+            675,
+            464
+          ]
+        },
+        "degree": {
+          "distancePx": 6.434204856338258,
+          "pitch": 0,
+          "fromYaw": -60,
+          "toYaw": -61,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 80,
+          "rest": [
+            675,
+            464
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 0,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.0691804081746263,
+          "pitch": 0,
+          "fromYaw": 60.28,
+          "toYaw": 60.29,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "degree": {
+          "distancePx": 6.909347733587128,
+          "pitch": 0,
+          "fromYaw": 60,
+          "toYaw": 61,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 30,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.03925060044652429,
+          "pitch": 30,
+          "fromYaw": -61.29,
+          "toYaw": -61.3,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 8,
+          "rest": [
+            675,
+            372
+          ]
+        },
+        "degree": {
+          "distancePx": 3.914757974210596,
+          "pitch": 30,
+          "fromYaw": -61,
+          "toYaw": -62,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 8,
+          "rest": [
+            675,
+            372
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 30,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.04075458884657055,
+          "pitch": 30,
+          "fromYaw": 61.29,
+          "toYaw": 61.3,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
+          "rest": [
+            331,
+            375
+          ]
+        },
+        "degree": {
+          "distancePx": 4.063731277580403,
+          "pitch": 30,
+          "fromYaw": 61,
+          "toYaw": 62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      }
+    ]
+  },
+  "J2": {
+    "distancePx": 6.909347733587128,
+    "pitch": 0,
+    "fromYaw": 60,
+    "toYaw": 61,
+    "mesh": "eye-left-upper-lashes",
+    "vertex": 72,
+    "rest": [
+      331,
+      465
+    ],
+    "limitPx": 7.240357154381933
+  },
+  "J6": {
+    "distancePx": 0,
+    "xyzMaxErrorPx": 0,
+    "xyStepDeg": 1,
+    "xyzStepDeg": 1,
+    "limitPx": 0.000001
+  },
+  "J7": {
+    "maxWeight": 0,
+    "limit": 0.05,
+    "poses": [
+      {
+        "name": "front",
+        "requested": [
+          -1.3058707682272463,
+          1.5480214716376788
+        ],
+        "s": 0
+      },
+      {
+        "name": "left",
+        "requested": [
+          -47.61660424600042,
+          0.32643746760535375
+        ],
+        "s": 0
+      },
+      {
+        "name": "right",
+        "requested": [
+          48.30864868359759,
+          1.9607457790839389
+        ],
+        "s": 0
+      },
+      {
+        "name": "up",
+        "requested": [
+          1.4487257139741638,
+          33.61648637349459
+        ],
+        "s": 0
+      },
+      {
+        "name": "down",
+        "requested": [
+          21.97680704042867,
+          -31.638613075805154
+        ],
+        "s": 0
+      },
+      {
+        "name": "up-left",
+        "requested": [
+          -45.83872508935118,
+          32.22091859371879
+        ],
+        "s": 0
+      },
+      {
+        "name": "up-right",
+        "requested": [
+          41.97782361066015,
+          24.15351813281776
+        ],
+        "s": 0
+      },
+      {
+        "name": "down-left",
+        "requested": [
+          -51.295645849108304,
+          -33.28737527145702
+        ],
+        "s": 0
+      },
+      {
+        "name": "down-right",
+        "requested": [
+          34.88569731719818,
+          -25.180988581439273
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0276",
+        "requested": [
+          -0.1316471753661597,
+          -35.27593686319509
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0275",
+        "requested": [
+          3.423029926745324,
+          -34.79532075415544
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0277",
+        "requested": [
+          -4.181266677125033,
+          -35.468759359037044
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0017",
+        "requested": [
+          -20.660051638026818,
+          8.436096537393329
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0213",
+        "requested": [
+          30.44990175653519,
+          27.189167494704396
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0048",
+        "requested": [
+          -31.441741562845888,
+          -5.060624139996259
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0255",
+        "requested": [
+          36.335075962587034,
+          -21.392617500992888
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0342",
+        "requested": [
+          -23.549451411999836,
+          -0.7715580500254465
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0074",
+        "requested": [
+          22.76111440389865,
+          3.050541697290215
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0086",
+        "requested": [
+          0.06149148824259608,
+          17.687110510018808
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0102",
+        "requested": [
+          -0.2892513206684326,
+          -21.431895999144032
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0043",
+        "requested": [
+          -47.44229055079851,
+          -1.4550831460781348
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0241",
+        "requested": [
+          47.97311156083558,
+          0.047614838889337575
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0093",
+        "requested": [
+          -0.8107655931882455,
+          30.626160355312347
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0103",
+        "requested": [
+          -0.30140803123711707,
+          -23.21953890292815
+        ],
+        "s": 0
+      }
+    ],
+    "passed": true
+  },
+  "reusedFrom": "340b286: fixed J0 V_own/J6/J7; F-B3/F-T1 reruns J1/J2 geometry sweeps",
+  "passed": {
+    "J1": true,
+    "J2": true,
+    "J6": true
+  }
+}

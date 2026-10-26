@@ -1,0 +1,52 @@
+{
+  "poses": [
+    "up-left",
+    "up",
+    "up-right",
+    "left",
+    "front",
+    "right",
+    "down-left",
+    "down",
+    "down-right",
+    "aux-0213",
+    "aux-0255",
+    "aux-0074",
+    "aux-0102",
+    "aux-0276",
+    "aux-0277",
+    "aux-0043",
+    "aux-0241"
+  ],
+  "focusEyes": [
+    [
+      "right",
+      "right"
+    ],
+    [
+      "aux-0241",
+      "right"
+    ],
+    [
+      "up-right",
+      "right"
+    ],
+    [
+      "aux-0213",
+      "right"
+    ]
+  ],
+  "highYawRequested": [
+    50,
+    52,
+    54,
+    56,
+    58
+  ],
+  "highPitch": [
+    -30,
+    0,
+    30
+  ],
+  "referenceAndR24Reused": true
+}

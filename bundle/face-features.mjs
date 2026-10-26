@@ -1,12 +1,42 @@
 import {FEATURE_FIT} from './feature-data.mjs';
 import {frameValue} from './pose-grid.mjs';
-import {faceSolveAnchorWorld,turnWeights45} from './face-solve.mjs';
+import {faceSolveAnchorWorld,faceSolveWorld,turnWeights45} from './face-solve.mjs';
 import {FACE_SOLVE} from './face-solve-data.mjs';
 import {correction,artWorld} from './geometry.mjs';
 import {registeredFeatureWorld} from './face-feature-prior.mjs';
 import {smoothstep} from './face-profile.mjs';
+import {EYE_SAM3} from './eye-sam3-data.mjs';
+import {eyeDeformation,achievedAngles} from './eye-sam3-model.mjs';
 export {registeredFeatureWorld} from './face-feature-prior.mjs';
+export function sam3EyeState(side,p){
+ return frameValue(p,'sam3-eye:'+side,()=>{
+  const rest=EYE_SAM3[side].rest,unrolled={...p,ParamAngleZ:0};
+  const pin=FEATURE_FIT.front[side],a=faceSolveAnchorWorld(side,unrolled);
+  const origin=faceSolveWorld(pin,unrolled),center=faceSolveWorld(rest.cO,unrolled);
+  const cO=[a[0]+center[0]-origin[0],a[1]+center[1]-origin[1]];
+  const gain=correction(p,'CorrTurn'),d=achievedAngles(EYE_SAM3,p.ParamAngleX*gain,p.ParamAngleY*gain);
+  const model=eyeDeformation(EYE_SAM3,side,d,cO,[p.ParamEyeBallX,p.ParamEyeBallY]);
+  return {...model,achieved:d,depth:center[2]};
+ });
+}
 export function featureWorld(id,point,p){
+ const yaw=p.ParamAngleX*correction(p,'CorrTurn'),angle=Math.abs(yaw);
+ if(angle<67&&!id.endsWith('brow')&&(id.startsWith('eye-')||id==='closed-eyes-v1')){
+  const S=sam3FeatureWorld(id,point,p);
+  if(angle<52)return S;
+  const L=legacyFeatureWorld(id,point,p),s=smoothstep(52,67,angle);
+  return S.map((value,i)=>value+(L[i]-value)*s);
+ }
+ return legacyFeatureWorld(id,point,p);
+}
+export function sam3FeatureWorld(id,point,p){
+  const side=id==='closed-eyes-v1'?(point[0]<502?'left':'right'):id.includes('-left-')?'left':'right';
+  const model=sam3EyeState(side,p);
+  const xy=id.endsWith('highlight')?model.highlight(point):/-(iris|pupil)$/.test(id)?model.iris(point):
+   model.lid(point,side==='left'?p.ParamEyeLOpen:p.ParamEyeROpen,id==='closed-eyes-v1');
+  return artWorld([xy[0]-502,xy[1]-326,model.depth],{...p,ParamAngleX:0,ParamAngleY:0});
+}
+export function legacyFeatureWorld(id,point,p){
  const q=registeredFeatureWorld(id,point,p);
  // Neutral pitch retains the authored eyelid, gaze, brow and mouth evaluator.
  const yaw=p.ParamAngleX*correction(p,'CorrTurn');

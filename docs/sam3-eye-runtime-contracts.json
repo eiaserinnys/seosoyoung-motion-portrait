@@ -1,0 +1,242 @@
+{
+  "runtimeRevision": "F-B3/F-T1 frozen at 724d3d7",
+  "R1": {
+    "maxErrorPx": 1.5073658198898532e-14
+  },
+  "front": [
+    {
+      "side": "left",
+      "errorPx": 0
+    },
+    {
+      "side": "right",
+      "errorPx": 0
+    }
+  ],
+  "R6": {
+    "J1": {
+      "distancePx": 0.0691804081746263,
+      "pitch": 0,
+      "fromYaw": 60.28,
+      "toYaw": 60.29,
+      "mesh": "eye-left-upper-lashes",
+      "vertex": 72,
+      "rest": [
+        331,
+        465
+      ],
+      "limitPx": 0.07240357154381934,
+      "over1pxSteps": 0,
+      "samples": 54006,
+      "vertexCount": 1062,
+      "cases": [
+        {
+          "pitch": -30,
+          "sign": -1,
+          "peak": {
+            "distancePx": 0.042274689204829206,
+            "pitch": -30,
+            "fromYaw": -61.09,
+            "toYaw": -61.1,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 0,
+            "rest": [
+              331,
+              375
+            ]
+          },
+          "degree": {
+            "distancePx": 4.20516295653113,
+            "pitch": -30,
+            "fromYaw": -61,
+            "toYaw": -62,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 0,
+            "rest": [
+              331,
+              375
+            ]
+          },
+          "legacy": {
+            "distancePx": 0
+          },
+          "over1": 0
+        },
+        {
+          "pitch": -30,
+          "sign": 1,
+          "peak": {
+            "distancePx": 0.04399933144009997,
+            "pitch": -30,
+            "fromYaw": 61,
+            "toYaw": 61.01,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 72,
+            "rest": [
+              331,
+              465
+            ]
+          },
+          "degree": {
+            "distancePx": 4.382699544448922,
+            "pitch": -30,
+            "fromYaw": 61,
+            "toYaw": 62,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 72,
+            "rest": [
+              331,
+              465
+            ]
+          },
+          "legacy": {
+            "distancePx": 0
+          },
+          "over1": 0
+        },
+        {
+          "pitch": 0,
+          "sign": -1,
+          "peak": {
+            "distancePx": 0.06438581969481617,
+            "pitch": 0,
+            "fromYaw": -60.59,
+            "toYaw": -60.6,
+            "mesh": "eye-right-upper-lashes",
+            "vertex": 80,
+            "rest": [
+              675,
+              464
+            ]
+          },
+          "degree": {
+            "distancePx": 6.434204856338258,
+            "pitch": 0,
+            "fromYaw": -60,
+            "toYaw": -61,
+            "mesh": "eye-right-upper-lashes",
+            "vertex": 80,
+            "rest": [
+              675,
+              464
+            ]
+          },
+          "legacy": {
+            "distancePx": 0
+          },
+          "over1": 0
+        },
+        {
+          "pitch": 0,
+          "sign": 1,
+          "peak": {
+            "distancePx": 0.0691804081746263,
+            "pitch": 0,
+            "fromYaw": 60.28,
+            "toYaw": 60.29,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 72,
+            "rest": [
+              331,
+              465
+            ]
+          },
+          "degree": {
+            "distancePx": 6.909347733587128,
+            "pitch": 0,
+            "fromYaw": 60,
+            "toYaw": 61,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 72,
+            "rest": [
+              331,
+              465
+            ]
+          },
+          "legacy": {
+            "distancePx": 0
+          },
+          "over1": 0
+        },
+        {
+          "pitch": 30,
+          "sign": -1,
+          "peak": {
+            "distancePx": 0.03925060044652429,
+            "pitch": 30,
+            "fromYaw": -61.29,
+            "toYaw": -61.3,
+            "mesh": "eye-right-upper-lashes",
+            "vertex": 8,
+            "rest": [
+              675,
+              372
+            ]
+          },
+          "degree": {
+            "distancePx": 3.914757974210596,
+            "pitch": 30,
+            "fromYaw": -61,
+            "toYaw": -62,
+            "mesh": "eye-right-upper-lashes",
+            "vertex": 8,
+            "rest": [
+              675,
+              372
+            ]
+          },
+          "legacy": {
+            "distancePx": 0
+          },
+          "over1": 0
+        },
+        {
+          "pitch": 30,
+          "sign": 1,
+          "peak": {
+            "distancePx": 0.04075458884657055,
+            "pitch": 30,
+            "fromYaw": 61.29,
+            "toYaw": 61.3,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 0,
+            "rest": [
+              331,
+              375
+            ]
+          },
+          "degree": {
+            "distancePx": 4.063731277580403,
+            "pitch": 30,
+            "fromYaw": 61,
+            "toYaw": 62,
+            "mesh": "eye-left-upper-lashes",
+            "vertex": 72,
+            "rest": [
+              331,
+              465
+            ]
+          },
+          "legacy": {
+            "distancePx": 0
+          },
+          "over1": 0
+        }
+      ]
+    },
+    "J2": {
+      "distancePx": 6.909347733587128,
+      "pitch": 0,
+      "fromYaw": 60,
+      "toYaw": 61,
+      "mesh": "eye-left-upper-lashes",
+      "vertex": 72,
+      "rest": [
+        331,
+        465
+      ],
+      "limitPx": 7.240357154381933
+    }
+  },
+  "fixedVOwn": 7.240357154381933
+}

@@ -1,0 +1,170 @@
+{
+  "fromMain": "a29bb35",
+  "toMain": "6dd12cf",
+  "alphaBeforeSha": "f642107b281d5eb49b8e535663c45c8191a8c655b3e843aa4a5819fbb74559cf",
+  "alphaAfterSha": "2f88d3af0d40ce76bb8c68f74929889487946bfb00d84daf04301b8742e3accd",
+  "verifiedUnchangedAtlasRegions": [
+    {
+      "mesh": "face-skin",
+      "box": [
+        1496,
+        1342,
+        1892,
+        1754
+      ],
+      "sha256": "c1f4b7a642453f5c4eb1fb1dfc6a60e2dbf12a0c1ea0a878933e14b748c9d3c5"
+    },
+    {
+      "mesh": "eye-left-sclera",
+      "box": [
+        1925,
+        249,
+        2025,
+        334
+      ],
+      "sha256": "2fb9ad98f22abd965b35530e6d24b455ea4a270e2fc6ded9b570ccd6f81dad35"
+    },
+    {
+      "mesh": "eye-right-sclera",
+      "box": [
+        1925,
+        338,
+        2023,
+        423
+      ],
+      "sha256": "50a9708fdcb5b62ec8648a90c4015c9858ad29aeb2ef4d9f6831d31cbc3a65cf"
+    },
+    {
+      "mesh": "eye-left-iris",
+      "box": [
+        1925,
+        427,
+        2003,
+        511
+      ],
+      "sha256": "e621b65cd4f3f009a0bef466503710367a26756a3672e5cd9f16ed7ff2061e8f"
+    },
+    {
+      "mesh": "eye-right-iris",
+      "box": [
+        1925,
+        515,
+        2001,
+        599
+      ],
+      "sha256": "84a0a8b5eecc6a3d90d80bab83812f45453d17829024c9b01af905e25ee7063a"
+    },
+    {
+      "mesh": "eye-left-pupil",
+      "box": [
+        2007,
+        473,
+        2041,
+        515
+      ],
+      "sha256": "604b05c5742cd189147b0390a46dcdcb79a69c82923539e093f550791d1ff433"
+    },
+    {
+      "mesh": "eye-right-pupil",
+      "box": [
+        1860,
+        1126,
+        1893,
+        1167
+      ],
+      "sha256": "11bcc5d6023514388759d939aaf52968f39646de3cc76a21766ee4e84cc9a028"
+    },
+    {
+      "mesh": "eye-left-highlight",
+      "box": [
+        1860,
+        1171,
+        1894,
+        1211
+      ],
+      "sha256": "a703fa066e76a081d461454ce176b44e1a32f4794d48a1a8fb20255dde5cde65"
+    },
+    {
+      "mesh": "eye-right-highlight",
+      "box": [
+        2007,
+        427,
+        2041,
+        469
+      ],
+      "sha256": "816dc4160ddca0d476358207dc192a91f1e16be55c5265620d181789da2bc5ab"
+    },
+    {
+      "mesh": "eye-left-lower-line",
+      "box": [
+        1294,
+        1878,
+        1383,
+        1928
+      ],
+      "sha256": "db9fcd236b2ebac18b6e918d2b8345c0588cf6fc3a5dffbed6adea7421b2825a"
+    },
+    {
+      "mesh": "eye-right-lower-line",
+      "box": [
+        1387,
+        1878,
+        1473,
+        1926
+      ],
+      "sha256": "26a770dd4df2e30972875e0995ada74a874191b0b451fd5cbbd5f69da8a58772"
+    },
+    {
+      "mesh": "eye-left-upper-lashes",
+      "box": [
+        1293,
+        1952,
+        1428,
+        2046
+      ],
+      "sha256": "17dc7b847d2d6e0c0ba97bb8c65f9e4dea58b16e76dbaa364d370e94212e2ef8"
+    },
+    {
+      "mesh": "eye-right-upper-lashes",
+      "box": [
+        1905,
+        1126,
+        2042,
+        1222
+      ],
+      "sha256": "5d514c853fe65d3b5c017c95ccdaa9738b2978dc9a6ef486bcf3eb6a32ecc3e1"
+    },
+    {
+      "mesh": "closed-eyes-v1",
+      "box": [
+        956,
+        1952,
+        1289,
+        2003
+      ],
+      "sha256": "c4d0f2fcb3d83776a2c65088a8fe3147db199a3269000ae4801f34c3360892a8"
+    },
+    {
+      "mesh": "eye-left-brow",
+      "box": [
+        1905,
+        1482,
+        2036,
+        1533
+      ],
+      "sha256": "2fa447ae9b2a6013e95847aae9826a94eec83b7a9c7ba5504ffcb63f25da1737"
+    },
+    {
+      "mesh": "eye-right-brow",
+      "box": [
+        1905,
+        1420,
+        2037,
+        1478
+      ],
+      "sha256": "f8618c0808a49c68701d3079c796b2736460723d74842e2df659ae8f75556f03"
+    }
+  ],
+  "reused": "J1/J2 unchanged geometry and J3 completed/partial isolated-eye passes; hair is hidden in J3, eye/closed/face texels including 2px padding unchanged",
+  "geometryAndRendererUnchangedAfterRebase": true
+}

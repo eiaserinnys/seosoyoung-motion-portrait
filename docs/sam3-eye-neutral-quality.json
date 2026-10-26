@@ -1,0 +1,12 @@
+{
+  "baseline": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+  "baselineImageSha256": "a8c00c581c0af4bd15cdf867ef6e4f2de4ee642ce7559f46283a760b2db16560",
+  "scope": "full canvas, hair on, neutral",
+  "canvasSize": [
+    1100,
+    1600
+  ],
+  "changedPixels": 0,
+  "maxChannelDifferenceLSB": 0,
+  "passed": true
+}

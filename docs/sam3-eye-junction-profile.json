@@ -1,0 +1,10 @@
+{
+  "runtimeRevision": "v2.9.4 F-B2",
+  "status": "closed by Fable review; not rerun",
+  "maskSource": "skin-silhouette",
+  "scope": "Fable re-review 1: J1/J2/J3 and R4 mask checks",
+  "evidence": [
+    "sam3-eye-far-clip-contract.json",
+    "sam3-eye-junction-alpha.json"
+  ]
+}

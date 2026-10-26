@@ -1,0 +1,908 @@
+{
+  "method": "Selaphiel 1600x1100 DPR2 viewer, 640x260 nasal-bridge window, RGB/alpha>127 identify, temporal/nasal split by mean visible iris x",
+  "rows": [
+    {
+      "pitch": -30,
+      "yawAbs": 30,
+      "left": {
+        "scleraTemporal": 507,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 251.37246531483459
+      },
+      "right": {
+        "scleraTemporal": 435,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 381.48902821316614
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.8579881656804734,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 32,
+      "left": {
+        "scleraTemporal": 487,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 253.09154550350027
+      },
+      "right": {
+        "scleraTemporal": 400,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 379.93474801061006
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.8213552361396304,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 34,
+      "left": {
+        "scleraTemporal": 467,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 255.00054288816503
+      },
+      "right": {
+        "scleraTemporal": 360,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 378.26054054054055
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.7708779443254818,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 36,
+      "left": {
+        "scleraTemporal": 443,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 255.93336974330967
+      },
+      "right": {
+        "scleraTemporal": 330,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 376.5196024295969
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.744920993227991,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 38,
+      "left": {
+        "scleraTemporal": 427,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 257.9067471201316
+      },
+      "right": {
+        "scleraTemporal": 295,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 374.70660694288915
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.6908665105386417,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 40,
+      "left": {
+        "scleraTemporal": 398,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 259.0248207391065
+      },
+      "right": {
+        "scleraTemporal": 256,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 372.80249009620826
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.6432160804020101,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 42,
+      "left": {
+        "scleraTemporal": 392,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 260.36475869809203
+      },
+      "right": {
+        "scleraTemporal": 231,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 370.66108545034643
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5892857142857143,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 44,
+      "left": {
+        "scleraTemporal": 366,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 262.5633089476646
+      },
+      "right": {
+        "scleraTemporal": 196,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 368.5401759530792
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5355191256830601,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 46,
+      "left": {
+        "scleraTemporal": 363,
+        "scleraNasal": 9,
+        "irisVisible": true,
+        "irisCenterX": 263.1427752293578
+      },
+      "right": {
+        "scleraTemporal": 181,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 367.8214925373134
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.4986225895316804,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 48,
+      "left": {
+        "scleraTemporal": 375,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 263.6531690140845
+      },
+      "right": {
+        "scleraTemporal": 195,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 366.60084541062804
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.52,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 50,
+      "left": {
+        "scleraTemporal": 381,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 264.3726893261777
+      },
+      "right": {
+        "scleraTemporal": 200,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 366.4023199023199
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5249343832020997,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 52,
+      "left": {
+        "scleraTemporal": 390,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 264.0721271393643
+      },
+      "right": {
+        "scleraTemporal": 213,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 366.1224489795918
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5461538461538461,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 54,
+      "left": {
+        "scleraTemporal": 411,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 264.90082122552116
+      },
+      "right": {
+        "scleraTemporal": 234,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 365.75387596899225
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5693430656934306,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 56,
+      "left": {
+        "scleraTemporal": 412,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 264.7917511832319
+      },
+      "right": {
+        "scleraTemporal": 238,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 365.2597586941093
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5776699029126213,
+      "passed": true
+    },
+    {
+      "pitch": -30,
+      "yawAbs": 58,
+      "left": {
+        "scleraTemporal": 359,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 265.836862745098
+      },
+      "right": {
+        "scleraTemporal": 191,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 364.7152600170503
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.532033426183844,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 30,
+      "left": {
+        "scleraTemporal": 652,
+        "scleraNasal": 16,
+        "irisVisible": true,
+        "irisCenterX": 245.22018348623854
+      },
+      "right": {
+        "scleraTemporal": 450,
+        "scleraNasal": 7,
+        "irisVisible": true,
+        "irisCenterX": 394.0013507429086
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.6901840490797546,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 32,
+      "left": {
+        "scleraTemporal": 618,
+        "scleraNasal": 13,
+        "irisVisible": true,
+        "irisCenterX": 245.6115013169447
+      },
+      "right": {
+        "scleraTemporal": 413,
+        "scleraNasal": 7,
+        "irisVisible": true,
+        "irisCenterX": 392.62130996309963
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.6682847896440129,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 34,
+      "left": {
+        "scleraTemporal": 583,
+        "scleraNasal": 19,
+        "irisVisible": true,
+        "irisCenterX": 247.21812527765437
+      },
+      "right": {
+        "scleraTemporal": 357,
+        "scleraNasal": 11,
+        "irisVisible": true,
+        "irisCenterX": 392.2448113207547
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.6123499142367067,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 36,
+      "left": {
+        "scleraTemporal": 553,
+        "scleraNasal": 25,
+        "irisVisible": true,
+        "irisCenterX": 247.71906052393857
+      },
+      "right": {
+        "scleraTemporal": 308,
+        "scleraNasal": 8,
+        "irisVisible": true,
+        "irisCenterX": 390.74711538461537
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5569620253164557,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 38,
+      "left": {
+        "scleraTemporal": 534,
+        "scleraNasal": 20,
+        "irisVisible": true,
+        "irisCenterX": 248.49862763037513
+      },
+      "right": {
+        "scleraTemporal": 268,
+        "scleraNasal": 3,
+        "irisVisible": true,
+        "irisCenterX": 390.1874694077337
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.50187265917603,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 40,
+      "left": {
+        "scleraTemporal": 530,
+        "scleraNasal": 20,
+        "irisVisible": true,
+        "irisCenterX": 249.21870637505816
+      },
+      "right": {
+        "scleraTemporal": 255,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 389.4291397314769
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.4811320754716981,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 42,
+      "left": {
+        "scleraTemporal": 540,
+        "scleraNasal": 20,
+        "irisVisible": true,
+        "irisCenterX": 249.87511961722487
+      },
+      "right": {
+        "scleraTemporal": 267,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 388.5431164901664
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.49444444444444446,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 44,
+      "left": {
+        "scleraTemporal": 564,
+        "scleraNasal": 15,
+        "irisVisible": true,
+        "irisCenterX": 250.88845208845208
+      },
+      "right": {
+        "scleraTemporal": 279,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 387.53913043478263
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.4946808510638298,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 46,
+      "left": {
+        "scleraTemporal": 560,
+        "scleraNasal": 10,
+        "irisVisible": true,
+        "irisCenterX": 250.22333000997008
+      },
+      "right": {
+        "scleraTemporal": 296,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 388.8864696734059
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5285714285714286,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 48,
+      "left": {
+        "scleraTemporal": 505,
+        "scleraNasal": 11,
+        "irisVisible": true,
+        "irisCenterX": 246.34708612686953
+      },
+      "right": {
+        "scleraTemporal": 311,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 391.5677385345282
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.6158415841584158,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 50,
+      "left": {
+        "scleraTemporal": 413,
+        "scleraNasal": 6,
+        "irisVisible": true,
+        "irisCenterX": 243.8428040361126
+      },
+      "right": {
+        "scleraTemporal": 326,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 394.9533512064343
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.7893462469733656,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 52,
+      "left": {
+        "scleraTemporal": 301,
+        "scleraNasal": 3,
+        "irisVisible": true,
+        "irisCenterX": 241.60999456816947
+      },
+      "right": {
+        "scleraTemporal": 320,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 398.02562704471103
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 1.06312292358804,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 54,
+      "left": {
+        "scleraTemporal": 202,
+        "scleraNasal": 3,
+        "irisVisible": true,
+        "irisCenterX": 239.7014245014245
+      },
+      "right": {
+        "scleraTemporal": 250,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 400.74520856820743
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 1.2376237623762376,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 56,
+      "left": {
+        "scleraTemporal": 122,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 237.2954128440367
+      },
+      "right": {
+        "scleraTemporal": 164,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 403.18280216476245
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 1.3442622950819672,
+      "passed": true
+    },
+    {
+      "pitch": 0,
+      "yawAbs": 58,
+      "left": {
+        "scleraTemporal": 64,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 236.11673699015472
+      },
+      "right": {
+        "scleraTemporal": 88,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 405.40834473324213
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 1.375,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 30,
+      "left": {
+        "scleraTemporal": 524,
+        "scleraNasal": 27,
+        "irisVisible": true,
+        "irisCenterX": 249.14736323311976
+      },
+      "right": {
+        "scleraTemporal": 276,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 381.7521052631579
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5267175572519084,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 32,
+      "left": {
+        "scleraTemporal": 497,
+        "scleraNasal": 23,
+        "irisVisible": true,
+        "irisCenterX": 249.93169261677548
+      },
+      "right": {
+        "scleraTemporal": 228,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 379.9886914378029
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.45875251509054327,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 34,
+      "left": {
+        "scleraTemporal": 487,
+        "scleraNasal": 30,
+        "irisVisible": true,
+        "irisCenterX": 252.0668380462725
+      },
+      "right": {
+        "scleraTemporal": 195,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 378.0292979546711
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.4004106776180698,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 36,
+      "left": {
+        "scleraTemporal": 493,
+        "scleraNasal": 24,
+        "irisVisible": true,
+        "irisCenterX": 252.84769962982548
+      },
+      "right": {
+        "scleraTemporal": 209,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 375.7894144144144
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.4239350912778905,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 38,
+      "left": {
+        "scleraTemporal": 519,
+        "scleraNasal": 14,
+        "irisVisible": true,
+        "irisCenterX": 254.02546045503792
+      },
+      "right": {
+        "scleraTemporal": 220,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 373.50570125427595
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.4238921001926782,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 40,
+      "left": {
+        "scleraTemporal": 518,
+        "scleraNasal": 17,
+        "irisVisible": true,
+        "irisCenterX": 255.13689482470784
+      },
+      "right": {
+        "scleraTemporal": 230,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 371.07948568088835
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.444015444015444,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 42,
+      "left": {
+        "scleraTemporal": 528,
+        "scleraNasal": 16,
+        "irisVisible": true,
+        "irisCenterX": 255.34925201380898
+      },
+      "right": {
+        "scleraTemporal": 252,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 368.65456745311553
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.4772727272727273,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 44,
+      "left": {
+        "scleraTemporal": 546,
+        "scleraNasal": 16,
+        "irisVisible": true,
+        "irisCenterX": 256.80892857142857
+      },
+      "right": {
+        "scleraTemporal": 265,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 367.0243902439024
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.48534798534798534,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 46,
+      "left": {
+        "scleraTemporal": 558,
+        "scleraNasal": 12,
+        "irisVisible": true,
+        "irisCenterX": 257.4004898958971
+      },
+      "right": {
+        "scleraTemporal": 282,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 364.95966709346993
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5053763440860215,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 48,
+      "left": {
+        "scleraTemporal": 578,
+        "scleraNasal": 9,
+        "irisVisible": true,
+        "irisCenterX": 257.95599489795916
+      },
+      "right": {
+        "scleraTemporal": 290,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 364.6677609980302
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5017301038062284,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 50,
+      "left": {
+        "scleraTemporal": 605,
+        "scleraNasal": 8,
+        "irisVisible": true,
+        "irisCenterX": 258.71485676215855
+      },
+      "right": {
+        "scleraTemporal": 319,
+        "scleraNasal": 8,
+        "irisVisible": true,
+        "irisCenterX": 364.357094365241
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5272727272727272,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 52,
+      "left": {
+        "scleraTemporal": 604,
+        "scleraNasal": 6,
+        "irisVisible": true,
+        "irisCenterX": 259.4427327528466
+      },
+      "right": {
+        "scleraTemporal": 319,
+        "scleraNasal": 11,
+        "irisVisible": true,
+        "irisCenterX": 364.1415868673051
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5281456953642384,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 54,
+      "left": {
+        "scleraTemporal": 603,
+        "scleraNasal": 9,
+        "irisVisible": true,
+        "irisCenterX": 259.2207702888583
+      },
+      "right": {
+        "scleraTemporal": 321,
+        "scleraNasal": 9,
+        "irisVisible": true,
+        "irisCenterX": 363.8181179775281
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5323383084577115,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 56,
+      "left": {
+        "scleraTemporal": 562,
+        "scleraNasal": 18,
+        "irisVisible": true,
+        "irisCenterX": 260.1659324522761
+      },
+      "right": {
+        "scleraTemporal": 321,
+        "scleraNasal": 7,
+        "irisVisible": true,
+        "irisCenterX": 363.37481146304674
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5711743772241993,
+      "passed": true
+    },
+    {
+      "pitch": 30,
+      "yawAbs": 58,
+      "left": {
+        "scleraTemporal": 463,
+        "scleraNasal": 11,
+        "irisVisible": true,
+        "irisCenterX": 260.12764158918003
+      },
+      "right": {
+        "scleraTemporal": 264,
+        "scleraNasal": 0,
+        "irisVisible": true,
+        "irisCenterX": 363.0201754385965
+      },
+      "rightTemporalVisible": true,
+      "withinTwoTimes": true,
+      "ratio": 0.5701943844492441,
+      "passed": true
+    }
+  ],
+  "complete": true,
+  "failed": [],
+  "passed": true
+}
