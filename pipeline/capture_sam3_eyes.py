@@ -122,7 +122,8 @@ def gates(records,front):
         errors=nasal,paired=paired),R5=dict(maxChannelDifferenceLSB=int(front_eye.max()),passed=bool(front_eye.max()<=1)))
 
 def sheets(colors):
-    names=ORDER+['aux-0213','aux-0255','aux-0074','aux-0102','aux-0276','aux-0277']
+    names=ORDER+['aux-0213','aux-0255','aux-0074','aux-0102','aux-0276','aux-0277','aux-0043','aux-0241']
+    assert {'left','right','up-left','up-right','down-left','aux-0043','aux-0241'}<=set(names)
     rows=[]
     for i,name in enumerate(names):
         row=next(r for r in ROWS if r['name']==name)

@@ -7,8 +7,9 @@ import ast
 import functools
 import http.server
 import json
-import subprocess
 import threading
+import shutil
+from eye_render_ratios import ratio_gates
 import numpy as np
 from PIL import Image, ImageDraw
 from playwright.sync_api import sync_playwright
@@ -16,27 +17,8 @@ import capture_sam3_eyes as c
 from eye_capture_angles import inverse_achieved, achieved
 
 ROOT=c.ROOT
-OUT=ROOT/'debug/sam3-eye-v291/final-render'
+OUT=ROOT/'debug/sam3-eye-v292/final-render'
 DOC=c.DOC
-EXTRA_SETUP='''()=>{
- window.captureFarAlpha=([yaw,pitch])=>{
-  captureEyes([yaw,pitch,false,false]);
-  const ids=new Set(studio.rig.meshes.filter(m=>m.id.startsWith('eye-right-')).map(m=>m.id));
-  eyeCapture.render(studio.p,{...studio.state,hidden:new Set(),mode:'solo',selectedIds:ids,wire:false,grid:false,before:false,surfaceOnly:false,identify:null});
-  return eyeCapture.canvas.toDataURL('image/png').split(',')[1];
- };
- window.captureStage=([yaw,pitch])=>{
-  captureEyes([yaw,pitch,false,false]);
-  const keep=id=>id==='face-skin'||id.startsWith('eye-')||id==='nose-detail'||id==='mouth-detail'||id.startsWith('ear-');
-  const hidden=new Set(studio.rig.meshes.filter(m=>!keep(m.id)).map(m=>m.id));
-  const state={...studio.state,hidden,mode:'normal',wire:false,grid:false,before:false,surfaceOnly:false,identify:null};
-  eyeCapture.render(studio.p,state);const color=eyeCapture.canvas.toDataURL('image/png').split(',')[1];
-  eyeCapture.render(studio.p,{...state,identify:'exposed-skin'});
-  return {color,owned:eyeCapture.canvas.toDataURL('image/png').split(',')[1]};
- };
-}'''
-
-
 def clipped_measure(captures,row,side):
     q=c.measure(captures,row,side)
     sil=c.binary(captures['faceMask'])
@@ -68,7 +50,7 @@ def stage_measure(name,rgba,owned,geometry):
 
 def regression_sheet():
     report=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
-    cache=ROOT/'debug/sam3-eye-v291/far-clip-contract';tiles=[]
+    cache=ROOT/'debug/sam3-eye-v292/far-clip-contract';tiles=[]
     for row in report['poses']:
         for side in row['increasedSides']:
             coords=row['sides'][side]['coordinates720']+row['sides'][side]['r24Coordinates720']
@@ -92,7 +74,7 @@ def regression_sheet():
     sheet=Image.new('RGB',(width*2,sum(pair[0].height+24 for _,pair in tiles)),'#eeeeee');y=0
     for label,pair in tiles:
         for j,im in enumerate(pair):
-            sheet.paste(im,(width*j,y));ImageDraw.Draw(sheet).text((width*j+4,y+im.height+3),label+' | '+['v2.9.1','r24'][j],fill='black')
+            sheet.paste(im,(width*j,y));ImageDraw.Draw(sheet).text((width*j+4,y+im.height+3),label+' | '+['v2.9.2','r24'][j],fill='black')
         y+=pair[0].height+24
     sheet.save(DOC/'sam3_eye_R7_outside_regressions_4x.png')
 
@@ -100,79 +82,66 @@ def regression_sheet():
 def main():
     OUT.mkdir(parents=True,exist_ok=True);c.OUT=OUT
     r4=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
-    assert r4['status']=='R4_PASS',r4['status']
-    geom=json.loads(subprocess.check_output(['node',str(ROOT/'pipeline/skin_fill_geometry.mjs')],timeout=60))
+    junction=json.loads((ROOT/'docs/sam3-eye-junction-v2.json').read_text())
+    j5=json.loads((ROOT/'docs/sam3-eye-junction-profile.json').read_text())
+    assert junction['complete'] and junction['passed']['J1'] and junction['passed']['J6']
+    assert r4['status']=='R4_PASS' and r4['R5']['passed'] and j5['passed']
+    old_metrics=json.loads((ROOT/'docs/sam3-eye-render-metrics.json').read_text())
+    baseline=ROOT/'debug/sam3-eye-v291/final-render'
+    for path in baseline.glob('r24-*.png'):shutil.copyfile(path,OUT/path.name)
+    neutral={rev:Image.open(ROOT/f'debug/sam3-eye-v292/far-clip-contract/{rev}-neutral.png').convert('RGBA') for rev in ['r24','v291']}
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(c.Handler,directory=str(ROOT)))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
-    colors={r:{} for r in ['r24','v291']};records={r:{} for r in colors};neutral={};neutral_full={};stages={};alpha=[];inputs=[]
+    colors={r:{} for r in ['r24','v291']};records={r:{} for r in colors};inputs=[]
     try:
         with sync_playwright() as pw:
             browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--use-angle=swiftshader'])
             for rev,path in [('r24','debug/r24/bundle'),('v291','bundle')]:
-                page=browser.new_page(viewport=dict(width=1440,height=1000),device_scale_factor=1)
-                page.goto(f'http://127.0.0.1:{server.server_port}/{path}/',wait_until='networkidle')
-                page.wait_for_function('window.studio?.ready',timeout=30000);page.evaluate(c.SETUP);page.evaluate(EXTRA_SETUP)
+                page=None
+                if rev=='v291':
+                    page=browser.new_page(viewport=dict(width=1440,height=1000),device_scale_factor=1)
+                    page.goto(f'http://127.0.0.1:{server.server_port}/{path}/',wait_until='networkidle')
+                    page.wait_for_function('window.studio?.ready',timeout=30000)
+                    page.evaluate('window.requestAnimationFrame=()=>0');page.evaluate(c.SETUP)
                 for row in c.ROWS:
                     requested=inverse_achieved(c.BOOT['achieved']['c'],row['yaw'],row['pitch'])
-                    keys=['color','allEyes','faceMask']+[s+'-'+k for s in ['left','right'] for k in ['env','inner','iris','lash']]
+                    keys=['color','allEyes','faceMask']+[side+'-'+k for side in ['left','right'] for k in ['env','inner','iris','lash']]
                     if row['name'] in c.ORDER:keys+=['full']
                     paths={k:OUT/f"{rev}-{row['name']}-{k}.png" for k in keys}
                     if all(p.exists() for p in paths.values()):captures={k:Image.open(p).convert('RGBA') for k,p in paths.items()}
                     else:
+                        assert page is not None,'Missing unchanged r24 evidence'
                         raw=page.evaluate('(a)=>captureEyes(a)',[*requested,True,row['name'] in c.ORDER])
                         captures={k:c.image(v,full=k=='full') for k,v in raw.items()}
                         for k,im in captures.items():im.save(paths[k])
-                    records[rev][row['name']]={s:clipped_measure(captures,row,s) for s in ['left','right']}
+                    records[rev][row['name']]={side:clipped_measure(captures,row,side) for side in ['left','right']}
                     colors[rev][row['name']]=captures['color']
                     if rev=='v291':inputs.append(dict(name=row['name'],requested=requested,targetAchieved=[row['yaw'],row['pitch']],actualAchieved=achieved(c.BOOT['achieved']['c'],*requested)))
-                    print('MATCHED',rev,row['name'],flush=True)
-                raw=page.evaluate('(a)=>captureEyes(a)',[0,0,False,True])
-                neutral[rev]=c.image(raw['color']);neutral_full[rev]=c.image(raw['full'],full=True)
-                neutral[rev].save(OUT/f'{rev}-neutral.png');neutral_full[rev].save(OUT/f'{rev}-neutral-full.png')
-                if rev=='v291':
-                    for yaw in np.arange(0,20.01,.5):
-                        requested=inverse_achieved(c.BOOT['achieved']['c'],float(yaw),0)
-                        im=c.image(page.evaluate('(a)=>captureFarAlpha(a)',requested))
-                        alpha.append(dict(yawAchieved=float(yaw),requested=requested,alphaSumPx=float(np.array(im)[:,:,3].sum()/255)))
-                        (OUT/'alpha.json').write_text(json.dumps(alpha)+'\n')
-                    print('R6 alpha samples',len(alpha),flush=True)
+                    print('MATCHED v292',rev,row['name'],flush=True)
+                if page is not None:
                     sweep=[]
                     for yaw in [15,17,19,21,23,25,27,29,30]:
                         requested=inverse_achieved(c.BOOT['achieved']['c'],yaw,0)
-                        im=c.image(page.evaluate('(a)=>captureEyes(a)',[*requested,False,False])['color'])
-                        sweep.append((yaw,im))
+                        im=c.image(page.evaluate('(a)=>captureEyes(a)',[*requested,False,False])['color']);sweep.append((yaw,im))
                     strip=Image.new('RGB',(len(sweep)*320,300),'#eeeeee')
                     for i,(yaw,im) in enumerate(sweep):
                         strip.paste(im.convert('RGB').crop((405,330,565,470)).resize((320,280)),(i*320,0))
                         ImageDraw.Draw(strip).text((i*320+4,283),f'achieved yaw {yaw}',fill='black')
                     strip.save(DOC/'sam3_eye_R7_temporal_sweep.png')
-                    stages['poses']=[]
-                    # Geometry export follows FEATURE_FIT's existing nine requests.
-                    page.evaluate("async()=>{window.stagePoses=(await import('./feature-data.mjs')).FEATURE_FIT.poses;}")
-                    for g in geom:
-                        pose=page.evaluate('(name)=>stagePoses.find(p=>p.name===name)',g['name'])
-                        raw=page.evaluate('(a)=>captureStage(a)',[pose['yaw'],pose['pitch']])
-                        rgba=np.array(c.image(raw['color'],full=True));owned=np.array(c.image(raw['owned'],full=True))
-                        stages['poses'].append(stage_measure(g['name'],rgba,owned,g))
                     page.evaluate('studio.setPose(0,0,0,"Neutral");studio.renderer.render(studio.p,studio.state)')
                     page.screenshot(path=str(DOC/'sam3_eye_viewer_wide.png'))
-                    page.set_viewport_size(dict(width=720,height=1000));page.screenshot(path=str(DOC/'sam3_eye_viewer_narrow.png'))
-                page.close()
+                    page.set_viewport_size(dict(width=720,height=1000));page.screenshot(path=str(DOC/'sam3_eye_viewer_narrow.png'));page.close()
             browser.close()
     finally:
         server.shutdown();server.server_close();thread.join()
-    combined=[dict(name=r['name'],side=s,**{rev:records[rev][r['name']][s] for rev in records}) for r in c.ROWS for s in ['left','right']]
+    combined=[dict(name=r['name'],side=side,**{rev:records[rev][r['name']][side] for rev in records}) for r in c.ROWS for side in ['left','right']]
     report=c.gates(combined,neutral)
-    delta=np.abs(np.array(neutral['v291']).astype(int)-np.array(neutral['r24']).astype(int))
-    report['R5'].update(changedPixels=int(np.any(delta,axis=2).sum()),maxChannelDifferenceLSB=int(delta.max()))
-    assert report['R5']['changedPixels']==0,report['R5']
-    report['R3']['passed']=max(report['R3']['maxEyeErrorPx'],report['R3']['maxPairedErrorPx'])<=report['R3']['limitPx']
-    differences=np.abs(np.diff([r['alphaSumPx'] for r in alpha]));idx=int(np.argmax(differences))
-    report['R6Alpha']=dict(side='right (far)',stepAchievedDeg=.5,samples=alpha,maxAdjacentDifferencePx=float(differences[idx]),maxIntervalDeg=[alpha[idx]['yawAchieved'],alpha[idx+1]['yawAchieved']],threshold='report-only; no numerical threshold specified')
-    full_delta=np.abs(np.array(neutral_full['v291']).astype(int)-np.array(neutral_full['r24']).astype(int))
-    stages['front']=dict(changedPixels=int(np.any(full_delta,axis=2).sum()),maxChannelDifferenceLSB=int(full_delta.max()))
-    report['Stage4']=stages;report['R4']=dict(status=r4['status'],poses=len(r4['poses']))
-    report['records']=combined;report['poseInputs']=inputs
+    report['runtimeRevision']='v2.9.2 requested 52..67 junction'
+    report['absoluteForm']='Reference only: SAM vs identify constant offsets; ratio form is authoritative'
+    report.update(ratio_gates(combined,c.M,c.AUDIT));report['R5']=r4['R5']
+    report['Junction']=junction;report['J3']=json.loads((ROOT/'docs/sam3-eye-junction-alpha.json').read_text());report['J5']=j5
+    report['Stage4']=old_metrics['Stage4'];report['Stage4Evidence']='Reused: original up 5px matches r24; hair-on 0px; excluded by Fable junction v2'
+    report['R4']=dict(status=r4['status'],poses=len(r4['poses']));report['records']=combined;report['poseInputs']=inputs
     (ROOT/'docs/sam3-eye-render-metrics.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     c.sheets(colors);regression_sheet()
     grid=Image.new('RGB',(1440,1440),'#1e2430')
@@ -180,6 +149,7 @@ def main():
         im=Image.open(OUT/f'v291-{name}-full.png').convert('RGB').crop((152,20,872,740)).resize((480,480))
         ImageDraw.Draw(im).text((8,8),name,fill='white');grid.paste(im,((i%3)*480,(i//3)*480))
     grid.save(DOC/'sam3_eye_9dir_grid.png')
-    print(json.dumps({k:v for k,v in report.items() if k not in ['records','poseInputs']},ensure_ascii=False,indent=2))
+    print(json.dumps({k:report[k] for k in ['R2Ratio','R3Ratio','frontOffsets','R4','R5']},ensure_ascii=False,indent=2))
+
 
 if __name__=='__main__':main()

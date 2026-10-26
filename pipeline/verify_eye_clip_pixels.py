@@ -10,7 +10,8 @@ from playwright.sync_api import sync_playwright
 from capture_sam3_eyes import ROOT, ROWS, BOOT, SETUP, Handler, image, binary
 from eye_capture_angles import inverse_achieved, achieved
 
-OUT=ROOT/'debug/sam3-eye-v291/far-clip-contract'
+OUT=ROOT/'debug/sam3-eye-v292/far-clip-contract'
+BASELINE=ROOT/'debug/sam3-eye-v291/far-clip-contract'
 DOC=ROOT/'docs/captures'
 SIDE_SETUP='''async()=>{
  const {eyeClipControls}=await import('./renderer.mjs');
@@ -58,7 +59,7 @@ def save_report(report):
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     previous=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
-    report=dict(rendererContract='profile-only alpha fallback; far-eye smoothstep(0,15) alpha face clip',
+    report=dict(rendererContract='v2: eye soft clip far0..15/near52..67; fixed authored masks and exposed-skin-clip; nose/mouth retain profile fallback',
                 R4Definition='a: achieved theta_far>=15, zero far side only; all other counts report-only against r24',
                 R5=previous['R5'],poses=[])
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT)))
@@ -70,9 +71,15 @@ def main():
             for rev,path in [('r24','debug/r24/bundle'),('v291','bundle')]:
                 page=browser.new_page(viewport=dict(width=1440,height=1000),device_scale_factor=1)
                 page.goto(f'http://127.0.0.1:{server.server_port}/{path}/',wait_until='networkidle')
-                page.wait_for_function('window.studio?.ready',timeout=30000);page.evaluate(SETUP);page.evaluate(SIDE_SETUP)
+                page.wait_for_function('window.studio?.ready',timeout=30000);page.evaluate('window.requestAnimationFrame=()=>0');page.evaluate(SETUP);page.evaluate(SIDE_SETUP)
                 pages[rev]=page
-            print('REUSED R5',json.dumps(report['R5']),flush=True)
+            neutral={rev:image(page.evaluate('(a)=>captureEyes(a)',[0,0,False,False])['color']) for rev,page in pages.items()}
+            for rev,im in neutral.items():im.save(OUT/f'{rev}-neutral.png')
+            diff=np.abs(np.array(neutral['v291']).astype(int)-np.array(neutral['r24']).astype(int))
+            report['R5']=dict(changedPixels=int(np.any(diff,axis=2).sum()),maxChannelDifferenceLSB=int(diff.max()),passed=not np.any(diff))
+            print('R5',json.dumps(report['R5']),flush=True)
+            if not report['R5']['passed']:
+                report['status']='STOP_R5';save_report(report);browser.close();return
             # Reference inputs are inverted before passing them to either viewer.
             poses=[dict(name=r['name'],targetAchieved=[r['yaw'],r['pitch']],requested=inverse_achieved(BOOT['achieved']['c'],r['yaw'],r['pitch'])) for r in ROWS]
             poses += [dict(name=f'sweep-{yaw}-{pitch}',requested=[yaw,pitch],targetAchieved=achieved(BOOT['achieved']['c'],yaw,pitch)) for yaw in [-45,-40,-35,-30,30,35,40,45] for pitch in [-30,0,30]]
@@ -80,7 +87,12 @@ def main():
                 captures={};evidence={};controls={}
                 for rev,page in pages.items():
                     paths={k:OUT/f"{rev}-{pose['name']}-{k}.png" for k in ['color','faceMask','left','right']}
-                    if all(p.exists() for p in paths.values()):
+                    baseline_paths={k:BASELINE/f"{rev}-{pose['name']}-{k}.png" for k in paths}
+                    if rev=='r24' and all(p.exists() for p in baseline_paths.values()):
+                        captures[rev]={k:Image.open(p).convert('RGBA') for k,p in baseline_paths.items()}
+                        controls[rev]={s:dict(profileFaceClip=abs(pose['requested'][0])>45,eyeFaceClip=0) for s in ['left','right']}
+                        for k,im in captures[rev].items():im.save(paths[k])
+                    elif all(p.exists() for p in paths.values()):
                         captures[rev]={k:Image.open(p).convert('RGBA') for k,p in paths.items()}
                         old=next(r for r in previous['poses'] if r['name']==pose['name'])
                         controls[rev]=old['controls'][rev]

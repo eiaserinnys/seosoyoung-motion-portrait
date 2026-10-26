@@ -1,5 +1,5 @@
 {
-  "rendererContract": "profile-only alpha fallback; far-eye smoothstep(0,15) alpha face clip",
+  "rendererContract": "v2: eye soft clip far0..15/near52..67; fixed authored masks and exposed-skin-clip; nose/mouth retain profile fallback",
   "R4Definition": "a: achieved theta_far>=15, zero far side only; all other counts report-only against r24",
   "R5": {
     "changedPixels": 0,
@@ -105,11 +105,11 @@
         },
         "v291": {
           "left": {
-            "profileFaceClip": true,
-            "eyeFaceClip": 0
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
           },
           "right": {
-            "profileFaceClip": true,
+            "profileFaceClip": false,
             "eyeFaceClip": 0
           }
         }
@@ -166,12 +166,12 @@
         },
         "v291": {
           "left": {
-            "profileFaceClip": true,
+            "profileFaceClip": false,
             "eyeFaceClip": 0
           },
           "right": {
-            "profileFaceClip": true,
-            "eyeFaceClip": 0
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
           }
         }
       },
@@ -508,11 +508,11 @@
         },
         "v291": {
           "left": {
-            "profileFaceClip": true,
-            "eyeFaceClip": 0
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
           },
           "right": {
-            "profileFaceClip": true,
+            "profileFaceClip": false,
             "eyeFaceClip": 0
           }
         }
@@ -527,8 +527,25 @@
           "role": "far"
         },
         "right": {
-          "pixels": 0,
-          "coordinates720": [],
+          "pixels": 4,
+          "coordinates720": [
+            [
+              427,
+              362
+            ],
+            [
+              428,
+              362
+            ],
+            [
+              429,
+              362
+            ],
+            [
+              430,
+              362
+            ]
+          ],
           "r24Pixels": 0,
           "r24Coordinates720": [],
           "role": "near"
@@ -540,7 +557,9 @@
         "right": true
       },
       "passed": true,
-      "increasedSides": []
+      "increasedSides": [
+        "right"
+      ]
     },
     {
       "name": "up-right",
@@ -875,11 +894,11 @@
         },
         "v291": {
           "left": {
-            "profileFaceClip": true,
-            "eyeFaceClip": 0
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
           },
           "right": {
-            "profileFaceClip": true,
+            "profileFaceClip": false,
             "eyeFaceClip": 0
           }
         }
@@ -894,8 +913,41 @@
           "role": "far"
         },
         "right": {
-          "pixels": 0,
-          "coordinates720": [],
+          "pixels": 8,
+          "coordinates720": [
+            [
+              417,
+              444
+            ],
+            [
+              418,
+              444
+            ],
+            [
+              419,
+              444
+            ],
+            [
+              420,
+              444
+            ],
+            [
+              421,
+              444
+            ],
+            [
+              422,
+              444
+            ],
+            [
+              423,
+              444
+            ],
+            [
+              424,
+              444
+            ]
+          ],
           "r24Pixels": 0,
           "r24Coordinates720": [],
           "role": "near"
@@ -907,7 +959,9 @@
         "right": true
       },
       "passed": true,
-      "increasedSides": []
+      "increasedSides": [
+        "right"
+      ]
     },
     {
       "name": "down-right",
@@ -3701,11 +3755,11 @@
         },
         "v291": {
           "left": {
-            "profileFaceClip": true,
-            "eyeFaceClip": 0
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
           },
           "right": {
-            "profileFaceClip": true,
+            "profileFaceClip": false,
             "eyeFaceClip": 0
           }
         }
@@ -3720,8 +3774,17 @@
           "role": "far"
         },
         "right": {
-          "pixels": 0,
-          "coordinates720": [],
+          "pixels": 2,
+          "coordinates720": [
+            [
+              374,
+              429
+            ],
+            [
+              375,
+              429
+            ]
+          ],
           "r24Pixels": 0,
           "r24Coordinates720": [],
           "role": "near"
@@ -3733,7 +3796,9 @@
         "right": true
       },
       "passed": true,
-      "increasedSides": []
+      "increasedSides": [
+        "right"
+      ]
     },
     {
       "name": "aux-0241",
@@ -3762,20 +3827,29 @@
         },
         "v291": {
           "left": {
-            "profileFaceClip": true,
+            "profileFaceClip": false,
             "eyeFaceClip": 0
           },
           "right": {
-            "profileFaceClip": true,
-            "eyeFaceClip": 0
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
           }
         }
       },
       "thetaFarAchieved": 37.05340082666024,
       "sides": {
         "left": {
-          "pixels": 0,
-          "coordinates720": [],
+          "pixels": 2,
+          "coordinates720": [
+            [
+              344,
+              430
+            ],
+            [
+              299,
+              431
+            ]
+          ],
           "r24Pixels": 0,
           "r24Coordinates720": [],
           "role": "near"
@@ -3794,7 +3868,9 @@
         "right": true
       },
       "passed": true,
-      "increasedSides": []
+      "increasedSides": [
+        "left"
+      ]
     },
     {
       "name": "aux-0093",

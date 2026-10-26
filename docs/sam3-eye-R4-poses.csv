@@ -4,9 +4,9 @@ left,a,36.82991693704355,far,0,0,near,0,0,True
 right,a,37.673671865607666,near,0,0,far,0,0,True
 up,b,1.3089814586488127,near,10,4,far,1,0,True
 down,b,14.253565453750118,near,13,7,far,0,2,True
-up-left,a,41.167166482660775,far,0,0,near,0,0,True
+up-left,a,41.167166482660775,far,0,0,near,4,0,True
 up-right,a,36.376549246237346,near,3,1,far,0,56,True
-down-left,a,32.93852359358867,far,0,0,near,0,0,True
+down-left,a,32.93852359358867,far,0,0,near,8,0,True
 down-right,a,23.506140424439433,near,5,5,far,0,44,True
 aux-0276,b,0.0835118619694821,far,27,11,near,11,9,True
 aux-0275,b,2.17786545394133,near,24,11,far,11,7,True
@@ -19,8 +19,8 @@ aux-0342,a,18.11371569838885,far,0,24,near,1,1,True
 aux-0074,a,17.847254962686957,near,0,0,far,0,13,True
 aux-0086,b,0.05173279623544449,near,2,0,far,0,0,True
 aux-0102,b,0.19913596566379507,far,12,8,near,3,2,True
-aux-0043,a,36.36485392194829,far,0,0,near,0,0,True
-aux-0241,a,37.05340082666024,near,0,0,far,0,0,True
+aux-0043,a,36.36485392194829,far,0,0,near,2,0,True
+aux-0241,a,37.05340082666024,near,2,0,far,0,0,True
 aux-0093,b,0.7230861456710767,far,2,0,near,1,0,True
 aux-0103,b,0.20540003534124593,far,11,6,near,4,2,True
 sweep--45--30,a,29.473898497212076,far,0,61,near,4,22,True

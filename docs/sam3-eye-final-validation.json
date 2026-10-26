@@ -1,311 +1,631 @@
 {
+  "runtimeRevision": "v2.9.2 requested 52..67 junction",
+  "inputSha": "46d5bd8a510ff90be1ecd24b233ce562f7c6d2495419464068052bbba3602593",
+  "J0": {
+    "V_own": 7.240357154381933,
+    "own": {
+      "sam3": {
+        "distancePx": 6.22078660612518,
+        "pitch": 0,
+        "fromYaw": 45,
+        "toYaw": 46,
+        "mesh": "eye-left-iris",
+        "vertex": 72,
+        "rest": [
+          380,
+          478
+        ]
+      },
+      "legacy": {
+        "distancePx": 7.240357154381933,
+        "pitch": 0,
+        "fromYaw": -45,
+        "toYaw": -46,
+        "mesh": "eye-right-upper-lashes",
+        "vertex": 8,
+        "rest": [
+          675,
+          372
+        ]
+      }
+    }
+  },
+  "J1": {
+    "distancePx": 0.06927192446320186,
+    "pitch": 0,
+    "fromYaw": 60.35,
+    "toYaw": 60.36,
+    "mesh": "eye-left-upper-lashes",
+    "vertex": 72,
+    "rest": [
+      331,
+      465
+    ],
+    "limitPx": 0.07240357154381934,
+    "over1pxSteps": 0,
+    "samples": 54006,
+    "vertexCount": 1062,
+    "cases": [
+      {
+        "pitch": -30,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.038429047442133435,
+          "pitch": -30,
+          "fromYaw": -60.33,
+          "toYaw": -60.34,
+          "mesh": "closed-eyes-v1",
+          "vertex": 84,
+          "rest": [
+            481.22222222222223,
+            469
+          ]
+        },
+        "degree": {
+          "distancePx": 3.8354959346662807,
+          "pitch": -30,
+          "fromYaw": -60,
+          "toYaw": -61,
+          "mesh": "closed-eyes-v1",
+          "vertex": 84,
+          "rest": [
+            481.22222222222223,
+            469
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": -30,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.04409974830213935,
+          "pitch": -30,
+          "fromYaw": 61.13,
+          "toYaw": 61.14,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "degree": {
+          "distancePx": 4.39191104043616,
+          "pitch": -30,
+          "fromYaw": 61,
+          "toYaw": 62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 0,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.0644468029851973,
+          "pitch": 0,
+          "fromYaw": -60.53,
+          "toYaw": -60.54,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 80,
+          "rest": [
+            675,
+            464
+          ]
+        },
+        "degree": {
+          "distancePx": 6.439349258485923,
+          "pitch": 0,
+          "fromYaw": -60,
+          "toYaw": -61,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 80,
+          "rest": [
+            675,
+            464
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 0,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.06927192446320186,
+          "pitch": 0,
+          "fromYaw": 60.35,
+          "toYaw": 60.36,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "degree": {
+          "distancePx": 6.919485711508532,
+          "pitch": 0,
+          "fromYaw": 60,
+          "toYaw": 61,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 30,
+        "sign": -1,
+        "peak": {
+          "distancePx": 0.0392983943273891,
+          "pitch": 30,
+          "fromYaw": -61.32,
+          "toYaw": -61.33,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 8,
+          "rest": [
+            675,
+            372
+          ]
+        },
+        "degree": {
+          "distancePx": 3.919219942662835,
+          "pitch": 30,
+          "fromYaw": -61,
+          "toYaw": -62,
+          "mesh": "eye-right-upper-lashes",
+          "vertex": 8,
+          "rest": [
+            675,
+            372
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      },
+      {
+        "pitch": 30,
+        "sign": 1,
+        "peak": {
+          "distancePx": 0.04083212038309793,
+          "pitch": 30,
+          "fromYaw": 61.28,
+          "toYaw": 61.29,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
+          "rest": [
+            331,
+            375
+          ]
+        },
+        "degree": {
+          "distancePx": 4.073292098360331,
+          "pitch": 30,
+          "fromYaw": 61,
+          "toYaw": 62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 72,
+          "rest": [
+            331,
+            465
+          ]
+        },
+        "legacy": {
+          "distancePx": 0
+        },
+        "over1": 0
+      }
+    ]
+  },
+  "J2": {
+    "distancePx": 6.919485711508532,
+    "pitch": 0,
+    "fromYaw": 60,
+    "toYaw": 61,
+    "mesh": "eye-left-upper-lashes",
+    "vertex": 72,
+    "rest": [
+      331,
+      465
+    ],
+    "limitPx": 7.240357154381933
+  },
+  "J3": {
+    "limitAlphaPixels": 362.0178577190967,
+    "stepRequestedDeg": 0.1,
+    "poses": 5406,
+    "peaks": {
+      "far": {
+        "difference": 40.752941176470586,
+        "side": "left",
+        "pitch": 0,
+        "fromYaw": -60,
+        "toYaw": -60.1,
+        "fromAlpha": 1210.721568627451,
+        "toAlpha": 1169.9686274509804
+      },
+      "near": {
+        "difference": 22.858823529411893,
+        "side": "left",
+        "pitch": 0,
+        "fromYaw": 62.9,
+        "toYaw": 63,
+        "fromAlpha": 5763.619607843138,
+        "toAlpha": 5740.760784313726
+      }
+    },
+    "passed": true,
+    "inputSha": "910f3f86d5c39a032197de2479723cd549540e3b7b58497dac4b5811f684ba78"
+  },
+  "J4": {
+    "passed": true,
+    "evidence": "pipeline/test_eye_clip_contract.mjs: three tests passed; fixed maskId, eyeFaceMask source, continuous soft strengths"
+  },
+  "J5": {
+    "passed": true,
+    "poses": 36,
+    "maxOutsidePixels": 0
+  },
+  "J6": {
+    "distancePx": 0,
+    "xyzMaxErrorPx": 0,
+    "xyStepDeg": 1,
+    "xyzStepDeg": 1,
+    "limitPx": 1e-06
+  },
+  "J7": {
+    "maxWeight": 0,
+    "limit": 0.05,
+    "poses": [
+      {
+        "name": "front",
+        "requested": [
+          -1.3058707682272463,
+          1.5480214716376788
+        ],
+        "s": 0
+      },
+      {
+        "name": "left",
+        "requested": [
+          -47.61660424600042,
+          0.32643746760535375
+        ],
+        "s": 0
+      },
+      {
+        "name": "right",
+        "requested": [
+          48.30864868359759,
+          1.9607457790839389
+        ],
+        "s": 0
+      },
+      {
+        "name": "up",
+        "requested": [
+          1.4487257139741638,
+          33.61648637349459
+        ],
+        "s": 0
+      },
+      {
+        "name": "down",
+        "requested": [
+          21.97680704042867,
+          -31.638613075805154
+        ],
+        "s": 0
+      },
+      {
+        "name": "up-left",
+        "requested": [
+          -45.83872508935118,
+          32.22091859371879
+        ],
+        "s": 0
+      },
+      {
+        "name": "up-right",
+        "requested": [
+          41.97782361066015,
+          24.15351813281776
+        ],
+        "s": 0
+      },
+      {
+        "name": "down-left",
+        "requested": [
+          -51.295645849108304,
+          -33.28737527145702
+        ],
+        "s": 0
+      },
+      {
+        "name": "down-right",
+        "requested": [
+          34.88569731719818,
+          -25.180988581439273
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0276",
+        "requested": [
+          -0.1316471753661597,
+          -35.27593686319509
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0275",
+        "requested": [
+          3.423029926745324,
+          -34.79532075415544
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0277",
+        "requested": [
+          -4.181266677125033,
+          -35.468759359037044
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0017",
+        "requested": [
+          -20.660051638026818,
+          8.436096537393329
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0213",
+        "requested": [
+          30.44990175653519,
+          27.189167494704396
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0048",
+        "requested": [
+          -31.441741562845888,
+          -5.060624139996259
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0255",
+        "requested": [
+          36.335075962587034,
+          -21.392617500992888
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0342",
+        "requested": [
+          -23.549451411999836,
+          -0.7715580500254465
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0074",
+        "requested": [
+          22.76111440389865,
+          3.050541697290215
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0086",
+        "requested": [
+          0.06149148824259608,
+          17.687110510018808
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0102",
+        "requested": [
+          -0.2892513206684326,
+          -21.431895999144032
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0043",
+        "requested": [
+          -47.44229055079851,
+          -1.4550831460781348
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0241",
+        "requested": [
+          47.97311156083558,
+          0.047614838889337575
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0093",
+        "requested": [
+          -0.8107655931882455,
+          30.626160355312347
+        ],
+        "s": 0
+      },
+      {
+        "name": "aux-0103",
+        "requested": [
+          -0.30140803123711707,
+          -23.21953890292815
+        ],
+        "s": 0
+      }
+    ],
+    "passed": true
+  },
   "R1": {
     "maxErrorPx": 8.265626605580337e-15
   },
-  "R2": {
+  "R2Ratio": {
     "dTemp": {
-      "r24": 8.447664590066752,
-      "v291": 8.956303813923173,
+      "r24": 10.23817902249429,
+      "v291": 5.2513035401756625,
       "limit": 3.759995664880529,
-      "passed": false
+      "passed": false,
+      "betterThanR24": true
     },
     "dNas": {
-      "r24": 4.078225921240274,
-      "v291": 4.638495249196565,
+      "r24": 6.144262069414464,
+      "v291": 3.8757188050723514,
       "limit": 3.0257798801506213,
-      "passed": false
+      "passed": false,
+      "betterThanR24": true
     },
     "h": {
-      "r24": 5.4068425908776,
-      "v291": 4.832531114718118,
+      "r24": 5.339688101439596,
+      "v291": 2.976624803050544,
       "limit": 3.7260039699061562,
-      "passed": false
+      "passed": true,
+      "betterThanR24": true
     },
     "deltaY": {
-      "r24": 2.138695977559056,
-      "v291": 2.029892947511298,
+      "r24": 2.169371725528979,
+      "v291": 2.024473576533968,
       "limit": 2.0,
-      "passed": false
+      "passed": false,
+      "betterThanR24": true
     },
     "a": {
-      "r24": 3.8751577254652494,
-      "v291": 3.049675664020376,
+      "r24": 4.69542398477026,
+      "v291": 2.623156442263271,
       "limit": 2.0,
-      "passed": false
+      "passed": false,
+      "betterThanR24": true
     }
   },
-  "R3": {
+  "R3Ratio": {
     "limitPx": 4.538669820225932,
     "excluded": [
       "aux-0213:left",
       "up-left:right",
       "up-right:left"
-    ],
-    "maxEyeErrorPx": 7.927178478465208,
-    "maxPairedErrorPx": 11.933867004065434,
-    "passed": false
-  },
-  "R4": {
-    "status": "R4_PASS",
-    "referencePoses": 24,
-    "syntheticPoses": 24,
-    "mandatoryPoses": 38,
-    "farOutsidePixels": 0,
-    "r24FarOutsidePixels": 2387,
-    "reportOnlyIncreases": [
-      [
-        "up",
-        "left"
-      ],
-      [
-        "up",
-        "right"
-      ],
-      [
-        "down",
-        "left"
-      ],
-      [
-        "up-right",
-        "left"
-      ],
-      [
-        "aux-0276",
-        "left"
-      ],
-      [
-        "aux-0276",
-        "right"
-      ],
-      [
-        "aux-0275",
-        "left"
-      ],
-      [
-        "aux-0275",
-        "right"
-      ],
-      [
-        "aux-0277",
-        "left"
-      ],
-      [
-        "aux-0277",
-        "right"
-      ],
-      [
-        "aux-0017",
-        "right"
-      ],
-      [
-        "aux-0213",
-        "left"
-      ],
-      [
-        "aux-0086",
-        "left"
-      ],
-      [
-        "aux-0102",
-        "left"
-      ],
-      [
-        "aux-0102",
-        "right"
-      ],
-      [
-        "aux-0093",
-        "left"
-      ],
-      [
-        "aux-0093",
-        "right"
-      ],
-      [
-        "aux-0103",
-        "left"
-      ],
-      [
-        "aux-0103",
-        "right"
-      ],
-      [
-        "sweep--45-30",
-        "right"
-      ],
-      [
-        "sweep--40-30",
-        "right"
-      ],
-      [
-        "sweep--35-30",
-        "right"
-      ],
-      [
-        "sweep--30-30",
-        "right"
-      ],
-      [
-        "sweep-30--30",
-        "left"
-      ],
-      [
-        "sweep-30-30",
-        "left"
-      ],
-      [
-        "sweep-35--30",
-        "left"
-      ],
-      [
-        "sweep-35-30",
-        "left"
-      ],
-      [
-        "sweep-40--30",
-        "left"
-      ],
-      [
-        "sweep-45--30",
-        "left"
-      ],
-      [
-        "sweep-45-30",
-        "left"
-      ]
     ]
   },
-  "R5": {
-    "maxChannelDifferenceLSB": 0,
-    "passed": true,
-    "changedPixels": 0
-  },
-  "R6": {
-    "samples": 54006,
-    "pitchDeg": [
-      -20,
-      0,
-      20
-    ],
-    "stepDeg": 0.01,
-    "maxFineStepPx": 0.024519525281228027,
-    "maxExcessPx": -9.999999928945726e-07,
-    "maxDegreeStepPx": 2.4044288860310132,
-    "headRadiusPx": 262,
-    "source": "bundle/geometry.mjs HEAD_RADIUS",
-    "speedLimitPx": 4.572762640225143,
-    "passed": true,
-    "failures": []
-  },
-  "R6Alpha": {
-    "side": "right (far)",
-    "stepAchievedDeg": 0.5,
-    "maxAdjacentDifferencePx": 88.29019607843111,
-    "maxIntervalDeg": [
-      16.0,
-      16.5
-    ],
-    "threshold": "report-only; no numerical threshold specified"
-  },
-  "Stage4": {
-    "poses": [
-      {
-        "name": "left",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 2,
-        "passed": true
-      },
-      {
-        "name": "front",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 0,
-        "passed": true
-      },
-      {
-        "name": "right",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 3,
-        "passed": true
-      },
-      {
-        "name": "up-left",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 0,
-        "passed": true
-      },
-      {
-        "name": "up",
-        "exposedPixelsBelowEarLine": 5,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 0,
-        "passed": false
-      },
-      {
-        "name": "up-right",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 0,
-        "passed": true
-      },
-      {
-        "name": "down-left",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.71520000000001,
-        "foreheadProfileCount": 10,
-        "passed": true
-      },
-      {
-        "name": "down",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 2,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 10,
-        "passed": true
-      },
-      {
-        "name": "down-right",
-        "exposedPixelsBelowEarLine": 0,
-        "downHalfWidthDifference": 0,
-        "maxForeheadLuminanceValley": 0.0,
-        "foreheadProfileCount": 10,
-        "passed": true
-      }
-    ],
-    "front": {
-      "changedPixels": 0,
-      "maxChannelDifferenceLSB": 0
+  "R3Summary": {
+    "v291": {
+      "maxEyeErrorPx": 7.6103805459993605,
+      "maxPairedErrorPx": 10.215001582131944,
+      "allEyesMaxErrorPx": 12.440253428768402,
+      "passed": false
+    },
+    "r24": {
+      "maxEyeErrorPx": 14.539872507706207,
+      "maxPairedErrorPx": 19.11562304864816,
+      "allEyesMaxErrorPx": 14.539872507706207,
+      "passed": false
     }
   },
+  "frontOffsets": {
+    "left": {
+      "v291": {
+        "dTemp": 12.589780119278373,
+        "dNas": 6.94730163444774,
+        "h": -0.14106196212077293,
+        "a": 0.16121367099515282
+      },
+      "r24": {
+        "dTemp": 12.82152477133394,
+        "dNas": 6.715556982392172,
+        "h": -0.21159294318113098,
+        "a": -0.32242734199030565
+      }
+    },
+    "right": {
+      "v291": {
+        "dTemp": 8.188002701226594,
+        "dNas": 2.5563254878829866,
+        "h": -0.8246211251234854,
+        "a": 0.20858063753126999
+      },
+      "r24": {
+        "dTemp": 9.458889376417005,
+        "dNas": 1.3824530627070999,
+        "h": -0.8052182751205805,
+        "a": 0.4608176875690617
+      }
+    }
+  },
+  "R4": {
+    "poses": 48,
+    "mandatoryPoses": 38,
+    "farOutsidePixels": 0
+  },
+  "R5": {
+    "changedPixels": 0,
+    "maxChannelDifferenceLSB": 0,
+    "passed": true
+  },
+  "Stage4Evidence": "Reused: original up 5px matches r24; hair-on 0px; excluded by Fable junction v2",
+  "R7PoseNames": [
+    "up-left",
+    "up",
+    "up-right",
+    "left",
+    "front",
+    "right",
+    "down-left",
+    "down",
+    "down-right",
+    "aux-0213",
+    "aux-0255",
+    "aux-0074",
+    "aux-0102",
+    "aux-0276",
+    "aux-0277",
+    "aux-0043",
+    "aux-0241"
+  ],
   "captureSha256": {
-    "sam3_eye_R7_comparison.png": "6a542bca96e4603575c411c4ae45d7f51e00b6965ee30c5da39765d9cd8ec416",
+    "sam3_eye_R7_comparison.png": "275fb5ca09baca71897f537445dd91a657f1a5756d8cf114433cb662eea87c47",
     "sam3_eye_R7_temporal_sweep.png": "51fc0c7039ae4489118217463c9250e87a2c17d09cd5d93f3bf3bf06ca7778e7",
-    "sam3_eye_R7_outside_regressions_4x.png": "70a93e4292d237a9c8064707a7042fac13abfa176253fca82728fb54516ecf73",
-    "sam3_eye_9dir_grid.png": "0edd161cf445fca4b58738d326193c66ac4ef3b7a5764e786728e75b67bf4ae8",
+    "sam3_eye_R7_outside_regressions_4x.png": "6e21f6f07f70aee7770ac7997663ef103b5e18b248bad2c8b7581f942ee0094b",
+    "sam3_eye_9dir_grid.png": "1d480245050f9b1396568b1307d93d9e1ff360d50054b1f4b20bf7cd37f6d0df",
     "sam3_eye_viewer_wide.png": "6d762119e953a3cfd7a6dc4be49037ebbce3e599150f0a76d1fcdf6a0b8672d0",
     "sam3_eye_viewer_narrow.png": "5cddb7a7799c4763fbe3ecc94a60a7ce20e109d10691a33b8e032d6e0df00799"
   },
   "viewerHtmlSha256": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
-  "replay": "Approved measurements, fit tables/coefficients, noise, residuals and 5 WARNs matched within 1e-6; unchanged prior replay evidence reused.",
-  "tests": {
-    "currentPython": "Ran 3 tests / OK (R4); Ran 1 test / OK (Stage4 report-only fault injection)",
-    "reusedPython": 6,
-    "reusedNode": 12,
-    "totalValid": 22
-  },
-  "reviews": "Code review by delegator, Fable R7 review, then Selaphiel UI/UX review pending; Ready PR is not visual acceptance.",
-  "clipMaskMeshes": {
-    "upTo45": "exposed-skin-clip",
-    "profile": "face-skin"
-  }
+  "tests": "7 Node integration/clip/junction + 1 Node fault judge + 2 Node R1/front + 4 Python ratio/alpha = 14 valid tests; unchanged audit replay reused",
+  "reviews": "Delegator/Fable re-review pending, then Selaphiel on this same worktree; no merge/deployment/cleanup"
 }
