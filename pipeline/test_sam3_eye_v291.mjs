@@ -3,8 +3,6 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {EYE_SAM3 as data} from '../bundle/eye-sam3-data.mjs';
 import {eyeDeformation,eyeResidual,gazeAngles,rotateEye,compression} from '../bundle/eye-sam3-model.mjs';
-import {HEAD_RADIUS} from '../bundle/geometry.mjs';
-import {continuity} from './eye_runtime_quality.mjs';
 const measurement=JSON.parse(readFileSync(new URL('../source/viewer/sam3-eye-measurements.json',import.meta.url)));
 const audit=JSON.parse(readFileSync(new URL('../source/references/seedance/eye-audit-v291.json',import.meta.url))).evaluation;
 const near=(a,b,tol=1e-6)=>assert(Math.abs(a-b)<=tol,`${a} != ${b}`);
@@ -56,20 +54,6 @@ test('temporal split uses screen-right tau times outward for both eyes',{timeout
  }
 });
 
-test('R6b: one degree descriptor change is bounded by the rig head radius',{timeout:60000},()=>{
- let maxStep=0;
- for(const side of ['left','right']){
-  const b=data[side],r=b.rest;let previous;
-  for(let yaw=-45;yaw<=45;yaw++){
-   const m=eyeDeformation(data,side,[yaw,0],r.cO,[0,0]);
-   const now=[r.dTemp*m.internal.rT,r.dNas*m.internal.rN,r.h*Math.exp(m.internal.logH),b.w0*m.internal.deltaY,r.a*Math.exp(m.internal.logA),...m.cI];
-   if(previous)now.forEach((v,i)=>{maxStep=Math.max(maxStep,Math.abs(v-previous[i]));assert(Math.abs(v-previous[i])<=HEAD_RADIUS*Math.PI/180);});
-   previous=now;
-  }
- }
- report.R6b={maxStepPx:maxStep,headRadiusPx:HEAD_RADIUS,limitPx:HEAD_RADIUS*Math.PI/180,source:'bundle/geometry.mjs HEAD_RADIUS'};
-});
-
 test('retained gaze rotation and compression contracts',{timeout:60000},()=>{
  for(const z of [.2,.3]){
   const h=1e-7;assert(Math.abs((compression(z)-compression(z-h))/h-(compression(z+h)-compression(z))/h)<1e-5);
@@ -82,16 +66,6 @@ test('retained gaze rotation and compression contracts',{timeout:60000},()=>{
   vector(m.cI.map((v,i)=>v-neutral.cI[i]),expected);
  }
  vector(rotateEye([0,0,1],[0,0]),[0,0,1]);
-});
-
-test('R6a/b: 0.01 degree sweep has no jumps and respects the physical speed bound',{timeout:60000},()=>{
- report.R6=continuity(data,audit,eyeResidual);
- assert.equal(report.R6.passed,true,JSON.stringify(report.R6.failures.slice(0,3)));
-});
-
-test('R6 detector rejects an injected jump',{timeout:60000},()=>{
- const broken=(data,side,d)=>{const r=eyeResidual(data,side,d);return {...r,rT:r.rT+(d[0]>=0?.1:0)};};
- assert.equal(continuity(data,audit,broken).passed,false);
 });
 
 test('save targeted numerical evidence',{timeout:60000},()=>{

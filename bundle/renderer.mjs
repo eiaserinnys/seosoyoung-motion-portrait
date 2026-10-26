@@ -7,10 +7,18 @@ import {deform3D,opacity,bindRig} from './rig.mjs';
 import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction} from './geometry.mjs';
 export function eyeClipControls(id,yaw){
   const profile=Math.abs(yaw)>45;
-  const profileFaceClip=profile&&(id.startsWith('eye-')||id==='closed-eyes-v1'||id==='nose-detail'||id.startsWith('mouth-'));
+  const profileFaceClip=profile&&(id==='nose-detail'||id.startsWith('mouth-'));
   const side=id.startsWith('eye-left-')?1:id.startsWith('eye-right-')?-1:0;
-  const eyeFaceClip=!profile&&side?smoothstep(0,15,Math.max(0,-yaw*side)):0;
+  const eyeFaceClip=side?smoothstep(-yaw*side>0?0:52,-yaw*side>0?15:67,Math.abs(yaw)):
+    id==='closed-eyes-v1'?smoothstep(52,67,Math.abs(yaw)):0;
   return {profileFaceClip,eyeFaceClip};
+}
+export function eyeMaskId(mesh,yaw){
+  if(mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1')return mesh.masks[0];
+  return mesh.masks[0]||(eyeClipControls(mesh.id,yaw).profileFaceClip?'face-skin':null);
+}
+export function faceMaskSource(id,yaw){
+  return id.startsWith('eye-')||id==='closed-eyes-v1'||Math.abs(yaw)<=45?'exposed-skin-clip':'face-skin';
 }
 export class Renderer {
   constructor(canvas,overlay,rig,images) {
@@ -100,21 +108,21 @@ export class Renderer {
     };
     gl.disable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);
     const profile=Math.abs(yaw)>45;
-    if(!profile&&!state.surfaceOnly&&!state.before){
+    let currentFaceMask=null;
+    const bindFaceMask=source=>{
       gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,this.faceFramebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1i(this.loc.solid,1);gl.depthMask(false);texture(6);this.draw(skinFillClipMesh(),p,1);
-      gl.uniform1i(this.loc.solid,0);gl.depthMask(true);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,this.faceMaskTexture);
-      texture(0);this.skinClip=true;
-    }
-    if(profile&&!state.surfaceOnly){
-      // A separate immutable face mask preserves the existing child-eye mask.
-      // Sampling an attachment's own framebuffer would be a WebGL feedback loop.
-      gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,this.faceFramebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);gl.disable(gl.CULL_FACE);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.faceMaskTexture);gl.activeTexture(gl.TEXTURE0);
+      gl.bindFramebuffer(gl.FRAMEBUFFER,this.faceFramebuffer);gl.disable(gl.DEPTH_TEST);gl.clear(gl.COLOR_BUFFER_BIT);
+      if(source==='exposed-skin-clip'){
+        gl.disable(gl.CULL_FACE);gl.uniform1i(this.loc.solid,1);gl.depthMask(false);texture(6);this.draw(skinFillClipMesh(),p,1);
+        gl.uniform1i(this.loc.solid,0);gl.depthMask(true);texture(0);
+      }else{
+        gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);gl.disable(gl.CULL_FACE);
+      }
+      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,this.faceMaskTexture);gl.activeTexture(gl.TEXTURE0);
+      currentFaceMask=source;
+    };
+    if(!state.surfaceOnly&&(profile||!state.before)){
+      bindFaceMask(profile?'face-skin':'exposed-skin-clip');this.skinClip=!profile;
     }
     if(!state.surfaceOnly&&p.ParamAngleX!==0){
       // Far back ribbons share the cheek/side-hair occlusion mask. Keep their
@@ -155,7 +163,9 @@ export class Renderer {
       if(!visible(mesh))continue;
       const alpha=opacity(mesh,p,state)*(state.mode==='dim'&&!state.selectedIds.has(mesh.id)?.18:1);
       const {profileFaceClip,eyeFaceClip}=eyeClipControls(mesh.id,yaw);
-      const maskId=mesh.masks[0]||(profileFaceClip?'face-skin':null);
+      const maskId=eyeMaskId(mesh,yaw);
+      const faceSource=faceMaskSource(mesh.id,yaw);
+      if(!state.surfaceOnly&&faceSource!==currentFaceMask)bindFaceMask(faceSource);
       if(maskId){
         if(currentMask!==maskId){
           gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);

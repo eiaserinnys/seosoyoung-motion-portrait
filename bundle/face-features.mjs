@@ -20,17 +20,23 @@ export function sam3EyeState(side,p){
  });
 }
 export function featureWorld(id,point,p){
- const yaw=p.ParamAngleX*correction(p,'CorrTurn');
- if(Math.abs(yaw)<=45&&!id.endsWith('brow')&&(id.startsWith('eye-')||id==='closed-eyes-v1')){
+ const yaw=p.ParamAngleX*correction(p,'CorrTurn'),angle=Math.abs(yaw);
+ if(angle<67&&!id.endsWith('brow')&&(id.startsWith('eye-')||id==='closed-eyes-v1')){
+  const S=sam3FeatureWorld(id,point,p);
+  if(angle<52)return S;
+  const L=legacyFeatureWorld(id,point,p),s=smoothstep(52,67,angle);
+  return S.map((value,i)=>value+(L[i]-value)*s);
+ }
+ return legacyFeatureWorld(id,point,p);
+}
+export function sam3FeatureWorld(id,point,p){
   const side=id==='closed-eyes-v1'?(point[0]<502?'left':'right'):id.includes('-left-')?'left':'right';
   const model=sam3EyeState(side,p);
   const xy=id.endsWith('highlight')?model.highlight(point):/-(iris|pupil)$/.test(id)?model.iris(point):
    model.lid(point,side==='left'?p.ParamEyeLOpen:p.ParamEyeROpen,id==='closed-eyes-v1');
   return artWorld([xy[0]-502,xy[1]-326,model.depth],{...p,ParamAngleX:0,ParamAngleY:0});
- }
- return legacyFeatureWorld(id,point,p);
 }
-function legacyFeatureWorld(id,point,p){
+export function legacyFeatureWorld(id,point,p){
  const q=registeredFeatureWorld(id,point,p);
  // Neutral pitch retains the authored eyelid, gaze, brow and mouth evaluator.
  const yaw=p.ParamAngleX*correction(p,'CorrTurn');

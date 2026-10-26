@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {eyeClipControls} from '../bundle/renderer.mjs';
+import {eyeClipControls,eyeMaskId,faceMaskSource} from '../bundle/renderer.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 test('frontal artwork and near eyes retain their original masks; far eyes fade into clipping',{timeout:60000},()=>{
  for(const mesh of rig.meshes){
@@ -18,9 +18,21 @@ test('frontal artwork and near eyes retain their original masks; far eyes fade i
   }
  }
 });
-test('the profile branch exactly retains the original family of clipping targets',{timeout:60000},()=>{
+test('J4: every eye mask stays fixed and clip strengths are continuous at all junctions',{timeout:60000},()=>{
+ for(const mesh of rig.meshes.filter(m=>m.id.startsWith('eye-')||m.id==='closed-eyes-v1')){
+  for(const yaw of [-90,-67,-52,-45,-15,0,15,45,52,67,90]){
+   const a=eyeClipControls(mesh.id,yaw-1e-7),b=eyeClipControls(mesh.id,yaw+1e-7);
+   assert.equal(a.profileFaceClip,false);assert.equal(b.profileFaceClip,false);
+   assert(Math.abs(a.eyeFaceClip-b.eyeFaceClip)<1e-6);
+   assert.equal(eyeMaskId(mesh,yaw),mesh.masks[0]);
+   assert.equal(faceMaskSource(mesh.id,yaw),'exposed-skin-clip');
+  }
+ }
+});
+test('profile eye and closed-lid clipping stays soft while nose and mouth retain hard clipping',{timeout:60000},()=>{
  for(const yaw of [-90,-67.5,67.5,90])for(const mesh of rig.meshes){
-  const expected=mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-');
-  const c=eyeClipControls(mesh.id,yaw);assert.equal(c.profileFaceClip,expected);assert.equal(c.eyeFaceClip,0);
+  const eye=mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1';
+  const expected=mesh.id==='nose-detail'||mesh.id.startsWith('mouth-');
+  const c=eyeClipControls(mesh.id,yaw);assert.equal(c.profileFaceClip,expected);assert.equal(c.eyeFaceClip,eye?1:0);
  }
 });

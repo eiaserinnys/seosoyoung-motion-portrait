@@ -54,6 +54,9 @@ SETUP='''async()=>{
    }
    eyeCapture.render(studio.p,{...state,identify:studio.rig.meshes.filter(m=>m.id.startsWith('eye-')).map(m=>m.id)});
    result.allEyes=canvas.toDataURL('image/png').split(',')[1];
+   // Read the mask actually bound for eyes, independent of later nose/mouth draws.
+   const eyeIds=studio.rig.meshes.filter(m=>m.id.startsWith('eye-')).map(m=>m.id);
+   eyeCapture.render(studio.p,{...state,mode:'solo',hidden:new Set(),selectedIds:new Set(eyeIds),identify:eyeIds});
    const gl=eyeCapture.gl,w=canvas.width,h=canvas.height,raw=new Uint8Array(w*h*4);
    gl.bindFramebuffer(gl.FRAMEBUFFER,eyeCapture.faceFramebuffer);gl.readPixels(0,0,w,h,gl.RGBA,gl.UNSIGNED_BYTE,raw);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
    const mc=document.createElement('canvas');mc.width=w;mc.height=h;const ctx=mc.getContext('2d'),im=ctx.createImageData(w,h);
@@ -138,7 +141,7 @@ def sheets(colors):
         rows.append((name,tiles,width*2,height*2))
     cell_width=max(r[2] for r in rows)+20;sheet=Image.new('RGB',(cell_width*3,sum(r[3]+26 for r in rows)),'#eeeeee');y=0
     for name,tiles,width,height in rows:
-        for j,(im,label) in enumerate(zip(tiles,['reference','v2.9.1','r24'])):
+        for j,(im,label) in enumerate(zip(tiles,['reference','v2.9.2','r24'])):
             sheet.paste(im,(j*cell_width,y));ImageDraw.Draw(sheet).text((j*cell_width+4,y+height+3),name+' | '+label,fill='black')
         y+=height+26
     sheet.save(DOC/'sam3_eye_R7_comparison.png')
