@@ -1,0 +1,38 @@
+{
+  "front": [
+    {
+      "side": "left",
+      "errorPx": 0
+    },
+    {
+      "side": "right",
+      "errorPx": 0
+    }
+  ],
+  "R1": {
+    "maxErrorPx": 8.265626605580337e-15
+  },
+  "R6b": {
+    "maxStepPx": 2.4044288860310132,
+    "headRadiusPx": 262,
+    "limitPx": 4.572762640225144,
+    "source": "bundle/geometry.mjs HEAD_RADIUS"
+  },
+  "R6": {
+    "samples": 54006,
+    "pitchDeg": [
+      -20,
+      0,
+      20
+    ],
+    "stepDeg": 0.01,
+    "maxFineStepPx": 0.024519525281228027,
+    "maxExcessPx": -9.999999928945726e-7,
+    "maxDegreeStepPx": 2.4044288860310132,
+    "headRadiusPx": 262,
+    "source": "bundle/geometry.mjs HEAD_RADIUS",
+    "speedLimitPx": 4.572762640225143,
+    "passed": true,
+    "failures": []
+  }
+}
