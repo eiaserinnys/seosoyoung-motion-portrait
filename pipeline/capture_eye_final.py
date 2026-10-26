@@ -108,13 +108,21 @@ def main():
     assert r4['status']=='R4_RECORDED' and r4['complete'] and r4['R5']['passed']
     baseline=ROOT/'debug/sam3-eye-v293/final-render'
     for path in baseline.glob('r24-*.png'):shutil.copyfile(path,OUT/path.name)
-    neutral={rev:Image.open(ROOT/f'debug/sam3-eye-v293/far-clip-contract/{key}-neutral.png').convert('RGBA') for rev,key in [('r24','r5-a29'),('v291','v291')]}
+    neutral={}
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(c.Handler,directory=str(ROOT)))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     colors={r:{} for r in ['r24','v291']};records={r:{} for r in colors};inputs=[]
     try:
         with sync_playwright() as pw:
             browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--use-angle=swiftshader'])
+            baseline_page=browser.new_page(viewport=dict(width=1440,height=1000),device_scale_factor=1)
+            baseline_page.goto(f'http://127.0.0.1:{server.server_port}/debug/r5-6dd/bundle/',wait_until='networkidle')
+            baseline_page.wait_for_function('window.studio?.ready',timeout=30000)
+            baseline_page.evaluate('window.requestAnimationFrame=()=>0');baseline_page.evaluate(c.SETUP)
+            baseline_raw=baseline_page.evaluate('(a)=>captureEyes(a)',[0,0,False,True])
+            neutral['r24']=c.image(baseline_raw['color'])
+            baseline_full=Image.open(io.BytesIO(base64.b64decode(baseline_raw['full']))).convert('RGBA')
+            baseline_full.save(OUT/'r5-6dd-neutral-full.png');baseline_page.close()
             for rev,path in [('r24','debug/r24/bundle'),('v291','bundle')]:
                 page=None
                 if rev=='v291':
@@ -124,12 +132,12 @@ def main():
                     page.evaluate('window.requestAnimationFrame=()=>0');page.evaluate(c.SETUP)
                     raw=page.evaluate('(a)=>captureEyes(a)',[0,0,False,True])
                     full=Image.open(io.BytesIO(base64.b64decode(raw['full']))).convert('RGBA')
-                    prior=Image.open(ROOT/'debug/sam3-eye-v293/far-clip-contract/v291-neutral-full.png').convert('RGBA')
-                    diff=np.abs(np.array(full).astype(int)-np.array(prior).astype(int))
-                    unchanged=dict(changedPixels=int(np.any(diff,axis=2).sum()),maxLSB=int(diff.max()),baseline='3acd5fa neutral full canvas')
-                    print('NEUTRAL COMPARISON',json.dumps(unchanged),flush=True)
-                    assert unchanged['changedPixels']==0,'R5 neutral changed'
-                    r4['R5']['F_B2NeutralComparison']=unchanged
+                    full.save(OUT/'v291-neutral-full.png')
+                    diff=np.abs(np.array(full).astype(int)-np.array(baseline_full).astype(int))
+                    r4['R5']=dict(baseline=(ROOT/'debug/r5-6dd/revision.txt').read_text().strip(),scope='full canvas, hair on, neutral',canvasSize=list(full.size),changedPixels=int(np.any(diff,axis=2).sum()),maxChannelDifferenceLSB=int(diff.max()))
+                    r4['R5']['passed']=r4['R5']['changedPixels']==0
+                    print('R5 MAIN 6dd12cf',json.dumps(r4['R5']),flush=True)
+                    assert r4['R5']['passed'],'R5 neutral changed'
                     neutral['v291']=c.image(raw['color'])
                 for row in c.ROWS:
                     requested=inverse_achieved(c.BOOT['achieved']['c'],row['yaw'],row['pitch'])

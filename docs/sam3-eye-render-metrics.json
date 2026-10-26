@@ -2,7 +2,7 @@
   "R2": {
     "dTemp": {
       "r24": 8.447664590066752,
-      "v291": 8.66014863127023,
+      "v291": 8.67691006937083,
       "limit": 3.759995664880529,
       "passed": false
     },
@@ -310,7 +310,7 @@
     ]
   },
   "R5": {
-    "baseline": "a29bb358231566d0c90b1b058bc8a153cfc57410",
+    "baseline": "6dd12cfe12b89a3b67b23938996a62c70e281173",
     "scope": "full canvas, hair on, neutral",
     "canvasSize": [
       1100,
@@ -320,12 +320,12 @@
     "maxChannelDifferenceLSB": 0,
     "passed": true
   },
-  "runtimeRevision": "v2.9.3 F-A far iris disk + F-B face-skin mask, requested 52..67 junction",
+  "runtimeRevision": "v2.9.4 F-B2 solid skin-silhouette union, requested 52..67 junction",
   "absoluteForm": "Reference only: SAM vs identify constant offsets; ratio form is authoritative",
   "R2Ratio": {
     "dTemp": {
       "r24": 10.23817902249429,
-      "v291": 5.422985587054204,
+      "v291": 5.016219103309864,
       "limit": 3.759995664880529,
       "passed": false,
       "betterThanR24": true
@@ -1293,7 +1293,7 @@
         {
           "name": "left",
           "side": "left",
-          "errorPx": -4.608942663960017
+          "errorPx": -2.9023769093211502
         },
         {
           "name": "left",
@@ -1328,7 +1328,7 @@
         {
           "name": "down",
           "side": "right",
-          "errorPx": -13.12802768600445
+          "errorPx": -12.01946143472965
         },
         {
           "name": "up-left",
@@ -1353,7 +1353,7 @@
         {
           "name": "down-left",
           "side": "left",
-          "errorPx": -3.911188893277343
+          "errorPx": -2.1340514662913757
         },
         {
           "name": "down-left",
@@ -1403,7 +1403,7 @@
         {
           "name": "aux-0017",
           "side": "left",
-          "errorPx": -10.416398443587713
+          "errorPx": -8.839337313963451
         },
         {
           "name": "aux-0017",
@@ -1423,7 +1423,7 @@
         {
           "name": "aux-0048",
           "side": "left",
-          "errorPx": -14.259889793861149
+          "errorPx": -12.751159162189484
         },
         {
           "name": "aux-0048",
@@ -1443,7 +1443,7 @@
         {
           "name": "aux-0342",
           "side": "left",
-          "errorPx": -12.300887607020618
+          "errorPx": -9.624039571522873
         },
         {
           "name": "aux-0342",
@@ -1458,7 +1458,7 @@
         {
           "name": "aux-0074",
           "side": "right",
-          "errorPx": -0.6999156135509437
+          "errorPx": 0.17873650724260906
         },
         {
           "name": "aux-0086",
@@ -1483,7 +1483,7 @@
         {
           "name": "aux-0043",
           "side": "left",
-          "errorPx": -6.763751650163043
+          "errorPx": -4.861274361296701
         },
         {
           "name": "aux-0043",
@@ -3473,13 +3473,11 @@
       "name": "down",
       "side": "right",
       "theta": 14.253565453750118,
-      "renderDTemp": 57.70407590864431,
+      "renderDTemp": 58.72272553379696,
       "modelDTemp": 62.10603587092977,
-      "rawErrorPx": -4.40195996228546,
-      "normalizedErrorPx": -12.721279788461905,
+      "normalizedErrorPx": -11.533348342321718,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "down-right",
@@ -3487,23 +3485,19 @@
       "theta": 23.506140424439433,
       "renderDTemp": 46.809375632012234,
       "modelDTemp": 44.11167863342955,
-      "rawErrorPx": 2.6976969985826855,
       "normalizedErrorPx": -3.701010890914912,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0017",
       "side": "left",
       "theta": 16.63452860375611,
-      "renderDTemp": 56.42982277552494,
+      "renderDTemp": 58.03188363103939,
       "modelDTemp": 54.27475528041192,
-      "rawErrorPx": 2.1550674951130233,
-      "normalizedErrorPx": -9.06201157910254,
+      "normalizedErrorPx": -7.343985273386397,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0213",
@@ -3511,23 +3505,19 @@
       "theta": 26.74801146289593,
       "renderDTemp": 40.86482746237181,
       "modelDTemp": 38.78803652057843,
-      "rawErrorPx": 2.0767909417933765,
       "normalizedErrorPx": -4.1898614715819,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0048",
       "side": "left",
       "theta": 23.657377722415653,
-      "renderDTemp": 46.5076251184947,
+      "renderDTemp": 47.903130958046546,
       "modelDTemp": 46.045343898939244,
-      "rawErrorPx": 0.4622812195554573,
-      "normalizedErrorPx": -10.838594603026875,
+      "normalizedErrorPx": -9.02423040047903,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": true
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0255",
@@ -3535,35 +3525,29 @@
       "theta": 25.020571693572187,
       "renderDTemp": 43.29260906898537,
       "modelDTemp": 41.53944640250815,
-      "rawErrorPx": 1.7531626664772233,
       "normalizedErrorPx": -4.924346225166478,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": true
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0342",
       "side": "left",
       "theta": 18.11371569838885,
-      "renderDTemp": 53.830252330728,
+      "renderDTemp": 56.48020204771095,
       "modelDTemp": 52.42720368301542,
-      "rawErrorPx": 1.4030486477125805,
-      "normalizedErrorPx": -9.830884108721268,
+      "normalizedErrorPx": -6.881799877517889,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": true
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0074",
       "side": "right",
       "theta": 17.847254962686957,
-      "renderDTemp": 59.00891757133979,
+      "renderDTemp": 59.98876149648652,
       "modelDTemp": 55.2145202286942,
-      "rawErrorPx": 3.7943973426455955,
-      "normalizedErrorPx": -3.21877356354655,
+      "normalizedErrorPx": -2.100786798340095,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     }
   ],
   "FAIris": [
@@ -3601,16 +3585,16 @@
       "modelIrisDiameter": 43.26617705658505,
       "modelOpeningWidth": 55.517561043389506,
       "renderIrisChord": 41.89036482264888,
-      "renderOpeningWidth": 62.591207763871296
+      "renderOpeningWidth": 64.5509614519062
     }
   ],
-  "modelComparison": "per_eye2: log((render/render-front)/model-ratio) × measured still dTemp; raw width difference also retained",
+  "modelComparison": "per_eye2: log((render/render-front)/model-ratio) × measured still dTemp. Render px and reference-rest px are not directly subtracted.",
   "FableAcceptedExcess": {
     "dNas": "한계 초과이나 렌더에서 결함이 아님",
     "R3": "한계 초과이나 렌더에서 결함이 아님",
     "deltaY": "PASS"
   },
-  "FableAcceptanceReason": "r25-impl-review-fable.md 1.2: dNas/R3 residual is reference nasal-line extension and beta omission plus approved nasal outlier, not iris/lid misalignment; deltaY excess is subpixel. Limits unchanged.",
+  "FableAcceptanceReason": "Fable r25 review 1.2 and re-review 1: dNas/R3 excess reflects approved nasal outlier, omitted video bias beta_N and pose-dependent nasal line extension. Thresholds unchanged; current results are reported separately.",
   "Junction": {
     "complete": true,
     "inputSha": "71b239f3c7955cdf06a08c1b8fd41bc75ca5adcc983a5eba5aee1e5f0901addc",
@@ -4072,7 +4056,7 @@
       ],
       "passed": true
     },
-    "reusedFrom": "798df34: J0,J6,J7; Fable 1.3 only J1/J2 geometry sweep rerun",
+    "reusedFrom": "3acd5fa: J0/J6/J7 closed by Fable; F-B2 reruns J1/J2 geometry sweeps",
     "passed": {
       "J1": true,
       "J2": true,
@@ -4085,13 +4069,13 @@
     "poses": 5406,
     "peaks": {
       "far": {
-        "difference": 37.576470588235225,
+        "difference": 40.31764705882347,
         "side": "left",
-        "pitch": -30,
+        "pitch": 0,
         "fromYaw": -60,
         "toYaw": -60.1,
-        "fromAlpha": 1061.521568627451,
-        "toAlpha": 1023.9450980392157
+        "fromAlpha": 1179.3333333333333,
+        "toAlpha": 1139.0156862745098
       },
       "near": {
         "difference": 21.83529411764721,
@@ -4104,13 +4088,13 @@
       }
     },
     "passed": true,
-    "inputSha": "853c130f834b74c2fa9026974476ea0c537bde60d91161004b1920e616f60a81"
+    "inputSha": "2f88d3af0d40ce76bb8c68f74929889487946bfb00d84daf04301b8742e3accd"
   },
   "J5": {
-    "runtimeRevision": "v2.9.3",
-    "status": "not rerun in this review",
-    "maskSource": "face-skin",
-    "scope": "Fable r25 1.3: J1/J2 geometry; R4 and J3 mask checks",
+    "runtimeRevision": "v2.9.4 F-B2",
+    "status": "closed by Fable review; not rerun",
+    "maskSource": "skin-silhouette",
+    "scope": "Fable re-review 1: J1/J2/J3 and R4 mask checks",
     "evidence": [
       "sam3-eye-far-clip-contract.json",
       "sam3-eye-junction-alpha.json"
@@ -4123,21 +4107,287 @@
   "R4": {
     "status": "R4_RECORDED",
     "poses": 48,
-    "recordedPixelCount": 6881,
-    "affectedEyes": 61,
-    "ownerDecision": {
-      "pose": "left",
-      "eye": "left",
-      "coordinate720": [
-        171,
-        323
-      ],
-      "text": "R4 1px, 경계 걸침, 육안 비가시",
-      "review": "Fable 재검수 대기"
-    },
+    "passed": true,
+    "maskBasis": "skin-silhouette for both revisions; original r24 eye rendering",
+    "recordedPixelCount": 234,
+    "affectedEyes": 37,
+    "requiredFarEyes": [
+      {
+        "pose": "left",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "right",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "down",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "up-left",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "up-right",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "down-left",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "down-right",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0017",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0213",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0048",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0255",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0342",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0074",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0043",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0241",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--45--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--45-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--45-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--40--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--40-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--40-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--35--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--35-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--35-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--30--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--30-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--30-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-30--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-30-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-30-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-35--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-35-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-35-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-40--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-40-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-40-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-45--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-45-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-45-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      }
+    ],
     "violationTable": "docs/sam3-eye-R4-violations.csv",
-    "violationSheet": "docs/captures/sam3_eye_R4_violations_4x.png",
-    "disposition": "raw observations; owner/Fable review pending"
+    "violationSheet": "docs/captures/sam3_eye_R4_violations_4x.png"
   },
   "records": [
     {
@@ -4302,7 +4552,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 73.95929053263944,
-        "dTempSil": 70.0,
+        "dTempSil": 75.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -4468,7 +4718,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 76.07372414889625,
-        "dTempSil": 76.0,
+        "dTempSil": 80.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -4561,7 +4811,7 @@
           193.29079094043738,
           407.0769004433289
         ],
-        "w": 57.351763456528545,
+        "w": 59.17549310966132,
         "h": 68.81774317135711,
         "E": [
           [
@@ -4574,8 +4824,8 @@
           ]
         ],
         "Pmin": [
-          160.91980109272166,
-          409.36575831134917
+          159.10061327546276,
+          409.4943877529735
         ],
         "Pmax": [
           218.12873510287395,
@@ -4592,9 +4842,9 @@
         "aUp": 32.329534409845905,
         "bLow": 36.4882087615112,
         "phi": -0.07058958981887359,
-        "dTemp": 32.45180817860404,
+        "dTemp": 34.27553783173681,
         "dNas": 24.899955277924505,
-        "dTempObs": 32.45180817860404,
+        "dTempObs": 34.27553783173681,
         "dNasObs": 24.899955277924505,
         "tLash": 12.0,
         "hInner": 56.81774317135711,
@@ -4633,8 +4883,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 32.45180817860404,
-        "dTempSil": 36.0,
+        "dTempEnv": 34.27553783173681,
+        "dTempSil": 37.0,
         "temporalAtFaceEdge": true
       }
     },
@@ -4800,7 +5050,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 81.09906229964906,
-        "dTempSil": 67.0,
+        "dTempSil": 84.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -4966,7 +5216,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 84.93441497835693,
-        "dTempSil": 62.0,
+        "dTempSil": 89.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -5132,7 +5382,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 28.852037954322327,
-        "dTempSil": 42.0,
+        "dTempSil": 43.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -5298,7 +5548,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 75.3648722266285,
-        "dTempSil": 72.0,
+        "dTempSil": 75.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -5464,7 +5714,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 76.88379313651757,
-        "dTempSil": 76.0,
+        "dTempSil": 77.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -5630,7 +5880,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 79.979613558865,
-        "dTempSil": 63.0,
+        "dTempSil": 77.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -5723,7 +5973,7 @@
           472.32771735836,
           421.561278022228
         ],
-        "w": 88.12774471320188,
+        "w": 89.14639433835453,
         "h": 58.64445140698757,
         "E": [
           [
@@ -5740,8 +5990,8 @@
           420.38066625752214
         ],
         "Pmax": [
-          529.9883291230659,
-          423.80052508105155
+          531.0062114760071,
+          423.84005449281625
         ],
         "Papex": [
           473.4166331059521,
@@ -5754,9 +6004,9 @@
         "aUp": 28.06071652950243,
         "bLow": 30.583734877485142,
         "phi": 0.038815446081463686,
-        "dTemp": 57.70407590864431,
+        "dTemp": 58.72272553379696,
         "dNas": 30.423668804557565,
-        "dTempObs": 57.70407590864431,
+        "dTempObs": 58.72272553379696,
         "dNasObs": 30.423668804557565,
         "tLash": 12.0,
         "hInner": 46.64445140698757,
@@ -5795,8 +6045,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 57.70407590864431,
-        "dTempSil": 60.0,
+        "dTempEnv": 58.72272553379696,
+        "dTempSil": 61.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -5962,7 +6212,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 28.237582060246183,
-        "dTempSil": 50.0,
+        "dTempSil": 51.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -6128,7 +6378,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 81.70540136223985,
-        "dTempSil": 76.0,
+        "dTempSil": 81.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -6294,7 +6544,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 83.09305257995905,
-        "dTempSil": 72.0,
+        "dTempSil": 86.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -6460,7 +6710,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 30.3775870358009,
-        "dTempSil": 55.0,
+        "dTempSil": 56.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -6553,7 +6803,7 @@
           195.15112015960477,
           414.0301279715532
         ],
-        "w": 62.591207763871296,
+        "w": 64.5509614519062,
         "h": 54.6813193959689,
         "E": [
           [
@@ -6566,8 +6816,8 @@
           ]
         ],
         "Pmin": [
-          158.71962269767582,
-          416.6060924385583
+          156.76474960122914,
+          416.74431578881206
         ],
         "Pmax": [
           221.1549526469144,
@@ -6584,9 +6834,9 @@
         "aUp": 25.688456428829,
         "bLow": 28.9928629671399,
         "phi": -0.07058958981887359,
-        "dTemp": 36.522453371231904,
+        "dTemp": 38.48220705926681,
         "dNas": 26.06875439263939,
-        "dTempObs": 36.522453371231904,
+        "dTempObs": 38.48220705926681,
         "dNasObs": 26.06875439263939,
         "tLash": 12.0,
         "hInner": 42.6813193959689,
@@ -6625,8 +6875,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 36.522453371231904,
-        "dTempSil": 39.0,
+        "dTempEnv": 38.48220705926681,
+        "dTempSil": 41.0,
         "temporalAtFaceEdge": true
       }
     },
@@ -6792,7 +7042,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 80.58003606207131,
-        "dTempSil": 66.0,
+        "dTempSil": 78.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -6958,7 +7208,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 81.58167441437942,
-        "dTempSil": 62.0,
+        "dTempSil": 87.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -7290,7 +7540,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 73.58648391846316,
-        "dTempSil": 59.0,
+        "dTempSil": 63.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -7456,7 +7706,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 76.45207972395292,
-        "dTempSil": 66.0,
+        "dTempSil": 69.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -7622,7 +7872,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 75.59409791507471,
-        "dTempSil": 60.0,
+        "dTempSil": 64.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -7788,7 +8038,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 75.43343009880027,
-        "dTempSil": 67.0,
+        "dTempSil": 68.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -7954,7 +8204,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 70.55617069647599,
-        "dTempSil": 58.0,
+        "dTempSil": 63.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -8120,7 +8370,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 76.42297544894848,
-        "dTempSil": 67.0,
+        "dTempSil": 70.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -8213,7 +8463,7 @@
           226.74073116048945,
           399.8331978412079
         ],
-        "w": 84.92433912391965,
+        "w": 86.5263999794341,
         "h": 74.06222540591841,
         "E": [
           [
@@ -8226,8 +8476,8 @@
           ]
         ],
         "Pmin": [
-          170.45144182038794,
-          403.81324860262924
+          168.85337075439807,
+          403.9262435264871
         ],
         "Pmax": [
           255.16428445998181,
@@ -8244,9 +8494,9 @@
         "aUp": 34.793312805511846,
         "bLow": 39.268912600406566,
         "phi": -0.07058958981887359,
-        "dTemp": 56.42982277552494,
+        "dTemp": 58.03188363103939,
         "dNas": 28.49451634839471,
-        "dTempObs": 56.42982277552494,
+        "dTempObs": 58.03188363103939,
         "dNasObs": 28.49451634839471,
         "tLash": 12.0,
         "hInner": 62.06222540591841,
@@ -8285,8 +8535,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 56.42982277552494,
-        "dTempSil": 59.0,
+        "dTempEnv": 58.03188363103939,
+        "dTempSil": 61.0,
         "temporalAtFaceEdge": true
       }
     },
@@ -8452,7 +8702,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 82.32144184983213,
-        "dTempSil": 79.0,
+        "dTempSil": 85.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -8618,7 +8868,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 82.45323582319702,
-        "dTempSil": 75.0,
+        "dTempSil": 84.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -8784,7 +9034,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 40.86482746237181,
-        "dTempSil": 62.0,
+        "dTempSil": 63.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -8877,7 +9127,7 @@
           211.25938271897672,
           411.3469841683853
         ],
-        "w": 74.55628490804344,
+        "w": 75.95179074759528,
         "h": 70.06211119435102,
         "E": [
           [
@@ -8890,8 +9140,8 @@
           ]
         ],
         "Pmin": [
-          164.86758068851987,
-          414.6272125947812
+          163.47555023166709,
+          414.7256389907203
         ],
         "Pmax": [
           239.23818982557572,
@@ -8908,9 +9158,9 @@
         "aUp": 32.91411967759757,
         "bLow": 37.14799151675345,
         "phi": -0.07058958981887359,
-        "dTemp": 46.5076251184947,
+        "dTemp": 47.903130958046546,
         "dNas": 28.048659789548736,
-        "dTempObs": 46.5076251184947,
+        "dTempObs": 47.903130958046546,
         "dNasObs": 28.048659789548736,
         "tLash": 12.0,
         "hInner": 58.06211119435102,
@@ -8949,8 +9199,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 46.5076251184947,
-        "dTempSil": 49.0,
+        "dTempEnv": 47.903130958046546,
+        "dTempSil": 50.0,
         "temporalAtFaceEdge": true
       }
     },
@@ -9116,7 +9366,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 81.04085374964029,
-        "dTempSil": 74.0,
+        "dTempSil": 89.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -9282,7 +9532,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 81.58419337798873,
-        "dTempSil": 63.0,
+        "dTempSil": 91.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -9541,7 +9791,7 @@
           222.49063711014028,
           409.2961534148414
         ],
-        "w": 81.75044497620249,
+        "w": 84.40039469318543,
         "h": 73.03448825332424,
         "E": [
           [
@@ -9554,8 +9804,8 @@
           ]
         ],
         "Pmin": [
-          168.79444421673927,
-          413.0928539224556
+          166.15109396293218,
+          413.2797574757551
         ],
         "Pmax": [
           250.34129700861746,
@@ -9572,9 +9822,9 @@
         "aUp": 34.310497442672386,
         "bLow": 38.723990810651856,
         "phi": -0.07058958981887359,
-        "dTemp": 53.830252330728,
+        "dTemp": 56.48020204771095,
         "dNas": 27.920192645474486,
-        "dTempObs": 53.830252330728,
+        "dTempObs": 56.48020204771095,
         "dNasObs": 27.920192645474486,
         "tLash": 12.0,
         "hInner": 61.03448825332424,
@@ -9613,8 +9863,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 53.830252330728,
-        "dTempSil": 56.0,
+        "dTempEnv": 56.48020204771095,
+        "dTempSil": 59.0,
         "temporalAtFaceEdge": true
       }
     },
@@ -9780,7 +10030,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 81.04085374964035,
-        "dTempSil": 78.0,
+        "dTempSil": 87.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -9946,7 +10196,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 80.9746041845383,
-        "dTempSil": 73.0,
+        "dTempSil": 88.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -10039,7 +10289,7 @@
           475.0996747580951,
           406.05837497905156
         ],
-        "w": 88.28296751322523,
+        "w": 89.26281143837195,
         "h": 71.78503157145605,
         "E": [
           [
@@ -10056,8 +10306,8 @@
           404.92237497905154
         ],
         "Pmax": [
-          534.0641453463304,
-          408.3482573319927
+          535.0432512286833,
+          408.3862808614045
         ],
         "Papex": [
           476.4325860471286,
@@ -10070,9 +10320,9 @@
         "aUp": 34.34833771414566,
         "bLow": 37.43669385731039,
         "phi": 0.038815446081463686,
-        "dTemp": 59.00891757133979,
+        "dTemp": 59.98876149648652,
         "dNas": 29.274049941885437,
-        "dTempObs": 59.00891757133979,
+        "dTempObs": 59.98876149648652,
         "dNasObs": 29.274049941885437,
         "tLash": 12.0,
         "hInner": 59.785031571456045,
@@ -10111,8 +10361,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 59.00891757133979,
-        "dTempSil": 62.0,
+        "dTempEnv": 59.98876149648652,
+        "dTempSil": 63.0,
         "temporalAtFaceEdge": true
       }
     },
@@ -10278,7 +10528,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 74.34972989208086,
-        "dTempSil": 72.0,
+        "dTempSil": 75.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -10444,7 +10694,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 76.05432129889329,
-        "dTempSil": 77.0,
+        "dTempSil": 80.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -10610,7 +10860,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 74.47567807254583,
-        "dTempSil": 64.0,
+        "dTempSil": 69.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -10776,7 +11026,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 75.08902951124873,
-        "dTempSil": 71.0,
+        "dTempSil": 75.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -10869,7 +11119,7 @@
           193.3494313760752,
           407.2991008902061
         ],
-        "w": 57.5280909091795,
+        "w": 59.452579106684226,
         "h": 69.59862189023994,
         "E": [
           [
@@ -10882,8 +11132,8 @@
           ]
         ],
         "Pmin": [
-          160.83019279739497,
-          409.5984409917289
+          158.9104973659229,
+          409.7341770323381
         ],
         "Pmax": [
           218.21501513242035,
@@ -10900,9 +11150,9 @@
         "aUp": 32.69637941592492,
         "bLow": 36.90224247431502,
         "phi": -0.07058958981887359,
-        "dTemp": 32.60042703155273,
+        "dTemp": 34.524915229057456,
         "dNas": 24.92766387762677,
-        "dTempObs": 32.60042703155273,
+        "dTempObs": 34.524915229057456,
         "dNasObs": 24.92766387762677,
         "tLash": 12.0,
         "hInner": 57.59862189023994,
@@ -10941,8 +11191,8 @@
         "centroidNoRoot": false,
         "arcs": [],
         "arcRejected": [],
-        "dTempEnv": 32.60042703155273,
-        "dTempSil": 35.0,
+        "dTempEnv": 34.524915229057456,
+        "dTempSil": 37.0,
         "temporalAtFaceEdge": true
       }
     },
@@ -11108,7 +11358,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 81.05055517464177,
-        "dTempSil": 67.0,
+        "dTempSil": 86.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -11274,7 +11524,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 85.92940560403011,
-        "dTempSil": 62.0,
+        "dTempSil": 92.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -11606,7 +11856,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 72.82071898123615,
-        "dTempSil": 71.0,
+        "dTempSil": 73.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -11772,7 +12022,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 78.04796413669192,
-        "dTempSil": 78.0,
+        "dTempSil": 80.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -11938,7 +12188,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 74.49079185420163,
-        "dTempSil": 63.0,
+        "dTempSil": 68.0,
         "temporalAtFaceEdge": false
       }
     },
@@ -12104,7 +12354,7 @@
         "arcs": [],
         "arcRejected": [],
         "dTempEnv": 75.10843236125163,
-        "dTempSil": 70.0,
+        "dTempSil": 74.0,
         "temporalAtFaceEdge": false
       }
     }
@@ -12471,6 +12721,14 @@
       ]
     }
   ],
-  "FAVisual": "up-left:left, down-left:left, right:right, up-right:right: both-side sclera visible in actual 4x comparison crops; Fable review pending",
-  "FBComparison": "Report both direct render-model width and Fable per_eye2 front-normalized log difference; no new fit or cutoff."
+  "FBComparison": "Authoritative: log((render dTemp / rendered front dTemp) / model r_T) × measured still dTemp. No subtraction across different pixel scales.",
+  "FAVisual": "Fable re-review 1 accepted four sclera poses; F-A unchanged.",
+  "conditionalR2R3Update": {
+    "baseline": "3acd5fa",
+    "changedR2Fields": [
+      "dTemp"
+    ],
+    "R3Changed": false,
+    "note": "New 24-pose R7 captures supply observations; unchanged r24 captures and limits reused. No separate R2/R3 rendering pass."
+  }
 }

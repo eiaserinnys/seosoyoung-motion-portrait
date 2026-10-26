@@ -4,13 +4,13 @@
   "poses": 5406,
   "peaks": {
     "far": {
-      "difference": 37.576470588235225,
+      "difference": 40.31764705882347,
       "side": "left",
-      "pitch": -30,
+      "pitch": 0,
       "fromYaw": -60,
       "toYaw": -60.1,
-      "fromAlpha": 1061.521568627451,
-      "toAlpha": 1023.9450980392157
+      "fromAlpha": 1179.3333333333333,
+      "toAlpha": 1139.0156862745098
     },
     "near": {
       "difference": 21.83529411764721,
@@ -23,5 +23,5 @@
     }
   },
   "passed": true,
-  "inputSha": "853c130f834b74c2fa9026974476ea0c537bde60d91161004b1920e616f60a81"
+  "inputSha": "2f88d3af0d40ce76bb8c68f74929889487946bfb00d84daf04301b8742e3accd"
 }

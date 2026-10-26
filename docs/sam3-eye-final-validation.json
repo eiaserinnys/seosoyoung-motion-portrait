@@ -1,9 +1,10 @@
 {
-  "runtimeRevision": "v2.9.3 F-A far iris disk + F-B face-skin mask, requested 52..67 junction",
+  "runtimeRevision": "v2.9.4 F-B2 solid skin-silhouette union, requested 52..67 junction",
   "verificationComplete": true,
-  "review": "owner/Fable review pending; R4 observations are unfiltered and have no automatic disposition",
-  "baseMain": "a29bb358231566d0c90b1b058bc8a153cfc57410",
+  "review": "F-B2 owner/Fable review pending",
+  "baseMain": "6dd12cfe12b89a3b67b23938996a62c70e281173",
   "r24Comparison": "1458c77a77af6016dda236aaad06c00ce1c8cbd4",
+  "rendererSha256": "d81b3cd56cd19a15c982f715a6824cace1dc832227b2adfd9aee826bcb74a0e0",
   "R1": {
     "maxErrorPx": 8.265626605580337e-15,
     "aLaw": "Fable F-A cos(max(theta,0)); independent audit for other terms"
@@ -237,13 +238,13 @@
     "poses": 5406,
     "peaks": {
       "far": {
-        "difference": 37.576470588235225,
+        "difference": 40.31764705882347,
         "side": "left",
-        "pitch": -30,
+        "pitch": 0,
         "fromYaw": -60,
         "toYaw": -60.1,
-        "fromAlpha": 1061.521568627451,
-        "toAlpha": 1023.9450980392157
+        "fromAlpha": 1179.3333333333333,
+        "toAlpha": 1139.0156862745098
       },
       "near": {
         "difference": 21.83529411764721,
@@ -256,29 +257,295 @@
       }
     },
     "passed": true,
-    "inputSha": "853c130f834b74c2fa9026974476ea0c537bde60d91161004b1920e616f60a81"
+    "inputSha": "2f88d3af0d40ce76bb8c68f74929889487946bfb00d84daf04301b8742e3accd"
   },
   "R4": {
     "status": "R4_RECORDED",
     "poses": 48,
-    "recordedPixelCount": 6881,
-    "affectedEyes": 61,
-    "ownerDecision": {
-      "pose": "left",
-      "eye": "left",
-      "coordinate720": [
-        171,
-        323
-      ],
-      "text": "R4 1px, 경계 걸침, 육안 비가시",
-      "review": "Fable 재검수 대기"
-    },
+    "passed": true,
+    "maskBasis": "skin-silhouette for both revisions; original r24 eye rendering",
+    "recordedPixelCount": 234,
+    "affectedEyes": 37,
+    "requiredFarEyes": [
+      {
+        "pose": "left",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "right",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "down",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "up-left",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "up-right",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "down-left",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "down-right",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0017",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0213",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0048",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0255",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0342",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0074",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0043",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "aux-0241",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--45--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--45-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--45-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--40--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--40-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--40-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--35--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--35-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--35-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--30--30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--30-0",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep--30-30",
+        "eye": "left",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-30--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-30-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-30-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-35--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-35-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-35-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-40--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-40-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-40-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-45--30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-45-0",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      },
+      {
+        "pose": "sweep-45-30",
+        "eye": "right",
+        "pixels": 0,
+        "edgeBandPixels": 0,
+        "outsideBeyondBandPixels": 0
+      }
+    ],
     "violationTable": "docs/sam3-eye-R4-violations.csv",
-    "violationSheet": "docs/captures/sam3_eye_R4_violations_4x.png",
-    "disposition": "raw observations; owner/Fable review pending"
+    "violationSheet": "docs/captures/sam3_eye_R4_violations_4x.png"
   },
   "R5": {
-    "baseline": "a29bb358231566d0c90b1b058bc8a153cfc57410",
+    "baseline": "6dd12cfe12b89a3b67b23938996a62c70e281173",
     "scope": "full canvas, hair on, neutral",
     "canvasSize": [
       1100,
@@ -291,7 +558,7 @@
   "R2Ratio": {
     "dTemp": {
       "r24": 10.23817902249429,
-      "v291": 5.422985587054204,
+      "v291": 5.016219103309864,
       "limit": 3.759995664880529,
       "passed": false,
       "betterThanR24": true
@@ -380,22 +647,20 @@
       "modelIrisDiameter": 43.26617705658505,
       "modelOpeningWidth": 55.517561043389506,
       "renderIrisChord": 41.89036482264888,
-      "renderOpeningWidth": 62.591207763871296
+      "renderOpeningWidth": 64.5509614519062
     }
   ],
-  "FAVisual": "up-left:left, down-left:left, right:right, up-right:right: both-side sclera visible in actual 4x comparison crops; Fable review pending",
+  "FAVisual": "Fable re-review 1 accepted four sclera poses; F-A unchanged.",
   "FBTemporal": [
     {
       "name": "down",
       "side": "right",
       "theta": 14.253565453750118,
-      "renderDTemp": 57.70407590864431,
+      "renderDTemp": 58.72272553379696,
       "modelDTemp": 62.10603587092977,
-      "rawErrorPx": -4.40195996228546,
-      "normalizedErrorPx": -12.721279788461905,
+      "normalizedErrorPx": -11.533348342321718,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "down-right",
@@ -403,23 +668,19 @@
       "theta": 23.506140424439433,
       "renderDTemp": 46.809375632012234,
       "modelDTemp": 44.11167863342955,
-      "rawErrorPx": 2.6976969985826855,
       "normalizedErrorPx": -3.701010890914912,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0017",
       "side": "left",
       "theta": 16.63452860375611,
-      "renderDTemp": 56.42982277552494,
+      "renderDTemp": 58.03188363103939,
       "modelDTemp": 54.27475528041192,
-      "rawErrorPx": 2.1550674951130233,
-      "normalizedErrorPx": -9.06201157910254,
+      "normalizedErrorPx": -7.343985273386397,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0213",
@@ -427,23 +688,19 @@
       "theta": 26.74801146289593,
       "renderDTemp": 40.86482746237181,
       "modelDTemp": 38.78803652057843,
-      "rawErrorPx": 2.0767909417933765,
       "normalizedErrorPx": -4.1898614715819,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0048",
       "side": "left",
       "theta": 23.657377722415653,
-      "renderDTemp": 46.5076251184947,
+      "renderDTemp": 47.903130958046546,
       "modelDTemp": 46.045343898939244,
-      "rawErrorPx": 0.4622812195554573,
-      "normalizedErrorPx": -10.838594603026875,
+      "normalizedErrorPx": -9.02423040047903,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": true
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0255",
@@ -451,59 +708,49 @@
       "theta": 25.020571693572187,
       "renderDTemp": 43.29260906898537,
       "modelDTemp": 41.53944640250815,
-      "rawErrorPx": 1.7531626664772233,
       "normalizedErrorPx": -4.924346225166478,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": true
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0342",
       "side": "left",
       "theta": 18.11371569838885,
-      "renderDTemp": 53.830252330728,
+      "renderDTemp": 56.48020204771095,
       "modelDTemp": 52.42720368301542,
-      "rawErrorPx": 1.4030486477125805,
-      "normalizedErrorPx": -9.830884108721268,
+      "normalizedErrorPx": -6.881799877517889,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": true
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     },
     {
       "name": "aux-0074",
       "side": "right",
       "theta": 17.847254962686957,
-      "renderDTemp": 59.00891757133979,
+      "renderDTemp": 59.98876149648652,
       "modelDTemp": 55.2145202286942,
-      "rawErrorPx": 3.7943973426455955,
-      "normalizedErrorPx": -3.21877356354655,
+      "normalizedErrorPx": -2.100786798340095,
       "passed": false,
-      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
-      "directWithin2Px": false
+      "scope": "rig silhouette residual outside this eye PR, per Fable F-B2"
     }
   ],
-  "FBComparison": "Report both direct render-model width and Fable per_eye2 front-normalized log difference; no new fit or cutoff.",
+  "FBComparison": "Authoritative: log((render dTemp / rendered front dTemp) / model r_T) × measured still dTemp. No subtraction across different pixel scales.",
   "FableAcceptedExcess": {
     "dNas": "한계 초과이나 렌더에서 결함이 아님",
     "R3": "한계 초과이나 렌더에서 결함이 아님",
     "deltaY": "PASS"
   },
-  "FableAcceptanceReason": "r25-impl-review-fable.md 1.2: dNas/R3 residual is reference nasal-line extension and beta omission plus approved nasal outlier, not iris/lid misalignment; deltaY excess is subpixel. Limits unchanged.",
-  "J5": {
-    "runtimeRevision": "v2.9.3",
-    "status": "not rerun in this review",
-    "maskSource": "face-skin",
-    "scope": "Fable r25 1.3: J1/J2 geometry; R4 and J3 mask checks",
-    "evidence": [
-      "sam3-eye-far-clip-contract.json",
-      "sam3-eye-junction-alpha.json"
-    ]
+  "FableAcceptanceReason": "Fable r25 review 1.2 and re-review 1: dNas/R3 excess reflects approved nasal outlier, omitted video bias beta_N and pose-dependent nasal line extension. Thresholds unchanged; current results are reported separately.",
+  "conditionalR2R3Update": {
+    "baseline": "3acd5fa",
+    "changedR2Fields": [
+      "dTemp"
+    ],
+    "R3Changed": false,
+    "note": "New 24-pose R7 captures supply observations; unchanged r24 captures and limits reused. No separate R2/R3 rendering pass."
   },
-  "Stage4": {
-    "status": "excluded by Fable r25 1.3; not remeasured in this review"
-  },
-  "reused": "unchanged geometry J0/J6/J7; completed J1/J2/J3/R5 kept; no SAM calls or refitting",
-  "tests": "19 prior valid tests plus 1 new unfiltered pixel-recording test = 20 passed",
+  "reused": "Fable-closed J0/J4/J5/J6/J7 and R1; completed geometry/isolated-eye samples survive main rebase because renderer/geometry and eye/face texels are unchanged; R5 freshly compared to 6dd12cf",
+  "rebaseEvidence": "docs/sam3-eye-rebase-inputs.json",
+  "tests": "13 targeted tests passed: Node clip 3, Python raw/edge pixels 5, Python ratios/alpha judge 5; edge-band case confirmed RED then GREEN",
   "R7PoseNames": [
     "up-left",
     "up",
@@ -524,14 +771,15 @@
     "aux-0241"
   ],
   "captureSha256": {
-    "sam3_eye_R7_comparison.png": "220847176cd29fe1b1ba8ce4391e0bc8f56547298f55683cec519c814eb64bcc",
-    "sam3_eye_9dir_grid.png": "fc9034b5c19cfd827d259884e945e289dfc67f0d64fc99dba9c1bf411904b14f",
-    "sam3_eye_R7_temporal_sweep.png": "4b4ef4171dc784b3068852f481d061d6397b04429bb987742cdc365fe11270ad",
-    "sam3_eye_R7_outside_regressions_4x.png": "26230cf25e08d2a64b8544271a3f7980c649693f40e867b2a5bc8cc7f54fef2b",
-    "sam3_eye_viewer_wide.png": "7b440694794f14b3dcca7911f3e1388fbcb9098e95ff70ce4fc5be597f69c717",
-    "sam3_eye_viewer_narrow.png": "72d3a8712d8d5a4d285b1d7bac7353ac3f47fdfe852b66ac11d03042ea84bd4b",
-    "sam3_eye_R4_violations_4x.png": "296bae90c1e2960741ca81f97b6366f7addc95ccc2b1ccc314a3851fcc4ff401",
-    "sam3_eye_FA_four_eyes_4x.png": "60024cd2c1169174b8d60d7968323359e1cf695fead8b6414d1c8dc2948b3371",
-    "sam3_eye_FB_eight_eyes_4x.png": "3fff6c4724606fe76a692497b5a780cd377ac8fddb4ea8e9b44861d99803d3eb"
+    "sam3_eye_R7_comparison.png": "35a5647905c2f735867a74f7a23b05c6cb1290c230ff42eb27119afe89a2013f",
+    "sam3_eye_FB2_temporal_tips_2x.png": "85cd8f13471f49ed43f61523c5b94989d58abc12fdbc1bcf033728771e56f26a",
+    "sam3_eye_FB_eight_eyes_4x.png": "d4ed8dda3957922a8247bbe191faac15bba350643bc41bb82d9c2625ba49e69c",
+    "sam3_eye_FA_four_eyes_4x.png": "0766dbb561847e05dc88cfaa28eaabcae45f2231ae3a1e9a9cfc55fa740c0bcb",
+    "sam3_eye_9dir_grid.png": "21598b5635d8c14a0c0c30c52f4071336c38c4cccd9edac9e06e7505d56808fa",
+    "sam3_eye_R7_temporal_sweep.png": "bde8e234cab9a8a703b81a0c05750f25580d40036b3aabf49af63fa7e8927a7b",
+    "sam3_eye_R7_outside_regressions_4x.png": "26d896424d4438d2e55afc15a0e4188b8c4fa1c7ec0c3a9c8bf1c4b681edf8a1",
+    "sam3_eye_R4_violations_4x.png": "2b740f0123e567e5887bb3aeb6ef557b0d715d5df77f96db85f8b9c546df5931",
+    "sam3_eye_viewer_wide.png": "d66feef70d163a8743b721c0aead44c0a993f9f413b642671040b61fd5003a47",
+    "sam3_eye_viewer_narrow.png": "04a6c8d9d03affe7ec0bee56ce5369529db8feda9afa99a62a6c32949a697242"
   }
 }
