@@ -1,0 +1,311 @@
+{
+  "R1": {
+    "maxErrorPx": 8.265626605580337e-15
+  },
+  "R2": {
+    "dTemp": {
+      "r24": 8.447664590066752,
+      "v291": 8.956303813923173,
+      "limit": 3.759995664880529,
+      "passed": false
+    },
+    "dNas": {
+      "r24": 4.078225921240274,
+      "v291": 4.638495249196565,
+      "limit": 3.0257798801506213,
+      "passed": false
+    },
+    "h": {
+      "r24": 5.4068425908776,
+      "v291": 4.832531114718118,
+      "limit": 3.7260039699061562,
+      "passed": false
+    },
+    "deltaY": {
+      "r24": 2.138695977559056,
+      "v291": 2.029892947511298,
+      "limit": 2.0,
+      "passed": false
+    },
+    "a": {
+      "r24": 3.8751577254652494,
+      "v291": 3.049675664020376,
+      "limit": 2.0,
+      "passed": false
+    }
+  },
+  "R3": {
+    "limitPx": 4.538669820225932,
+    "excluded": [
+      "aux-0213:left",
+      "up-left:right",
+      "up-right:left"
+    ],
+    "maxEyeErrorPx": 7.927178478465208,
+    "maxPairedErrorPx": 11.933867004065434,
+    "passed": false
+  },
+  "R4": {
+    "status": "R4_PASS",
+    "referencePoses": 24,
+    "syntheticPoses": 24,
+    "mandatoryPoses": 38,
+    "farOutsidePixels": 0,
+    "r24FarOutsidePixels": 2387,
+    "reportOnlyIncreases": [
+      [
+        "up",
+        "left"
+      ],
+      [
+        "up",
+        "right"
+      ],
+      [
+        "down",
+        "left"
+      ],
+      [
+        "up-right",
+        "left"
+      ],
+      [
+        "aux-0276",
+        "left"
+      ],
+      [
+        "aux-0276",
+        "right"
+      ],
+      [
+        "aux-0275",
+        "left"
+      ],
+      [
+        "aux-0275",
+        "right"
+      ],
+      [
+        "aux-0277",
+        "left"
+      ],
+      [
+        "aux-0277",
+        "right"
+      ],
+      [
+        "aux-0017",
+        "right"
+      ],
+      [
+        "aux-0213",
+        "left"
+      ],
+      [
+        "aux-0086",
+        "left"
+      ],
+      [
+        "aux-0102",
+        "left"
+      ],
+      [
+        "aux-0102",
+        "right"
+      ],
+      [
+        "aux-0093",
+        "left"
+      ],
+      [
+        "aux-0093",
+        "right"
+      ],
+      [
+        "aux-0103",
+        "left"
+      ],
+      [
+        "aux-0103",
+        "right"
+      ],
+      [
+        "sweep--45-30",
+        "right"
+      ],
+      [
+        "sweep--40-30",
+        "right"
+      ],
+      [
+        "sweep--35-30",
+        "right"
+      ],
+      [
+        "sweep--30-30",
+        "right"
+      ],
+      [
+        "sweep-30--30",
+        "left"
+      ],
+      [
+        "sweep-30-30",
+        "left"
+      ],
+      [
+        "sweep-35--30",
+        "left"
+      ],
+      [
+        "sweep-35-30",
+        "left"
+      ],
+      [
+        "sweep-40--30",
+        "left"
+      ],
+      [
+        "sweep-45--30",
+        "left"
+      ],
+      [
+        "sweep-45-30",
+        "left"
+      ]
+    ]
+  },
+  "R5": {
+    "maxChannelDifferenceLSB": 0,
+    "passed": true,
+    "changedPixels": 0
+  },
+  "R6": {
+    "samples": 54006,
+    "pitchDeg": [
+      -20,
+      0,
+      20
+    ],
+    "stepDeg": 0.01,
+    "maxFineStepPx": 0.024519525281228027,
+    "maxExcessPx": -9.999999928945726e-07,
+    "maxDegreeStepPx": 2.4044288860310132,
+    "headRadiusPx": 262,
+    "source": "bundle/geometry.mjs HEAD_RADIUS",
+    "speedLimitPx": 4.572762640225143,
+    "passed": true,
+    "failures": []
+  },
+  "R6Alpha": {
+    "side": "right (far)",
+    "stepAchievedDeg": 0.5,
+    "maxAdjacentDifferencePx": 88.29019607843111,
+    "maxIntervalDeg": [
+      16.0,
+      16.5
+    ],
+    "threshold": "report-only; no numerical threshold specified"
+  },
+  "Stage4": {
+    "poses": [
+      {
+        "name": "left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 2,
+        "passed": true
+      },
+      {
+        "name": "front",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "passed": true
+      },
+      {
+        "name": "right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 3,
+        "passed": true
+      },
+      {
+        "name": "up-left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "passed": true
+      },
+      {
+        "name": "up",
+        "exposedPixelsBelowEarLine": 5,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "passed": false
+      },
+      {
+        "name": "up-right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 0,
+        "passed": true
+      },
+      {
+        "name": "down-left",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.71520000000001,
+        "foreheadProfileCount": 10,
+        "passed": true
+      },
+      {
+        "name": "down",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 2,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 10,
+        "passed": true
+      },
+      {
+        "name": "down-right",
+        "exposedPixelsBelowEarLine": 0,
+        "downHalfWidthDifference": 0,
+        "maxForeheadLuminanceValley": 0.0,
+        "foreheadProfileCount": 10,
+        "passed": true
+      }
+    ],
+    "front": {
+      "changedPixels": 0,
+      "maxChannelDifferenceLSB": 0
+    }
+  },
+  "captureSha256": {
+    "sam3_eye_R7_comparison.png": "6a542bca96e4603575c411c4ae45d7f51e00b6965ee30c5da39765d9cd8ec416",
+    "sam3_eye_R7_temporal_sweep.png": "51fc0c7039ae4489118217463c9250e87a2c17d09cd5d93f3bf3bf06ca7778e7",
+    "sam3_eye_R7_outside_regressions_4x.png": "70a93e4292d237a9c8064707a7042fac13abfa176253fca82728fb54516ecf73",
+    "sam3_eye_9dir_grid.png": "0edd161cf445fca4b58738d326193c66ac4ef3b7a5764e786728e75b67bf4ae8",
+    "sam3_eye_viewer_wide.png": "6d762119e953a3cfd7a6dc4be49037ebbce3e599150f0a76d1fcdf6a0b8672d0",
+    "sam3_eye_viewer_narrow.png": "5cddb7a7799c4763fbe3ecc94a60a7ce20e109d10691a33b8e032d6e0df00799"
+  },
+  "viewerHtmlSha256": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
+  "replay": "Approved measurements, fit tables/coefficients, noise, residuals and 5 WARNs matched within 1e-6; unchanged prior replay evidence reused.",
+  "tests": {
+    "currentPython": "Ran 3 tests / OK (R4); Ran 1 test / OK (Stage4 report-only fault injection)",
+    "reusedPython": 6,
+    "reusedNode": 12,
+    "totalValid": 22
+  },
+  "reviews": "Code review by delegator, Fable R7 review, then Selaphiel UI/UX review pending; Ready PR is not visual acceptance.",
+  "clipMaskMeshes": {
+    "upTo45": "exposed-skin-clip",
+    "profile": "face-skin"
+  }
+}

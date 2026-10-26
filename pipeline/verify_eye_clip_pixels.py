@@ -84,9 +84,10 @@ def main():
                         captures[rev]={k:Image.open(p).convert('RGBA') for k,p in paths.items()}
                         old=next(r for r in previous['poses'] if r['name']==pose['name'])
                         controls[rev]=old['controls'][rev]
-                    elif rev=='v291' and pose['name']=='front':
+                    elif rev=='v291' and pose['name']=='front' and all((OUT/f'front-{k}.png').exists() for k in paths):
                         captures[rev]={k:Image.open(OUT/f'front-{k}.png').convert('RGBA') for k in ['color','faceMask','left','right']}
                         controls[rev]=previous['poses'][0]['controls']
+                        for k,im in captures[rev].items():im.save(paths[k])
                     else:
                         raw=page.evaluate('(args)=>captureClipPose(args)',pose['requested'])
                         captures[rev]={k:image(raw[k]) for k in ['color','faceMask','left','right']}
