@@ -43,7 +43,7 @@ export function eyeResidual(data,side,[yaw,pitch]){
   return Math.exp(logs[j]*(1-u)+logs[j+1]*u);
  };
  return {theta,rT:table(b.r_T),rN:table(b.r_N),logH:polynomial(b.h),deltaY:polynomial(b.deltaNu),
-  logA:b.kappa*Math.log(Math.cos(t)),logB:Math.log(Math.cos(pitch*rad))};
+  logA:Math.log(Math.cos(Math.max(t,0))),logB:Math.log(Math.cos(pitch*rad))};
 }
 export function achievedAngles(data,yaw,pitch){
  const y=yaw/45,p=pitch/30,c=data.achieved.c;

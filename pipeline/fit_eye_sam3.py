@@ -15,7 +15,8 @@ def export_fit(measurement, evaluation, bootstrap):
                   gaze={}, status=evaluation['status'], warnings=evaluation['warnings'],
                   noise=evaluation['noise'],
                   dependencies='Cleanup seeds, centroid inversion and bObserved use K; sigma includes pose variation within 4 degrees.',
-                  nasalCutDepth='Observed mask nasal overrun; not reconstructed hidden iris width.')
+                  nasalCutDepth='Observed mask nasal overrun; not reconstructed hidden iris width.',
+                  aLaw='cos(max(theta,0))')
     for side in ['left', 'right']:
         r = measurement['rest'][side]
         rest = dict(r)
@@ -32,7 +33,7 @@ def export_fit(measurement, evaluation, bootstrap):
                             knotsDeg=f['dTemp']['knotsDeg'], r_T=f['dTemp']['knotLogs'],
                             r_N=f['dNas']['knotLogs'], h=f['h']['coefficients'][:4],
                             deltaNu=f['deltaY']['coefficients'][:4],
-                            kappa=f['a']['coefficients'][0])
+                            kappa=1)
         # Retain measured v2.2 main-axis gaze distances with the specified K.w.
         negative, positive, vertical = bootstrap['gaze'][side]['legacyMainAxisPx']
         radius = result['rho']*result[side]['w0']

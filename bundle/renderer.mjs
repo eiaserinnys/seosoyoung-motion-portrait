@@ -18,7 +18,8 @@ export function eyeMaskId(mesh,yaw){
   return mesh.masks[0]||(eyeClipControls(mesh.id,yaw).profileFaceClip?'face-skin':null);
 }
 export function faceMaskSource(id,yaw){
-  return id.startsWith('eye-')||id==='closed-eyes-v1'||Math.abs(yaw)<=45?'exposed-skin-clip':'face-skin';
+  if(id.startsWith('eye-')||id==='closed-eyes-v1')return 'face-skin';
+  return Math.abs(yaw)<=45?'exposed-skin-clip':'face-skin';
 }
 export class Renderer {
   constructor(canvas,overlay,rig,images) {
@@ -116,7 +117,10 @@ export class Renderer {
         gl.disable(gl.CULL_FACE);gl.uniform1i(this.loc.solid,1);gl.depthMask(false);texture(6);this.draw(skinFillClipMesh(),p,1);
         gl.uniform1i(this.loc.solid,0);gl.depthMask(true);texture(0);
       }else{
+        // The silhouette mask is uncut. Foreground face-skin keeps upperClip.
+        const skinClip=this.skinClip;this.skinClip=false;
         gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);gl.disable(gl.CULL_FACE);
+        this.skinClip=skinClip;
       }
       gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,this.faceMaskTexture);gl.activeTexture(gl.TEXTURE0);
       currentFaceMask=source;

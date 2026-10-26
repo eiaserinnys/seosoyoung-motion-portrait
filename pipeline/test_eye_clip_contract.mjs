@@ -25,9 +25,10 @@ test('J4: every eye mask stays fixed and clip strengths are continuous at all ju
    assert.equal(a.profileFaceClip,false);assert.equal(b.profileFaceClip,false);
    assert(Math.abs(a.eyeFaceClip-b.eyeFaceClip)<1e-6);
    assert.equal(eyeMaskId(mesh,yaw),mesh.masks[0]);
-   assert.equal(faceMaskSource(mesh.id,yaw),'exposed-skin-clip');
+   assert.equal(faceMaskSource(mesh.id,yaw),'face-skin');
   }
  }
+ assert.equal(faceMaskSource('face-skin',0),'exposed-skin-clip');
 });
 test('profile eye and closed-lid clipping stays soft while nose and mouth retain hard clipping',{timeout:60000},()=>{
  for(const yaw of [-90,-67.5,67.5,90])for(const mesh of rig.meshes){

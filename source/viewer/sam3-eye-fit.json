@@ -849,6 +849,7 @@
   },
   "dependencies": "Cleanup seeds, centroid inversion and bObserved use K; sigma includes pose variation within 4 degrees.",
   "nasalCutDepth": "Observed mask nasal overrun; not reconstructed hidden iris width.",
+  "aLaw": "cos(max(theta,0))",
   "left": {
     "K": {
       "cO": [
@@ -972,7 +973,7 @@
       -0.050366103677615084,
       -0.0006227418890125255
     ],
-    "kappa": 0.15502146420415627
+    "kappa": 1
   },
   "right": {
     "K": {
@@ -1097,6 +1098,6 @@
       -0.006608471241032772,
       0.030196483912461835
     ],
-    "kappa": 0.12001428827763906
+    "kappa": 1
   }
 }
