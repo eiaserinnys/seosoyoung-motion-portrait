@@ -25,7 +25,7 @@ test('J4: every eye mask stays fixed and clip strengths are continuous at all ju
    assert.equal(a.profileFaceClip,false);assert.equal(b.profileFaceClip,false);
    assert(Math.abs(a.eyeFaceClip-b.eyeFaceClip)<1e-6);
    assert.equal(eyeMaskId(mesh,yaw),mesh.masks[0]);
-   assert.equal(faceMaskSource(mesh.id,yaw),'face-skin');
+   assert.equal(faceMaskSource(mesh.id,yaw),'skin-silhouette');
   }
  }
  assert.equal(faceMaskSource('face-skin',0),'exposed-skin-clip');

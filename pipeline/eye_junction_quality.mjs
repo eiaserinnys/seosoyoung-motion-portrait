@@ -31,7 +31,7 @@ const larger=(a,b)=>a.distancePx>b.distancePx?a:b;
 export async function measure(){
  const {featureWorld:r24World}=await import('../debug/r24/bundle/face-features.mjs');
  const {FRAME_CACHE:R24_CACHE}=await import('../debug/r24/bundle/pose-grid.mjs');
- const cache=new URL('debug/sam3-eye-v293/junction/',root);mkdirSync(cache,{recursive:true});
+ const cache=new URL('debug/sam3-eye-v294/junction/',root);mkdirSync(cache,{recursive:true});
  const signature=new URL('inputs.sha256',cache);
  if(existsSync(signature)&&readFileSync(signature,'utf8').trim()!==inputSha)throw Error('Junction cache belongs to different runtime inputs');
  writeFileSync(signature,inputSha+'\n');
@@ -78,7 +78,7 @@ export async function measure(){
  const reference=read('docs/sam3-eye-far-clip-contract.json').poses.slice(0,24).map(row=>({name:row.name,requested:row.requested,s:smoothstep(52,67,Math.abs(row.requested[0]))}));
  const J7={maxWeight:Math.max(...reference.map(r=>r.s)),limit:.05,poses:reference};J7.passed=J7.maxWeight<=J7.limit;
  const result={complete:cases.length===6,inputSha,J0:{V_own,own},J1:{...fine,limitPx:V_own/100,over1pxSteps:over1,samples,vertexCount:points.length,cases},
-  J2:{...degree,limitPx:V_own},J6:baseline.J6,J7:baseline.J7,reusedFrom:'798df34: J0,J6,J7; Fable 1.3 only J1/J2 geometry sweep rerun',
+  J2:{...degree,limitPx:V_own},J6:baseline.J6,J7:baseline.J7,reusedFrom:'3acd5fa: J0/J6/J7 closed by Fable; F-B2 reruns J1/J2 geometry sweeps',
   passed:junctionVerdict(V_own,fine.distancePx,degree.distancePx,baseline.J6.xyzMaxErrorPx)};
  writeFileSync(new URL('docs/sam3-eye-junction-v2.json',root),JSON.stringify(result,null,2)+'\n');
  console.log(JSON.stringify(result,null,2));

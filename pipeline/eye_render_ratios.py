@@ -18,12 +18,12 @@ def model_fidelity(records,measurement,fit):
         if name in unclipped and theta>0:
             error=float(np.log((render['dTemp']/front[side]['dTemp'])/rT)*measurement['rest'][side]['dTemp'])
             temporal.append(dict(name=name,side=side,theta=float(theta),renderDTemp=render['dTemp'],modelDTemp=b['rest']['dTemp']*rT,
-                rawErrorPx=render['dTemp']-b['rest']['dTemp']*rT,normalizedErrorPx=error,passed=abs(error)<=2,
-                scope='eye clip' if abs(error)<=2 else 'outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review'))
+                normalizedErrorPx=error,passed=abs(error)<=2,
+                scope='eye clip' if abs(error)<=2 else 'rig silhouette residual outside this eye PR, per Fable F-B2'))
         if iris_poses.get(name)==side:
             iris.append(dict(name=name,side=side,theta=float(theta),modelIrisDiameter=2*b['rest']['a']*float(np.cos(np.deg2rad(max(theta,0)))),
                 modelOpeningWidth=b['rest']['dTemp']*rT+b['rest']['dNas']*rN,renderIrisChord=2*render['a'],renderOpeningWidth=render['dTemp']+render['dNas']))
-    return dict(FBTemporal=temporal,FAIris=iris,modelComparison='per_eye2: log((render/render-front)/model-ratio) × measured still dTemp; raw width difference also retained')
+    return dict(FBTemporal=temporal,FAIris=iris,modelComparison='per_eye2: log((render/render-front)/model-ratio) × measured still dTemp. Render px and reference-rest px are not directly subtracted.')
 
 
 def ratio_error(render,render_front,reference,rest,field,w0):

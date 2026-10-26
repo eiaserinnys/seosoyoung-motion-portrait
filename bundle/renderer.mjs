@@ -18,7 +18,7 @@ export function eyeMaskId(mesh,yaw){
   return mesh.masks[0]||(eyeClipControls(mesh.id,yaw).profileFaceClip?'face-skin':null);
 }
 export function faceMaskSource(id,yaw){
-  if(id.startsWith('eye-')||id==='closed-eyes-v1')return 'face-skin';
+  if(id.startsWith('eye-')||id==='closed-eyes-v1')return 'skin-silhouette';
   return Math.abs(yaw)<=45?'exposed-skin-clip':'face-skin';
 }
 export class Renderer {
@@ -113,7 +113,14 @@ export class Renderer {
     const bindFaceMask=source=>{
       gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,null);
       gl.bindFramebuffer(gl.FRAMEBUFFER,this.faceFramebuffer);gl.disable(gl.DEPTH_TEST);gl.clear(gl.COLOR_BUFFER_BIT);
-      if(source==='exposed-skin-clip'){
+      if(source==='skin-silhouette'){
+        // Eyes clip to geometry, including skin hidden under the painted hair.
+        const skinClip=this.skinClip;this.skinClip=false;
+        gl.disable(gl.CULL_FACE);gl.depthMask(false);gl.uniform1i(this.loc.solid,1);
+        this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);
+        this.draw(skinFillClipMesh(),p,1);
+        gl.uniform1i(this.loc.solid,0);gl.depthMask(true);this.skinClip=skinClip;
+      }else if(source==='exposed-skin-clip'){
         gl.disable(gl.CULL_FACE);gl.uniform1i(this.loc.solid,1);gl.depthMask(false);texture(6);this.draw(skinFillClipMesh(),p,1);
         gl.uniform1i(this.loc.solid,0);gl.depthMask(true);texture(0);
       }else{

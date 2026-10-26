@@ -459,7 +459,7 @@
     ],
     "passed": true
   },
-  "reusedFrom": "798df34: J0,J6,J7; Fable 1.3 only J1/J2 geometry sweep rerun",
+  "reusedFrom": "3acd5fa: J0/J6/J7 closed by Fable; F-B2 reruns J1/J2 geometry sweeps",
   "passed": {
     "J1": true,
     "J2": true,

@@ -6,7 +6,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from capture_sam3_eyes import ROOT,SETUP,Handler
 
-OUT=ROOT/'debug/sam3-eye-v293/alpha'
+OUT=ROOT/'debug/sam3-eye-v294/alpha'
 ALPHA_SETUP='''async()=>{
  const {FRAME_CACHE}=await import('./pose-grid.mjs');
  // Geometry is state-independent; reuse the real renderer's frame cache for

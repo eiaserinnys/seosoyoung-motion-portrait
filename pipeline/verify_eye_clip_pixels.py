@@ -4,13 +4,14 @@ import http.server
 import json
 import threading
 import csv
+import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 from playwright.sync_api import sync_playwright
 from capture_sam3_eyes import ROOT, ROWS, BOOT, SETUP, Handler, image, binary
 from eye_capture_angles import inverse_achieved, achieved
 
-OUT=ROOT/'debug/sam3-eye-v293/far-clip-contract'
+OUT=ROOT/'debug/sam3-eye-v294/far-clip-contract'
 BASELINE=ROOT/'debug/sam3-eye-v291/far-clip-contract'
 DOC=ROOT/'docs/captures'
 SIDE_SETUP='''async()=>{
@@ -42,6 +43,14 @@ def outside_samples(captures,side):
                  eye_value=min(captures[side].getpixel((x,y))[:3]),eye_alpha=captures[side].getpixel((x,y))[3])
             for x,y in pixel_evidence(captures,side)['coordinates720']]
 
+def edge_evidence(captures,side):
+    mask=binary(captures['faceMask'])
+    outside=binary(captures[side])&~mask
+    band=cv2.dilate(mask.astype(np.uint8),np.ones((3,3),np.uint8)).astype(bool)&~mask
+    yy,xx=np.where(outside&~band)
+    return dict(edgeBandPixels=int((outside&band).sum()),outsideBeyondBandPixels=len(xx),
+                outsideBeyondBandCoordinates720=np.column_stack([xx,yy]).tolist())
+
 def export_violations(report):
     directory=DOC/'sam3_eye_R4_violations';directory.mkdir(parents=True,exist_ok=True)
     tiles=[];table=[]
@@ -66,8 +75,9 @@ def export_violations(report):
     with (ROOT/'docs/sam3-eye-R4-violations.csv').open('w',newline='') as stream:
         writer=csv.DictWriter(stream,fieldnames=['pose','eye','x','y','mask_value','eye_value','eye_alpha','crop4x'],lineterminator='\n')
         writer.writeheader();writer.writerows(table)
-    sheet=Image.new('RGB',(max(im.width for im in tiles),sum(im.height for im in tiles)),'#eeeeee');y=0
+    sheet=Image.new('RGB',(max((im.width for im in tiles),default=400),max(28,sum(im.height for im in tiles))),'#eeeeee');y=0
     for im in tiles:sheet.paste(im,(0,y));y+=im.height
+    if not tiles:ImageDraw.Draw(sheet).text((8,8),'No outside pixels at binary127',fill='black')
     sheet.save(DOC/'sam3_eye_R4_violations_4x.png')
     report.update(recordedPixelCount=len(table),affectedEyes=len(tiles),violationTable='docs/sam3-eye-R4-violations.csv',violationSheet='docs/captures/sam3_eye_R4_violations_4x.png')
 
@@ -85,18 +95,18 @@ def save_report(report):
                 row['controls'][rev]=row['controls'][rev][rev]
     (ROOT/'docs/sam3-eye-far-clip-contract.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     with (ROOT/'docs/sam3-eye-R4-poses.csv').open('w',newline='') as stream:
-        writer=csv.writer(stream,lineterminator='\n');writer.writerow(['pose','theta_far_achieved','left_role','left_v291','left_r24','right_role','right_v291','right_r24'])
+        writer=csv.writer(stream,lineterminator='\n');writer.writerow(['pose','requested_yaw','theta_far_achieved','left_role','left_v291','left_r24','left_edge_band','left_beyond_band','right_role','right_v291','right_r24','right_edge_band','right_beyond_band'])
         for r in report['poses']:
             left=r['sides']['left'];right=r['sides']['right']
-            writer.writerow([r['name'],r['thetaFarAchieved'],left['role'],left['pixels'],left['r24Pixels'],right['role'],right['pixels'],right['r24Pixels']])
+            writer.writerow([r['name'],r['requested'][0],r['thetaFarAchieved'],left['role'],left['pixels'],left['r24Pixels'],left['edgeBandPixels'],left['outsideBeyondBandPixels'],right['role'],right['pixels'],right['r24Pixels'],right['edgeBandPixels'],right['outsideBeyondBandPixels']])
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     previous=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
-    report=dict(rendererContract='v2: eye soft clip far0..15/near52..67; fixed authored masks and face-skin eye silhouette; nose/mouth retain profile fallback',
-                R4Definition='Record every outside pixel on both eyes in all 48 poses at binary127. No filtering or automatic disposition.',
-                ownerDecision=dict(pose='left',eye='left',coordinate720=[171,323],text='R4 1px, 경계 걸침, 육안 비가시',review='Fable 재검수 대기'),
-                R5=previous['R5'],maskBasis='face-skin for both revisions; unchanged face geometry, original r24 eye rendering',poses=[])
+    report=dict(rendererContract='F-B2: eye soft clip to solid face-skin + skinFillClipMesh union; other clips unchanged',
+                R4Definition='Requested |yaw| >=15: far-eye pixels beyond skin-silhouette must be zero. One-pixel edge band is report-only. All raw outside pixels retained at binary127.',
+                edgeBandDefinition='Outside binary127 silhouette within its 3x3 dilation (one pixel, 8-neighbour); recorded separately without deleting raw observations.',
+                R5=previous['R5'],maskBasis='skin-silhouette for both revisions; original r24 eye rendering',poses=[])
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT)))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     try:
@@ -139,7 +149,7 @@ def main():
                 # Face geometry is unchanged; r24 itself retains its authored clip.
                 captures['r24']['faceMask']=captures['v291']['faceMask']
                 captures['r24']['faceMask'].save(OUT/f"r24-{pose['name']}-faceMask.png")
-                evidence={rev:{side:pixel_evidence(captures[rev],side) for side in ['left','right']} for rev in captures}
+                evidence={rev:{side:{**pixel_evidence(captures[rev],side),**edge_evidence(captures[rev],side)} for side in ['left','right']} for rev in captures}
                 row={**pose,'actualAchieved':achieved(BOOT['achieved']['c'],*pose['requested']),'controls':controls,
                      'thetaFarAchieved':abs(pose['targetAchieved'][0])}
                 row['sides']={side:{**evidence['v291'][side],
@@ -152,6 +162,8 @@ def main():
                 save_report(report)
             report['status']='R4_RECORDED'
             report['complete']=len(report['poses'])==48
+            report['requiredFarEyes']=[dict(pose=r['name'],eye=s,pixels=q['pixels'],edgeBandPixels=q['edgeBandPixels'],outsideBeyondBandPixels=q['outsideBeyondBandPixels']) for r in report['poses'] if abs(r['requested'][0])>=15 for s,q in r['sides'].items() if q['role']=='far']
+            report['passed']=all(q['outsideBeyondBandPixels']==0 for q in report['requiredFarEyes'])
             browser.close()
     finally:
         server.shutdown();server.server_close();thread.join()

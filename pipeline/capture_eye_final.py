@@ -4,6 +4,8 @@ Prior captures have a different renderer or input-angle contract. This run has
 its own directory and resumes only complete captures from this final contract.
 """
 import ast
+import base64
+import io
 import functools
 import http.server
 import json
@@ -17,7 +19,7 @@ import capture_sam3_eyes as c
 from eye_capture_angles import inverse_achieved, achieved
 
 ROOT=c.ROOT
-OUT=ROOT/'debug/sam3-eye-v293/final-render'
+OUT=ROOT/'debug/sam3-eye-v294/final-render'
 DOC=c.DOC
 def clipped_measure(captures,row,side):
     q=c.measure(captures,row,side)
@@ -50,7 +52,7 @@ def stage_measure(name,rgba,owned,geometry):
 
 def regression_sheet():
     report=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
-    cache=ROOT/'debug/sam3-eye-v293/far-clip-contract';tiles=[]
+    cache=ROOT/'debug/sam3-eye-v294/far-clip-contract';tiles=[]
     for row in report['poses']:
         for side in row['increasedSides']:
             coords=row['sides'][side]['coordinates720']+row['sides'][side]['r24Coordinates720']
@@ -70,25 +72,41 @@ def regression_sheet():
                 im=im.crop(box).resize(((box[2]-box[0])*4,(box[3]-box[1])*4),Image.Resampling.NEAREST)
                 pair.append(im)
             tiles.append((row['name']+' '+side,pair))
-    width=max(im.width for _,pair in tiles for im in pair)+16
-    sheet=Image.new('RGB',(width*2,sum(pair[0].height+24 for _,pair in tiles)),'#eeeeee');y=0
+    width=max((im.width for _,pair in tiles for im in pair),default=200)+16
+    sheet=Image.new('RGB',(width*2,max(28,sum(pair[0].height+24 for _,pair in tiles))),'#eeeeee');y=0
     for label,pair in tiles:
         for j,im in enumerate(pair):
-            sheet.paste(im,(width*j,y));ImageDraw.Draw(sheet).text((width*j+4,y+im.height+3),label+' | '+['v2.9.3','r24'][j],fill='black')
+            sheet.paste(im,(width*j,y));ImageDraw.Draw(sheet).text((width*j+4,y+im.height+3),label+' | '+['F-B2','r24'][j],fill='black')
         y+=pair[0].height+24
+    if not tiles:ImageDraw.Draw(sheet).text((8,8),'No increases over r24',fill='black')
     sheet.save(DOC/'sam3_eye_R7_outside_regressions_4x.png')
+
+def temporal_tip_sheet():
+    tiles=[]
+    for name,side in [('aux-0213','right'),('aux-0255','right'),('down','right'),('aux-0048','left')]:
+        yy,xx=np.where(c.binary(Image.open(OUT/f'v291-{name}-{side}-env.png').convert('RGBA')))
+        box=(int(xx.min())-12,int(yy.min())-12,int(xx.max())+13,int(yy.max())+13)
+        im=Image.open(OUT/f'v291-{name}-color.png').convert('RGB').crop(box)
+        tiles.append((f'{name}:{side} | temporal tip 2x',im.resize((im.width*2,im.height*2),Image.Resampling.NEAREST)))
+    strip=Image.new('RGB',(sum(im.width+16 for _,im in tiles),max(im.height for _,im in tiles)+28),'#eeeeee');x=0
+    for label,im in tiles:
+        strip.paste(im,(x,0));ImageDraw.Draw(strip).text((x+4,im.height+5),label,fill='black');x+=im.width+16
+    strip.save(DOC/'sam3_eye_FB2_temporal_tips_2x.png')
+    sheet=Image.open(DOC/'sam3_eye_R7_comparison.png').convert('RGB')
+    combined=Image.new('RGB',(max(sheet.width,strip.width),sheet.height+strip.height),'#eeeeee')
+    combined.paste(sheet,(0,0));combined.paste(strip,(0,sheet.height));combined.save(DOC/'sam3_eye_R7_comparison.png')
 
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True);c.OUT=OUT
     r4=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
     junction=json.loads((ROOT/'docs/sam3-eye-junction-v2.json').read_text())
-    j5=dict(runtimeRevision='v2.9.3',status='not rerun in this review',maskSource='face-skin',
-            scope='Fable r25 1.3: J1/J2 geometry; R4 and J3 mask checks',
+    j5=dict(runtimeRevision='v2.9.4 F-B2',status='closed by Fable review; not rerun',maskSource='skin-silhouette',
+            scope='Fable re-review 1: J1/J2/J3 and R4 mask checks',
             evidence=['sam3-eye-far-clip-contract.json','sam3-eye-junction-alpha.json'])
     assert junction['complete'] and junction['passed']['J1'] and junction['passed']['J6']
     assert r4['status']=='R4_RECORDED' and r4['complete'] and r4['R5']['passed']
-    baseline=ROOT/'debug/sam3-eye-v291/final-render'
+    baseline=ROOT/'debug/sam3-eye-v293/final-render'
     for path in baseline.glob('r24-*.png'):shutil.copyfile(path,OUT/path.name)
     neutral={rev:Image.open(ROOT/f'debug/sam3-eye-v293/far-clip-contract/{key}-neutral.png').convert('RGBA') for rev,key in [('r24','r5-a29'),('v291','v291')]}
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(c.Handler,directory=str(ROOT)))
@@ -104,6 +122,15 @@ def main():
                     page.goto(f'http://127.0.0.1:{server.server_port}/{path}/',wait_until='networkidle')
                     page.wait_for_function('window.studio?.ready',timeout=30000)
                     page.evaluate('window.requestAnimationFrame=()=>0');page.evaluate(c.SETUP)
+                    raw=page.evaluate('(a)=>captureEyes(a)',[0,0,False,True])
+                    full=Image.open(io.BytesIO(base64.b64decode(raw['full']))).convert('RGBA')
+                    prior=Image.open(ROOT/'debug/sam3-eye-v293/far-clip-contract/v291-neutral-full.png').convert('RGBA')
+                    diff=np.abs(np.array(full).astype(int)-np.array(prior).astype(int))
+                    unchanged=dict(changedPixels=int(np.any(diff,axis=2).sum()),maxLSB=int(diff.max()),baseline='3acd5fa neutral full canvas')
+                    print('NEUTRAL COMPARISON',json.dumps(unchanged),flush=True)
+                    assert unchanged['changedPixels']==0,'R5 neutral changed'
+                    r4['R5']['F_B2NeutralComparison']=unchanged
+                    neutral['v291']=c.image(raw['color'])
                 for row in c.ROWS:
                     requested=inverse_achieved(c.BOOT['achieved']['c'],row['yaw'],row['pitch'])
                     keys=['color','allEyes','faceMask']+[side+'-'+k for side in ['left','right'] for k in ['env','inner','iris','lash']]
@@ -118,7 +145,7 @@ def main():
                     records[rev][row['name']]={side:clipped_measure(captures,row,side) for side in ['left','right']}
                     colors[rev][row['name']]=captures['color']
                     if rev=='v291':inputs.append(dict(name=row['name'],requested=requested,targetAchieved=[row['yaw'],row['pitch']],actualAchieved=achieved(c.BOOT['achieved']['c'],*requested)))
-                    print('MATCHED v293',rev,row['name'],flush=True)
+                    print('MATCHED F-B2',rev,row['name'],flush=True)
                 if page is not None:
                     sweep=[]
                     for yaw in [15,17,19,21,23,25,27,29,30]:
@@ -137,7 +164,7 @@ def main():
         server.shutdown();server.server_close();thread.join()
     combined=[dict(name=r['name'],side=side,**{rev:records[rev][r['name']][side] for rev in records}) for r in c.ROWS for side in ['left','right']]
     report=c.gates(combined,neutral)
-    report['runtimeRevision']='v2.9.3 F-A far iris disk + F-B face-skin mask, requested 52..67 junction'
+    report['runtimeRevision']='v2.9.4 F-B2 solid skin-silhouette union, requested 52..67 junction'
     report['absoluteForm']='Reference only: SAM vs identify constant offsets; ratio form is authoritative'
     report.update(ratio_gates(combined,c.M,c.AUDIT));report['R5']=r4['R5']
     report.update(model_fidelity(combined,c.M,json.loads((ROOT/'source/viewer/sam3-eye-fit.json').read_text())))
@@ -150,7 +177,7 @@ def main():
     report['Stage4Evidence']='Historical finding only: original up 5px matches r24; hair-on 0px. Previous candidate metrics are not carried forward.'
     report['R4']=dict(status=r4['status'],poses=len(r4['poses']));report['records']=combined;report['poseInputs']=inputs
     (ROOT/'docs/sam3-eye-render-metrics.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-    c.sheets(colors);regression_sheet()
+    c.sheets(colors);temporal_tip_sheet();regression_sheet()
     grid=Image.new('RGB',(1440,1440),'#1e2430')
     for i,name in enumerate(c.ORDER):
         im=Image.open(OUT/f'v291-{name}-full.png').convert('RGB').crop((152,20,872,740)).resize((480,480))

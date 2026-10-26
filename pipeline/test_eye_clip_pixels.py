@@ -5,6 +5,14 @@ from verify_eye_clip_pixels import judge_pose, pixel_evidence
 import verify_eye_clip_pixels as clip
 
 class EyeClipPixelsTest(unittest.TestCase):
+    def test_one_pixel_edge_is_reported_separately_from_real_outside(self):
+        eye=np.full((5,5,4),255,np.uint8)
+        face=np.zeros_like(eye);face[:,:,3]=255;face[:,2:,:3]=255
+        result=clip.edge_evidence({'left':Image.fromarray(eye),'faceMask':Image.fromarray(face)},'left')
+        self.assertEqual(result['edgeBandPixels'],5)
+        self.assertEqual(result['outsideBeyondBandPixels'],5)
+        self.assertEqual(result['outsideBeyondBandCoordinates720'],[[0,y] for y in range(5)])
+
     def test_all_outside_values_are_kept_without_boundary_filtering(self):
         eye=np.array([[[144,144,144,220],[255,255,255,255],[255,255,255,255]]],np.uint8)
         face=np.array([[[125,125,125,255],[0,0,0,255],[200,200,200,255]]],np.uint8)
