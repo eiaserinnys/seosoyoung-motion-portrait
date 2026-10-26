@@ -147,7 +147,7 @@ export class Renderer {
     if(!state.surfaceOnly)for(const mesh of foreground) {
       if(!visible(mesh))continue;
       const alpha=opacity(mesh,p,state)*(state.mode==='dim'&&!state.selectedIds.has(mesh.id)?.18:1);
-      const faceClip=profile&&(mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-'));
+      const faceClip=mesh.id.startsWith('eye-')||(profile&&(mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-')));
       const maskId=mesh.masks[0]||(faceClip?'face-skin':null);
       if(maskId){
         if(currentMask!==maskId){

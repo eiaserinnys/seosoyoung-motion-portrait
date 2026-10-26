@@ -1,0 +1,269 @@
+{
+  "fallbackOnlyDisabled": {
+    "originalMaxLSB": 255,
+    "isolatedMaxLSB": 255,
+    "originalChangedPixels": 109,
+    "isolatedChangedPixels": 22,
+    "isolatedUnmaskedDraws": [
+      {
+        "id": "eye-left-sclera",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-sclera",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-lower-line",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-lower-line",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-upper-lashes",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-upper-lashes",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-brow",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-brow",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      }
+    ],
+    "productionRendererChanged": false
+  },
+  "originalClipBehavior": {
+    "originalMaxLSB": 255,
+    "isolatedMaxLSB": 0,
+    "originalChangedPixels": 109,
+    "isolatedChangedPixels": 0,
+    "isolatedUnmaskedDraws": [
+      {
+        "id": "eye-left-sclera",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-sclera",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-iris",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-iris",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-pupil",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-pupil",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-highlight",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-highlight",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-lower-line",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-lower-line",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-upper-lashes",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-upper-lashes",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-left-brow",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      },
+      {
+        "id": "eye-right-brow",
+        "originalOptions": {
+          "clip": true,
+          "faceClip": true,
+          "tint": false
+        }
+      }
+    ],
+    "productionRendererChanged": false
+  },
+  "neutralGeometry": [
+    {
+      "id": "eye-left-sclera",
+      "maxXYErrorPx": 5.684341886080802e-14,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-right-sclera",
+      "maxXYErrorPx": 1.1368683772161603e-13,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-left-iris",
+      "maxXYErrorPx": 5.684341886080802e-14,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-right-iris",
+      "maxXYErrorPx": 1.1368683772161603e-13,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-left-pupil",
+      "maxXYErrorPx": 5.684341886080802e-14,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-right-pupil",
+      "maxXYErrorPx": 1.1368683772161603e-13,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-left-highlight",
+      "maxXYErrorPx": 5.684341886080802e-14,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-right-highlight",
+      "maxXYErrorPx": 1.1368683772161603e-13,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-left-lower-line",
+      "maxXYErrorPx": 0,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-right-lower-line",
+      "maxXYErrorPx": 1.1368683772161603e-13,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-left-upper-lashes",
+      "maxXYErrorPx": 5.684341886080802e-14,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-right-upper-lashes",
+      "maxXYErrorPx": 1.1368683772161603e-13,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-left-brow",
+      "maxXYErrorPx": 0,
+      "float32XYChanges": 0
+    },
+    {
+      "id": "eye-right-brow",
+      "maxXYErrorPx": 0,
+      "float32XYChanges": 0
+    }
+  ],
+  "note": "Browser-only isolation, not production modifications. Fallback-only leaves 22 changed eye pixels; restoring original clip behavior leaves 0. R4/R5 require an explicit face-mask decision."
+}
