@@ -1,5 +1,11 @@
 {
   "rendererContract": "profile-only alpha fallback; far-eye smoothstep(0,15) alpha face clip",
+  "R4Definition": "a: achieved theta_far>=15, zero both sides; b: separate side counts<=r24 at the same achieved pose",
+  "R5": {
+    "changedPixels": 0,
+    "maxChannelDifferenceLSB": 0,
+    "passed": true
+  },
   "poses": [
     {
       "name": "front",
@@ -16,19 +22,39 @@
         1.287185042771068
       ],
       "controls": {
-        "left": {
-          "profileFaceClip": false,
-          "eyeFaceClip": 0.021417668746752296
+        "r24": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          }
         },
-        "right": {
-          "profileFaceClip": false,
-          "eyeFaceClip": 0
+        "v291": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0.021417668746752296
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          }
         }
       },
+      "thetaFarAchieved": 1.016282113547139,
       "sides": {
         "left": {
           "pixels": 1,
           "coordinates720": [
+            [
+              186,
+              414
+            ]
+          ],
+          "r24Pixels": 1,
+          "r24Coordinates720": [
             [
               186,
               414
@@ -39,16 +65,776 @@
         "right": {
           "pixels": 0,
           "coordinates720": [],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
           "role": "near"
         }
-      }
+      },
+      "criterion": "b",
+      "sidePassed": {
+        "left": true,
+        "right": true
+      },
+      "passed": true
+    },
+    {
+      "name": "left",
+      "targetAchieved": [
+        -36.82991693704355,
+        0.7006801983402771
+      ],
+      "requested": [
+        -47.61660424600042,
+        0.32643746760535375
+      ],
+      "actualAchieved": [
+        -36.82991693704355,
+        0.7006801983402772
+      ],
+      "controls": {
+        "r24": {
+          "left": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          }
+        },
+        "v291": {
+          "left": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          }
+        }
+      },
+      "thetaFarAchieved": 36.82991693704355,
+      "sides": {
+        "left": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
+          "role": "far"
+        },
+        "right": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
+          "role": "near"
+        }
+      },
+      "criterion": "a",
+      "sidePassed": {
+        "left": true,
+        "right": true
+      },
+      "passed": true
+    },
+    {
+      "name": "right",
+      "targetAchieved": [
+        37.673671865607666,
+        2.072845484977355
+      ],
+      "requested": [
+        48.30864868359759,
+        1.9607457790839389
+      ],
+      "actualAchieved": [
+        37.673671865607666,
+        2.072845484977355
+      ],
+      "controls": {
+        "r24": {
+          "left": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          }
+        },
+        "v291": {
+          "left": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          }
+        }
+      },
+      "thetaFarAchieved": 37.673671865607666,
+      "sides": {
+        "left": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
+          "role": "near"
+        },
+        "right": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
+          "role": "far"
+        }
+      },
+      "criterion": "a",
+      "sidePassed": {
+        "left": true,
+        "right": true
+      },
+      "passed": true
+    },
+    {
+      "name": "up",
+      "targetAchieved": [
+        1.3089814586488127,
+        28.83288170662574
+      ],
+      "requested": [
+        1.4487257139741638,
+        33.61648637349459
+      ],
+      "actualAchieved": [
+        1.3089814586488129,
+        28.832881706625745
+      ],
+      "controls": {
+        "r24": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          }
+        },
+        "v291": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0.026182248811881383
+          }
+        }
+      },
+      "thetaFarAchieved": 1.3089814586488127,
+      "sides": {
+        "left": {
+          "pixels": 10,
+          "coordinates720": [
+            [
+              190,
+              354
+            ],
+            [
+              191,
+              354
+            ],
+            [
+              192,
+              354
+            ],
+            [
+              290,
+              363
+            ],
+            [
+              291,
+              363
+            ],
+            [
+              292,
+              363
+            ],
+            [
+              293,
+              363
+            ],
+            [
+              294,
+              363
+            ],
+            [
+              295,
+              363
+            ],
+            [
+              296,
+              363
+            ]
+          ],
+          "r24Pixels": 4,
+          "r24Coordinates720": [
+            [
+              290,
+              363
+            ],
+            [
+              291,
+              363
+            ],
+            [
+              292,
+              363
+            ],
+            [
+              293,
+              363
+            ]
+          ],
+          "role": "near"
+        },
+        "right": {
+          "pixels": 1,
+          "coordinates720": [
+            [
+              516,
+              350
+            ]
+          ],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
+          "role": "far"
+        }
+      },
+      "criterion": "b",
+      "sidePassed": {
+        "left": false,
+        "right": false
+      },
+      "passed": false
+    },
+    {
+      "name": "down",
+      "targetAchieved": [
+        14.253565453750118,
+        -25.345294313197353
+      ],
+      "requested": [
+        21.97680704042867,
+        -31.638613075805154
+      ],
+      "actualAchieved": [
+        14.253565453750118,
+        -25.345294313197353
+      ],
+      "controls": {
+        "r24": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          }
+        },
+        "v291": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
+          }
+        }
+      },
+      "thetaFarAchieved": 14.253565453750118,
+      "sides": {
+        "left": {
+          "pixels": 13,
+          "coordinates720": [
+            [
+              232,
+              449
+            ],
+            [
+              233,
+              449
+            ],
+            [
+              224,
+              450
+            ],
+            [
+              225,
+              450
+            ],
+            [
+              226,
+              450
+            ],
+            [
+              227,
+              450
+            ],
+            [
+              228,
+              450
+            ],
+            [
+              229,
+              450
+            ],
+            [
+              230,
+              450
+            ],
+            [
+              231,
+              450
+            ],
+            [
+              232,
+              450
+            ],
+            [
+              233,
+              450
+            ],
+            [
+              234,
+              450
+            ]
+          ],
+          "r24Pixels": 7,
+          "r24Coordinates720": [
+            [
+              229,
+              451
+            ],
+            [
+              230,
+              451
+            ],
+            [
+              231,
+              451
+            ],
+            [
+              232,
+              451
+            ],
+            [
+              233,
+              451
+            ],
+            [
+              234,
+              451
+            ],
+            [
+              235,
+              451
+            ]
+          ],
+          "role": "near"
+        },
+        "right": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 2,
+          "r24Coordinates720": [
+            [
+              541,
+              377
+            ],
+            [
+              531,
+              420
+            ]
+          ],
+          "role": "far"
+        }
+      },
+      "criterion": "b",
+      "sidePassed": {
+        "left": false,
+        "right": true
+      },
+      "passed": false
+    },
+    {
+      "name": "up-left",
+      "targetAchieved": [
+        -41.167166482660775,
+        27.996669331747192
+      ],
+      "requested": [
+        -45.83872508935118,
+        32.22091859371879
+      ],
+      "actualAchieved": [
+        -41.167166482660775,
+        27.99666933174719
+      ],
+      "controls": {
+        "r24": {
+          "left": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          }
+        },
+        "v291": {
+          "left": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": true,
+            "eyeFaceClip": 0
+          }
+        }
+      },
+      "thetaFarAchieved": 41.167166482660775,
+      "sides": {
+        "left": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
+          "role": "far"
+        },
+        "right": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 0,
+          "r24Coordinates720": [],
+          "role": "near"
+        }
+      },
+      "criterion": "a",
+      "sidePassed": {
+        "left": true,
+        "right": true
+      },
+      "passed": true
+    },
+    {
+      "name": "up-right",
+      "targetAchieved": [
+        36.376549246237346,
+        20.861991527889202
+      ],
+      "requested": [
+        41.97782361066015,
+        24.15351813281776
+      ],
+      "actualAchieved": [
+        36.376549246237346,
+        20.861991527889202
+      ],
+      "controls": {
+        "r24": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          }
+        },
+        "v291": {
+          "left": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 0
+          },
+          "right": {
+            "profileFaceClip": false,
+            "eyeFaceClip": 1
+          }
+        }
+      },
+      "thetaFarAchieved": 36.376549246237346,
+      "sides": {
+        "left": {
+          "pixels": 3,
+          "coordinates720": [
+            [
+              261,
+              374
+            ],
+            [
+              262,
+              374
+            ],
+            [
+              364,
+              388
+            ]
+          ],
+          "r24Pixels": 1,
+          "r24Coordinates720": [
+            [
+              364,
+              388
+            ]
+          ],
+          "role": "near"
+        },
+        "right": {
+          "pixels": 0,
+          "coordinates720": [],
+          "r24Pixels": 56,
+          "r24Coordinates720": [
+            [
+              532,
+              305
+            ],
+            [
+              532,
+              306
+            ],
+            [
+              533,
+              306
+            ],
+            [
+              534,
+              306
+            ],
+            [
+              533,
+              307
+            ],
+            [
+              534,
+              307
+            ],
+            [
+              535,
+              307
+            ],
+            [
+              533,
+              308
+            ],
+            [
+              534,
+              308
+            ],
+            [
+              535,
+              308
+            ],
+            [
+              536,
+              308
+            ],
+            [
+              537,
+              308
+            ],
+            [
+              533,
+              309
+            ],
+            [
+              534,
+              309
+            ],
+            [
+              535,
+              309
+            ],
+            [
+              536,
+              309
+            ],
+            [
+              537,
+              309
+            ],
+            [
+              538,
+              309
+            ],
+            [
+              534,
+              310
+            ],
+            [
+              535,
+              310
+            ],
+            [
+              536,
+              310
+            ],
+            [
+              537,
+              310
+            ],
+            [
+              538,
+              310
+            ],
+            [
+              539,
+              310
+            ],
+            [
+              536,
+              311
+            ],
+            [
+              537,
+              311
+            ],
+            [
+              538,
+              311
+            ],
+            [
+              539,
+              311
+            ],
+            [
+              540,
+              311
+            ],
+            [
+              541,
+              311
+            ],
+            [
+              538,
+              312
+            ],
+            [
+              539,
+              312
+            ],
+            [
+              540,
+              312
+            ],
+            [
+              541,
+              312
+            ],
+            [
+              542,
+              312
+            ],
+            [
+              540,
+              313
+            ],
+            [
+              541,
+              313
+            ],
+            [
+              542,
+              313
+            ],
+            [
+              543,
+              313
+            ],
+            [
+              542,
+              314
+            ],
+            [
+              543,
+              314
+            ],
+            [
+              544,
+              314
+            ],
+            [
+              543,
+              315
+            ],
+            [
+              544,
+              315
+            ],
+            [
+              545,
+              315
+            ],
+            [
+              545,
+              316
+            ],
+            [
+              546,
+              316
+            ],
+            [
+              546,
+              317
+            ],
+            [
+              547,
+              317
+            ],
+            [
+              547,
+              318
+            ],
+            [
+              548,
+              318
+            ],
+            [
+              548,
+              319
+            ],
+            [
+              549,
+              319
+            ],
+            [
+              550,
+              320
+            ],
+            [
+              551,
+              321
+            ],
+            [
+              552,
+              322
+            ]
+          ],
+          "role": "far"
+        }
+      },
+      "criterion": "a",
+      "sidePassed": {
+        "left": false,
+        "right": true
+      },
+      "passed": false
     }
   ],
-  "R5": {
-    "changedPixels": 0,
-    "maxChannelDifferenceLSB": 0,
-    "passed": true
-  },
-  "status": "STOP_R4_PROTRUSION",
-  "failureOverlay": "docs/captures/sam3_eye_clip_failure_front.png"
+  "status": "STOP_R4_A_PROTRUSION",
+  "failureOverlay": "docs/captures/sam3_eye_clip_failure_up-right.png"
 }

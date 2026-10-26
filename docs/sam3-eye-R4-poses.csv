@@ -1,0 +1,8 @@
+pose,criterion,theta_far_achieved,left_role,left_v291,left_r24,right_role,right_v291,right_r24,passed
+front,b,1.016282113547139,far,1,1,near,0,0,True
+left,a,36.82991693704355,far,0,0,near,0,0,True
+right,a,37.673671865607666,near,0,0,far,0,0,True
+up,b,1.3089814586488127,near,10,4,far,1,0,False
+down,b,14.253565453750118,near,13,7,far,0,2,False
+up-left,a,41.167166482660775,far,0,0,near,0,0,True
+up-right,a,36.376549246237346,near,3,1,far,0,56,False
