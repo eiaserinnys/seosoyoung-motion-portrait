@@ -1,13 +1,11 @@
-"""R5/R4 evidence; only a fully clipped far eye is a protrusion stop gate."""
+"""Collect all R4 outside pixels at the unchanged binary threshold, without stops."""
 import functools
 import http.server
 import json
 import threading
 import csv
-import base64
-import io
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 from playwright.sync_api import sync_playwright
 from capture_sam3_eyes import ROOT, ROWS, BOOT, SETUP, Handler, image, binary
 from eye_capture_angles import inverse_achieved, achieved
@@ -39,6 +37,40 @@ def pixel_evidence(captures,side):
     yy,xx=np.where(exposed)
     return dict(pixels=len(xx),coordinates720=np.column_stack([xx,yy]).tolist())
 
+def outside_samples(captures,side):
+    return [dict(x=x,y=y,mask_value=min(captures['faceMask'].getpixel((x,y))[:3]),
+                 eye_value=min(captures[side].getpixel((x,y))[:3]),eye_alpha=captures[side].getpixel((x,y))[3])
+            for x,y in pixel_evidence(captures,side)['coordinates720']]
+
+def export_violations(report):
+    directory=DOC/'sam3_eye_R4_violations';directory.mkdir(parents=True,exist_ok=True)
+    tiles=[];table=[]
+    for row in report['poses']:
+        mask=Image.open(OUT/f"v291-{row['name']}-faceMask.png").convert('RGBA')
+        color=Image.open(OUT/f"v291-{row['name']}-color.png").convert('RGB')
+        for side in ['left','right']:
+            eye=Image.open(OUT/f"v291-{row['name']}-{side}.png").convert('RGBA')
+            samples=outside_samples({'faceMask':mask,side:eye},side)
+            row['sides'][side]['samples']=samples
+            if not samples:continue
+            yy,xx=np.where(binary(eye));box=(int(xx.min())-8,int(yy.min())-8,int(xx.max())+9,int(yy.max())+9)
+            marked=color.copy()
+            for point in samples:marked.putpixel((point['x'],point['y']),(255,0,0))
+            pair=[im.crop(box).resize(((box[2]-box[0])*4,(box[3]-box[1])*4),Image.Resampling.NEAREST) for im in [color,marked]]
+            tile=Image.new('RGB',(pair[0].width*2,pair[0].height+28),'#eeeeee')
+            for j,im in enumerate(pair):tile.paste(im,(j*im.width,0))
+            ImageDraw.Draw(tile).text((8,pair[0].height+5),f"{row['name']} {side} | raw / marked | {len(samples)} pixels",fill='black')
+            dest=directory/f"{row['name']}-{side}.png";tile.save(dest);tiles.append(tile)
+            crop=str(dest.relative_to(ROOT));row['sides'][side]['crop4x']=crop
+            table.extend([dict(pose=row['name'],eye=side,**point,crop4x=crop) for point in samples])
+    with (ROOT/'docs/sam3-eye-R4-violations.csv').open('w',newline='') as stream:
+        writer=csv.DictWriter(stream,fieldnames=['pose','eye','x','y','mask_value','eye_value','eye_alpha','crop4x'],lineterminator='\n')
+        writer.writeheader();writer.writerows(table)
+    sheet=Image.new('RGB',(max(im.width for im in tiles),sum(im.height for im in tiles)),'#eeeeee');y=0
+    for im in tiles:sheet.paste(im,(0,y));y+=im.height
+    sheet.save(DOC/'sam3_eye_R4_violations_4x.png')
+    report.update(recordedPixelCount=len(table),affectedEyes=len(tiles),violationTable='docs/sam3-eye-R4-violations.csv',violationSheet='docs/captures/sam3_eye_R4_violations_4x.png')
+
 def judge_pose(yaw,counts,baseline):
     criterion='a' if abs(yaw)>=15 else 'b'
     far='left' if yaw<0 else 'right'
@@ -53,16 +85,17 @@ def save_report(report):
                 row['controls'][rev]=row['controls'][rev][rev]
     (ROOT/'docs/sam3-eye-far-clip-contract.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     with (ROOT/'docs/sam3-eye-R4-poses.csv').open('w',newline='') as stream:
-        writer=csv.writer(stream,lineterminator='\n');writer.writerow(['pose','criterion','theta_far_achieved','left_role','left_v291','left_r24','right_role','right_v291','right_r24','passed'])
+        writer=csv.writer(stream,lineterminator='\n');writer.writerow(['pose','theta_far_achieved','left_role','left_v291','left_r24','right_role','right_v291','right_r24'])
         for r in report['poses']:
             left=r['sides']['left'];right=r['sides']['right']
-            writer.writerow([r['name'],r['criterion'],r['thetaFarAchieved'],left['role'],left['pixels'],left['r24Pixels'],right['role'],right['pixels'],right['r24Pixels'],r['passed']])
+            writer.writerow([r['name'],r['thetaFarAchieved'],left['role'],left['pixels'],left['r24Pixels'],right['role'],right['pixels'],right['r24Pixels']])
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     previous=json.loads((ROOT/'docs/sam3-eye-far-clip-contract.json').read_text())
     report=dict(rendererContract='v2: eye soft clip far0..15/near52..67; fixed authored masks and face-skin eye silhouette; nose/mouth retain profile fallback',
-                R4Definition='a: achieved theta_far>=15, zero far side only; all other counts report-only against r24',
+                R4Definition='Record every outside pixel on both eyes in all 48 poses at binary127. No filtering or automatic disposition.',
+                ownerDecision=dict(pose='left',eye='left',coordinate720=[171,323],text='R4 1px, 경계 걸침, 육안 비가시',review='Fable 재검수 대기'),
                 R5=previous['R5'],maskBasis='face-skin for both revisions; unchanged face geometry, original r24 eye rendering',poses=[])
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT)))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
@@ -75,20 +108,8 @@ def main():
                 page.goto(f'http://127.0.0.1:{server.server_port}/{path}/',wait_until='networkidle')
                 page.wait_for_function('window.studio?.ready',timeout=30000);page.evaluate('window.requestAnimationFrame=()=>0');page.evaluate(SETUP);page.evaluate(SIDE_SETUP)
                 pages[rev]=page
-            baseline_page=browser.new_page(viewport=dict(width=1440,height=1000),device_scale_factor=1)
-            baseline_page.goto(f'http://127.0.0.1:{server.server_port}/debug/r5-a29/bundle/',wait_until='networkidle')
-            baseline_page.wait_for_function('window.studio?.ready',timeout=30000);baseline_page.evaluate('window.requestAnimationFrame=()=>0');baseline_page.evaluate(SETUP)
-            neutral={rev:page.evaluate('(a)=>captureEyes(a)',[0,0,False,True]) for rev,page in [('r5-a29',baseline_page),('v291',pages['v291'])]}
-            neutral_full={rev:Image.open(io.BytesIO(base64.b64decode(raw['full']))).convert('RGBA') for rev,raw in neutral.items()}
-            for rev,raw in neutral.items():
-                image(raw['color']).save(OUT/f'{rev}-neutral.png')
-                neutral_full[rev].save(OUT/f'{rev}-neutral-full.png')
-            diff=np.abs(np.array(neutral_full['v291']).astype(int)-np.array(neutral_full['r5-a29']).astype(int))
-            report['R5']=dict(baseline='a29bb358231566d0c90b1b058bc8a153cfc57410',scope='full canvas, hair on, neutral',canvasSize=list(neutral_full['v291'].size),changedPixels=int(np.any(diff,axis=2).sum()),maxChannelDifferenceLSB=int(diff.max()),passed=not np.any(diff))
-            baseline_page.close()
-            print('R5',json.dumps(report['R5']),flush=True)
-            if not report['R5']['passed']:
-                report['status']='STOP_R5';save_report(report);browser.close();return
+            assert report['R5']['passed']
+            print('REUSED R5',json.dumps(report['R5']),flush=True)
             # Reference inputs are inverted before passing them to either viewer.
             poses=[dict(name=r['name'],targetAchieved=[r['yaw'],r['pitch']],requested=inverse_achieved(BOOT['achieved']['c'],r['yaw'],r['pitch'])) for r in ROWS]
             poses += [dict(name=f'sweep-{yaw}-{pitch}',requested=[yaw,pitch],targetAchieved=achieved(BOOT['achieved']['c'],yaw,pitch)) for yaw in [-45,-40,-35,-30,30,35,40,45] for pitch in [-30,0,30]]
@@ -125,24 +146,16 @@ def main():
                               'r24Pixels':evidence['r24'][side]['pixels'],
                               'r24Coordinates720':evidence['r24'][side]['coordinates720'],
                               'role':'far' if pose['requested'][0]*(1 if side=='left' else -1)<0 else 'near'} for side in ['left','right']}
-                row.update(judge_pose(pose['targetAchieved'][0],{s:evidence['v291'][s]['pixels'] for s in evidence['v291']},{s:evidence['r24'][s]['pixels'] for s in evidence['r24']}))
+                row['increasedSides']=[s for s in ['left','right'] if evidence['v291'][s]['pixels']>evidence['r24'][s]['pixels']]
                 report['poses'].append(row)
-                print('R4',pose['name'],row['criterion'],json.dumps({side:(q['pixels'],q['r24Pixels']) for side,q in row['sides'].items()}),flush=True)
+                print('R4',pose['name'],json.dumps({side:(q['pixels'],q['r24Pixels']) for side,q in row['sides'].items()}),flush=True)
                 save_report(report)
-                if row['criterion']=='a' and not row['passed']:
-                    report['status']='STOP_R4_A_PROTRUSION'
-                    overlay=np.array(captures['v291']['color']).copy()
-                    for side in ['left','right']:
-                        for x,y in row['sides'][side]['coordinates720']:overlay[y,x]=[255,0,0,255]
-                    dest=DOC/f"sam3_eye_clip_failure_{pose['name']}.png"
-                    Image.fromarray(overlay).save(dest)
-                    report['failureOverlay']=str(dest.relative_to(ROOT))
-                    break
-            else:
-                report['status']='R4_PASS'
+            report['status']='R4_RECORDED'
+            report['complete']=len(report['poses'])==48
             browser.close()
     finally:
         server.shutdown();server.server_close();thread.join()
+    export_violations(report)
     save_report(report)
     print(json.dumps(dict(status=report['status'],poses=len(report['poses']),last=report['poses'][-1]),ensure_ascii=False,indent=2))
 

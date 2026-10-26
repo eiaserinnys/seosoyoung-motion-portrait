@@ -1,7 +1,7 @@
 {
-  "runtimeRevision": "v2.9.3 F-A iris law + F-B face-skin source",
-  "complete": false,
-  "status": "STOP_R4_A_PROTRUSION",
+  "runtimeRevision": "v2.9.3 F-A far iris disk + F-B face-skin mask, requested 52..67 junction",
+  "verificationComplete": true,
+  "review": "owner/Fable review pending; R4 observations are unfiltered and have no automatic disposition",
   "baseMain": "a29bb358231566d0c90b1b058bc8a153cfc57410",
   "r24Comparison": "1458c77a77af6016dda236aaad06c00ce1c8cbd4",
   "R1": {
@@ -259,52 +259,23 @@
     "inputSha": "853c130f834b74c2fa9026974476ea0c537bde60d91161004b1920e616f60a81"
   },
   "R4": {
-    "expectedPoses": 48,
-    "measuredPoses": 2,
-    "pose": "left",
-    "requested": [
-      -47.61660424600042,
-      0.32643746760535375
-    ],
-    "achieved": [
-      -36.82991693704355,
-      0.7006801983402772
-    ],
-    "farSide": "left",
-    "farOutsidePixels": 1,
-    "nearOutsidePixels": 207,
-    "r24FarOutsidePixels": 0,
-    "samples": [
-      {
-        "coordinate720": [
-          171,
-          323
-        ],
-        "coordinateArtwork": [
-          323,
-          343
-        ],
-        "faceMaskRGBA": [
-          125,
-          125,
-          125,
-          255
-        ],
-        "eyeIdentifyRGBA": [
-          144,
-          144,
-          144,
-          220
-        ],
-        "colorRGBA": [
-          163,
-          133,
-          125,
-          220
-        ]
-      }
-    ],
-    "maskBasis": "face-skin for both revisions; unchanged face geometry, original r24 eye rendering"
+    "status": "R4_RECORDED",
+    "poses": 48,
+    "recordedPixelCount": 6881,
+    "affectedEyes": 61,
+    "ownerDecision": {
+      "pose": "left",
+      "eye": "left",
+      "coordinate720": [
+        171,
+        323
+      ],
+      "text": "R4 1px, 경계 걸침, 육안 비가시",
+      "review": "Fable 재검수 대기"
+    },
+    "violationTable": "docs/sam3-eye-R4-violations.csv",
+    "violationSheet": "docs/captures/sam3_eye_R4_violations_4x.png",
+    "disposition": "raw observations; owner/Fable review pending"
   },
   "R5": {
     "baseline": "a29bb358231566d0c90b1b058bc8a153cfc57410",
@@ -317,6 +288,207 @@
     "maxChannelDifferenceLSB": 0,
     "passed": true
   },
+  "R2Ratio": {
+    "dTemp": {
+      "r24": 10.23817902249429,
+      "v291": 5.422985587054204,
+      "limit": 3.759995664880529,
+      "passed": false,
+      "betterThanR24": true
+    },
+    "dNas": {
+      "r24": 6.144262069414464,
+      "v291": 3.9189336882019274,
+      "limit": 3.0257798801506213,
+      "passed": false,
+      "betterThanR24": true
+    },
+    "h": {
+      "r24": 5.339688101439596,
+      "v291": 2.9760683347839403,
+      "limit": 3.7260039699061562,
+      "passed": true,
+      "betterThanR24": true
+    },
+    "deltaY": {
+      "r24": 2.169371725528979,
+      "v291": 1.9662482305064863,
+      "limit": 2.0,
+      "passed": true,
+      "betterThanR24": true
+    },
+    "a": {
+      "r24": 4.69542398477026,
+      "v291": 2.685408603164905,
+      "limit": 2.0,
+      "passed": false,
+      "betterThanR24": true
+    }
+  },
+  "R3": {
+    "limitPx": 4.538669820225932,
+    "excluded": [
+      "aux-0213:left",
+      "up-left:right",
+      "up-right:left"
+    ],
+    "v291": {
+      "maxEyeErrorPx": 7.709424500279318,
+      "maxPairedErrorPx": 9.875779532274391,
+      "allEyesMaxErrorPx": 12.450585922963072,
+      "passed": false
+    },
+    "r24": {
+      "maxEyeErrorPx": 14.539872507706207,
+      "maxPairedErrorPx": 19.11562304864816,
+      "allEyesMaxErrorPx": 14.539872507706207,
+      "passed": false
+    }
+  },
+  "FAIris": [
+    {
+      "name": "right",
+      "side": "right",
+      "theta": 37.673671865607666,
+      "modelIrisDiameter": 40.09828156893403,
+      "modelOpeningWidth": 49.890444620391335,
+      "renderIrisChord": 35.419902680305995,
+      "renderOpeningWidth": 51.752251670252804
+    },
+    {
+      "name": "up-left",
+      "side": "left",
+      "theta": 41.167166482660775,
+      "modelIrisDiameter": 38.808781053689415,
+      "modelOpeningWidth": 41.93550222763828,
+      "renderIrisChord": 35.94057277748374,
+      "renderOpeningWidth": 50.43972731261101
+    },
+    {
+      "name": "up-right",
+      "side": "right",
+      "theta": 36.376549246237346,
+      "modelIrisDiameter": 40.78889817411761,
+      "modelOpeningWidth": 51.033648333817034,
+      "renderIrisChord": 35.86131751787218,
+      "renderOpeningWidth": 53.192913282968675
+    },
+    {
+      "name": "down-left",
+      "side": "left",
+      "theta": 32.93852359358867,
+      "modelIrisDiameter": 43.26617705658505,
+      "modelOpeningWidth": 55.517561043389506,
+      "renderIrisChord": 41.89036482264888,
+      "renderOpeningWidth": 62.591207763871296
+    }
+  ],
+  "FAVisual": "up-left:left, down-left:left, right:right, up-right:right: both-side sclera visible in actual 4x comparison crops; Fable review pending",
+  "FBTemporal": [
+    {
+      "name": "down",
+      "side": "right",
+      "theta": 14.253565453750118,
+      "renderDTemp": 57.70407590864431,
+      "modelDTemp": 62.10603587092977,
+      "rawErrorPx": -4.40195996228546,
+      "normalizedErrorPx": -12.721279788461905,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": false
+    },
+    {
+      "name": "down-right",
+      "side": "right",
+      "theta": 23.506140424439433,
+      "renderDTemp": 46.809375632012234,
+      "modelDTemp": 44.11167863342955,
+      "rawErrorPx": 2.6976969985826855,
+      "normalizedErrorPx": -3.701010890914912,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": false
+    },
+    {
+      "name": "aux-0017",
+      "side": "left",
+      "theta": 16.63452860375611,
+      "renderDTemp": 56.42982277552494,
+      "modelDTemp": 54.27475528041192,
+      "rawErrorPx": 2.1550674951130233,
+      "normalizedErrorPx": -9.06201157910254,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": false
+    },
+    {
+      "name": "aux-0213",
+      "side": "right",
+      "theta": 26.74801146289593,
+      "renderDTemp": 40.86482746237181,
+      "modelDTemp": 38.78803652057843,
+      "rawErrorPx": 2.0767909417933765,
+      "normalizedErrorPx": -4.1898614715819,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": false
+    },
+    {
+      "name": "aux-0048",
+      "side": "left",
+      "theta": 23.657377722415653,
+      "renderDTemp": 46.5076251184947,
+      "modelDTemp": 46.045343898939244,
+      "rawErrorPx": 0.4622812195554573,
+      "normalizedErrorPx": -10.838594603026875,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": true
+    },
+    {
+      "name": "aux-0255",
+      "side": "right",
+      "theta": 25.020571693572187,
+      "renderDTemp": 43.29260906898537,
+      "modelDTemp": 41.53944640250815,
+      "rawErrorPx": 1.7531626664772233,
+      "normalizedErrorPx": -4.924346225166478,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": true
+    },
+    {
+      "name": "aux-0342",
+      "side": "left",
+      "theta": 18.11371569838885,
+      "renderDTemp": 53.830252330728,
+      "modelDTemp": 52.42720368301542,
+      "rawErrorPx": 1.4030486477125805,
+      "normalizedErrorPx": -9.830884108721268,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": true
+    },
+    {
+      "name": "aux-0074",
+      "side": "right",
+      "theta": 17.847254962686957,
+      "renderDTemp": 59.00891757133979,
+      "modelDTemp": 55.2145202286942,
+      "rawErrorPx": 3.7943973426455955,
+      "normalizedErrorPx": -3.21877356354655,
+      "passed": false,
+      "scope": "outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review",
+      "directWithin2Px": false
+    }
+  ],
+  "FBComparison": "Report both direct render-model width and Fable per_eye2 front-normalized log difference; no new fit or cutoff.",
+  "FableAcceptedExcess": {
+    "dNas": "한계 초과이나 렌더에서 결함이 아님",
+    "R3": "한계 초과이나 렌더에서 결함이 아님",
+    "deltaY": "PASS"
+  },
+  "FableAcceptanceReason": "r25-impl-review-fable.md 1.2: dNas/R3 residual is reference nasal-line extension and beta omission plus approved nasal outlier, not iris/lid misalignment; deltaY excess is subpixel. Limits unchanged.",
   "J5": {
     "runtimeRevision": "v2.9.3",
     "status": "not rerun in this review",
@@ -328,23 +500,38 @@
     ]
   },
   "Stage4": {
-    "status": "excluded by Fable r25 1.3; no old candidate metrics carried forward"
+    "status": "excluded by Fable r25 1.3; not remeasured in this review"
   },
-  "R2Ratio": {
-    "status": "not measured: F-C stopped at mandatory R4 gate"
-  },
-  "R3Ratio": {
-    "status": "not measured: F-C stopped at mandatory R4 gate"
-  },
-  "FAIris": {
-    "status": "not visually verified in four required poses"
-  },
-  "FBTemporal": {
-    "status": "eight poses not measured"
-  },
-  "R7": {
-    "status": "not regenerated: F-C stopped; old images removed from current outputs"
-  },
-  "tests": "19 previously passed on unchanged relevant code; no test reruns at this stop",
-  "failureOverlay": "docs/captures/sam3_eye_clip_failure_left.png"
+  "reused": "unchanged geometry J0/J6/J7; completed J1/J2/J3/R5 kept; no SAM calls or refitting",
+  "tests": "19 prior valid tests plus 1 new unfiltered pixel-recording test = 20 passed",
+  "R7PoseNames": [
+    "up-left",
+    "up",
+    "up-right",
+    "left",
+    "front",
+    "right",
+    "down-left",
+    "down",
+    "down-right",
+    "aux-0213",
+    "aux-0255",
+    "aux-0074",
+    "aux-0102",
+    "aux-0276",
+    "aux-0277",
+    "aux-0043",
+    "aux-0241"
+  ],
+  "captureSha256": {
+    "sam3_eye_R7_comparison.png": "220847176cd29fe1b1ba8ce4391e0bc8f56547298f55683cec519c814eb64bcc",
+    "sam3_eye_9dir_grid.png": "fc9034b5c19cfd827d259884e945e289dfc67f0d64fc99dba9c1bf411904b14f",
+    "sam3_eye_R7_temporal_sweep.png": "4b4ef4171dc784b3068852f481d061d6397b04429bb987742cdc365fe11270ad",
+    "sam3_eye_R7_outside_regressions_4x.png": "26230cf25e08d2a64b8544271a3f7980c649693f40e867b2a5bc8cc7f54fef2b",
+    "sam3_eye_viewer_wide.png": "7b440694794f14b3dcca7911f3e1388fbcb9098e95ff70ce4fc5be597f69c717",
+    "sam3_eye_viewer_narrow.png": "72d3a8712d8d5a4d285b1d7bac7353ac3f47fdfe852b66ac11d03042ea84bd4b",
+    "sam3_eye_R4_violations_4x.png": "296bae90c1e2960741ca81f97b6366f7addc95ccc2b1ccc314a3851fcc4ff401",
+    "sam3_eye_FA_four_eyes_4x.png": "60024cd2c1169174b8d60d7968323359e1cf695fead8b6414d1c8dc2948b3371",
+    "sam3_eye_FB_eight_eyes_4x.png": "3fff6c4724606fe76a692497b5a780cd377ac8fddb4ea8e9b44861d99803d3eb"
+  }
 }

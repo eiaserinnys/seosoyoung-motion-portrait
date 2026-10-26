@@ -1,4 +1,4 @@
-"""Final matched-angle evidence; only R1/R4-far/R5 are stop gates.
+"""Final matched-angle evidence after all 48 R4 poses have been recorded.
 
 Prior captures have a different renderer or input-angle contract. This run has
 its own directory and resumes only complete captures from this final contract.
@@ -87,7 +87,7 @@ def main():
             scope='Fable r25 1.3: J1/J2 geometry; R4 and J3 mask checks',
             evidence=['sam3-eye-far-clip-contract.json','sam3-eye-junction-alpha.json'])
     assert junction['complete'] and junction['passed']['J1'] and junction['passed']['J6']
-    assert r4['status']=='R4_PASS' and r4['R5']['passed']
+    assert r4['status']=='R4_RECORDED' and r4['complete'] and r4['R5']['passed']
     baseline=ROOT/'debug/sam3-eye-v291/final-render'
     for path in baseline.glob('r24-*.png'):shutil.copyfile(path,OUT/path.name)
     neutral={rev:Image.open(ROOT/f'debug/sam3-eye-v293/far-clip-contract/{key}-neutral.png').convert('RGBA') for rev,key in [('r24','r5-a29'),('v291','v291')]}

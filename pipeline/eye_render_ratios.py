@@ -19,7 +19,7 @@ def model_fidelity(records,measurement,fit):
             error=float(np.log((render['dTemp']/front[side]['dTemp'])/rT)*measurement['rest'][side]['dTemp'])
             temporal.append(dict(name=name,side=side,theta=float(theta),renderDTemp=render['dTemp'],modelDTemp=b['rest']['dTemp']*rT,
                 rawErrorPx=render['dTemp']-b['rest']['dTemp']*rT,normalizedErrorPx=error,passed=abs(error)<=2,
-                scope='eye clip' if abs(error)<=2 else 'remaining face silhouette limitation; outside this eye PR per Fable 1.3'))
+                scope='eye clip' if abs(error)<=2 else 'outside this eye PR only if Fable confirms remaining silhouette clipping; otherwise measurement review'))
         if iris_poses.get(name)==side:
             iris.append(dict(name=name,side=side,theta=float(theta),modelIrisDiameter=2*b['rest']['a']*float(np.cos(np.deg2rad(max(theta,0)))),
                 modelOpeningWidth=b['rest']['dTemp']*rT+b['rest']['dNas']*rN,renderIrisChord=2*render['a'],renderOpeningWidth=render['dTemp']+render['dNas']))
