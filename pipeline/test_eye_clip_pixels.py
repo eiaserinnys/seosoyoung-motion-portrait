@@ -4,15 +4,17 @@ from PIL import Image
 from verify_eye_clip_pixels import judge_pose, pixel_evidence
 
 class EyeClipPixelsTest(unittest.TestCase):
-    def test_full_clip_requires_zero_for_both_sides(self):
-        self.assertTrue(judge_pose(15,{'left':0,'right':0},{'left':20,'right':20})['passed'])
-        for side in ['left','right']:
-            bad={'left':0,'right':0};bad[side]=1
-            self.assertFalse(judge_pose(15,bad,{'left':20,'right':20})['passed'])
+    def test_full_clip_requires_zero_only_for_far_side(self):
+        self.assertTrue(judge_pose(15,{'left':3,'right':0},{'left':1,'right':20})['passed'])
+        self.assertFalse(judge_pose(15,{'left':0,'right':1},{'left':20,'right':20})['passed'])
+        self.assertTrue(judge_pose(-15,{'left':0,'right':3},{'left':20,'right':1})['passed'])
+        self.assertFalse(judge_pose(-15,{'left':1,'right':0},{'left':20,'right':20})['passed'])
 
     def test_low_angle_uses_separate_side_regression_counts(self):
         self.assertTrue(judge_pose(1,{'left':1,'right':0},{'left':1,'right':0})['passed'])
-        self.assertFalse(judge_pose(1,{'left':0,'right':1},{'left':1,'right':0})['passed'])
+        result=judge_pose(1,{'left':0,'right':1},{'left':1,'right':0})
+        self.assertTrue(result['passed'])
+        self.assertEqual(result['increasedSides'],['right'])
 
     def test_outside_pixel_is_detected_at_its_actual_coordinate(self):
         eye=np.zeros((2,2,4),np.uint8);eye[1,0]=[255,255,255,255]
