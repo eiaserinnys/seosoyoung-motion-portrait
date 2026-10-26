@@ -14721,7 +14721,7 @@
       ]
     }
   ],
-  "status": "R4_RECORDED",
+  "status": "historical only: R4 now uses independent visible portrait alpha, not the clip mask",
   "complete": true,
   "requiredFarEyes": [
     {
@@ -15002,5 +15002,8 @@
   "recordedPixelCount": 234,
   "affectedEyes": 37,
   "violationTable": "docs/sam3-eye-R4-violations.csv",
-  "violationSheet": "docs/captures/sam3_eye_R4_violations_4x.png"
+  "violationSheet": "docs/captures/sam3_eye_R4_violations_4x.png",
+  "evidenceCommit": "340b286",
+  "currentReport": "sam3-eye-visible-outline.json",
+  "currentTable": "sam3-eye-R4-poses.csv"
 }

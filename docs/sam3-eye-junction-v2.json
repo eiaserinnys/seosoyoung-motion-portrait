@@ -1,6 +1,6 @@
 {
   "complete": true,
-  "inputSha": "71b239f3c7955cdf06a08c1b8fd41bc75ca5adcc983a5eba5aee1e5f0901addc",
+  "inputSha": "8c06ebd397a7943c6828a7c04ce39d3c5a3b5d6b2a5d3cc0bce5f90a9a0fc189",
   "J0": {
     "V_own": 7.240357154381933,
     "own": {
@@ -31,10 +31,10 @@
     }
   },
   "J1": {
-    "distancePx": 0.06927192446320186,
+    "distancePx": 0.0691804081746263,
     "pitch": 0,
-    "fromYaw": 60.35,
-    "toYaw": 60.36,
+    "fromYaw": 60.28,
+    "toYaw": 60.29,
     "mesh": "eye-left-upper-lashes",
     "vertex": 72,
     "rest": [
@@ -50,27 +50,27 @@
         "pitch": -30,
         "sign": -1,
         "peak": {
-          "distancePx": 0.038429047442133435,
+          "distancePx": 0.042274689204829206,
           "pitch": -30,
-          "fromYaw": -60.33,
-          "toYaw": -60.34,
-          "mesh": "closed-eyes-v1",
-          "vertex": 84,
+          "fromYaw": -61.09,
+          "toYaw": -61.1,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
           "rest": [
-            481.22222222222223,
-            469
+            331,
+            375
           ]
         },
         "degree": {
-          "distancePx": 3.8354959346662807,
+          "distancePx": 4.20516295653113,
           "pitch": -30,
-          "fromYaw": -60,
-          "toYaw": -61,
-          "mesh": "closed-eyes-v1",
-          "vertex": 84,
+          "fromYaw": -61,
+          "toYaw": -62,
+          "mesh": "eye-left-upper-lashes",
+          "vertex": 0,
           "rest": [
-            481.22222222222223,
-            469
+            331,
+            375
           ]
         },
         "legacy": {
@@ -82,10 +82,10 @@
         "pitch": -30,
         "sign": 1,
         "peak": {
-          "distancePx": 0.04409974830213935,
+          "distancePx": 0.04399933144009997,
           "pitch": -30,
-          "fromYaw": 61.13,
-          "toYaw": 61.14,
+          "fromYaw": 61,
+          "toYaw": 61.01,
           "mesh": "eye-left-upper-lashes",
           "vertex": 72,
           "rest": [
@@ -94,7 +94,7 @@
           ]
         },
         "degree": {
-          "distancePx": 4.39191104043616,
+          "distancePx": 4.382699544448922,
           "pitch": -30,
           "fromYaw": 61,
           "toYaw": 62,
@@ -114,10 +114,10 @@
         "pitch": 0,
         "sign": -1,
         "peak": {
-          "distancePx": 0.0644468029851973,
+          "distancePx": 0.06438581969481617,
           "pitch": 0,
-          "fromYaw": -60.53,
-          "toYaw": -60.54,
+          "fromYaw": -60.59,
+          "toYaw": -60.6,
           "mesh": "eye-right-upper-lashes",
           "vertex": 80,
           "rest": [
@@ -126,7 +126,7 @@
           ]
         },
         "degree": {
-          "distancePx": 6.439349258485923,
+          "distancePx": 6.434204856338258,
           "pitch": 0,
           "fromYaw": -60,
           "toYaw": -61,
@@ -146,10 +146,10 @@
         "pitch": 0,
         "sign": 1,
         "peak": {
-          "distancePx": 0.06927192446320186,
+          "distancePx": 0.0691804081746263,
           "pitch": 0,
-          "fromYaw": 60.35,
-          "toYaw": 60.36,
+          "fromYaw": 60.28,
+          "toYaw": 60.29,
           "mesh": "eye-left-upper-lashes",
           "vertex": 72,
           "rest": [
@@ -158,7 +158,7 @@
           ]
         },
         "degree": {
-          "distancePx": 6.919485711508532,
+          "distancePx": 6.909347733587128,
           "pitch": 0,
           "fromYaw": 60,
           "toYaw": 61,
@@ -178,10 +178,10 @@
         "pitch": 30,
         "sign": -1,
         "peak": {
-          "distancePx": 0.0392983943273891,
+          "distancePx": 0.03925060044652429,
           "pitch": 30,
-          "fromYaw": -61.32,
-          "toYaw": -61.33,
+          "fromYaw": -61.29,
+          "toYaw": -61.3,
           "mesh": "eye-right-upper-lashes",
           "vertex": 8,
           "rest": [
@@ -190,7 +190,7 @@
           ]
         },
         "degree": {
-          "distancePx": 3.919219942662835,
+          "distancePx": 3.914757974210596,
           "pitch": 30,
           "fromYaw": -61,
           "toYaw": -62,
@@ -210,10 +210,10 @@
         "pitch": 30,
         "sign": 1,
         "peak": {
-          "distancePx": 0.04083212038309793,
+          "distancePx": 0.04075458884657055,
           "pitch": 30,
-          "fromYaw": 61.28,
-          "toYaw": 61.29,
+          "fromYaw": 61.29,
+          "toYaw": 61.3,
           "mesh": "eye-left-upper-lashes",
           "vertex": 0,
           "rest": [
@@ -222,7 +222,7 @@
           ]
         },
         "degree": {
-          "distancePx": 4.073292098360331,
+          "distancePx": 4.063731277580403,
           "pitch": 30,
           "fromYaw": 61,
           "toYaw": 62,
@@ -241,7 +241,7 @@
     ]
   },
   "J2": {
-    "distancePx": 6.919485711508532,
+    "distancePx": 6.909347733587128,
     "pitch": 0,
     "fromYaw": 60,
     "toYaw": 61,
@@ -459,7 +459,7 @@
     ],
     "passed": true
   },
-  "reusedFrom": "3acd5fa: J0/J6/J7 closed by Fable; F-B2 reruns J1/J2 geometry sweeps",
+  "reusedFrom": "340b286: fixed J0 V_own/J6/J7; F-B3/F-T1 reruns J1/J2 geometry sweeps",
   "passed": {
     "J1": true,
     "J2": true,

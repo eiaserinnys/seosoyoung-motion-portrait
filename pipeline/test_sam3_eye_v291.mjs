@@ -5,6 +5,7 @@ import {EYE_SAM3 as data} from '../bundle/eye-sam3-data.mjs';
 import {eyeDeformation,eyeResidual,gazeAngles,rotateEye,compression} from '../bundle/eye-sam3-model.mjs';
 const measurement=JSON.parse(readFileSync(new URL('../source/viewer/sam3-eye-measurements.json',import.meta.url)));
 const audit=JSON.parse(readFileSync(new URL('../source/references/seedance/eye-audit-v291.json',import.meta.url))).evaluation;
+const temporal=JSON.parse(readFileSync(new URL('../docs/sam3-eye-temporal-refit.json',import.meta.url)));
 const near=(a,b,tol=1e-6)=>assert(Math.abs(a-b)<=tol,`${a} != ${b}`);
 const vector=(a,b)=>a.forEach((v,i)=>near(v,b[i]));
 const report={};
@@ -35,7 +36,7 @@ test('corrected delta0 contract preserves neutral centers and every part transfo
  }
 });
 
-test('R1: 24 achieved poses reproduce audit predictions with approved F-A law, without beta',{timeout:60000},()=>{
+test('R1: 24 achieved poses reproduce F-T1 temporal and unchanged audit coefficients without beta',{timeout:60000},()=>{
  let maximum=0;
  for(const row of measurement.records){
   const {side,yaw,pitch}=row,b=data[side],f=audit.fit[side];
@@ -46,7 +47,7 @@ test('R1: 24 achieved poses reproduce audit predictions with approved F-A law, w
    return Math.exp(v);
   };
   const poly=c=>c[0]*p+c[1]*p*p+c[2]*t*t+c[3]*t*p;
-  const expected=[table(f.dTemp),table(f.dNas),Math.exp(poly(f.h.coefficients)),poly(f.deltaY.coefficients),Math.cos(Math.max(t,0)),Math.cos(pitch*Math.PI/180)];
+  const expected=[table(temporal.tables[side].fit),table(f.dNas),Math.exp(poly(f.h.coefficients)),poly(f.deltaY.coefficients),Math.cos(Math.max(t,0)),Math.cos(pitch*Math.PI/180)];
   const r=eyeResidual(data,side,[yaw,pitch]);
   const actual=[r.rT,r.rN,Math.exp(r.logH),r.deltaY,Math.exp(r.logA),Math.exp(r.logB)];
   const scales=[b.rest.dTemp,b.rest.dNas,b.rest.h,b.w0,b.rest.a,b.rest.bI];
@@ -82,5 +83,5 @@ test('retained gaze rotation and compression contracts',{timeout:60000},()=>{
 });
 
 test('save targeted numerical evidence',{timeout:60000},()=>{
- writeFileSync(new URL('../debug/sam3-eye-v291/runtime-contracts.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
+ writeFileSync(new URL('../debug/sam3-eye-v295/runtime-contracts.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
 });
