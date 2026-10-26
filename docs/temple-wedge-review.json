@@ -1,0 +1,383 @@
+{
+  "base": "1458c77a77af6016dda236aaad06c00ce1c8cbd4",
+  "scope": "Atlas-only restoration of forced temple-extension RGBA; right-side part build preserves original alpha. Forehead alignment deferred.",
+  "atlas": {
+    "base": "1458c77",
+    "allowedPixels": 1767,
+    "changedPixels": 1767,
+    "outsideAllowedPixels": 0,
+    "rgbChangedPixels": 1489,
+    "alphaChangedPixels": 1767,
+    "atlasSha256": "7ee37a88679c27950352b019ff9bc7f8d2480ee254bcb9b7645dc16735447338"
+  },
+  "front": {
+    "rectExclusive": [
+      634,
+      340,
+      666,
+      407
+    ],
+    "roiPixels": 2144,
+    "changedPixels": 1068,
+    "outsideChangedPixels": 0,
+    "r24MeanAbsoluteRGBDifference": 39.65469527363184,
+    "fixedMeanAbsoluteRGBDifference": 6.237095771144279,
+    "normalization": "1024x1536 source canvas, viewer scale 1, remove (38,32) viewport inset, compare same integer coordinates in RGB 0..255"
+  },
+  "poses": [
+    {
+      "name": "up-left",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 462,
+      "fixedDarkAtSameCoordinates": 8,
+      "changedPixels": 2605,
+      "temples": [
+        [
+          536.249783726184,
+          299.0443096334355,
+          160.8477834437472
+        ],
+        [
+          290.4228072359499,
+          377.35143089338067,
+          -28.483530291898674
+        ]
+      ],
+      "yaw": -45,
+      "pitch": 30
+    },
+    {
+      "name": "up",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 372,
+      "fixedDarkAtSameCoordinates": 209,
+      "changedPixels": 1334,
+      "temples": [
+        [
+          629.9755849447275,
+          342.0505100260305,
+          99.41351940786333
+        ],
+        [
+          365.95420292111896,
+          330.5075603025783,
+          96.67400110753046
+        ]
+      ],
+      "yaw": 0,
+      "pitch": 30
+    },
+    {
+      "name": "up-right",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 191,
+      "fixedDarkAtSameCoordinates": 25,
+      "changedPixels": 977,
+      "temples": [
+        [
+          709.4959598504435,
+          386.1046441074263,
+          -21.262249858791733
+        ],
+        [
+          451.51531953516684,
+          332.0526233317535,
+          163.80963096196356
+        ]
+      ],
+      "yaw": 45,
+      "pitch": 30
+    },
+    {
+      "name": "left",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 2,
+      "r24DarkPixels": 456,
+      "fixedDarkAtSameCoordinates": 9,
+      "changedPixels": 2475,
+      "temples": [
+        [
+          539.2143877114627,
+          384,
+          153.04404160062052
+        ],
+        [
+          310.9180696625888,
+          384,
+          -44.61735296613301
+        ]
+      ],
+      "yaw": -45,
+      "pitch": 0
+    },
+    {
+      "name": "front",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 480,
+      "fixedDarkAtSameCoordinates": 265,
+      "changedPixels": 1068,
+      "temples": [
+        [
+          636,
+          384,
+          82.43695927198968
+        ],
+        [
+          360,
+          384,
+          78.90153431810722
+        ]
+      ],
+      "yaw": 0,
+      "pitch": 0
+    },
+    {
+      "name": "right",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 3,
+      "r24DarkPixels": 140,
+      "fixedDarkAtSameCoordinates": 38,
+      "changedPixels": 722,
+      "temples": [
+        [
+          694.5676667871571,
+          384,
+          -36.46057575737423
+        ],
+        [
+          456.9888619857179,
+          384,
+          156.20097289084646
+        ]
+      ],
+      "yaw": 45,
+      "pitch": 0
+    },
+    {
+      "name": "down-left",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.71520000000001,
+      "foreheadProfileCount": 10,
+      "r24DarkPixels": 541,
+      "fixedDarkAtSameCoordinates": 4,
+      "changedPixels": 2725,
+      "temples": [
+        [
+          543.2644107343442,
+          373.46470651268737,
+          102.84778344374722
+        ],
+        [
+          309.03356552818616,
+          367.3052651450371,
+          -68.1041407756421
+        ]
+      ],
+      "yaw": -45,
+      "pitch": -30
+    },
+    {
+      "name": "down",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 2,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 10,
+      "r24DarkPixels": 252,
+      "fixedDarkAtSameCoordinates": 146,
+      "changedPixels": 755,
+      "temples": [
+        [
+          634.3781170935063,
+          397.2372072547783,
+          41.41351940786333
+        ],
+        [
+          361.6072203547001,
+          405.97902196489633,
+          38.674001107530465
+        ]
+      ],
+      "yaw": 0,
+      "pitch": -30
+    },
+    {
+      "name": "down-right",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 10,
+      "r24DarkPixels": 143,
+      "fixedDarkAtSameCoordinates": 23,
+      "changedPixels": 522,
+      "temples": [
+        [
+          698.3712299520703,
+          346.75873444327135,
+          -61.26802932272574
+        ],
+        [
+          453.51177068164105,
+          404.5495756603383,
+          105.80963096196355
+        ]
+      ],
+      "yaw": 45,
+      "pitch": -30
+    },
+    {
+      "name": "yaw-30",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 322,
+      "fixedDarkAtSameCoordinates": 7,
+      "changedPixels": 1955,
+      "temples": [
+        [
+          571.3547474647562,
+          384,
+          145.15893715867307
+        ],
+        [
+          323.71677553157474,
+          384,
+          -2.6692668829494224
+        ]
+      ],
+      "yaw": -30,
+      "pitch": 0
+    },
+    {
+      "name": "yaw-15",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 259,
+      "fixedDarkAtSameCoordinates": 6,
+      "changedPixels": 1682,
+      "temples": [
+        [
+          606.3470135521861,
+          384,
+          122.43607531690475
+        ],
+        [
+          340.45770793661313,
+          384,
+          39.460725327135066
+        ]
+      ],
+      "yaw": -15,
+      "pitch": 0
+    },
+    {
+      "name": "yaw+15",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 196,
+      "fixedDarkAtSameCoordinates": 177,
+      "changedPixels": 516,
+      "temples": [
+        [
+          657.1801377857928,
+          384,
+          44.94623595781712
+        ],
+        [
+          396.4616753630132,
+          384,
+          125.70837033743855
+        ]
+      ],
+      "yaw": 15,
+      "pitch": 0
+    },
+    {
+      "name": "yaw+30",
+      "exposedPixelsBelowEarLine": 0,
+      "downHalfWidthDifference": 0,
+      "maxForeheadLuminanceValley": 0.0,
+      "foreheadProfileCount": 0,
+      "r24DarkPixels": 146,
+      "fixedDarkAtSameCoordinates": 127,
+      "changedPixels": 414,
+      "temples": [
+        [
+          677.156478244784,
+          384,
+          4.392500940286212
+        ],
+        [
+          432.46185276483243,
+          384,
+          148.68166477312482
+        ]
+      ],
+      "yaw": 30,
+      "pitch": 0
+    }
+  ],
+  "darkPixelMethod": "At the same r24 pixel coordinates: r24 side-hair-right identify RGB minimum >252; original RGB maximum <20 and alpha >250; 250<x<730, 250<y<480. Candidate counted with the same RGB/alpha limits. White identify threshold excludes antialiased owner edges; older diagnostic palette counts used a different boundary tolerance.",
+  "earExposureMethod": "Actual complete portrait, exposed-skin identify is white and occluders black; count pixels below the deformed ear attachment line.",
+  "tests": {
+    "pythonHairPixels": 10,
+    "nodeHairTextureBudget": 3
+  },
+  "knownExistingIssue": {
+    "regeneratedAtlasOutsideTempleChangedPixels": 4586,
+    "regeneratedHairTopChangedPixels": 88,
+    "opaqueExample": {
+      "atlas": [
+        1364,
+        1411
+      ],
+      "before": [
+        130,
+        114,
+        113,
+        255
+      ],
+      "after": [
+        127,
+        111,
+        110,
+        255
+      ]
+    },
+    "scope": "Full-rebuild differences were observed before this atlas-only repair. Investigation and regenerated outputs excluded."
+  },
+  "visualReviewFlags": [
+    "13포즈의 양쪽 관자 2배 크롭을 직접 열어 비교했다. 새 투명 경계에서 어두운 RGB가 번지는 새 테두리는 관찰되지 않았다.",
+    "up-right/down-right 먼 쪽 관자에서는 불투명 패치가 없어지며 작은 배경 틈이 드러난다. 해당 포즈의 right temple 2x 크롭에 포함했다. 원래 가닥 윤곽과 기존 변형은 남으며 Fable의 시각 판정 대상으로 표시한다.",
+    "left/up-left/down-left와 정면에서 곧은 경계의 검은 덩어리가 사라졌다. 옆머리 가닥 변형, 머리핀, 눈 및 피부/이마는 변경하지 않았다."
+  ],
+  "captureEnvironment": "Linux Chromium SwiftShader, device scale 1, canvas 1100x1600, cropped authored top 1024x1024 at (38,32)",
+  "runtime": "All bundle MJS and mesh/rig bytes remain r24; no added runtime deformation work.",
+  "reviewStatus": "Parent code review, Fable implementation review and Selaphiel UI/UX review pending",
+  "captureArtifacts": {
+    "docs/captures/temple-wedge-13poses.png": "edd6f906f8f58f56fca683a3bb10d55abab435717520389d52d3d4d82d92ac7c",
+    "docs/captures/temple-wedge-front-2x.png": "8358c843752f9e456e260f0ef834c9d6204bd751c60cef935e6a8b0cbc6452f5",
+    "docs/captures/temple-wedge-overview.png": "cee2bb75b0de03350843b63e92c3720e5a2adcc7f46ba4b252c981bbc0c07217"
+  }
+}

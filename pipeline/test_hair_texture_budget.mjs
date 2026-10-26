@@ -37,6 +37,7 @@ test('P3 preserves non-hair meshes and metadata apart from the approved D2 angle
  assert.equal(rig.meshes.filter(hair).length,15);
  assert.deepEqual(rig.meshes.filter(m=>!hair(m)),old.meshes.filter(m=>!hair(m)));
  assert.deepEqual({...rig,meshes:[]},{...old,meshes:[]});
- execFileSync('git',['diff','--exit-code',baseline,'--','parts/','bundle/assets/texture_00.png']);
+ // The atlas-only temple alpha repair has its pixel contract in test_hair_pixels.py.
+ execFileSync('git',['diff','--exit-code',baseline,'--','parts/']);
  assert(rig.meshes.reduce((s,m)=>s+m.positions.length,0)<=10000);
 });
