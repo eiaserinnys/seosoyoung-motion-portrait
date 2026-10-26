@@ -1,0 +1,209 @@
+{
+  "baseline": "a29bb358231566d0c90b1b058bc8a153cfc57410",
+  "atlasSHA256": "9eca11b327ee80a8c4e6f4f026daa243ce142e2aba812bf862652c7e616ad057",
+  "changedAlphaTexels": 6915,
+  "outsideHairTopAddedTexels": 0,
+  "changedRGBTexels": 0,
+  "centralGapBBoxInclusive": [
+    519,
+    226,
+    566,
+    244
+  ],
+  "neutral": {
+    "baselineMAE": 36.244152046783626,
+    "correctedMAE": 15.85891812865497,
+    "insideChangedPixels": 497,
+    "outsideChangedPixels": 5,
+    "outsideMaxLSB": 1,
+    "outsidePixelRecord": [
+      {
+        "xy": [
+          669,
+          185
+        ],
+        "baselineRGBA": [
+          88,
+          52,
+          43,
+          255
+        ],
+        "CRGBA": [
+          87,
+          52,
+          43,
+          255
+        ],
+        "bangsAlpha": [
+          0,
+          253
+        ]
+      },
+      {
+        "xy": [
+          672,
+          239
+        ],
+        "baselineRGBA": [
+          64,
+          46,
+          43,
+          255
+        ],
+        "CRGBA": [
+          63,
+          45,
+          42,
+          255
+        ],
+        "bangsAlpha": [
+          0,
+          250
+        ]
+      },
+      {
+        "xy": [
+          672,
+          240
+        ],
+        "baselineRGBA": [
+          80,
+          56,
+          54,
+          255
+        ],
+        "CRGBA": [
+          79,
+          55,
+          53,
+          255
+        ],
+        "bangsAlpha": [
+          0,
+          250
+        ]
+      },
+      {
+        "xy": [
+          518,
+          244
+        ],
+        "baselineRGBA": [
+          124,
+          105,
+          103,
+          255
+        ],
+        "CRGBA": [
+          125,
+          105,
+          103,
+          255
+        ],
+        "bangsAlpha": [
+          0,
+          254
+        ]
+      },
+      {
+        "xy": [
+          568,
+          244
+        ],
+        "baselineRGBA": [
+          95,
+          65,
+          54,
+          255
+        ],
+        "CRGBA": [
+          96,
+          66,
+          55,
+          255
+        ],
+        "bangsAlpha": [
+          0,
+          254
+        ]
+      }
+    ]
+  },
+  "approval": "Assignee accepted C with outside neutral tolerance <=1 LSB, 261026.",
+  "poses": [
+    {
+      "name": "up-left",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "up",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "up-right",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "left",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "front",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "right",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "down-left",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "down",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "down-right",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "yaw-30",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "yaw-15",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "yaw+15",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    },
+    {
+      "name": "yaw+30",
+      "geometryMaxDelta": 0.0,
+      "fillBelowEar": 0
+    }
+  ],
+  "evidenceReuse": "13-pose C trial reused: final atlas byte-identical, all runtime JS and rig unchanged. Neutral pair rerendered by the permanent test on the worktree.",
+  "visualReview": "Approved A curve preserved at five symptom poses; no new strand disconnections in 13 head views. Existing S3 side-hair bend is outside scope.",
+  "sheets": {
+    "docs/captures/hairline-13poses-2col.png": "74f4d36c2145542a3ae5d9af199e78b2ecab239f6d4d96c1296e411e09e060f9",
+    "docs/captures/hairline-front-original-baseline-C.png": "539b8a5771667832a1ac79f3a38bdee4726bd206c7109149a1bcc1ffe121b770",
+    "docs/captures/hairline-five-poses-left-3col-2x.png": "6eb40a69089c996a43c69985b9977835e09b237d0e46cadc2cdfb5a5ba32e463",
+    "docs/captures/hairline-five-poses-right-3col-2x.png": "d2673491de48c596d5ae357ab2295e867a15ffa9c02c999cbfc96e79ca0fb769",
+    "docs/captures/hairline-representative-3col-2x.png": "84a3622ab1e8a953e0c2be41a74956717543820af12bdbed09bd528a58dadfc0"
+  }
+}
