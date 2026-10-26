@@ -1,0 +1,222 @@
+{
+  "source": "Stage4 skin_contour pixel mask reconstructed before polar sampling; per-frame RNG42; largest convex hull; original saved masks unavailable",
+  "codeSha": "be9c240e4d1de650117e66b4c8fc8720990ba6509af35893d4d7bf7fe809699d",
+  "frames": [
+    {
+      "name": "front",
+      "frame": 3,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0003.png",
+      "sourceSha": "734407b9cd8b1288d2fe5d0451cec9a0b517fad7c10f4fa5fed6a69d5a8b43fe",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/front.png",
+      "maskSha": "1135fc763e578f62583ecf424039ae38ce3bf2435137a26892db2cde7c89bf5c",
+      "area": 118589
+    },
+    {
+      "name": "left",
+      "frame": 42,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0042.png",
+      "sourceSha": "4b0225a7020f45aa44a74c7cb0576d3be5775fb677d5df4dc605417decffa66e",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/left.png",
+      "maskSha": "00d999bce631ecf2dff89bfdd498b0a1634d6e00504cc3c7e8276ada0600d4a6",
+      "area": 93820
+    },
+    {
+      "name": "right",
+      "frame": 240,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0240.png",
+      "sourceSha": "eefd7ca2edd3777e07f9e1bebf94b1cc78e5091af2011ee282d2617bef1a6303",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/right.png",
+      "maskSha": "e58f59b6c475245af78c7afbed0442074b4a3154d282d5d502d546bd140dea23",
+      "area": 95190
+    },
+    {
+      "name": "up",
+      "frame": 206,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0206.png",
+      "sourceSha": "5fdbe2c19cbd2e12e819f3ab5c00094adce0fc0469564ca447e37f4179f815af",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/up.png",
+      "maskSha": "0de99bad1a306520142db67452cf5792c212987ab69e41b84b21ca9ab18ab2f7",
+      "area": 115068
+    },
+    {
+      "name": "down",
+      "frame": 270,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0270.png",
+      "sourceSha": "82cb6dca410a89dcf43437bbcbf2c04ba6ae60e43a8e8d38f99bed71b167a1a6",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/down.png",
+      "maskSha": "10805134deed946e100b1c6e34ac145069c24c9bf519bc2d00a54bb3131edc78",
+      "area": 106563
+    },
+    {
+      "name": "up-left",
+      "frame": 192,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0192.png",
+      "sourceSha": "e1a189acfb9be5692a1d73795d04d07ca73d327300895bd9fcc97ffd52933e70",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/up-left.png",
+      "maskSha": "b020018eed79daa1dbaa40cd4c163d3863e7d00383da5c4f0ea918dede5115af",
+      "area": 77093
+    },
+    {
+      "name": "up-right",
+      "frame": 219,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0219.png",
+      "sourceSha": "95fcc636e232e5acba26c1ecc0e632f189d49963d244e679351e2a33a36323bc",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/up-right.png",
+      "maskSha": "a4e9c2781d4e20bf968f969754726ae8f1629f95567a5c4964055aff55bbd5c3",
+      "area": 94116
+    },
+    {
+      "name": "down-left",
+      "frame": 303,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0303.png",
+      "sourceSha": "325cc9fd2946b1e9fa47892fd97710de55b0e8e3e3b245e464a29ccb183cafba",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/down-left.png",
+      "maskSha": "8785d5d920b4cde0f4a18ee2909da65d5d5e53913deb42ed76c6cd2776b51a06",
+      "area": 94381
+    },
+    {
+      "name": "down-right",
+      "frame": 264,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0264.png",
+      "sourceSha": "ea5ce1f9696c17755ad6d70a728576c5923d778b35a3fac35cccc5257d827b19",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/down-right.png",
+      "maskSha": "dea09a7143522656a039fc9605a5bc0e528433b41fb75169ec6d46ab5628d9d1",
+      "area": 107492
+    },
+    {
+      "name": "aux-0276",
+      "frame": 276,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0276.png",
+      "sourceSha": "51d86534cfca64d2bc5e7390bb3a26516123699d607fee0644c3e6857a408409",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0276.png",
+      "maskSha": "d5332d60a0e517490ddd2213157e5eb1176d3c4004a0218ac495c6502670b409",
+      "area": 110102
+    },
+    {
+      "name": "aux-0275",
+      "frame": 275,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0275.png",
+      "sourceSha": "f9f2d3a388fb9f2826202683d79cf5cc5a355d5cd34a2ffed2bbd33684acd213",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0275.png",
+      "maskSha": "3777ec89f5d5302365136e34f118b6441b46966209ffa7a3ffc1992165f0ae78",
+      "area": 110532
+    },
+    {
+      "name": "aux-0277",
+      "frame": 277,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0277.png",
+      "sourceSha": "5712f12ca0c52c1faf882ad82152ac5d44b087321fbec899d65360ef59fac6fd",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0277.png",
+      "maskSha": "b5020a8d6eb7c96dda7189178b87fd141e1e0b3782d87cd504612452bcd96575",
+      "area": 107699
+    },
+    {
+      "name": "aux-0017",
+      "frame": 17,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0017.png",
+      "sourceSha": "6766a51b048f856ab4b4518830992ff0a77b0bc2a1adecc4c0c97084b1a44322",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0017.png",
+      "maskSha": "02b3a5df6061318389e3e9783295f3d1da0bba412dcfb30a88a05d0d80ed46a6",
+      "area": 114279
+    },
+    {
+      "name": "aux-0213",
+      "frame": 213,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0213.png",
+      "sourceSha": "62a0018106be893682cf2259839d0f78a1b9cd99591f4e07389cf9e967615933",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0213.png",
+      "maskSha": "68c439a9ef9468b72d8284bfb5ec558e72beac8ba8cc90c2ff0c1e48452e7767",
+      "area": 105195
+    },
+    {
+      "name": "aux-0048",
+      "frame": 48,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0048.png",
+      "sourceSha": "a8cd10d1cc7b8ba1b67ae654c905174f620d894d8b4d140ea5b8eea51ec3fb3a",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0048.png",
+      "maskSha": "a933a913471716ea18c6bdd1e6b2bd52daf0cd478355717686c74918339bcde6",
+      "area": 108548
+    },
+    {
+      "name": "aux-0255",
+      "frame": 255,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0255.png",
+      "sourceSha": "f953c571a903fa3f0e181e0c686dab3fc12b555d919483c1f7cb90ddfd95a183",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0255.png",
+      "maskSha": "b23b747396cae8ba7dfd2feb0b437349bb29a19095ae26999ff93e04b05212b5",
+      "area": 108722
+    },
+    {
+      "name": "aux-0342",
+      "frame": 342,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0342.png",
+      "sourceSha": "c6ab64a2059fdfdd59996ef1707b1fefbc430d704ee88a5467f981aab0c76952",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0342.png",
+      "maskSha": "c52b97da823a1d5339d4989fc9940c0ce85337fc4636f71dae9e7ffd5e9b4cd8",
+      "area": 114249
+    },
+    {
+      "name": "aux-0074",
+      "frame": 74,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0074.png",
+      "sourceSha": "c1a7ddd659fa0aecedeb5eb64a1023cd1f4e9f5d7c62760232cd462ee205dabe",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0074.png",
+      "maskSha": "df97a1e8c009a7f5c7e752f44232abcdee9ce7c2cd342101e4273c5874135a5e",
+      "area": 111349
+    },
+    {
+      "name": "aux-0086",
+      "frame": 86,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0086.png",
+      "sourceSha": "952e8fe7f92296a6afbb3cc7a275b4cda8da5a5835048fe8b832e6ce29fcd33b",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0086.png",
+      "maskSha": "1fbafbd0491bb7a28897b61b97a39f09367a27be8f1ffbbfa5bf0ed39928a86c",
+      "area": 119293
+    },
+    {
+      "name": "aux-0102",
+      "frame": 102,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0102.png",
+      "sourceSha": "081e28960032f90f6a9fce1fe222190db244a6b539fae2560accdff5ee1e622f",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0102.png",
+      "maskSha": "360d0b751723aeca7f40bfe193fc4a10e2f4520f57bf4b524de693afb1bc1b2c",
+      "area": 107535
+    },
+    {
+      "name": "aux-0043",
+      "frame": 43,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0043.png",
+      "sourceSha": "66b0ec3eb73957db07c1dd72b503ba927c0d073267313dde08a1234a6f049876",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0043.png",
+      "maskSha": "88ea3b11f651dcd70fe3df91d91fcb4f4e2b9e984def3ce41489624f708bed2b",
+      "area": 94574
+    },
+    {
+      "name": "aux-0241",
+      "frame": 241,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0241.png",
+      "sourceSha": "f70804fd0a5a8172a493681b24c31cba91f68e1e89024b8a48edeef513680a3d",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0241.png",
+      "maskSha": "486feca8a44f21d55ea682d5b6915df25a8cb49fe45694ad54edbc1b921b915d",
+      "area": 96411
+    },
+    {
+      "name": "aux-0093",
+      "frame": 93,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0093.png",
+      "sourceSha": "150663e11b4dd48f41cd2d024fcd7f3d934d82e7a6b5e8202d99acb317a8a762",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0093.png",
+      "maskSha": "b3752e65df29135f208b0cb1b49e55c328453d3539956aa6eaeab6e226dce14e",
+      "area": 120677
+    },
+    {
+      "name": "aux-0103",
+      "frame": 103,
+      "source": "/home/eias/workspace/.local/artifacts/20261025-ponytail-seedance-reg/frames/frame_0103.png",
+      "sourceSha": "102e587a1fd38632710948af56a47ed5278690e2342da1c27c77d2d3e8b4f96b",
+      "mask": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-sam3-eye-registration-v2-fb55bcd8/source/references/seedance/silhouettes/aux-0103.png",
+      "maskSha": "76b7a5f0f8de84ec426dc83c32666a07f2af28e65aba5af3ffb81aa282b67ef3",
+      "area": 108637
+    }
+  ]
+}
