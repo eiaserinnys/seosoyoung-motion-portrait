@@ -1,0 +1,54 @@
+{
+  "rendererContract": "profile-only alpha fallback; far-eye smoothstep(0,15) alpha face clip",
+  "poses": [
+    {
+      "name": "front",
+      "targetAchieved": [
+        -1.016282113547139,
+        1.287185042771068
+      ],
+      "requested": [
+        -1.3058707682272463,
+        1.5480214716376788
+      ],
+      "actualAchieved": [
+        -1.016282113547139,
+        1.287185042771068
+      ],
+      "controls": {
+        "left": {
+          "profileFaceClip": false,
+          "eyeFaceClip": 0.021417668746752296
+        },
+        "right": {
+          "profileFaceClip": false,
+          "eyeFaceClip": 0
+        }
+      },
+      "sides": {
+        "left": {
+          "pixels": 1,
+          "coordinates720": [
+            [
+              186,
+              414
+            ]
+          ],
+          "role": "far"
+        },
+        "right": {
+          "pixels": 0,
+          "coordinates720": [],
+          "role": "near"
+        }
+      }
+    }
+  ],
+  "R5": {
+    "changedPixels": 0,
+    "maxChannelDifferenceLSB": 0,
+    "passed": true
+  },
+  "status": "STOP_R4_PROTRUSION",
+  "failureOverlay": "docs/captures/sam3_eye_clip_failure_front.png"
+}
