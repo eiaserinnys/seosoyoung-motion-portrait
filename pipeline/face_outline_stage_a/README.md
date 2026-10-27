@@ -1,6 +1,6 @@
 # 얼굴 외곽선과 귀 — 승인 A단계
 
-승인 해는 7.11-filled + 귀 이동 범위 80이다. `accepted/manifest.json`의 세 파일 SHA가 제품 `bundle/face-solve-data.mjs`, `stereo-attachments.mjs`, `ear-transform-data.mjs`의 기준이다. O2 옆머리 실험과 눈 정합은 포함하지 않는다.
+출발 해는7.11-filled + 귀 이동 범위80이다. accepted/manifest.json은 원래 동결 해의 출처를 보존한다. 최종 제품 SHA는 accepted/final-validation.json에 있으며, 앵커 닫기·9키 자유X투영·프로필 후처리를 반영했다. O2 옆머리 실험과 눈PR24는 포함하지 않는다.
 
 ## 입력과 생성 경로
 
@@ -38,17 +38,19 @@ python3 pipeline/face_outline_stage_a/tps-study/stage-a/v711-ear80/update_active
 
 `export_bases.mjs`는 `earBase + t_face`와 실제 런타임의 합성을 검산한다. 80px 단계는 `selection.json`의 여섯 귀만 다시 맞추고, 바뀐 포즈의 du만 원래 관측에서 복원한다. Z와 얼굴 t는 고정한다. 가중치·λ·귀 크기·회전 범위는 바꾸지 않았다. `provenance.json`에 옮기기 전후 코드 SHA와 경로를 보존했다.
 
-## 검증과 증거
+## 최종 검증
 
-- `pipeline/test_face_outline_stage_a.mjs`: 승인 당시 실제 렌더가 기록한 9키 + 키 사이 8장의 피부·귀 좌표와 반전 집합. 알려진 키 반전 11개는 같은 ID만 허용하며 중간 8장은 음수 0이다.
-- `pipeline/test_face_outline_stage_a.py`: 같은 현재 뷰어·아틀라스에서 `seed-bundle/`의 변경 전 얼굴·귀 모듈과 현재 모듈을 불러 정면 전체 렌더를 대조한다. 0픽셀이 기준이다.
-- 기존 r11/r12 위치·귀 상자·눈 여백은 승인 A 데이터로 기준을 갱신한다. 45도 밖 프로필 실패는 기준을 바꾸지 않고 진단 중이다.
-- 시트: `docs/captures/face-outline-stage-a/`의 9키 머리카락 없음·켬, 키 사이 두 장, F7 세 자리.
+Node **207/207 pass**, fail0/cancelled0. 픽셀·투영 **16 passed**, 계약 **6/6**. 정면 전체 렌더 변경0픽셀.
 
-남은 것: up-left 오른쪽 귀가 약간 높음(IoU .472, 이동 80 경계), 옆머리 줄무늬와 먼 「<」는 O2 재설계 대상이다. 행 F3 전행 정의는 v7 자기 검산에 실패해 판정에 쓰지 않았다. 향후 화면 `y ≥ y_c`로 제한해야 한다는 결정을 기록하며, 승인된 키 사이 틈 판정은 담당의 시각 확인이다.
+- 9키와 키사이8장의 피부 음수 삼각형0, ±45 연속.01 유지.
+- 혼합 전 B의 관측·행 합성은 승인된 오프라인 펴기 기록을 포함해1e-6으로 검사한다. 최종 A는67.5이상에서6dd와1e-12, 혼합구간에서Y/Z혼합과X혼합+동일프레임투영을1e-6으로 검사한다.
+- up턱 기대값은 레퍼런스28px에서 측정 F2오차7.847817px를 뺀 값이며, 기존1e-12 앵커 기준은 유지했다.
+- 상세 수치·SHA·시트 해시는 accepted/final-validation.json, 후처리 재현은 refinement/README.md.
 
-기존 `pipeline/solve_to_bundle.py`는 A단계 이전 `source/viewer/face-solve.json`을 내보내는 별도 생성 경로다. 승인 A 데이터를 보존할 때는 이 옛 경로로 덮지 않고 위 A단계 경로를 사용한다. 이 이관에서는 기존 source JSON과 생성기를 변경하지 않았다.
+## 알려진 비용과 범위
 
-## A1 제품 통합 현재 상태
+67.5°부터 6dd와 같아져 떠 있는 귀와 직선으로 잘린 볼이 돌아온다. 45~67.5°는 섞인다.
 
-정면 픽셀·머리카락 픽셀 14개와 승인 17포즈 기하 계약은 통과했다. 전체 Node 검사는 177 통과, 6 실패, 3 취소다. 45도 밖 프로필의 경계 점프·피부 반전·이마 간격 퇴보는 기존 게이트 그대로 보존해 원인 설계에 넘긴다. up 턱 곡률 옛 하한과 특징점 1e-12 비교도 미통과이며, 성능·포니테일·side90 파일은 60초 제한으로 취소됐다. 프로필 해결 전에는 A1을 머지하지 않는다.
+up-left 귀가 약간 높은 점은 남아 있다. 옆머리 줄무늬와 먼 가닥「<」는 O2 후속이다. A2-1과 눈PR24는 포함하지 않았다. 원래 동결 해는 그대로 보존한다.
+
+기존 pipeline/solve_to_bundle.py는A단계 이전 source JSON을 내보내므로 이 승인 해를 보존할 때 덮어쓰지 않는다. 이 PR에서는 원래 source JSON을 변경하지 않았다.

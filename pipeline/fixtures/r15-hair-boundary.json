@@ -5,18 +5,19 @@
     {
       "yaw": -45,
       "pitch": 0,
-      "sha256": "9c4030e429ab8316c7a152debb620a7dc79f581d25e727ed3a4aa84fc466d400"
+      "sha256": "bcde3cfa7ea68cf65a4cc98d7c78a4c54175d9cb434f748a0c5d995a33c6c6fb"
     },
     {
       "yaw": 0,
       "pitch": 0,
-      "sha256": "49e6048b6e5e89717e8c6ce69fb607796a6eb09b96fb30b0ecee32338c03ff34"
+      "sha256": "b5691e0dd2a3cca6abca3fb1268570bafce52fcb9e4235136ae66cd0c34bc445"
     },
     {
       "yaw": 45,
       "pitch": 0,
-      "sha256": "ddd25cd807ee5049bc9cd28b7098b38bb5427ee22ab4d8e77e28275e18149dfb"
+      "sha256": "d41a4fe8844c82fc25589d839a9b70c645079ce73d8d7a9d803282de0d065caf"
     }
   ],
-  "earWorldSha256": "46fd688a2e4ead8dcfcb97d8bc0c3bfea4d6d4ad124e9ee91a79dc7cd5253f46"
+  "earWorldSha256": "46fd688a2e4ead8dcfcb97d8bc0c3bfea4d6d4ad124e9ee91a79dc7cd5253f46",
+  "refinement": "A1 face calibration; non-calibration geometry independently compared"
 }

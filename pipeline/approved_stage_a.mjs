@@ -7,6 +7,5 @@ export function negativeTriangleIds(rest,world,triangles){
  return triangles.flatMap((t,i)=>area(rest,t)*area(world,t)<0?[i]:[]);
 }
 export function assertApprovedReversals(name,rest,world,triangles){
- const before=approvedStageA.poses.find(p=>p.name===name).meshes.find(m=>m.id==='face-skin').world;
- assert.deepEqual(negativeTriangleIds(rest,world,triangles),negativeTriangleIds(rest,before,triangles),name+' approved A-stage triangle set');
+ assert.deepEqual(negativeTriangleIds(rest,world,triangles),[],name+' 7.17 requires zero reversed triangles');
 }

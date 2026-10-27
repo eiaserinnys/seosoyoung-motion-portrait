@@ -1,3 +1,4 @@
+import {profileRows} from './face_outline_stage_a/refinement/profile_rows.mjs';
 // Read the approved measurements and neutral r11 geometry through their public evaluators.
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
@@ -86,11 +87,13 @@ function rowAt(rows,y){
  }
  return rows.at(-1).slice(1);
 }
-const family45={p45Left:p45[-1],p45Right:p45[1],poses:[
+const oldProfile=JSON.parse(readFileSync(new URL('./face_outline_stage_a/tps-study/stage-a/v711-filled/base-inputs.json',import.meta.url))).family45;
+const rowAudit=Object.fromEntries([-1,1].map(sign=>{const side=sign<0?'Left':'Right';return [sign,profileRows(samples,p45[sign],oldProfile['p45'+side],points,skin.triangles)];}));
+const family45={p45Left:p45[-1],p45Right:p45[1],rowAudit,poses:[
  ['left67',-67.5,-22.5,.36,.72],['left90',-90,-45,.02,.45],
  ['right67',67.5,22.5,.72,.36],['right90',90,45,.45,.02],
 ].map(([name,yaw,delta,left,right])=>{
- const rest=p45[Math.sign(yaw)],rows=samples.map(s=>[s.y,rest[s.left][0],rest[s.right][0]]);
+ const rest=p45[Math.sign(yaw)],rows=rowAudit[Math.sign(yaw)].map(r=>[r.y,...r.selected]);
  const obs=points.map((_,i)=>{
   const y=points[i][1],[l,r]=rowAt(rows,y),[lt,rt]=rowAt(maskRows[name],y);
   return [lt+(rest[i][0]-l)/Math.max(1,r-l)*(rt-lt),rest[i][1]];

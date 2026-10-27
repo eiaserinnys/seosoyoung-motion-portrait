@@ -1,0 +1,299 @@
+{
+  "status": "passed",
+  "node": {
+    "tests": 207,
+    "pass": 207,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "pythonPassed": 16,
+  "contractsPassed": 6,
+  "projectionStatistics": [
+    {
+      "yaw": -56.25,
+      "pitch": -30,
+      "maximum": 0.036848244928559634,
+      "nonzeroVertices": 3
+    },
+    {
+      "yaw": -56.25,
+      "pitch": 0,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": -56.25,
+      "pitch": 30,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": -50,
+      "pitch": -30,
+      "maximum": 0.05416353926941879,
+      "nonzeroVertices": 3
+    },
+    {
+      "yaw": -50,
+      "pitch": 0,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": -50,
+      "pitch": 30,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": 50,
+      "pitch": -30,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": 50,
+      "pitch": 0,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": 50,
+      "pitch": 30,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": 56.25,
+      "pitch": -30,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": 56.25,
+      "pitch": 0,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    },
+    {
+      "yaw": 56.25,
+      "pitch": 30,
+      "maximum": 0,
+      "nonzeroVertices": 0
+    }
+  ],
+  "geometry": [
+    {
+      "name": "front",
+      "negative": 0,
+      "minimum": 0.9999999999999932
+    },
+    {
+      "name": "up-left",
+      "negative": 0,
+      "minimum": 2.7127412214968315e-07
+    },
+    {
+      "name": "up",
+      "negative": 0,
+      "minimum": 2.2365548224545506e-07
+    },
+    {
+      "name": "up-right",
+      "negative": 0,
+      "minimum": 0.008331581369814732
+    },
+    {
+      "name": "left",
+      "negative": 0,
+      "minimum": 1.0000000006419916e-06
+    },
+    {
+      "name": "right",
+      "negative": 0,
+      "minimum": 0.20111500956894235
+    },
+    {
+      "name": "down-left",
+      "negative": 0,
+      "minimum": 9.999999991513953e-07
+    },
+    {
+      "name": "down",
+      "negative": 0,
+      "minimum": 9.999999993996294e-07
+    },
+    {
+      "name": "down-right",
+      "negative": 0,
+      "minimum": 9.999999968408296e-07
+    },
+    {
+      "name": "mid-left",
+      "negative": 0,
+      "minimum": 0.39089655308468824
+    },
+    {
+      "name": "mid-right",
+      "negative": 0,
+      "minimum": 0.4811777948621708
+    },
+    {
+      "name": "mid-up",
+      "negative": 0,
+      "minimum": 0.2917614100433596
+    },
+    {
+      "name": "mid-down",
+      "negative": 0,
+      "minimum": 0.3943580903474133
+    },
+    {
+      "name": "mid-up-left",
+      "negative": 0,
+      "minimum": 0.24528412872213284
+    },
+    {
+      "name": "mid-down-left",
+      "negative": 0,
+      "minimum": 0.2895983647220261
+    },
+    {
+      "name": "mid-up-right",
+      "negative": 0,
+      "minimum": 0.34756386705738307
+    },
+    {
+      "name": "mid-down-right",
+      "negative": 0,
+      "minimum": 0.32176207058783196
+    }
+  ],
+  "profileComparison": [
+    {
+      "kind": "maskFidelity",
+      "name": "minus67",
+      "baseline": {
+        "rms": 4.588314677411235,
+        "maximum": 21.0
+      },
+      "candidate": {
+        "rms": 4.588314677411235,
+        "maximum": 21.0
+      },
+      "pass_": true
+    },
+    {
+      "kind": "maskFidelity",
+      "name": "plus67",
+      "baseline": {
+        "rms": 4.978902859487271,
+        "maximum": 25.0
+      },
+      "candidate": {
+        "rms": 4.978902859487271,
+        "maximum": 25.0
+      },
+      "pass_": true
+    },
+    {
+      "kind": "maskFidelity",
+      "name": "minus90",
+      "baseline": {
+        "rms": 4.382981441415133,
+        "maximum": 20.0
+      },
+      "candidate": {
+        "rms": 4.382981441415133,
+        "maximum": 20.0
+      },
+      "pass_": true
+    },
+    {
+      "kind": "maskFidelity",
+      "name": "plus90",
+      "baseline": {
+        "rms": 4.981544888253463,
+        "maximum": 25.0
+      },
+      "candidate": {
+        "rms": 4.981544888253463,
+        "maximum": 25.0
+      },
+      "pass_": true
+    },
+    {
+      "kind": "smoothness",
+      "name": "minus67",
+      "baseline": {
+        "maximum": 7
+      },
+      "candidate": {
+        "maximum": 7
+      },
+      "pass_": true
+    },
+    {
+      "kind": "smoothness",
+      "name": "minus78",
+      "baseline": {
+        "maximum": 7
+      },
+      "candidate": {
+        "maximum": 7
+      },
+      "pass_": true
+    },
+    {
+      "kind": "smoothness",
+      "name": "plus67",
+      "baseline": {
+        "maximum": 68
+      },
+      "candidate": {
+        "maximum": 68
+      },
+      "pass_": true
+    },
+    {
+      "kind": "smoothness",
+      "name": "plus78",
+      "baseline": {
+        "maximum": 67
+      },
+      "candidate": {
+        "maximum": 67
+      },
+      "pass_": true
+    }
+  ],
+  "anchorMaximum": 0,
+  "frozenSHA": {
+    "face-solve-data.mjs": "703182263f1b79d1188a4eee9279e665174e3c1305d1f79e9a56117515223c53",
+    "stereo-attachments.mjs": "d4e5a6b65579e253f77a4852581deb01134a8dd071fbfea40c436255e56fe9f9",
+    "ear-transform-data.mjs": "7baf74abb04b05d1f39c693422e33d1580464a5199f7ad7f153cdc5cb769dd34"
+  },
+  "currentSHA": {
+    "face-solve-data.mjs": "32e1908f0ddcb904feb0853844fac8ce4dc7ffe073d3298c3c0852ca5ee544e5",
+    "stereo-attachments.mjs": "d4e5a6b65579e253f77a4852581deb01134a8dd071fbfea40c436255e56fe9f9",
+    "ear-transform-data.mjs": "7baf74abb04b05d1f39c693422e33d1580464a5199f7ad7f153cdc5cb769dd34"
+  },
+  "runtimeSHA": "4ada25597539bd047f3559f1249cddb9e3327e3dbbb5456dccbcb869dada8de1",
+  "faceDataChangeReason": "Exact runtime anchor closure, nine-key free-X projection, family45 regeneration and offline projection; original freeze retained",
+  "legacyCommit": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+  "legacyFilesVerified": 9,
+  "captures": {
+    "final-F7-down-left-2x.png": "73c135633f52f378232ab49a1f08177c6ba97e6f5a4cb839a55e12960bccaa88",
+    "profile-A-profiles-hairless.png": "d3e060acbf8ff8bb56b0325e7827a98b66a08051c2161333420eec98a992ade5",
+    "profile-A-mixed-full-2x.png": "e94475e360070520830dfa32e1662cf9adfb9b4627bf2a07d3ab394502a51511",
+    "profile-A-mixed-hairless-2x.png": "fa49ddc4f791cd499dc8da12e9f2ff9891862c21efe5e5bee0602b7966451c0c",
+    "final-F7-down-right-2x.png": "fd89237c722bc578469ee6a92a3927741d1f925cdf9116b615eb60445d2b76c7",
+    "final-nine-keys-full.png": "d6eebb933d4cc60137965d52b1950229d9f17be34de0fe8c2d4462c0d95a37f8",
+    "profile-A-profiles-full.png": "7ef44b04424c015c1d64b3c9e750e522922874cacda45f0cc61a2728b2b76fc8",
+    "final-eight-between-hairless.png": "70899a342688d98a9522fbc9df6e8db632ad95a03b51008e65dfe6702cef58e3",
+    "final-nine-keys-hairless.png": "06cb8273c838b4f48709ac4b2a92315b964d2891ae517e08c881757b41e37f63",
+    "final-eight-between-full.png": "d050c6085ee71802a22a2690489b98dff0bb3a3754ae3ecaf8c765e972f9b7a2",
+    "final-F7-left-2x.png": "bc00c33e7c0866b86d0ab987da2cd2e7af34dcc4cc7b141e9b8a97ef8f784d0e"
+  }
+}

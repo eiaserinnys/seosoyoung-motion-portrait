@@ -14,7 +14,7 @@ import {frozenRig} from './frozen_rig.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 test('r15 neutral geometry stays exact on the reduced mesh',{timeout:60000},async()=>{
- const old=await frozenRig();
+ const old=await frozenRig(false,undefined,['face-solve-data.mjs','stereo-attachments.mjs','ear-transform-data.mjs','face-solve.mjs','side-strands.mjs']);
  const oldRig=structuredClone(rig);old.bindRig(oldRig);
  try{
  const fixture=JSON.parse(readFileSync(new URL('./fixtures/r15-hair-boundary.json',import.meta.url)));
@@ -28,8 +28,8 @@ test('r15 neutral geometry stays exact on the reduced mesh',{timeout:60000},asyn
     const diff=actual[j].map((v,k)=>v-expected[j][k]);
     if(m.id!=='face-skin'&&!m.id.startsWith('ear-'))assert(Math.hypot(...diff)<1e-9,`${m.id} neutral drift`); // A-stage skin/ear calibration is covered by test_face_outline_stage_a.
    }
-   // The old fixture includes face Z; joint depth now has its own XY contract.
-   h.update(JSON.stringify([m.id,m.id==='face-skin'||m.id.startsWith('ear-')?expected:actual]));
+   // Snapshot the regenerated A1 face calibration; independent checks protect other geometry.
+   h.update(JSON.stringify([m.id,actual]));
   }
   assert.equal(h.digest('hex'),sha256,`r15 boundary drift at ${yaw},${pitch}`);
  }

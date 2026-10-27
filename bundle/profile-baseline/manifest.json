@@ -1,0 +1,41 @@
+{
+  "commit": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+  "files": [
+    {
+      "path": "corrections.mjs",
+      "sha256": "b953c4f6f781606e0ed992b8fd7139154aa53b88ab2a21c03937b6049d5baf25"
+    },
+    {
+      "path": "face-contour.mjs",
+      "sha256": "a03cc267de4d7cb337d78fda82e1f9845a8913a9374c6dee7cd9c5dad2261b6a"
+    },
+    {
+      "path": "face-solve-data.mjs",
+      "sha256": "eb234a18410b3480bd6cb39f9485c73f1ba37851cd7a6fe94e4ca08641335370"
+    },
+    {
+      "path": "face-solve.mjs",
+      "sha256": "385da50e260eb0b9316996692b3affe41763812a0e9cc9a4a79b50453418ffba"
+    },
+    {
+      "path": "geometry.mjs",
+      "sha256": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d"
+    },
+    {
+      "path": "head-turn.mjs",
+      "sha256": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf"
+    },
+    {
+      "path": "outline-data.mjs",
+      "sha256": "4d509c8ed9c9219661fc45ce9c3d62a43496535002ac6d3bd661e70727ab5702"
+    },
+    {
+      "path": "ponytail-skin.mjs",
+      "sha256": "87a55807da252ce051d03af354ed8401773da4bb7cad8ccc9dad631f16d5111e"
+    },
+    {
+      "path": "pose-grid.mjs",
+      "sha256": "4e37923756f7924ee4d06cf103ed242fe7824d82604a6d05a0605e9fb9152c44"
+    }
+  ]
+}

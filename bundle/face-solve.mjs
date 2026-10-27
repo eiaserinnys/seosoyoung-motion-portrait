@@ -1,4 +1,7 @@
 import {FACE_SOLVE} from './face-solve-data.mjs';
+import {faceSolveWorld as baselineProfileWorld,faceSolveAnchorWorld as baselineProfileAnchorWorld} from './profile-baseline/face-solve.mjs';
+import {FRAME_CACHE as BASELINE_FRAME_CACHE} from './profile-baseline/pose-grid.mjs';
+import {smoothstep} from './face-profile.mjs';
 import {artWorld,correction,clamp,radians} from './geometry.mjs';
 import {gridValue,frameValue,FRAME_CACHE} from './pose-grid.mjs';
 import {contourCoordinates} from './face-contour.mjs';
@@ -77,7 +80,7 @@ export function turnWeights45(delta){
  return [(c2*s-s2*c)/det,(-c1*s+s1*c)/det];
 }
 // Side depths use the same node ordering as face-0, in the evaluated ±45° frame.
-function face45Prior(point,p,family,relief,weights){
+function face45Prior(point,p,family,relief,weights,useBaseline=true){
  const gain=correction(p,'CorrTurn'),yaw=p.ParamAngleX*gain,sign=yaw<0?-1:1;
  const edge=frameValue(p,'face45-edge',()=>({...p,ParamAngleX:sign*45/gain,ParamAngleZ:0,[FRAME_CACHE]:new Map()}));
  const rest=frameValue(p,'face45-rest',()=>({...edge,ParamAngleY:0,[FRAME_CACHE]:new Map()}));
@@ -94,7 +97,7 @@ function face45Prior(point,p,family,relief,weights){
   const flat={...p,ParamAngleY:0,ParamAngleZ:0,[FRAME_CACHE]:new Map()};
   return FACE_SOLVE.samples.map(s=>{
    const a=[s.left,s.right].map(i=>face0(FACE_SOLVE.points[i],rest,0,[[i,1]]));
-   const b=[s.left,s.right].map(i=>face45Prior(FACE_SOLVE.points[i],flat,family,0,[[i,1]]));
+   const b=[s.left,s.right].map(i=>face45Prior(FACE_SOLVE.points[i],flat,family,0,[[i,1]],false));
    return [(a[0][1]+a[1][1])/2,a[0][0],a[1][0],b[0][0],b[1][0]];
   });
  }):null;
@@ -116,7 +119,14 @@ function face45Prior(point,p,family,relief,weights){
   const turned=shifted0[d]+residual;
   q[d]=d===0&&pitch?composedX:q[d]+turned-p45[d];
  }
- return artWorld([q[0]-502,q[1]-326,q[2]+shifted0[2]-z-relief],{...p,ParamAngleX:0,ParamAngleY:0});
+ const current=artWorld([q[0]-502,q[1]-326,q[2]+shifted0[2]-z-relief],{...p,ParamAngleX:0,ParamAngleY:0});
+ if(!useBaseline)return current;
+ // Beyond 67.5 degrees the authored 6dd absolute profile is retained. At
+ // 45 degrees the weight and its first derivative are both zero.
+ const baselinePose=frameValue(p,'profile-baseline-pose',()=>({...p,[BASELINE_FRAME_CACHE]:new Map()}));
+ const anchorName=weights.length===1&&weights[0][1]===1?Object.keys(FACE_SOLVE.anchors).find(name=>FACE_SOLVE.anchors[name]===weights[0][0]):undefined;
+ const old=anchorName===undefined?baselineProfileWorld(point,baselinePose,relief):baselineProfileAnchorWorld(anchorName,baselinePose),w=smoothstep(0,22.5,Math.abs(yaw)-45);
+ return current.map((v,d)=>v*(1-w)+old[d]*w);
 }
 const fixedSideNodes=new Set([...Object.values(FACE_SOLVE.anchors),...FACE_SOLVE.samples.flatMap(s=>[s.left,s.right,s.center])]);
 function sideTriangleCorrection(p,family){
@@ -144,9 +154,15 @@ function sideTriangleCorrection(p,family){
  }
  throw Error('Side triangle projection did not converge');
 }
+// The unmixed B position used as the new-frame input to the A interpolation.
+// Keep its observations testable independently of the final legacy blend.
+export function evaluateFace45BaseWorld(point,p,family=FACE_SOLVE.family45,relief=0,weights=stencil(point)){
+ const unrolled={...p,ParamAngleZ:0},q=face45Prior(point,unrolled,family,relief,weights,false);
+ return artWorld([q[0]-502,q[1]-326,q[2]],{...p,ParamAngleX:0,ParamAngleY:0});
+}
 export function evaluateFace45World(point,p,family=FACE_SOLVE.family45,relief=0,weights=stencil(point)){
  const unrolled={...p,ParamAngleZ:0},q=face45Prior(point,unrolled,family,relief,weights);
- if(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))>45&&p.ParamAngleY*correction(p,'CorrTurn')){
+ if(Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))>45){
   const delta=frameValue(p,'face45-triangle-projection',()=>sideTriangleCorrection(unrolled,family));
   q[0]+=sample(delta,weights);
  }

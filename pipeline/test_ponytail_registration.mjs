@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 import {assertApprovedReversals} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -9,6 +10,7 @@ import {FEATURE_FIT} from '../bundle/feature-data.mjs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {ponytailSkinDelta} from '../bundle/ponytail-skin.mjs';
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 const skin=rig.meshes.find(m=>m.id==='face-skin');
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
@@ -32,6 +34,6 @@ test('ponytail continuous prior has no lower-face support; hair modules and auth
  for(const y of [410,497,554.5,616])assert.deepEqual(ponytailSkinDelta([500,y],22.5,15,at(22.5,15)),[0,0]);
  for(const yaw of [-44.99,-29.25,0,22.5,44.99])assert.deepEqual(ponytailSkinDelta([400,300],yaw,0,at(yaw,0)),[0,0]);
  for(const path of ['bundle/hair-surface.mjs','bundle/hair-shell.mjs','bundle/hair-solve.mjs','bundle/hair-solve-data.mjs','bundle/dome-data.mjs','bundle/assets/seosoyoung-rig.json','bundle/assets/texture_00.png']){
-  assert.deepEqual(readFileSync(new URL('../'+path,import.meta.url)),execFileSync('git',['show','f5d3c9f:'+path],{maxBuffer:20*1024*1024}),path);
+  assert.equal(sha(readFileSync(new URL('../'+path,import.meta.url))),sha(execFileSync('git',['show','6dd12cf:'+path],{maxBuffer:20*1024*1024})),path);
  }
 });

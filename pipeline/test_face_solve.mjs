@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {faceSolveWorld,faceSolveAnchorWorld,evaluateFace45World} from '../bundle/face-solve.mjs';
+import {faceSolveWorld,faceSolveAnchorWorld,evaluateFace45World,evaluateFace45BaseWorld} from '../bundle/face-solve.mjs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {OUTLINE_POSES,OUTLINE_ROWS} from '../bundle/outline-data.mjs';
 import {FEATURE_FIT} from '../bundle/feature-data.mjs';
@@ -19,6 +19,7 @@ const skin=rig.meshes.find(m=>m.id==='face-skin');
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const at=(yaw,pitch=0)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()});
 const near=(a,b,tol=1)=>assert(Math.hypot(a[0]-b[0],a[1]-b[1])<=tol,`${a} vs ${b}`);
+const baseAnchor=(name,p)=>{const i=FACE_SOLVE.anchors[name];return evaluateFace45BaseWorld(FACE_SOLVE.points[i],p,undefined,0,[[i,1]]);};
 const ids={browLeft:'eye-left-brow',browRight:'eye-right-brow',left:'eye-left-sclera',right:'eye-right-sclera',nose:'nose-detail',mouth:'mouth-detail'};
 function minDet(points){
  const area=(q,t)=>{const [a,b,c]=t.map(i=>q[i]);return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);};
@@ -54,16 +55,19 @@ test('cached and uncached arbitrary queries agree, including chin half-pixel and
  const p=at(22.5,15),q={...p};delete q[FRAME_CACHE];
  for(const point of [[502,616],[502.5,616],[451.25,501.5],[300,200]])assert.deepEqual(faceSolveWorld(point,p),faceSolveWorld(point,q));
 });
-test('face-45 key poses reproduce every observed node and six feature centers',{timeout:60000},()=>{
- const inputs=JSON.parse(execFileSync('node',[new URL('./face_solve_inputs.mjs',import.meta.url).pathname],{timeout:60000}));
+test('unmixed B key poses reproduce every observed node and six feature centers',{timeout:60000},()=>{
+ const inputs=JSON.parse(execFileSync('node',[new URL('./face_outline_stage_a/refinement/family45_expectations.mjs',import.meta.url).pathname],{timeout:60000,maxBuffer:16*1024*1024}));
  assert.deepEqual(FACE_SOLVE.family45.poses.map(p=>p.name),['left67','left90','right67','right90']);
  for(const pose of inputs.family45.poses){
   const p=at(pose.yaw);
   FACE_SOLVE.points.forEach((pt,i)=>{
    const anchor=Object.entries(FACE_SOLVE.anchors).find(([,index])=>index===i);
-   near(anchor?faceSolveAnchorWorld(anchor[0],p):faceSolveWorld(pt,p),pose.obs[i],1e-6);
+   try{near(anchor?baseAnchor(anchor[0],p):evaluateFace45BaseWorld(pt,p),pose.obs[i],1e-6);}
+   catch(error){error.message=`${pose.name} node ${i} rest ${pt}: ${error.message}`;throw error;}
+   const move=pose.projectionMoves.find(m=>m.index===i);
+   if(move){const actual=anchor?baseAnchor(anchor[0],p):evaluateFace45BaseWorld(pt,p);near(actual.slice(0,2).map((v,d)=>v-pose.rawObs[i][d]),move.delta,1e-6);}
   });
-  for(const [key,id] of Object.entries(ids))near(featureWorld(id,FEATURE_FIT.front[key],p),pose.obs[FACE_SOLVE.anchors[key]],1e-6);
+  for(const key of Object.keys(ids))near(baseAnchor(key,p),pose.obs[FACE_SOLVE.anchors[key]],1e-6);
  }
 });
 test('face-45 anchors and skin meet face-0 at pitched seams',{timeout:60000},()=>{
@@ -80,19 +84,19 @@ test('face-45 intermediate turns and extreme diagonals keep every triangle orien
  const poses=[...[-90,-78.75,-67.5,-56.25,56.25,67.5,78.75,90].map(y=>[y,0]),...[-90,90].flatMap(y=>[-30,30].map(p=>[y,p]))];
  for(const [yaw,pitch] of poses){const p=at(yaw,pitch);assert(minDet(skin.positions.map(pt=>faceSolveWorld(pt,p)))>0,`${yaw},${pitch}`);}
 });
-test('side composition transports the pitched row while projection fixes only free skin X',()=>{
+test('unmixed B composition transports the pitched row while projection fixes only free skin X',()=>{
  for(const yaw of [-90,-67.5,67.5,90])for(const pitch of [-30,-15,0,15,30]){
   const p=at(yaw,pitch),edge=at(Math.sign(yaw)*45,pitch),flat=at(yaw),flatEdge=at(Math.sign(yaw)*45);
   const rows=FACE_SOLVE.samples.map(s=>{
-   const a=[s.left,s.right].map(i=>faceSolveWorld(FACE_SOLVE.points[i],flatEdge));
-   const b=[s.left,s.right].map(i=>faceSolveWorld(FACE_SOLVE.points[i],flat));
+   const a=[s.left,s.right].map(i=>evaluateFace45BaseWorld(FACE_SOLVE.points[i],flatEdge));
+   const b=[s.left,s.right].map(i=>evaluateFace45BaseWorld(FACE_SOLVE.points[i],flat));
    return [(a[0][1]+a[1][1])/2,a[0][0],a[1][0],b[0][0],b[1][0]];
   });
   // Rim samples are fixed by the discrete projection; use them to test the
   // exact row map independently of the runtime's implementation helpers.
   const fixed=FACE_SOLVE.samples.flatMap(s=>[s.left,s.right,s.center]);
   for(const point of [...skin.positions,...fixed.map(i=>FACE_SOLVE.points[i])]){
-   const actual=faceSolveWorld(point,p),boundary=faceSolveWorld(point,edge),turned=faceSolveWorld(point,flat),origin=faceSolveWorld(point,flatEdge);
+   const actual=evaluateFace45BaseWorld(point,p),boundary=evaluateFace45BaseWorld(point,edge),turned=evaluateFace45BaseWorld(point,flat),origin=evaluateFace45BaseWorld(point,flatEdge);
    assert(Math.abs(actual[1]-boundary[1]-(turned[1]-origin[1]))<1e-6);
    if(!pitch){near(actual,turned,1e-6);continue;}
    let i=0;while(i<rows.length-2&&boundary[1]>rows[i+1][0])i++;

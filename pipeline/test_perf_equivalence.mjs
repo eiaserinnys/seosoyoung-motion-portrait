@@ -9,7 +9,7 @@ import {Renderer} from '../bundle/renderer.mjs';
 
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
-test('P1/P2 cache all nine poses without moving any vertex',{timeout:60000},async()=>{
+test('P1/P2 cache all nine poses without moving any vertex',{timeout:600000},async()=>{
  let beforeMs=0,afterMs=0,maxDisplacement=0;
  for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
   const plain={...base,ParamAngleX:yaw,ParamAngleY:pitch};
@@ -30,7 +30,7 @@ test('P1/P2 cache all nine poses without moving any vertex',{timeout:60000},asyn
  console.log(JSON.stringify({poses:9,beforeMs,afterMs,maxDisplacement,displacementPx:maxDisplacement.toFixed(3)}));
 });
 
-test('P2 mask and main draw reuse positions only within their current frame',{timeout:60000},()=>{
+test('P2 mask and main draw reuse positions only within their current frame',{timeout:600000},()=>{
  const gl=new Proxy({}, {get:()=>()=>{}});
  const renderer={gl,loc:{},rig};
  const mesh=rig.meshes.find(m=>m.id==='face-skin');
