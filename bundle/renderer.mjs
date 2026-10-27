@@ -5,7 +5,7 @@ import {profileWeights,smoothstep} from './face-profile.mjs';
 import {skinFillMesh,skinFillPositions,skinFillClipMesh,skinFillClipPositions} from './skin-fill.mjs';
 import {deform3D,opacity,bindRig} from './rig.mjs';
 import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction} from './geometry.mjs';
-import {getHeadBase,headBaseVertices} from './head-base.mjs';
+import {getHeadBase,headBaseVertices,headSurfaceFacingDelta} from './head-base.mjs';
 import {CORRECTION_PRESETS} from './corrections.mjs';
 
 function faceBoundaryWeights(mesh){
@@ -37,16 +37,18 @@ export function earDepthMargin(side,p,bias){
   return Math.max(2,bias[side]*(1-smoothstep(0,20,far)));
 }
 
+export const neckSampleY=(neck,size,row)=>(neck.atlas[1]+row-neck.bbox[1]+.5)/size;
+export const faceDirectionFade=(point,p)=>smoothstep(.05,.20,headSurfaceFacingDelta(point,p));
+
 export function createNeckExtension(neck,head,rest){
   const spec=head.neck_extension,[x0,,width]=spec.bbox;
   const firstY=Math.min(...neck.positions.map(point=>point[1]));
   const top=Math.min(...head.open_boundary.map(i=>head.reference[i*3+1]));
   const center=x0+width/2,delta=deform3D(neck,[center,firstY],rest)[1]-firstY;
   const rawTop=top-delta,edge=neck.positions.map((p,i)=>({p,i})).filter(v=>v.p[1]===firstY).sort((a,b)=>a.p[0]-b.p[0]);
-  const positions=neck.positions.map(p=>p.slice()),triangles=neck.triangles.map(t=>t.slice()),start=positions.length;
-  for(const {p} of edge)positions.push([p[0],rawTop]);
+  const positions=neck.positions.map(p=>p.slice()),uvs=neck.uvs.map(uv=>uv.slice()),triangles=neck.triangles.map(t=>t.slice()),start=positions.length;
+  for(const {p,i} of edge){positions.push([p[0],rawTop]);uvs.push(neck.uvs[i].slice());}
   for(let i=0;i<edge.length-1;i++)triangles.push([start+i,start+i+1,edge[i].i],[start+i+1,edge[i+1].i,edge[i].i]);
-  const uvs=positions.map(([x,y])=>[(x-x0)/width,(y-spec.texture_top_y)/spec.texture_height]);
   return {...neck,positions,triangles,uvs};
 }
 
@@ -76,9 +78,9 @@ export class Renderer {
     this.program=gl.createProgram();
     gl.attachShader(this.program,shader(gl.VERTEX_SHADER,`attribute vec3 a_pos;attribute vec2 a_uv;attribute float a_rawX;attribute float a_rawY;attribute float a_facing;attribute float a_seam;attribute vec2 a_refUV;attribute float a_refMix;uniform vec4 u_view;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){gl_Position=vec4(a_pos.xy*u_view.xy+u_view.zw,-a_pos.z/1024.,1.);v_uv=a_uv;v_rawX=a_rawX;v_rawY=a_rawY;v_facing=a_facing;v_seam=a_seam;v_refUV=a_refUV;v_refMix=a_refMix;}`));
     gl.attachShader(this.program,shader(gl.FRAGMENT_SHADER,`#extension GL_OES_standard_derivatives : enable
-precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceMask;uniform bool u_faceClip;uniform sampler2D u_rim;uniform bool u_repairRim;uniform bool u_upperClip;uniform float u_earHeight;uniform sampler2D u_profileTex;uniform vec3 u_profileMix;uniform vec2 u_lidAlpha;uniform sampler2D u_mask;uniform sampler2D u_headDepth;uniform bool u_depthEncode;uniform bool u_headCompare;uniform bool u_headSmooth;uniform float u_headBias;uniform bool u_neck;uniform bool u_solid;uniform bool u_headBase;uniform vec4 u_baseColor;uniform bool u_clip;uniform bool u_rimFade;uniform float u_rimStep;uniform bool u_closed;uniform bool u_tint;uniform vec2 u_eye;uniform vec2 u_res;uniform float u_opacity;uniform float u_farBack;uniform float u_backStart;uniform float u_identify;uniform vec4 u_refRect;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){if(v_facing<=0.000001)discard;if(u_depthEncode){vec3 d=fract(gl_FragCoord.z*vec3(1.,255.,65025.));d-=d.yzz*vec3(1./255.,1./255.,0.);gl_FragColor=vec4(d,1.);return;}float headCoverage=1.;if(u_headCompare){vec4 d=texture2D(u_headDepth,gl_FragCoord.xy/u_res);if(d.a>.5){float gap=dot(d.rgb,vec3(1.,1./255.,1./65025.))+2./65535.+u_headBias-gl_FragCoord.z;if(u_headSmooth){float feather=max(fwidth(gap),1./2097152.);headCoverage=smoothstep(-feather,0.,gap);}else if(gap<0.)discard;}}vec4 c=u_headBase?u_baseColor:(u_solid?vec4(.28,.35,.42,1.):texture2D(u_tex,v_uv));c.a*=v_seam*headCoverage;if(!u_solid&&u_profileMix.x>0.){vec2 uv=vec2(v_rawX/2048.,v_rawY/2048.+u_profileMix.z);vec3 c67=texture2D(u_profileTex,uv).rgb;vec3 c90=texture2D(u_profileTex,uv+vec2(.5,0.)).rgb;c.rgb=mix(c.rgb,mix(c67,c90,u_profileMix.y),u_profileMix.x);}if(!u_solid&&v_refMix>0.&&all(greaterThanEqual(v_refUV,u_refRect.xy))&&all(lessThanEqual(v_refUV,u_refRect.zw)))c.rgb=mix(c.rgb,texture2D(u_tex,v_refUV).rgb,v_refMix);if(u_repairRim){vec4 rim=texture2D(u_rim,vec2(v_rawX,v_rawY)/1024.);c.rgb=mix(c.rgb,rim.rgb,rim.a);}if(u_closed)c.a*=v_rawX<502.?u_lidAlpha.x:u_lidAlpha.y;if(u_closed&&((v_rawX<502.&&u_eye.x>=.22)||(v_rawX>=502.&&u_eye.y>=.22)))discard;if(u_neck)c.a*=mix(texture2D(u_mask,gl_FragCoord.xy/u_res).a,1.,smoothstep(550.,590.,v_rawY));if(u_clip)c.a*=texture2D(u_mask,gl_FragCoord.xy/u_res).a;if(u_rimFade){vec2 q=gl_FragCoord.xy;float m=min(min(texture2D(u_mask,(q+vec2(u_rimStep,0.))/u_res).a,texture2D(u_mask,(q-vec2(u_rimStep,0.))/u_res).a),min(texture2D(u_mask,(q+vec2(0.,u_rimStep))/u_res).a,texture2D(u_mask,(q-vec2(0.,u_rimStep))/u_res).a));c.a*=1.-v_refMix*m;}if(u_farBack!=0.&&(v_rawX-502.)*u_farBack>0.&&v_rawY>u_backStart)c.a*=mix(1.,texture2D(u_mask,gl_FragCoord.xy/u_res).a,abs(u_farBack));if(u_upperClip&&v_rawY<u_earHeight&&texture2D(u_faceMask,gl_FragCoord.xy/u_res).a<.99)discard;if(u_faceClip&&texture2D(u_faceMask,gl_FragCoord.xy/u_res).a<.999)discard;if(c.a*u_opacity<.01)discard;if(u_identify>0.)c.rgb=vec3(u_identify>1.5?1.:0.);if(u_tint)c.rgb=mix(c.rgb,vec3(.1,1.,.8),.7);gl_FragColor=vec4(c.rgb,c.a*u_opacity);}`));
+precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceMask;uniform bool u_faceClip;uniform sampler2D u_rim;uniform bool u_repairRim;uniform bool u_upperClip;uniform float u_earHeight;uniform sampler2D u_profileTex;uniform vec3 u_profileMix;uniform vec2 u_lidAlpha;uniform sampler2D u_mask;uniform sampler2D u_headDepth;uniform bool u_depthEncode;uniform bool u_headCompare;uniform bool u_headSmooth;uniform float u_headBias;uniform bool u_neck;uniform bool u_neckFill;uniform float u_neckArtY;uniform float u_neckSampleY;uniform bool u_solid;uniform bool u_headBase;uniform vec4 u_baseColor;uniform bool u_clip;uniform bool u_rimFade;uniform float u_rimStep;uniform bool u_closed;uniform bool u_tint;uniform vec2 u_eye;uniform vec2 u_res;uniform float u_opacity;uniform float u_farBack;uniform float u_backStart;uniform float u_identify;uniform vec4 u_refRect;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){if(v_facing<=0.000001)discard;if(u_depthEncode){vec3 d=fract(gl_FragCoord.z*vec3(1.,255.,65025.));d-=d.yzz*vec3(1./255.,1./255.,0.);gl_FragColor=vec4(d,1.);return;}float headCoverage=1.;if(u_headCompare){vec4 d=texture2D(u_headDepth,gl_FragCoord.xy/u_res);if(d.a>.5){float gap=dot(d.rgb,vec3(1.,1./255.,1./65025.))+2./65535.+u_headBias-gl_FragCoord.z;if(u_headSmooth){float feather=max(fwidth(gap),1./2097152.);headCoverage=smoothstep(-feather,0.,gap);}else if(gap<0.)discard;}}vec4 c=u_headBase?u_baseColor:(u_solid?vec4(.28,.35,.42,1.):texture2D(u_tex,v_uv));if(u_neckFill){vec4 art=v_rawY<u_neckArtY?vec4(0.):c;vec4 base=texture2D(u_tex,vec2(v_uv.x,u_neckSampleY));float a=art.a+base.a*(1.-art.a);c=a>0.?vec4((art.rgb*art.a+base.rgb*base.a*(1.-art.a))/a,a):vec4(0.);}c.a*=v_seam*headCoverage;if(!u_solid&&u_profileMix.x>0.){vec2 uv=vec2(v_rawX/2048.,v_rawY/2048.+u_profileMix.z);vec3 c67=texture2D(u_profileTex,uv).rgb;vec3 c90=texture2D(u_profileTex,uv+vec2(.5,0.)).rgb;c.rgb=mix(c.rgb,mix(c67,c90,u_profileMix.y),u_profileMix.x);}if(!u_solid&&v_refMix>0.&&all(greaterThanEqual(v_refUV,u_refRect.xy))&&all(lessThanEqual(v_refUV,u_refRect.zw)))c.rgb=mix(c.rgb,texture2D(u_tex,v_refUV).rgb,v_refMix);if(u_repairRim){vec4 rim=texture2D(u_rim,vec2(v_rawX,v_rawY)/1024.);c.rgb=mix(c.rgb,rim.rgb,rim.a);}if(u_closed)c.a*=v_rawX<502.?u_lidAlpha.x:u_lidAlpha.y;if(u_closed&&((v_rawX<502.&&u_eye.x>=.22)||(v_rawX>=502.&&u_eye.y>=.22)))discard;if(u_neck)c.a*=mix(texture2D(u_mask,gl_FragCoord.xy/u_res).a,1.,smoothstep(550.,590.,v_rawY));if(u_clip)c.a*=texture2D(u_mask,gl_FragCoord.xy/u_res).a;if(u_rimFade){vec2 q=gl_FragCoord.xy;float m=min(min(texture2D(u_mask,(q+vec2(u_rimStep,0.))/u_res).a,texture2D(u_mask,(q-vec2(u_rimStep,0.))/u_res).a),min(texture2D(u_mask,(q+vec2(0.,u_rimStep))/u_res).a,texture2D(u_mask,(q-vec2(0.,u_rimStep))/u_res).a));c.a*=1.-v_refMix*max(m,v_refUV.x);}if(u_farBack!=0.&&(v_rawX-502.)*u_farBack>0.&&v_rawY>u_backStart)c.a*=mix(1.,texture2D(u_mask,gl_FragCoord.xy/u_res).a,abs(u_farBack));if(u_upperClip&&v_rawY<u_earHeight&&texture2D(u_faceMask,gl_FragCoord.xy/u_res).a<.99)discard;if(u_faceClip&&texture2D(u_faceMask,gl_FragCoord.xy/u_res).a<.999)discard;if(c.a*u_opacity<.01)discard;if(u_identify>0.)c.rgb=vec3(u_identify>1.5?1.:0.);if(u_tint)c.rgb=mix(c.rgb,vec3(.1,1.,.8),.7);gl_FragColor=vec4(c.rgb,c.a*u_opacity);}`));
     gl.linkProgram(this.program);if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(this.program));gl.useProgram(this.program);
-    this.loc={};for(const name of ['neck','solid','headBase','baseColor','view','tex','mask','clip','rimFade','rimStep','closed','tint','eye','res','opacity','farBack','backStart','identify','refRect','profileTex','profileMix','headDepth','depthEncode','headCompare','headSmooth','headBias'])this.loc[name]=gl.getUniformLocation(this.program,'u_'+name);
+    this.loc={};for(const name of ['neck','neckFill','neckArtY','neckSampleY','solid','headBase','baseColor','view','tex','mask','clip','rimFade','rimStep','closed','tint','eye','res','opacity','farBack','backStart','identify','refRect','profileTex','profileMix','headDepth','depthEncode','headCompare','headSmooth','headBias'])this.loc[name]=gl.getUniformLocation(this.program,'u_'+name);
     this.buffer=gl.createBuffer();this.indices=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);
     for(const [name,size,offset] of [['pos',3,0],['uv',2,12],['rawX',1,20],['rawY',1,24],['facing',1,28],['seam',1,32],['refUV',2,36],['refMix',1,44]]){const loc=gl.getAttribLocation(this.program,'a_'+name);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,size,gl.FLOAT,false,48,offset);}
     this.textures=images.map(im=>{const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);this.textureParams();gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);return tex;});
@@ -123,11 +125,16 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceMask;unifo
       const [x,y]=sample.point,[bx,by]=ref.bbox,[ax,ay]=ref.atlas;
       return [(ax+x-bx)/this.rig.atlasSize,(ay+y-by)/this.rig.atlasSize,sample.weight];
     };
-    const data=new Float32Array(points.flatMap((pt,i)=>[...pt,...mesh.uvs[i],mesh.positions[i][0],mesh.positions[i][1],mesh.id.startsWith('side-cranium')?craniumFacing(mesh.positions[i],p):1,mesh.id.startsWith('side-cranium')?craniumSeam(mesh.positions[i]):1,...(mesh.id==='face-skin'?[0,0,this.faceRim[i]]:reference(mesh.positions[i]))]));
+    const faceDirection=mesh.id==='face-skin'&&this.headBase&&correction(p,'CorrHeadBase')===1&&correction(p,'CorrOutline')===1
+      ?frameValue(p,'face-direction',()=>mesh.positions.map(point=>faceDirectionFade(point,p))):null;
+    const data=new Float32Array(points.flatMap((pt,i)=>[...pt,...mesh.uvs[i],mesh.positions[i][0],mesh.positions[i][1],mesh.id.startsWith('side-cranium')?craniumFacing(mesh.positions[i],p):1,mesh.id.startsWith('side-cranium')?craniumSeam(mesh.positions[i]):1,...(mesh.id==='face-skin'?[faceDirection?.[i]||0,0,this.faceRim[i]]:reference(mesh.positions[i]))]));
     gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(mesh.triangles.flat()),gl.STATIC_DRAW);
     const ear=compareHead&&mesh.id.startsWith('ear-'),side=mesh.id.endsWith('left')?'left':'right';
     gl.uniform1i(this.loc.neck,mesh.id==='neck'&&!compareHead);gl.uniform1i(this.loc.headCompare,compareHead);
+    const neckFill=mesh.id==='neck'&&compareHead&&!this.neckArtOnly;
+    gl.uniform1i(this.loc.neckFill,neckFill);
+    if(neckFill){gl.uniform1f(this.loc.neckArtY,mesh.bbox[1]);gl.uniform1f(this.loc.neckSampleY,neckSampleY(mesh,this.rig.atlasSize,this.headBase.neck_extension.sample_y));}
     gl.uniform1i(this.loc.headSmooth,ear);gl.uniform1f(this.loc.headBias,ear?earDepthMargin(side,p,this.headBase.ear_depth_bias_px)/2048:0);
     gl.uniform1f(this.loc.opacity,alpha);gl.uniform1i(this.loc.clip,clip);gl.uniform1i(this.loc.tint,tint);gl.uniform1i(this.loc.closed,mesh.id==='closed-eyes-v1');gl.drawElements(gl.TRIANGLES,mesh.triangles.length*3,gl.UNSIGNED_SHORT,0);
     return points;
@@ -138,7 +145,7 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceMask;unifo
     gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(this.headBase.triangles),gl.STATIC_DRAW);
     gl.uniform1i(this.loc.headBase,1);gl.uniform4f(this.loc.baseColor,...this.headBase.color,1);
-    for(const name of ['faceClip','upperClip','repairRim','neck','clip','closed','tint'])gl.uniform1i(this.loc[name],0);
+    for(const name of ['faceClip','upperClip','repairRim','neck','neckFill','clip','closed','tint'])gl.uniform1i(this.loc[name],0);
     gl.uniform3f(this.loc.profileMix,0,0,0);gl.uniform1f(this.loc.farBack,0);gl.uniform1f(this.loc.opacity,1);
     gl.uniform1f(this.loc.identify,this.identify?((Array.isArray(this.identify)?this.identify.includes('head-base'):this.identify==='head-base')?2:1):0);
     gl.uniform1i(this.loc.headCompare,0);
@@ -153,7 +160,7 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceMask;unifo
   }
   render(parameters,state) {
     const p={...parameters,[FRAME_CACHE]:new Map()};
-    this.identify=state.identify;this.hideHeadCap=!!state.hideHeadCap;this.skinClip=false;this.repairRim=!state.before&&!state.surfaceOnly;
+    this.identify=state.identify;this.hideHeadCap=!!state.hideHeadCap;this.neckArtOnly=!!state.neckArtOnly;this.skinClip=false;this.repairRim=!state.before&&!state.surfaceOnly;
     this.overlay.hidden=!(state.wire||state.grid);
     this.resize();const gl=this.gl,w=this.canvas.width,h=this.canvas.height;
     const scale=Math.min(w/1100,h/1600),ox=(w-1024*scale)/2,oy=(h-1536*scale)/2;
@@ -241,10 +248,8 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceMask;unifo
       if(mesh.id.startsWith('ear-')){gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
       if(mesh.id.startsWith('back-hair'))gl.enable(gl.CULL_FACE);
       const neckExtension=mesh.id==='neck'&&policy.compareHead;
-      if(neckExtension)texture(7);
       const drawn=neckExtension?this.neckExtension:mesh;
       wire(drawn,this.draw(drawn,p,alpha,{compareHead:policy.compareHead}));
-      if(neckExtension)texture(state.before?1:0);
       gl.disable(gl.CULL_FACE);gl.disable(gl.DEPTH_TEST);
     }
     drawFill();

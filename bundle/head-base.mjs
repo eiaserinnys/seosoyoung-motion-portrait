@@ -134,6 +134,11 @@ function triangleFrame(coords,vertices){
  return [t1,t2,n];
 }
 
+export function headSurfaceFacingDelta(point,p){
+ const a=attachment(point),current=headBaseVertices(p).surface;
+ return triangleFrame(current,a.vertices)[2][2]-triangleFrame(model.reference,a.vertices)[2][2];
+}
+
 export function attachedTransform(point,p){
  const key=pointKey(point),a=attachment(point),current=headBaseVertices(p).surface;
  if(!model.restFrames.has(key))model.restFrames.set(key,triangleFrame(model.reference,a.vertices));

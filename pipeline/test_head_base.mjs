@@ -57,6 +57,21 @@ test('neck extension reaches the projected head ring and keeps cylinder depth',{
  for(const point of depth.slice(first))assert(point[2]>=zc-1e-9,'extension must use neck cylinder depth');
  assert.equal(backgroundLayerPolicy(neck,p,{hidden:new Set(),outfit:'sweater',bangs:false},true).compareHead,true);
 });
+test('neck extension preserves the original vertices, UVs, and triangles',{timeout:30000},()=>{
+ const neck=rig.meshes.find(m=>m.id==='neck'),extended=renderer.createNeckExtension(neck,headBase.getHeadBase(),pose());
+ assert.deepEqual(extended.positions.slice(0,neck.positions.length),neck.positions);
+ assert.deepEqual(extended.uvs.slice(0,neck.uvs.length),neck.uvs);
+ assert.deepEqual(extended.triangles.slice(0,neck.triangles.length),neck.triangles);
+});
+test('neck sample uses the corresponding row in the bound atlas',{timeout:30000},()=>{
+ const neck=rig.meshes.find(m=>m.id==='neck'),sample=renderer.neckSampleY(neck,rig.atlasSize,640);
+ close(sample,(neck.atlas[1]+640-neck.bbox[1]+.5)/rig.atlasSize,1e-12,'atlas sample row');
+});
+test('surface direction fade is zero at rest',{timeout:30000},()=>{
+ const p=pose();for(const point of skin.positions)close(renderer.faceDirectionFade(point,p),0,1e-12,'rest fade');
+ const up=pose(0,30);assert(skin.positions.some(point=>renderer.faceDirectionFade(point,up)>0),'up pose activates direction fade');
+ for(const side of ['left','right'])assert(rig.meshes.find(m=>m.id==='side-cranium-'+side).atlas[1]>.5,'face refUV.y=0 remains outside hair atlas');
+});
 
 test('N7: Python projection fixture, 100 vertices and 13 poses',{timeout:30000},()=>{
  const vertices=new Float32Array(binary.buffer,binary.byteOffset+metadata.offsets.vertices.offset,metadata.offsets.vertices.length/4);

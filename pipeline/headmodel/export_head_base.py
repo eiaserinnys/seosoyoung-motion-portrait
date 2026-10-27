@@ -143,24 +143,10 @@ def ear_depth_biases():
     return result
 
 
-def neck_extension_texture(rig, top):
+def neck_extension_spec(rig, top):
     mesh = next(item for item in rig['meshes'] if item['id'] == 'neck')
-    ax, ay, width, height = mesh['atlas']
-    x, y, _, _ = mesh['bbox']
-    source = np.asarray(Image.open(ROOT / 'bundle/assets/texture_00.png').convert('RGBA'))
-    texture = source[ay:ay+height, ax:ax+width].copy()
-    sample_y = 640
-    sample = texture[sample_y-y]
-    # The existing rest neck deformation moves its top 16px upward.
-    texture_top = int(np.floor(top+16))
-    height_out = height + y-texture_top
-    base = Image.fromarray(np.broadcast_to(sample, (height_out, width, 4)).copy())
-    base.alpha_composite(Image.fromarray(texture), (0, y-texture_top))
-    base.save(ROOT / 'bundle/assets/neck-extension.png')
-    opaque = np.flatnonzero(sample[:, 3] >= 127)
     return {'bbox': mesh['bbox'], 'top_y': float(top), 'raw_top_y': float(top+16),
-            'texture_top_y': texture_top, 'texture_height': height_out, 'sample_y': sample_y,
-            'profile': [float(x+opaque[0]), float(x+opaque[-1])]}
+            'sample_y': 640}
 
 
 def ear_root_rings(vertices, triangles, ear):
@@ -317,7 +303,7 @@ def main():
     _, owner = raster_silhouette(projected, attachment_triangles)
     projected[:, :2] += [152, 20]
     projected[:, 2] *= np.exp(front[3])
-    neck_extension = neck_extension_texture(rig, float(projected[open_ring, 1].min()))
+    neck_extension = neck_extension_spec(rig, float(projected[open_ring, 1].min()))
     ear_roots = {}
     for side, anchor in [('left', [369, 465]), ('right', [636, 464.5])]:
         ring = root_rings[side]
