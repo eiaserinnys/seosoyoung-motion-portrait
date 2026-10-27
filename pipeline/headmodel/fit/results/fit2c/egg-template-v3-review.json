@@ -1,0 +1,57 @@
+{
+  "decision": "stop_before_fit2c",
+  "reason": "이목구비 국소 영역을 채운 뒤에도 눈가 홈, 코와 콧구멍 굴곡, 입술선이 남아 계속 진행 조건을 충족하지 못했다.",
+  "conditions": {
+    "no_facial_features_or_holes": {
+      "status": "fail",
+      "observation": "위상상의 눈 두 곳과 입 한 곳은 닫혔으나, 정면과 아래 30도에서 눈가 가로 홈, 코와 콧구멍 굴곡, 입술선이 보인다. 별도의 열린 콧구멍 경계 고리는 없었다."
+    },
+    "convex_smooth_side_profile": {
+      "status": "fail",
+      "observation": "옆 90도에서 코와 입 부근의 굴곡이 남아 이마부터 턱 끝까지 하나의 매끈한 볼록 곡선이 되지 않았다."
+    },
+    "no_mask_boundary_groove_ridge_or_step": {
+      "status": "unconfirmed",
+      "observation": "남은 눈가 홈과 볼 앞쪽의 음영 전환이 보인다. 마스크 바깥 경계의 정확한 접선 연속성은 이 시트만으로 확인하지 못했다."
+    },
+    "front_silhouette_change_within_five_percent": {
+      "status": "pass",
+      "reference_face_width_px": 315.0,
+      "max_inward_px": 0.0,
+      "max_outward_px": 0.0,
+      "max_fraction_of_reference_width": 0.0
+    }
+  },
+  "mask": {
+    "landmark_convention": "0부터 시작하는 Multi-PIE 68점의 17~67번",
+    "eye_center_distance_xy": 6.51288366317749,
+    "outward_margin": 0.9769325494766234,
+    "original_free_vertices": 3980,
+    "added_free_cap_centers": 3,
+    "total_free_vertices": 3983,
+    "fixed_vertices": 7268,
+    "original_aperture_ring_sizes": [42, 42, 74],
+    "free_original_aperture_ring_vertices": [0, 0, 0],
+    "explanation": "원본 개구부 경계 정점은 모두 +z 법선 조건 밖이므로 지시대로 고정했다. 새 중심 3점은 자신의 법선으로 판정해 채우기 대상에 포함했다.",
+    "jaw_landmarks_all_fixed": true,
+    "remaining_topological_feature_holes": 0,
+    "same_linear_map_neutral_and_100_modes": true,
+    "fixed_fields_max_difference": 0.0
+  },
+  "nose_vertex": 4842,
+  "independent_review": {
+    "code": "중심점 선택 오류 보정 확인, 추가 P0/P2 없음",
+    "visual": "조건 1과 2 미충족으로 정합 중단에 동의. 마스크 경계에 별도의 뚜렷한 틈이나 단차는 보이지 않음.",
+    "scope": "코드, JSON, 최종 시트 직접 확인. 추가 실행이나 수정 없음."
+  },
+  "sheet": "pipeline/headmodel/fit/sheets/egg-template-v3.png",
+  "sheet_sha256": "9c156121f72c0152debb0aaf595eab0e12c55bdb0f1b3bdf41b3b97bdf13c682",
+  "execution": {
+    "template_runner_runs": 2,
+    "correction_runs_used": 1,
+    "fit_runs": 0,
+    "correction_reason": "구멍 중심의 마스크를 고리의 선택 여부로 정하던 구현 오류를 고쳤다. 새 중심 자신의 법선으로 판정하는 회귀 테스트를 추가했다.",
+    "tests": "test_egg_v3.py: 3 tests passed in 0.003s",
+    "fit2c_outputs_not_produced": ["shared", "poses", "fitted OBJ", "residuals", "delta statistics", "fit2c-overlay", "fit2c-jaw", "fit2c-shape"]
+  }
+}
