@@ -16,6 +16,7 @@ from typing import Any
 
 from part_preview import render_before_after_comparison
 from part_pixels import dilate_bool, erode_bool, blur_f32, fill_holes_2d, inpaint_horizontal_and_diffuse, despill_green_and_clean_alpha
+from neck_art import clear_background
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
@@ -409,7 +410,7 @@ def main() -> int:
     rebuilt_map["face-skin"] = build_clean_face_skin(still_np, existing_map["face-skin"])
     rebuilt_map["ear-left"] = build_extended_ear(existing_map["ear-left"], "left")
     rebuilt_map["ear-right"] = build_extended_ear(existing_map["ear-right"], "right")
-    rebuilt_map["neck"] = build_clean_neck(existing_map["neck"], existing_map["upper-body-short-sleeve"])
+    rebuilt_map["neck"] = clear_background(build_clean_neck(existing_map["neck"], existing_map["upper-body-short-sleeve"]), still_np)
 
     eye_rebuilt = build_hole_free_sclera_and_iris(existing_map)
     rebuilt_map.update(eye_rebuilt)

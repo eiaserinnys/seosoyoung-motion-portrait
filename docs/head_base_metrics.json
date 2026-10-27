@@ -5,7 +5,8 @@
   },
   "N2": {
     "passed": true,
-    "evidence": "pipeline/test_head_base.mjs: legacy and feature hashes"
+    "evidence": "pipeline/test_head_base.mjs: legacy and feature hashes",
+    "scope": "Geometry and feature vertex hashes; neck atlas alpha was intentionally changed by one pixel in each view."
   },
   "N3c": {
     "changed_pixels": 0,
@@ -728,13 +729,14 @@
         },
         "passed": true
       }
-    ]
+    ],
+    "limitation": "front and up select an isolated 2px band after head occlusion; their zero is not evidence that the whole neck junction is gap-free."
   },
   "rest_full_difference": {
-    "changed_pixels": 3263,
+    "changed_pixels": 3264,
     "ear_changed_pixels": 2770,
     "neck_opaque_changed_pixels": 2,
-    "other_changed_pixels": 491,
+    "other_changed_pixels": 492,
     "ear_changed_from_8330_pixels": 0,
     "bbox": [
       310,
@@ -2863,12 +2865,67 @@
   ],
   "reference_transform": "(q - camera_translation) * exp(logscale_front - logscale_key) + rest_translation",
   "note": "Angle-dependent displacement and outside-offset decay remain active.",
-  "post_capture_review": {
-    "jaw": "비교 시트에서 위 방향의 볼을 가로지르는 선이 남는다. -30/+20과 +45/+20의 여덟 표본에서 방향 항 f=1, 가장자리 가중 r=0.261~0.873이므로 지정 식은 원래 선 알파를 최소 12.7%~73.9% 남긴다. 방향 최대에서도 선을 완전히 지우지 못한다.",
-    "jaw_evidence": "docs/captures/head_base_jaw_direction.txt",
-    "neck_gap_limit": "불투명 첫 행에서 안쪽 열을 구할 수 있는 첫 행을 사용했다. 일부 포즈에서는 두상 깊이에 가려진 뒤 한쪽에 나타난 2px 폭만 선택되어 N10 0이 목 전체에 틈이 없다는 증거는 아니다.",
-    "capture_attempts": "첫 실행에서 10포즈의 첫 불투명 행에 안쪽 열이 없어 측정에 실패했다. 측정기를 보완해 허용된 인프라 재실행을 한 번 사용했고, 복원 전 정면은 첫 실행 자료를 재사용했다.",
-    "rest_neck": "원래 목 식별 렌더의 적색과 알파가 255인 화면 픽셀 중 목 연장 전후 차이는 2픽셀이다. 렌더 결과의 8비트 값으로 판정했으며 정확한 부동소수 알파는 확인하지 못했다.",
-    "status": "턱선과 정면 불투명 목 0픽셀 조건을 충족하지 못해 검수 완료나 머지 가능으로 볼 수 없다."
+  "neck_edge": {
+    "bbox_canvas": [
+      339,
+      610,
+      662,
+      778
+    ],
+    "views": {
+      "after": {
+        "opaque_on_original_background_px": 0,
+        "affected_bbox": null
+      },
+      "before": {
+        "opaque_on_original_background_px": 0,
+        "affected_bbox": null
+      }
+    },
+    "portrait_changes": {
+      "sweater": 1,
+      "shirt": 1
+    },
+    "part_bbox_canvas": [
+      339,
+      531,
+      323,
+      247
+    ],
+    "atlas_bbox": [
+      1666,
+      873,
+      323,
+      247
+    ],
+    "source_background_alpha_0_changed_texels": 1,
+    "changed_canvas_pixel": [
+      566,
+      594
+    ],
+    "previous_alpha": 9,
+    "assessment": "The texture rule is satisfied, but the two-layer shoulder strip remains visible: still.png includes opaque hair overlapping the neck part, so its alpha alone does not mark the shoulder line.",
+    "example_opaque_hair_canvas_pixel": [
+      345,
+      713
+    ],
+    "example_still_rgba": [
+      40,
+      29,
+      33,
+      255
+    ],
+    "example_neck_rgba": [
+      156,
+      110,
+      71,
+      255
+    ]
+  },
+  "jaw_fade_review": {
+    "formula": "1 - max(r*m, smoothstep(0,0.25,r)*f)",
+    "six_upward_cheek_lines": "The crossing lines are no longer visible in the six comparison crops.",
+    "color_boundary": "Angular skin color patches are visible near the faded face edge at yaw ±60 degrees.",
+    "color_crop": "docs/captures/head_base_direction_color.png"
   }
 }

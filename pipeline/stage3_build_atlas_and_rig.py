@@ -5,6 +5,7 @@ import math
 import shutil
 import numpy as np
 from silhouette_mesh import silhouette_mesh
+from neck_art import clear_background
 from pathlib import Path
 from PIL import Image
 
@@ -138,6 +139,7 @@ def build():
     build_cranium()
     parts=json.loads((ROOT/'parts/parts_index.json').read_text())
     manifest=json.loads((SOURCE/'manifest.json').read_text()); clothing=json.loads((SOURCE/'clothing.json').read_text())
+    still=np.asarray(Image.open(SOURCE/'still.png').convert('RGBA'))
     old={p['id']:p for p in manifest['leaves']+manifest['expressions']+clothing['parts']}
     boxes=pack([(p['id'],*p['bbox'][2:]) for p in parts])
     assets=ROOT/'bundle/assets';assets.mkdir(parents=True,exist_ok=True)
@@ -161,6 +163,10 @@ def build():
             raw=Image.open(SOURCE/src['src']).convert('RGBA').resize((bounds['width'],bounds['height']),Image.Resampling.LANCZOS)
             full.paste(raw,(bounds['x'],bounds['y']))
             original=full.crop((x,y,x+w,y+h))
+        if key=='neck':
+            reference=still[y:y+h,x:x+w]
+            im=Image.fromarray(clear_background(im,reference))
+            original=Image.fromarray(clear_background(original,reference))
         if key=='upper-body-short-sleeve':
             alpha=original.getchannel('A')
             alpha.putdata([round(a*max(0,min(1,(y+i//w-680)/12))) for i,a in enumerate(alpha.tobytes())])
