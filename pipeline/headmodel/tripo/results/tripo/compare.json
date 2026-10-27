@@ -271,7 +271,16 @@
           "head_iou": 0.9438258623082425
         }
       ],
-      "curvature_status": "Pending corrected cotangent remeasurement; geometric projection residuals remain valid."
+      "curvature": {
+        "p50": 0.0037957175033000775,
+        "p95": 0.05299910825164944,
+        "p99": 0.13436433718639548,
+        "max": 0.6715928211269256,
+        "passed": false,
+        "excluded_vertices": 954,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
     },
     "B3-step1": {
       "frames": [
@@ -414,305 +423,438 @@
       }
     },
     "B3-step2": {
-      "available": false,
-      "reason": "Corrective solve with sum-edge-then-clamp cotangent weights pending.",
-      "superseded_results": "pipeline/headmodel/fit/results/fit2f/pre-edge-clamp/"
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 0.7374896872714682,
+            "max_px": 3.4491314610985007,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 0.651038462844786,
+            "max_px": 12.890755806608484,
+            "count": 882
+          },
+          "head_iou": 0.9850196796041341
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.598128228179786,
+            "max_px": 7.7020922693918585,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 0.7371013813281526,
+            "max_px": 17.86205427192672,
+            "count": 970
+          },
+          "head_iou": 0.9900188434813332
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 4.939765515577637,
+            "max_px": 24.150085977770715,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 2.6368133180782793,
+            "max_px": 23.39242040585128,
+            "count": 974
+          },
+          "head_iou": 0.9535263604169784
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 5.668123564347819,
+            "max_px": 16.165710453494675,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 2.870184723091401,
+            "max_px": 23.603179248499924,
+            "count": 985
+          },
+          "head_iou": 0.9511517736716565
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 4.891239579465945,
+            "max_px": 21.54021990308064,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 3.869385087264192,
+            "max_px": 25.375839464609765,
+            "count": 877
+          },
+          "head_iou": 0.9384124985242611
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.6555364219423545,
+            "max_px": 17.445228282879714,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 4.035338038124522,
+            "max_px": 19.08634469416699,
+            "count": 999
+          },
+          "head_iou": 0.9599916034561989
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.5750542070944913,
+            "max_px": 4.282680495552866,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 0.6377413756187228,
+            "max_px": 4.522818445715621,
+            "count": 926
+          },
+          "head_iou": 0.98769189050754
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 3.6977891852508766,
+            "max_px": 6.22092262976538,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 4.466123811197177,
+            "max_px": 10.576464965209752,
+            "count": 964
+          },
+          "head_iou": 0.9604575133046652
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 1.585766409502365,
+            "max_px": 8.889888258826039,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 8.767695997372986,
+            "max_px": 17.033631269776283,
+            "count": 905
+          },
+          "head_iou": 0.9440153924267123
+        }
+      ],
+      "curvature": {
+        "p50": 0.0008049920505854538,
+        "p95": 0.007428896544797541,
+        "p99": 0.013142774300785856,
+        "max": 0.058454189561999624,
+        "passed": false,
+        "excluded_vertices": 1031,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
     },
     "T1-A": {
-      "aligned": true,
-      "measured": false,
-      "parameters": {
-        "rotation_offset_deg": [
-          -2.5642723379780037,
-          -3.847084132921153,
-          2.2056556292160283
-        ],
-        "scale_xyz": [
-          1.0207658795259933,
-          1.0183207042184304,
-          1.1393742192839489
-        ],
-        "translation_ict": [
-          0.21093636775879537,
-          -1.026001142857388,
-          0.06646555360215142
-        ],
-        "thickness_px": 14.0,
-        "icp": [
-          {
-            "iteration": 1,
-            "gate_px": 15.0,
-            "pairs": 63601,
-            "loss": 21.479669408095045,
-            "rotation_offset_deg": [
-              -2.1393440833626793,
-              -4.741885979058367,
-              0.3254124495106562
-            ],
-            "scales_xyz": [
-              1.0437539131094984,
-              0.995082246759717,
-              1.1124357260048847
-            ],
-            "t": 9.907667783115818,
-            "seconds": 75.46870670095086
+      "available": true,
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 8.965501044600522,
+            "max_px": 26.421200570928054,
+            "count": 310
           },
-          {
-            "iteration": 2,
-            "gate_px": 13.714285714285714,
-            "pairs": 64295,
-            "loss": 21.15360495873817,
-            "rotation_offset_deg": [
-              -2.962441177007275,
-              -4.896322877206018,
-              0.7470426984758837
-            ],
-            "scales_xyz": [
-              1.0405059337626714,
-              1.004031317405511,
-              1.1132469349724472
-            ],
-            "t": 10.891733563396011,
-            "seconds": 73.72384354902897
+          "hair": {
+            "median_px": 1.6617642900931244,
+            "max_px": 40.29719584251915,
+            "count": 883
           },
-          {
-            "iteration": 3,
-            "gate_px": 12.428571428571429,
-            "pairs": 63158,
-            "loss": 19.32180734569619,
-            "rotation_offset_deg": [
-              -3.24011556476598,
-              -4.980008496192435,
-              1.0270385038654668
-            ],
-            "scales_xyz": [
-              1.0389642932353358,
-              1.007638920799553,
-              1.1138021097291375
-            ],
-            "t": 11.832587085166066,
-            "seconds": 59.05007666395977
+          "head_iou": 0.9224260278685704
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 9.616661734881069,
+            "max_px": 52.555370985260595,
+            "count": 432
           },
-          {
-            "iteration": 4,
-            "gate_px": 11.142857142857142,
-            "pairs": 61524,
-            "loss": 16.72182865659005,
-            "rotation_offset_deg": [
-              -3.361922302566268,
-              -5.0734071052536915,
-              1.2490114009665467
-            ],
-            "scales_xyz": [
-              1.0367741945532334,
-              1.009159586801336,
-              1.1138337367066202
-            ],
-            "t": 12.785100313005815,
-            "seconds": 88.93842060898896
+          "hair": {
+            "median_px": 4.478437603240071,
+            "max_px": 46.606952668740576,
+            "count": 970
           },
-          {
-            "iteration": 5,
-            "gate_px": 9.857142857142858,
-            "pairs": 59506,
-            "loss": 14.558815626129359,
-            "rotation_offset_deg": [
-              -3.305426127470819,
-              -4.948865420662201,
-              1.4137654282567227
-            ],
-            "scales_xyz": [
-              1.030766649126056,
-              1.0110435846625536,
-              1.1190349363668624
-            ],
-            "t": 13.78099419454846,
-            "seconds": 75.59465906198602
+          "head_iou": 0.8984278994872664
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 21.331922784493575,
+            "max_px": 69.2123012149543,
+            "count": 445
           },
-          {
-            "iteration": 6,
-            "gate_px": 8.571428571428571,
-            "pairs": 56853,
-            "loss": 11.941942708590041,
-            "rotation_offset_deg": [
-              -3.1964662281734433,
-              -4.726722655665907,
-              1.6282129266815513
-            ],
-            "scales_xyz": [
-              1.0261268543732187,
-              1.014133068751486,
-              1.1262989915433477
-            ],
-            "t": 14.0,
-            "seconds": 70.45049207797274
+          "hair": {
+            "median_px": 9.031365202348352,
+            "max_px": 48.940698521086986,
+            "count": 974
           },
-          {
-            "iteration": 7,
-            "gate_px": 7.285714285714286,
-            "pairs": 53273,
-            "loss": 9.209372200956368,
-            "rotation_offset_deg": [
-              -2.9973474524744055,
-              -4.441077251977983,
-              1.8589211748168892
-            ],
-            "scales_xyz": [
-              1.022592053048853,
-              1.0164152428786368,
-              1.1339491377413964
-            ],
-            "t": 14.0,
-            "seconds": 69.43016234203242
+          "head_iou": 0.8485677523329261
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 0.9860101348170323,
+            "max_px": 11.428386226276965,
+            "count": 148
           },
-          {
-            "iteration": 8,
-            "gate_px": 6.0,
-            "pairs": 48980,
-            "loss": 6.663099735111099,
-            "rotation_offset_deg": [
-              -2.794287624950528,
-              -4.160208256210751,
-              1.9594512310593317
-            ],
-            "scales_xyz": [
-              1.02163962502051,
-              1.0169964605814954,
-              1.1367902204048375
-            ],
-            "t": 14.0,
-            "seconds": 84.54646981495898
+          "hair": {
+            "median_px": 3.86283421889582,
+            "max_px": 36.55207914490833,
+            "count": 988
           },
-          {
-            "iteration": 9,
-            "gate_px": 6.0,
-            "pairs": 48922,
-            "loss": 6.427854358531192,
-            "rotation_offset_deg": [
-              -2.668520558301901,
-              -3.969153424066893,
-              2.091982836899832
-            ],
-            "scales_xyz": [
-              1.0211368426580139,
-              1.0177950520636843,
-              1.1382587656953451
-            ],
-            "t": 14.0,
-            "seconds": 140.0573660490336
+          "head_iou": 0.8789567543468569
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 12.049680031740456,
+            "max_px": 47.62580765679112,
+            "count": 499
           },
-          {
-            "iteration": 10,
-            "gate_px": 6.0,
-            "pairs": 48837,
-            "loss": 6.383111668889254,
-            "rotation_offset_deg": [
-              -2.5642723379780037,
-              -3.847084132921153,
-              2.2056556292160283
-            ],
-            "scales_xyz": [
-              1.0207658795259933,
-              1.0183207042184304,
-              1.1393742192839489
-            ],
-            "t": 14.0,
-            "seconds": 68.0613194250036
-          }
-        ],
-        "elapsed_seconds": 811.4299753139494,
-        "camera_rotations_unchanged": true,
-        "gauge": "global/camera similarity retains initialization gauge; no geometric vertex displacement"
-      },
-      "reason": "Nine-key residuals and final sheets await approved runner."
+          "hair": {
+            "median_px": 10.579547825805122,
+            "max_px": 30.27769290377573,
+            "count": 877
+          },
+          "head_iou": 0.8654226991730671
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 9.533582431619385,
+            "max_px": 46.390342150123,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 5.107041761648772,
+            "max_px": 36.990893469243076,
+            "count": 999
+          },
+          "head_iou": 0.9061368837112544
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 7.566288600297301,
+            "max_px": 13.948591936309366,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 5.941430850700819,
+            "max_px": 41.747392581138214,
+            "count": 928
+          },
+          "head_iou": 0.9244152281010934
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 36.21523517739425,
+            "max_px": 51.133181688428365,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 8.930639412635015,
+            "max_px": 47.532185591753844,
+            "count": 965
+          },
+          "head_iou": 0.836430457809997
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 18.576412330018275,
+            "max_px": 41.81176599675804,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 5.25103572931239,
+            "max_px": 34.343648340538536,
+            "count": 908
+          },
+          "head_iou": 0.8807677534638529
+        }
+      ],
+      "evaluation_surface": "8px remesh of aligned T1-A; no alignment rerun"
     },
     "T1-B3": {
-      "available": false,
-      "reason": "Not executed; additional runner approval pending."
-    },
-    "T2-A": {
-      "available": false,
-      "reason": "MeshLab meshing_close_holes requires edge manifoldness; largest position-welded component has non-manifold edges."
+      "available": true,
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 1.040620293959467,
+            "max_px": 5.745114060692663,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 0.6694396649175874,
+            "max_px": 41.853715031741565,
+            "count": 883
+          },
+          "head_iou": 0.9459949158959381
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.9855074056698612,
+            "max_px": 39.218014931881896,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 1.055171709687774,
+            "max_px": 45.95000937403178,
+            "count": 970
+          },
+          "head_iou": 0.9416988180537693
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 13.761530233384585,
+            "max_px": 65.32765906631529,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 13.87179127652877,
+            "max_px": 46.75195930865952,
+            "count": 974
+          },
+          "head_iou": 0.8434400324409915
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 9.16697410914098,
+            "max_px": 14.548511533286534,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 4.5742383994341145,
+            "max_px": 38.13869749910642,
+            "count": 988
+          },
+          "head_iou": 0.8682686816908142
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 9.433112224674069,
+            "max_px": 38.580004604044866,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 12.282059226480737,
+            "max_px": 29.922751245050705,
+            "count": 877
+          },
+          "head_iou": 0.8638889627482783
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 4.386756221531913,
+            "max_px": 39.191973749495894,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 7.638573244871107,
+            "max_px": 36.00066362259701,
+            "count": 999
+          },
+          "head_iou": 0.9160041828574145
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.5798797186984957,
+            "max_px": 2.930337719145431,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 0.790093694590581,
+            "max_px": 41.64203191956365,
+            "count": 928
+          },
+          "head_iou": 0.9621834672510349
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 25.038829363034537,
+            "max_px": 51.23740315761356,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 11.24261425007522,
+            "max_px": 49.58550750750915,
+            "count": 965
+          },
+          "head_iou": 0.8317331476189332
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 4.902756323626147,
+            "max_px": 30.771517597309305,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 4.079076732598917,
+            "max_px": 35.960968536402376,
+            "count": 908
+          },
+          "head_iou": 0.9042406065150379
+        }
+      ],
+      "curvature": {
+        "p50": 0.0010960395503722777,
+        "p95": 0.009620239051362224,
+        "p99": 0.027715358913575867,
+        "max": 0.1699866460318513,
+        "passed": false,
+        "excluded_vertices": 1186,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
     }
   },
   "tripo_status": {
-    "status": "partial",
+    "status": "six_model_quantitative_complete; front_feature_visual_invalid",
     "checked_at": "2026-10-27T17:37:42.641326+00:00",
     "endpoint": "https://openapi.tripo3d.ai/v3",
     "authenticated": true,
     "created_models": 2,
     "credits_consumed": 60.0,
-    "T1": "global alignment complete",
-    "T2": "MeshLab meshing_close_holes requires edge manifoldness; largest position-welded component has non-manifold edges.",
-    "additional_runners_pending": 4
+    "T1": "T1-A and T1-B3 measured and rendered",
+    "T2": "excluded by caller; no topology repair or fit",
+    "additional_runners_pending": 0,
+    "additional_runners_approved": 3,
+    "visual_limitations": [
+      "canonical front eye-height unverified",
+      "eyelash eye crops usable in 7/9 keys"
+    ]
   },
-  "generation": [
-    {
-      "name": "T1",
-      "attempt": 1,
-      "model": "v3.1-20260211",
-      "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
-      "parameters": {
-        "input": "uploaded file_token (asset reference omitted)",
-        "model": "v3.1-20260211"
-      },
-      "input_path": "pipeline/headmodel/tripo/inputs/T1-input.png",
-      "status": "failed",
-      "error_code": 2010,
-      "message": "Tripo error code 2010: You don't have enough credit to create this task",
-      "elapsed_seconds": 2.3066467790631577
-    },
-    {
-      "name": "T1",
-      "attempt": 1,
-      "model": "v3.1-20260211",
-      "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
-      "parameters": {
-        "input": "uploaded file_token (asset reference omitted)",
-        "model": "v3.1-20260211"
-      },
-      "input_path": "pipeline/headmodel/tripo/inputs/T1-input.png",
-      "status": "success",
-      "task_id": "d2acfb47-c2d1-4f77-b000-213b7f404207",
-      "elapsed_seconds": 124.52920128696132,
-      "credits_consumed": 30.0,
-      "created_at": "2026-10-27T16:39:32.862672Z",
-      "completed_at": "2026-10-27T16:41:26.143573Z",
-      "glb_path": "pipeline/headmodel/tripo/results/tripo/T1.glb",
-      "glb_bytes": 42057580,
-      "sha256": "1891aa2055427c209e3965fbd1cefef0caea00bcda4c09903ff2bcdf3a7cee9f"
-    },
-    {
-      "name": "T2",
-      "attempt": 1,
-      "model": "v3.1-20260211",
-      "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
-      "parameters": {
-        "input": "uploaded file_token (asset reference omitted)",
-        "model": "v3.1-20260211"
-      },
-      "input_path": "source/character/still.png",
-      "status": "success",
-      "task_id": "1141e696-0158-4822-83a0-7d0ffa4c6007",
-      "elapsed_seconds": 145.59954578091856,
-      "credits_consumed": 30.0,
-      "created_at": "2026-10-27T16:41:41.802801Z",
-      "completed_at": "2026-10-27T16:43:54.932197Z",
-      "glb_path": "pipeline/headmodel/tripo/results/tripo/T2.glb",
-      "glb_bytes": 45886696,
-      "sha256": "26471eb63805e53ee0b75a3d9cb2cdfad93fabd7f8dd6897fae2f96a12f5451b"
-    }
-  ],
-  "endpoint_check": {
-    "endpoint": "https://openapi.tripo3d.ai/v3",
-    "authenticated": true,
-    "balance": {
-      "balance": 0.0,
-      "frozen": 0.0
-    },
-    "correction": "Initial .com China endpoint rejected the global key; key unchanged.",
-    "earlier_failed_uploads": 2,
-    "earlier_generation_tasks": 0
+  "excluded_models": {
+    "T2-A": "Caller excluded non-manifold T2; no repair or alignment attempted."
   },
-  "status": "partial; awaiting additional runner approval and T2 topology decision"
+  "status": "six-model quantitative comparison complete; visual limitations in review.json",
+  "review": "pipeline/headmodel/tripo/results/tripo/review.json"
 }

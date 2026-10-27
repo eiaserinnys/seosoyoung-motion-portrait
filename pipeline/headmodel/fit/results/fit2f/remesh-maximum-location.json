@@ -1,0 +1,22 @@
+{
+  "original_vertex": 2165,
+  "point_ict": [
+    6.767804145812988,
+    0.6412473917007446,
+    1.3959378004074097
+  ],
+  "closest_remesh_point_ict": [
+    6.88187019868246,
+    0.5930797843175892,
+    1.4093446645651277
+  ],
+  "distance_px": 3.0878357047105056,
+  "ear_excluded": false,
+  "open_boundary_two_rings": false,
+  "nearest_open_vertex_px": 109.90972906626534,
+  "classification": "other; inspect marked views",
+  "test6_rerun": false,
+  "action": "location only, geometry and remeshing parameters unchanged",
+  "visual_location": "귀뿌리와 측면 두상 접합부. ear_mask에는 포함되지 않지만 얼굴·두개 전면이나 목 절단 경계는 아니다.",
+  "independent_location_confirmation": true
+}

@@ -160,12 +160,15 @@ def ict_models():
 
 def tripo_models():
     models={}
-    for prefix,title in [('T1','T1-A'),('T2','T2-A')]:
-        path=TOUT/(prefix+'-a-state.npz')
+    # T2 is explicitly excluded by the caller. The approved remeshed T1-A
+    # supplies both residual measurements and renders, without another fit.
+    for prefix,title in [('T1','T1-A')]:
+        path=TOUT/(prefix+'-a-remeshed.npz')
         if not path.exists(): continue
         with np.load(path) as source: model={k:source[k].copy() for k in source.files}
         model.update(poses=read_json(TOUT/(prefix+'-poses.json'))['frames'],
-                     t=read_json(TOUT/(prefix+'-alignment.json'))['pass2']['thickness_px'])
+                     t=read_json(TOUT/(prefix+'-alignment.json'))['pass2']['thickness_px'],
+                     evaluation_surface='8px remesh of aligned T1-A; no alignment rerun')
         models[title]=model
     if (TOUT/'T1-b3-state.npz').exists():
         with np.load(TOUT/'T1-b3-state.npz') as source: model={k:source[k].copy() for k in source.files}
@@ -209,7 +212,7 @@ def front_features(model):
 
 def tripo_sheets(egg,models):
     rows=[]
-    for title in ['EGG V5','A','B3-w3','B3-step2','T1-A','T1-B3','T2-A']:
+    for title in ['EGG V5','A','B3-w3','B3-step2','T1-A','T1-B3']:
         if title=='EGG V5': rows.append((title,*egg,None))
         elif title in models:
             m=models[title]; rows.append((title,m['vertices'],m['triangles'],None))
@@ -239,14 +242,15 @@ def all_sheets(tripo_only=False):
     targets=load_targets_f(frames,shared['thickness_px'])
     keys=frame_sets()[0][:9]; evaluation=load_targets_f(keys,shared['thickness_px'])
     report=read_json(TOUT/'compare.json')['models'] if tripo_only else {}
+    report={name:report[name] for name in models if name in report}
     for name,model in models.items():
-        if tripo_only: continue
         if name in ('B3-step1','B3-step2'):
             rows=read_json(RESULTS/(name.lower()+'-residuals.json'))['frames']
+        elif tripo_only:
+            rows=report[name]['frames']
         else: rows=measure_surface(model['vertices'],model['triangles'],[model['poses'][str(f)] for f in keys],evaluation)
         report[name]={'frames':rows,**({'curvature':model['curvature_stats']} if 'curvature_stats' in model else {})}
     for number in (1,2):
-        if tripo_only: break
         name=f'B3-step{number}'; model=models[name]; stats=model['curvature_stats']
         rows=[('EGG V5',*egg,None),('A',models['A']['vertices'],models['A']['triangles'],None),
               ('REMESH A',remesh['vertices'],remesh['triangles'],None),
@@ -254,6 +258,10 @@ def all_sheets(tripo_only=False):
               (f'CURV p99={stats["p99"]:.4f} max={stats["max"]:.4f}',model['vertices'],model['triangles'],heat(model['curvature'],.05,model['excluded'])),
               ('DIHEDRAL CHANGE 0-10 DEG',model['vertices'],model['triangles'],heat(dihedral_change(model['base_vertices'],model['vertices'],model['triangles']),10.))]
         manifest.append(save(FIT/f'sheets/fit2f-shape-step{number}.png',shape_rows(rows)))
+        if tripo_only and number==1:
+            # Geometry, target masks and cameras did not change. Reuse the
+            # already reviewed crops; only its corrected heatmap is redrawn.
+            continue
         for mode in ('jaw','err'):
             images=[panel(model,t,cameras[str(t['frame'])],name,mode=='err') for t in targets]
             manifest.append(save(FIT/f'sheets/fit2f-{mode}-step{number}.png',padded_stack(images)))
@@ -262,7 +270,7 @@ def all_sheets(tripo_only=False):
     # and make unavailable models visible instead of filling fake measurements.
     status=read_json(TOUT/'status.json') if (TOUT/'status.json').exists() else {'status':'not_run'}
     generated=tripo_models(); models.update(generated)
-    for name in ('T1-A','T1-B3','T2-A'):
+    for name in ('T1-A','T1-B3'):
         if name not in generated:
             report[name]={'available':False,'reason':status}; continue
         model=generated[name]
@@ -270,11 +278,13 @@ def all_sheets(tripo_only=False):
         else:
             rows=measure_surface(model['vertices'],model['triangles'],[model['poses'][str(f)] for f in keys],load_targets_f(keys,model['t']))
         report[name]={'available':True,'frames':rows,**({'curvature':model['curvature_stats']} if 'curvature_stats' in model else {})}
+        if 'evaluation_surface' in model: report[name]['evaluation_surface']=model['evaluation_surface']
     if generated:
         manifest.extend(tripo_sheets(egg,models))
         write_json(TOUT/'sheet-sha256.json',{'sheets':manifest,'elapsed_seconds':time.perf_counter()-started})
     write_json(TOUT/'compare.json',{'definition':'2f label-free full silhouette, ear10px and open-edge exclusions; directed skin/hair, tapered head IoU',
-                'frames':keys,'models':report,'tripo_status':status})
+                'frames':keys,'models':report,'tripo_status':status,
+                'excluded_models':{'T2-A':'Caller excluded non-manifold T2; no repair or alignment attempted.'}})
     with (TOUT/'compare.csv').open('w',encoding='utf-8',newline='') as file:
         writer=csv.writer(file)
         writer.writerow(['model','frame','skin_median_px','skin_max_px','hair_median_px','hair_max_px','head_iou','curvature_p99','curvature_max'])
@@ -284,7 +294,11 @@ def all_sheets(tripo_only=False):
                 writer.writerow([name,row['frame'],row['skin']['median_px'],row['skin']['max_px'],
                                  row['hair']['median_px'],row['hair']['max_px'],row['head_iou'],curv.get('p99',''),curv.get('max','')])
     write_json(RESULTS/'residuals.json',{'models':{k:v for k,v in report.items() if k.startswith(('A','B3'))}})
-    if not tripo_only: write_json(RESULTS/'sheet-sha256.json',{'sheets':manifest,'elapsed_seconds':time.perf_counter()-started})
+    # Include unchanged crops and the separately named superseded archives.
+    all_ict=[{'path':str(p.relative_to(ROOT)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+              'validity':'superseded operator archive' if 'pre-edge-clamp' in p.name else 'current'}
+             for p in sorted((FIT/'sheets').glob('fit2f-*.png'))]
+    write_json(RESULTS/'sheet-sha256.json',{'sheets':all_ict,'elapsed_seconds':time.perf_counter()-started})
     print('SHEETS',manifest,flush=True)
 
 

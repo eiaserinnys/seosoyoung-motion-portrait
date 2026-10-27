@@ -1,0 +1,26 @@
+{
+  "source": "source/character/still.png",
+  "display_pose": [
+    0.0,
+    0.0,
+    0.0,
+    3.3636895782406024,
+    355.0698403559156,
+    523.9937359144141
+  ],
+  "framing": "uniform scale and translation from bald head/face/ears layer bounding box, no feature landmark fitting",
+  "crop_720": [
+    [
+      118,
+      1
+    ],
+    [
+      596,
+      720
+    ]
+  ],
+  "usable_for_eye_height": false,
+  "observed": "정면 음영 두상이 원화 몸통까지 크게 겹쳐져 눈 높이 판정에 무효.",
+  "cause": "head/face/ears 레이어의 전체 alpha>0 범위를 bbox로 쓰면서 머리 외 잔여 영역까지 포함한 프레이밍.",
+  "action": "승인된 마지막 runner가 끝나 추가 렌더 없이 오류를 기록했다."
+}

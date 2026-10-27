@@ -1,5 +1,4 @@
 {
-  "status": "partial",
   "models": {
     "A": {
       "frames": [
@@ -260,7 +259,16 @@
           "head_iou": 0.9438258623082425
         }
       ],
-      "curvature_status": "Pending corrected cotangent remeasurement; geometric projection residuals remain valid."
+      "curvature": {
+        "p50": 0.0037957175033000775,
+        "p95": 0.05299910825164944,
+        "p99": 0.13436433718639548,
+        "max": 0.6715928211269256,
+        "passed": false,
+        "excluded_vertices": 954,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
     },
     "B3-step1": {
       "frames": [
@@ -403,9 +411,144 @@
       }
     },
     "B3-step2": {
-      "available": false,
-      "reason": "Corrective solve with sum-edge-then-clamp cotangent weights pending.",
-      "superseded_results": "pipeline/headmodel/fit/results/fit2f/pre-edge-clamp/"
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 0.7374896872714682,
+            "max_px": 3.4491314610985007,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 0.651038462844786,
+            "max_px": 12.890755806608484,
+            "count": 882
+          },
+          "head_iou": 0.9850196796041341
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.598128228179786,
+            "max_px": 7.7020922693918585,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 0.7371013813281526,
+            "max_px": 17.86205427192672,
+            "count": 970
+          },
+          "head_iou": 0.9900188434813332
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 4.939765515577637,
+            "max_px": 24.150085977770715,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 2.6368133180782793,
+            "max_px": 23.39242040585128,
+            "count": 974
+          },
+          "head_iou": 0.9535263604169784
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 5.668123564347819,
+            "max_px": 16.165710453494675,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 2.870184723091401,
+            "max_px": 23.603179248499924,
+            "count": 985
+          },
+          "head_iou": 0.9511517736716565
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 4.891239579465945,
+            "max_px": 21.54021990308064,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 3.869385087264192,
+            "max_px": 25.375839464609765,
+            "count": 877
+          },
+          "head_iou": 0.9384124985242611
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.6555364219423545,
+            "max_px": 17.445228282879714,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 4.035338038124522,
+            "max_px": 19.08634469416699,
+            "count": 999
+          },
+          "head_iou": 0.9599916034561989
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.5750542070944913,
+            "max_px": 4.282680495552866,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 0.6377413756187228,
+            "max_px": 4.522818445715621,
+            "count": 926
+          },
+          "head_iou": 0.98769189050754
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 3.6977891852508766,
+            "max_px": 6.22092262976538,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 4.466123811197177,
+            "max_px": 10.576464965209752,
+            "count": 964
+          },
+          "head_iou": 0.9604575133046652
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 1.585766409502365,
+            "max_px": 8.889888258826039,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 8.767695997372986,
+            "max_px": 17.033631269776283,
+            "count": 905
+          },
+          "head_iou": 0.9440153924267123
+        }
+      ],
+      "curvature": {
+        "p50": 0.0008049920505854538,
+        "p95": 0.007428896544797541,
+        "p99": 0.013142774300785856,
+        "max": 0.058454189561999624,
+        "passed": false,
+        "excluded_vertices": 1031,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
     }
   }
 }

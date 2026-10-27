@@ -152,15 +152,23 @@ def generate_align():
 
 
 def t1_b3():
+    started=time.perf_counter()
     if not (OUT/'T1-a-state.npz').exists():
         print('PART2 T1-B3 skipped: no aligned T1',flush=True); return
     cameras,shared,sref=context()
     source=np.load(OUT/'T1-a-state.npz'); v,tri=source['vertices'],source['triangles']
+    remesh_started=time.perf_counter()
     new,new_tri,tool=remesh_surface(v,tri,sref)
+    remesh_seconds=time.perf_counter()-remesh_started
+    np.savez_compressed(OUT/'T1-a-remeshed.npz',vertices=new,triangles=new_tri,
+                        open_edges=boundary_edges(new_tri))
+    print('T1 REMESH',len(v),len(new),'vertices',remesh_seconds,'seconds',flush=True)
     from fit2f_core import surface_distances, edges
     unique=np.unique(edges(new_tri),axis=0)
     lengths=np.linalg.norm(new[unique[:,0]]-new[unique[:,1]],axis=1)*sref
-    remesh_info={'tool':tool,'vertices':len(new),'faces':len(new_tri),
+    remesh_info={'tool':tool,'original_vertices':len(v),'original_faces':len(tri),
+        'vertices':len(new),'faces':len(new_tri),'remesh_seconds':remesh_seconds,
+        'target_edge_length_px':8.,'iterations':10,
         'edge_length_px':{'p10':float(np.percentile(lengths,10)),'median':float(np.median(lengths)),
                           'p90':float(np.percentile(lengths,90))},
         'distance_px':surface_distances(v,tri,new,new_tri,sref)}
@@ -176,7 +184,8 @@ def t1_b3():
     write_json(OUT/'T1-b3-residuals.json',{'tool':tool,'vertices':len(new),'faces':len(new_tri),
         'lambda':1000.,'mu':.01,'curvature':stats,'icp':trace,'elapsed_seconds':elapsed,'frames':residual,
         'd_px':{'max':float(np.linalg.norm(d,axis=1).max()),'mean':float(np.linalg.norm(d,axis=1).mean()),
-                 'p95':float(np.percentile(np.linalg.norm(d,axis=1),95))}})
+                 'p95':float(np.percentile(np.linalg.norm(d,axis=1),95))},
+        'total_elapsed_seconds':time.perf_counter()-started})
 
 
 if __name__=='__main__':
