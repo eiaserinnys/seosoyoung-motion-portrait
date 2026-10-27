@@ -343,7 +343,7 @@ def main():
                   const ears=key?capture(meshes.filter(m=>!m.id.startsWith('ear-')).map(m=>m.id),p,['ear-left','ear-right']):null;
                   const headNeck=capture(meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck').map(m=>m.id));
                   const headOnly=capture(meshes.map(m=>m.id));
-                  const neckOnly=capture(meshes.filter(m=>m.id!=='neck').map(m=>m.id),p,['neck','neck-tube']);
+                  const neckOnly=capture(meshes.filter(m=>m.id!=='neck').map(m=>m.id),p,'neck');
                   const isolated=[...meshes.filter(m=>m.id!=='face-skin').map(m=>m.id),'head-base'];
                   const restOld=yaw===0&&pitch===0?capture(isolated,{...p,CorrHeadBase:0}):null;
                   const restNew=yaw===0&&pitch===0?capture(isolated):null;
@@ -356,21 +356,30 @@ def main():
                   const neck=meshes.find(m=>m.id==='neck');
                   const base=headModule.getHeadBase(),ring=base.open_boundary,ref=base.reference;
                   const axis=[0,2].map(c=>ring.reduce((sum,i)=>sum+ref[i*3+c],0)/ring.length),rows=new Map();
-                  const tubeSpec=base.neck_tube,topProfile=tubeSpec.profile[tubeSpec.first_opaque_y-tubeSpec.bbox[1]],radius=(topProfile[1]-topProfile[0])/2;
+                  const profile=base.neck_extension.profile,radius=(profile[1]-profile[0])/2;
                   const neckXs=[axis[0]-radius,axis[0]+radius];
                   for(const point of neck.positions){const x=rigModule.deform3D(neck,point,q)[0],row=rows.get(point[1])||[Infinity,-Infinity];row[0]=Math.min(row[0],x);row[1]=Math.max(row[1],x);rows.set(point[1],row);}
                   const differences=[...rows.values()].map(([a,b])=>Math.abs((a+b)/2-axis[0]));
                   const neckAxis={center_x:axis[0],depth:axis[1],max_row_difference:Math.max(...differences),fallback_rows:differences.filter(d=>d>5).length};
                   for(const point of skinPositions)include(point[0],point[1]);
                   for(const mesh of meshes.filter(m=>m.id.startsWith('ear-')))for(const point of mesh.positions){const v=rigModule.deform3D(mesh,point,q);include(v[0],v[1]);}
-                  return {portrait,union,unionWithCap,ears,headNeck,headOnly,neckOnly,neckColumn:[Math.min(...neckXs),Math.max(...neckXs)],neckAxis,restOld,restNew,restEars,skinPositions:measure?skinPositions:null,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
+                  let restOriginalNeck=null,restOriginalNeckOnly=null;
+                  if(yaw===0&&pitch===0){
+                    const extension=headCapture.neckExtension,texture=headCapture.textures[7];
+                    headCapture.neckExtension=neck;headCapture.textures[7]=headCapture.textures[0];
+                    restOriginalNeck=capture(hidden);
+                    restOriginalNeckOnly=capture(meshes.filter(m=>m.id!=='neck').map(m=>m.id),p,'neck');
+                    headCapture.neckExtension=extension;headCapture.textures[7]=texture;
+                  }
+                  return {portrait,union,unionWithCap,ears,headNeck,headOnly,neckOnly,neckColumn:[Math.min(...neckXs),Math.max(...neckXs)],neckAxis,restOld,restNew,restEars,restOriginalNeck,restOriginalNeckOnly,skinPositions:measure?skinPositions:null,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
                 }''', [yaw, pitch, (yaw, pitch) in key_positions, (yaw, pitch) in jacobian_positions])
                 renders[(yaw, pitch)] = {'portrait': decode(data['portrait']),
                                          'bounds': data['bounds'], 'neck_column': data['neckColumn'], 'neck_axis': data['neckAxis'],
                                          'model_angle': data['modelAngle'], 'hidden': data['hidden']}
                 for source, target in [('union', 'union'), ('unionWithCap', 'union_with_cap'), ('ears', 'ears'), ('headNeck', 'head_neck'),
                                        ('headOnly', 'head_only'), ('neckOnly', 'neck_only'),
-                                       ('restOld', 'rest_old'), ('restNew', 'rest_new')]:
+                                       ('restOld', 'rest_old'), ('restNew', 'rest_new'),
+                                       ('restOriginalNeck', 'rest_original_neck'), ('restOriginalNeckOnly', 'rest_original_neck_only')]:
                     if data[source] is not None:
                         renders[(yaw, pitch)][target] = decode(data[source])
                 if data['restEars']:
@@ -444,6 +453,13 @@ def main():
     rest_diff = {'changed_pixels': int(difference.sum()), 'ear_changed_pixels': int(np.count_nonzero(difference & rest_ear)),
                  'other_changed_pixels': int(np.count_nonzero(difference & ~rest_ear)),
                  'ear_changed_from_8330_pixels': int(np.count_nonzero(older_difference & rest_ear)), 'bbox': None}
+    without_extension = np.asarray(renders[(0, 0)]['rest_original_neck'])
+    original_neck = np.asarray(renders[(0, 0)]['rest_original_neck_only'])
+    extension_diff = np.any(without_extension != after, axis=2)
+    dy, dx = np.where(extension_diff)
+    rest_extension_diff = {'changed_pixels': int(extension_diff.sum()),
+                           'on_opaque_original_neck_pixels': int(np.count_nonzero(extension_diff & (original_neck[:, :, 0] >= 250))),
+                           'bbox': [int(dx.min())-X_OFFSET, int(dy.min()), int(dx.max())-X_OFFSET, int(dy.max())] if len(dx) else None}
     if len(xx):
         box = (max(0, int(xx.min())-8), max(0, int(yy.min())-8),
                min(CANVAS_WIDTH, int(xx.max())+9), min(1024, int(yy.max())+9))
@@ -465,7 +481,7 @@ def main():
                'rest_ear_occluded_pixels': ear_occlusion,
                'rest_fill_outside_head': json.loads((baseline / 'rest_analysis.json').read_text())['fill_outside_pixels'],
                'ear_depth_bias_px': meta['ear_depth_bias_px'],
-               'neck_tube': {key: meta['neck_tube'][key] for key in ('bottom_y', 'first_opaque_y', 'rings')},
+               'neck_extension': meta['neck_extension'], 'rest_extension_difference': rest_extension_diff,
                'neck_axis': {'center_x': renders[(0, 0)]['neck_axis']['center_x'],
                              'rest_depth': renders[(0, 0)]['neck_axis']['depth'],
                              'max_row_difference': max(item['neck_axis']['max_row_difference'] for item in renders.values()),

@@ -10,7 +10,7 @@ import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
 import {outlineWorld} from '../bundle/face-outline.mjs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {backgroundLayerPolicy,neckDepthPositions} from '../bundle/renderer.mjs';
-import {createNeckTube,neckTubePositions} from '../bundle/neck-tube.mjs';
+import * as renderer from '../bundle/renderer.mjs';
 import {skinFillPositions} from '../bundle/skin-fill.mjs';
 import {sideWorld} from '../bundle/hair-shell.mjs';
 import {earWorld} from '../bundle/stereo-attachments.mjs';
@@ -35,6 +35,28 @@ const oldFeatures={
  '0.65:0.5':'f7d7592cc233828d99f27a709c1b4f87d4a3d58bba48ef8c21e372c095885138',
  '0.65:1':'9cfe292c3370db2ba277f50d34bf5323268b5052a2a3ff94e3311b4205d5df70'};
 const oldSkin={'1':'643b11c1d22b621f598f6633185d2cd82ee78b03b01f040cb0a4bef5b3048631','0.65':'80388b8f6df4482094cc9e250cde58010b3020732108f266714c148f4241c02c'};
+
+test('ear angle margin retains the near ear and fades to two pixels',{timeout:30000},()=>{
+ for(const side of ['left','right']){
+  const b=metadata.ear_depth_bias_px[side],sign=side==='left'?-1:1;
+  for(const far of [-45,0])close(renderer.earDepthMargin(side,pose(sign*far),metadata.ear_depth_bias_px),b,1e-9,'near/rest');
+  for(const far of [20,45,90])close(renderer.earDepthMargin(side,pose(sign*far),metadata.ear_depth_bias_px),2,1e-9,'far');
+  close(renderer.earDepthMargin(side,pose(sign*10),metadata.ear_depth_bias_px),b*.5,1e-9,'midpoint');
+ }
+});
+test('neck extension reaches the projected head ring and keeps cylinder depth',{timeout:30000},()=>{
+ const neck=rig.meshes.find(m=>m.id==='neck'),head=headBase.getHeadBase(),p=pose();
+ const extended=renderer.createNeckExtension(neck,head,p);
+ const target=Math.min(...head.open_boundary.map(i=>head.reference[i*3+1]));
+ const first=neck.positions.length;
+ assert(extended.positions.length>first);
+ for(const point of extended.positions.slice(first))close(deform3D(extended,point,p)[1],target,1e-6,'rest top');
+ const pts=extended.positions.map(point=>deform3D(extended,point,p));
+ const depth=neckDepthPositions(extended,pts,head.reference,head.open_boundary);
+ const zc=head.open_boundary.reduce((s,i)=>s+head.reference[i*3+2],0)/head.open_boundary.length;
+ for(const point of depth.slice(first))assert(point[2]>=zc-1e-9,'extension must use neck cylinder depth');
+ assert.equal(backgroundLayerPolicy(neck,p,{hidden:new Set(),outfit:'sweater',bangs:false},true).compareHead,true);
+});
 
 test('N7: Python projection fixture, 100 vertices and 13 poses',{timeout:30000},()=>{
  const vertices=new Float32Array(binary.buffer,binary.byteOffset+metadata.offsets.vertices.offset,metadata.offsets.vertices.length/4);
@@ -132,19 +154,6 @@ test('neck depth uses the original xy and the rest ring cylinder',{timeout:30000
  const ref=headBase.getHeadBase().reference,values=neckDepthPositions(neck,points,ref,metadata.open_boundary);
  const ring=metadata.open_boundary,zc=ring.reduce((sum,i)=>sum+ref[i*3+2],0)/ring.length;
  points.forEach((v,i)=>{close(values[i][0],v[0],1e-10,'neck x');close(values[i][1],v[1],1e-10,'neck y');assert(values[i][2]>=zc-1e-10);});
-});
-test('neck tube joins the head ring and keeps its lower ring with the body',{timeout:30000},()=>{
- const neck=rig.meshes.find(m=>m.id==='neck'),rest=pose(),tube=createNeckTube(neck,headBase.getHeadBase(),rest);
- assert.equal(tube.rows,10);assert.equal(tube.ringCount,metadata.open_boundary.length);assert.equal(tube.bottom,685.375);
- for(const pitch of [-30,0,30])for(const yaw of [-90,-45,0,45,90])for(const roll of [-12,0,12]){
-  const p=pose(yaw,pitch,{ParamAngleZ:roll,ParamBodyAngleX:2,ParamBreath:.2}),points=neckTubePositions(tube,p),head=headBaseVertices(p).surface;
-  for(let j=0;j<tube.ringCount;j++){
-   const last=(tube.rows-1)*tube.ringCount+j,top=tube.vertices[last],body=deform3D(neck,tube.vertices[j].raw,p);
-   for(let c=0;c<3;c++)close(points[last][c],head[top.index*3+c],1e-6,'top head ring');
-   close(points[j][0],body[0],1e-6,'bottom body x');close(points[j][1],body[1],1e-6,'bottom body y');
-   close(points[j][2],tube.vertices[j].point[2],1e-6,'bottom body z');
-  }
- }
 });
 test('ear bias covers each rest ear depth and preserves legacy neck and fill positions',{timeout:30000},()=>{
  const evidence=JSON.parse(read('../docs/captures/fix4-baseline/rest_analysis.json'));

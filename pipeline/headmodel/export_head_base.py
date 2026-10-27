@@ -143,29 +143,24 @@ def ear_depth_biases():
     return result
 
 
-def neck_tube_texture(rig):
+def neck_extension_texture(rig, top):
     mesh = next(item for item in rig['meshes'] if item['id'] == 'neck')
     ax, ay, width, height = mesh['atlas']
     x, y, _, _ = mesh['bbox']
     source = np.asarray(Image.open(ROOT / 'bundle/assets/texture_00.png').convert('RGBA'))
     texture = source[ay:ay+height, ax:ax+width].copy()
-    middle = round(502-x)
-    first = int(np.flatnonzero(texture[:, middle, 3] >= 250)[0])
-    opaque = np.flatnonzero(texture[first, :, 3] >= 250)
-    profile = []
-    for row in texture:
-        solid = np.flatnonzero(row[:, 3] >= 127)
-        if not len(solid):
-            solid = opaque
-        profile.append([float(x+solid[0]), float(x+solid[-1])])
-    sample_x = np.clip(np.arange(width), opaque[0], opaque[-1])
-    texture[:first, :, :3] = texture[first, sample_x, :3]
-    texture[:first, :, 3] = 255
-    Image.fromarray(texture).save(ROOT / 'bundle/assets/neck-tube.png')
-    # At and below raw y=680 the existing neck's head and pitch weights are zero.
-    bottom = min(point[1] for point in mesh['positions'] if point[1] >= 680)
-    return {'bottom_y': bottom, 'first_opaque_y': y+first, 'bbox': mesh['bbox'],
-            'profile': profile, 'rings': 10}
+    sample_y = 640
+    sample = texture[sample_y-y]
+    # The existing rest neck deformation moves its top 16px upward.
+    texture_top = int(np.floor(top+16))
+    height_out = height + y-texture_top
+    base = Image.fromarray(np.broadcast_to(sample, (height_out, width, 4)).copy())
+    base.alpha_composite(Image.fromarray(texture), (0, y-texture_top))
+    base.save(ROOT / 'bundle/assets/neck-extension.png')
+    opaque = np.flatnonzero(sample[:, 3] >= 127)
+    return {'bbox': mesh['bbox'], 'top_y': float(top), 'raw_top_y': float(top+16),
+            'texture_top_y': texture_top, 'texture_height': height_out, 'sample_y': sample_y,
+            'profile': [float(x+opaque[0]), float(x+opaque[-1])]}
 
 
 def ear_root_rings(vertices, triangles, ear):
@@ -297,7 +292,6 @@ def main():
     refined = {row['frame']: row['refined_pose'] for row in poses['frames']}
     rig = json.loads((ROOT / 'bundle/assets/seosoyoung-rig.json').read_text())
     ear_biases = ear_depth_biases()
-    neck_tube = neck_tube_texture(rig)
     skin = next(mesh for mesh in rig['meshes'] if mesh['id'] == 'face-skin')
     raw_solve = (ROOT / 'bundle/face-solve-data.mjs').read_text().split('=', 1)[1].strip().removesuffix(';')
     solve = json.loads(raw_solve)
@@ -323,6 +317,7 @@ def main():
     _, owner = raster_silhouette(projected, attachment_triangles)
     projected[:, :2] += [152, 20]
     projected[:, 2] *= np.exp(front[3])
+    neck_extension = neck_extension_texture(rig, float(projected[open_ring, 1].min()))
     ear_roots = {}
     for side, anchor in [('left', [369, 465]), ('right', [636, 464.5])]:
         ring = root_rings[side]
@@ -350,7 +345,7 @@ def main():
     outside = outside_sheet(outside_points)
     print(json.dumps({'sheet': str(sheet), 'neck_sheet': str(neck), 'outside_sheet': str(outside),
                       'open_ring': len(open_ring), 'cap_vertices': 1, 'cap_triangles': len(open_ring),
-                      'ear_bias_px': ear_biases, 'neck_tube': {key: neck_tube[key] for key in ('bottom_y', 'first_opaque_y', 'rings')},
+                      'ear_bias_px': ear_biases, 'neck_extension': neck_extension,
                       'ear_roots': {side: {'count': len(data['ring']), 'center': data['rest_center'], 'delta': data['delta']} for side, data in ear_roots.items()},
                       'attachments': statistics}, ensure_ascii=False), flush=True)
     if statistics['solve']['outside'] > 111 or statistics['solve']['max_distance_px'] > 15:
@@ -377,7 +372,7 @@ def main():
                 'logscale_front': front[3], 'rest_translation': [front[4]+152, front[5]+20],
                 'rest_eye': [501.9, 431.5], 'attachments': attachments,
                 'inset_px': 0, 'color': base_color, 'attachmentStatistics': statistics,
-                'open_boundary': open_ring.tolist(), 'ear_roots': ear_roots, 'ear_depth_bias_px': ear_biases, 'neck_tube': neck_tube,
+                'open_boundary': open_ring.tolist(), 'ear_roots': ear_roots, 'ear_depth_bias_px': ear_biases, 'neck_extension': neck_extension,
                 'excluded_vertices': np.flatnonzero(excluded).tolist()}
     (ROOT / 'bundle/assets/head-base.json').write_text(json.dumps(metadata, ensure_ascii=False, separators=(',', ':')))
     indices = np.linspace(0, len(vertices)-1, 100, dtype=int)
