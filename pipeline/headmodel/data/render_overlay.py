@@ -86,6 +86,69 @@ def render_overlay_sheet(
     return target
 
 
+def render_raw_sheet(
+    registration: dict[str, object],
+    frame_rows: list[dict[str, object]],
+) -> Path:
+    key_rows = {int(row["sourceFrame"]): row for row in registration["keys"]}
+    available = [
+        row
+        for row in frame_rows
+        if (DATA_DIR / f"frame_{int(row['frame']):04d}" / "raw").is_dir()
+    ]
+    columns = 6
+    sheet = np.full((int(np.ceil(len(available) / columns)) * CELL, columns * CELL, 3), 248, dtype=np.uint8)
+    colors = {
+        "face skin": (255, 40, 20),
+        "ear": (0, 230, 255),
+        "neck": (0, 140, 255),
+    }
+    for index, row in enumerate(available):
+        frame_number = int(row["frame"])
+        rgb, _ = load_registered_frame(frame_number, key_rows.get(frame_number))
+        canvas = cv2.resize(cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR), (CELL, CELL), interpolation=cv2.INTER_AREA)
+        frame_dir = DATA_DIR / f"frame_{frame_number:04d}"
+        for prompt, color in colors.items():
+            mask = cv2.imread(str(frame_dir / "raw" / f"{prompt}.png"), cv2.IMREAD_GRAYSCALE)
+            if mask is None:
+                continue
+            resized = cv2.resize(mask, (CELL, CELL), interpolation=cv2.INTER_NEAREST) > 0
+            tinted = canvas.copy()
+            tinted[resized] = color
+            canvas = cv2.addWeighted(tinted, 0.48, canvas, 0.52, 0)
+        for legend_index, (label, color) in enumerate(colors.items()):
+            x = 8 + legend_index * 92
+            cv2.rectangle(canvas, (x, 8), (x + 14, 22), color, -1)
+            cv2.putText(
+                canvas,
+                label,
+                (x + 19, 20),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.38,
+                (20, 20, 20),
+                1,
+                cv2.LINE_AA,
+            )
+        yaw, pitch = float(row["pose"][0]), float(row["pose"][1])
+        cv2.putText(
+            canvas,
+            f"Frame {frame_number}  yaw {yaw:.1f}  pitch {pitch:.1f}",
+            (8, 38),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.42,
+            (20, 20, 20),
+            1,
+            cv2.LINE_AA,
+        )
+        r, c = divmod(index, columns)
+        sheet[r * CELL : (r + 1) * CELL, c * CELL : (c + 1) * CELL] = canvas
+    target = DATA_DIR / "sheets/masks-raw.png"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if not cv2.imwrite(str(target), sheet):
+        raise RuntimeError(f"Could not write raw mask sheet: {target}")
+    return target
+
+
 def main() -> None:
     from prepare_video_inputs import build_frame_index, read_registration
 
