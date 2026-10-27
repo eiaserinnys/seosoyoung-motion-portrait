@@ -1,0 +1,56 @@
+{
+  "decision": "stop_before_fit2c",
+  "reason": "법선 조건을 제거한 뒤에도 코 아래 두 돌기와 눈높이 홈이 남고, 옆모습의 코 위치에서 돌출과 꺾임이 보여 계속 진행 조건을 충족하지 못했다.",
+  "conditions": {
+    "no_facial_features_or_holes": {
+      "status": "fail",
+      "observation": "눈과 입 개구부는 닫혔고 v3의 감은 눈 선과 입술선은 줄었다. 정면과 아래 30도에서 코 아래 두 돌기, 눈높이 홈이 여전히 보인다."
+    },
+    "convex_smooth_side_profile": {
+      "status": "fail",
+      "observation": "옆 90도에서 코 위치의 뾰족한 돌출과 그 아래 후퇴가 남아 이마부터 턱 끝까지 하나의 매끈한 볼록 곡선이 되지 않았다."
+    },
+    "no_mask_boundary_groove_ridge_or_step": {
+      "status": "unconfirmed",
+      "observation": "눈높이 양옆 홈과 코 아래 요철이 남는다. 이 요철과 마스크 외곽 경계의 정확한 일치 여부는 시트만으로 확인하지 못했다."
+    },
+    "front_silhouette_change_within_five_percent": {
+      "status": "pass",
+      "reference_face_width_px": 315.0,
+      "max_inward_px": 0.0,
+      "max_outward_px": 0.0,
+      "max_fraction_of_reference_width": 0.0
+    }
+  },
+  "mask": {
+    "landmark_convention": "0부터 시작하는 Multi-PIE 68점의 17~67번",
+    "eye_center_distance_xy": 6.51288366317749,
+    "outward_margin": 0.9769325494766234,
+    "normal_condition": "없음",
+    "original_free_vertices": 4895,
+    "added_free_cap_centers": 3,
+    "total_free_vertices": 4898,
+    "fixed_vertices": 6353,
+    "original_aperture_ring_sizes": [42, 42, 74],
+    "free_original_aperture_ring_vertices": [42, 42, 74],
+    "jaw_landmarks_all_fixed": true,
+    "remaining_topological_feature_holes": 0,
+    "same_linear_map_neutral_and_100_modes": true,
+    "fixed_fields_max_difference": 0.0
+  },
+  "nose_vertex": 4838,
+  "independent_review": {
+    "code": "새 지시대로 법선 조건만 제거됐으며 원본과 중심점 모두 같은 XY와 Face 선택을 사용함. 코드 결함과 추가 P0/P2 지적 없음.",
+    "visual": "조건 1과 2 미충족. 눈높이 홈, 코 아래 두 돌기, 입 부근 패임과 측면 코 위치의 뾰족한 꺾임이 남음. 마스크 외곽의 별도 뚜렷한 틈이나 단차는 시트에서 보이지 않음.",
+    "scope": "코드, JSON, 최종 시트 직접 확인. 추가 실행이나 수정 없음."
+  },
+  "sheet": "pipeline/headmodel/fit/sheets/egg-template-v4.png",
+  "sheet_sha256": "f9f5bbdb393c5c88f653a5884ab12f9f99e41851732e31749627370c72bd4c9e",
+  "execution": {
+    "template_runner_runs": 1,
+    "correction_runs_used": 0,
+    "fit_runs": 0,
+    "tests": "test_egg_v3.py and test_egg_v4.py: 5 tests passed in 0.009s",
+    "fit2c_outputs_not_produced": ["shared", "poses", "fitted OBJ", "residuals", "delta statistics", "fit2c-overlay", "fit2c-jaw", "fit2c-shape"]
+  }
+}

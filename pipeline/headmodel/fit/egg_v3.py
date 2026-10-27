@@ -33,14 +33,16 @@ def feature_mask(vertices,normals,face_mask,polygon):
     return face_mask & inside_polygon(vertices[:,:2],polygon) & (normals[:,2]>0)
 
 
-def extended_selection(original,vertices,tri,face,polygon):
+def extended_selection(original,vertices,tri,face,polygon,selector=feature_mask):
     # Original vertices keep the neutral mask; new cap centers use their own
     # normals rather than inheriting back-facing aperture wall membership.
-    added=feature_mask(vertices,vertex_normals(vertices,tri),face,polygon)[len(original):]
+    added=selector(vertices,vertex_normals(vertices,tri),face,polygon)[len(original):]
     return np.r_[original,added]
 
 
-def prepare_template():
+def prepare_template(version='v3',selector=feature_mask,
+                     selection_text='Face excluding ears and neck, expanded feature polygon in neutral XY, original vertex normal z>0'):
+    basename=f'egg-template-{version}'
     neutral,tri,modes=load_model(); regions,faces=define_regions(neutral,tri)
     landmarks=read_json(ROOT/'pipeline/headmodel/model/ict_landmarks.json')
     if landmarks['index_base']!=0 or len(landmarks['indices'])!=68:
@@ -51,14 +53,14 @@ def prepare_template():
     polygon=expanded_hull(landmark_xyz[17:68,:2],eye_distance*.15)
     face=np.isin(np.arange(len(neutral)),regions['face'])
     normals=vertex_normals(neutral,tri)
-    selected=feature_mask(neutral,normals,face,polygon)
+    selected=selector(neutral,normals,face,polygon)
     # Inspect the actual open mesh, avoiding artificial borders from the mask.
     loops=boundary_loops(tri)
     internal=[loop for loop in loops if face[loop].all() and
               inside_polygon(neutral[loop,:2],polygon).all()]
     augmented,new_tri,new_modes=cap_loops(neutral,tri,modes,internal)
     extended_face=np.r_[face,np.ones(len(internal),bool)]
-    selected=extended_selection(selected,augmented,new_tri,extended_face,polygon)
+    selected=extended_selection(selected,augmented,new_tri,extended_face,polygon,selector)
     head=np.r_[np.isin(np.arange(len(neutral)),regions['head']),np.ones(len(internal),bool)]
     free=np.flatnonzero(selected); fixed=np.flatnonzero(~selected)
     edges=mesh_edges(new_tri)
@@ -79,13 +81,13 @@ def prepare_template():
     panels=[]
     for name,v,draw_tri,colors in [('ICT ORIGINAL',neutral,tri[faces['head']],None),
                                  ('FEATURE MASK',neutral,tri[faces['head']],color),
-                                 ('EGG V3',egg,head_tri,None)]:
+                                 ('EGG '+version.upper(),egg,head_tri,None)]:
         row=[]
         for title,yaw,pitch in [('FRONT',0,0),('YAW 45',45,0),('SIDE 90',90,0),('FROM BELOW 30',0,30)]:
             image,_,_=shade(v-center,draw_tri,[yaw,pitch,0,np.log(scale),cell/2,cell/2],cell,colors)
             label(image,name+' / '+title); row.append(image)
         panels.append(np.hstack(row))
-    save_image('egg-template-v3.png',np.vstack(panels))
+    save_image(basename+'.png',np.vstack(panels))
     nose=int(np.argmin(np.linalg.norm(egg-neutral[NOSE_VERTEX],axis=1)))
     metrics=front_metrics(neutral,egg,new_tri,extended_face)
     # Also measure outward contour changes; the older helper checks inward only.
@@ -95,13 +97,13 @@ def prepare_template():
     metrics['within_five_percent']=bool(metrics['max_change_fraction_of_reference_width']<=.05)
     jaw_untouched=bool((~selected[ids[:17]]).all())
     RESULTS.mkdir(parents=True,exist_ok=True)
-    np.savez_compressed(RESULTS/'egg-template-v3.npz',neutral_vertices=egg,identity_modes=egg_modes,
+    np.savez_compressed(RESULTS/(basename+'.npz'),neutral_vertices=egg,identity_modes=egg_modes,
                         triangles=new_tri,original_augmented=augmented,face_mask=extended_face,
                         head_mask=head,feature_mask=selected,fixed_vertices=fixed,edges=edges)
     report={
         'landmark_convention':landmarks['convention'],'index_base':0,'feature_landmark_range':[17,67],
         'eye_distance_xy':eye_distance,'outward_margin':eye_distance*.15,'polygon_xy':polygon.tolist(),
-        'selection':'Face excluding ears and neck, expanded feature polygon in neutral XY, original vertex normal z>0',
+        'selection':selection_text,
         'fixed':'all vertices outside selection, including all exterior boundary rings',
         'original_selected_count':int(selected[:len(neutral)].sum()),'free_count':len(free),'fixed_count':len(fixed),
         'cap_selected_count':int(selected[len(neutral):].sum()),
@@ -114,7 +116,7 @@ def prepare_template():
         'front_silhouette':metrics,'nose_vertex':nose,'original_nose_vertex':NOSE_VERTEX,
         'original_nose_xyz':neutral[NOSE_VERTEX].tolist(),'selected_egg_nose_xyz':egg[nose].tolist(),
         'visual_conditions':'pending direct sheet inspection'}
-    write_json(RESULTS/'egg-template-v3.json',report)
+    write_json(RESULTS/(basename+'.json'),report)
     print('MASK',report['original_selected_count'],'FREE',len(free),'FIXED',len(fixed),'JAW FIXED',jaw_untouched,flush=True)
     print('HOLES',[(len(loop),int(selected[loop].sum())) for loop in internal],'REMAINING',len(remaining_features),flush=True)
     print('FRONT',metrics,'NOSE',nose,flush=True)
