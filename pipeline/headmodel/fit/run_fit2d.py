@@ -107,9 +107,45 @@ def fit_b3():
     print('B3 FINAL',shared,rows,flush=True)
 
 
+def diagnose_b3():
+    """Split saved-state contour residual directions; no fitting or geometry edit."""
+    from scipy.spatial import cKDTree
+    from fit_core import boundary
+    from fit2d_core import prepare_b_targets, model_contours
+    _,tri,_,masks,faces=template()
+    vertices=np.load(RESULTS/'b3-state.npz')['vertices']
+    a=read_json(RESULTS/'a-shared.json')
+    cameras=read_json(RESULTS/'a-poses.json')['frames']
+    keys=read_json(RESULTS/'b3-shared.json')['evaluation_frames']
+    targets=prepare_b_targets(load_targets(keys,pose_affine),a['thickness_px'])
+    def directed(points,wanted,used=None):
+        distance=cKDTree(wanted).query(points)[0]
+        worst=np.argsort(distance)[-3:][::-1]
+        return {'median_px':float(np.median(distance)),'max_px':float(distance.max()),
+                'worst':[{'xy':points[i].tolist(),'distance_px':float(distance[i]),
+                          **({'nearest_full_boundary_is_used':bool(used[i])} if used is not None else {})}
+                         for i in worst]}
+    rows=[]
+    for target in targets:
+        contours=model_contours(vertices,tri,masks,faces,cameras[str(target['frame'])])
+        row={'frame':target['frame'],'contours':{}}
+        pairs=[('face',target['face_points']),('head',target['head_boundary'])]
+        pairs += [(key,boundary(mask)) for key,mask in target['ears'].items()]
+        for key,wanted in pairs:
+            points=contours[key]['xy']; used=None
+            if key=='face':
+                nearest=cKDTree(target['face_all_points']).query(points)[1]
+                used=target['face_keep'][nearest]
+            row['contours'][key]={'target_to_model':directed(wanted,points),
+                                  'model_to_target':directed(points,wanted,used)}
+        rows.append(row)
+    write_json(RESULTS/'b3-diagnostics.json',{'frames':rows,
+        'note':'Separate directions explain raw symmetric maxima. Original fit, metrics and geometry are unchanged.'})
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase',choices=['init','a','b3'])
+    parser.add_argument('phase',choices=['init','a','b3','b3-diagnostics'])
     args=parser.parse_args()
     torch.set_num_threads(2); torch.set_num_interop_threads(1); cv2.setNumThreads(2)
-    {'init':init,'a':fit_a,'b3':fit_b3}[args.phase]()
+    {'init':init,'a':fit_a,'b3':fit_b3,'b3-diagnostics':diagnose_b3}[args.phase]()

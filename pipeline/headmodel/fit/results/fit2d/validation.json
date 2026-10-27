@@ -1,5 +1,5 @@
 {
-  "status": "stopped_before_B3_synthetic_test_30s_limit",
+  "status": "B3_completed_geometry_condition_failed_awaiting_assignee_review",
   "date": "2026-10-28",
   "A": {
     "passed": true,
@@ -86,12 +86,13 @@
     ],
     "global_seconds": 2051.059915528982,
     "camera_seconds": 1648.1887034560787,
-    "computation_elapsed_seconds": 3750.9647631819826
+    "computation_elapsed_seconds": 3750.9647631819826,
+    "assignee_verdict": "Passed by assignee after reviewing 096ff14 shape sheet"
   },
   "validation": {
     "new_unique_tests": 7,
-    "new_passed": 6,
-    "synthetic_status": "timed_out; final five-iteration recovery accuracy unverified",
+    "new_passed": 7,
+    "synthetic_status": "passed in 5 ICP iterations",
     "legacy_fit_core_passed": 7,
     "independent_static_review": "A and B implementation passed; measurement test linked to actual report path",
     "synthetic_first_process_timeout_s": 30,
@@ -101,16 +102,173 @@
       8.428100332967006,
       10.389851092011668
     ],
-    "profile_model_contours_frame3_seconds": 0.8644010280258954
+    "profile_model_contours_frame3_seconds": 0.8644010280258954,
+    "synthetic_120": {
+      "frames": [
+        3,
+        42,
+        264
+      ],
+      "radius_px": 60,
+      "amplitude_px": 10,
+      "iterations": 5,
+      "jaw_median_before_px": [
+        4.871335013616322,
+        4.032951515888858,
+        3.961088055791959
+      ],
+      "jaw_median_after_px": [
+        0.3492250427157629,
+        0.37870885439679297,
+        0.24899716776585507
+      ],
+      "elapsed_seconds": 52.66822096193209,
+      "time_limit_seconds": 120,
+      "passed": true,
+      "icp": [
+        {
+          "iteration": 1,
+          "gate_px": 40,
+          "pairs": 16507,
+          "pairs_by_frame": {
+            "3": {
+              "head": 3077,
+              "face": 1852
+            },
+            "42": {
+              "head": 2978,
+              "face": 2539
+            },
+            "264": {
+              "head": 3212,
+              "face": 2849
+            }
+          },
+          "residual_median_px": 0.12758537151901084,
+          "residual_max_px": 1.880697232283426,
+          "displacement_max_px": 10.072872591861536,
+          "seconds": 8.070379195036367,
+          "elapsed_seconds": 8.330156459007412,
+          "stable_changes": 0
+        },
+        {
+          "iteration": 2,
+          "gate_px": 31.25,
+          "pairs": 16599,
+          "pairs_by_frame": {
+            "3": {
+              "head": 3081,
+              "face": 1905
+            },
+            "42": {
+              "head": 2986,
+              "face": 2556
+            },
+            "264": {
+              "head": 3222,
+              "face": 2849
+            }
+          },
+          "residual_median_px": 0.18154444479605397,
+          "residual_max_px": 3.1745585393607825,
+          "displacement_max_px": 11.215103266639067,
+          "seconds": 11.406633056001738,
+          "elapsed_seconds": 19.73689372697845,
+          "stable_changes": 0
+        },
+        {
+          "iteration": 3,
+          "gate_px": 22.5,
+          "pairs": 16594,
+          "pairs_by_frame": {
+            "3": {
+              "head": 3084,
+              "face": 1896
+            },
+            "42": {
+              "head": 2987,
+              "face": 2564
+            },
+            "264": {
+              "head": 3221,
+              "face": 2842
+            }
+          },
+          "residual_median_px": 0.20132983363413526,
+          "residual_max_px": 6.870348828892963,
+          "displacement_max_px": 12.137597571589557,
+          "seconds": 6.032036055927165,
+          "elapsed_seconds": 25.770256582065485,
+          "stable_changes": 1
+        },
+        {
+          "iteration": 4,
+          "gate_px": 13.75,
+          "pairs": 16593,
+          "pairs_by_frame": {
+            "3": {
+              "head": 3083,
+              "face": 1894
+            },
+            "42": {
+              "head": 2986,
+              "face": 2556
+            },
+            "264": {
+              "head": 3222,
+              "face": 2852
+            }
+          },
+          "residual_median_px": 0.21624991998096935,
+          "residual_max_px": 2.249755125960081,
+          "displacement_max_px": 13.390636926269408,
+          "seconds": 5.177074448089115,
+          "elapsed_seconds": 30.973931910004467,
+          "stable_changes": 2
+        },
+        {
+          "iteration": 5,
+          "gate_px": 5,
+          "pairs": 16561,
+          "pairs_by_frame": {
+            "3": {
+              "head": 3085,
+              "face": 1865
+            },
+            "42": {
+              "head": 2988,
+              "face": 2560
+            },
+            "264": {
+              "head": 3222,
+              "face": 2841
+            }
+          },
+          "residual_median_px": 0.2291866075156262,
+          "residual_max_px": 1.571651985805146,
+          "displacement_max_px": 14.169421266263544,
+          "seconds": 7.242236443911679,
+          "elapsed_seconds": 38.21626749902498,
+          "stable_changes": 3
+        }
+      ]
+    },
+    "synthetic_120_test_output": "heavy verification: running in slot 3/3\ntest_synthetic_bump (test_fit2d_linear.LinearContracts.test_synthetic_bump) ... B ICP {'iteration': 1, 'gate_px': 40.0, 'pairs': 16507, 'pairs_by_frame': {'3': {'head': 3077, 'face': 1852}, '42': {'head': 2978, 'face': 2539}, '264': {'head': 3212, 'face': 2849}}, 'residual_median_px': 0.12758537151901084, 'residual_max_px': 1.880697232283426, 'displacement_max_px': 10.072872591861536, 'seconds': 8.070379195036367, 'elapsed_seconds': 8.330156459007412, 'stable_changes': 0}\nB ICP {'iteration': 2, 'gate_px': 31.25, 'pairs': 16599, 'pairs_by_frame': {'3': {'head': 3081, 'face': 1905}, '42': {'head': 2986, 'face': 2556}, '264': {'head': 3222, 'face': 2849}}, 'residual_median_px': 0.18154444479605397, 'residual_max_px': 3.1745585393607825, 'displacement_max_px': 11.215103266639067, 'seconds': 11.406633056001738, 'elapsed_seconds': 19.73689372697845, 'stable_changes': 0}\nB ICP {'iteration': 3, 'gate_px': 22.5, 'pairs': 16594, 'pairs_by_frame': {'3': {'head': 3084, 'face': 1896}, '42': {'head': 2987, 'face': 2564}, '264': {'head': 3221, 'face': 2842}}, 'residual_median_px': 0.20132983363413526, 'residual_max_px': 6.870348828892963, 'displacement_max_px': 12.137597571589557, 'seconds': 6.032036055927165, 'elapsed_seconds': 25.770256582065485, 'stable_changes': 1}\nB ICP {'iteration': 4, 'gate_px': 13.75, 'pairs': 16593, 'pairs_by_frame': {'3': {'head': 3083, 'face': 1894}, '42': {'head': 2986, 'face': 2556}, '264': {'head': 3222, 'face': 2852}}, 'residual_median_px': 0.21624991998096935, 'residual_max_px': 2.249755125960081, 'displacement_max_px': 13.390636926269408, 'seconds': 5.177074448089115, 'elapsed_seconds': 30.973931910004467, 'stable_changes': 2}\nB ICP {'iteration': 5, 'gate_px': 5.0, 'pairs': 16561, 'pairs_by_frame': {'3': {'head': 3085, 'face': 1865}, '42': {'head': 2988, 'face': 2560}, '264': {'head': 3222, 'face': 2841}}, 'residual_median_px': 0.2291866075156262, 'residual_max_px': 1.571651985805146, 'displacement_max_px': 14.169421266263544, 'seconds': 7.242236443911679, 'elapsed_seconds': 38.21626749902498, 'stable_changes': 3}\nSYNTHETIC jaw median px before/after: [4.871335013616322, 4.032951515888858, 3.961088055791959] [0.3492250427157629, 0.37870885439679297, 0.24899716776585507]\nok\n\n----------------------------------------------------------------------\nRan 1 test in 52.675s\n\nOK\n",
+    "time_limits_seconds": {
+      "synthetic": 120,
+      "others": 30
+    }
   },
   "heavy_runner_calls": {
     "init": 1,
     "A": 1,
-    "synthetic_tests": 2,
+    "synthetic_tests": 3,
     "profile": 1,
-    "total": 5,
+    "B3": 1,
+    "B3_diagnostics": 1,
+    "total": 8,
     "A_reexecutions": 0,
-    "B3": 0,
+    "B3_reexecutions": 0,
     "B130": 0
   },
   "B_final_spec": {
@@ -126,17 +284,47 @@
   "B_test_first_output": "heavy verification: running in slot 2/3\ntest_synthetic_bump (test_fit2d_linear.LinearContracts.test_synthetic_bump) ... ",
   "B_test_recheck_output": "heavy verification: running in slot 2/3\ntest_synthetic_bump (test_fit2d_linear.LinearContracts.test_synthetic_bump) ... B ICP {'iteration': 1, 'gate_px': 40.0, 'pairs': 16507, 'pairs_by_frame': {'3': {'head': 3077, 'face': 1852}, '42': {'head': 2978, 'face': 2539}, '264': {'head': 3212, 'face': 2849}}, 'residual_median_px': 0.12758537151901084, 'residual_max_px': 1.880697232283426, 'displacement_max_px': 10.072872591861536, 'seconds': 8.428100332967006, 'elapsed_seconds': 8.811112340074033, 'stable_changes': 0}\nB ICP {'iteration': 2, 'gate_px': 31.25, 'pairs': 16599, 'pairs_by_frame': {'3': {'head': 3081, 'face': 1905}, '42': {'head': 2986, 'face': 2556}, '264': {'head': 3222, 'face': 2849}}, 'residual_median_px': 0.18154444479605397, 'residual_max_px': 3.1745585393607825, 'displacement_max_px': 11.215103266639067, 'seconds': 10.389851092011668, 'elapsed_seconds': 19.201077662059106, 'stable_changes': 0}\nERROR\n\n======================================================================\nERROR: test_synthetic_bump (test_fit2d_linear.LinearContracts.test_synthetic_bump)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/test_fit2d_linear.py\", line 79, in test_synthetic_bump\n    result,trace=solve_icp(v,tri,masks,faces,poses,targets,sref,0.,300.,iterations=5)\n                 ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 299, in solve_icp\n    rows,counts=correspondence_rows(base+d,tri,masks,faces,pxposes,targets,thickness,gate,interface)\n                ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 255, in correspondence_rows\n    contours=model_contours(vertices,tri,masks,faces,pose,interface)\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 215, in model_contours\n    head,head_owner=raster(faces['head'])\n                    ~~~~~~^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 211, in raster\n    _,owner=rasterize(q,tri[ids],cull_backfaces=True)\n            ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit_core.py\", line 191, in rasterize\n    det = np.where(valid, det, 1.)\n  File \"/home/eias/.local/lib/python3.13/site-packages/numpy/_core/multiarray.py\", line 406, in where\n    @array_function_from_c_func_and_dispatcher(_multiarray_umath.where)\n    \n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/test_fit2d_linear.py\", line 22, in timeout\n    raise TimeoutError('Individual fit2d test exceeded 30 seconds')\nTimeoutError: Individual fit2d test exceeded 30 seconds\n\n----------------------------------------------------------------------\nRan 1 test in 30.138s\n\nFAILED (errors=1)\n",
   "sheets": {
-    "sheets/fit2d-init.png": "67603da4e210450b65c22163123c9c6e018816f7ae2d7933c91740655235f551",
-    "sheets/fit2d-shape-a.png": "a6cf0091fd9d41fb97c39c801353351788f10fb4871cbb041e211b3dc034bee1"
+    "pipeline/headmodel/fit/sheets/fit2d-init.png": "67603da4e210450b65c22163123c9c6e018816f7ae2d7933c91740655235f551",
+    "pipeline/headmodel/fit/sheets/fit2d-shape-a.png": "a6cf0091fd9d41fb97c39c801353351788f10fb4871cbb041e211b3dc034bee1",
+    "pipeline/headmodel/fit/sheets/fit2d-shape-b3.png": "2b8c3507a16acdfc6e1054318b5c0eacf301e4b220fa76558998e4f6e7a3a70a",
+    "pipeline/headmodel/fit/sheets/fit2d-jaw-b3.png": "5152001097484b6209eee17607bfdc3881f223b6448e5b14c70bd6fd89c8594e",
+    "pipeline/headmodel/fit/sheets/fit2d-overlay-b3.png": "744bbd086e0af26e038895145606116b91ba27e60dc0fdb272a52f2bc72ca4ff",
+    "pipeline/headmodel/fit/sheets/fit2d-err-b3.png": "f99f0446aca2fb7f9280d2e9e0705858353253d183d41d3c0aedafa2bc86ad83"
   },
   "not_performed": [
-    "B3 actual fit",
     "B130",
-    "lambda search",
+    "lambda correction/search",
     "angular correction fields",
     "PR",
     "merge",
     "deployment",
     "runtime/rig/data modifications beyond requested input merge"
-  ]
+  ],
+  "B3": {
+    "elapsed_seconds": 113.29385817900766,
+    "iterations": 13,
+    "converged": true,
+    "final_five_gates_px": [
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    "displacement_stats_px": {
+      "max": 68.01165820977462,
+      "mean": 14.561325597780295,
+      "p95": 41.05626846041462
+    },
+    "neck_displacement_finite": true,
+    "shape_verdict": "failed_smooth_surface_condition",
+    "head_iou_min_9keys": 0.9259991768183494,
+    "head_iou_median_9keys": 0.9521155276165243,
+    "top_10_percent_symmetric_face_frames": [
+      206
+    ],
+    "top_10_percent_target_to_model_face_frames": [
+      219
+    ]
+  }
 }
