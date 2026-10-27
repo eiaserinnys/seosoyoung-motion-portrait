@@ -302,6 +302,67 @@ def all_sheets(tripo_only=False):
     print('SHEETS',manifest,flush=True)
 
 
+def b130_sheets():
+    """One final render pass, reusing the saved 130-frame fit and cameras."""
+    import torch
+    from fit_core import project
+    started=time.perf_counter(); manifest=[]
+    shared=read_json(RESULTS/'shared.json'); cameras=read_json(RESULTS/'poses.json')['frames']
+    model=load_surface('fit-state'); step=load_surface('b3-step2-state')
+    stepstats=read_json(RESULTS/'b3-step2-residuals.json')['curvature']; stats=shared['curvature']
+    rows=[('B3 STEP2',step['vertices'],step['triangles'],None),
+          ('B130',model['vertices'],model['triangles'],None)]
+    for title,surface,values in [('B3 STEP2',step,stepstats),('B130',model,stats)]:
+        rows.append((f'{title} p99={values["p99"]:.4f} max={values["max"]:.4f}',
+                     surface['vertices'],surface['triangles'],heat(surface['curvature'],.05,surface['excluded'])))
+    manifest.append(save(FIT/'sheets/fit2f-shape.png',shape_rows(rows)))
+    keys=frame_sets()[0][:9]
+    targets=load_targets_f(keys,shared['thickness_px'])
+    manifest.append(save(FIT/'sheets/fit2f-jaw.png',padded_stack([
+        panel(model,t,cameras[str(t['frame'])],'B130') for t in targets])))
+    allframes=frame_sets()[1]
+    registration=read_json(ROOT/'source/viewer/ponytail-seedance-registration.json')
+    positive=max((f for f in allframes if registration['video'][f-1]['pose'][0]>0),
+                 key=lambda f:registration['video'][f-1]['pose'][0])
+    profiles=[172,184,192,240,219,positive]
+    profile_targets=load_targets_f(profiles,shared['thickness_px'])
+    manifest.append(save(FIT/'sheets/fit2f-profile.png',padded_stack([
+        panel(model,t,cameras[str(t['frame'])],'B130 P6') for t in profile_targets])))
+    def overlay(frame):
+        target=load_targets_f([frame],shared['thickness_px'])[0]
+        pose=cameras[str(frame)]; original=image_for(frame)
+        gray,visible,_=shade(model['vertices'],model['triangles'],pose,cull_backfaces=True)
+        shaded=original.copy(); shaded[visible]=(.5*original[visible]+.5*gray[visible]).astype(np.uint8)
+        outlines=original.copy(); contour=surface_contour(model['vertices'],model['triangles'],pose)
+        draw_points(outlines,contour['xy'],(20,25,240))
+        draw_points(outlines,target['points'][target['labels']==0],(240,80,0))
+        draw_points(outlines,target['points'][target['labels']==1],(0,190,25))
+        label(shaded,f'B130 f{frame} yaw{pose[0]:.1f} pitch{pose[1]:.1f} / alpha .5')
+        label(outlines,'skin blue / hair green / model red')
+        return np.hstack([shaded,outlines])
+    a33=frame_sets()[0]
+    for number in range(3):
+        frames=a33[number*11:(number+1)*11]
+        manifest.append(save(FIT/f'sheets/fit2f-overlay-{number+1}.png',np.vstack([overlay(f) for f in frames])))
+    pitch_frames=[min(allframes,key=lambda f:cameras[str(f)][1]),
+                  max(allframes,key=lambda f:cameras[str(f)][1])]
+    manifest.append(save(FIT/'sheets/fit2f-cut-boundary.png',np.vstack([overlay(f) for f in pitch_frames])))
+    center,scale=common_view(); point=np.asarray(stats['maximum_location']['fitted_point_ict'])
+    panels=[]
+    for yaw,pitch in [(0,0),(-90,0),(90,0),(0,30)]:
+        pose=[yaw,pitch,0,np.log(scale),200,200]
+        image,_,_=shade(model['vertices']-center,model['triangles'],pose,400,cull_backfaces=True)
+        q=project(torch.tensor((point-center)[None]),torch.tensor(pose,dtype=torch.float64)).numpy()[0,:2]
+        cv2.circle(image,tuple(np.rint(q).astype(int)),6,(0,0,255),2,cv2.LINE_AA)
+        label(image,f'curvature max {stats["max"]:.4f} y{yaw} p{pitch}'); panels.append(image)
+    manifest.append(save(FIT/'sheets/fit2f-maximum.png',np.hstack(panels)))
+    info={'sheets':manifest,'elapsed_seconds':time.perf_counter()-started,
+          'profile_frames':profiles,'pitch_extreme_frames':pitch_frames,
+          'fit_stage':shared['stage'],'no_extra_fit':True}
+    write_json(RESULTS/'b130-sheet-sha256.json',info)
+    print('B130 SHEETS',info,flush=True)
+
+
 if __name__=='__main__':
     import argparse
     import torch

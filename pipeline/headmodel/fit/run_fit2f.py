@@ -11,7 +11,7 @@ from fit_core import FIT, ROOT, read_json, write_json
 from fit2d_core import template, frame_sets
 from fit2f_core import (RESULTS, compact_surface, boundary_edges, load_surface,
                         load_targets_f, remesh_surface, surface_distances,
-                        solve_surface, curvature_stats, measure_surface)
+                        solve_surface, curvature_stats, measure_surface, fit_cameras_f)
 
 
 def context():
@@ -126,9 +126,82 @@ def refresh_step1_curvature():
     print('STEP1 CORRECTED CURVATURE',stats,flush=True)
 
 
+def save_b130(vertices,d,trace,elapsed,cameras,stage,camera_trace=None):
+    initial,shared,sref=context(); surface=load_surface('surface-a')
+    base,tri=surface['vertices'],surface['triangles']
+    frames=frame_sets()[1]; keys=frame_sets()[0][:9]
+    stats,curvature,excluded=curvature_stats(base*sref,tri,d,surface['ear_excluded'])
+    rows=measure_surface(vertices,tri,[cameras[str(f)] for f in frames],
+                         load_targets_f(frames,shared['thickness_px']))
+    for row in rows:
+        pose=cameras[str(row['frame'])]; row.update(yaw=pose[0],pitch=pose[1],roll=pose[2])
+    used=np.flatnonzero(~excluded); maximum=int(used[np.argmax(curvature[used])])
+    stats['maximum_location']={'vertex':maximum,'base_point_ict':base[maximum].tolist(),
+        'fitted_point_ict':vertices[maximum].tolist(),'value':float(curvature[maximum]),
+        'ear_excluded':bool(surface['ear_excluded'][maximum]),
+        'boundary_excluded':bool(excluded[maximum])}
+    by_skin=sorted(rows,key=lambda r:r['skin']['median_px'],reverse=True)
+    by_hair=sorted(rows,key=lambda r:r['hair']['median_px'],reverse=True)
+    distributions={}
+    for field in ('skin','hair'):
+        values=[r[field]['median_px'] for r in rows]
+        distributions[field]={'p50':float(np.percentile(values,50)),
+                              'p90':float(np.percentile(values,90)),'max':float(max(values))}
+    key_max=max(row['skin']['max_px'] for row in rows if row['frame'] in keys)
+    magnitude=np.linalg.norm(d,axis=1)
+    info={key:shared[key] for key in ('beta','scale_xyz','thickness_px','beta_at_limit')}
+    info.update(stage=stage,lambda_value=1000.,mu=.01,s_ref=sref,frames=frames,keys=keys,
+        icp=trace,elapsed_seconds=elapsed,curvature=stats,
+        displacement_stats_px={'mean':float(magnitude.mean()),'p95':float(np.percentile(magnitude,95)),
+                               'max':float(magnitude.max())},
+        key_skin_max_px=key_max,camera_refinement_triggered=key_max>3.,
+        camera_refinement_performed=stage=='camera-refined',camera_refinement=camera_trace,
+        rotation_max_abs_delta_deg=float(max(np.max(np.abs(np.array(cameras[str(f)][:3])-initial[str(f)][:3])) for f in frames)))
+    residuals={'stage':stage,'frames':rows,'curvature':stats,'median_distributions_px':distributions,
+        'worst_skin_median_frames':by_skin[:5],'worst_hair_median_frames':by_hair[:5],
+        'keys':[r for r in rows if r['frame'] in keys]}
+    prefix='b130-initial-' if stage=='initial' else 'b130-refined-'
+    state=dict(vertices=vertices,triangles=tri,base_vertices=base,displacement_px=d,
+               curvature=curvature,excluded=excluded,s_ref=sref,open_edges=surface['open_edges'])
+    for name in (prefix+'state','fit-state'): np.savez_compressed(RESULTS/(name+'.npz'),**state)
+    for name in (prefix+'shared','shared'): write_json(RESULTS/(name+'.json'),info)
+    for name in (prefix+'residuals','residuals'): write_json(RESULTS/(name+'.json'),residuals)
+    write_json(RESULTS/'poses.json',{'frames':cameras,'stage':stage,'rotations_fixed':True})
+    with (RESULTS/'fitted_neutral.obj').open('w',encoding='utf-8') as output:
+        for x,y,z in vertices: output.write(f'v {x:.10f} {y:.10f} {z:.10f}\n')
+        for a,b,c in tri+1: output.write(f'f {a} {b} {c}\n')
+    print('B130 SUMMARY',stage,distributions,'curvature',stats,'displacement',info['displacement_stats_px'],
+          'key skin max',key_max,flush=True)
+
+
+def fit_b130(refine=False):
+    started=time.perf_counter(); cameras,shared,sref=context(); frames=frame_sets()[1]
+    if len(frames)!=130: raise ValueError('Expected exactly 130 frames')
+    surface=load_surface('surface-a'); v,tri=surface['vertices'],surface['triangles']
+    targets=load_targets_f(frames,shared['thickness_px']); camera_trace=None
+    if refine:
+        first=read_json(RESULTS/'b130-initial-shared.json')
+        if not first['camera_refinement_triggered']: raise ValueError('Camera refinement condition not met')
+        if (RESULTS/'b130-refined-shared.json').exists(): raise ValueError('Refinement already performed; no further run')
+        frozen=load_surface('b130-initial-state')['vertices']
+        initial=np.array([cameras[str(f)] for f in frames])
+        fitted,camera_trace=fit_cameras_f(frozen,tri,targets,initial)
+        cameras={str(f):p.tolist() for f,p in zip(frames,fitted)}
+        # Re-solve absolute displacement from the same remeshed A datum.
+        # The fixed B130 surface above was used only for the camera update.
+    elif (RESULTS/'b130-initial-shared.json').exists():
+        raise ValueError('Initial B130 already performed; no repeat')
+    vertices,d,trace,solve_seconds=solve_surface(v,tri,[cameras[str(f)] for f in frames],targets,sref)
+    save_b130(vertices,d,trace,time.perf_counter()-started,cameras,
+              'camera-refined' if refine else 'initial',camera_trace)
+    print('B130 SOLVE SECONDS',solve_seconds,flush=True)
+
+
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(); parser.add_argument('phase',choices=['prepare','step1','step2','refresh-step1-curvature'])
+    parser=argparse.ArgumentParser(); parser.add_argument('phase',choices=['prepare','step1','step2','refresh-step1-curvature','b130','b130-refine','b130-sheets'])
     phase=parser.parse_args().phase
     torch.set_num_threads(2); torch.set_num_interop_threads(1); cv2.setNumThreads(2)
     {'prepare':prepare,'step1':lambda:step(1),'step2':lambda:step(2),
-     'refresh-step1-curvature':refresh_step1_curvature}[phase]()
+     'refresh-step1-curvature':refresh_step1_curvature,'b130':fit_b130,
+     'b130-refine':lambda:fit_b130(True),
+     'b130-sheets':lambda:__import__('fit2f_sheets').b130_sheets()}[phase]()

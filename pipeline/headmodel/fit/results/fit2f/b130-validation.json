@@ -1,0 +1,52 @@
+{
+  "initial_runs": 1,
+  "conditional_camera_and_b130_runs": 1,
+  "sheet_runs": 1,
+  "additional_fit_runs": 0,
+  "initial_input_and_fit_seconds": 436.1736059950199,
+  "initial_icp_seconds_sum": 430.7323505671229,
+  "initial_key_skin_max_px": 17.483602019105017,
+  "refinement_condition": "initial nine-key classified skin maximum >3px",
+  "camera_iterations": 100,
+  "camera_seconds": 249.81816166697536,
+  "final_input_camera_and_fit_seconds": 673.1782548620831,
+  "final_icp_seconds_sum": 418.9157746270066,
+  "sheet_seconds": 32.6162898830371,
+  "rotations_max_delta_deg": 0.0,
+  "contracts": "New fixed-shape synthetic camera recovery RED missing function -> GREEN 1 test, 6.452s; existing unchanged 2f evidence reused; remesh test6 not rerun.",
+  "independent_static_review": "B130 orchestration, camera updates and sheet entry passed; no P1 identified.",
+  "final_visual_review": {
+    "verdict": "전면 매끈함 미충족. 곡률 p99와 최대 모두 기준 초과.",
+    "direct_review": "담당 실행 세션이 형상, 턱선, P6, overlay3장, pitch 극단, 최대점 시트 8개를 열었다.",
+    "independent_review": "독립 검수자가 같은 시트 8개와 최종 JSON을 직접 열어 같은 판정.",
+    "shape": "B3-step2보다 이마·관자·볼에 넓은 굴곡과 능선, 턱끝의 날카로운 요철이 늘었다.",
+    "jaw": "턱선이 목표와 겹치는 구간이 많지만 172·184·192의 먼 쪽 볼 경계 등에 벌어짐이 남고, 9키 피부 최대 15.692px이다.",
+    "maximum_location": "vertex225는 턱끝이다. 정면·양측면에서 확인했고 상향뷰에서 턱밑 중앙에 투영된다. 귀·목 경계 제외 영역이 아니다.",
+    "cut_boundary": "199번 상향뷰에 턱밑면 패싯, 거친 하단 경계와 귀뒤 하단 잔여 실루엣이 남는다. 295번 하향뷰에도 턱끝과 머리 외곽 불일치가 보인다.",
+    "scope": "수치 측정은 130프레임 전체, 이미지 열람은 A33·P6·pitch 양 극단 정지 표본이다.",
+    "limitations": [
+      "P6 피부 bbox 크롭은 정수리·이마 상부 전체 외곽을 담지 않는다.",
+      "연속영상과 그 밖의 프레임 화면은 확인하지 않았다."
+    ],
+    "additional_fitting": false
+  },
+  "lambda": 1000.0,
+  "mu": 0.01,
+  "taper_px": 20.0,
+  "sample_spacing_px": 1.0,
+  "reference_spacing_px": 3.0,
+  "not_executed": [
+    "parameter search",
+    "extra camera refinement",
+    "2e",
+    "ear positioning",
+    "nose/eye/mouth terms",
+    "Tripo work",
+    "PR",
+    "merge",
+    "deployment"
+  ],
+  "protected_paths": "Existing 2d, data, model, runtime and Tripo assets unchanged.",
+  "syntax_checks": "Four changed/new Python files py_compile passed; git diff --check passed.",
+  "completion": "Requested bounded experiment and outputs finished; visual and numeric shape criteria failed."
+}

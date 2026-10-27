@@ -1,0 +1,8327 @@
+{
+  "beta": [
+    3.0,
+    -2.3238532543182373,
+    0.962838888168335,
+    -0.04428758844733238,
+    -1.0781466960906982,
+    2.021167755126953,
+    -1.385634183883667,
+    2.5732109546661377,
+    0.240731880068779,
+    -0.09863744676113129,
+    -0.5421181917190552,
+    -1.425161600112915,
+    -1.0903725624084473,
+    0.7136549949645996,
+    -1.3719813823699951,
+    0.05031247437000275,
+    1.5402365922927856,
+    1.5293943881988525,
+    -0.7934077978134155,
+    -0.8313567042350769,
+    0.16595520079135895,
+    -0.18424229323863983,
+    0.19038638472557068,
+    -0.8863693475723267,
+    1.2397328615188599,
+    0.0698409229516983,
+    -0.09095994383096695,
+    0.11244086921215057,
+    -0.029552536085247993,
+    0.7899767160415649,
+    -0.1986280381679535,
+    -0.8034907579421997,
+    -0.17191722989082336,
+    -0.1377059668302536,
+    -0.23412825167179108,
+    0.19318658113479614,
+    0.20554983615875244,
+    -0.11594325304031372,
+    0.16738411784172058,
+    0.34028974175453186,
+    -0.4750702977180481,
+    0.07579408586025238,
+    -0.12109437584877014,
+    -0.15439951419830322,
+    0.07954122871160507,
+    0.06994428485631943,
+    -0.0035821222700178623,
+    -0.3056850731372833,
+    0.433557391166687,
+    0.21419882774353027,
+    -0.601729154586792,
+    -0.059788867831230164,
+    0.3816203474998474,
+    0.13980181515216827,
+    0.6887043118476868,
+    -0.24262502789497375,
+    -0.07118495553731918,
+    -0.16446071863174438,
+    -0.01492663286626339,
+    0.2903563678264618,
+    0.10983365029096603,
+    0.056190233677625656,
+    -0.19466200470924377,
+    -0.582794189453125,
+    0.2117919623851776,
+    -0.014575084671378136,
+    0.25760799646377563,
+    0.08110616356134415,
+    0.21673579514026642,
+    -0.15223616361618042,
+    0.342691570520401,
+    -0.014702805317938328,
+    -0.10131555795669556,
+    0.09664084762334824,
+    0.12389245629310608,
+    0.26290133595466614,
+    0.005319082178175449,
+    0.14341023564338684,
+    -0.2706989645957947,
+    0.1062079444527626,
+    0.003311032662168145,
+    0.1934320032596588,
+    -0.0498250275850296,
+    0.050588060170412064,
+    0.051849476993083954,
+    0.03046773001551628,
+    -0.24730399250984192,
+    0.33053329586982727,
+    -0.1952749639749527,
+    0.06955652683973312,
+    -0.019400261342525482,
+    -0.058940138667821884,
+    -0.07317037135362625,
+    -0.0431399941444397,
+    -0.101898193359375,
+    0.01849408447742462,
+    -0.18917448818683624,
+    -0.0590202622115612,
+    0.023658737540245056,
+    0.08376810699701309
+  ],
+  "scale_xyz": [
+    1.1242845058441162,
+    1.0283762216567993,
+    1.0862475633621216
+  ],
+  "thickness_px": 6.993907451629639,
+  "beta_at_limit": 1,
+  "stage": "camera-refined",
+  "lambda_value": 1000.0,
+  "mu": 0.01,
+  "s_ref": 24.793355646783024,
+  "frames": [
+    1,
+    3,
+    4,
+    7,
+    10,
+    13,
+    16,
+    19,
+    22,
+    25,
+    28,
+    31,
+    34,
+    37,
+    40,
+    42,
+    43,
+    46,
+    49,
+    52,
+    55,
+    58,
+    61,
+    64,
+    67,
+    70,
+    73,
+    76,
+    79,
+    82,
+    85,
+    88,
+    91,
+    94,
+    97,
+    100,
+    103,
+    106,
+    109,
+    112,
+    115,
+    118,
+    121,
+    124,
+    127,
+    130,
+    133,
+    136,
+    139,
+    142,
+    145,
+    148,
+    151,
+    154,
+    157,
+    160,
+    163,
+    166,
+    169,
+    172,
+    175,
+    178,
+    181,
+    184,
+    187,
+    190,
+    192,
+    193,
+    196,
+    199,
+    202,
+    205,
+    206,
+    208,
+    211,
+    214,
+    217,
+    219,
+    220,
+    223,
+    226,
+    229,
+    232,
+    235,
+    238,
+    240,
+    241,
+    244,
+    247,
+    250,
+    253,
+    256,
+    259,
+    262,
+    264,
+    265,
+    268,
+    270,
+    271,
+    274,
+    277,
+    280,
+    283,
+    286,
+    289,
+    292,
+    295,
+    298,
+    301,
+    303,
+    304,
+    307,
+    310,
+    313,
+    316,
+    319,
+    322,
+    325,
+    328,
+    331,
+    334,
+    337,
+    340,
+    343,
+    346,
+    349,
+    352,
+    355,
+    358,
+    361
+  ],
+  "keys": [
+    3,
+    42,
+    192,
+    206,
+    219,
+    240,
+    264,
+    270,
+    303
+  ],
+  "icp": [
+    {
+      "iteration": 1,
+      "gate_px": 15.0,
+      "pairs": 318768,
+      "counts": {
+        "1": {
+          "skin": 679,
+          "hair": 1672,
+          "cut_rejected": 0
+        },
+        "3": {
+          "skin": 678,
+          "hair": 1699,
+          "cut_rejected": 0
+        },
+        "4": {
+          "skin": 674,
+          "hair": 1673,
+          "cut_rejected": 0
+        },
+        "7": {
+          "skin": 664,
+          "hair": 1705,
+          "cut_rejected": 0
+        },
+        "10": {
+          "skin": 633,
+          "hair": 1655,
+          "cut_rejected": 18
+        },
+        "13": {
+          "skin": 592,
+          "hair": 1636,
+          "cut_rejected": 48
+        },
+        "16": {
+          "skin": 547,
+          "hair": 1675,
+          "cut_rejected": 74
+        },
+        "19": {
+          "skin": 590,
+          "hair": 1808,
+          "cut_rejected": 78
+        },
+        "22": {
+          "skin": 758,
+          "hair": 2065,
+          "cut_rejected": 94
+        },
+        "25": {
+          "skin": 915,
+          "hair": 2096,
+          "cut_rejected": 113
+        },
+        "28": {
+          "skin": 962,
+          "hair": 2090,
+          "cut_rejected": 110
+        },
+        "31": {
+          "skin": 900,
+          "hair": 2105,
+          "cut_rejected": 119
+        },
+        "34": {
+          "skin": 920,
+          "hair": 2095,
+          "cut_rejected": 123
+        },
+        "37": {
+          "skin": 909,
+          "hair": 2102,
+          "cut_rejected": 116
+        },
+        "40": {
+          "skin": 1002,
+          "hair": 1991,
+          "cut_rejected": 115
+        },
+        "42": {
+          "skin": 891,
+          "hair": 1840,
+          "cut_rejected": 98
+        },
+        "43": {
+          "skin": 943,
+          "hair": 1861,
+          "cut_rejected": 104
+        },
+        "46": {
+          "skin": 751,
+          "hair": 1934,
+          "cut_rejected": 84
+        },
+        "49": {
+          "skin": 671,
+          "hair": 1525,
+          "cut_rejected": 55
+        },
+        "52": {
+          "skin": 695,
+          "hair": 1712,
+          "cut_rejected": 0
+        },
+        "55": {
+          "skin": 666,
+          "hair": 1915,
+          "cut_rejected": 73
+        },
+        "58": {
+          "skin": 851,
+          "hair": 2165,
+          "cut_rejected": 103
+        },
+        "61": {
+          "skin": 824,
+          "hair": 2190,
+          "cut_rejected": 112
+        },
+        "64": {
+          "skin": 824,
+          "hair": 2173,
+          "cut_rejected": 110
+        },
+        "67": {
+          "skin": 832,
+          "hair": 2156,
+          "cut_rejected": 108
+        },
+        "70": {
+          "skin": 855,
+          "hair": 2083,
+          "cut_rejected": 95
+        },
+        "73": {
+          "skin": 797,
+          "hair": 1917,
+          "cut_rejected": 83
+        },
+        "76": {
+          "skin": 663,
+          "hair": 1777,
+          "cut_rejected": 57
+        },
+        "79": {
+          "skin": 721,
+          "hair": 1725,
+          "cut_rejected": 0
+        },
+        "82": {
+          "skin": 707,
+          "hair": 1681,
+          "cut_rejected": 0
+        },
+        "85": {
+          "skin": 583,
+          "hair": 1837,
+          "cut_rejected": 63
+        },
+        "88": {
+          "skin": 396,
+          "hair": 1781,
+          "cut_rejected": 146
+        },
+        "91": {
+          "skin": 280,
+          "hair": 1907,
+          "cut_rejected": 169
+        },
+        "94": {
+          "skin": 294,
+          "hair": 1872,
+          "cut_rejected": 163
+        },
+        "97": {
+          "skin": 528,
+          "hair": 1785,
+          "cut_rejected": 94
+        },
+        "100": {
+          "skin": 717,
+          "hair": 1774,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 757,
+          "hair": 820,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 753,
+          "hair": 1610,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 710,
+          "hair": 1668,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 555,
+          "hair": 1779,
+          "cut_rejected": 91
+        },
+        "115": {
+          "skin": 306,
+          "hair": 1881,
+          "cut_rejected": 152
+        },
+        "118": {
+          "skin": 277,
+          "hair": 1900,
+          "cut_rejected": 186
+        },
+        "121": {
+          "skin": 497,
+          "hair": 1781,
+          "cut_rejected": 120
+        },
+        "124": {
+          "skin": 714,
+          "hair": 1836,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 764,
+          "hair": 1775,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 772,
+          "hair": 1778,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 760,
+          "hair": 1765,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 735,
+          "hair": 1680,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 708,
+          "hair": 1668,
+          "cut_rejected": 0
+        },
+        "142": {
+          "skin": 678,
+          "hair": 1656,
+          "cut_rejected": 0
+        },
+        "145": {
+          "skin": 675,
+          "hair": 1629,
+          "cut_rejected": 2
+        },
+        "148": {
+          "skin": 642,
+          "hair": 1516,
+          "cut_rejected": 33
+        },
+        "151": {
+          "skin": 601,
+          "hair": 1224,
+          "cut_rejected": 60
+        },
+        "154": {
+          "skin": 692,
+          "hair": 1670,
+          "cut_rejected": 75
+        },
+        "157": {
+          "skin": 595,
+          "hair": 645,
+          "cut_rejected": 86
+        },
+        "160": {
+          "skin": 723,
+          "hair": 767,
+          "cut_rejected": 94
+        },
+        "163": {
+          "skin": 842,
+          "hair": 1685,
+          "cut_rejected": 119
+        },
+        "166": {
+          "skin": 909,
+          "hair": 2100,
+          "cut_rejected": 137
+        },
+        "169": {
+          "skin": 976,
+          "hair": 1943,
+          "cut_rejected": 153
+        },
+        "172": {
+          "skin": 889,
+          "hair": 1918,
+          "cut_rejected": 175
+        },
+        "175": {
+          "skin": 761,
+          "hair": 1854,
+          "cut_rejected": 181
+        },
+        "178": {
+          "skin": 744,
+          "hair": 1798,
+          "cut_rejected": 193
+        },
+        "181": {
+          "skin": 720,
+          "hair": 1784,
+          "cut_rejected": 189
+        },
+        "184": {
+          "skin": 707,
+          "hair": 1762,
+          "cut_rejected": 196
+        },
+        "187": {
+          "skin": 697,
+          "hair": 1765,
+          "cut_rejected": 198
+        },
+        "190": {
+          "skin": 715,
+          "hair": 1785,
+          "cut_rejected": 189
+        },
+        "192": {
+          "skin": 720,
+          "hair": 1744,
+          "cut_rejected": 172
+        },
+        "193": {
+          "skin": 807,
+          "hair": 1802,
+          "cut_rejected": 193
+        },
+        "196": {
+          "skin": 802,
+          "hair": 1978,
+          "cut_rejected": 205
+        },
+        "199": {
+          "skin": 693,
+          "hair": 1889,
+          "cut_rejected": 201
+        },
+        "202": {
+          "skin": 253,
+          "hair": 1874,
+          "cut_rejected": 201
+        },
+        "205": {
+          "skin": 169,
+          "hair": 2129,
+          "cut_rejected": 204
+        },
+        "206": {
+          "skin": 245,
+          "hair": 2042,
+          "cut_rejected": 181
+        },
+        "208": {
+          "skin": 241,
+          "hair": 2077,
+          "cut_rejected": 182
+        },
+        "211": {
+          "skin": 420,
+          "hair": 2070,
+          "cut_rejected": 143
+        },
+        "214": {
+          "skin": 541,
+          "hair": 1994,
+          "cut_rejected": 159
+        },
+        "217": {
+          "skin": 856,
+          "hair": 1577,
+          "cut_rejected": 158
+        },
+        "219": {
+          "skin": 853,
+          "hair": 1477,
+          "cut_rejected": 146
+        },
+        "220": {
+          "skin": 854,
+          "hair": 1575,
+          "cut_rejected": 169
+        },
+        "223": {
+          "skin": 835,
+          "hair": 1549,
+          "cut_rejected": 173
+        },
+        "226": {
+          "skin": 804,
+          "hair": 1590,
+          "cut_rejected": 165
+        },
+        "229": {
+          "skin": 783,
+          "hair": 1622,
+          "cut_rejected": 156
+        },
+        "232": {
+          "skin": 841,
+          "hair": 1620,
+          "cut_rejected": 153
+        },
+        "235": {
+          "skin": 897,
+          "hair": 1799,
+          "cut_rejected": 138
+        },
+        "238": {
+          "skin": 816,
+          "hair": 2035,
+          "cut_rejected": 129
+        },
+        "240": {
+          "skin": 820,
+          "hair": 1963,
+          "cut_rejected": 110
+        },
+        "241": {
+          "skin": 863,
+          "hair": 2092,
+          "cut_rejected": 116
+        },
+        "244": {
+          "skin": 855,
+          "hair": 2053,
+          "cut_rejected": 103
+        },
+        "247": {
+          "skin": 869,
+          "hair": 1950,
+          "cut_rejected": 93
+        },
+        "250": {
+          "skin": 948,
+          "hair": 1883,
+          "cut_rejected": 69
+        },
+        "253": {
+          "skin": 954,
+          "hair": 1896,
+          "cut_rejected": 68
+        },
+        "256": {
+          "skin": 962,
+          "hair": 1892,
+          "cut_rejected": 59
+        },
+        "259": {
+          "skin": 967,
+          "hair": 1887,
+          "cut_rejected": 55
+        },
+        "262": {
+          "skin": 969,
+          "hair": 1885,
+          "cut_rejected": 46
+        },
+        "264": {
+          "skin": 986,
+          "hair": 1842,
+          "cut_rejected": 35
+        },
+        "265": {
+          "skin": 968,
+          "hair": 1868,
+          "cut_rejected": 29
+        },
+        "268": {
+          "skin": 914,
+          "hair": 1743,
+          "cut_rejected": 4
+        },
+        "270": {
+          "skin": 914,
+          "hair": 1615,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 869,
+          "hair": 1607,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 847,
+          "hair": 1687,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 911,
+          "hair": 1693,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1003,
+          "hair": 1733,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 1001,
+          "hair": 1403,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1093,
+          "hair": 1429,
+          "cut_rejected": 13
+        },
+        "289": {
+          "skin": 1034,
+          "hair": 1231,
+          "cut_rejected": 22
+        },
+        "292": {
+          "skin": 942,
+          "hair": 1296,
+          "cut_rejected": 26
+        },
+        "295": {
+          "skin": 962,
+          "hair": 1276,
+          "cut_rejected": 24
+        },
+        "298": {
+          "skin": 931,
+          "hair": 1268,
+          "cut_rejected": 31
+        },
+        "301": {
+          "skin": 942,
+          "hair": 1150,
+          "cut_rejected": 49
+        },
+        "303": {
+          "skin": 913,
+          "hair": 1103,
+          "cut_rejected": 51
+        },
+        "304": {
+          "skin": 866,
+          "hair": 1189,
+          "cut_rejected": 74
+        },
+        "307": {
+          "skin": 861,
+          "hair": 1056,
+          "cut_rejected": 75
+        },
+        "310": {
+          "skin": 826,
+          "hair": 985,
+          "cut_rejected": 91
+        },
+        "313": {
+          "skin": 835,
+          "hair": 947,
+          "cut_rejected": 103
+        },
+        "316": {
+          "skin": 915,
+          "hair": 1039,
+          "cut_rejected": 86
+        },
+        "319": {
+          "skin": 791,
+          "hair": 924,
+          "cut_rejected": 99
+        },
+        "322": {
+          "skin": 823,
+          "hair": 975,
+          "cut_rejected": 96
+        },
+        "325": {
+          "skin": 780,
+          "hair": 933,
+          "cut_rejected": 100
+        },
+        "328": {
+          "skin": 852,
+          "hair": 987,
+          "cut_rejected": 95
+        },
+        "331": {
+          "skin": 911,
+          "hair": 1144,
+          "cut_rejected": 93
+        },
+        "334": {
+          "skin": 919,
+          "hair": 1755,
+          "cut_rejected": 82
+        },
+        "337": {
+          "skin": 784,
+          "hair": 1927,
+          "cut_rejected": 79
+        },
+        "340": {
+          "skin": 709,
+          "hair": 1857,
+          "cut_rejected": 72
+        },
+        "343": {
+          "skin": 713,
+          "hair": 1652,
+          "cut_rejected": 54
+        },
+        "346": {
+          "skin": 676,
+          "hair": 1683,
+          "cut_rejected": 36
+        },
+        "349": {
+          "skin": 679,
+          "hair": 1698,
+          "cut_rejected": 5
+        },
+        "352": {
+          "skin": 674,
+          "hair": 1678,
+          "cut_rejected": 0
+        },
+        "355": {
+          "skin": 675,
+          "hair": 1674,
+          "cut_rejected": 0
+        },
+        "358": {
+          "skin": 678,
+          "hair": 1682,
+          "cut_rejected": 0
+        },
+        "361": {
+          "skin": 676,
+          "hair": 1680,
+          "cut_rejected": 0
+        }
+      },
+      "median_px": 1.63756108005781,
+      "max_px": 24.11863547714475,
+      "d_max_px": 36.018514856061955,
+      "seconds": 42.158714233897626
+    },
+    {
+      "iteration": 2,
+      "gate_px": 13.714285714285714,
+      "pairs": 339007,
+      "counts": {
+        "1": {
+          "skin": 718,
+          "hair": 1822,
+          "cut_rejected": 0
+        },
+        "3": {
+          "skin": 721,
+          "hair": 1841,
+          "cut_rejected": 0
+        },
+        "4": {
+          "skin": 716,
+          "hair": 1825,
+          "cut_rejected": 0
+        },
+        "7": {
+          "skin": 715,
+          "hair": 1858,
+          "cut_rejected": 0
+        },
+        "10": {
+          "skin": 711,
+          "hair": 1840,
+          "cut_rejected": 0
+        },
+        "13": {
+          "skin": 714,
+          "hair": 1841,
+          "cut_rejected": 3
+        },
+        "16": {
+          "skin": 727,
+          "hair": 1876,
+          "cut_rejected": 44
+        },
+        "19": {
+          "skin": 694,
+          "hair": 1932,
+          "cut_rejected": 61
+        },
+        "22": {
+          "skin": 797,
+          "hair": 2077,
+          "cut_rejected": 84
+        },
+        "25": {
+          "skin": 939,
+          "hair": 2125,
+          "cut_rejected": 102
+        },
+        "28": {
+          "skin": 991,
+          "hair": 2089,
+          "cut_rejected": 112
+        },
+        "31": {
+          "skin": 969,
+          "hair": 2116,
+          "cut_rejected": 118
+        },
+        "34": {
+          "skin": 975,
+          "hair": 2104,
+          "cut_rejected": 119
+        },
+        "37": {
+          "skin": 951,
+          "hair": 2118,
+          "cut_rejected": 118
+        },
+        "40": {
+          "skin": 1012,
+          "hair": 2064,
+          "cut_rejected": 114
+        },
+        "42": {
+          "skin": 901,
+          "hair": 1936,
+          "cut_rejected": 97
+        },
+        "43": {
+          "skin": 965,
+          "hair": 1972,
+          "cut_rejected": 102
+        },
+        "46": {
+          "skin": 773,
+          "hair": 1985,
+          "cut_rejected": 84
+        },
+        "49": {
+          "skin": 715,
+          "hair": 1583,
+          "cut_rejected": 11
+        },
+        "52": {
+          "skin": 713,
+          "hair": 1833,
+          "cut_rejected": 0
+        },
+        "55": {
+          "skin": 727,
+          "hair": 1994,
+          "cut_rejected": 21
+        },
+        "58": {
+          "skin": 869,
+          "hair": 2199,
+          "cut_rejected": 67
+        },
+        "61": {
+          "skin": 846,
+          "hair": 2232,
+          "cut_rejected": 76
+        },
+        "64": {
+          "skin": 853,
+          "hair": 2216,
+          "cut_rejected": 78
+        },
+        "67": {
+          "skin": 855,
+          "hair": 2225,
+          "cut_rejected": 74
+        },
+        "70": {
+          "skin": 866,
+          "hair": 2194,
+          "cut_rejected": 76
+        },
+        "73": {
+          "skin": 815,
+          "hair": 2065,
+          "cut_rejected": 43
+        },
+        "76": {
+          "skin": 706,
+          "hair": 1972,
+          "cut_rejected": 1
+        },
+        "79": {
+          "skin": 739,
+          "hair": 1802,
+          "cut_rejected": 0
+        },
+        "82": {
+          "skin": 721,
+          "hair": 1816,
+          "cut_rejected": 0
+        },
+        "85": {
+          "skin": 680,
+          "hair": 1821,
+          "cut_rejected": 0
+        },
+        "88": {
+          "skin": 554,
+          "hair": 1746,
+          "cut_rejected": 78
+        },
+        "91": {
+          "skin": 448,
+          "hair": 1868,
+          "cut_rejected": 88
+        },
+        "94": {
+          "skin": 446,
+          "hair": 1833,
+          "cut_rejected": 100
+        },
+        "97": {
+          "skin": 661,
+          "hair": 1749,
+          "cut_rejected": 29
+        },
+        "100": {
+          "skin": 747,
+          "hair": 1925,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 781,
+          "hair": 905,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 781,
+          "hair": 1757,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 741,
+          "hair": 1788,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 648,
+          "hair": 1748,
+          "cut_rejected": 43
+        },
+        "115": {
+          "skin": 492,
+          "hair": 1846,
+          "cut_rejected": 84
+        },
+        "118": {
+          "skin": 454,
+          "hair": 1870,
+          "cut_rejected": 100
+        },
+        "121": {
+          "skin": 627,
+          "hair": 1743,
+          "cut_rejected": 56
+        },
+        "124": {
+          "skin": 738,
+          "hair": 1870,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 790,
+          "hair": 1874,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 798,
+          "hair": 1762,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 786,
+          "hair": 1899,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 755,
+          "hair": 1831,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 731,
+          "hair": 1817,
+          "cut_rejected": 0
+        },
+        "142": {
+          "skin": 719,
+          "hair": 1812,
+          "cut_rejected": 0
+        },
+        "145": {
+          "skin": 721,
+          "hair": 1791,
+          "cut_rejected": 0
+        },
+        "148": {
+          "skin": 716,
+          "hair": 1592,
+          "cut_rejected": 0
+        },
+        "151": {
+          "skin": 720,
+          "hair": 1339,
+          "cut_rejected": 8
+        },
+        "154": {
+          "skin": 414,
+          "hair": 1638,
+          "cut_rejected": 55
+        },
+        "157": {
+          "skin": 692,
+          "hair": 439,
+          "cut_rejected": 74
+        },
+        "160": {
+          "skin": 800,
+          "hair": 889,
+          "cut_rejected": 90
+        },
+        "163": {
+          "skin": 915,
+          "hair": 1433,
+          "cut_rejected": 107
+        },
+        "166": {
+          "skin": 952,
+          "hair": 2087,
+          "cut_rejected": 134
+        },
+        "169": {
+          "skin": 995,
+          "hair": 2014,
+          "cut_rejected": 160
+        },
+        "172": {
+          "skin": 989,
+          "hair": 2029,
+          "cut_rejected": 168
+        },
+        "175": {
+          "skin": 916,
+          "hair": 2056,
+          "cut_rejected": 186
+        },
+        "178": {
+          "skin": 930,
+          "hair": 1930,
+          "cut_rejected": 185
+        },
+        "181": {
+          "skin": 910,
+          "hair": 1918,
+          "cut_rejected": 180
+        },
+        "184": {
+          "skin": 855,
+          "hair": 1930,
+          "cut_rejected": 190
+        },
+        "187": {
+          "skin": 844,
+          "hair": 1945,
+          "cut_rejected": 198
+        },
+        "190": {
+          "skin": 864,
+          "hair": 1947,
+          "cut_rejected": 195
+        },
+        "192": {
+          "skin": 796,
+          "hair": 1955,
+          "cut_rejected": 175
+        },
+        "193": {
+          "skin": 921,
+          "hair": 1997,
+          "cut_rejected": 173
+        },
+        "196": {
+          "skin": 868,
+          "hair": 1846,
+          "cut_rejected": 191
+        },
+        "199": {
+          "skin": 722,
+          "hair": 1762,
+          "cut_rejected": 186
+        },
+        "202": {
+          "skin": 392,
+          "hair": 1859,
+          "cut_rejected": 138
+        },
+        "205": {
+          "skin": 252,
+          "hair": 2102,
+          "cut_rejected": 112
+        },
+        "206": {
+          "skin": 247,
+          "hair": 2017,
+          "cut_rejected": 112
+        },
+        "208": {
+          "skin": 235,
+          "hair": 2035,
+          "cut_rejected": 132
+        },
+        "211": {
+          "skin": 295,
+          "hair": 2061,
+          "cut_rejected": 115
+        },
+        "214": {
+          "skin": 562,
+          "hair": 2050,
+          "cut_rejected": 129
+        },
+        "217": {
+          "skin": 885,
+          "hair": 1726,
+          "cut_rejected": 155
+        },
+        "219": {
+          "skin": 903,
+          "hair": 1614,
+          "cut_rejected": 134
+        },
+        "220": {
+          "skin": 951,
+          "hair": 1737,
+          "cut_rejected": 154
+        },
+        "223": {
+          "skin": 978,
+          "hair": 1728,
+          "cut_rejected": 159
+        },
+        "226": {
+          "skin": 980,
+          "hair": 1763,
+          "cut_rejected": 154
+        },
+        "229": {
+          "skin": 970,
+          "hair": 1771,
+          "cut_rejected": 149
+        },
+        "232": {
+          "skin": 983,
+          "hair": 1775,
+          "cut_rejected": 165
+        },
+        "235": {
+          "skin": 990,
+          "hair": 1906,
+          "cut_rejected": 147
+        },
+        "238": {
+          "skin": 879,
+          "hair": 2118,
+          "cut_rejected": 130
+        },
+        "240": {
+          "skin": 836,
+          "hair": 2063,
+          "cut_rejected": 101
+        },
+        "241": {
+          "skin": 884,
+          "hair": 2171,
+          "cut_rejected": 116
+        },
+        "244": {
+          "skin": 877,
+          "hair": 2176,
+          "cut_rejected": 89
+        },
+        "247": {
+          "skin": 880,
+          "hair": 2059,
+          "cut_rejected": 60
+        },
+        "250": {
+          "skin": 969,
+          "hair": 2004,
+          "cut_rejected": 29
+        },
+        "253": {
+          "skin": 1007,
+          "hair": 1983,
+          "cut_rejected": 11
+        },
+        "256": {
+          "skin": 1016,
+          "hair": 1989,
+          "cut_rejected": 1
+        },
+        "259": {
+          "skin": 1015,
+          "hair": 1998,
+          "cut_rejected": 0
+        },
+        "262": {
+          "skin": 1006,
+          "hair": 1991,
+          "cut_rejected": 0
+        },
+        "264": {
+          "skin": 1018,
+          "hair": 1974,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 1002,
+          "hair": 1996,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 936,
+          "hair": 1975,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 940,
+          "hair": 1998,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 891,
+          "hair": 1931,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 871,
+          "hair": 1805,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 941,
+          "hair": 1962,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1026,
+          "hair": 1943,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 1025,
+          "hair": 1494,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1114,
+          "hair": 1515,
+          "cut_rejected": 0
+        },
+        "289": {
+          "skin": 1093,
+          "hair": 1261,
+          "cut_rejected": 0
+        },
+        "292": {
+          "skin": 1023,
+          "hair": 1341,
+          "cut_rejected": 0
+        },
+        "295": {
+          "skin": 1040,
+          "hair": 1328,
+          "cut_rejected": 0
+        },
+        "298": {
+          "skin": 1040,
+          "hair": 1325,
+          "cut_rejected": 0
+        },
+        "301": {
+          "skin": 1019,
+          "hair": 1138,
+          "cut_rejected": 12
+        },
+        "303": {
+          "skin": 990,
+          "hair": 1095,
+          "cut_rejected": 43
+        },
+        "304": {
+          "skin": 992,
+          "hair": 1297,
+          "cut_rejected": 53
+        },
+        "307": {
+          "skin": 1051,
+          "hair": 1164,
+          "cut_rejected": 77
+        },
+        "310": {
+          "skin": 1037,
+          "hair": 1085,
+          "cut_rejected": 92
+        },
+        "313": {
+          "skin": 1024,
+          "hair": 1007,
+          "cut_rejected": 100
+        },
+        "316": {
+          "skin": 1026,
+          "hair": 1007,
+          "cut_rejected": 96
+        },
+        "319": {
+          "skin": 991,
+          "hair": 1031,
+          "cut_rejected": 98
+        },
+        "322": {
+          "skin": 1019,
+          "hair": 1056,
+          "cut_rejected": 97
+        },
+        "325": {
+          "skin": 983,
+          "hair": 1055,
+          "cut_rejected": 103
+        },
+        "328": {
+          "skin": 1023,
+          "hair": 1075,
+          "cut_rejected": 105
+        },
+        "331": {
+          "skin": 996,
+          "hair": 1143,
+          "cut_rejected": 97
+        },
+        "334": {
+          "skin": 917,
+          "hair": 1815,
+          "cut_rejected": 96
+        },
+        "337": {
+          "skin": 808,
+          "hair": 1982,
+          "cut_rejected": 76
+        },
+        "340": {
+          "skin": 739,
+          "hair": 2012,
+          "cut_rejected": 46
+        },
+        "343": {
+          "skin": 764,
+          "hair": 1890,
+          "cut_rejected": 13
+        },
+        "346": {
+          "skin": 720,
+          "hair": 1895,
+          "cut_rejected": 0
+        },
+        "349": {
+          "skin": 717,
+          "hair": 1883,
+          "cut_rejected": 0
+        },
+        "352": {
+          "skin": 719,
+          "hair": 1835,
+          "cut_rejected": 0
+        },
+        "355": {
+          "skin": 718,
+          "hair": 1826,
+          "cut_rejected": 0
+        },
+        "358": {
+          "skin": 717,
+          "hair": 1824,
+          "cut_rejected": 0
+        },
+        "361": {
+          "skin": 718,
+          "hair": 1824,
+          "cut_rejected": 0
+        }
+      },
+      "median_px": 1.683628501708478,
+      "max_px": 22.17007524059622,
+      "d_max_px": 46.22704436888997,
+      "seconds": 39.24730619206093
+    },
+    {
+      "iteration": 3,
+      "gate_px": 12.428571428571429,
+      "pairs": 341072,
+      "counts": {
+        "1": {
+          "skin": 709,
+          "hair": 1860,
+          "cut_rejected": 8
+        },
+        "3": {
+          "skin": 709,
+          "hair": 1873,
+          "cut_rejected": 11
+        },
+        "4": {
+          "skin": 705,
+          "hair": 1866,
+          "cut_rejected": 9
+        },
+        "7": {
+          "skin": 709,
+          "hair": 1896,
+          "cut_rejected": 7
+        },
+        "10": {
+          "skin": 698,
+          "hair": 1856,
+          "cut_rejected": 12
+        },
+        "13": {
+          "skin": 706,
+          "hair": 1844,
+          "cut_rejected": 7
+        },
+        "16": {
+          "skin": 743,
+          "hair": 1869,
+          "cut_rejected": 31
+        },
+        "19": {
+          "skin": 691,
+          "hair": 1945,
+          "cut_rejected": 72
+        },
+        "22": {
+          "skin": 791,
+          "hair": 2092,
+          "cut_rejected": 90
+        },
+        "25": {
+          "skin": 936,
+          "hair": 2126,
+          "cut_rejected": 110
+        },
+        "28": {
+          "skin": 995,
+          "hair": 2072,
+          "cut_rejected": 120
+        },
+        "31": {
+          "skin": 965,
+          "hair": 2104,
+          "cut_rejected": 137
+        },
+        "34": {
+          "skin": 993,
+          "hair": 2096,
+          "cut_rejected": 122
+        },
+        "37": {
+          "skin": 957,
+          "hair": 2108,
+          "cut_rejected": 131
+        },
+        "40": {
+          "skin": 1024,
+          "hair": 2043,
+          "cut_rejected": 112
+        },
+        "42": {
+          "skin": 906,
+          "hair": 1920,
+          "cut_rejected": 102
+        },
+        "43": {
+          "skin": 968,
+          "hair": 1971,
+          "cut_rejected": 103
+        },
+        "46": {
+          "skin": 787,
+          "hair": 2003,
+          "cut_rejected": 78
+        },
+        "49": {
+          "skin": 710,
+          "hair": 1577,
+          "cut_rejected": 9
+        },
+        "52": {
+          "skin": 703,
+          "hair": 1846,
+          "cut_rejected": 7
+        },
+        "55": {
+          "skin": 716,
+          "hair": 1986,
+          "cut_rejected": 30
+        },
+        "58": {
+          "skin": 851,
+          "hair": 2194,
+          "cut_rejected": 75
+        },
+        "61": {
+          "skin": 839,
+          "hair": 2221,
+          "cut_rejected": 83
+        },
+        "64": {
+          "skin": 845,
+          "hair": 2215,
+          "cut_rejected": 85
+        },
+        "67": {
+          "skin": 843,
+          "hair": 2210,
+          "cut_rejected": 90
+        },
+        "70": {
+          "skin": 863,
+          "hair": 2187,
+          "cut_rejected": 77
+        },
+        "73": {
+          "skin": 801,
+          "hair": 2071,
+          "cut_rejected": 46
+        },
+        "76": {
+          "skin": 693,
+          "hair": 1963,
+          "cut_rejected": 16
+        },
+        "79": {
+          "skin": 727,
+          "hair": 1913,
+          "cut_rejected": 8
+        },
+        "82": {
+          "skin": 710,
+          "hair": 1860,
+          "cut_rejected": 8
+        },
+        "85": {
+          "skin": 661,
+          "hair": 1806,
+          "cut_rejected": 19
+        },
+        "88": {
+          "skin": 573,
+          "hair": 1673,
+          "cut_rejected": 81
+        },
+        "91": {
+          "skin": 391,
+          "hair": 1857,
+          "cut_rejected": 109
+        },
+        "94": {
+          "skin": 403,
+          "hair": 1823,
+          "cut_rejected": 100
+        },
+        "97": {
+          "skin": 629,
+          "hair": 1690,
+          "cut_rejected": 30
+        },
+        "100": {
+          "skin": 741,
+          "hair": 1908,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 780,
+          "hair": 800,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 781,
+          "hair": 1888,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 737,
+          "hair": 1870,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 635,
+          "hair": 1742,
+          "cut_rejected": 32
+        },
+        "115": {
+          "skin": 490,
+          "hair": 1790,
+          "cut_rejected": 75
+        },
+        "118": {
+          "skin": 397,
+          "hair": 1808,
+          "cut_rejected": 88
+        },
+        "121": {
+          "skin": 641,
+          "hair": 1506,
+          "cut_rejected": 62
+        },
+        "124": {
+          "skin": 732,
+          "hair": 1878,
+          "cut_rejected": 1
+        },
+        "127": {
+          "skin": 790,
+          "hair": 1809,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 798,
+          "hair": 1760,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 784,
+          "hair": 1925,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 748,
+          "hair": 1880,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 722,
+          "hair": 1861,
+          "cut_rejected": 7
+        },
+        "142": {
+          "skin": 710,
+          "hair": 1864,
+          "cut_rejected": 6
+        },
+        "145": {
+          "skin": 713,
+          "hair": 1865,
+          "cut_rejected": 7
+        },
+        "148": {
+          "skin": 709,
+          "hair": 1795,
+          "cut_rejected": 7
+        },
+        "151": {
+          "skin": 715,
+          "hair": 1350,
+          "cut_rejected": 4
+        },
+        "154": {
+          "skin": 425,
+          "hair": 1573,
+          "cut_rejected": 25
+        },
+        "157": {
+          "skin": 713,
+          "hair": 423,
+          "cut_rejected": 79
+        },
+        "160": {
+          "skin": 799,
+          "hair": 756,
+          "cut_rejected": 103
+        },
+        "163": {
+          "skin": 905,
+          "hair": 1345,
+          "cut_rejected": 126
+        },
+        "166": {
+          "skin": 947,
+          "hair": 1951,
+          "cut_rejected": 145
+        },
+        "169": {
+          "skin": 1019,
+          "hair": 2013,
+          "cut_rejected": 157
+        },
+        "172": {
+          "skin": 984,
+          "hair": 2035,
+          "cut_rejected": 197
+        },
+        "175": {
+          "skin": 938,
+          "hair": 2085,
+          "cut_rejected": 216
+        },
+        "178": {
+          "skin": 954,
+          "hair": 2082,
+          "cut_rejected": 208
+        },
+        "181": {
+          "skin": 936,
+          "hair": 2091,
+          "cut_rejected": 199
+        },
+        "184": {
+          "skin": 920,
+          "hair": 2091,
+          "cut_rejected": 212
+        },
+        "187": {
+          "skin": 899,
+          "hair": 2101,
+          "cut_rejected": 203
+        },
+        "190": {
+          "skin": 908,
+          "hair": 2097,
+          "cut_rejected": 201
+        },
+        "192": {
+          "skin": 837,
+          "hair": 2007,
+          "cut_rejected": 183
+        },
+        "193": {
+          "skin": 947,
+          "hair": 2032,
+          "cut_rejected": 209
+        },
+        "196": {
+          "skin": 882,
+          "hair": 1796,
+          "cut_rejected": 213
+        },
+        "199": {
+          "skin": 725,
+          "hair": 1573,
+          "cut_rejected": 190
+        },
+        "202": {
+          "skin": 416,
+          "hair": 1737,
+          "cut_rejected": 142
+        },
+        "205": {
+          "skin": 233,
+          "hair": 2059,
+          "cut_rejected": 125
+        },
+        "206": {
+          "skin": 242,
+          "hair": 1979,
+          "cut_rejected": 104
+        },
+        "208": {
+          "skin": 237,
+          "hair": 1926,
+          "cut_rejected": 118
+        },
+        "211": {
+          "skin": 271,
+          "hair": 2004,
+          "cut_rejected": 115
+        },
+        "214": {
+          "skin": 551,
+          "hair": 2183,
+          "cut_rejected": 141
+        },
+        "217": {
+          "skin": 894,
+          "hair": 1927,
+          "cut_rejected": 147
+        },
+        "219": {
+          "skin": 910,
+          "hair": 1833,
+          "cut_rejected": 132
+        },
+        "220": {
+          "skin": 947,
+          "hair": 1955,
+          "cut_rejected": 147
+        },
+        "223": {
+          "skin": 978,
+          "hair": 1933,
+          "cut_rejected": 149
+        },
+        "226": {
+          "skin": 970,
+          "hair": 1958,
+          "cut_rejected": 155
+        },
+        "229": {
+          "skin": 961,
+          "hair": 1966,
+          "cut_rejected": 157
+        },
+        "232": {
+          "skin": 989,
+          "hair": 1959,
+          "cut_rejected": 156
+        },
+        "235": {
+          "skin": 983,
+          "hair": 1999,
+          "cut_rejected": 145
+        },
+        "238": {
+          "skin": 863,
+          "hair": 2135,
+          "cut_rejected": 141
+        },
+        "240": {
+          "skin": 828,
+          "hair": 2064,
+          "cut_rejected": 102
+        },
+        "241": {
+          "skin": 875,
+          "hair": 2173,
+          "cut_rejected": 110
+        },
+        "244": {
+          "skin": 866,
+          "hair": 2180,
+          "cut_rejected": 78
+        },
+        "247": {
+          "skin": 865,
+          "hair": 2075,
+          "cut_rejected": 37
+        },
+        "250": {
+          "skin": 981,
+          "hair": 1982,
+          "cut_rejected": 23
+        },
+        "253": {
+          "skin": 1009,
+          "hair": 1972,
+          "cut_rejected": 9
+        },
+        "256": {
+          "skin": 1014,
+          "hair": 1977,
+          "cut_rejected": 9
+        },
+        "259": {
+          "skin": 1012,
+          "hair": 1989,
+          "cut_rejected": 6
+        },
+        "262": {
+          "skin": 1010,
+          "hair": 1982,
+          "cut_rejected": 4
+        },
+        "264": {
+          "skin": 1022,
+          "hair": 1962,
+          "cut_rejected": 3
+        },
+        "265": {
+          "skin": 1006,
+          "hair": 1987,
+          "cut_rejected": 4
+        },
+        "268": {
+          "skin": 938,
+          "hair": 1963,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 942,
+          "hair": 2023,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 895,
+          "hair": 1946,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 876,
+          "hair": 1933,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 943,
+          "hair": 1925,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1033,
+          "hair": 1818,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 1030,
+          "hair": 1545,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1117,
+          "hair": 1393,
+          "cut_rejected": 0
+        },
+        "289": {
+          "skin": 1096,
+          "hair": 1262,
+          "cut_rejected": 0
+        },
+        "292": {
+          "skin": 1028,
+          "hair": 1336,
+          "cut_rejected": 0
+        },
+        "295": {
+          "skin": 1042,
+          "hair": 1320,
+          "cut_rejected": 0
+        },
+        "298": {
+          "skin": 1041,
+          "hair": 1333,
+          "cut_rejected": 2
+        },
+        "301": {
+          "skin": 1024,
+          "hair": 1115,
+          "cut_rejected": 20
+        },
+        "303": {
+          "skin": 989,
+          "hair": 1077,
+          "cut_rejected": 40
+        },
+        "304": {
+          "skin": 995,
+          "hair": 1326,
+          "cut_rejected": 46
+        },
+        "307": {
+          "skin": 1055,
+          "hair": 1228,
+          "cut_rejected": 59
+        },
+        "310": {
+          "skin": 1040,
+          "hair": 1169,
+          "cut_rejected": 79
+        },
+        "313": {
+          "skin": 1027,
+          "hair": 1071,
+          "cut_rejected": 96
+        },
+        "316": {
+          "skin": 1016,
+          "hair": 960,
+          "cut_rejected": 85
+        },
+        "319": {
+          "skin": 990,
+          "hair": 1074,
+          "cut_rejected": 100
+        },
+        "322": {
+          "skin": 1014,
+          "hair": 1091,
+          "cut_rejected": 96
+        },
+        "325": {
+          "skin": 988,
+          "hair": 1080,
+          "cut_rejected": 97
+        },
+        "328": {
+          "skin": 1026,
+          "hair": 1120,
+          "cut_rejected": 95
+        },
+        "331": {
+          "skin": 997,
+          "hair": 1163,
+          "cut_rejected": 90
+        },
+        "334": {
+          "skin": 926,
+          "hair": 1843,
+          "cut_rejected": 90
+        },
+        "337": {
+          "skin": 811,
+          "hair": 1997,
+          "cut_rejected": 71
+        },
+        "340": {
+          "skin": 742,
+          "hair": 2030,
+          "cut_rejected": 52
+        },
+        "343": {
+          "skin": 758,
+          "hair": 1887,
+          "cut_rejected": 11
+        },
+        "346": {
+          "skin": 718,
+          "hair": 1924,
+          "cut_rejected": 3
+        },
+        "349": {
+          "skin": 709,
+          "hair": 1898,
+          "cut_rejected": 6
+        },
+        "352": {
+          "skin": 707,
+          "hair": 1866,
+          "cut_rejected": 9
+        },
+        "355": {
+          "skin": 708,
+          "hair": 1863,
+          "cut_rejected": 8
+        },
+        "358": {
+          "skin": 710,
+          "hair": 1863,
+          "cut_rejected": 5
+        },
+        "361": {
+          "skin": 710,
+          "hair": 1863,
+          "cut_rejected": 6
+        }
+      },
+      "median_px": 1.666782525078487,
+      "max_px": 17.830977991982458,
+      "d_max_px": 53.936794247339456,
+      "seconds": 37.67042288405355
+    },
+    {
+      "iteration": 4,
+      "gate_px": 11.142857142857142,
+      "pairs": 336118,
+      "counts": {
+        "1": {
+          "skin": 713,
+          "hair": 1859,
+          "cut_rejected": 0
+        },
+        "3": {
+          "skin": 715,
+          "hair": 1870,
+          "cut_rejected": 0
+        },
+        "4": {
+          "skin": 711,
+          "hair": 1862,
+          "cut_rejected": 1
+        },
+        "7": {
+          "skin": 708,
+          "hair": 1893,
+          "cut_rejected": 1
+        },
+        "10": {
+          "skin": 704,
+          "hair": 1859,
+          "cut_rejected": 5
+        },
+        "13": {
+          "skin": 691,
+          "hair": 1832,
+          "cut_rejected": 21
+        },
+        "16": {
+          "skin": 714,
+          "hair": 1806,
+          "cut_rejected": 38
+        },
+        "19": {
+          "skin": 682,
+          "hair": 1931,
+          "cut_rejected": 60
+        },
+        "22": {
+          "skin": 787,
+          "hair": 2088,
+          "cut_rejected": 81
+        },
+        "25": {
+          "skin": 928,
+          "hair": 2108,
+          "cut_rejected": 110
+        },
+        "28": {
+          "skin": 977,
+          "hair": 2057,
+          "cut_rejected": 136
+        },
+        "31": {
+          "skin": 951,
+          "hair": 2096,
+          "cut_rejected": 140
+        },
+        "34": {
+          "skin": 969,
+          "hair": 2080,
+          "cut_rejected": 145
+        },
+        "37": {
+          "skin": 945,
+          "hair": 2096,
+          "cut_rejected": 135
+        },
+        "40": {
+          "skin": 1008,
+          "hair": 2041,
+          "cut_rejected": 118
+        },
+        "42": {
+          "skin": 907,
+          "hair": 1920,
+          "cut_rejected": 91
+        },
+        "43": {
+          "skin": 960,
+          "hair": 1948,
+          "cut_rejected": 102
+        },
+        "46": {
+          "skin": 785,
+          "hair": 1992,
+          "cut_rejected": 68
+        },
+        "49": {
+          "skin": 686,
+          "hair": 1513,
+          "cut_rejected": 29
+        },
+        "52": {
+          "skin": 705,
+          "hair": 1841,
+          "cut_rejected": 2
+        },
+        "55": {
+          "skin": 731,
+          "hair": 1985,
+          "cut_rejected": 12
+        },
+        "58": {
+          "skin": 865,
+          "hair": 2208,
+          "cut_rejected": 55
+        },
+        "61": {
+          "skin": 849,
+          "hair": 2232,
+          "cut_rejected": 68
+        },
+        "64": {
+          "skin": 856,
+          "hair": 2228,
+          "cut_rejected": 64
+        },
+        "67": {
+          "skin": 852,
+          "hair": 2226,
+          "cut_rejected": 70
+        },
+        "70": {
+          "skin": 881,
+          "hair": 2048,
+          "cut_rejected": 56
+        },
+        "73": {
+          "skin": 812,
+          "hair": 1938,
+          "cut_rejected": 26
+        },
+        "76": {
+          "skin": 706,
+          "hair": 1954,
+          "cut_rejected": 2
+        },
+        "79": {
+          "skin": 731,
+          "hair": 1913,
+          "cut_rejected": 1
+        },
+        "82": {
+          "skin": 716,
+          "hair": 1855,
+          "cut_rejected": 0
+        },
+        "85": {
+          "skin": 660,
+          "hair": 1786,
+          "cut_rejected": 16
+        },
+        "88": {
+          "skin": 525,
+          "hair": 1521,
+          "cut_rejected": 94
+        },
+        "91": {
+          "skin": 389,
+          "hair": 1675,
+          "cut_rejected": 102
+        },
+        "94": {
+          "skin": 382,
+          "hair": 1634,
+          "cut_rejected": 110
+        },
+        "97": {
+          "skin": 587,
+          "hair": 1518,
+          "cut_rejected": 48
+        },
+        "100": {
+          "skin": 736,
+          "hair": 1905,
+          "cut_rejected": 1
+        },
+        "103": {
+          "skin": 775,
+          "hair": 728,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 777,
+          "hair": 1884,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 732,
+          "hair": 1869,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 595,
+          "hair": 1574,
+          "cut_rejected": 44
+        },
+        "115": {
+          "skin": 452,
+          "hair": 1637,
+          "cut_rejected": 83
+        },
+        "118": {
+          "skin": 384,
+          "hair": 1649,
+          "cut_rejected": 99
+        },
+        "121": {
+          "skin": 572,
+          "hair": 1439,
+          "cut_rejected": 72
+        },
+        "124": {
+          "skin": 729,
+          "hair": 1871,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 785,
+          "hair": 1773,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 793,
+          "hair": 1667,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 780,
+          "hair": 1922,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 745,
+          "hair": 1879,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 725,
+          "hair": 1858,
+          "cut_rejected": 0
+        },
+        "142": {
+          "skin": 712,
+          "hair": 1862,
+          "cut_rejected": 1
+        },
+        "145": {
+          "skin": 713,
+          "hair": 1868,
+          "cut_rejected": 4
+        },
+        "148": {
+          "skin": 705,
+          "hair": 1783,
+          "cut_rejected": 9
+        },
+        "151": {
+          "skin": 701,
+          "hair": 1293,
+          "cut_rejected": 18
+        },
+        "154": {
+          "skin": 390,
+          "hair": 1484,
+          "cut_rejected": 34
+        },
+        "157": {
+          "skin": 695,
+          "hair": 325,
+          "cut_rejected": 57
+        },
+        "160": {
+          "skin": 789,
+          "hair": 553,
+          "cut_rejected": 101
+        },
+        "163": {
+          "skin": 893,
+          "hair": 1331,
+          "cut_rejected": 129
+        },
+        "166": {
+          "skin": 941,
+          "hair": 1865,
+          "cut_rejected": 157
+        },
+        "169": {
+          "skin": 1002,
+          "hair": 1999,
+          "cut_rejected": 170
+        },
+        "172": {
+          "skin": 989,
+          "hair": 2016,
+          "cut_rejected": 190
+        },
+        "175": {
+          "skin": 949,
+          "hair": 2095,
+          "cut_rejected": 198
+        },
+        "178": {
+          "skin": 962,
+          "hair": 2084,
+          "cut_rejected": 202
+        },
+        "181": {
+          "skin": 940,
+          "hair": 2106,
+          "cut_rejected": 199
+        },
+        "184": {
+          "skin": 917,
+          "hair": 2095,
+          "cut_rejected": 214
+        },
+        "187": {
+          "skin": 924,
+          "hair": 2092,
+          "cut_rejected": 214
+        },
+        "190": {
+          "skin": 904,
+          "hair": 2112,
+          "cut_rejected": 206
+        },
+        "192": {
+          "skin": 831,
+          "hair": 2017,
+          "cut_rejected": 183
+        },
+        "193": {
+          "skin": 951,
+          "hair": 2042,
+          "cut_rejected": 209
+        },
+        "196": {
+          "skin": 896,
+          "hair": 1572,
+          "cut_rejected": 203
+        },
+        "199": {
+          "skin": 733,
+          "hair": 1533,
+          "cut_rejected": 197
+        },
+        "202": {
+          "skin": 388,
+          "hair": 1547,
+          "cut_rejected": 150
+        },
+        "205": {
+          "skin": 231,
+          "hair": 1856,
+          "cut_rejected": 111
+        },
+        "206": {
+          "skin": 232,
+          "hair": 1825,
+          "cut_rejected": 104
+        },
+        "208": {
+          "skin": 207,
+          "hair": 1844,
+          "cut_rejected": 137
+        },
+        "211": {
+          "skin": 240,
+          "hair": 1901,
+          "cut_rejected": 126
+        },
+        "214": {
+          "skin": 551,
+          "hair": 2161,
+          "cut_rejected": 132
+        },
+        "217": {
+          "skin": 904,
+          "hair": 1967,
+          "cut_rejected": 148
+        },
+        "219": {
+          "skin": 919,
+          "hair": 1832,
+          "cut_rejected": 131
+        },
+        "220": {
+          "skin": 957,
+          "hair": 1958,
+          "cut_rejected": 150
+        },
+        "223": {
+          "skin": 982,
+          "hair": 1944,
+          "cut_rejected": 151
+        },
+        "226": {
+          "skin": 983,
+          "hair": 1967,
+          "cut_rejected": 146
+        },
+        "229": {
+          "skin": 971,
+          "hair": 1975,
+          "cut_rejected": 147
+        },
+        "232": {
+          "skin": 1000,
+          "hair": 1969,
+          "cut_rejected": 139
+        },
+        "235": {
+          "skin": 996,
+          "hair": 2019,
+          "cut_rejected": 128
+        },
+        "238": {
+          "skin": 891,
+          "hair": 2146,
+          "cut_rejected": 123
+        },
+        "240": {
+          "skin": 839,
+          "hair": 2074,
+          "cut_rejected": 91
+        },
+        "241": {
+          "skin": 888,
+          "hair": 2178,
+          "cut_rejected": 96
+        },
+        "244": {
+          "skin": 884,
+          "hair": 2180,
+          "cut_rejected": 60
+        },
+        "247": {
+          "skin": 882,
+          "hair": 2075,
+          "cut_rejected": 27
+        },
+        "250": {
+          "skin": 992,
+          "hair": 1981,
+          "cut_rejected": 6
+        },
+        "253": {
+          "skin": 1014,
+          "hair": 1972,
+          "cut_rejected": 0
+        },
+        "256": {
+          "skin": 1016,
+          "hair": 1977,
+          "cut_rejected": 0
+        },
+        "259": {
+          "skin": 1011,
+          "hair": 1987,
+          "cut_rejected": 0
+        },
+        "262": {
+          "skin": 1008,
+          "hair": 1981,
+          "cut_rejected": 0
+        },
+        "264": {
+          "skin": 1021,
+          "hair": 1961,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 1007,
+          "hair": 1986,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 932,
+          "hair": 1961,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 937,
+          "hair": 2014,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 890,
+          "hair": 1938,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 871,
+          "hair": 1923,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 938,
+          "hair": 1906,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1026,
+          "hair": 1719,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 1027,
+          "hair": 1489,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1110,
+          "hair": 1220,
+          "cut_rejected": 5
+        },
+        "289": {
+          "skin": 1084,
+          "hair": 1266,
+          "cut_rejected": 10
+        },
+        "292": {
+          "skin": 1030,
+          "hair": 1332,
+          "cut_rejected": 16
+        },
+        "295": {
+          "skin": 1043,
+          "hair": 1320,
+          "cut_rejected": 13
+        },
+        "298": {
+          "skin": 1044,
+          "hair": 1333,
+          "cut_rejected": 14
+        },
+        "301": {
+          "skin": 1013,
+          "hair": 1096,
+          "cut_rejected": 35
+        },
+        "303": {
+          "skin": 980,
+          "hair": 1015,
+          "cut_rejected": 39
+        },
+        "304": {
+          "skin": 989,
+          "hair": 1319,
+          "cut_rejected": 50
+        },
+        "307": {
+          "skin": 1040,
+          "hair": 1227,
+          "cut_rejected": 62
+        },
+        "310": {
+          "skin": 1032,
+          "hair": 1063,
+          "cut_rejected": 78
+        },
+        "313": {
+          "skin": 1030,
+          "hair": 1013,
+          "cut_rejected": 83
+        },
+        "316": {
+          "skin": 1008,
+          "hair": 952,
+          "cut_rejected": 81
+        },
+        "319": {
+          "skin": 989,
+          "hair": 1039,
+          "cut_rejected": 89
+        },
+        "322": {
+          "skin": 1019,
+          "hair": 1036,
+          "cut_rejected": 80
+        },
+        "325": {
+          "skin": 983,
+          "hair": 1052,
+          "cut_rejected": 89
+        },
+        "328": {
+          "skin": 1019,
+          "hair": 1054,
+          "cut_rejected": 92
+        },
+        "331": {
+          "skin": 995,
+          "hair": 1033,
+          "cut_rejected": 86
+        },
+        "334": {
+          "skin": 923,
+          "hair": 1828,
+          "cut_rejected": 75
+        },
+        "337": {
+          "skin": 799,
+          "hair": 2001,
+          "cut_rejected": 71
+        },
+        "340": {
+          "skin": 731,
+          "hair": 1997,
+          "cut_rejected": 52
+        },
+        "343": {
+          "skin": 736,
+          "hair": 1878,
+          "cut_rejected": 35
+        },
+        "346": {
+          "skin": 711,
+          "hair": 1888,
+          "cut_rejected": 9
+        },
+        "349": {
+          "skin": 708,
+          "hair": 1902,
+          "cut_rejected": 5
+        },
+        "352": {
+          "skin": 712,
+          "hair": 1864,
+          "cut_rejected": 1
+        },
+        "355": {
+          "skin": 711,
+          "hair": 1861,
+          "cut_rejected": 0
+        },
+        "358": {
+          "skin": 711,
+          "hair": 1861,
+          "cut_rejected": 0
+        },
+        "361": {
+          "skin": 711,
+          "hair": 1859,
+          "cut_rejected": 0
+        }
+      },
+      "median_px": 1.5754479961210222,
+      "max_px": 15.686328552246632,
+      "d_max_px": 57.00473275737322,
+      "seconds": 38.3296153760748
+    },
+    {
+      "iteration": 5,
+      "gate_px": 9.857142857142858,
+      "pairs": 330976,
+      "counts": {
+        "1": {
+          "skin": 707,
+          "hair": 1856,
+          "cut_rejected": 3
+        },
+        "3": {
+          "skin": 707,
+          "hair": 1868,
+          "cut_rejected": 4
+        },
+        "4": {
+          "skin": 701,
+          "hair": 1861,
+          "cut_rejected": 5
+        },
+        "7": {
+          "skin": 702,
+          "hair": 1886,
+          "cut_rejected": 4
+        },
+        "10": {
+          "skin": 694,
+          "hair": 1856,
+          "cut_rejected": 12
+        },
+        "13": {
+          "skin": 673,
+          "hair": 1828,
+          "cut_rejected": 45
+        },
+        "16": {
+          "skin": 700,
+          "hair": 1728,
+          "cut_rejected": 56
+        },
+        "19": {
+          "skin": 675,
+          "hair": 1917,
+          "cut_rejected": 60
+        },
+        "22": {
+          "skin": 784,
+          "hair": 2044,
+          "cut_rejected": 85
+        },
+        "25": {
+          "skin": 915,
+          "hair": 2087,
+          "cut_rejected": 117
+        },
+        "28": {
+          "skin": 969,
+          "hair": 2048,
+          "cut_rejected": 132
+        },
+        "31": {
+          "skin": 949,
+          "hair": 2074,
+          "cut_rejected": 149
+        },
+        "34": {
+          "skin": 971,
+          "hair": 2062,
+          "cut_rejected": 138
+        },
+        "37": {
+          "skin": 930,
+          "hair": 2078,
+          "cut_rejected": 150
+        },
+        "40": {
+          "skin": 998,
+          "hair": 2021,
+          "cut_rejected": 121
+        },
+        "42": {
+          "skin": 890,
+          "hair": 1900,
+          "cut_rejected": 99
+        },
+        "43": {
+          "skin": 955,
+          "hair": 1926,
+          "cut_rejected": 93
+        },
+        "46": {
+          "skin": 772,
+          "hair": 1980,
+          "cut_rejected": 78
+        },
+        "49": {
+          "skin": 666,
+          "hair": 1313,
+          "cut_rejected": 51
+        },
+        "52": {
+          "skin": 705,
+          "hair": 1839,
+          "cut_rejected": 0
+        },
+        "55": {
+          "skin": 724,
+          "hair": 1986,
+          "cut_rejected": 11
+        },
+        "58": {
+          "skin": 868,
+          "hair": 2222,
+          "cut_rejected": 40
+        },
+        "61": {
+          "skin": 863,
+          "hair": 2231,
+          "cut_rejected": 54
+        },
+        "64": {
+          "skin": 864,
+          "hair": 2219,
+          "cut_rejected": 64
+        },
+        "67": {
+          "skin": 864,
+          "hair": 2152,
+          "cut_rejected": 64
+        },
+        "70": {
+          "skin": 883,
+          "hair": 1927,
+          "cut_rejected": 48
+        },
+        "73": {
+          "skin": 818,
+          "hair": 1802,
+          "cut_rejected": 13
+        },
+        "76": {
+          "skin": 700,
+          "hair": 1930,
+          "cut_rejected": 5
+        },
+        "79": {
+          "skin": 726,
+          "hair": 1909,
+          "cut_rejected": 1
+        },
+        "82": {
+          "skin": 711,
+          "hair": 1856,
+          "cut_rejected": 0
+        },
+        "85": {
+          "skin": 646,
+          "hair": 1771,
+          "cut_rejected": 19
+        },
+        "88": {
+          "skin": 513,
+          "hair": 1496,
+          "cut_rejected": 101
+        },
+        "91": {
+          "skin": 376,
+          "hair": 1604,
+          "cut_rejected": 110
+        },
+        "94": {
+          "skin": 375,
+          "hair": 1560,
+          "cut_rejected": 107
+        },
+        "97": {
+          "skin": 559,
+          "hair": 1491,
+          "cut_rejected": 65
+        },
+        "100": {
+          "skin": 737,
+          "hair": 1901,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 772,
+          "hair": 594,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 773,
+          "hair": 1877,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 730,
+          "hair": 1868,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 569,
+          "hair": 1521,
+          "cut_rejected": 60
+        },
+        "115": {
+          "skin": 434,
+          "hair": 1574,
+          "cut_rejected": 102
+        },
+        "118": {
+          "skin": 371,
+          "hair": 1585,
+          "cut_rejected": 109
+        },
+        "121": {
+          "skin": 540,
+          "hair": 1427,
+          "cut_rejected": 80
+        },
+        "124": {
+          "skin": 726,
+          "hair": 1856,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 782,
+          "hair": 1595,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 790,
+          "hair": 1467,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 777,
+          "hair": 1867,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 745,
+          "hair": 1875,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 720,
+          "hair": 1856,
+          "cut_rejected": 1
+        },
+        "142": {
+          "skin": 708,
+          "hair": 1861,
+          "cut_rejected": 3
+        },
+        "145": {
+          "skin": 703,
+          "hair": 1861,
+          "cut_rejected": 10
+        },
+        "148": {
+          "skin": 695,
+          "hair": 1749,
+          "cut_rejected": 16
+        },
+        "151": {
+          "skin": 682,
+          "hair": 1135,
+          "cut_rejected": 43
+        },
+        "154": {
+          "skin": 362,
+          "hair": 1458,
+          "cut_rejected": 61
+        },
+        "157": {
+          "skin": 679,
+          "hair": 258,
+          "cut_rejected": 73
+        },
+        "160": {
+          "skin": 783,
+          "hair": 369,
+          "cut_rejected": 99
+        },
+        "163": {
+          "skin": 877,
+          "hair": 1308,
+          "cut_rejected": 143
+        },
+        "166": {
+          "skin": 925,
+          "hair": 1810,
+          "cut_rejected": 165
+        },
+        "169": {
+          "skin": 994,
+          "hair": 1966,
+          "cut_rejected": 178
+        },
+        "172": {
+          "skin": 970,
+          "hair": 1960,
+          "cut_rejected": 203
+        },
+        "175": {
+          "skin": 950,
+          "hair": 2077,
+          "cut_rejected": 201
+        },
+        "178": {
+          "skin": 956,
+          "hair": 2087,
+          "cut_rejected": 198
+        },
+        "181": {
+          "skin": 927,
+          "hair": 2088,
+          "cut_rejected": 205
+        },
+        "184": {
+          "skin": 915,
+          "hair": 2096,
+          "cut_rejected": 213
+        },
+        "187": {
+          "skin": 913,
+          "hair": 2086,
+          "cut_rejected": 219
+        },
+        "190": {
+          "skin": 903,
+          "hair": 2097,
+          "cut_rejected": 208
+        },
+        "192": {
+          "skin": 830,
+          "hair": 2021,
+          "cut_rejected": 175
+        },
+        "193": {
+          "skin": 951,
+          "hair": 2047,
+          "cut_rejected": 196
+        },
+        "196": {
+          "skin": 877,
+          "hair": 1530,
+          "cut_rejected": 217
+        },
+        "199": {
+          "skin": 732,
+          "hair": 1464,
+          "cut_rejected": 199
+        },
+        "202": {
+          "skin": 385,
+          "hair": 1520,
+          "cut_rejected": 149
+        },
+        "205": {
+          "skin": 234,
+          "hair": 1829,
+          "cut_rejected": 126
+        },
+        "206": {
+          "skin": 240,
+          "hair": 1776,
+          "cut_rejected": 98
+        },
+        "208": {
+          "skin": 210,
+          "hair": 1758,
+          "cut_rejected": 126
+        },
+        "211": {
+          "skin": 241,
+          "hair": 1726,
+          "cut_rejected": 120
+        },
+        "214": {
+          "skin": 564,
+          "hair": 2131,
+          "cut_rejected": 115
+        },
+        "217": {
+          "skin": 908,
+          "hair": 1959,
+          "cut_rejected": 146
+        },
+        "219": {
+          "skin": 925,
+          "hair": 1830,
+          "cut_rejected": 125
+        },
+        "220": {
+          "skin": 971,
+          "hair": 1960,
+          "cut_rejected": 136
+        },
+        "223": {
+          "skin": 997,
+          "hair": 1937,
+          "cut_rejected": 145
+        },
+        "226": {
+          "skin": 984,
+          "hair": 1964,
+          "cut_rejected": 158
+        },
+        "229": {
+          "skin": 986,
+          "hair": 1980,
+          "cut_rejected": 139
+        },
+        "232": {
+          "skin": 1012,
+          "hair": 1970,
+          "cut_rejected": 133
+        },
+        "235": {
+          "skin": 1005,
+          "hair": 2012,
+          "cut_rejected": 126
+        },
+        "238": {
+          "skin": 891,
+          "hair": 2136,
+          "cut_rejected": 120
+        },
+        "240": {
+          "skin": 850,
+          "hair": 2055,
+          "cut_rejected": 86
+        },
+        "241": {
+          "skin": 899,
+          "hair": 2166,
+          "cut_rejected": 84
+        },
+        "244": {
+          "skin": 884,
+          "hair": 2153,
+          "cut_rejected": 48
+        },
+        "247": {
+          "skin": 881,
+          "hair": 2075,
+          "cut_rejected": 27
+        },
+        "250": {
+          "skin": 989,
+          "hair": 1982,
+          "cut_rejected": 6
+        },
+        "253": {
+          "skin": 1013,
+          "hair": 1967,
+          "cut_rejected": 1
+        },
+        "256": {
+          "skin": 1016,
+          "hair": 1971,
+          "cut_rejected": 0
+        },
+        "259": {
+          "skin": 1014,
+          "hair": 1982,
+          "cut_rejected": 0
+        },
+        "262": {
+          "skin": 1008,
+          "hair": 1976,
+          "cut_rejected": 0
+        },
+        "264": {
+          "skin": 1021,
+          "hair": 1956,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 1007,
+          "hair": 1982,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 932,
+          "hair": 1958,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 935,
+          "hair": 2010,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 886,
+          "hair": 1925,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 868,
+          "hair": 1903,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 935,
+          "hair": 1810,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1023,
+          "hair": 1561,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 1025,
+          "hair": 1353,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1107,
+          "hair": 1149,
+          "cut_rejected": 7
+        },
+        "289": {
+          "skin": 1079,
+          "hair": 1230,
+          "cut_rejected": 14
+        },
+        "292": {
+          "skin": 1030,
+          "hair": 1307,
+          "cut_rejected": 17
+        },
+        "295": {
+          "skin": 1048,
+          "hair": 1284,
+          "cut_rejected": 16
+        },
+        "298": {
+          "skin": 1046,
+          "hair": 1296,
+          "cut_rejected": 19
+        },
+        "301": {
+          "skin": 1004,
+          "hair": 1058,
+          "cut_rejected": 33
+        },
+        "303": {
+          "skin": 969,
+          "hair": 971,
+          "cut_rejected": 59
+        },
+        "304": {
+          "skin": 977,
+          "hair": 1279,
+          "cut_rejected": 65
+        },
+        "307": {
+          "skin": 1032,
+          "hair": 1176,
+          "cut_rejected": 69
+        },
+        "310": {
+          "skin": 1027,
+          "hair": 999,
+          "cut_rejected": 77
+        },
+        "313": {
+          "skin": 1012,
+          "hair": 958,
+          "cut_rejected": 78
+        },
+        "316": {
+          "skin": 1003,
+          "hair": 923,
+          "cut_rejected": 74
+        },
+        "319": {
+          "skin": 987,
+          "hair": 971,
+          "cut_rejected": 80
+        },
+        "322": {
+          "skin": 1007,
+          "hair": 979,
+          "cut_rejected": 82
+        },
+        "325": {
+          "skin": 978,
+          "hair": 989,
+          "cut_rejected": 82
+        },
+        "328": {
+          "skin": 1007,
+          "hair": 997,
+          "cut_rejected": 85
+        },
+        "331": {
+          "skin": 991,
+          "hair": 997,
+          "cut_rejected": 79
+        },
+        "334": {
+          "skin": 914,
+          "hair": 1815,
+          "cut_rejected": 81
+        },
+        "337": {
+          "skin": 783,
+          "hair": 1998,
+          "cut_rejected": 79
+        },
+        "340": {
+          "skin": 723,
+          "hair": 1975,
+          "cut_rejected": 55
+        },
+        "343": {
+          "skin": 721,
+          "hair": 1868,
+          "cut_rejected": 48
+        },
+        "346": {
+          "skin": 700,
+          "hair": 1876,
+          "cut_rejected": 19
+        },
+        "349": {
+          "skin": 701,
+          "hair": 1894,
+          "cut_rejected": 8
+        },
+        "352": {
+          "skin": 701,
+          "hair": 1861,
+          "cut_rejected": 6
+        },
+        "355": {
+          "skin": 704,
+          "hair": 1861,
+          "cut_rejected": 4
+        },
+        "358": {
+          "skin": 707,
+          "hair": 1860,
+          "cut_rejected": 4
+        },
+        "361": {
+          "skin": 705,
+          "hair": 1860,
+          "cut_rejected": 5
+        }
+      },
+      "median_px": 1.5001263490053676,
+      "max_px": 14.33714388581642,
+      "d_max_px": 57.2273752352914,
+      "seconds": 40.60457941296045
+    },
+    {
+      "iteration": 6,
+      "gate_px": 8.571428571428571,
+      "pairs": 324980,
+      "counts": {
+        "1": {
+          "skin": 704,
+          "hair": 1854,
+          "cut_rejected": 2
+        },
+        "3": {
+          "skin": 706,
+          "hair": 1864,
+          "cut_rejected": 3
+        },
+        "4": {
+          "skin": 703,
+          "hair": 1857,
+          "cut_rejected": 2
+        },
+        "7": {
+          "skin": 700,
+          "hair": 1882,
+          "cut_rejected": 2
+        },
+        "10": {
+          "skin": 686,
+          "hair": 1841,
+          "cut_rejected": 16
+        },
+        "13": {
+          "skin": 681,
+          "hair": 1820,
+          "cut_rejected": 29
+        },
+        "16": {
+          "skin": 693,
+          "hair": 1673,
+          "cut_rejected": 62
+        },
+        "19": {
+          "skin": 673,
+          "hair": 1822,
+          "cut_rejected": 81
+        },
+        "22": {
+          "skin": 784,
+          "hair": 1987,
+          "cut_rejected": 98
+        },
+        "25": {
+          "skin": 927,
+          "hair": 2057,
+          "cut_rejected": 115
+        },
+        "28": {
+          "skin": 974,
+          "hair": 2028,
+          "cut_rejected": 132
+        },
+        "31": {
+          "skin": 952,
+          "hair": 2072,
+          "cut_rejected": 140
+        },
+        "34": {
+          "skin": 969,
+          "hair": 2034,
+          "cut_rejected": 145
+        },
+        "37": {
+          "skin": 942,
+          "hair": 2070,
+          "cut_rejected": 135
+        },
+        "40": {
+          "skin": 999,
+          "hair": 2000,
+          "cut_rejected": 121
+        },
+        "42": {
+          "skin": 897,
+          "hair": 1860,
+          "cut_rejected": 95
+        },
+        "43": {
+          "skin": 955,
+          "hair": 1898,
+          "cut_rejected": 93
+        },
+        "46": {
+          "skin": 766,
+          "hair": 1956,
+          "cut_rejected": 79
+        },
+        "49": {
+          "skin": 677,
+          "hair": 1010,
+          "cut_rejected": 40
+        },
+        "52": {
+          "skin": 700,
+          "hair": 1842,
+          "cut_rejected": 1
+        },
+        "55": {
+          "skin": 713,
+          "hair": 1983,
+          "cut_rejected": 22
+        },
+        "58": {
+          "skin": 847,
+          "hair": 2226,
+          "cut_rejected": 52
+        },
+        "61": {
+          "skin": 845,
+          "hair": 2240,
+          "cut_rejected": 69
+        },
+        "64": {
+          "skin": 851,
+          "hair": 2237,
+          "cut_rejected": 66
+        },
+        "67": {
+          "skin": 844,
+          "hair": 2132,
+          "cut_rejected": 62
+        },
+        "70": {
+          "skin": 864,
+          "hair": 1899,
+          "cut_rejected": 64
+        },
+        "73": {
+          "skin": 805,
+          "hair": 1755,
+          "cut_rejected": 32
+        },
+        "76": {
+          "skin": 689,
+          "hair": 1855,
+          "cut_rejected": 12
+        },
+        "79": {
+          "skin": 723,
+          "hair": 1902,
+          "cut_rejected": 0
+        },
+        "82": {
+          "skin": 706,
+          "hair": 1851,
+          "cut_rejected": 1
+        },
+        "85": {
+          "skin": 636,
+          "hair": 1736,
+          "cut_rejected": 24
+        },
+        "88": {
+          "skin": 470,
+          "hair": 1479,
+          "cut_rejected": 127
+        },
+        "91": {
+          "skin": 374,
+          "hair": 1527,
+          "cut_rejected": 134
+        },
+        "94": {
+          "skin": 379,
+          "hair": 1499,
+          "cut_rejected": 138
+        },
+        "97": {
+          "skin": 547,
+          "hair": 1468,
+          "cut_rejected": 72
+        },
+        "100": {
+          "skin": 733,
+          "hair": 1895,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 771,
+          "hair": 509,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 772,
+          "hair": 1850,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 728,
+          "hair": 1867,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 543,
+          "hair": 1488,
+          "cut_rejected": 78
+        },
+        "115": {
+          "skin": 421,
+          "hair": 1561,
+          "cut_rejected": 137
+        },
+        "118": {
+          "skin": 366,
+          "hair": 1555,
+          "cut_rejected": 135
+        },
+        "121": {
+          "skin": 511,
+          "hair": 1414,
+          "cut_rejected": 99
+        },
+        "124": {
+          "skin": 721,
+          "hair": 1824,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 780,
+          "hair": 1465,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 788,
+          "hair": 1343,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 776,
+          "hair": 1804,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 742,
+          "hair": 1875,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 717,
+          "hair": 1855,
+          "cut_rejected": 0
+        },
+        "142": {
+          "skin": 705,
+          "hair": 1858,
+          "cut_rejected": 1
+        },
+        "145": {
+          "skin": 703,
+          "hair": 1843,
+          "cut_rejected": 7
+        },
+        "148": {
+          "skin": 691,
+          "hair": 1434,
+          "cut_rejected": 17
+        },
+        "151": {
+          "skin": 685,
+          "hair": 791,
+          "cut_rejected": 32
+        },
+        "154": {
+          "skin": 361,
+          "hair": 1440,
+          "cut_rejected": 57
+        },
+        "157": {
+          "skin": 675,
+          "hair": 238,
+          "cut_rejected": 81
+        },
+        "160": {
+          "skin": 784,
+          "hair": 312,
+          "cut_rejected": 104
+        },
+        "163": {
+          "skin": 882,
+          "hair": 1269,
+          "cut_rejected": 136
+        },
+        "166": {
+          "skin": 922,
+          "hair": 1706,
+          "cut_rejected": 167
+        },
+        "169": {
+          "skin": 984,
+          "hair": 1921,
+          "cut_rejected": 187
+        },
+        "172": {
+          "skin": 972,
+          "hair": 1865,
+          "cut_rejected": 209
+        },
+        "175": {
+          "skin": 941,
+          "hair": 2078,
+          "cut_rejected": 204
+        },
+        "178": {
+          "skin": 939,
+          "hair": 2078,
+          "cut_rejected": 211
+        },
+        "181": {
+          "skin": 927,
+          "hair": 2072,
+          "cut_rejected": 210
+        },
+        "184": {
+          "skin": 857,
+          "hair": 2082,
+          "cut_rejected": 220
+        },
+        "187": {
+          "skin": 858,
+          "hair": 2080,
+          "cut_rejected": 208
+        },
+        "190": {
+          "skin": 852,
+          "hair": 2081,
+          "cut_rejected": 215
+        },
+        "192": {
+          "skin": 782,
+          "hair": 2006,
+          "cut_rejected": 192
+        },
+        "193": {
+          "skin": 921,
+          "hair": 2029,
+          "cut_rejected": 205
+        },
+        "196": {
+          "skin": 859,
+          "hair": 1416,
+          "cut_rejected": 230
+        },
+        "199": {
+          "skin": 711,
+          "hair": 1414,
+          "cut_rejected": 194
+        },
+        "202": {
+          "skin": 369,
+          "hair": 1483,
+          "cut_rejected": 164
+        },
+        "205": {
+          "skin": 222,
+          "hair": 1774,
+          "cut_rejected": 140
+        },
+        "206": {
+          "skin": 218,
+          "hair": 1699,
+          "cut_rejected": 129
+        },
+        "208": {
+          "skin": 182,
+          "hair": 1617,
+          "cut_rejected": 141
+        },
+        "211": {
+          "skin": 209,
+          "hair": 1623,
+          "cut_rejected": 142
+        },
+        "214": {
+          "skin": 507,
+          "hair": 2083,
+          "cut_rejected": 151
+        },
+        "217": {
+          "skin": 903,
+          "hair": 1957,
+          "cut_rejected": 160
+        },
+        "219": {
+          "skin": 913,
+          "hair": 1824,
+          "cut_rejected": 146
+        },
+        "220": {
+          "skin": 954,
+          "hair": 1949,
+          "cut_rejected": 172
+        },
+        "223": {
+          "skin": 980,
+          "hair": 1937,
+          "cut_rejected": 179
+        },
+        "226": {
+          "skin": 960,
+          "hair": 1962,
+          "cut_rejected": 180
+        },
+        "229": {
+          "skin": 972,
+          "hair": 1966,
+          "cut_rejected": 163
+        },
+        "232": {
+          "skin": 1002,
+          "hair": 1962,
+          "cut_rejected": 152
+        },
+        "235": {
+          "skin": 993,
+          "hair": 2010,
+          "cut_rejected": 145
+        },
+        "238": {
+          "skin": 886,
+          "hair": 2080,
+          "cut_rejected": 131
+        },
+        "240": {
+          "skin": 832,
+          "hair": 1967,
+          "cut_rejected": 88
+        },
+        "241": {
+          "skin": 880,
+          "hair": 2144,
+          "cut_rejected": 87
+        },
+        "244": {
+          "skin": 871,
+          "hair": 2105,
+          "cut_rejected": 66
+        },
+        "247": {
+          "skin": 873,
+          "hair": 2076,
+          "cut_rejected": 36
+        },
+        "250": {
+          "skin": 981,
+          "hair": 1983,
+          "cut_rejected": 13
+        },
+        "253": {
+          "skin": 1009,
+          "hair": 1967,
+          "cut_rejected": 2
+        },
+        "256": {
+          "skin": 1016,
+          "hair": 1969,
+          "cut_rejected": 0
+        },
+        "259": {
+          "skin": 1010,
+          "hair": 1981,
+          "cut_rejected": 0
+        },
+        "262": {
+          "skin": 1008,
+          "hair": 1972,
+          "cut_rejected": 0
+        },
+        "264": {
+          "skin": 1020,
+          "hair": 1956,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 1004,
+          "hair": 1980,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 928,
+          "hair": 1958,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 930,
+          "hair": 2003,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 881,
+          "hair": 1920,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 865,
+          "hair": 1877,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 931,
+          "hair": 1602,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1021,
+          "hair": 1512,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 1023,
+          "hair": 1251,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1109,
+          "hair": 1107,
+          "cut_rejected": 3
+        },
+        "289": {
+          "skin": 1082,
+          "hair": 1247,
+          "cut_rejected": 8
+        },
+        "292": {
+          "skin": 1029,
+          "hair": 1328,
+          "cut_rejected": 15
+        },
+        "295": {
+          "skin": 1046,
+          "hair": 1298,
+          "cut_rejected": 18
+        },
+        "298": {
+          "skin": 1047,
+          "hair": 1308,
+          "cut_rejected": 17
+        },
+        "301": {
+          "skin": 1007,
+          "hair": 1009,
+          "cut_rejected": 36
+        },
+        "303": {
+          "skin": 968,
+          "hair": 924,
+          "cut_rejected": 49
+        },
+        "304": {
+          "skin": 979,
+          "hair": 1230,
+          "cut_rejected": 60
+        },
+        "307": {
+          "skin": 1031,
+          "hair": 1033,
+          "cut_rejected": 77
+        },
+        "310": {
+          "skin": 1025,
+          "hair": 937,
+          "cut_rejected": 82
+        },
+        "313": {
+          "skin": 1010,
+          "hair": 892,
+          "cut_rejected": 85
+        },
+        "316": {
+          "skin": 992,
+          "hair": 902,
+          "cut_rejected": 82
+        },
+        "319": {
+          "skin": 979,
+          "hair": 919,
+          "cut_rejected": 88
+        },
+        "322": {
+          "skin": 999,
+          "hair": 911,
+          "cut_rejected": 83
+        },
+        "325": {
+          "skin": 969,
+          "hair": 940,
+          "cut_rejected": 84
+        },
+        "328": {
+          "skin": 1011,
+          "hair": 941,
+          "cut_rejected": 81
+        },
+        "331": {
+          "skin": 980,
+          "hair": 936,
+          "cut_rejected": 79
+        },
+        "334": {
+          "skin": 898,
+          "hair": 1800,
+          "cut_rejected": 79
+        },
+        "337": {
+          "skin": 789,
+          "hair": 1966,
+          "cut_rejected": 78
+        },
+        "340": {
+          "skin": 724,
+          "hair": 1962,
+          "cut_rejected": 62
+        },
+        "343": {
+          "skin": 719,
+          "hair": 1854,
+          "cut_rejected": 47
+        },
+        "346": {
+          "skin": 692,
+          "hair": 1835,
+          "cut_rejected": 25
+        },
+        "349": {
+          "skin": 697,
+          "hair": 1887,
+          "cut_rejected": 8
+        },
+        "352": {
+          "skin": 702,
+          "hair": 1860,
+          "cut_rejected": 3
+        },
+        "355": {
+          "skin": 702,
+          "hair": 1856,
+          "cut_rejected": 3
+        },
+        "358": {
+          "skin": 705,
+          "hair": 1853,
+          "cut_rejected": 1
+        },
+        "361": {
+          "skin": 702,
+          "hair": 1855,
+          "cut_rejected": 3
+        }
+      },
+      "median_px": 1.4606996481322645,
+      "max_px": 11.783688619796978,
+      "d_max_px": 59.68023468892599,
+      "seconds": 37.013580156024545
+    },
+    {
+      "iteration": 7,
+      "gate_px": 7.285714285714286,
+      "pairs": 318011,
+      "counts": {
+        "1": {
+          "skin": 696,
+          "hair": 1853,
+          "cut_rejected": 5
+        },
+        "3": {
+          "skin": 701,
+          "hair": 1865,
+          "cut_rejected": 1
+        },
+        "4": {
+          "skin": 698,
+          "hair": 1857,
+          "cut_rejected": 1
+        },
+        "7": {
+          "skin": 696,
+          "hair": 1878,
+          "cut_rejected": 2
+        },
+        "10": {
+          "skin": 682,
+          "hair": 1824,
+          "cut_rejected": 13
+        },
+        "13": {
+          "skin": 664,
+          "hair": 1812,
+          "cut_rejected": 37
+        },
+        "16": {
+          "skin": 685,
+          "hair": 1644,
+          "cut_rejected": 61
+        },
+        "19": {
+          "skin": 677,
+          "hair": 1757,
+          "cut_rejected": 76
+        },
+        "22": {
+          "skin": 780,
+          "hair": 1951,
+          "cut_rejected": 94
+        },
+        "25": {
+          "skin": 923,
+          "hair": 2050,
+          "cut_rejected": 116
+        },
+        "28": {
+          "skin": 965,
+          "hair": 2032,
+          "cut_rejected": 136
+        },
+        "31": {
+          "skin": 944,
+          "hair": 2056,
+          "cut_rejected": 151
+        },
+        "34": {
+          "skin": 959,
+          "hair": 2034,
+          "cut_rejected": 149
+        },
+        "37": {
+          "skin": 929,
+          "hair": 2067,
+          "cut_rejected": 142
+        },
+        "40": {
+          "skin": 986,
+          "hair": 1966,
+          "cut_rejected": 128
+        },
+        "42": {
+          "skin": 884,
+          "hair": 1825,
+          "cut_rejected": 103
+        },
+        "43": {
+          "skin": 947,
+          "hair": 1859,
+          "cut_rejected": 105
+        },
+        "46": {
+          "skin": 767,
+          "hair": 1948,
+          "cut_rejected": 76
+        },
+        "49": {
+          "skin": 672,
+          "hair": 741,
+          "cut_rejected": 45
+        },
+        "52": {
+          "skin": 696,
+          "hair": 1841,
+          "cut_rejected": 1
+        },
+        "55": {
+          "skin": 720,
+          "hair": 1981,
+          "cut_rejected": 9
+        },
+        "58": {
+          "skin": 864,
+          "hair": 2209,
+          "cut_rejected": 39
+        },
+        "61": {
+          "skin": 854,
+          "hair": 2165,
+          "cut_rejected": 50
+        },
+        "64": {
+          "skin": 866,
+          "hair": 2110,
+          "cut_rejected": 39
+        },
+        "67": {
+          "skin": 858,
+          "hair": 2020,
+          "cut_rejected": 50
+        },
+        "70": {
+          "skin": 887,
+          "hair": 1825,
+          "cut_rejected": 32
+        },
+        "73": {
+          "skin": 812,
+          "hair": 1709,
+          "cut_rejected": 22
+        },
+        "76": {
+          "skin": 694,
+          "hair": 1668,
+          "cut_rejected": 8
+        },
+        "79": {
+          "skin": 714,
+          "hair": 1903,
+          "cut_rejected": 3
+        },
+        "82": {
+          "skin": 702,
+          "hair": 1849,
+          "cut_rejected": 2
+        },
+        "85": {
+          "skin": 634,
+          "hair": 1695,
+          "cut_rejected": 20
+        },
+        "88": {
+          "skin": 464,
+          "hair": 1436,
+          "cut_rejected": 116
+        },
+        "91": {
+          "skin": 374,
+          "hair": 1479,
+          "cut_rejected": 132
+        },
+        "94": {
+          "skin": 397,
+          "hair": 1444,
+          "cut_rejected": 131
+        },
+        "97": {
+          "skin": 537,
+          "hair": 1467,
+          "cut_rejected": 70
+        },
+        "100": {
+          "skin": 728,
+          "hair": 1892,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 767,
+          "hair": 473,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 764,
+          "hair": 1820,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 722,
+          "hair": 1863,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 537,
+          "hair": 1476,
+          "cut_rejected": 72
+        },
+        "115": {
+          "skin": 411,
+          "hair": 1557,
+          "cut_rejected": 129
+        },
+        "118": {
+          "skin": 345,
+          "hair": 1489,
+          "cut_rejected": 140
+        },
+        "121": {
+          "skin": 497,
+          "hair": 1394,
+          "cut_rejected": 86
+        },
+        "124": {
+          "skin": 718,
+          "hair": 1791,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 778,
+          "hair": 1289,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 784,
+          "hair": 1220,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 772,
+          "hair": 1518,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 737,
+          "hair": 1875,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 712,
+          "hair": 1854,
+          "cut_rejected": 1
+        },
+        "142": {
+          "skin": 701,
+          "hair": 1856,
+          "cut_rejected": 0
+        },
+        "145": {
+          "skin": 703,
+          "hair": 1834,
+          "cut_rejected": 2
+        },
+        "148": {
+          "skin": 690,
+          "hair": 1188,
+          "cut_rejected": 14
+        },
+        "151": {
+          "skin": 671,
+          "hair": 630,
+          "cut_rejected": 36
+        },
+        "154": {
+          "skin": 358,
+          "hair": 1421,
+          "cut_rejected": 66
+        },
+        "157": {
+          "skin": 673,
+          "hair": 203,
+          "cut_rejected": 88
+        },
+        "160": {
+          "skin": 779,
+          "hair": 263,
+          "cut_rejected": 113
+        },
+        "163": {
+          "skin": 880,
+          "hair": 1245,
+          "cut_rejected": 144
+        },
+        "166": {
+          "skin": 906,
+          "hair": 1638,
+          "cut_rejected": 171
+        },
+        "169": {
+          "skin": 976,
+          "hair": 1836,
+          "cut_rejected": 197
+        },
+        "172": {
+          "skin": 915,
+          "hair": 1812,
+          "cut_rejected": 219
+        },
+        "175": {
+          "skin": 897,
+          "hair": 2003,
+          "cut_rejected": 210
+        },
+        "178": {
+          "skin": 914,
+          "hair": 2056,
+          "cut_rejected": 216
+        },
+        "181": {
+          "skin": 896,
+          "hair": 2070,
+          "cut_rejected": 224
+        },
+        "184": {
+          "skin": 816,
+          "hair": 2072,
+          "cut_rejected": 215
+        },
+        "187": {
+          "skin": 797,
+          "hair": 2073,
+          "cut_rejected": 221
+        },
+        "190": {
+          "skin": 810,
+          "hair": 2068,
+          "cut_rejected": 221
+        },
+        "192": {
+          "skin": 764,
+          "hair": 1997,
+          "cut_rejected": 205
+        },
+        "193": {
+          "skin": 919,
+          "hair": 1987,
+          "cut_rejected": 219
+        },
+        "196": {
+          "skin": 873,
+          "hair": 1302,
+          "cut_rejected": 218
+        },
+        "199": {
+          "skin": 702,
+          "hair": 1379,
+          "cut_rejected": 188
+        },
+        "202": {
+          "skin": 338,
+          "hair": 1408,
+          "cut_rejected": 161
+        },
+        "205": {
+          "skin": 236,
+          "hair": 1748,
+          "cut_rejected": 140
+        },
+        "206": {
+          "skin": 207,
+          "hair": 1686,
+          "cut_rejected": 134
+        },
+        "208": {
+          "skin": 183,
+          "hair": 1560,
+          "cut_rejected": 147
+        },
+        "211": {
+          "skin": 211,
+          "hair": 1586,
+          "cut_rejected": 133
+        },
+        "214": {
+          "skin": 444,
+          "hair": 1992,
+          "cut_rejected": 159
+        },
+        "217": {
+          "skin": 913,
+          "hair": 1945,
+          "cut_rejected": 156
+        },
+        "219": {
+          "skin": 915,
+          "hair": 1817,
+          "cut_rejected": 146
+        },
+        "220": {
+          "skin": 966,
+          "hair": 1933,
+          "cut_rejected": 157
+        },
+        "223": {
+          "skin": 986,
+          "hair": 1938,
+          "cut_rejected": 175
+        },
+        "226": {
+          "skin": 907,
+          "hair": 1962,
+          "cut_rejected": 167
+        },
+        "229": {
+          "skin": 885,
+          "hair": 1972,
+          "cut_rejected": 169
+        },
+        "232": {
+          "skin": 977,
+          "hair": 1946,
+          "cut_rejected": 165
+        },
+        "235": {
+          "skin": 992,
+          "hair": 2009,
+          "cut_rejected": 144
+        },
+        "238": {
+          "skin": 900,
+          "hair": 1981,
+          "cut_rejected": 94
+        },
+        "240": {
+          "skin": 840,
+          "hair": 1849,
+          "cut_rejected": 64
+        },
+        "241": {
+          "skin": 900,
+          "hair": 2094,
+          "cut_rejected": 73
+        },
+        "244": {
+          "skin": 887,
+          "hair": 2039,
+          "cut_rejected": 48
+        },
+        "247": {
+          "skin": 879,
+          "hair": 2073,
+          "cut_rejected": 25
+        },
+        "250": {
+          "skin": 986,
+          "hair": 1956,
+          "cut_rejected": 4
+        },
+        "253": {
+          "skin": 1011,
+          "hair": 1958,
+          "cut_rejected": 2
+        },
+        "256": {
+          "skin": 1015,
+          "hair": 1947,
+          "cut_rejected": 1
+        },
+        "259": {
+          "skin": 1008,
+          "hair": 1973,
+          "cut_rejected": 0
+        },
+        "262": {
+          "skin": 1008,
+          "hair": 1962,
+          "cut_rejected": 0
+        },
+        "264": {
+          "skin": 1019,
+          "hair": 1953,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 1004,
+          "hair": 1971,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 920,
+          "hair": 1942,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 920,
+          "hair": 1972,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 871,
+          "hair": 1900,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 856,
+          "hair": 1780,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 925,
+          "hair": 1389,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1018,
+          "hair": 1454,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 1020,
+          "hair": 1140,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1082,
+          "hair": 1060,
+          "cut_rejected": 0
+        },
+        "289": {
+          "skin": 1084,
+          "hair": 1180,
+          "cut_rejected": 6
+        },
+        "292": {
+          "skin": 1032,
+          "hair": 1239,
+          "cut_rejected": 13
+        },
+        "295": {
+          "skin": 1048,
+          "hair": 1227,
+          "cut_rejected": 13
+        },
+        "298": {
+          "skin": 1046,
+          "hair": 1225,
+          "cut_rejected": 16
+        },
+        "301": {
+          "skin": 1006,
+          "hair": 936,
+          "cut_rejected": 28
+        },
+        "303": {
+          "skin": 970,
+          "hair": 877,
+          "cut_rejected": 40
+        },
+        "304": {
+          "skin": 970,
+          "hair": 1174,
+          "cut_rejected": 65
+        },
+        "307": {
+          "skin": 1027,
+          "hair": 925,
+          "cut_rejected": 77
+        },
+        "310": {
+          "skin": 1017,
+          "hair": 790,
+          "cut_rejected": 82
+        },
+        "313": {
+          "skin": 1009,
+          "hair": 782,
+          "cut_rejected": 82
+        },
+        "316": {
+          "skin": 984,
+          "hair": 881,
+          "cut_rejected": 81
+        },
+        "319": {
+          "skin": 951,
+          "hair": 854,
+          "cut_rejected": 87
+        },
+        "322": {
+          "skin": 995,
+          "hair": 827,
+          "cut_rejected": 81
+        },
+        "325": {
+          "skin": 951,
+          "hair": 867,
+          "cut_rejected": 84
+        },
+        "328": {
+          "skin": 1003,
+          "hair": 853,
+          "cut_rejected": 89
+        },
+        "331": {
+          "skin": 974,
+          "hair": 902,
+          "cut_rejected": 81
+        },
+        "334": {
+          "skin": 900,
+          "hair": 1579,
+          "cut_rejected": 77
+        },
+        "337": {
+          "skin": 787,
+          "hair": 1954,
+          "cut_rejected": 75
+        },
+        "340": {
+          "skin": 721,
+          "hair": 1954,
+          "cut_rejected": 57
+        },
+        "343": {
+          "skin": 711,
+          "hair": 1848,
+          "cut_rejected": 46
+        },
+        "346": {
+          "skin": 695,
+          "hair": 1825,
+          "cut_rejected": 14
+        },
+        "349": {
+          "skin": 696,
+          "hair": 1884,
+          "cut_rejected": 4
+        },
+        "352": {
+          "skin": 700,
+          "hair": 1858,
+          "cut_rejected": 1
+        },
+        "355": {
+          "skin": 699,
+          "hair": 1857,
+          "cut_rejected": 1
+        },
+        "358": {
+          "skin": 700,
+          "hair": 1854,
+          "cut_rejected": 1
+        },
+        "361": {
+          "skin": 700,
+          "hair": 1855,
+          "cut_rejected": 1
+        }
+      },
+      "median_px": 1.3858717626517765,
+      "max_px": 13.216232512275678,
+      "d_max_px": 57.9433942504154,
+      "seconds": 41.0576838409761
+    },
+    {
+      "iteration": 8,
+      "gate_px": 6.0,
+      "pairs": 306794,
+      "counts": {
+        "1": {
+          "skin": 698,
+          "hair": 1853,
+          "cut_rejected": 2
+        },
+        "3": {
+          "skin": 702,
+          "hair": 1863,
+          "cut_rejected": 0
+        },
+        "4": {
+          "skin": 697,
+          "hair": 1856,
+          "cut_rejected": 0
+        },
+        "7": {
+          "skin": 694,
+          "hair": 1874,
+          "cut_rejected": 2
+        },
+        "10": {
+          "skin": 687,
+          "hair": 1819,
+          "cut_rejected": 7
+        },
+        "13": {
+          "skin": 661,
+          "hair": 1802,
+          "cut_rejected": 35
+        },
+        "16": {
+          "skin": 677,
+          "hair": 1561,
+          "cut_rejected": 51
+        },
+        "19": {
+          "skin": 682,
+          "hair": 1734,
+          "cut_rejected": 58
+        },
+        "22": {
+          "skin": 781,
+          "hair": 1929,
+          "cut_rejected": 82
+        },
+        "25": {
+          "skin": 934,
+          "hair": 2023,
+          "cut_rejected": 106
+        },
+        "28": {
+          "skin": 944,
+          "hair": 2009,
+          "cut_rejected": 135
+        },
+        "31": {
+          "skin": 905,
+          "hair": 2015,
+          "cut_rejected": 133
+        },
+        "34": {
+          "skin": 930,
+          "hair": 1967,
+          "cut_rejected": 137
+        },
+        "37": {
+          "skin": 927,
+          "hair": 2031,
+          "cut_rejected": 144
+        },
+        "40": {
+          "skin": 989,
+          "hair": 1929,
+          "cut_rejected": 126
+        },
+        "42": {
+          "skin": 894,
+          "hair": 1758,
+          "cut_rejected": 95
+        },
+        "43": {
+          "skin": 944,
+          "hair": 1736,
+          "cut_rejected": 88
+        },
+        "46": {
+          "skin": 764,
+          "hair": 1921,
+          "cut_rejected": 68
+        },
+        "49": {
+          "skin": 657,
+          "hair": 491,
+          "cut_rejected": 50
+        },
+        "52": {
+          "skin": 693,
+          "hair": 1839,
+          "cut_rejected": 3
+        },
+        "55": {
+          "skin": 721,
+          "hair": 1979,
+          "cut_rejected": 12
+        },
+        "58": {
+          "skin": 861,
+          "hair": 2138,
+          "cut_rejected": 46
+        },
+        "61": {
+          "skin": 861,
+          "hair": 2078,
+          "cut_rejected": 51
+        },
+        "64": {
+          "skin": 869,
+          "hair": 2034,
+          "cut_rejected": 38
+        },
+        "67": {
+          "skin": 868,
+          "hair": 1850,
+          "cut_rejected": 47
+        },
+        "70": {
+          "skin": 876,
+          "hair": 1656,
+          "cut_rejected": 38
+        },
+        "73": {
+          "skin": 815,
+          "hair": 1463,
+          "cut_rejected": 23
+        },
+        "76": {
+          "skin": 691,
+          "hair": 1434,
+          "cut_rejected": 8
+        },
+        "79": {
+          "skin": 711,
+          "hair": 1901,
+          "cut_rejected": 0
+        },
+        "82": {
+          "skin": 700,
+          "hair": 1843,
+          "cut_rejected": 0
+        },
+        "85": {
+          "skin": 631,
+          "hair": 1619,
+          "cut_rejected": 18
+        },
+        "88": {
+          "skin": 414,
+          "hair": 1369,
+          "cut_rejected": 123
+        },
+        "91": {
+          "skin": 379,
+          "hair": 1423,
+          "cut_rejected": 130
+        },
+        "94": {
+          "skin": 396,
+          "hair": 1396,
+          "cut_rejected": 125
+        },
+        "97": {
+          "skin": 522,
+          "hair": 1438,
+          "cut_rejected": 76
+        },
+        "100": {
+          "skin": 725,
+          "hair": 1879,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 761,
+          "hair": 424,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 748,
+          "hair": 1644,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 720,
+          "hair": 1854,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 536,
+          "hair": 1469,
+          "cut_rejected": 64
+        },
+        "115": {
+          "skin": 411,
+          "hair": 1504,
+          "cut_rejected": 99
+        },
+        "118": {
+          "skin": 309,
+          "hair": 1463,
+          "cut_rejected": 113
+        },
+        "121": {
+          "skin": 466,
+          "hair": 1382,
+          "cut_rejected": 76
+        },
+        "124": {
+          "skin": 717,
+          "hair": 1771,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 770,
+          "hair": 1164,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 775,
+          "hair": 1146,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 769,
+          "hair": 1317,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 735,
+          "hair": 1872,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 710,
+          "hair": 1854,
+          "cut_rejected": 1
+        },
+        "142": {
+          "skin": 699,
+          "hair": 1854,
+          "cut_rejected": 0
+        },
+        "145": {
+          "skin": 702,
+          "hair": 1827,
+          "cut_rejected": 0
+        },
+        "148": {
+          "skin": 691,
+          "hair": 757,
+          "cut_rejected": 8
+        },
+        "151": {
+          "skin": 668,
+          "hair": 500,
+          "cut_rejected": 35
+        },
+        "154": {
+          "skin": 360,
+          "hair": 1385,
+          "cut_rejected": 66
+        },
+        "157": {
+          "skin": 685,
+          "hair": 160,
+          "cut_rejected": 68
+        },
+        "160": {
+          "skin": 796,
+          "hair": 224,
+          "cut_rejected": 100
+        },
+        "163": {
+          "skin": 877,
+          "hair": 1170,
+          "cut_rejected": 147
+        },
+        "166": {
+          "skin": 838,
+          "hair": 1561,
+          "cut_rejected": 170
+        },
+        "169": {
+          "skin": 895,
+          "hair": 1752,
+          "cut_rejected": 200
+        },
+        "172": {
+          "skin": 853,
+          "hair": 1651,
+          "cut_rejected": 213
+        },
+        "175": {
+          "skin": 811,
+          "hair": 1892,
+          "cut_rejected": 205
+        },
+        "178": {
+          "skin": 756,
+          "hair": 2046,
+          "cut_rejected": 207
+        },
+        "181": {
+          "skin": 786,
+          "hair": 2042,
+          "cut_rejected": 207
+        },
+        "184": {
+          "skin": 716,
+          "hair": 2028,
+          "cut_rejected": 221
+        },
+        "187": {
+          "skin": 731,
+          "hair": 2021,
+          "cut_rejected": 218
+        },
+        "190": {
+          "skin": 742,
+          "hair": 2023,
+          "cut_rejected": 218
+        },
+        "192": {
+          "skin": 705,
+          "hair": 1935,
+          "cut_rejected": 201
+        },
+        "193": {
+          "skin": 844,
+          "hair": 1853,
+          "cut_rejected": 221
+        },
+        "196": {
+          "skin": 856,
+          "hair": 1181,
+          "cut_rejected": 228
+        },
+        "199": {
+          "skin": 656,
+          "hair": 1302,
+          "cut_rejected": 199
+        },
+        "202": {
+          "skin": 330,
+          "hair": 1372,
+          "cut_rejected": 176
+        },
+        "205": {
+          "skin": 223,
+          "hair": 1722,
+          "cut_rejected": 127
+        },
+        "206": {
+          "skin": 195,
+          "hair": 1620,
+          "cut_rejected": 114
+        },
+        "208": {
+          "skin": 168,
+          "hair": 1447,
+          "cut_rejected": 137
+        },
+        "211": {
+          "skin": 212,
+          "hair": 1568,
+          "cut_rejected": 125
+        },
+        "214": {
+          "skin": 449,
+          "hair": 1897,
+          "cut_rejected": 124
+        },
+        "217": {
+          "skin": 917,
+          "hair": 1885,
+          "cut_rejected": 147
+        },
+        "219": {
+          "skin": 918,
+          "hair": 1734,
+          "cut_rejected": 143
+        },
+        "220": {
+          "skin": 951,
+          "hair": 1839,
+          "cut_rejected": 174
+        },
+        "223": {
+          "skin": 944,
+          "hair": 1856,
+          "cut_rejected": 155
+        },
+        "226": {
+          "skin": 821,
+          "hair": 1898,
+          "cut_rejected": 154
+        },
+        "229": {
+          "skin": 777,
+          "hair": 1918,
+          "cut_rejected": 162
+        },
+        "232": {
+          "skin": 837,
+          "hair": 1891,
+          "cut_rejected": 164
+        },
+        "235": {
+          "skin": 1001,
+          "hair": 1988,
+          "cut_rejected": 130
+        },
+        "238": {
+          "skin": 891,
+          "hair": 1918,
+          "cut_rejected": 83
+        },
+        "240": {
+          "skin": 832,
+          "hair": 1809,
+          "cut_rejected": 61
+        },
+        "241": {
+          "skin": 898,
+          "hair": 1936,
+          "cut_rejected": 61
+        },
+        "244": {
+          "skin": 889,
+          "hair": 1916,
+          "cut_rejected": 44
+        },
+        "247": {
+          "skin": 877,
+          "hair": 1951,
+          "cut_rejected": 20
+        },
+        "250": {
+          "skin": 986,
+          "hair": 1922,
+          "cut_rejected": 7
+        },
+        "253": {
+          "skin": 1005,
+          "hair": 1947,
+          "cut_rejected": 3
+        },
+        "256": {
+          "skin": 1013,
+          "hair": 1935,
+          "cut_rejected": 1
+        },
+        "259": {
+          "skin": 1006,
+          "hair": 1947,
+          "cut_rejected": 1
+        },
+        "262": {
+          "skin": 1002,
+          "hair": 1942,
+          "cut_rejected": 1
+        },
+        "264": {
+          "skin": 1013,
+          "hair": 1767,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 1000,
+          "hair": 1945,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 914,
+          "hair": 1918,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 905,
+          "hair": 1447,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 864,
+          "hair": 1791,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 844,
+          "hair": 1658,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 903,
+          "hair": 1218,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1000,
+          "hair": 1397,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 997,
+          "hair": 1100,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1020,
+          "hair": 916,
+          "cut_rejected": 0
+        },
+        "289": {
+          "skin": 1088,
+          "hair": 1159,
+          "cut_rejected": 0
+        },
+        "292": {
+          "skin": 1033,
+          "hair": 1214,
+          "cut_rejected": 6
+        },
+        "295": {
+          "skin": 1044,
+          "hair": 1212,
+          "cut_rejected": 6
+        },
+        "298": {
+          "skin": 1043,
+          "hair": 1190,
+          "cut_rejected": 16
+        },
+        "301": {
+          "skin": 994,
+          "hair": 801,
+          "cut_rejected": 31
+        },
+        "303": {
+          "skin": 969,
+          "hair": 771,
+          "cut_rejected": 44
+        },
+        "304": {
+          "skin": 983,
+          "hair": 1057,
+          "cut_rejected": 52
+        },
+        "307": {
+          "skin": 1018,
+          "hair": 771,
+          "cut_rejected": 76
+        },
+        "310": {
+          "skin": 985,
+          "hair": 718,
+          "cut_rejected": 78
+        },
+        "313": {
+          "skin": 985,
+          "hair": 697,
+          "cut_rejected": 81
+        },
+        "316": {
+          "skin": 981,
+          "hair": 852,
+          "cut_rejected": 74
+        },
+        "319": {
+          "skin": 908,
+          "hair": 790,
+          "cut_rejected": 74
+        },
+        "322": {
+          "skin": 925,
+          "hair": 760,
+          "cut_rejected": 75
+        },
+        "325": {
+          "skin": 871,
+          "hair": 811,
+          "cut_rejected": 77
+        },
+        "328": {
+          "skin": 981,
+          "hair": 807,
+          "cut_rejected": 79
+        },
+        "331": {
+          "skin": 971,
+          "hair": 900,
+          "cut_rejected": 74
+        },
+        "334": {
+          "skin": 894,
+          "hair": 1358,
+          "cut_rejected": 72
+        },
+        "337": {
+          "skin": 791,
+          "hair": 1931,
+          "cut_rejected": 61
+        },
+        "340": {
+          "skin": 712,
+          "hair": 1816,
+          "cut_rejected": 80
+        },
+        "343": {
+          "skin": 717,
+          "hair": 1840,
+          "cut_rejected": 39
+        },
+        "346": {
+          "skin": 695,
+          "hair": 1849,
+          "cut_rejected": 14
+        },
+        "349": {
+          "skin": 698,
+          "hair": 1846,
+          "cut_rejected": 0
+        },
+        "352": {
+          "skin": 698,
+          "hair": 1856,
+          "cut_rejected": 0
+        },
+        "355": {
+          "skin": 697,
+          "hair": 1856,
+          "cut_rejected": 1
+        },
+        "358": {
+          "skin": 698,
+          "hair": 1854,
+          "cut_rejected": 0
+        },
+        "361": {
+          "skin": 696,
+          "hair": 1854,
+          "cut_rejected": 2
+        }
+      },
+      "median_px": 1.277199017075075,
+      "max_px": 13.275426311983955,
+      "d_max_px": 59.79210971705536,
+      "seconds": 46.77008823596407
+    },
+    {
+      "iteration": 9,
+      "gate_px": 6.0,
+      "pairs": 304434,
+      "counts": {
+        "1": {
+          "skin": 696,
+          "hair": 1854,
+          "cut_rejected": 1
+        },
+        "3": {
+          "skin": 698,
+          "hair": 1861,
+          "cut_rejected": 1
+        },
+        "4": {
+          "skin": 694,
+          "hair": 1858,
+          "cut_rejected": 1
+        },
+        "7": {
+          "skin": 694,
+          "hair": 1875,
+          "cut_rejected": 1
+        },
+        "10": {
+          "skin": 687,
+          "hair": 1821,
+          "cut_rejected": 2
+        },
+        "13": {
+          "skin": 659,
+          "hair": 1796,
+          "cut_rejected": 40
+        },
+        "16": {
+          "skin": 673,
+          "hair": 1546,
+          "cut_rejected": 64
+        },
+        "19": {
+          "skin": 669,
+          "hair": 1720,
+          "cut_rejected": 66
+        },
+        "22": {
+          "skin": 785,
+          "hair": 1939,
+          "cut_rejected": 80
+        },
+        "25": {
+          "skin": 926,
+          "hair": 2014,
+          "cut_rejected": 113
+        },
+        "28": {
+          "skin": 970,
+          "hair": 1977,
+          "cut_rejected": 134
+        },
+        "31": {
+          "skin": 927,
+          "hair": 1978,
+          "cut_rejected": 138
+        },
+        "34": {
+          "skin": 952,
+          "hair": 1935,
+          "cut_rejected": 133
+        },
+        "37": {
+          "skin": 937,
+          "hair": 2007,
+          "cut_rejected": 136
+        },
+        "40": {
+          "skin": 977,
+          "hair": 1910,
+          "cut_rejected": 131
+        },
+        "42": {
+          "skin": 899,
+          "hair": 1700,
+          "cut_rejected": 84
+        },
+        "43": {
+          "skin": 939,
+          "hair": 1638,
+          "cut_rejected": 82
+        },
+        "46": {
+          "skin": 768,
+          "hair": 1931,
+          "cut_rejected": 71
+        },
+        "49": {
+          "skin": 659,
+          "hair": 497,
+          "cut_rejected": 47
+        },
+        "52": {
+          "skin": 690,
+          "hair": 1839,
+          "cut_rejected": 2
+        },
+        "55": {
+          "skin": 711,
+          "hair": 1978,
+          "cut_rejected": 19
+        },
+        "58": {
+          "skin": 852,
+          "hair": 2158,
+          "cut_rejected": 50
+        },
+        "61": {
+          "skin": 843,
+          "hair": 2124,
+          "cut_rejected": 63
+        },
+        "64": {
+          "skin": 849,
+          "hair": 2082,
+          "cut_rejected": 54
+        },
+        "67": {
+          "skin": 839,
+          "hair": 1862,
+          "cut_rejected": 65
+        },
+        "70": {
+          "skin": 857,
+          "hair": 1536,
+          "cut_rejected": 59
+        },
+        "73": {
+          "skin": 796,
+          "hair": 1503,
+          "cut_rejected": 33
+        },
+        "76": {
+          "skin": 692,
+          "hair": 1361,
+          "cut_rejected": 6
+        },
+        "79": {
+          "skin": 712,
+          "hair": 1900,
+          "cut_rejected": 0
+        },
+        "82": {
+          "skin": 700,
+          "hair": 1845,
+          "cut_rejected": 0
+        },
+        "85": {
+          "skin": 620,
+          "hair": 1633,
+          "cut_rejected": 27
+        },
+        "88": {
+          "skin": 407,
+          "hair": 1373,
+          "cut_rejected": 116
+        },
+        "91": {
+          "skin": 388,
+          "hair": 1432,
+          "cut_rejected": 142
+        },
+        "94": {
+          "skin": 390,
+          "hair": 1409,
+          "cut_rejected": 135
+        },
+        "97": {
+          "skin": 494,
+          "hair": 1453,
+          "cut_rejected": 90
+        },
+        "100": {
+          "skin": 725,
+          "hair": 1878,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 760,
+          "hair": 424,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 744,
+          "hair": 1618,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 719,
+          "hair": 1852,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 513,
+          "hair": 1469,
+          "cut_rejected": 77
+        },
+        "115": {
+          "skin": 398,
+          "hair": 1506,
+          "cut_rejected": 128
+        },
+        "118": {
+          "skin": 333,
+          "hair": 1457,
+          "cut_rejected": 128
+        },
+        "121": {
+          "skin": 426,
+          "hair": 1374,
+          "cut_rejected": 110
+        },
+        "124": {
+          "skin": 716,
+          "hair": 1775,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 770,
+          "hair": 1150,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 776,
+          "hair": 1128,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 767,
+          "hair": 1275,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 734,
+          "hair": 1870,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 708,
+          "hair": 1852,
+          "cut_rejected": 1
+        },
+        "142": {
+          "skin": 695,
+          "hair": 1854,
+          "cut_rejected": 2
+        },
+        "145": {
+          "skin": 699,
+          "hair": 1830,
+          "cut_rejected": 1
+        },
+        "148": {
+          "skin": 688,
+          "hair": 753,
+          "cut_rejected": 10
+        },
+        "151": {
+          "skin": 672,
+          "hair": 485,
+          "cut_rejected": 36
+        },
+        "154": {
+          "skin": 343,
+          "hair": 1386,
+          "cut_rejected": 62
+        },
+        "157": {
+          "skin": 703,
+          "hair": 156,
+          "cut_rejected": 72
+        },
+        "160": {
+          "skin": 785,
+          "hair": 221,
+          "cut_rejected": 103
+        },
+        "163": {
+          "skin": 876,
+          "hair": 1169,
+          "cut_rejected": 132
+        },
+        "166": {
+          "skin": 828,
+          "hair": 1563,
+          "cut_rejected": 165
+        },
+        "169": {
+          "skin": 870,
+          "hair": 1725,
+          "cut_rejected": 187
+        },
+        "172": {
+          "skin": 815,
+          "hair": 1634,
+          "cut_rejected": 207
+        },
+        "175": {
+          "skin": 752,
+          "hair": 1891,
+          "cut_rejected": 219
+        },
+        "178": {
+          "skin": 763,
+          "hair": 2037,
+          "cut_rejected": 206
+        },
+        "181": {
+          "skin": 734,
+          "hair": 2040,
+          "cut_rejected": 219
+        },
+        "184": {
+          "skin": 719,
+          "hair": 2003,
+          "cut_rejected": 216
+        },
+        "187": {
+          "skin": 738,
+          "hair": 2009,
+          "cut_rejected": 214
+        },
+        "190": {
+          "skin": 740,
+          "hair": 1992,
+          "cut_rejected": 228
+        },
+        "192": {
+          "skin": 705,
+          "hair": 1926,
+          "cut_rejected": 199
+        },
+        "193": {
+          "skin": 839,
+          "hair": 1863,
+          "cut_rejected": 211
+        },
+        "196": {
+          "skin": 855,
+          "hair": 1152,
+          "cut_rejected": 208
+        },
+        "199": {
+          "skin": 647,
+          "hair": 1298,
+          "cut_rejected": 200
+        },
+        "202": {
+          "skin": 303,
+          "hair": 1378,
+          "cut_rejected": 159
+        },
+        "205": {
+          "skin": 209,
+          "hair": 1735,
+          "cut_rejected": 152
+        },
+        "206": {
+          "skin": 170,
+          "hair": 1648,
+          "cut_rejected": 118
+        },
+        "208": {
+          "skin": 148,
+          "hair": 1457,
+          "cut_rejected": 153
+        },
+        "211": {
+          "skin": 196,
+          "hair": 1576,
+          "cut_rejected": 138
+        },
+        "214": {
+          "skin": 417,
+          "hair": 1875,
+          "cut_rejected": 143
+        },
+        "217": {
+          "skin": 883,
+          "hair": 1906,
+          "cut_rejected": 172
+        },
+        "219": {
+          "skin": 894,
+          "hair": 1775,
+          "cut_rejected": 146
+        },
+        "220": {
+          "skin": 932,
+          "hair": 1863,
+          "cut_rejected": 178
+        },
+        "223": {
+          "skin": 888,
+          "hair": 1871,
+          "cut_rejected": 180
+        },
+        "226": {
+          "skin": 767,
+          "hair": 1896,
+          "cut_rejected": 181
+        },
+        "229": {
+          "skin": 741,
+          "hair": 1893,
+          "cut_rejected": 169
+        },
+        "232": {
+          "skin": 810,
+          "hair": 1838,
+          "cut_rejected": 156
+        },
+        "235": {
+          "skin": 974,
+          "hair": 1962,
+          "cut_rejected": 149
+        },
+        "238": {
+          "skin": 882,
+          "hair": 1908,
+          "cut_rejected": 89
+        },
+        "240": {
+          "skin": 815,
+          "hair": 1810,
+          "cut_rejected": 71
+        },
+        "241": {
+          "skin": 886,
+          "hair": 1914,
+          "cut_rejected": 69
+        },
+        "244": {
+          "skin": 878,
+          "hair": 1893,
+          "cut_rejected": 50
+        },
+        "247": {
+          "skin": 870,
+          "hair": 1921,
+          "cut_rejected": 29
+        },
+        "250": {
+          "skin": 983,
+          "hair": 1892,
+          "cut_rejected": 5
+        },
+        "253": {
+          "skin": 1009,
+          "hair": 1930,
+          "cut_rejected": 1
+        },
+        "256": {
+          "skin": 1012,
+          "hair": 1923,
+          "cut_rejected": 0
+        },
+        "259": {
+          "skin": 1007,
+          "hair": 1947,
+          "cut_rejected": 0
+        },
+        "262": {
+          "skin": 1004,
+          "hair": 1933,
+          "cut_rejected": 0
+        },
+        "264": {
+          "skin": 1014,
+          "hair": 1758,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 999,
+          "hair": 1950,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 914,
+          "hair": 1893,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 909,
+          "hair": 1413,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 861,
+          "hair": 1772,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 844,
+          "hair": 1633,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 908,
+          "hair": 1195,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1014,
+          "hair": 1386,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 982,
+          "hair": 1118,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1040,
+          "hair": 903,
+          "cut_rejected": 0
+        },
+        "289": {
+          "skin": 1060,
+          "hair": 1100,
+          "cut_rejected": 0
+        },
+        "292": {
+          "skin": 1030,
+          "hair": 1180,
+          "cut_rejected": 0
+        },
+        "295": {
+          "skin": 1046,
+          "hair": 1175,
+          "cut_rejected": 0
+        },
+        "298": {
+          "skin": 1044,
+          "hair": 1144,
+          "cut_rejected": 6
+        },
+        "301": {
+          "skin": 999,
+          "hair": 759,
+          "cut_rejected": 35
+        },
+        "303": {
+          "skin": 958,
+          "hair": 756,
+          "cut_rejected": 47
+        },
+        "304": {
+          "skin": 978,
+          "hair": 1029,
+          "cut_rejected": 59
+        },
+        "307": {
+          "skin": 1002,
+          "hair": 746,
+          "cut_rejected": 81
+        },
+        "310": {
+          "skin": 976,
+          "hair": 669,
+          "cut_rejected": 74
+        },
+        "313": {
+          "skin": 981,
+          "hair": 666,
+          "cut_rejected": 81
+        },
+        "316": {
+          "skin": 966,
+          "hair": 871,
+          "cut_rejected": 85
+        },
+        "319": {
+          "skin": 869,
+          "hair": 725,
+          "cut_rejected": 88
+        },
+        "322": {
+          "skin": 929,
+          "hair": 715,
+          "cut_rejected": 80
+        },
+        "325": {
+          "skin": 860,
+          "hair": 742,
+          "cut_rejected": 87
+        },
+        "328": {
+          "skin": 963,
+          "hair": 743,
+          "cut_rejected": 90
+        },
+        "331": {
+          "skin": 967,
+          "hair": 899,
+          "cut_rejected": 78
+        },
+        "334": {
+          "skin": 891,
+          "hair": 1373,
+          "cut_rejected": 79
+        },
+        "337": {
+          "skin": 785,
+          "hair": 1937,
+          "cut_rejected": 72
+        },
+        "340": {
+          "skin": 715,
+          "hair": 1822,
+          "cut_rejected": 73
+        },
+        "343": {
+          "skin": 716,
+          "hair": 1844,
+          "cut_rejected": 56
+        },
+        "346": {
+          "skin": 693,
+          "hair": 1849,
+          "cut_rejected": 12
+        },
+        "349": {
+          "skin": 696,
+          "hair": 1871,
+          "cut_rejected": 0
+        },
+        "352": {
+          "skin": 694,
+          "hair": 1858,
+          "cut_rejected": 1
+        },
+        "355": {
+          "skin": 697,
+          "hair": 1855,
+          "cut_rejected": 0
+        },
+        "358": {
+          "skin": 694,
+          "hair": 1855,
+          "cut_rejected": 1
+        },
+        "361": {
+          "skin": 695,
+          "hair": 1855,
+          "cut_rejected": 1
+        }
+      },
+      "median_px": 1.2539604648239875,
+      "max_px": 9.763818319532309,
+      "d_max_px": 61.502179043807175,
+      "seconds": 50.08645573502872
+    },
+    {
+      "iteration": 10,
+      "gate_px": 6.0,
+      "pairs": 303859,
+      "counts": {
+        "1": {
+          "skin": 698,
+          "hair": 1852,
+          "cut_rejected": 1
+        },
+        "3": {
+          "skin": 701,
+          "hair": 1863,
+          "cut_rejected": 0
+        },
+        "4": {
+          "skin": 698,
+          "hair": 1855,
+          "cut_rejected": 0
+        },
+        "7": {
+          "skin": 696,
+          "hair": 1873,
+          "cut_rejected": 0
+        },
+        "10": {
+          "skin": 694,
+          "hair": 1817,
+          "cut_rejected": 0
+        },
+        "13": {
+          "skin": 645,
+          "hair": 1790,
+          "cut_rejected": 48
+        },
+        "16": {
+          "skin": 668,
+          "hair": 1490,
+          "cut_rejected": 59
+        },
+        "19": {
+          "skin": 673,
+          "hair": 1711,
+          "cut_rejected": 68
+        },
+        "22": {
+          "skin": 787,
+          "hair": 1938,
+          "cut_rejected": 88
+        },
+        "25": {
+          "skin": 918,
+          "hair": 2010,
+          "cut_rejected": 110
+        },
+        "28": {
+          "skin": 965,
+          "hair": 1977,
+          "cut_rejected": 130
+        },
+        "31": {
+          "skin": 946,
+          "hair": 1970,
+          "cut_rejected": 135
+        },
+        "34": {
+          "skin": 958,
+          "hair": 1932,
+          "cut_rejected": 144
+        },
+        "37": {
+          "skin": 927,
+          "hair": 2004,
+          "cut_rejected": 134
+        },
+        "40": {
+          "skin": 982,
+          "hair": 1899,
+          "cut_rejected": 119
+        },
+        "42": {
+          "skin": 888,
+          "hair": 1667,
+          "cut_rejected": 86
+        },
+        "43": {
+          "skin": 932,
+          "hair": 1607,
+          "cut_rejected": 85
+        },
+        "46": {
+          "skin": 759,
+          "hair": 1932,
+          "cut_rejected": 79
+        },
+        "49": {
+          "skin": 630,
+          "hair": 472,
+          "cut_rejected": 41
+        },
+        "52": {
+          "skin": 696,
+          "hair": 1838,
+          "cut_rejected": 0
+        },
+        "55": {
+          "skin": 717,
+          "hair": 1981,
+          "cut_rejected": 11
+        },
+        "58": {
+          "skin": 861,
+          "hair": 2144,
+          "cut_rejected": 51
+        },
+        "61": {
+          "skin": 856,
+          "hair": 2107,
+          "cut_rejected": 58
+        },
+        "64": {
+          "skin": 858,
+          "hair": 2057,
+          "cut_rejected": 56
+        },
+        "67": {
+          "skin": 865,
+          "hair": 1887,
+          "cut_rejected": 48
+        },
+        "70": {
+          "skin": 881,
+          "hair": 1509,
+          "cut_rejected": 52
+        },
+        "73": {
+          "skin": 815,
+          "hair": 1452,
+          "cut_rejected": 19
+        },
+        "76": {
+          "skin": 691,
+          "hair": 1295,
+          "cut_rejected": 7
+        },
+        "79": {
+          "skin": 710,
+          "hair": 1898,
+          "cut_rejected": 1
+        },
+        "82": {
+          "skin": 701,
+          "hair": 1846,
+          "cut_rejected": 0
+        },
+        "85": {
+          "skin": 627,
+          "hair": 1643,
+          "cut_rejected": 15
+        },
+        "88": {
+          "skin": 422,
+          "hair": 1367,
+          "cut_rejected": 119
+        },
+        "91": {
+          "skin": 382,
+          "hair": 1431,
+          "cut_rejected": 124
+        },
+        "94": {
+          "skin": 395,
+          "hair": 1396,
+          "cut_rejected": 122
+        },
+        "97": {
+          "skin": 508,
+          "hair": 1452,
+          "cut_rejected": 77
+        },
+        "100": {
+          "skin": 725,
+          "hair": 1876,
+          "cut_rejected": 0
+        },
+        "103": {
+          "skin": 758,
+          "hair": 418,
+          "cut_rejected": 0
+        },
+        "106": {
+          "skin": 747,
+          "hair": 1614,
+          "cut_rejected": 0
+        },
+        "109": {
+          "skin": 719,
+          "hair": 1857,
+          "cut_rejected": 0
+        },
+        "112": {
+          "skin": 528,
+          "hair": 1466,
+          "cut_rejected": 70
+        },
+        "115": {
+          "skin": 396,
+          "hair": 1503,
+          "cut_rejected": 119
+        },
+        "118": {
+          "skin": 327,
+          "hair": 1438,
+          "cut_rejected": 121
+        },
+        "121": {
+          "skin": 464,
+          "hair": 1371,
+          "cut_rejected": 97
+        },
+        "124": {
+          "skin": 717,
+          "hair": 1781,
+          "cut_rejected": 0
+        },
+        "127": {
+          "skin": 767,
+          "hair": 1139,
+          "cut_rejected": 0
+        },
+        "130": {
+          "skin": 773,
+          "hair": 1115,
+          "cut_rejected": 0
+        },
+        "133": {
+          "skin": 767,
+          "hair": 1268,
+          "cut_rejected": 0
+        },
+        "136": {
+          "skin": 734,
+          "hair": 1871,
+          "cut_rejected": 0
+        },
+        "139": {
+          "skin": 708,
+          "hair": 1853,
+          "cut_rejected": 1
+        },
+        "142": {
+          "skin": 699,
+          "hair": 1854,
+          "cut_rejected": 0
+        },
+        "145": {
+          "skin": 701,
+          "hair": 1828,
+          "cut_rejected": 0
+        },
+        "148": {
+          "skin": 690,
+          "hair": 769,
+          "cut_rejected": 7
+        },
+        "151": {
+          "skin": 672,
+          "hair": 463,
+          "cut_rejected": 35
+        },
+        "154": {
+          "skin": 333,
+          "hair": 1381,
+          "cut_rejected": 70
+        },
+        "157": {
+          "skin": 712,
+          "hair": 143,
+          "cut_rejected": 64
+        },
+        "160": {
+          "skin": 784,
+          "hair": 222,
+          "cut_rejected": 98
+        },
+        "163": {
+          "skin": 880,
+          "hair": 1184,
+          "cut_rejected": 123
+        },
+        "166": {
+          "skin": 788,
+          "hair": 1537,
+          "cut_rejected": 161
+        },
+        "169": {
+          "skin": 830,
+          "hair": 1707,
+          "cut_rejected": 183
+        },
+        "172": {
+          "skin": 774,
+          "hair": 1630,
+          "cut_rejected": 213
+        },
+        "175": {
+          "skin": 697,
+          "hair": 1884,
+          "cut_rejected": 215
+        },
+        "178": {
+          "skin": 746,
+          "hair": 2009,
+          "cut_rejected": 209
+        },
+        "181": {
+          "skin": 725,
+          "hair": 2009,
+          "cut_rejected": 220
+        },
+        "184": {
+          "skin": 719,
+          "hair": 2002,
+          "cut_rejected": 217
+        },
+        "187": {
+          "skin": 731,
+          "hair": 2013,
+          "cut_rejected": 207
+        },
+        "190": {
+          "skin": 727,
+          "hair": 2016,
+          "cut_rejected": 216
+        },
+        "192": {
+          "skin": 711,
+          "hair": 1890,
+          "cut_rejected": 200
+        },
+        "193": {
+          "skin": 803,
+          "hair": 1889,
+          "cut_rejected": 215
+        },
+        "196": {
+          "skin": 839,
+          "hair": 1205,
+          "cut_rejected": 210
+        },
+        "199": {
+          "skin": 642,
+          "hair": 1306,
+          "cut_rejected": 205
+        },
+        "202": {
+          "skin": 301,
+          "hair": 1376,
+          "cut_rejected": 155
+        },
+        "205": {
+          "skin": 211,
+          "hair": 1749,
+          "cut_rejected": 155
+        },
+        "206": {
+          "skin": 188,
+          "hair": 1635,
+          "cut_rejected": 115
+        },
+        "208": {
+          "skin": 148,
+          "hair": 1452,
+          "cut_rejected": 145
+        },
+        "211": {
+          "skin": 192,
+          "hair": 1582,
+          "cut_rejected": 135
+        },
+        "214": {
+          "skin": 421,
+          "hair": 1889,
+          "cut_rejected": 140
+        },
+        "217": {
+          "skin": 900,
+          "hair": 1911,
+          "cut_rejected": 159
+        },
+        "219": {
+          "skin": 884,
+          "hair": 1769,
+          "cut_rejected": 151
+        },
+        "220": {
+          "skin": 942,
+          "hair": 1896,
+          "cut_rejected": 160
+        },
+        "223": {
+          "skin": 866,
+          "hair": 1890,
+          "cut_rejected": 178
+        },
+        "226": {
+          "skin": 775,
+          "hair": 1934,
+          "cut_rejected": 173
+        },
+        "229": {
+          "skin": 745,
+          "hair": 1935,
+          "cut_rejected": 158
+        },
+        "232": {
+          "skin": 808,
+          "hair": 1857,
+          "cut_rejected": 152
+        },
+        "235": {
+          "skin": 982,
+          "hair": 1974,
+          "cut_rejected": 131
+        },
+        "238": {
+          "skin": 889,
+          "hair": 1909,
+          "cut_rejected": 88
+        },
+        "240": {
+          "skin": 810,
+          "hair": 1812,
+          "cut_rejected": 69
+        },
+        "241": {
+          "skin": 913,
+          "hair": 1913,
+          "cut_rejected": 56
+        },
+        "244": {
+          "skin": 884,
+          "hair": 1907,
+          "cut_rejected": 45
+        },
+        "247": {
+          "skin": 884,
+          "hair": 1937,
+          "cut_rejected": 21
+        },
+        "250": {
+          "skin": 982,
+          "hair": 1869,
+          "cut_rejected": 6
+        },
+        "253": {
+          "skin": 1006,
+          "hair": 1931,
+          "cut_rejected": 2
+        },
+        "256": {
+          "skin": 1011,
+          "hair": 1912,
+          "cut_rejected": 0
+        },
+        "259": {
+          "skin": 1006,
+          "hair": 1937,
+          "cut_rejected": 0
+        },
+        "262": {
+          "skin": 1004,
+          "hair": 1920,
+          "cut_rejected": 0
+        },
+        "264": {
+          "skin": 1010,
+          "hair": 1747,
+          "cut_rejected": 0
+        },
+        "265": {
+          "skin": 998,
+          "hair": 1935,
+          "cut_rejected": 0
+        },
+        "268": {
+          "skin": 912,
+          "hair": 1903,
+          "cut_rejected": 0
+        },
+        "270": {
+          "skin": 905,
+          "hair": 1417,
+          "cut_rejected": 0
+        },
+        "271": {
+          "skin": 859,
+          "hair": 1761,
+          "cut_rejected": 0
+        },
+        "274": {
+          "skin": 845,
+          "hair": 1625,
+          "cut_rejected": 0
+        },
+        "277": {
+          "skin": 911,
+          "hair": 1180,
+          "cut_rejected": 0
+        },
+        "280": {
+          "skin": 1015,
+          "hair": 1354,
+          "cut_rejected": 0
+        },
+        "283": {
+          "skin": 973,
+          "hair": 1129,
+          "cut_rejected": 0
+        },
+        "286": {
+          "skin": 1031,
+          "hair": 890,
+          "cut_rejected": 0
+        },
+        "289": {
+          "skin": 1086,
+          "hair": 1132,
+          "cut_rejected": 0
+        },
+        "292": {
+          "skin": 1032,
+          "hair": 1222,
+          "cut_rejected": 0
+        },
+        "295": {
+          "skin": 1048,
+          "hair": 1210,
+          "cut_rejected": 0
+        },
+        "298": {
+          "skin": 1035,
+          "hair": 1190,
+          "cut_rejected": 13
+        },
+        "301": {
+          "skin": 990,
+          "hair": 741,
+          "cut_rejected": 40
+        },
+        "303": {
+          "skin": 955,
+          "hair": 762,
+          "cut_rejected": 46
+        },
+        "304": {
+          "skin": 975,
+          "hair": 983,
+          "cut_rejected": 57
+        },
+        "307": {
+          "skin": 995,
+          "hair": 734,
+          "cut_rejected": 78
+        },
+        "310": {
+          "skin": 958,
+          "hair": 666,
+          "cut_rejected": 84
+        },
+        "313": {
+          "skin": 959,
+          "hair": 655,
+          "cut_rejected": 84
+        },
+        "316": {
+          "skin": 967,
+          "hair": 881,
+          "cut_rejected": 78
+        },
+        "319": {
+          "skin": 879,
+          "hair": 713,
+          "cut_rejected": 86
+        },
+        "322": {
+          "skin": 910,
+          "hair": 701,
+          "cut_rejected": 82
+        },
+        "325": {
+          "skin": 858,
+          "hair": 725,
+          "cut_rejected": 88
+        },
+        "328": {
+          "skin": 952,
+          "hair": 720,
+          "cut_rejected": 91
+        },
+        "331": {
+          "skin": 962,
+          "hair": 908,
+          "cut_rejected": 80
+        },
+        "334": {
+          "skin": 880,
+          "hair": 1350,
+          "cut_rejected": 86
+        },
+        "337": {
+          "skin": 784,
+          "hair": 1926,
+          "cut_rejected": 78
+        },
+        "340": {
+          "skin": 713,
+          "hair": 1849,
+          "cut_rejected": 74
+        },
+        "343": {
+          "skin": 700,
+          "hair": 1841,
+          "cut_rejected": 47
+        },
+        "346": {
+          "skin": 689,
+          "hair": 1843,
+          "cut_rejected": 14
+        },
+        "349": {
+          "skin": 698,
+          "hair": 1871,
+          "cut_rejected": 0
+        },
+        "352": {
+          "skin": 698,
+          "hair": 1856,
+          "cut_rejected": 0
+        },
+        "355": {
+          "skin": 696,
+          "hair": 1854,
+          "cut_rejected": 1
+        },
+        "358": {
+          "skin": 698,
+          "hair": 1853,
+          "cut_rejected": 0
+        },
+        "361": {
+          "skin": 698,
+          "hair": 1854,
+          "cut_rejected": 0
+        }
+      },
+      "median_px": 1.2426625235944817,
+      "max_px": 9.926093001083103,
+      "d_max_px": 63.82840790204071,
+      "seconds": 45.97732855996583
+    }
+  ],
+  "elapsed_seconds": 673.1782548620831,
+  "curvature": {
+    "p50": 0.0071200717989296225,
+    "p95": 0.030268220633411124,
+    "p99": 0.05973987188936222,
+    "max": 0.3813096558219595,
+    "passed": false,
+    "excluded_vertices": 1031,
+    "unit": "1/px",
+    "operator": "cotangent: sum per edge, then clamp",
+    "maximum_location": {
+      "vertex": 225,
+      "base_point_ict": [
+        -0.25654445192098635,
+        -6.121173641790874,
+        9.518011105641817
+      ],
+      "fitted_point_ict": [
+        -0.19518103208027293,
+        -6.714030014180497,
+        9.19730270382114
+      ],
+      "value": 0.3813096558219595,
+      "ear_excluded": false,
+      "boundary_excluded": false,
+      "visual_region": "턱끝 / 상향뷰에서 턱밑 중앙"
+    }
+  },
+  "displacement_stats_px": {
+    "mean": 16.80769927580159,
+    "p95": 34.137661899892336,
+    "max": 63.82840790204071
+  },
+  "key_skin_max_px": 15.691963942162975,
+  "camera_refinement_triggered": true,
+  "camera_refinement_performed": true,
+  "camera_refinement": {
+    "iterations": 100,
+    "history": [
+      {
+        "iteration": 10,
+        "gate_px": 15.0,
+        "pairs": 346354,
+        "counts": {
+          "1": 2571,
+          "3": 2585,
+          "4": 2567,
+          "7": 2605,
+          "10": 2557,
+          "13": 2558,
+          "16": 2538,
+          "19": 2673,
+          "22": 2891,
+          "25": 3040,
+          "28": 3032,
+          "31": 3059,
+          "34": 3040,
+          "37": 3030,
+          "40": 3043,
+          "42": 2921,
+          "43": 3013,
+          "46": 2798,
+          "49": 1832,
+          "52": 2561,
+          "55": 2726,
+          "58": 3102,
+          "61": 3114,
+          "64": 3106,
+          "67": 3092,
+          "70": 3086,
+          "73": 2893,
+          "76": 2674,
+          "79": 2675,
+          "82": 2575,
+          "85": 2504,
+          "88": 2199,
+          "91": 2272,
+          "94": 2254,
+          "97": 2265,
+          "100": 2426,
+          "103": 1440,
+          "106": 2674,
+          "109": 2528,
+          "112": 2294,
+          "115": 2270,
+          "118": 2267,
+          "121": 2204,
+          "124": 2611,
+          "127": 1785,
+          "130": 1752,
+          "133": 1848,
+          "136": 2631,
+          "139": 2581,
+          "142": 2569,
+          "145": 2576,
+          "148": 2571,
+          "151": 2598,
+          "154": 2366,
+          "157": 2457,
+          "160": 2632,
+          "163": 2863,
+          "166": 2991,
+          "169": 2907,
+          "172": 2834,
+          "175": 2828,
+          "178": 2877,
+          "181": 2874,
+          "184": 2859,
+          "187": 2865,
+          "190": 2853,
+          "192": 2765,
+          "193": 2972,
+          "196": 2914,
+          "199": 2455,
+          "202": 2444,
+          "205": 2467,
+          "206": 2263,
+          "208": 2394,
+          "211": 2354,
+          "214": 2786,
+          "217": 2896,
+          "219": 2760,
+          "220": 2919,
+          "223": 2931,
+          "226": 2942,
+          "229": 2955,
+          "232": 2977,
+          "235": 3020,
+          "238": 3028,
+          "240": 2955,
+          "241": 3113,
+          "244": 3067,
+          "247": 2970,
+          "250": 2975,
+          "253": 2982,
+          "256": 2987,
+          "259": 2993,
+          "262": 2985,
+          "264": 2986,
+          "265": 2990,
+          "268": 2812,
+          "270": 2974,
+          "271": 2840,
+          "274": 2825,
+          "277": 2895,
+          "280": 3022,
+          "283": 2948,
+          "286": 3022,
+          "289": 2560,
+          "292": 2537,
+          "295": 2504,
+          "298": 2481,
+          "301": 2561,
+          "303": 2502,
+          "304": 2413,
+          "307": 2318,
+          "310": 2227,
+          "313": 2067,
+          "316": 2713,
+          "319": 2005,
+          "322": 2041,
+          "325": 2065,
+          "328": 2112,
+          "331": 2980,
+          "334": 2621,
+          "337": 2815,
+          "340": 2776,
+          "343": 2669,
+          "346": 2651,
+          "349": 2605,
+          "352": 2568,
+          "355": 2563,
+          "358": 2569,
+          "361": 2566
+        },
+        "loss_sum": 5728841.777792901,
+        "seconds": 26.534233174053952
+      },
+      {
+        "iteration": 20,
+        "gate_px": 13.714285714285714,
+        "pairs": 342717,
+        "counts": {
+          "1": 2557,
+          "3": 2565,
+          "4": 2563,
+          "7": 2597,
+          "10": 2555,
+          "13": 2521,
+          "16": 2518,
+          "19": 2621,
+          "22": 2873,
+          "25": 3031,
+          "28": 3030,
+          "31": 3032,
+          "34": 3018,
+          "37": 3013,
+          "40": 3040,
+          "42": 2876,
+          "43": 3010,
+          "46": 2787,
+          "49": 1742,
+          "52": 2555,
+          "55": 2708,
+          "58": 3078,
+          "61": 3092,
+          "64": 3082,
+          "67": 3095,
+          "70": 3077,
+          "73": 2881,
+          "76": 2652,
+          "79": 2659,
+          "82": 2577,
+          "85": 2488,
+          "88": 2168,
+          "91": 2271,
+          "94": 2239,
+          "97": 2253,
+          "100": 2618,
+          "103": 1373,
+          "106": 2676,
+          "109": 2611,
+          "112": 2304,
+          "115": 2248,
+          "118": 2260,
+          "121": 2135,
+          "124": 2601,
+          "127": 1793,
+          "130": 1772,
+          "133": 1857,
+          "136": 2609,
+          "139": 2585,
+          "142": 2571,
+          "145": 2568,
+          "148": 2564,
+          "151": 2592,
+          "154": 2320,
+          "157": 2489,
+          "160": 2575,
+          "163": 2778,
+          "166": 2962,
+          "169": 2959,
+          "172": 2862,
+          "175": 2854,
+          "178": 2882,
+          "181": 2876,
+          "184": 2857,
+          "187": 2867,
+          "190": 2851,
+          "192": 2784,
+          "193": 2944,
+          "196": 2806,
+          "199": 2334,
+          "202": 2393,
+          "205": 2457,
+          "206": 2334,
+          "208": 2328,
+          "211": 2362,
+          "214": 2716,
+          "217": 2885,
+          "219": 2745,
+          "220": 2929,
+          "223": 2942,
+          "226": 2937,
+          "229": 2961,
+          "232": 2992,
+          "235": 2996,
+          "238": 3045,
+          "240": 2921,
+          "241": 3077,
+          "244": 3078,
+          "247": 2961,
+          "250": 2970,
+          "253": 2976,
+          "256": 2966,
+          "259": 2988,
+          "262": 2982,
+          "264": 2965,
+          "265": 2989,
+          "268": 2898,
+          "270": 2956,
+          "271": 2819,
+          "274": 2771,
+          "277": 2857,
+          "280": 2975,
+          "283": 2923,
+          "286": 2520,
+          "289": 2672,
+          "292": 2559,
+          "295": 2519,
+          "298": 2507,
+          "301": 2352,
+          "303": 2308,
+          "304": 2359,
+          "307": 2257,
+          "310": 2133,
+          "313": 1943,
+          "316": 2304,
+          "319": 1899,
+          "322": 1942,
+          "325": 1945,
+          "328": 1995,
+          "331": 2698,
+          "334": 2468,
+          "337": 2812,
+          "340": 2748,
+          "343": 2647,
+          "346": 2630,
+          "349": 2597,
+          "352": 2569,
+          "355": 2564,
+          "358": 2558,
+          "361": 2557
+        },
+        "loss_sum": 4759878.5668596765,
+        "seconds": 28.71566583099775
+      },
+      {
+        "iteration": 30,
+        "gate_px": 12.428571428571429,
+        "pairs": 338556,
+        "counts": {
+          "1": 2544,
+          "3": 2559,
+          "4": 2562,
+          "7": 2594,
+          "10": 2548,
+          "13": 2479,
+          "16": 2488,
+          "19": 2549,
+          "22": 2886,
+          "25": 3026,
+          "28": 3005,
+          "31": 3023,
+          "34": 3014,
+          "37": 3011,
+          "40": 3021,
+          "42": 2855,
+          "43": 2999,
+          "46": 2776,
+          "49": 1619,
+          "52": 2552,
+          "55": 2707,
+          "58": 3066,
+          "61": 3080,
+          "64": 3099,
+          "67": 3087,
+          "70": 3078,
+          "73": 2878,
+          "76": 2635,
+          "79": 2649,
+          "82": 2563,
+          "85": 2494,
+          "88": 2117,
+          "91": 2251,
+          "94": 2184,
+          "97": 2164,
+          "100": 2650,
+          "103": 1363,
+          "106": 2624,
+          "109": 2604,
+          "112": 2245,
+          "115": 2152,
+          "118": 2214,
+          "121": 2070,
+          "124": 2597,
+          "127": 1822,
+          "130": 1799,
+          "133": 1866,
+          "136": 2602,
+          "139": 2573,
+          "142": 2561,
+          "145": 2563,
+          "148": 2558,
+          "151": 2525,
+          "154": 2237,
+          "157": 2420,
+          "160": 2148,
+          "163": 2678,
+          "166": 2932,
+          "169": 2939,
+          "172": 2823,
+          "175": 2840,
+          "178": 2864,
+          "181": 2835,
+          "184": 2834,
+          "187": 2850,
+          "190": 2837,
+          "192": 2739,
+          "193": 2940,
+          "196": 2830,
+          "199": 2290,
+          "202": 2313,
+          "205": 2400,
+          "206": 2297,
+          "208": 2300,
+          "211": 2383,
+          "214": 2743,
+          "217": 2880,
+          "219": 2745,
+          "220": 2906,
+          "223": 2937,
+          "226": 2933,
+          "229": 2942,
+          "232": 2965,
+          "235": 2988,
+          "238": 3034,
+          "240": 2893,
+          "241": 3068,
+          "244": 3066,
+          "247": 2966,
+          "250": 2969,
+          "253": 2975,
+          "256": 2969,
+          "259": 2988,
+          "262": 2978,
+          "264": 2961,
+          "265": 2983,
+          "268": 2891,
+          "270": 2941,
+          "271": 2796,
+          "274": 2765,
+          "277": 2846,
+          "280": 2928,
+          "283": 2782,
+          "286": 2387,
+          "289": 2692,
+          "292": 2534,
+          "295": 2515,
+          "298": 2509,
+          "301": 2130,
+          "303": 2057,
+          "304": 2379,
+          "307": 2237,
+          "310": 2091,
+          "313": 1876,
+          "316": 2085,
+          "319": 1831,
+          "322": 1869,
+          "325": 1859,
+          "328": 1919,
+          "331": 2166,
+          "334": 2615,
+          "337": 2810,
+          "340": 2743,
+          "343": 2653,
+          "346": 2624,
+          "349": 2596,
+          "352": 2571,
+          "355": 2566,
+          "358": 2564,
+          "361": 2561
+        },
+        "loss_sum": 4018177.918441131,
+        "seconds": 26.39224404806737
+      },
+      {
+        "iteration": 40,
+        "gate_px": 11.142857142857142,
+        "pairs": 335150,
+        "counts": {
+          "1": 2549,
+          "3": 2559,
+          "4": 2560,
+          "7": 2590,
+          "10": 2547,
+          "13": 2468,
+          "16": 2475,
+          "19": 2521,
+          "22": 2862,
+          "25": 3018,
+          "28": 3014,
+          "31": 3015,
+          "34": 3028,
+          "37": 3017,
+          "40": 3031,
+          "42": 2842,
+          "43": 2982,
+          "46": 2761,
+          "49": 1513,
+          "52": 2546,
+          "55": 2701,
+          "58": 3071,
+          "61": 3083,
+          "64": 3078,
+          "67": 3080,
+          "70": 3072,
+          "73": 2861,
+          "76": 2641,
+          "79": 2638,
+          "82": 2556,
+          "85": 2463,
+          "88": 2053,
+          "91": 2206,
+          "94": 2191,
+          "97": 2114,
+          "100": 2642,
+          "103": 1348,
+          "106": 2588,
+          "109": 2597,
+          "112": 2188,
+          "115": 2059,
+          "118": 2140,
+          "121": 2036,
+          "124": 2591,
+          "127": 1847,
+          "130": 1822,
+          "133": 1885,
+          "136": 2608,
+          "139": 2570,
+          "142": 2562,
+          "145": 2560,
+          "148": 2558,
+          "151": 2476,
+          "154": 2125,
+          "157": 2298,
+          "160": 1828,
+          "163": 2512,
+          "166": 2925,
+          "169": 2923,
+          "172": 2813,
+          "175": 2823,
+          "178": 2837,
+          "181": 2823,
+          "184": 2825,
+          "187": 2829,
+          "190": 2816,
+          "192": 2669,
+          "193": 2937,
+          "196": 2772,
+          "199": 2251,
+          "202": 2245,
+          "205": 2328,
+          "206": 2236,
+          "208": 2172,
+          "211": 2375,
+          "214": 2734,
+          "217": 2887,
+          "219": 2758,
+          "220": 2926,
+          "223": 2921,
+          "226": 2933,
+          "229": 2947,
+          "232": 2966,
+          "235": 3010,
+          "238": 2963,
+          "240": 2807,
+          "241": 3051,
+          "244": 3051,
+          "247": 2968,
+          "250": 2966,
+          "253": 2973,
+          "256": 2977,
+          "259": 2986,
+          "262": 2978,
+          "264": 2966,
+          "265": 2979,
+          "268": 2884,
+          "270": 2939,
+          "271": 2805,
+          "274": 2754,
+          "277": 2829,
+          "280": 2875,
+          "283": 2710,
+          "286": 2335,
+          "289": 2602,
+          "292": 2480,
+          "295": 2474,
+          "298": 2483,
+          "301": 2032,
+          "303": 1935,
+          "304": 2363,
+          "307": 2205,
+          "310": 1913,
+          "313": 1806,
+          "316": 2011,
+          "319": 1820,
+          "322": 1842,
+          "325": 1842,
+          "328": 1872,
+          "331": 2071,
+          "334": 2749,
+          "337": 2804,
+          "340": 2748,
+          "343": 2613,
+          "346": 2628,
+          "349": 2592,
+          "352": 2564,
+          "355": 2561,
+          "358": 2559,
+          "361": 2558
+        },
+        "loss_sum": 3554655.7066627364,
+        "seconds": 22.759759768028744
+      },
+      {
+        "iteration": 50,
+        "gate_px": 9.857142857142858,
+        "pairs": 330198,
+        "counts": {
+          "1": 2553,
+          "3": 2568,
+          "4": 2556,
+          "7": 2585,
+          "10": 2543,
+          "13": 2468,
+          "16": 2461,
+          "19": 2509,
+          "22": 2848,
+          "25": 3018,
+          "28": 2998,
+          "31": 3001,
+          "34": 3033,
+          "37": 3012,
+          "40": 3002,
+          "42": 2812,
+          "43": 2962,
+          "46": 2760,
+          "49": 1428,
+          "52": 2539,
+          "55": 2704,
+          "58": 3068,
+          "61": 3065,
+          "64": 3074,
+          "67": 3071,
+          "70": 3068,
+          "73": 2815,
+          "76": 2645,
+          "79": 2631,
+          "82": 2557,
+          "85": 2443,
+          "88": 1989,
+          "91": 2158,
+          "94": 2122,
+          "97": 2074,
+          "100": 2632,
+          "103": 1332,
+          "106": 2569,
+          "109": 2593,
+          "112": 2126,
+          "115": 2023,
+          "118": 2085,
+          "121": 2001,
+          "124": 2584,
+          "127": 1854,
+          "130": 1836,
+          "133": 1898,
+          "136": 2613,
+          "139": 2570,
+          "142": 2557,
+          "145": 2558,
+          "148": 2486,
+          "151": 2284,
+          "154": 1842,
+          "157": 2229,
+          "160": 1440,
+          "163": 2380,
+          "166": 2798,
+          "169": 2859,
+          "172": 2793,
+          "175": 2812,
+          "178": 2820,
+          "181": 2820,
+          "184": 2809,
+          "187": 2801,
+          "190": 2801,
+          "192": 2663,
+          "193": 2918,
+          "196": 2628,
+          "199": 2221,
+          "202": 2171,
+          "205": 2204,
+          "206": 2085,
+          "208": 2055,
+          "211": 2357,
+          "214": 2657,
+          "217": 2874,
+          "219": 2757,
+          "220": 2912,
+          "223": 2915,
+          "226": 2930,
+          "229": 2921,
+          "232": 2949,
+          "235": 2989,
+          "238": 2854,
+          "240": 2678,
+          "241": 3009,
+          "244": 2958,
+          "247": 2961,
+          "250": 2966,
+          "253": 2972,
+          "256": 2976,
+          "259": 2983,
+          "262": 2977,
+          "264": 2970,
+          "265": 2979,
+          "268": 2880,
+          "270": 2935,
+          "271": 2769,
+          "274": 2743,
+          "277": 2742,
+          "280": 2650,
+          "283": 2635,
+          "286": 2297,
+          "289": 2476,
+          "292": 2433,
+          "295": 2432,
+          "298": 2442,
+          "301": 1960,
+          "303": 1889,
+          "304": 2325,
+          "307": 2124,
+          "310": 1823,
+          "313": 1763,
+          "316": 1971,
+          "319": 1779,
+          "322": 1784,
+          "325": 1788,
+          "328": 1818,
+          "331": 1997,
+          "334": 2780,
+          "337": 2798,
+          "340": 2739,
+          "343": 2544,
+          "346": 2625,
+          "349": 2588,
+          "352": 2559,
+          "355": 2557,
+          "358": 2562,
+          "361": 2557
+        },
+        "loss_sum": 3165342.7932308572,
+        "seconds": 21.856875919969752
+      },
+      {
+        "iteration": 60,
+        "gate_px": 8.571428571428571,
+        "pairs": 324439,
+        "counts": {
+          "1": 2553,
+          "3": 2564,
+          "4": 2553,
+          "7": 2578,
+          "10": 2542,
+          "13": 2460,
+          "16": 2428,
+          "19": 2492,
+          "22": 2849,
+          "25": 3000,
+          "28": 2998,
+          "31": 3021,
+          "34": 3014,
+          "37": 2995,
+          "40": 2982,
+          "42": 2796,
+          "43": 2921,
+          "46": 2749,
+          "49": 1258,
+          "52": 2541,
+          "55": 2699,
+          "58": 3052,
+          "61": 3063,
+          "64": 3068,
+          "67": 3071,
+          "70": 2945,
+          "73": 2718,
+          "76": 2647,
+          "79": 2626,
+          "82": 2557,
+          "85": 2392,
+          "88": 1924,
+          "91": 2037,
+          "94": 1993,
+          "97": 2052,
+          "100": 2623,
+          "103": 1295,
+          "106": 2539,
+          "109": 2591,
+          "112": 2073,
+          "115": 2021,
+          "118": 2021,
+          "121": 1952,
+          "124": 2582,
+          "127": 1849,
+          "130": 1827,
+          "133": 1926,
+          "136": 2609,
+          "139": 2565,
+          "142": 2554,
+          "145": 2561,
+          "148": 2438,
+          "151": 1787,
+          "154": 1756,
+          "157": 1975,
+          "160": 1222,
+          "163": 2254,
+          "166": 2755,
+          "169": 2794,
+          "172": 2782,
+          "175": 2804,
+          "178": 2798,
+          "181": 2792,
+          "184": 2789,
+          "187": 2782,
+          "190": 2784,
+          "192": 2649,
+          "193": 2849,
+          "196": 2396,
+          "199": 2192,
+          "202": 2035,
+          "205": 2016,
+          "206": 1977,
+          "208": 1988,
+          "211": 2293,
+          "214": 2561,
+          "217": 2853,
+          "219": 2719,
+          "220": 2885,
+          "223": 2903,
+          "226": 2916,
+          "229": 2930,
+          "232": 2915,
+          "235": 2973,
+          "238": 2824,
+          "240": 2661,
+          "241": 2872,
+          "244": 2915,
+          "247": 2958,
+          "250": 2952,
+          "253": 2965,
+          "256": 2950,
+          "259": 2962,
+          "262": 2954,
+          "264": 2968,
+          "265": 2974,
+          "268": 2877,
+          "270": 2840,
+          "271": 2706,
+          "274": 2730,
+          "277": 2548,
+          "280": 2573,
+          "283": 2578,
+          "286": 2194,
+          "289": 2413,
+          "292": 2396,
+          "295": 2395,
+          "298": 2408,
+          "301": 1895,
+          "303": 1867,
+          "304": 2285,
+          "307": 1959,
+          "310": 1744,
+          "313": 1725,
+          "316": 1957,
+          "319": 1726,
+          "322": 1730,
+          "325": 1723,
+          "328": 1771,
+          "331": 1973,
+          "334": 2726,
+          "337": 2787,
+          "340": 2731,
+          "343": 2516,
+          "346": 2624,
+          "349": 2581,
+          "352": 2556,
+          "355": 2554,
+          "358": 2554,
+          "361": 2554
+        },
+        "loss_sum": 2813237.476867319,
+        "seconds": 23.036138458992355
+      },
+      {
+        "iteration": 70,
+        "gate_px": 7.285714285714286,
+        "pairs": 315402,
+        "counts": {
+          "1": 2550,
+          "3": 2563,
+          "4": 2549,
+          "7": 2573,
+          "10": 2535,
+          "13": 2439,
+          "16": 2392,
+          "19": 2479,
+          "22": 2827,
+          "25": 2985,
+          "28": 2990,
+          "31": 2999,
+          "34": 2986,
+          "37": 3003,
+          "40": 2950,
+          "42": 2733,
+          "43": 2749,
+          "46": 2734,
+          "49": 1120,
+          "52": 2537,
+          "55": 2694,
+          "58": 3042,
+          "61": 3061,
+          "64": 3063,
+          "67": 2970,
+          "70": 2690,
+          "73": 2558,
+          "76": 2565,
+          "79": 2621,
+          "82": 2548,
+          "85": 2354,
+          "88": 1885,
+          "91": 1927,
+          "94": 1871,
+          "97": 2027,
+          "100": 2613,
+          "103": 1235,
+          "106": 2361,
+          "109": 2577,
+          "112": 2038,
+          "115": 1969,
+          "118": 1947,
+          "121": 1887,
+          "124": 2564,
+          "127": 1803,
+          "130": 1782,
+          "133": 1892,
+          "136": 2606,
+          "139": 2560,
+          "142": 2551,
+          "145": 2556,
+          "148": 2010,
+          "151": 1432,
+          "154": 1722,
+          "157": 1585,
+          "160": 1102,
+          "163": 2126,
+          "166": 2600,
+          "169": 2722,
+          "172": 2718,
+          "175": 2777,
+          "178": 2755,
+          "181": 2752,
+          "184": 2756,
+          "187": 2763,
+          "190": 2772,
+          "192": 2638,
+          "193": 2818,
+          "196": 2118,
+          "199": 2065,
+          "202": 1880,
+          "205": 1901,
+          "206": 1851,
+          "208": 1902,
+          "211": 2109,
+          "214": 2470,
+          "217": 2825,
+          "219": 2704,
+          "220": 2882,
+          "223": 2867,
+          "226": 2847,
+          "229": 2899,
+          "232": 2922,
+          "235": 2990,
+          "238": 2800,
+          "240": 2630,
+          "241": 2804,
+          "244": 2849,
+          "247": 2923,
+          "250": 2925,
+          "253": 2937,
+          "256": 2917,
+          "259": 2927,
+          "262": 2920,
+          "264": 2966,
+          "265": 2929,
+          "268": 2818,
+          "270": 2698,
+          "271": 2652,
+          "274": 2566,
+          "277": 2209,
+          "280": 2509,
+          "283": 2480,
+          "286": 2009,
+          "289": 2355,
+          "292": 2366,
+          "295": 2358,
+          "298": 2362,
+          "301": 1814,
+          "303": 1792,
+          "304": 2164,
+          "307": 1787,
+          "310": 1656,
+          "313": 1614,
+          "316": 1920,
+          "319": 1529,
+          "322": 1544,
+          "325": 1538,
+          "328": 1613,
+          "331": 1956,
+          "334": 2458,
+          "337": 2775,
+          "340": 2715,
+          "343": 2488,
+          "346": 2556,
+          "349": 2579,
+          "352": 2552,
+          "355": 2550,
+          "358": 2552,
+          "361": 2551
+        },
+        "loss_sum": 2356111.750393588,
+        "seconds": 24.105494373012334
+      },
+      {
+        "iteration": 80,
+        "gate_px": 6.0,
+        "pairs": 302078,
+        "counts": {
+          "1": 2546,
+          "3": 2557,
+          "4": 2547,
+          "7": 2569,
+          "10": 2518,
+          "13": 2419,
+          "16": 2220,
+          "19": 2425,
+          "22": 2777,
+          "25": 2962,
+          "28": 2963,
+          "31": 2964,
+          "34": 2939,
+          "37": 2971,
+          "40": 2887,
+          "42": 2516,
+          "43": 2540,
+          "46": 2684,
+          "49": 986,
+          "52": 2518,
+          "55": 2682,
+          "58": 3030,
+          "61": 2959,
+          "64": 2947,
+          "67": 2774,
+          "70": 2308,
+          "73": 2357,
+          "76": 2276,
+          "79": 2584,
+          "82": 2542,
+          "85": 2331,
+          "88": 1837,
+          "91": 1818,
+          "94": 1766,
+          "97": 1981,
+          "100": 2606,
+          "103": 1208,
+          "106": 2222,
+          "109": 2514,
+          "112": 2006,
+          "115": 1930,
+          "118": 1858,
+          "121": 1818,
+          "124": 2531,
+          "127": 1736,
+          "130": 1713,
+          "133": 1806,
+          "136": 2584,
+          "139": 2558,
+          "142": 2547,
+          "145": 2549,
+          "148": 1582,
+          "151": 1243,
+          "154": 1638,
+          "157": 1038,
+          "160": 1012,
+          "163": 2030,
+          "166": 2433,
+          "169": 2678,
+          "172": 2571,
+          "175": 2721,
+          "178": 2706,
+          "181": 2701,
+          "184": 2669,
+          "187": 2678,
+          "190": 2736,
+          "192": 2612,
+          "193": 2749,
+          "196": 1844,
+          "199": 1929,
+          "202": 1702,
+          "205": 1832,
+          "206": 1813,
+          "208": 1753,
+          "211": 1922,
+          "214": 2315,
+          "217": 2755,
+          "219": 2604,
+          "220": 2790,
+          "223": 2748,
+          "226": 2695,
+          "229": 2742,
+          "232": 2759,
+          "235": 2909,
+          "238": 2749,
+          "240": 2603,
+          "241": 2762,
+          "244": 2778,
+          "247": 2827,
+          "250": 2899,
+          "253": 2913,
+          "256": 2892,
+          "259": 2898,
+          "262": 2891,
+          "264": 2758,
+          "265": 2890,
+          "268": 2753,
+          "270": 2181,
+          "271": 2543,
+          "274": 2372,
+          "277": 2069,
+          "280": 2422,
+          "283": 2277,
+          "286": 1864,
+          "289": 2311,
+          "292": 2328,
+          "295": 2326,
+          "298": 2320,
+          "301": 1631,
+          "303": 1670,
+          "304": 1959,
+          "307": 1546,
+          "310": 1407,
+          "313": 1394,
+          "316": 1852,
+          "319": 1309,
+          "322": 1343,
+          "325": 1283,
+          "328": 1354,
+          "331": 1913,
+          "334": 2099,
+          "337": 2731,
+          "340": 2626,
+          "343": 2284,
+          "346": 2493,
+          "349": 2575,
+          "352": 2547,
+          "355": 2548,
+          "358": 2547,
+          "361": 2546
+        },
+        "loss_sum": 1810231.0021660621,
+        "seconds": 23.610468802042305
+      },
+      {
+        "iteration": 90,
+        "gate_px": 6.0,
+        "pairs": 300086,
+        "counts": {
+          "1": 2545,
+          "3": 2559,
+          "4": 2547,
+          "7": 2569,
+          "10": 2515,
+          "13": 2421,
+          "16": 2110,
+          "19": 2430,
+          "22": 2766,
+          "25": 2970,
+          "28": 2973,
+          "31": 2958,
+          "34": 2942,
+          "37": 2964,
+          "40": 2908,
+          "42": 2477,
+          "43": 2468,
+          "46": 2666,
+          "49": 973,
+          "52": 2519,
+          "55": 2681,
+          "58": 3033,
+          "61": 2954,
+          "64": 2884,
+          "67": 2701,
+          "70": 2271,
+          "73": 2303,
+          "76": 2161,
+          "79": 2567,
+          "82": 2541,
+          "85": 2320,
+          "88": 1806,
+          "91": 1829,
+          "94": 1789,
+          "97": 1983,
+          "100": 2606,
+          "103": 1209,
+          "106": 2213,
+          "109": 2512,
+          "112": 2012,
+          "115": 1914,
+          "118": 1850,
+          "121": 1796,
+          "124": 2529,
+          "127": 1739,
+          "130": 1716,
+          "133": 1818,
+          "136": 2585,
+          "139": 2559,
+          "142": 2548,
+          "145": 2547,
+          "148": 1485,
+          "151": 1195,
+          "154": 1615,
+          "157": 934,
+          "160": 1019,
+          "163": 2025,
+          "166": 2415,
+          "169": 2700,
+          "172": 2487,
+          "175": 2725,
+          "178": 2714,
+          "181": 2702,
+          "184": 2673,
+          "187": 2664,
+          "190": 2732,
+          "192": 2614,
+          "193": 2750,
+          "196": 1808,
+          "199": 1926,
+          "202": 1705,
+          "205": 1828,
+          "206": 1814,
+          "208": 1708,
+          "211": 1837,
+          "214": 2297,
+          "217": 2759,
+          "219": 2625,
+          "220": 2790,
+          "223": 2729,
+          "226": 2696,
+          "229": 2698,
+          "232": 2710,
+          "235": 2903,
+          "238": 2747,
+          "240": 2599,
+          "241": 2749,
+          "244": 2771,
+          "247": 2807,
+          "250": 2903,
+          "253": 2906,
+          "256": 2893,
+          "259": 2904,
+          "262": 2890,
+          "264": 2752,
+          "265": 2890,
+          "268": 2739,
+          "270": 2171,
+          "271": 2519,
+          "274": 2336,
+          "277": 2070,
+          "280": 2411,
+          "283": 2244,
+          "286": 1870,
+          "289": 2302,
+          "292": 2321,
+          "295": 2324,
+          "298": 2312,
+          "301": 1641,
+          "303": 1671,
+          "304": 1917,
+          "307": 1477,
+          "310": 1386,
+          "313": 1349,
+          "316": 1829,
+          "319": 1247,
+          "322": 1299,
+          "325": 1248,
+          "328": 1309,
+          "331": 1909,
+          "334": 2022,
+          "337": 2719,
+          "340": 2604,
+          "343": 2229,
+          "346": 2496,
+          "349": 2575,
+          "352": 2547,
+          "355": 2549,
+          "358": 2548,
+          "361": 2547
+        },
+        "loss_sum": 1688476.683298623,
+        "seconds": 23.465403176960535
+      },
+      {
+        "iteration": 100,
+        "gate_px": 6.0,
+        "pairs": 299060,
+        "counts": {
+          "1": 2544,
+          "3": 2556,
+          "4": 2546,
+          "7": 2569,
+          "10": 2513,
+          "13": 2421,
+          "16": 2060,
+          "19": 2416,
+          "22": 2768,
+          "25": 2970,
+          "28": 2978,
+          "31": 2963,
+          "34": 2944,
+          "37": 2986,
+          "40": 2910,
+          "42": 2442,
+          "43": 2375,
+          "46": 2649,
+          "49": 966,
+          "52": 2516,
+          "55": 2683,
+          "58": 3032,
+          "61": 2946,
+          "64": 2885,
+          "67": 2696,
+          "70": 2281,
+          "73": 2202,
+          "76": 2177,
+          "79": 2556,
+          "82": 2541,
+          "85": 2319,
+          "88": 1754,
+          "91": 1843,
+          "94": 1775,
+          "97": 1988,
+          "100": 2603,
+          "103": 1207,
+          "106": 2220,
+          "109": 2513,
+          "112": 2015,
+          "115": 1921,
+          "118": 1859,
+          "121": 1799,
+          "124": 2531,
+          "127": 1737,
+          "130": 1720,
+          "133": 1807,
+          "136": 2588,
+          "139": 2558,
+          "142": 2548,
+          "145": 2544,
+          "148": 1411,
+          "151": 1127,
+          "154": 1640,
+          "157": 890,
+          "160": 1019,
+          "163": 1985,
+          "166": 2402,
+          "169": 2697,
+          "172": 2487,
+          "175": 2714,
+          "178": 2698,
+          "181": 2705,
+          "184": 2680,
+          "187": 2675,
+          "190": 2710,
+          "192": 2612,
+          "193": 2746,
+          "196": 1856,
+          "199": 1920,
+          "202": 1719,
+          "205": 1832,
+          "206": 1809,
+          "208": 1679,
+          "211": 1744,
+          "214": 2299,
+          "217": 2759,
+          "219": 2625,
+          "220": 2784,
+          "223": 2732,
+          "226": 2661,
+          "229": 2662,
+          "232": 2678,
+          "235": 2903,
+          "238": 2756,
+          "240": 2602,
+          "241": 2753,
+          "244": 2772,
+          "247": 2797,
+          "250": 2901,
+          "253": 2903,
+          "256": 2887,
+          "259": 2900,
+          "262": 2892,
+          "264": 2729,
+          "265": 2890,
+          "268": 2744,
+          "270": 2243,
+          "271": 2521,
+          "274": 2326,
+          "277": 2074,
+          "280": 2420,
+          "283": 2219,
+          "286": 1862,
+          "289": 2299,
+          "292": 2315,
+          "295": 2323,
+          "298": 2311,
+          "301": 1644,
+          "303": 1664,
+          "304": 1897,
+          "307": 1452,
+          "310": 1361,
+          "313": 1320,
+          "316": 1831,
+          "319": 1218,
+          "322": 1271,
+          "325": 1230,
+          "328": 1290,
+          "331": 1902,
+          "334": 2029,
+          "337": 2713,
+          "340": 2561,
+          "343": 2185,
+          "346": 2488,
+          "349": 2576,
+          "352": 2547,
+          "355": 2547,
+          "358": 2548,
+          "361": 2547
+        },
+        "loss_sum": 1630596.9308626708,
+        "seconds": 25.141973669058643
+      }
+    ],
+    "elapsed_seconds": 249.81816166697536,
+    "rotation_max_abs_delta_deg": 0.0,
+    "rate": [
+      0.0015,
+      0.2,
+      0.2
+    ],
+    "shape_fixed": true,
+    "thickness_fixed": true
+  },
+  "rotation_max_abs_delta_deg": 0.0,
+  "visual_smoothness_passed": false,
+  "visual_review": {
+    "verdict": "전면 매끈함 미충족. 곡률 p99와 최대 모두 기준 초과.",
+    "direct_review": "담당 실행 세션이 형상, 턱선, P6, overlay3장, pitch 극단, 최대점 시트 8개를 열었다.",
+    "independent_review": "독립 검수자가 같은 시트 8개와 최종 JSON을 직접 열어 같은 판정.",
+    "shape": "B3-step2보다 이마·관자·볼에 넓은 굴곡과 능선, 턱끝의 날카로운 요철이 늘었다.",
+    "jaw": "턱선이 목표와 겹치는 구간이 많지만 172·184·192의 먼 쪽 볼 경계 등에 벌어짐이 남고, 9키 피부 최대 15.692px이다.",
+    "maximum_location": "vertex225는 턱끝이다. 정면·양측면에서 확인했고 상향뷰에서 턱밑 중앙에 투영된다. 귀·목 경계 제외 영역이 아니다.",
+    "cut_boundary": "199번 상향뷰에 턱밑면 패싯, 거친 하단 경계와 귀뒤 하단 잔여 실루엣이 남는다. 295번 하향뷰에도 턱끝과 머리 외곽 불일치가 보인다.",
+    "scope": "수치 측정은 130프레임 전체, 이미지 열람은 A33·P6·pitch 양 극단 정지 표본이다.",
+    "limitations": [
+      "P6 피부 bbox 크롭은 정수리·이마 상부 전체 외곽을 담지 않는다.",
+      "연속영상과 그 밖의 프레임 화면은 확인하지 않았다."
+    ],
+    "additional_fitting": false
+  }
+}

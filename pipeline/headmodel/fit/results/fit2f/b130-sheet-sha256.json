@@ -1,0 +1,51 @@
+{
+  "sheets": [
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-shape.png",
+      "sha256": "60049500c5723722889a7e54f9d6c3f21c42b1d5a2394ce74695f83808406012"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-jaw.png",
+      "sha256": "b0cc5c5e75f5cfaafe26c571c28f163b5878036a8a50aa7dae1cf978786d0985"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-profile.png",
+      "sha256": "0856a247cfea0142979b730795da8e6dc72d8dac532e330870619789b881495f"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-overlay-1.png",
+      "sha256": "5b12c9f442f17a6f9f131f90d2339c3e3435dc9fbda9c5f12295623f9a505549"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-overlay-2.png",
+      "sha256": "392c47741579beb6c956ae164bdad14020cd3dc4438a2460d6bd58037155a36c"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-overlay-3.png",
+      "sha256": "3c3e336cb9c535e03e8d20eadb848dcb57cbc5072cdf2a40500e0fbfbd09ed25"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-cut-boundary.png",
+      "sha256": "7a7c592f122831b6ae431cb502ac1712bb8b19c6780a5a382fcccac67d45b09c"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-maximum.png",
+      "sha256": "5ef4461afff81d5f0d856e74720c8cafed69ad7b1b2d18f8226a089b505743f3"
+    }
+  ],
+  "elapsed_seconds": 32.6162898830371,
+  "profile_frames": [
+    172,
+    184,
+    192,
+    240,
+    219,
+    232
+  ],
+  "pitch_extreme_frames": [
+    295,
+    199
+  ],
+  "fit_stage": "camera-refined",
+  "no_extra_fit": true
+}

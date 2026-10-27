@@ -228,6 +228,53 @@ def measure_surface(v,tri,poses,targets):
     return rows
 
 
+def fit_cameras_f(vertices,tri,targets,initial):
+    """100 camera-only Adam steps, ten 2f correspondence rounds, no shape fit.
+
+    Camera parameterization and rates are the existing 2d camera convention.
+    The ten correspondence rounds retain 2f's fixed 15-to-6px gate schedule.
+    """
+    started=time.perf_counter(); dtype=torch.float64
+    base=torch.tensor(np.asarray(initial),dtype=dtype)
+    rate=torch.tensor([.0015,.20,.20],dtype=dtype)
+    delta=torch.nn.Parameter(torch.zeros(len(targets),3,dtype=dtype))
+    optimizer=torch.optim.Adam([delta],lr=1.)
+    cut_edges=boundary_edges(tri); history=[]
+    for outer in range(10):
+        tick=time.perf_counter(); gate=15.-9.*min(outer,7)/7
+        poses=torch.cat([base[:,:3],base[:,3:]+delta*rate],1).detach().numpy()
+        rows=[]; counts={}
+        for index,(pose,target) in enumerate(zip(poses,targets)):
+            model=surface_contour(vertices,tri,pose,boundary_cache=cut_edges)
+            pairs=pair_rows(model,target,gate)
+            mi,ti=pairs['model_indices'],pairs['target_indices']
+            counts[str(target['frame'])]=len(mi)
+            if not len(mi): continue
+            anchor=(vertices[model['ids'][mi]]*model['weights'][mi,:,None]).sum(1)
+            rows.append((index,torch.tensor(anchor,dtype=dtype),
+                         torch.tensor(target['points'][ti],dtype=dtype),
+                         torch.tensor(target['normals'][ti],dtype=dtype),
+                         torch.tensor(np.where(target['labels'][ti]==0,10.,1.)/3.,dtype=dtype)))
+        if not rows: raise ValueError('No camera refinement correspondences')
+        for inner in range(10):
+            optimizer.zero_grad(set_to_none=True); total=0.
+            for index,anchor,wanted,normals,weight in rows:
+                pose=torch.cat([base[index,:3],base[index,3:]+delta[index]*rate])
+                residual=((project(anchor,pose)[:,:2]-wanted)*normals).sum(1)
+                loss=(weight*residual.square()).sum()
+                if not torch.isfinite(loss): raise FloatingPointError('2f camera refinement diverged')
+                loss.backward(); total+=float(loss.detach())
+            optimizer.step()
+        record={'iteration':(outer+1)*10,'gate_px':gate,'pairs':sum(counts.values()),
+                'counts':counts,'loss_sum':total,'seconds':time.perf_counter()-tick}
+        history.append(record); print('2F CAMERA',record,flush=True)
+    poses=torch.cat([base[:,:3],base[:,3:]+delta*rate],1).detach().numpy()
+    np.testing.assert_array_equal(poses[:,:3],np.asarray(initial)[:,:3])
+    return poses,{'iterations':100,'history':history,'elapsed_seconds':time.perf_counter()-started,
+                  'rotation_max_abs_delta_deg':0.,'rate':[.0015,.20,.20],
+                  'shape_fixed':True,'thickness_fixed':True}
+
+
 def remesh_surface(v,tri,sref):
     """Exactly the requested one remeshing pass; no topology/weight search."""
     tool='pymeshlab 2025.7'
