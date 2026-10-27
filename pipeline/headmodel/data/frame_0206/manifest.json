@@ -35,10 +35,12 @@
     "skin": {
       "file": "skin.png",
       "success": true,
-      "area_px": 127451,
+      "area_px": 108332,
       "prompt": "face skin",
+      "neck_subtracted": true,
       "postprocess": [
-        "union all returned instances",
+        "union all face skin instances",
+        "subtract neck raw when returned",
         "fill holes",
         "keep largest component"
       ]
@@ -312,7 +314,7 @@
   ],
   "endpoint": "https://fal.run/fal-ai/sam-3/image",
   "head_bbox_width_px": 424,
-  "mask_definition_revision": "a-stage-mask-revision-2",
+  "mask_definition_revision": "b-stage-mask-revision-1",
   "raw_masks": {
     "head": {
       "file": "raw/head.png",
@@ -416,5 +418,23 @@
       "instance_files": []
     }
   },
-  "neck_returned": true
+  "neck_returned": true,
+  "to720": [
+    [
+      1.0960072588276895,
+      -0.04420154409414249,
+      17.812321268966684
+    ],
+    [
+      0.04420154409414249,
+      1.0960072588276895,
+      52.25485365247147
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "to720_source": "normalization"
 }

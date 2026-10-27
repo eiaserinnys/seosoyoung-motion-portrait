@@ -35,10 +35,12 @@
     "skin": {
       "file": "skin.png",
       "success": true,
-      "area_px": 113265,
+      "area_px": 111269,
       "prompt": "face skin",
+      "neck_subtracted": true,
       "postprocess": [
-        "union all returned instances",
+        "union all face skin instances",
+        "subtract neck raw when returned",
         "fill holes",
         "keep largest component"
       ]
@@ -284,7 +286,7 @@
   "recovery_notes": [
     "두 번째 A 실행에서 head.png를 기록했지만, bbox 폭 계산 오류로 manifest 저장 전에 종료되어 재호출별 시각과 점수는 남지 않았습니다."
   ],
-  "mask_definition_revision": "a-stage-mask-revision-2",
+  "mask_definition_revision": "b-stage-mask-revision-1",
   "raw_masks": {
     "head": {
       "file": "raw/head.png",
@@ -390,5 +392,23 @@
       "success": true
     }
   },
-  "neck_returned": true
+  "neck_returned": true,
+  "to720": [
+    [
+      1.1313577778807054,
+      -0.0032283499260729797,
+      -12.585086311986572
+    ],
+    [
+      0.0032283499260729797,
+      1.1313577778807054,
+      -3.343212657892252
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "to720_source": "normalization"
 }

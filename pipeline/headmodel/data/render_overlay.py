@@ -45,10 +45,54 @@ def load_registered_frame(
     return rgb, False
 
 
+def select_pose_coverage_samples(
+    frame_rows: list[dict[str, object]],
+    count: int,
+) -> list[dict[str, object]]:
+    candidates = [row for row in frame_rows if row["role"] == "sample"]
+    if len(candidates) <= count:
+        return candidates
+    poses = np.asarray([row["pose"][:2] for row in candidates], dtype=np.float64)
+    minima = poses.min(axis=0)
+    spans = poses.max(axis=0) - minima
+    spans[spans == 0] = 1.0
+    points = (poses - minima) / spans
+
+    seeds = [
+        int(np.argmin(poses[:, 0])),
+        int(np.argmax(poses[:, 0])),
+        int(np.argmin(poses[:, 1])),
+        int(np.argmax(poses[:, 1])),
+    ]
+    chosen: list[int] = []
+    for index in seeds:
+        if index not in chosen:
+            chosen.append(index)
+    while len(chosen) < count:
+        remaining = [index for index in range(len(candidates)) if index not in chosen]
+        distances = {
+            index: min(float(np.sum((points[index] - points[used]) ** 2)) for used in chosen)
+            for index in remaining
+        }
+        next_index = max(
+            remaining,
+            key=lambda index: (
+                distances[index],
+                -int(candidates[index]["frame"]),
+            ),
+        )
+        chosen.append(next_index)
+    return sorted(
+        [candidates[index] for index in chosen],
+        key=lambda row: int(row["frame"]),
+    )
+
+
 def render_overlay_sheet(
     registration: dict[str, object],
     frame_rows: list[dict[str, object]],
     landmarks: dict[int, dict[str, object]] | None = None,
+    output_path: Path | None = None,
 ) -> Path:
     key_rows = {int(row["sourceFrame"]): row for row in registration["keys"]}
     available = [row for row in frame_rows if (DATA_DIR / f"frame_{int(row['frame']):04d}").is_dir()]
@@ -79,7 +123,7 @@ def render_overlay_sheet(
         cv2.putText(canvas, f"yaw {yaw:.1f}  pitch {pitch:.1f}", (8, 38), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (20, 20, 20), 1, cv2.LINE_AA)
         r, c = divmod(index, columns)
         sheet[r * CELL : (r + 1) * CELL, c * CELL : (c + 1) * CELL] = canvas
-    target = DATA_DIR / "sheets/masks-overlay.png"
+    target = output_path or DATA_DIR / "sheets/masks-overlay.png"
     target.parent.mkdir(parents=True, exist_ok=True)
     if not cv2.imwrite(str(target), sheet):
         raise RuntimeError(f"Could not write overlay sheet: {target}")

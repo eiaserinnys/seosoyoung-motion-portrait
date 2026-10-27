@@ -23,9 +23,8 @@ DATA_DIR = Path(__file__).resolve().parent
 FRAME_DIR = WORKSPACE_ROOT / ".local/artifacts/20261025-ponytail-seedance-reg/frames"
 WIDTH = 720
 HEIGHT = 720
-MASK_REVISION = "a-stage-mask-revision-2"
-PROMPTS = ("head", "hair bun", "ponytail", "face skin", "ear", "neck")
-REUSABLE_OLD_PROMPTS = {"head", "hair bun", "ponytail"}
+MASK_REVISION = "b-stage-mask-revision-1"
+PROMPTS = ("head", "hair bun", "ponytail", "neck", "face skin", "ear")
 
 sys.path.insert(0, str(REPO_ROOT / "pipeline"))
 from stage1_sam3_segment import SAM3_ENDPOINT, image_to_data_uri  # noqa: E402
@@ -92,11 +91,7 @@ def read_prompt_cache(
         or info.get("success") is False
     ):
         return None
-    if prompt not in REUSABLE_OLD_PROMPTS and (
-        not info
-        or info.get("mask_revision") != MASK_REVISION
-        or info.get("source_image_sha256") != source_sha256
-    ):
+    if not info or info.get("source_image_sha256") != source_sha256:
         return None
     raw_union = cv2.imread(str(raw_path), cv2.IMREAD_GRAYSCALE)
     if raw_union is None or raw_union.shape != (HEIGHT, WIDTH):
