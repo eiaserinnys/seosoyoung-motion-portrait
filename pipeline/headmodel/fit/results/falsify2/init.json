@@ -1,0 +1,115 @@
+{
+  "status": "awaiting_assignee_camera_check",
+  "frames": {
+    "3": [
+      -1.016282081604004,
+      1.2871850728988647,
+      0.0,
+      3.168121337890625,
+      345.4410400390625,
+      399.6852111816406
+    ],
+    "42": [
+      -36.829917907714844,
+      0.7006801962852478,
+      0.0,
+      3.168121337890625,
+      469.3450927734375,
+      397.5089416503906
+    ],
+    "264": [
+      23.506139755249023,
+      -20.148237228393555,
+      0.0,
+      3.168121337890625,
+      251.80393981933594,
+      316.8707580566406
+    ]
+  },
+  "camera_gauge": {
+    "base_scale": 23.762797916912646,
+    "gauge_shift_px": [
+      -4.458971088695472,
+      -11.814794051456076
+    ],
+    "neutral_facial_plane_datum": [
+      0.0,
+      3.0,
+      9.0
+    ],
+    "per_frame_gauge_correction_px": [
+      [
+        -0.0,
+        -0.0
+      ],
+      [
+        123.90404935564507,
+        -2.1762743087371557
+      ],
+      [
+        -93.63708473594954,
+        -82.8144530186656
+      ]
+    ],
+    "normalized_poses": [
+      [
+        -1.016282113547139,
+        1.287185042771068,
+        0.0,
+        -5.898059818321144e-17,
+        349.9,
+        411.50000000000006
+      ],
+      [
+        -36.82991693704355,
+        0.7006801983402771,
+        0.0,
+        -7.632783294297951e-17,
+        349.9,
+        411.5
+      ],
+      [
+        23.506140424439433,
+        -20.148236585590023,
+        0.0,
+        1.6902711869049014e-16,
+        349.9,
+        411.5
+      ]
+    ]
+  },
+  "input_hashes": {
+    "source/viewer/ponytail-seedance-registration.json": "bdb97e88ac4632112e3d7fbe15df817a553da74e039895c6c29aa9e879fd8eed",
+    "pipeline/headmodel/data/frame_0003/head.png": "30513fee19fa779f7a4ec1159668bf3642f578888974f530df0f57d36c12e761",
+    "pipeline/headmodel/data/frame_0003/raw/face skin.png": "ce586801dd1cd1e21459cb798bedbbeb10737749b70fc4d3c8f454c0a8b0f0ff",
+    "pipeline/headmodel/data/frame_0003/raw/neck.png": "d206a59120616ce6fa5a840aee42c9b39e36d9526b0f61eed77f39a220de78c6",
+    "pipeline/headmodel/data/frame_0003/ear-left.png": "4cbc2fdf50dbe78a2f62451997f7a6ed95416903c1263b8f6f7695dfeaed06ea",
+    "pipeline/headmodel/data/frame_0003/ear-right.png": "bc99ff9d8011159c784ae166bd4e76006184140141646c92a991a9efd601f9da",
+    "pipeline/headmodel/data/frame_0003/manifest.json": "ec2a22cbe46c01ea80d0e8dd3bd30785bbb8b85ca167a6859856096a6828b939",
+    "pipeline/headmodel/data/frame_0042/head.png": "2f2389819c4777b46ad2707267d26404c7a2dd67576f130827aac78bee78f641",
+    "pipeline/headmodel/data/frame_0042/raw/face skin.png": "5a71e707ca2db32bedada4da2a26c13629ccf8a586c3a7e1712c3f75ae3a2cf3",
+    "pipeline/headmodel/data/frame_0042/raw/neck.png": "af7e298b185202c92c70fd5acbca55c73a885a2f1e7c1ae3976b35283b9de6c9",
+    "pipeline/headmodel/data/frame_0042/ear-left.png": "1be843986ca622be9f46c04cdccca3256ddc7e6def7f98059c90f14980f0c785",
+    "pipeline/headmodel/data/frame_0042/ear-right.png": "8a2fafe4824aaf3d7e28a10dc0e71369e6641a0d97ab741bdd965dc569a74a2b",
+    "pipeline/headmodel/data/frame_0042/manifest.json": "371f6b666828d6cf17a82017fd7a2d12b6877a3484064d8699db48813d10ac73",
+    "pipeline/headmodel/data/frame_0264/head.png": "6e21e94b6d8cf2fb03b268c8c75de385d371c0fd1d5f1cd4f10ababce4f88c05",
+    "pipeline/headmodel/data/frame_0264/raw/face skin.png": "21333e70a31131d2c5c79b3ca751f6548533c7f684cbe5e4c722a008dd20f27b",
+    "pipeline/headmodel/data/frame_0264/raw/neck.png": "7c0d64cbfe13566f1ed56a4753e19579824999a5fcbbcfb3044799441a2f2aa9",
+    "pipeline/headmodel/data/frame_0264/ear-left.png": "5ed7b96674cd8489447a11efce5a4144237ea5b901b857c71ea82e50d3b83563",
+    "pipeline/headmodel/data/frame_0264/ear-right.png": "1be843986ca622be9f46c04cdccca3256ddc7e6def7f98059c90f14980f0c785",
+    "pipeline/headmodel/data/frame_0264/manifest.json": "0f1e311ae247afd51cd92a9f8e340460624f0af6819d779135bdd09c7f30adae"
+  },
+  "shape": "ICT neutral; beta=0, scale_xyz=[1,1,1]",
+  "optimization_iterations": 0,
+  "planned_fit": {
+    "rotation": "fixed to these registered yaw/pitch/roll values",
+    "free_camera": [
+      "logscale",
+      "tx",
+      "ty"
+    ],
+    "beta_abs_limit": 3.0,
+    "beta_L2_sum_weight": 0.1,
+    "shape_sheet": "same ten views; neck triangles excluded in both rows"
+  }
+}
