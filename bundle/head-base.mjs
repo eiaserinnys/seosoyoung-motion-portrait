@@ -15,6 +15,11 @@ export function configureHeadBase(metadata,buffer){
  for(let i=0;i<model.vertexCount;i++){
   model.reference[i*3]+=model.rest_translation[0];model.reference[i*3+1]+=model.rest_translation[1];
  }
+ model.earData=Object.fromEntries(Object.entries(model.ear_roots).map(([side,root])=>{
+  const center=ringCenter(model.reference,root.ring);
+  return [side,{...root,center,rest:root.ring.map(i=>[0,1,2].map(c=>model.reference[i*3+c]-center[c])),
+   delta:[root.anchor[0]-center[0],root.anchor[1]-center[1],0]}];
+ }));
  return model;
 }
 
@@ -137,10 +142,46 @@ export function attachedTransform(point,p){
  return {A:headSolveWorld(point,p),R};
 }
 
+function ringCenter(coords,ring){
+ const center=[0,0,0];for(const i of ring)for(let c=0;c<3;c++)center[c]+=coords[i*3+c];
+ return center.map(x=>x/ring.length);
+}
+
+function rootRotation(reference,current,center){
+ const h=Array.from({length:3},()=>[0,0,0]);
+ for(let i=0;i<reference.length;i++)for(let a=0;a<3;a++)for(let b=0;b<3;b++)h[a][b]+=reference[i][a]*(current[i][b]-center[b]);
+ const [[xx,xy,xz],[yx,yy,yz],[zx,zy,zz]]=h;
+ const n=[[xx+yy+zz,yz-zy,zx-xz,xy-yx],[yz-zy,xx-yy-zz,xy+yx,zx+xz],
+  [zx-xz,xy+yx,-xx+yy-zz,yz+zy],[xy-yx,zx+xz,yz+zy,-xx-yy+zz]];
+ const vectors=Array.from({length:4},(_,i)=>Array.from({length:4},(_,j)=>Number(i===j)));
+ for(let sweep=0;sweep<12;sweep++)for(let p=0;p<4;p++)for(let q=p+1;q<4;q++){
+  const value=n[p][q];if(Math.abs(value)<1e-12)continue;
+  const tau=(n[q][q]-n[p][p])/(2*value),t=(tau>=0?1:-1)/(Math.abs(tau)+Math.sqrt(1+tau*tau));
+  const c=1/Math.sqrt(1+t*t),s=t*c;n[p][p]-=t*value;n[q][q]+=t*value;n[p][q]=n[q][p]=0;
+  for(let i=0;i<4;i++){
+   if(i!==p&&i!==q){const a=n[i][p],b=n[i][q];n[i][p]=n[p][i]=c*a-s*b;n[i][q]=n[q][i]=s*a+c*b;}
+   const a=vectors[i][p],b=vectors[i][q];vectors[i][p]=c*a-s*b;vectors[i][q]=s*a+c*b;
+  }
+ }
+ let largest=0;for(let i=1;i<4;i++)if(n[i][i]>n[largest][largest])largest=i;
+ const [w,x,y,z]=vectors.map(row=>row[largest]);
+ return [[1-2*(y*y+z*z),2*(x*y-z*w),2*(x*z+y*w)],
+  [2*(x*y+z*w),1-2*(x*x+z*z),2*(y*z-x*w)],
+  [2*(x*z-y*w),2*(y*z+x*w),1-2*(x*x+y*y)]];
+}
+
+function earRootTransform(side,p){
+ return frameValue(p,'ear-root:'+side,()=>{
+  const root=model.earData[side],coords=headBaseVertices(p).surface,center=ringCenter(coords,root.ring);
+  const current=root.ring.map(i=>[coords[i*3],coords[i*3+1],coords[i*3+2]]);
+  return {center,R:rootRotation(root.rest,current,center),root};
+ });
+}
+
 export function headEarWorld(point,side,p){
- const anchor=side==='left'?[369,465]:[636,464.5],{A,R}=attachedTransform(anchor,p);
- const offset=[point[0]-anchor[0],point[1]-anchor[1],5];
- return A.map((x,i)=>x+R[i].reduce((sum,v,j)=>sum+v*offset[j],0));
+ const {center,R,root}=earRootTransform(side,p);
+ const offset=[root.delta[0]+point[0]-root.anchor[0],root.delta[1]+point[1]-root.anchor[1],5];
+ return center.map((x,i)=>x+R[i].reduce((sum,v,j)=>sum+v*offset[j],0));
 }
 
 export function headSolveWorld(point,p,relief=0){

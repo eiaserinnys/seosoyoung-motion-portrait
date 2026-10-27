@@ -68,12 +68,24 @@ test('N6: skin and head surface are continuous at both 45 degree boundaries',{ti
   for(const point of skin.positions){const x=headSolveWorld(point,a),y=headSolveWorld(point,b);assert(Math.hypot(x[0]-y[0],x[1]-y[1])<=.5,`skin ${sign}/${pitch}/${point}`);}
  }
 });
-test('ear rest attachment is identity and preserves every ear vertex',{timeout:30000},()=>{
+test('ear root preserves rest coordinates and matches the Kabsch fixture',{timeout:30000},()=>{
  for(const [side,anchor] of [['left',[369,465]],['right',[636,464.5]]]){
   const p=pose(),frame=headBase.attachedTransform(anchor,p);
   for(let i=0;i<3;i++)for(let j=0;j<3;j++)close(frame.R[i][j],Number(i===j),1e-9,`rest rotation ${side}`);
-  const mesh=rig.meshes.find(m=>m.id==='ear-'+side);
-  for(const point of mesh.positions){const q=headBase.headEarWorld(point,side,p);close(q[0],point[0],1e-6,`${side} x`);close(q[1],point[1],1e-6,`${side} y`);close(q[2],frame.A[2]+5,1e-6,`${side} z`);}
+  const mesh=rig.meshes.find(m=>m.id==='ear-'+side),root=metadata.ear_roots[side],ref=headBase.getHeadBase().reference;
+  const depth=root.ring.reduce((sum,i)=>sum+ref[i*3+2],0)/root.ring.length;
+  for(const point of mesh.positions){const q=headBase.headEarWorld(point,side,p);close(q[0],point[0],1e-6,`${side} x`);close(q[1],point[1],1e-6,`${side} y`);close(q[2],depth+5,1e-6,`${side} z`);}
+  for(const item of fixture.ear_roots){
+   const q=pose(item.yaw,item.pitch),expected=item.expected[side],origin=headBase.headEarWorld(anchor,side,q);
+   for(let i=0;i<3;i++)close(origin[i],expected.anchor[i],1e-6,`${side} key ${item.frame} anchor`);
+   for(let j=0;j<2;j++){const point=anchor.map((x,i)=>x+Number(i===j)),value=headBase.headEarWorld(point,side,q);
+    for(let i=0;i<3;i++)close(value[i]-origin[i],expected.R[i][j],1e-6,`${side} key ${item.frame} rotation`);
+   }
+  }
+  const point=mesh.positions[0],angle=17*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
+  const rolled=headBase.headEarWorld(point,side,pose(0,0,{ParamAngleZ:17})),x=point[0]-502,y=point[1]-568;
+  close(rolled[0],502+c*x-s*y,1e-6,`${side} roll x`);close(rolled[1],568+s*x+c*y,1e-6,`${side} roll y`);
+  close(rolled[2],depth+5,1e-6,`${side} roll z`);
  }
 });
 test('ear routing preserves the legacy path whenever the new surface is disabled',{timeout:30000},()=>{
@@ -84,14 +96,14 @@ test('ear routing preserves the legacy path whenever the new surface is disabled
   }
  }
 });
-test('neck skirt leaves exactly the final boundary loop open',{timeout:30000},()=>{
- const {rings,ring_length:count,added_vertices:added}=metadata.neck_skirt;
- assert.equal(rings.length,3);assert.equal(added,2*count);
+test('the smoothed neck retains the original single open boundary',{timeout:30000},()=>{
+ const ring=metadata.open_boundary,count=ring.length;
+ assert.equal(metadata.vertexCount,12257);assert.equal(metadata.triangleCount,24389);
  const edges=new Map(),triangles=headBase.getHeadBase().triangles;
  for(let i=0;i<triangles.length;i+=3)for(const [a,b] of [[triangles[i],triangles[i+1]],[triangles[i+1],triangles[i+2]],[triangles[i+2],triangles[i]]]){
   const key=[Math.min(a,b),Math.max(a,b)].join(',');edges.set(key,(edges.get(key)||0)+1);
  }
  const boundary=[...edges].filter(([,count])=>count===1).map(([key])=>key);
- const ring=rings[2],expected=new Set(ring.map((a,i)=>[Math.min(a,ring[(i+1)%count]),Math.max(a,ring[(i+1)%count])].join(',')));
+ const expected=new Set(ring.map((a,i)=>[Math.min(a,ring[(i+1)%count]),Math.max(a,ring[(i+1)%count])].join(',')));
  assert.equal(boundary.length,count);assert.deepEqual(new Set(boundary),expected);
 });

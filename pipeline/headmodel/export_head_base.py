@@ -35,6 +35,14 @@ def phi(theta, nodes, sigma):
     return weights / weights.sum()
 
 
+def root_rotation(reference, current):
+    reference = reference - reference.mean(axis=0)
+    current = current - current.mean(axis=0)
+    u, _, vh = np.linalg.svd(reference.T @ current)
+    signs = np.diag([1., 1., np.linalg.det(vh.T @ u.T)])
+    return vh.T @ signs @ u.T
+
+
 def flatten_ears(vertices, triangles, fields, ear):
     lap, mass = geometric_operator(vertices, triangles)
     unknown = ear.copy()
@@ -56,14 +64,14 @@ def vertex_normals(vertices, triangles):
     return normals / np.linalg.norm(normals, axis=1)[:, None]
 
 
-def neck_skirt(vertices, triangles, fields, edges, excluded, s_ref):
+def boundary_loops(edges):
     neighbors = {}
     for a, b in edges:
         a, b = int(a), int(b)
         neighbors.setdefault(a, []).append(b)
         neighbors.setdefault(b, []).append(a)
     if any(len(items) != 2 for items in neighbors.values()):
-        raise ValueError('STOP: open boundary is not a set of closed loops')
+        raise ValueError('STOP: boundary is not a set of closed loops')
     remaining, loops = set(neighbors), []
     while remaining:
         first = next(iter(remaining))
@@ -74,48 +82,38 @@ def neck_skirt(vertices, triangles, fields, edges, excluded, s_ref):
             adjacent = neighbors[current]
             previous, current = current, adjacent[0] if adjacent[0] != previous else adjacent[1]
         if current != first:
-            raise ValueError('STOP: open boundary does not form a closed loop')
+            raise ValueError('STOP: boundary does not form a closed loop')
         loops.append(loop)
-    ring = max(loops, key=len)
+    return loops
+
+
+def smooth_open_boundary(vertices, fields, edges):
+    loops = boundary_loops(edges)
+    ring = np.asarray(max(loops, key=len), dtype=int)
     if len(loops) > 1:
         print(json.dumps({'open_loops': list(map(len, loops)), 'selected': len(ring)}), flush=True)
-    directed = {}
-    for tri in triangles:
-        for a, b in zip(tri, np.roll(tri, -1)):
-            key = tuple(sorted((int(a), int(b))))
-            if key in directed:
-                directed[key] = None
-            else:
-                directed[key] = (int(a), int(b))
-    if directed[tuple(sorted(ring[:2]))] != tuple(ring[:2]):
-        ring = [ring[0]] + ring[:0:-1]
-    if any(directed[tuple(sorted((a, b)))] != (a, b) for a, b in zip(ring, ring[1:] + ring[:1])):
-        raise ValueError('STOP: open boundary winding is inconsistent')
-    ring = np.asarray(ring, dtype=int)
-    count, original = len(ring), len(vertices)
-    center = vertices[ring][:, [0, 2]].mean(axis=0)
-    rings = [ring]
-    values = vertices[ring].copy()
-    extras = []
-    for step in range(2):
-        values = values.copy()
-        values[:, [0, 2]] = center + (values[:, [0, 2]] - center) * .95
-        values[:, 1] -= 45 / s_ref
-        extras.append(values)
-        rings.append(np.arange(original + step * count, original + (step + 1) * count))
-    additions = []
-    for upper, lower in zip(rings, rings[1:]):
-        for i in range(count):
-            j = (i + 1) % count
-            additions.extend([[upper[j], upper[i], lower[i]], [upper[j], lower[i], lower[j]]])
-    vertices = np.concatenate([vertices, *extras])
-    fields = np.concatenate([fields, fields[:, ring, :], fields[:, ring, :]], axis=1)
-    triangles = np.concatenate([triangles, np.asarray(additions, dtype=triangles.dtype)])
-    excluded = np.r_[excluded, np.ones(2 * count, dtype=bool)]
-    excluded[ring] = True
-    stats = {'ring_length': count, 'added_vertices': 2 * count, 'added_triangles': len(additions),
-             'rings': [r.tolist() for r in rings], 'loop_lengths': list(map(len, loops))}
-    return vertices, triangles, fields, excluded, stats
+    vertices = vertices.copy()
+    fields = fields.copy()
+    for _ in range(10):
+        current = vertices[ring].copy()
+        vertices[ring] = .5 * current + .25 * (np.roll(current, 1, axis=0) + np.roll(current, -1, axis=0))
+        current = fields[:, ring, :].copy()
+        fields[:, ring, :] = .5 * current + .25 * (np.roll(current, 1, axis=1) + np.roll(current, -1, axis=1))
+    return vertices, fields, ring
+
+
+def ear_root_rings(vertices, triangles, ear):
+    rings = {}
+    for side, selected in [('left', ear & (vertices[:, 0] < 0)), ('right', ear & (vertices[:, 0] >= 0))]:
+        faces = triangles[np.all(selected[triangles], axis=1)]
+        edges = np.concatenate([faces[:, [0, 1]], faces[:, [1, 2]], faces[:, [2, 0]]])
+        edges = np.sort(edges, axis=1)
+        unique, counts = np.unique(edges, axis=0, return_counts=True)
+        loops = boundary_loops(unique[counts == 1])
+        if len(loops) != 1:
+            raise ValueError(f'STOP: {side} ear root has {len(loops)} boundary loops')
+        rings[side] = np.asarray(loops[0], dtype=int)
+    return rings
 
 
 def ear_sheet(vertices, triangles):
@@ -224,6 +222,9 @@ def main():
         open_edges, excluded = source['open_edges'].copy(), source['excluded'].copy()
     with np.load(FIT / 'results/fit2f/surface-a.npz') as source:
         ear = source['ear_excluded'].copy()
+        ear_vertices = source['vertices'].copy()
+        if not np.array_equal(source['triangles'], triangles):
+            raise ValueError('STOP: ear root and fitted surface use different topology')
     with np.load(FIT / 'results/fit2e/final-state.npz') as source:
         fields, nodes, sigma = source['D_k'].copy(), source['theta_k'].copy(), float(source['sigma'])
     poses = json.loads((FIT / 'results/fit2e/poses-refined.json').read_text())
@@ -233,11 +234,11 @@ def main():
     raw_solve = (ROOT / 'bundle/face-solve-data.mjs').read_text().split('=', 1)[1].strip().removesuffix(';')
     solve = json.loads(raw_solve)
 
+    root_rings = ear_root_rings(ear_vertices, triangles, ear)
     vertices, fields = flatten_ears(vertices, triangles, fields, ear)
-    vertices = vertices.astype('<f4')
-    fields = fields.astype('<f4')
-    sheet = ear_sheet(vertices, triangles)
-    vertices, triangles, fields, excluded, skirt = neck_skirt(vertices, triangles, fields, open_edges, excluded, s_ref)
+    sheet = ear_sheet(vertices.astype('<f4'), triangles)
+    vertices, fields, open_ring = smooth_open_boundary(vertices, fields, open_edges)
+    excluded[open_ring] = True
     vertices = vertices.astype('<f4')
     fields = fields.astype('<f4')
     normals = vertex_normals(vertices.astype(float), triangles).astype('<f4')
@@ -250,6 +251,12 @@ def main():
     _, owner = raster_silhouette(projected, triangles)
     projected[:, :2] += [152, 20]
     projected[:, 2] *= np.exp(front[3])
+    ear_roots = {}
+    for side, anchor in [('left', [369, 465]), ('right', [636, 464.5])]:
+        ring = root_rings[side]
+        center = projected[ring].mean(axis=0)
+        ear_roots[side] = {'ring': ring.tolist(), 'anchor': anchor, 'rest_center_ict': rest_vertices[ring].mean(axis=0).tolist(),
+                           'rest_center': center.tolist(), 'delta': [anchor[0] - center[0], anchor[1] - center[1], 0.]}
     binder = Attachments(projected, triangles, owner)
     groups = {'skin': skin['positions'], 'solve': solve['points'], 'eye': [[501.9, 431.5]],
               'ear': [[369, 465], [636, 464.5]]}
@@ -270,11 +277,10 @@ def main():
                             'min_weight': min(all_weights), 'max_weight': max(all_weights)}
     outside = outside_sheet(outside_points)
     print(json.dumps({'sheet': str(sheet), 'neck_sheet': str(neck), 'outside_sheet': str(outside),
-                      'skirt': {k: v for k, v in skirt.items() if k != 'rings'}, 'attachments': statistics}, ensure_ascii=False), flush=True)
+                      'open_ring': len(open_ring), 'ear_roots': {side: {'count': len(data['ring']), 'center': data['rest_center'], 'delta': data['delta']} for side, data in ear_roots.items()},
+                      'attachments': statistics}, ensure_ascii=False), flush=True)
     if statistics['solve']['outside'] > 111 or statistics['solve']['max_distance_px'] > 15:
         raise SystemExit('STOP: solve points exceed the approved outside count or distance')
-    if statistics['ear']['outside']:
-        raise SystemExit('STOP: ear attachment is outside the visible surface')
 
     colors = np.asarray(Image.open(ROOT / 'bundle/assets/texture_00.png').convert('RGB'))
     uv = np.asarray(skin['uvs']) * np.array([colors.shape[1], colors.shape[0]])
@@ -297,7 +303,8 @@ def main():
                 'logscale_front': front[3], 'rest_translation': [front[4]+152, front[5]+20],
                 'rest_eye': [501.9, 431.5], 'attachments': attachments,
                 'inset_px': 0, 'color': base_color, 'attachmentStatistics': statistics,
-                'neck_skirt': skirt, 'excluded_vertices': np.flatnonzero(excluded).tolist()}
+                'open_boundary': open_ring.tolist(), 'ear_roots': ear_roots,
+                'excluded_vertices': np.flatnonzero(excluded).tolist()}
     (ROOT / 'bundle/assets/head-base.json').write_text(json.dumps(metadata, ensure_ascii=False, separators=(',', ':')))
     indices = np.linspace(0, len(vertices)-1, 100, dtype=int)
     fixture_poses = [refined[frame] for frame, _, _ in KEYS]
@@ -306,6 +313,20 @@ def main():
     fixtures = {'indices': indices.tolist(), 'poses': fixture_poses,
                 'projections': [project_np(vertices[indices], pose).tolist() for pose in fixture_poses],
                 'fields': [np.einsum('k,kij->ij', phi(node, nodes, sigma), fields[:, indices, :].astype(float)).tolist() for node in nodes]}
+    fixtures['ear_roots'] = []
+    for frame, yaw, pitch in KEYS:
+        theta = refined[frame][:2]
+        posed_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta, nodes, sigma), fields.astype(float)) / s_ref
+        q = project_np(posed_vertices, [theta[0], theta[1], 0., front[3], front[4], front[5]])
+        q[:, :2] += [152, 20]
+        q[:, 2] *= np.exp(front[3])
+        expected = {}
+        for side, data in ear_roots.items():
+            ring = data['ring']
+            rotation = root_rotation(projected[ring], q[ring])
+            anchor = q[ring].mean(axis=0) + rotation @ (np.asarray(data['delta']) + [0., 0., 5.])
+            expected[side] = {'R': rotation.tolist(), 'anchor': anchor.tolist()}
+        fixtures['ear_roots'].append({'frame': frame, 'yaw': yaw, 'pitch': pitch, 'expected': expected})
     (FIT / 'results/fit2e/head-base-fixture.json').write_text(json.dumps(fixtures, ensure_ascii=False, separators=(',', ':')))
     print(json.dumps({'bin_bytes': asset_path.stat().st_size, 'json_bytes': (ROOT / 'bundle/assets/head-base.json').stat().st_size}, ensure_ascii=False), flush=True)
 
