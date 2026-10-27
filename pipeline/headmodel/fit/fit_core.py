@@ -132,11 +132,11 @@ def contour_dt(points, size=SIZE):
     return torch.from_numpy(cv2.distanceTransform(image, cv2.DIST_L2, cv2.DIST_MASK_PRECISE))
 
 
-def load_targets():
+def load_targets(frames=FRAMES, pose_affine=None):
     registration = read_json(ROOT/'source/viewer/ponytail-seedance-registration.json')
     keys = {int(k['sourceFrame']): k for k in registration['keys']}
     targets = []
-    for frame in FRAMES:
+    for frame in frames:
         directory = ROOT / f'pipeline/headmodel/data/frame_{frame:04d}'
         manifest = read_json(directory/'manifest.json')
         def mask(name):
@@ -157,7 +157,8 @@ def load_targets():
                   'ears': ears, 'ear_points': {k: torch.tensor(boundary(m, 128)) for k,m in ears.items()},
                   'ear_dt': {k: contour_dt(boundary(m)) for k,m in ears.items()},
                   'raw_pose': registration['video'][frame-1]['pose'],
-                  'affine': keys[frame]['normalization'], 'key': keys[frame]}
+                  'affine': (keys[frame]['normalization'] if pose_affine is None
+                             else pose_affine(manifest['to720'])), 'key': keys.get(frame)}
         target['normalized_pose'] = normalize_pose(target['raw_pose'], target['affine'])
         targets.append(target)
     return targets
