@@ -1,0 +1,142 @@
+{
+  "status": "stopped_before_B3_synthetic_test_30s_limit",
+  "date": "2026-10-28",
+  "A": {
+    "passed": true,
+    "scale_xyz": [
+      1.1242845058441162,
+      1.0283762216567993,
+      1.0862475633621216
+    ],
+    "beta_at_limit": 1,
+    "thickness_px": 6.993907451629639,
+    "sample_center_checks": [
+      {
+        "frame": 1,
+        "target_center": [
+          358,
+          323.5
+        ],
+        "model_center": [
+          363,
+          323
+        ],
+        "center_error_px": 5.024937810560445
+      },
+      {
+        "frame": 61,
+        "target_center": [
+          356.5,
+          316.5
+        ],
+        "model_center": [
+          355.5,
+          317.5
+        ],
+        "center_error_px": 1.4142135623730951
+      },
+      {
+        "frame": 121,
+        "target_center": [
+          360,
+          312.5
+        ],
+        "model_center": [
+          363.5,
+          305
+        ],
+        "center_error_px": 8.276472678623424
+      },
+      {
+        "frame": 181,
+        "target_center": [
+          390,
+          303.5
+        ],
+        "model_center": [
+          377,
+          302.5
+        ],
+        "center_error_px": 13.038404810405298
+      },
+      {
+        "frame": 241,
+        "target_center": [
+          374,
+          321
+        ],
+        "model_center": [
+          369,
+          324.5
+        ],
+        "center_error_px": 6.103277807866851
+      },
+      {
+        "frame": 301,
+        "target_center": [
+          306.5,
+          348
+        ],
+        "model_center": [
+          303.5,
+          354.5
+        ],
+        "center_error_px": 7.158910531638177
+      }
+    ],
+    "global_seconds": 2051.059915528982,
+    "camera_seconds": 1648.1887034560787,
+    "computation_elapsed_seconds": 3750.9647631819826
+  },
+  "validation": {
+    "new_unique_tests": 7,
+    "new_passed": 6,
+    "synthetic_status": "timed_out; final five-iteration recovery accuracy unverified",
+    "legacy_fit_core_passed": 7,
+    "independent_static_review": "A and B implementation passed; measurement test linked to actual report path",
+    "synthetic_first_process_timeout_s": 30,
+    "synthetic_recheck_body_seconds": 30.138,
+    "synthetic_recheck_icp_completed": 2,
+    "synthetic_recheck_icp_seconds": [
+      8.428100332967006,
+      10.389851092011668
+    ],
+    "profile_model_contours_frame3_seconds": 0.8644010280258954
+  },
+  "heavy_runner_calls": {
+    "init": 1,
+    "A": 1,
+    "synthetic_tests": 2,
+    "profile": 1,
+    "total": 5,
+    "A_reexecutions": 0,
+    "B3": 0,
+    "B130": 0
+  },
+  "B_final_spec": {
+    "lambda": 300,
+    "mu": 0.01,
+    "spacing_px": 1,
+    "maximum_icp": 25,
+    "convergence_median_change_px": 0.05,
+    "stable_changes": 2,
+    "final_five_gate_px": 5,
+    "lambda_correction": false
+  },
+  "B_test_first_output": "heavy verification: running in slot 2/3\ntest_synthetic_bump (test_fit2d_linear.LinearContracts.test_synthetic_bump) ... ",
+  "B_test_recheck_output": "heavy verification: running in slot 2/3\ntest_synthetic_bump (test_fit2d_linear.LinearContracts.test_synthetic_bump) ... B ICP {'iteration': 1, 'gate_px': 40.0, 'pairs': 16507, 'pairs_by_frame': {'3': {'head': 3077, 'face': 1852}, '42': {'head': 2978, 'face': 2539}, '264': {'head': 3212, 'face': 2849}}, 'residual_median_px': 0.12758537151901084, 'residual_max_px': 1.880697232283426, 'displacement_max_px': 10.072872591861536, 'seconds': 8.428100332967006, 'elapsed_seconds': 8.811112340074033, 'stable_changes': 0}\nB ICP {'iteration': 2, 'gate_px': 31.25, 'pairs': 16599, 'pairs_by_frame': {'3': {'head': 3081, 'face': 1905}, '42': {'head': 2986, 'face': 2556}, '264': {'head': 3222, 'face': 2849}}, 'residual_median_px': 0.18154444479605397, 'residual_max_px': 3.1745585393607825, 'displacement_max_px': 11.215103266639067, 'seconds': 10.389851092011668, 'elapsed_seconds': 19.201077662059106, 'stable_changes': 0}\nERROR\n\n======================================================================\nERROR: test_synthetic_bump (test_fit2d_linear.LinearContracts.test_synthetic_bump)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/test_fit2d_linear.py\", line 79, in test_synthetic_bump\n    result,trace=solve_icp(v,tri,masks,faces,poses,targets,sref,0.,300.,iterations=5)\n                 ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 299, in solve_icp\n    rows,counts=correspondence_rows(base+d,tri,masks,faces,pxposes,targets,thickness,gate,interface)\n                ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 255, in correspondence_rows\n    contours=model_contours(vertices,tri,masks,faces,pose,interface)\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 215, in model_contours\n    head,head_owner=raster(faces['head'])\n                    ~~~~~~^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit2d_core.py\", line 211, in raster\n    _,owner=rasterize(q,tri[ids],cull_backfaces=True)\n            ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/fit_core.py\", line 191, in rasterize\n    det = np.where(valid, det, 1.)\n  File \"/home/eias/.local/lib/python3.13/site-packages/numpy/_core/multiarray.py\", line 406, in where\n    @array_function_from_c_func_and_dispatcher(_multiarray_umath.where)\n    \n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/test_fit2d_linear.py\", line 22, in timeout\n    raise TimeoutError('Individual fit2d test exceeded 30 seconds')\nTimeoutError: Individual fit2d test exceeded 30 seconds\n\n----------------------------------------------------------------------\nRan 1 test in 30.138s\n\nFAILED (errors=1)\n",
+  "sheets": {
+    "sheets/fit2d-init.png": "67603da4e210450b65c22163123c9c6e018816f7ae2d7933c91740655235f551",
+    "sheets/fit2d-shape-a.png": "a6cf0091fd9d41fb97c39c801353351788f10fb4871cbb041e211b3dc034bee1"
+  },
+  "not_performed": [
+    "B3 actual fit",
+    "B130",
+    "lambda search",
+    "angular correction fields",
+    "PR",
+    "merge",
+    "deployment",
+    "runtime/rig/data modifications beyond requested input merge"
+  ]
+}
