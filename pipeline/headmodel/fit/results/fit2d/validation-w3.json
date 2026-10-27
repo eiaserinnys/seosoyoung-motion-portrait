@@ -1,0 +1,400 @@
+{
+  "status": "completed_authorized_one_reexecution_shape_condition_failed",
+  "source_commit": "d289804cac7b3b2169d316ecfe5da7cde6a99445",
+  "authorized_change": "all correspondence weights times sample_spacing/reference_spacing",
+  "sample_spacing": 1,
+  "reference_spacing": 3,
+  "data_weight_multiplier": 0.3333333333333333,
+  "lambda": 300,
+  "mu": 0.01,
+  "unchanged_A_fields": true,
+  "same_initial_pair_count": true,
+  "start": "saved A state; zero displacement",
+  "original_results_and_sheets_preserved": true,
+  "fit_executions_this_variant": 1,
+  "heavy_runner_calls_this_turn": 1,
+  "cumulative_heavy_runner_calls": 9,
+  "elapsed_seconds": 72.70763358299155,
+  "icp_iterations": 12,
+  "converged": true,
+  "final_five_gates": [
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "displacement_stats_px": {
+    "max": 28.4763744244227,
+    "mean": 8.975120472958173,
+    "p95": 19.509516857672782
+  },
+  "previous_displacement_stats_px": {
+    "max": 68.01165820977462,
+    "mean": 14.561325597780295,
+    "p95": 41.05626846041462
+  },
+  "face_target_to_model_9keys": [
+    {
+      "frame": 3,
+      "median_px": 0.6531741638260427,
+      "max_px": 3.8199662906192584,
+      "worst": [
+        {
+          "xy": [
+            354,
+            597
+          ],
+          "distance_px": 3.8199662906192584
+        },
+        {
+          "xy": [
+            349,
+            597
+          ],
+          "distance_px": 3.799772769312389
+        },
+        {
+          "xy": [
+            353,
+            597
+          ],
+          "distance_px": 3.787792392760418
+        }
+      ]
+    },
+    {
+      "frame": 42,
+      "median_px": 0.5489092102285489,
+      "max_px": 3.3073535855507656,
+      "worst": [
+        {
+          "xy": [
+            331,
+            584
+          ],
+          "distance_px": 3.3073535855507656
+        },
+        {
+          "xy": [
+            358,
+            581
+          ],
+          "distance_px": 2.950794547006344
+        },
+        {
+          "xy": [
+            327,
+            582
+          ],
+          "distance_px": 2.8047907017703997
+        }
+      ]
+    },
+    {
+      "frame": 192,
+      "median_px": 5.043554414115448,
+      "max_px": 19.10628455377206,
+      "worst": [
+        {
+          "xy": [
+            489,
+            537
+          ],
+          "distance_px": 19.10628455377206
+        },
+        {
+          "xy": [
+            486,
+            538
+          ],
+          "distance_px": 19.096810638886236
+        },
+        {
+          "xy": [
+            490,
+            537
+          ],
+          "distance_px": 18.89760097863835
+        }
+      ]
+    },
+    {
+      "frame": 206,
+      "median_px": 6.13908195277941,
+      "max_px": 15.942781478380702,
+      "worst": [
+        {
+          "xy": [
+            414,
+            576
+          ],
+          "distance_px": 15.942781478380702
+        },
+        {
+          "xy": [
+            414,
+            575
+          ],
+          "distance_px": 14.960308432552354
+        },
+        {
+          "xy": [
+            414,
+            574
+          ],
+          "distance_px": 13.980321009433057
+        }
+      ]
+    },
+    {
+      "frame": 219,
+      "median_px": 5.4312435628001685,
+      "max_px": 19.93639471885391,
+      "worst": [
+        {
+          "xy": [
+            258,
+            549
+          ],
+          "distance_px": 19.93639471885391
+        },
+        {
+          "xy": [
+            234,
+            548
+          ],
+          "distance_px": 19.766651398893462
+        },
+        {
+          "xy": [
+            236,
+            547
+          ],
+          "distance_px": 19.596315137364705
+        }
+      ]
+    },
+    {
+      "frame": 240,
+      "median_px": 2.3481307584882716,
+      "max_px": 15.954793976707707,
+      "worst": [
+        {
+          "xy": [
+            202,
+            525
+          ],
+          "distance_px": 15.954793976707707
+        },
+        {
+          "xy": [
+            203,
+            526
+          ],
+          "distance_px": 15.527176003037077
+        },
+        {
+          "xy": [
+            204,
+            527
+          ],
+          "distance_px": 15.219426349879036
+        }
+      ]
+    },
+    {
+      "frame": 264,
+      "median_px": 0.5384590450423024,
+      "max_px": 5.6861672785753505,
+      "worst": [
+        {
+          "xy": [
+            309,
+            569
+          ],
+          "distance_px": 5.6861672785753505
+        },
+        {
+          "xy": [
+            311,
+            570
+          ],
+          "distance_px": 5.511424179291216
+        },
+        {
+          "xy": [
+            310,
+            570
+          ],
+          "distance_px": 5.17011197303189
+        }
+      ]
+    },
+    {
+      "frame": 270,
+      "median_px": 3.606260266369148,
+      "max_px": 8.285263075533386,
+      "worst": [
+        {
+          "xy": [
+            177,
+            439
+          ],
+          "distance_px": 8.285263075533386
+        },
+        {
+          "xy": [
+            177,
+            438
+          ],
+          "distance_px": 7.945177644192709
+        },
+        {
+          "xy": [
+            178,
+            440
+          ],
+          "distance_px": 7.421183580973788
+        }
+      ]
+    },
+    {
+      "frame": 303,
+      "median_px": 1.7739609154717932,
+      "max_px": 8.384764909577463,
+      "worst": [
+        {
+          "xy": [
+            422,
+            555
+          ],
+          "distance_px": 8.384764909577463
+        },
+        {
+          "xy": [
+            420,
+            556
+          ],
+          "distance_px": 8.350336741557795
+        },
+        {
+          "xy": [
+            449,
+            537
+          ],
+          "distance_px": 8.217109860587872
+        }
+      ]
+    }
+  ],
+  "fitted_head_ears": [
+    {
+      "frame": 3,
+      "head": {
+        "median_px": 1.9425352145075245,
+        "mean_px": 3.2420606621488037,
+        "max_px": 11.704447935121985,
+        "model_count": 1641,
+        "target_count": 1380
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 4.028375820447034,
+          "mean_px": 9.37770477218825,
+          "max_px": 59.52898802104879,
+          "model_count": 450,
+          "target_count": 227,
+          "visible_iou": 0.564050115060087,
+          "isolated_iou": 0.650153217568948
+        },
+        "ear-right": {
+          "median_px": 2.733272760353753,
+          "mean_px": 7.825645605043209,
+          "max_px": 54.52407255883346,
+          "model_count": 473,
+          "target_count": 231,
+          "visible_iou": 0.6735882501899215,
+          "isolated_iou": 0.729040404040404
+        }
+      },
+      "head_iou": 0.973244857187961
+    },
+    {
+      "frame": 42,
+      "head": {
+        "median_px": 1.693295365423939,
+        "mean_px": 3.27683310835495,
+        "max_px": 14.187261216763636,
+        "model_count": 1593,
+        "target_count": 1353
+      },
+      "ears": {
+        "ear-right": {
+          "median_px": 18.914168990519208,
+          "mean_px": 27.94796340864302,
+          "max_px": 86.74955956914822,
+          "model_count": 695,
+          "target_count": 239,
+          "visible_iou": 0.2625446995039797,
+          "isolated_iou": 0.2625446995039797
+        }
+      },
+      "head_iou": 0.9701404530820665
+    },
+    {
+      "frame": 264,
+      "head": {
+        "median_px": 2.055275966884108,
+        "mean_px": 3.4984726138496756,
+        "max_px": 13.442371316445112,
+        "model_count": 1738,
+        "target_count": 1450
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 18.676500258722506,
+          "mean_px": 23.465783690919828,
+          "max_px": 79.82809439075889,
+          "model_count": 575,
+          "target_count": 250,
+          "visible_iou": 0.2943158511573396,
+          "isolated_iou": 0.30899039860343325
+        }
+      },
+      "head_iou": 0.972177348770912
+    }
+  ],
+  "shape_review": {
+    "direct": "failed_smooth_surface_condition",
+    "independent": "same verdict; implementation passed",
+    "observations": [
+      "Local irregularity and rough bands remain at temple/ear-front, ear/cheek joins and chin.",
+      "Neck-cut boundary jaggedness excluded from the shape verdict."
+    ],
+    "ear_red_remaining": [
+      "frame 3 both ears",
+      "frame 42 right ear",
+      "frame 264 left ear"
+    ]
+  },
+  "verification": {
+    "targeted_test": "test_unconstrained_neck_is_finite extended to exact normalized normal-equation LHS/RHS for head/face/left/right ear rows",
+    "test_count": 1,
+    "passed": 1,
+    "test_seconds": 3.133,
+    "red_first": true,
+    "fixture_pose_shape_correction": 1,
+    "full_suite_run": false,
+    "synthetic_legacy_reexecuted": false
+  },
+  "not_performed": [
+    "additional B3 reexecution",
+    "B130",
+    "other weight/lambda search",
+    "PR",
+    "merge",
+    "deployment",
+    "runtime/rig/data modification"
+  ]
+}

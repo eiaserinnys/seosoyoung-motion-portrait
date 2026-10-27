@@ -1,0 +1,1103 @@
+{
+  "frames": [
+    {
+      "frame": 3,
+      "head": {
+        "median_px": 1.9425352145075245,
+        "mean_px": 3.2420606621488037,
+        "max_px": 11.704447935121985,
+        "model_count": 1641,
+        "target_count": 1380
+      },
+      "face": {
+        "median_px": 0.9545051303245026,
+        "mean_px": 30.05587837098764,
+        "max_px": 260.7456829276152,
+        "model_count": 988,
+        "target_count": 310,
+        "worst_target_points": [
+          {
+            "xy": [
+              354.0,
+              597.0
+            ],
+            "distance_px": 3.8199662906192584
+          },
+          {
+            "xy": [
+              349.0,
+              597.0
+            ],
+            "distance_px": 3.799772769312389
+          },
+          {
+            "xy": [
+              353.0,
+              597.0
+            ],
+            "distance_px": 3.787792392760418
+          },
+          {
+            "xy": [
+              348.0,
+              597.0
+            ],
+            "distance_px": 3.7703044769326786
+          },
+          {
+            "xy": [
+              352.0,
+              597.0
+            ],
+            "distance_px": 3.7556279929219167
+          },
+          {
+            "xy": [
+              350.0,
+              597.0
+            ],
+            "distance_px": 3.734712533693703
+          },
+          {
+            "xy": [
+              351.0,
+              597.0
+            ],
+            "distance_px": 3.723454751962146
+          },
+          {
+            "xy": [
+              357.0,
+              596.0
+            ],
+            "distance_px": 3.4588110199188704
+          },
+          {
+            "xy": [
+              358.0,
+              596.0
+            ],
+            "distance_px": 3.2087859498057476
+          },
+          {
+            "xy": [
+              212.0,
+              493.0
+            ],
+            "distance_px": 3.157362715867336
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.17889635650065455,
+          "p95_px": 0.38808068517776523,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 4.028375820447034,
+          "mean_px": 9.37770477218825,
+          "max_px": 59.52898802104879,
+          "model_count": 450,
+          "target_count": 227,
+          "visible_iou": 0.564050115060087,
+          "isolated_iou": 0.650153217568948
+        },
+        "ear-right": {
+          "median_px": 2.733272760353753,
+          "mean_px": 7.825645605043209,
+          "max_px": 54.52407255883346,
+          "model_count": 473,
+          "target_count": 231,
+          "visible_iou": 0.6735882501899215,
+          "isolated_iou": 0.729040404040404
+        }
+      },
+      "head_iou": 0.973244857187961,
+      "nose_record_only": {
+        "score": 0.9588761925697327,
+        "detected_xy": [
+          355.16253662109375,
+          482.47698974609375
+        ],
+        "projected_xy": [
+          345.89318460590493,
+          411.79891907669423
+        ],
+        "error_px": 71.28331193435191
+      }
+    },
+    {
+      "frame": 42,
+      "head": {
+        "median_px": 1.693295365423939,
+        "mean_px": 3.27683310835495,
+        "max_px": 14.187261216763636,
+        "model_count": 1593,
+        "target_count": 1353
+      },
+      "face": {
+        "median_px": 0.6952712232110816,
+        "mean_px": 14.257604725303962,
+        "max_px": 198.47011828670477,
+        "model_count": 1284,
+        "target_count": 432,
+        "worst_target_points": [
+          {
+            "xy": [
+              331.0,
+              584.0
+            ],
+            "distance_px": 3.3073535855507656
+          },
+          {
+            "xy": [
+              358.0,
+              581.0
+            ],
+            "distance_px": 2.950794547006344
+          },
+          {
+            "xy": [
+              327.0,
+              582.0
+            ],
+            "distance_px": 2.8047907017703997
+          },
+          {
+            "xy": [
+              329.0,
+              583.0
+            ],
+            "distance_px": 2.8000449465098702
+          },
+          {
+            "xy": [
+              332.0,
+              584.0
+            ],
+            "distance_px": 2.601690621918007
+          },
+          {
+            "xy": [
+              362.0,
+              580.0
+            ],
+            "distance_px": 2.593698052435534
+          },
+          {
+            "xy": [
+              356.0,
+              582.0
+            ],
+            "distance_px": 2.565705947368913
+          },
+          {
+            "xy": [
+              355.0,
+              582.0
+            ],
+            "distance_px": 2.5539275275616804
+          },
+          {
+            "xy": [
+              328.0,
+              582.0
+            ],
+            "distance_px": 2.5376662956260434
+          },
+          {
+            "xy": [
+              330.0,
+              583.0
+            ],
+            "distance_px": 2.5342327850332493
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.17889635650065455,
+          "p95_px": 0.38808068517776523,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-right": {
+          "median_px": 18.914168990519208,
+          "mean_px": 27.94796340864302,
+          "max_px": 86.74955956914822,
+          "model_count": 695,
+          "target_count": 239,
+          "visible_iou": 0.2625446995039797,
+          "isolated_iou": 0.2625446995039797
+        }
+      },
+      "head_iou": 0.9701404530820665,
+      "nose_record_only": {
+        "score": 1.0351308584213257,
+        "detected_xy": [
+          297.88800048828125,
+          477.32354736328125
+        ],
+        "projected_xy": [
+          294.5897534190043,
+          416.4940629470301
+        ],
+        "error_px": 60.918836233770385
+      }
+    },
+    {
+      "frame": 192,
+      "head": {
+        "median_px": 3.7204872733802725,
+        "mean_px": 5.562017446954925,
+        "max_px": 25.812378479348517,
+        "model_count": 1569,
+        "target_count": 1369
+      },
+      "face": {
+        "median_px": 7.170854590063418,
+        "mean_px": 24.095866903257118,
+        "max_px": 210.97920843406047,
+        "model_count": 1248,
+        "target_count": 445,
+        "worst_target_points": [
+          {
+            "xy": [
+              489.0,
+              537.0
+            ],
+            "distance_px": 19.10628455377206
+          },
+          {
+            "xy": [
+              486.0,
+              538.0
+            ],
+            "distance_px": 19.096810638886236
+          },
+          {
+            "xy": [
+              490.0,
+              537.0
+            ],
+            "distance_px": 18.89760097863835
+          },
+          {
+            "xy": [
+              482.0,
+              540.0
+            ],
+            "distance_px": 18.807352340238673
+          },
+          {
+            "xy": [
+              483.0,
+              540.0
+            ],
+            "distance_px": 18.76624498207863
+          },
+          {
+            "xy": [
+              491.0,
+              537.0
+            ],
+            "distance_px": 18.74002497452865
+          },
+          {
+            "xy": [
+              487.0,
+              538.0
+            ],
+            "distance_px": 18.72851809075141
+          },
+          {
+            "xy": [
+              492.0,
+              537.0
+            ],
+            "distance_px": 18.634853080828996
+          },
+          {
+            "xy": [
+              485.0,
+              539.0
+            ],
+            "distance_px": 18.613561462049574
+          },
+          {
+            "xy": [
+              493.0,
+              537.0
+            ],
+            "distance_px": 18.58297507511126
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.19404034258888261,
+          "p95_px": 0.38808068517776523,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-right": {
+          "median_px": 19.651766019566253,
+          "mean_px": 26.92917648383753,
+          "max_px": 75.9768062872192,
+          "model_count": 739,
+          "target_count": 253,
+          "visible_iou": 0.19765669651362164,
+          "isolated_iou": 0.19765669651362164
+        }
+      },
+      "head_iou": 0.9475708298828076,
+      "nose_record_only": {
+        "score": 0.7120548486709595,
+        "detected_xy": [
+          275.7388916015625,
+          439.16131591796875
+        ],
+        "projected_xy": [
+          308.5662530772653,
+          367.49059772602016
+        ],
+        "error_px": 78.83100600402209
+      }
+    },
+    {
+      "frame": 206,
+      "head": {
+        "median_px": 4.068107003076452,
+        "mean_px": 5.3024195122332065,
+        "max_px": 31.33968446288757,
+        "model_count": 1599,
+        "target_count": 1299
+      },
+      "face": {
+        "median_px": 44.10486638881477,
+        "mean_px": 136.7311844555034,
+        "max_px": 409.4205292220607,
+        "model_count": 1364,
+        "target_count": 148,
+        "worst_target_points": [
+          {
+            "xy": [
+              414.0,
+              576.0
+            ],
+            "distance_px": 15.942781478380702
+          },
+          {
+            "xy": [
+              414.0,
+              575.0
+            ],
+            "distance_px": 14.960308432552354
+          },
+          {
+            "xy": [
+              414.0,
+              574.0
+            ],
+            "distance_px": 13.980321009433057
+          },
+          {
+            "xy": [
+              414.0,
+              573.0
+            ],
+            "distance_px": 13.003381200922075
+          },
+          {
+            "xy": [
+              414.0,
+              572.0
+            ],
+            "distance_px": 12.030231493458134
+          },
+          {
+            "xy": [
+              414.0,
+              571.0
+            ],
+            "distance_px": 11.061872215673537
+          },
+          {
+            "xy": [
+              414.0,
+              570.0
+            ],
+            "distance_px": 10.099681383369896
+          },
+          {
+            "xy": [
+              413.0,
+              569.0
+            ],
+            "distance_px": 9.11884066674817
+          },
+          {
+            "xy": [
+              405.0,
+              569.0
+            ],
+            "distance_px": 8.941639062698048
+          },
+          {
+            "xy": [
+              401.0,
+              569.0
+            ],
+            "distance_px": 8.871072100341745
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.19404034258888261,
+          "p95_px": 0.5366344779986068,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 6.786416359830138,
+          "mean_px": 14.382635943049396,
+          "max_px": 70.72932740455794,
+          "model_count": 472,
+          "target_count": 203,
+          "visible_iou": 0.5445688225538972,
+          "isolated_iou": 0.5584334852880232
+        },
+        "ear-right": {
+          "median_px": 9.68745631166876,
+          "mean_px": 17.519711336638686,
+          "max_px": 77.73975349148388,
+          "model_count": 458,
+          "target_count": 207,
+          "visible_iou": 0.5058823529411764,
+          "isolated_iou": 0.5056203164029975
+        }
+      },
+      "head_iou": 0.9520660602195294,
+      "nose_record_only": {
+        "score": 0.9385610818862915,
+        "detected_xy": [
+          348.30975341796875,
+          436.29144287109375
+        ],
+        "projected_xy": [
+          359.4256662048732,
+          362.37280520745753
+        ],
+        "error_px": 74.74977264938005
+      }
+    },
+    {
+      "frame": 219,
+      "head": {
+        "median_px": 4.687335727021112,
+        "mean_px": 7.245657708253798,
+        "max_px": 30.58676266678011,
+        "model_count": 1512,
+        "target_count": 1289
+      },
+      "face": {
+        "median_px": 6.924673330760271,
+        "mean_px": 17.420204239281823,
+        "max_px": 219.52779786276972,
+        "model_count": 1179,
+        "target_count": 499,
+        "worst_target_points": [
+          {
+            "xy": [
+              258.0,
+              549.0
+            ],
+            "distance_px": 19.93639471885391
+          },
+          {
+            "xy": [
+              234.0,
+              548.0
+            ],
+            "distance_px": 19.766651398893462
+          },
+          {
+            "xy": [
+              236.0,
+              547.0
+            ],
+            "distance_px": 19.596315137364705
+          },
+          {
+            "xy": [
+              233.0,
+              549.0
+            ],
+            "distance_px": 19.550429968398557
+          },
+          {
+            "xy": [
+              232.0,
+              550.0
+            ],
+            "distance_px": 19.434971478577886
+          },
+          {
+            "xy": [
+              257.0,
+              549.0
+            ],
+            "distance_px": 19.42349208106355
+          },
+          {
+            "xy": [
+              235.0,
+              548.0
+            ],
+            "distance_px": 19.22275660218348
+          },
+          {
+            "xy": [
+              259.0,
+              550.0
+            ],
+            "distance_px": 19.114433593983577
+          },
+          {
+            "xy": [
+              256.0,
+              549.0
+            ],
+            "distance_px": 18.827590944189506
+          },
+          {
+            "xy": [
+              231.0,
+              551.0
+            ],
+            "distance_px": 18.733009511317356
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.19404034258888261,
+          "p95_px": 0.42426838454921606,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 9.332226080037264,
+          "mean_px": 16.367912675923517,
+          "max_px": 60.504692573381945,
+          "model_count": 653,
+          "target_count": 254,
+          "visible_iou": 0.4704336399474376,
+          "isolated_iou": 0.47069645203679367
+        }
+      },
+      "head_iou": 0.9323027718550106,
+      "nose_record_only": {
+        "score": 0.7072960734367371,
+        "detected_xy": [
+          408.5202331542969,
+          446.4757385253906
+        ],
+        "projected_xy": [
+          394.1536601976039,
+          390.6436834995747
+        ],
+        "error_px": 57.650817747242044
+      }
+    },
+    {
+      "frame": 240,
+      "head": {
+        "median_px": 4.366783083481877,
+        "mean_px": 5.038804256640098,
+        "max_px": 20.872713312812312,
+        "model_count": 1629,
+        "target_count": 1364
+      },
+      "face": {
+        "median_px": 2.830487226507453,
+        "mean_px": 20.50525941865838,
+        "max_px": 210.50435738459984,
+        "model_count": 1341,
+        "target_count": 407,
+        "worst_target_points": [
+          {
+            "xy": [
+              202.0,
+              525.0
+            ],
+            "distance_px": 15.954793976707707
+          },
+          {
+            "xy": [
+              203.0,
+              526.0
+            ],
+            "distance_px": 15.527176003037077
+          },
+          {
+            "xy": [
+              204.0,
+              527.0
+            ],
+            "distance_px": 15.219426349879036
+          },
+          {
+            "xy": [
+              205.0,
+              528.0
+            ],
+            "distance_px": 14.575228194297283
+          },
+          {
+            "xy": [
+              206.0,
+              529.0
+            ],
+            "distance_px": 13.26805154315593
+          },
+          {
+            "xy": [
+              207.0,
+              530.0
+            ],
+            "distance_px": 11.981626599430095
+          },
+          {
+            "xy": [
+              208.0,
+              530.0
+            ],
+            "distance_px": 11.692879507638555
+          },
+          {
+            "xy": [
+              209.0,
+              531.0
+            ],
+            "distance_px": 10.499600725574375
+          },
+          {
+            "xy": [
+              210.0,
+              531.0
+            ],
+            "distance_px": 10.363670711117022
+          },
+          {
+            "xy": [
+              221.0,
+              537.0
+            ],
+            "distance_px": 10.321126429478685
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.17889635650065455,
+          "p95_px": 0.38808068517776523,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 20.46994696991117,
+          "mean_px": 23.968884216326806,
+          "max_px": 67.66771500543298,
+          "model_count": 629,
+          "target_count": 252,
+          "visible_iou": 0.26565402688230794,
+          "isolated_iou": 0.2659818599060212
+        }
+      },
+      "head_iou": 0.9566080786585262,
+      "nose_record_only": {
+        "score": 1.012474536895752,
+        "detected_xy": [
+          406.2193603515625,
+          476.0804443359375
+        ],
+        "projected_xy": [
+          399.9420902164454,
+          415.624103537016
+        ],
+        "error_px": 60.78135621343579
+      }
+    },
+    {
+      "frame": 264,
+      "head": {
+        "median_px": 2.055275966884108,
+        "mean_px": 3.4984726138496756,
+        "max_px": 13.442371316445112,
+        "model_count": 1738,
+        "target_count": 1450
+      },
+      "face": {
+        "median_px": 0.7713190288744288,
+        "mean_px": 16.881154255033586,
+        "max_px": 209.77815802170355,
+        "model_count": 1400,
+        "target_count": 453,
+        "worst_target_points": [
+          {
+            "xy": [
+              309.0,
+              569.0
+            ],
+            "distance_px": 5.6861672785753505
+          },
+          {
+            "xy": [
+              311.0,
+              570.0
+            ],
+            "distance_px": 5.511424179291216
+          },
+          {
+            "xy": [
+              310.0,
+              570.0
+            ],
+            "distance_px": 5.17011197303189
+          },
+          {
+            "xy": [
+              308.0,
+              569.0
+            ],
+            "distance_px": 4.998693321544389
+          },
+          {
+            "xy": [
+              306.0,
+              568.0
+            ],
+            "distance_px": 4.9723559475194765
+          },
+          {
+            "xy": [
+              312.0,
+              571.0
+            ],
+            "distance_px": 4.922506701388927
+          },
+          {
+            "xy": [
+              314.0,
+              572.0
+            ],
+            "distance_px": 4.484033539697512
+          },
+          {
+            "xy": [
+              305.0,
+              568.0
+            ],
+            "distance_px": 4.433574527001828
+          },
+          {
+            "xy": [
+              307.0,
+              569.0
+            ],
+            "distance_px": 4.420020073070171
+          },
+          {
+            "xy": [
+              313.0,
+              572.0
+            ],
+            "distance_px": 4.3641071158894285
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.17889635650065455,
+          "p95_px": 0.38808068517776523,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 18.676500258722506,
+          "mean_px": 23.465783690919828,
+          "max_px": 79.82809439075889,
+          "model_count": 575,
+          "target_count": 250,
+          "visible_iou": 0.2943158511573396,
+          "isolated_iou": 0.30899039860343325
+        }
+      },
+      "head_iou": 0.972177348770912,
+      "nose_record_only": {
+        "score": 1.0205520391464233,
+        "detected_xy": [
+          378.40985107421875,
+          497.6951904296875
+        ],
+        "projected_xy": [
+          383.56664934569955,
+          442.8109710124985
+        ],
+        "error_px": 55.12594769658743
+      }
+    },
+    {
+      "frame": 270,
+      "head": {
+        "median_px": 3.297105443776933,
+        "mean_px": 4.560711610248054,
+        "max_px": 13.914215229744888,
+        "model_count": 1786,
+        "target_count": 1520
+      },
+      "face": {
+        "median_px": 4.376881002925267,
+        "mean_px": 33.801347051393805,
+        "max_px": 279.68705647769366,
+        "model_count": 1461,
+        "target_count": 404,
+        "worst_target_points": [
+          {
+            "xy": [
+              177.0,
+              439.0
+            ],
+            "distance_px": 8.285263075533386
+          },
+          {
+            "xy": [
+              177.0,
+              438.0
+            ],
+            "distance_px": 7.945177644192709
+          },
+          {
+            "xy": [
+              178.0,
+              440.0
+            ],
+            "distance_px": 7.421183580973788
+          },
+          {
+            "xy": [
+              179.0,
+              442.0
+            ],
+            "distance_px": 6.920367673557325
+          },
+          {
+            "xy": [
+              368.0,
+              567.0
+            ],
+            "distance_px": 6.663124596570845
+          },
+          {
+            "xy": [
+              179.0,
+              441.0
+            ],
+            "distance_px": 6.610961623148181
+          },
+          {
+            "xy": [
+              181.0,
+              446.0
+            ],
+            "distance_px": 6.456170883699386
+          },
+          {
+            "xy": [
+              364.0,
+              569.0
+            ],
+            "distance_px": 6.383137309624681
+          },
+          {
+            "xy": [
+              180.0,
+              443.0
+            ],
+            "distance_px": 6.322687556442014
+          },
+          {
+            "xy": [
+              363.0,
+              570.0
+            ],
+            "distance_px": 6.201096427624748
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.17889635650065455,
+          "p95_px": 0.38808068517776523,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-left": {
+          "median_px": 12.82777292737633,
+          "mean_px": 19.436089784588074,
+          "max_px": 72.41839133585768,
+          "model_count": 512,
+          "target_count": 247,
+          "visible_iou": 0.3260497814934448,
+          "isolated_iou": 0.34398699891657636
+        },
+        "ear-right": {
+          "median_px": 27.488032874636797,
+          "mean_px": 26.263023623901347,
+          "max_px": 48.01064012584404,
+          "model_count": 297,
+          "target_count": 179,
+          "visible_iou": 0.0,
+          "isolated_iou": 0.0
+        }
+      },
+      "head_iou": 0.9644492462828625,
+      "nose_record_only": {
+        "score": 0.9647815823554993,
+        "detected_xy": [
+          364.3218994140625,
+          498.707275390625
+        ],
+        "projected_xy": [
+          378.21197903754194,
+          452.2651807877354
+        ],
+        "error_px": 48.47476109327766
+      }
+    },
+    {
+      "frame": 303,
+      "head": {
+        "median_px": 7.931228281300891,
+        "mean_px": 8.321219843436776,
+        "max_px": 22.969454089634485,
+        "model_count": 1665,
+        "target_count": 1373
+      },
+      "face": {
+        "median_px": 2.5446410816228906,
+        "mean_px": 12.155618868105723,
+        "max_px": 184.52540553282014,
+        "model_count": 1350,
+        "target_count": 450,
+        "worst_target_points": [
+          {
+            "xy": [
+              422.0,
+              555.0
+            ],
+            "distance_px": 8.384764909577463
+          },
+          {
+            "xy": [
+              420.0,
+              556.0
+            ],
+            "distance_px": 8.350336741557795
+          },
+          {
+            "xy": [
+              449.0,
+              537.0
+            ],
+            "distance_px": 8.217109860587872
+          },
+          {
+            "xy": [
+              446.0,
+              539.0
+            ],
+            "distance_px": 8.188238749401775
+          },
+          {
+            "xy": [
+              418.0,
+              557.0
+            ],
+            "distance_px": 8.167546702681436
+          },
+          {
+            "xy": [
+              424.0,
+              554.0
+            ],
+            "distance_px": 8.137400164021283
+          },
+          {
+            "xy": [
+              445.0,
+              540.0
+            ],
+            "distance_px": 8.117138196934944
+          },
+          {
+            "xy": [
+              448.0,
+              538.0
+            ],
+            "distance_px": 8.04748539895989
+          },
+          {
+            "xy": [
+              442.0,
+              542.0
+            ],
+            "distance_px": 8.032539958568131
+          },
+          {
+            "xy": [
+              421.0,
+              556.0
+            ],
+            "distance_px": 7.976578662581127
+          }
+        ],
+        "mask_spatial_jitter_estimate": {
+          "median_px": 0.17889635650065455,
+          "p95_px": 0.38805107877822465,
+          "method": "normal residual to five-pixel local boundary average; includes real corners, not temporal jitter"
+        }
+      },
+      "ears": {
+        "ear-right": {
+          "median_px": 23.518417569903598,
+          "mean_px": 29.88870192711288,
+          "max_px": 98.3710542766823,
+          "model_count": 641,
+          "target_count": 237,
+          "visible_iou": 0.2181512169860176,
+          "isolated_iou": 0.21826885754948894
+        }
+      },
+      "head_iou": 0.9287564766839378,
+      "nose_record_only": {
+        "score": 1.0212589502334595,
+        "detected_xy": [
+          321.07476806640625,
+          493.27935791015625
+        ],
+        "projected_xy": [
+          320.9026132964977,
+          456.17670943797054
+        ],
+        "error_px": 37.1030478655782
+      }
+    }
+  ],
+  "top_10_percent_frames_by_face_max": [
+    206
+  ],
+  "head_iou_min": 0.9287564766839378,
+  "head_iou_median": 0.9566080786585262,
+  "notes": [
+    "Nine-key evaluation; shared displacement fitted only to 3/42/264.",
+    "Face targets use classified pixels only; ears excluded at the contour pixel and outward probe.",
+    "Mask jitter is a spatial staircase estimate; temporal jitter was not measured."
+  ]
+}

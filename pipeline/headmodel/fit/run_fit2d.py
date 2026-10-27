@@ -65,7 +65,7 @@ def fit_a():
     if not shared['passed']: raise SystemExit('STOP: A shape or camera-center gate failed')
 
 
-def fit_b3():
+def fit_b3(suffix='',reference_spacing=1.):
     from fit2d_core import prepare_b_targets, solve_icp, measure_b
     from fit2d_sheets import b3_sheets
     started=time.perf_counter()
@@ -78,9 +78,10 @@ def fit_b3():
     frames=(3,42,264)
     targets=prepare_b_targets(load_targets(frames,pose_affine),a['thickness_px'])
     poses=np.array([cameras[str(f)] for f in frames])
-    result,trace=solve_icp(baseline,tri,masks,faces,poses,targets,sref,a['thickness_px'])
+    result,trace=solve_icp(baseline,tri,masks,faces,poses,targets,sref,a['thickness_px'],
+                         sample_spacing=1.,reference_spacing=reference_spacing)
     displacement=(result-baseline)*sref; magnitude=np.linalg.norm(displacement,axis=1)
-    np.savez_compressed(RESULTS/'b3-state.npz',vertices=result,triangles=tri,
+    np.savez_compressed(RESULTS/f'b3-state{suffix}.npz',vertices=result,triangles=tri,
                         displacement_px=displacement,s_ref=sref)
     keys=[r['frame'] for r in read_json(RESULTS.parents[2]/'data/frames.json')['frames'] if r['role']=='key']
     evaluation=prepare_b_targets(load_targets(keys,pose_affine),a['thickness_px'])
@@ -91,32 +92,35 @@ def fit_b3():
                                'p95':float(np.percentile(magnitude,95))},
         neck_displacement_finite=bool(np.isfinite(displacement[~masks['head']]).all()),
         elapsed_seconds=time.perf_counter()-started,
-        target_spacing_px=1,fit_frames=list(frames),evaluation_frames=keys,
-        adoption_reason='Assignee final directive: lambda 300 only; no lambda correction/search')
-    write_json(RESULTS/'b3-shared.json',shared)
+        target_spacing_px=1,reference_spacing_px=reference_spacing,
+        data_weight_multiplier=1./reference_spacing,fit_frames=list(frames),evaluation_frames=keys,
+        adoption_reason='Assignee directive: lambda 300 fixed; correspondence weight times sample/reference spacing')
+    write_json(RESULTS/f'b3-shared{suffix}.json',shared)
     worst=sorted(rows,key=lambda r:r['face']['max_px'],reverse=True)[:int(np.ceil(len(rows)*.1))]
-    write_json(RESULTS/'b3-residuals.json',{'frames':rows,
+    write_json(RESULTS/f'b3-residuals{suffix}.json',{'frames':rows,
         'top_10_percent_frames_by_face_max':[r['frame'] for r in worst],
         'head_iou_min':min(r['head_iou'] for r in rows),
         'head_iou_median':float(np.median([r['head_iou'] for r in rows])),
         'notes':['Nine-key evaluation; shared displacement fitted only to 3/42/264.',
                  'Face targets use classified pixels only; ears excluded at the contour pixel and outward probe.',
                  'Mask jitter is a spatial staircase estimate; temporal jitter was not measured.']})
-    shape_sheet([('EGG V5',v),('A GLOBAL',baseline),('B3 LAMBDA 300',result)],tri,faces['head'],'fit2d-shape-b3.png')
-    b3_sheets(result,tri,masks,faces,poses,targets)
+    title='B3 W3 LAMBDA 300' if suffix else 'B3 LAMBDA 300'
+    shape_sheet([('EGG V5',v),('A GLOBAL',baseline),(title,result)],tri,faces['head'],f'fit2d-shape-b3{suffix}.png')
+    b3_sheets(result,tri,masks,faces,poses,targets,suffix=suffix,save_overlay=not bool(suffix))
     print('B3 FINAL',shared,rows,flush=True)
+    if suffix: diagnose_b3(suffix)
 
 
-def diagnose_b3():
+def diagnose_b3(suffix=''):
     """Split saved-state contour residual directions; no fitting or geometry edit."""
     from scipy.spatial import cKDTree
     from fit_core import boundary
     from fit2d_core import prepare_b_targets, model_contours
     _,tri,_,masks,faces=template()
-    vertices=np.load(RESULTS/'b3-state.npz')['vertices']
+    vertices=np.load(RESULTS/f'b3-state{suffix}.npz')['vertices']
     a=read_json(RESULTS/'a-shared.json')
     cameras=read_json(RESULTS/'a-poses.json')['frames']
-    keys=read_json(RESULTS/'b3-shared.json')['evaluation_frames']
+    keys=read_json(RESULTS/f'b3-shared{suffix}.json')['evaluation_frames']
     targets=prepare_b_targets(load_targets(keys,pose_affine),a['thickness_px'])
     def directed(points,wanted,used=None):
         distance=cKDTree(wanted).query(points)[0]
@@ -139,13 +143,14 @@ def diagnose_b3():
             row['contours'][key]={'target_to_model':directed(wanted,points),
                                   'model_to_target':directed(points,wanted,used)}
         rows.append(row)
-    write_json(RESULTS/'b3-diagnostics.json',{'frames':rows,
+    write_json(RESULTS/f'b3-diagnostics{suffix}.json',{'frames':rows,
         'note':'Separate directions explain raw symmetric maxima. Original fit, metrics and geometry are unchanged.'})
 
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase',choices=['init','a','b3','b3-diagnostics'])
+    parser.add_argument('phase',choices=['init','a','b3','b3-diagnostics','b3-w3'])
     args=parser.parse_args()
     torch.set_num_threads(2); torch.set_num_interop_threads(1); cv2.setNumThreads(2)
-    {'init':init,'a':fit_a,'b3':fit_b3,'b3-diagnostics':diagnose_b3}[args.phase]()
+    {'init':init,'a':fit_a,'b3':fit_b3,'b3-diagnostics':diagnose_b3,
+     'b3-w3':lambda:fit_b3('-w3',3.)}[args.phase]()

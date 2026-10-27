@@ -76,7 +76,8 @@ class LinearContracts(unittest.TestCase):
             local=points[np.linalg.norm(points-projected_center,axis=1)<60]
             baseline=model_contours(v,tri,masks,faces,pose)['face']['xy']
             initial_errors.append(float(np.median(cKDTree(baseline).query(local)[0])))
-        result,trace=solve_icp(v,tri,masks,faces,poses,targets,sref,0.,300.,iterations=5)
+        result,trace=solve_icp(v,tri,masks,faces,poses,targets,sref,0.,300.,iterations=5,
+                               sample_spacing=1.,reference_spacing=1.)
         medians=[]
         for pose,target,center_xy in zip(poses,targets,neighborhoods):
             contours=model_contours(result,tri,masks,faces,pose)
@@ -132,11 +133,31 @@ class LinearContracts(unittest.TestCase):
     def test_unconstrained_neck_is_finite(self):
         from scipy import sparse
         from scipy.sparse.linalg import splu
+        from unittest.mock import patch
         tri=np.array([[0,1,2],[1,3,2]])
         lap=normalized_laplacian(tri,4)
-        # Only vertex 0 is constrained. Vertex 3 represents the free neck.
-        c=sparse.csr_matrix(([1.],([0],[0])),shape=(1,12))
-        q=300*sparse.kron(lap.T@lap,sparse.eye(3))+.01*sparse.eye(12)+c.T@c
-        d=splu(q.tocsc()).solve(np.asarray(c.T@np.array([10.])).ravel()).reshape(-1,3)
-        self.assertTrue(np.isfinite(d[3]).all())
-        self.assertGreater(abs(d[3,0]),0.)
+        # Head, Face and both ear rows share the same spacing normalization.
+        # Vertex 3 remains an unconstrained neck vertex in the actual solver.
+        rows=[]
+        for index,kind,weight,axis,value in [(0,'head',1.,0,10.),(1,'face',10.,0,8.),
+                                           (2,'ear-left',1.,0,6.),(0,'ear-right',1.,1,2.)]:
+            normal=np.eye(2)[axis:axis+1]
+            rows.append({'ids':np.array([[index,index,index]]),'weights':np.array([[1.,0.,0.]]),
+                'normal':normal,'target':normal*value,'a':np.eye(2,3),'t':np.zeros(2),
+                'weight':weight,'frame':3,'kind':kind})
+        c=sparse.csr_matrix((np.ones(4),(np.arange(4),[0,3,6,1])),shape=(4,12))
+        weights=np.array([1.,10.,1.,1.])/3
+        regularizer=300*sparse.kron(lap.T@lap,sparse.eye(3))+.01*sparse.eye(12)
+        q=regularizer+c.T@sparse.diags(weights)@c
+        rhs=np.asarray(c.T@(weights*np.array([10.,8.,6.,2.]))).ravel()
+        expected=splu(q.tocsc()).solve(rhs).reshape(-1,3)
+        with patch('fit2d_core.correspondence_rows',return_value=(rows,{})), \
+             patch('fit2d_core.face_interface',return_value=set()):
+            actual,_=solve_icp(np.zeros((4,3)),tri,{}, {},np.zeros((1,6)),[],1.,0.,iterations=1,
+                               sample_spacing=1.,reference_spacing=3.)
+        np.testing.assert_allclose(actual,expected,atol=1e-10,rtol=0)
+        unscaled_q=regularizer+c.T@sparse.diags(weights*3)@c
+        unscaled=splu(unscaled_q.tocsc()).solve(rhs*3).reshape(-1,3)
+        self.assertGreater(np.linalg.norm(actual-unscaled),.01)
+        self.assertTrue(np.isfinite(actual[3]).all())
+        self.assertGreater(abs(actual[3,0]),0.)

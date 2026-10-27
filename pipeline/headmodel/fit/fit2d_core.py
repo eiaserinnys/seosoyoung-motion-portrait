@@ -278,7 +278,8 @@ def correspondence_rows(vertices,tri,masks,faces,poses,targets,thickness,gate,in
     return rows,counts
 
 
-def solve_icp(vertices,tri,masks,faces,poses,targets,sref,thickness,lam=300.,iterations=25):
+def solve_icp(vertices,tri,masks,faces,poses,targets,sref,thickness,lam=300.,iterations=25,
+              *,sample_spacing,reference_spacing):
     """Absolute 3N displacement, sum energies; refactor the normal matrix per ICP."""
     import time
     from scipy import sparse
@@ -287,6 +288,7 @@ def solve_icp(vertices,tri,masks,faces,poses,targets,sref,thickness,lam=300.,ite
     pxposes=np.array(poses,dtype=float); pxposes[:,3]-=np.log(sref)
     lap=normalized_laplacian(tri,len(base)); interface=face_interface(tri,masks,faces)
     regularizer=lam*sparse.kron(lap.T@lap,sparse.eye(3),format='csc')+.01*sparse.eye(base.size,format='csc')
+    weight_multiplier=sample_spacing/reference_spacing
     trace=[]; stable=0; tight_start=None
     for iteration in range(iterations):
         tick=time.perf_counter()
@@ -305,7 +307,7 @@ def solve_icp(vertices,tri,masks,faces,poses,targets,sref,thickness,lam=300.,ite
             rr.append(np.repeat(np.arange(offset,offset+count),9)); cc.append(indices.ravel()); vv.append(coefficients.ravel())
             original=(base[row['ids']]*row['weights'][:,:,None]).sum(1)@row['a'].T+row['t']
             rhs.append(((row['target']-original)*row['normal']).sum(1))
-            total_weights.extend([row['weight']]*count); offset+=count
+            total_weights.extend([row['weight']*weight_multiplier]*count); offset+=count
         c=sparse.csr_matrix((np.concatenate(vv),(np.concatenate(rr),np.concatenate(cc))),shape=(offset,base.size))
         rhs=np.concatenate(rhs); weights=np.asarray(total_weights)
         cw=c.multiply(np.sqrt(weights)[:,None]).tocsc()

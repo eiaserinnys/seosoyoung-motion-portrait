@@ -65,7 +65,7 @@ def center_checks(v,tri,faces,poses,targets):
     return checks
 
 
-def b3_sheets(vertices,tri,masks,faces,poses,targets):
+def b3_sheets(vertices,tri,masks,faces,poses,targets,suffix='',save_overlay=True):
     from scipy.spatial import cKDTree
     from fit_core import boundary
     from fit2d_core import model_contours
@@ -95,8 +95,8 @@ def b3_sheets(vertices,tri,masks,faces,poses,targets):
         crop=cv2.resize(jaw[y0:y1+1,x0:x1+1],None,fx=2,fy=2,interpolation=cv2.INTER_CUBIC)
         label(crop,f'frame {target["frame"]} / used face target blue / model red / 2x'); crops.append(crop)
         label(err,f'frame {target["frame"]} / 0px green -> 3px+ red'); errors.append(err)
-    save_image('fit2d-overlay-b3.png',np.hstack(overlays))
-    save_image('fit2d-err-b3.png',np.hstack(errors))
+    if save_overlay: save_image(f'fit2d-overlay-b3{suffix}.png',np.hstack(overlays))
+    save_image(f'fit2d-err-b3{suffix}.png',np.hstack(errors))
     width=max(c.shape[1] for c in crops)
     padded=[cv2.copyMakeBorder(c,0,0,0,width-c.shape[1],cv2.BORDER_CONSTANT,value=(248,248,248)) for c in crops]
-    save_image('fit2d-jaw-b3.png',np.vstack(padded))
+    save_image(f'fit2d-jaw-b3{suffix}.png',np.vstack(padded))
