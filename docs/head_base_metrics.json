@@ -5,498 +5,573 @@
   },
   "N2": {
     "passed": true,
-    "source": "pipeline/test_head_base.mjs: main hashes"
+    "evidence": "pipeline/test_head_base.mjs: legacy and feature hashes"
+  },
+  "N3c": {
+    "changed_pixels": 0,
+    "passed": true,
+    "face_bbox": [
+      549,
+      223,
+      931,
+      619
+    ]
   },
   "N6": {
-    "max_difference_px": 0.17706736811484458,
+    "max_difference_px": 0.15492271585827744,
     "passed": true,
     "edges": [
       {
         "sign": -1,
         "pitch": -30,
-        "head_px": 0.17706736811484458,
-        "face_px": 0.11300581923305748
+        "head_px": 0.15492271585827744,
+        "face_px": 0.15487857482618092
       },
       {
         "sign": -1,
         "pitch": 0,
-        "head_px": 0.13463751753131126,
-        "face_px": 0.07718835337184338
+        "head_px": 0.0876934395021163,
+        "face_px": 0.08763631447112356
       },
       {
         "sign": -1,
         "pitch": 30,
-        "head_px": 0.11965021835756808,
-        "face_px": 0.07010157337360136
+        "head_px": 0.07578383534607051,
+        "face_px": 0.07559846745751424
       },
       {
         "sign": 1,
         "pitch": -30,
-        "head_px": 0.07080801204892309,
-        "face_px": 0.034816331335461706
+        "head_px": 0.05541686429614393,
+        "face_px": 0.05539394604502489
       },
       {
         "sign": 1,
         "pitch": 0,
-        "head_px": 0.1374006143344022,
-        "face_px": 0.07905666629951594
+        "head_px": 0.08974671098825678,
+        "face_px": 0.08970607877190284
       },
       {
         "sign": 1,
         "pitch": 30,
-        "head_px": 0.13638368282381413,
-        "face_px": 0.07604421327044107
+        "head_px": 0.08627467083321419,
+        "face_px": 0.0861404733165804
       }
     ]
   },
   "N7": {
     "passed": true,
-    "source": "pipeline/test_head_base.mjs: 100 vertices x 13 poses"
+    "evidence": "pipeline/test_head_base.mjs: projection fixture"
   },
   "poses": [
     {
       "name": "up-left",
+      "frame": 192,
       "yaw": -45,
       "pitch": 30,
+      "model_angle": [
+        -46.414680869864014,
+        26.102451011833192
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 1.673773570947037,
+          "max_px": 105.56559882312658,
+          "p95_px": 86.48343078588148,
+          "samples": 1032
+        },
+        "hair": {
+          "median_px": 1.112607490334841,
+          "max_px": 76.7059962631465,
+          "p95_px": 59.1500484321569,
+          "samples": 2247
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": -0.047541715286137196,
-        "max_anisotropy": 627.7625253138142,
+        "min_det_j": -0.04754171528613582,
+        "max_anisotropy": 627.7625253137364,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 55.03635025024414,
-        "pixels": 17767,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 0,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.016252023937253328,
-      "N3": {
-        "head": {
-          "median_px": 46.72863748964626,
-          "max_px": 88.39091907943636,
-          "p95_px": 86.94513838350544
-        },
-        "face": {
-          "median_px": 39.40460337450213,
-          "max_px": 58.49772618485581,
-          "p95_px": 57.01318217617982
-        },
-        "passed": false
-      }
+      "N11": {
+        "iou": 0.0,
+        "rendered_px": 2495,
+        "target_px": 5904
+      },
+      "r24_min_det_j": 0.016252023937253328
     },
     {
       "name": "up",
+      "frame": 206,
       "yaw": 0,
       "pitch": 30,
+      "model_angle": [
+        -3.1102626317356696,
+        27.139874068849014
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 83.49049578864235,
+          "max_px": 89.59391425546121,
+          "p95_px": 87.81878258173455,
+          "samples": 247
+        },
+        "hair": {
+          "median_px": 1.7892589445578997,
+          "max_px": 81.71708932371193,
+          "p95_px": 62.5509806626482,
+          "samples": 2587
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": 0.669789149656777,
-        "max_anisotropy": 1.7472994495335117,
+        "min_det_j": 0.6697891496567606,
+        "max_anisotropy": 1.747299449533502,
         "triangles": 308,
         "passed": true
       },
-      "N5": {
-        "max_depth_px": 17.8885440826416,
-        "pixels": 2252,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 5.684341886080802e-14,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.12855454995225185,
-      "N3": {
-        "head": {
-          "median_px": 24.670962728553288,
-          "max_px": 49.29028427778481,
-          "p95_px": 40.870659906457576
-        },
-        "face": {
-          "median_px": 40.698137117170916,
-          "max_px": 45.278796632727406,
-          "p95_px": 44.979655673514074
-        },
-        "passed": false
-      }
+      "N11": {
+        "iou": 0.0,
+        "rendered_px": 7233,
+        "target_px": 7871
+      },
+      "r24_min_det_j": 0.12855454995225185
     },
     {
       "name": "up-right",
+      "frame": 219,
       "yaw": 45,
       "pitch": 30,
+      "model_angle": [
+        38.279587225697675,
+        22.668265753186425
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 20.5327166216858,
+          "max_px": 87.45590742483594,
+          "p95_px": 79.74909189565629,
+          "samples": 1252
+        },
+        "hair": {
+          "median_px": 1.6408979781601682,
+          "max_px": 52.982327941562936,
+          "p95_px": 12.498824981814549,
+          "samples": 1941
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": -0.019189622743912674,
-        "max_anisotropy": 1137.0380660844453,
+        "min_det_j": -0.019189622743880693,
+        "max_anisotropy": 1137.0380661018135,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 35.05709457397461,
-        "pixels": 4989,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 0,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.13812748822493245,
-      "N3": {
-        "head": {
-          "median_px": 49.572239054002424,
-          "max_px": 94.02431385629359,
-          "p95_px": 92.5444947607839
-        },
-        "face": {
-          "median_px": 45.922743003590604,
-          "max_px": 56.09428395737923,
-          "p95_px": 55.39336202711956
-        },
-        "passed": false
-      }
+      "N11": {
+        "iou": 0.0,
+        "rendered_px": 2940,
+        "target_px": 5794
+      },
+      "r24_min_det_j": 0.13812748822493245
     },
     {
       "name": "left",
+      "frame": 42,
       "yaw": -45,
       "pitch": 0,
+      "model_angle": [
+        -34.62379845365239,
+        3.4042126660967256
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 3.2602541575978883,
+          "max_px": 90.706162041455,
+          "p95_px": 86.49088146677886,
+          "samples": 1020
+        },
+        "hair": {
+          "median_px": 2.82523446521817,
+          "max_px": 69.97144054980348,
+          "p95_px": 53.80336906123795,
+          "samples": 2202
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": 0.29550419651431536,
-        "max_anisotropy": 3.279777133998112,
+        "min_det_j": 0.2955041965143217,
+        "max_anisotropy": 3.2797771339980932,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 44.271888732910156,
-        "pixels": 11551,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 5.684341886080802e-14,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.42829691934470776,
-      "N3": {
-        "head": {
-          "median_px": 40.257955823199865,
-          "max_px": 64.98908944743778,
-          "p95_px": 64.09623610096209
-        },
-        "face": {
-          "median_px": 31.837723301140727,
-          "max_px": 51.98067549580318,
-          "p95_px": 49.26223198685172
-        },
-        "passed": false
-      }
+      "N11": {
+        "iou": 0.0,
+        "rendered_px": 3284,
+        "target_px": 5097
+      },
+      "r24_min_det_j": 0.42829691934470776
     },
     {
       "name": "front",
+      "frame": 3,
       "yaw": 0,
       "pitch": 0,
+      "model_angle": [
+        -0.4823997451209566,
+        -0.49091206322522374
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 33.80675296789406,
+          "max_px": 79.16665493666245,
+          "p95_px": 74.92125894116285,
+          "samples": 982
+        },
+        "hair": {
+          "median_px": 1.6424550601260954,
+          "max_px": 57.17159073041586,
+          "p95_px": 22.541575801279183,
+          "samples": 2002
+        },
+        "passed": false
+      },
       "N4": {
         "min_det_j": 0.9999999999999716,
         "max_anisotropy": 1.0000000000000704,
         "triangles": 308,
         "passed": true
       },
-      "N5": {
-        "max_depth_px": 0.0,
-        "pixels": 0,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "N8": {
-        "error_px": 0,
-        "passed": true
+      "N11": {
+        "iou": 0.7609899823217443,
+        "rendered_px": 7978,
+        "target_px": 6964
       },
-      "r24_min_det_j": 0.9999999999999932,
-      "N3": {
-        "head": {
-          "median_px": 3.0060925483703613,
-          "max_px": 23.19927314651238,
-          "p95_px": 14.99210872265484
-        },
-        "face": {
-          "median_px": 1.0,
-          "max_px": 2.8284271247461903,
-          "p95_px": 2.0
-        },
-        "passed": false
-      }
+      "r24_min_det_j": 0.9999999999999932
     },
     {
       "name": "right",
+      "frame": 240,
       "yaw": 45,
       "pitch": 0,
+      "model_angle": [
+        33.82500292852531,
+        3.536207459405677
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 3.4786499039159904,
+          "max_px": 91.64506598992119,
+          "p95_px": 88.03722125194037,
+          "samples": 968
+        },
+        "hair": {
+          "median_px": 2.8514550120150592,
+          "max_px": 73.02650290343242,
+          "p95_px": 52.53792149671372,
+          "samples": 2260
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": 0.12459031807981724,
-        "max_anisotropy": 7.789866738856957,
+        "min_det_j": 0.12459031807981337,
+        "max_anisotropy": 7.789866738857049,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 32.893768310546875,
-        "pixels": 8630,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 5.684341886080802e-14,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.42992344903257973,
-      "N3": {
-        "head": {
-          "median_px": 34.2386514252612,
-          "max_px": 55.517638519938544,
-          "p95_px": 54.72612282149164
-        },
-        "face": {
-          "median_px": 27.37956582928227,
-          "max_px": 44.24636284487126,
-          "p95_px": 43.38710205810021
-        },
-        "passed": false
-      }
+      "N11": {
+        "iou": 0.0,
+        "rendered_px": 3372,
+        "target_px": 5715
+      },
+      "r24_min_det_j": 0.42992344903257973
     },
     {
       "name": "down-left",
+      "frame": 303,
       "yaw": -45,
       "pitch": -30,
+      "model_angle": [
+        -31.37429570978855,
+        -25.471769731538046
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 1.765115888912932,
+          "max_px": 68.97958426864426,
+          "p95_px": 66.96825531563444,
+          "samples": 1062
+        },
+        "hair": {
+          "median_px": 9.297308299528888,
+          "max_px": 58.693038357166564,
+          "p95_px": 35.07592199789461,
+          "samples": 2126
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": 0.2755859231769471,
-        "max_anisotropy": 3.5672786399786633,
+        "min_det_j": 0.2755859231769623,
+        "max_anisotropy": 3.5672786399784275,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 39.66106414794922,
-        "pixels": 10292,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 8.038873388460929e-14,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.003449648537460901,
-      "N3": {
-        "head": {
-          "median_px": 30.325808704177327,
-          "max_px": 54.49640297385993,
-          "p95_px": 53.20885785126242
-        },
-        "face": {
-          "median_px": 37.33475527571877,
-          "max_px": 44.03698861165097,
-          "p95_px": 42.778674222644604
-        },
-        "passed": false
-      }
+      "N11": {
+        "iou": 0.0,
+        "rendered_px": 3091,
+        "target_px": 5070
+      },
+      "r24_min_det_j": 0.003449648537460901
     },
     {
       "name": "down",
+      "frame": 270,
       "yaw": 0,
       "pitch": -30,
+      "model_angle": [
+        19.312757106842884,
+        -27.493104446803358
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 15.381848172802943,
+          "max_px": 55.48609413664616,
+          "p95_px": 51.3265433049813,
+          "samples": 1079
+        },
+        "hair": {
+          "median_px": 3.1660561876483024,
+          "max_px": 54.76910528045173,
+          "p95_px": 40.57960065980617,
+          "samples": 2122
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": 0.5473876602293296,
-        "max_anisotropy": 2.392253429625791,
+        "min_det_j": 0.5473876602293478,
+        "max_anisotropy": 2.3922534296257005,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 53.740116119384766,
-        "pixels": 17714,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 0,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.3343225319614733,
-      "N3": {
-        "head": {
-          "median_px": 36.41054436135737,
-          "max_px": 67.62698601306238,
-          "p95_px": 64.3611132754448
-        },
-        "face": {
-          "median_px": 58.51678892948103,
-          "max_px": 64.14015275092322,
-          "p95_px": 63.59231219428241
-        },
-        "passed": false
-      }
+      "N11": {
+        "iou": 0.04415607821933856,
+        "rendered_px": 6697,
+        "target_px": 4890
+      },
+      "r24_min_det_j": 0.3343225319614733
     },
     {
       "name": "down-right",
+      "frame": 264,
       "yaw": 45,
       "pitch": -30,
+      "model_angle": [
+        22.841583280397632,
+        -15.14020027068204
+      ],
+      "N3": {
+        "skin": {
+          "median_px": 15.619793502579466,
+          "max_px": 69.57578227720656,
+          "p95_px": 66.2965244827271,
+          "samples": 1190
+        },
+        "hair": {
+          "median_px": 4.2226691794788636,
+          "max_px": 52.59201384735698,
+          "p95_px": 10.964033510914303,
+          "samples": 2009
+        },
+        "passed": false
+      },
       "N4": {
-        "min_det_j": 0.4835854600640491,
-        "max_anisotropy": 2.2844664789540836,
+        "min_det_j": 0.48358546006406306,
+        "max_anisotropy": 2.2844664789539553,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 6.4031243324279785,
-        "pixels": 752,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 5.684341886080802e-14,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
       },
-      "r24_min_det_j": 0.1911464651375664,
-      "N3": {
-        "head": {
-          "median_px": 33.3465507940782,
-          "max_px": 49.72604154419603,
-          "p95_px": 48.814752342890294
-        },
-        "face": {
-          "median_px": 32.514785735063505,
-          "max_px": 44.9032981180702,
-          "p95_px": 44.2543336429481
-        },
+      "N11": {
+        "iou": 0.01105243767653199,
+        "rendered_px": 3677,
+        "target_px": 4556
+      },
+      "r24_min_det_j": 0.1911464651375664
+    },
+    {
+      "name": "pose--22.5--15",
+      "yaw": -22.5,
+      "pitch": -15,
+      "N4": {
+        "min_det_j": 0.7631077393351248,
+        "max_anisotropy": 1.3721376474364742,
+        "triangles": 308,
+        "passed": true
+      }
+    },
+    {
+      "name": "pose-+22.5--15",
+      "yaw": 22.5,
+      "pitch": -15,
+      "N4": {
+        "min_det_j": 0.5083339626905964,
+        "max_anisotropy": 2.1029226680362627,
+        "triangles": 308,
         "passed": false
       }
     },
     {
-      "name": "mid--22.5--15",
-      "yaw": -22.5,
-      "pitch": -15,
-      "N4": {
-        "min_det_j": 0.7631077393351308,
-        "max_anisotropy": 1.37213764743647,
-        "triangles": 308,
-        "passed": true
-      },
-      "N5": {
-        "max_depth_px": 8.485280990600586,
-        "pixels": 1098,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 5.684341886080802e-14,
-        "passed": true
-      },
-      "r24_min_det_j": null
-    },
-    {
-      "name": "mid-22.5--15",
-      "yaw": 22.5,
-      "pitch": -15,
-      "N4": {
-        "min_det_j": 0.5083339626905907,
-        "max_anisotropy": 2.1029226680362996,
-        "triangles": 308,
-        "passed": false
-      },
-      "N5": {
-        "max_depth_px": 21.931713104248047,
-        "pixels": 4361,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 1.2710574864626038e-13,
-        "passed": true
-      },
-      "r24_min_det_j": null
-    },
-    {
-      "name": "mid--22.5-15",
+      "name": "pose--22.5-+15",
       "yaw": -22.5,
       "pitch": 15,
       "N4": {
-        "min_det_j": 0.5052311531797943,
-        "max_anisotropy": 2.0487923836966284,
+        "min_det_j": 0.505231153179806,
+        "max_anisotropy": 2.0487923836965796,
         "triangles": 308,
         "passed": false
-      },
-      "N5": {
-        "max_depth_px": 41.48493576049805,
-        "pixels": 9779,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 0,
-        "passed": true
-      },
-      "r24_min_det_j": null
+      }
     },
     {
-      "name": "mid-22.5-15",
+      "name": "pose-+22.5-+15",
       "yaw": 22.5,
       "pitch": 15,
       "N4": {
-        "min_det_j": 0.5342273065909406,
-        "max_anisotropy": 1.964278445454395,
+        "min_det_j": 0.5342273065909732,
+        "max_anisotropy": 1.9642784454543452,
         "triangles": 308,
         "passed": true
-      },
-      "N5": {
-        "max_depth_px": 15.231546401977539,
-        "pixels": 1284,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 0,
-        "passed": true
-      },
-      "r24_min_det_j": null
+      }
     },
     {
-      "name": "profile--67.5",
+      "name": "pose--90-+0",
+      "yaw": -90,
+      "pitch": 0,
+      "N10": {
+        "hole_pixels": 0,
+        "passed": true
+      }
+    },
+    {
+      "name": "pose--67.5-+0",
       "yaw": -67.5,
       "pitch": 0,
       "N4": {
-        "min_det_j": -0.33898061016576475,
-        "max_anisotropy": 111.52867622149381,
+        "min_det_j": -0.3389806101657544,
+        "max_anisotropy": 111.52867622145968,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 123.0162582397461,
-        "pixels": 41295,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 8.038873388460929e-14,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
-      },
-      "r24_min_det_j": null
+      }
     },
     {
-      "name": "profile-67.5",
+      "name": "pose-+67.5-+0",
       "yaw": 67.5,
       "pitch": 0,
       "N4": {
-        "min_det_j": -0.5816604038838924,
-        "max_anisotropy": 154.41674446448442,
+        "min_det_j": -0.5816604038838825,
+        "max_anisotropy": 154.4167444649402,
         "triangles": 308,
         "passed": false
       },
-      "N5": {
-        "max_depth_px": 126.81088256835938,
-        "pixels": 44610,
-        "passed": false
-      },
-      "N8": {
-        "error_px": 5.684341886080802e-14,
+      "N10": {
+        "hole_pixels": 0,
         "passed": true
-      },
-      "r24_min_det_j": null
+      }
+    },
+    {
+      "name": "pose-+90-+0",
+      "yaw": 90,
+      "pitch": 0,
+      "N10": {
+        "hole_pixels": 0,
+        "passed": true
+      }
     }
   ],
-  "r24_reference": {
-    "left": 0.42829691934470776,
-    "front": 0.9999999999999932,
-    "right": 0.42992344903257973,
-    "up-left": 0.016252023937253328,
-    "up": 0.12855454995225185,
-    "up-right": 0.13812748822493245,
-    "down-left": 0.003449648537460901,
-    "down": 0.3343225319614733,
-    "down-right": 0.1911464651375664
-  },
-  "angle_note": "pitch -30: effective yaw 25 to 45 maps model yaw 27.97 to 22.84 degrees"
+  "rest_translation": [
+    502.23801578678194,
+    444.88200857552545
+  ],
+  "common_crop_pixels": [
+    316,
+    24,
+    1148,
+    856
+  ],
+  "hidden_meshes": [
+    "back-hair-center",
+    "back-hair-left",
+    "back-hair-right",
+    "side-cranium-left",
+    "side-cranium-right",
+    "hair-top",
+    "eye-left-sclera",
+    "eye-right-sclera",
+    "eye-left-iris",
+    "eye-right-iris",
+    "eye-left-pupil",
+    "eye-right-pupil",
+    "eye-left-highlight",
+    "eye-right-highlight",
+    "eye-left-lower-line",
+    "eye-right-lower-line",
+    "eye-left-upper-lashes",
+    "eye-right-upper-lashes",
+    "closed-eyes-v1",
+    "eye-left-brow",
+    "eye-right-brow",
+    "nose-detail",
+    "mouth-detail",
+    "mouth-open-v1",
+    "mouth-round-v1",
+    "tail-left-hair",
+    "tail-right-hair",
+    "tail-left-tie",
+    "tail-right-tie",
+    "side-hair-left",
+    "side-hair-right",
+    "bangs-left",
+    "bangs-right",
+    "hairpin"
+  ],
+  "reference_transform": "(q - camera_translation) * exp(logscale_front - logscale_key) + rest_translation",
+  "note": "Angle-dependent displacement and outside-offset decay remain active."
 }

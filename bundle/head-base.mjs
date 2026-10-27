@@ -9,7 +9,7 @@ export const getHeadBase=()=>model;
 export function configureHeadBase(metadata,buffer){
  const array=(name,Type)=>{const {offset,length}=metadata.offsets[name];return new Type(buffer,offset,length/Type.BYTES_PER_ELEMENT);};
  model={...metadata,vertices:array('vertices',Float32Array),normals:array('normals',Float32Array),
-  fields:array('fields',Float32Array),triangles:array('triangles',Uint32Array),queries:new Map()};
+  fields:array('fields',Float32Array),triangles:array('triangles',Uint32Array),queries:new Map(),restFrames:new Map()};
  model.thetaRest=model.keys.find(k=>k.yaw===0&&k.pitch===0).model;
  model.reference=projectedVertices(model.thetaRest,false);
  for(let i=0;i<model.vertexCount;i++){
@@ -118,6 +118,29 @@ function attachment(point){
  if(stored)return stored;
  if(!model.queries.has(key))model.queries.set(key,triangleAt(point,false));
  return model.queries.get(key);
+}
+
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+const unit=v=>{const length=Math.hypot(...v);return v.map(x=>x/length);};
+function triangleFrame(coords,vertices){
+ const p=vertices.map(i=>[coords[i*3],coords[i*3+1],coords[i*3+2]]);
+ const a=p[1].map((x,i)=>x-p[0][i]),b=p[2].map((x,i)=>x-p[0][i]);
+ const t1=unit(a),n=unit(cross(b,a)),t2=cross(n,t1);
+ return [t1,t2,n];
+}
+
+export function attachedTransform(point,p){
+ const key=pointKey(point),a=attachment(point),current=headBaseVertices(p).surface;
+ if(!model.restFrames.has(key))model.restFrames.set(key,triangleFrame(model.reference,a.vertices));
+ const rest=model.restFrames.get(key),frame=triangleFrame(current,a.vertices);
+ const R=[0,1,2].map(i=>[0,1,2].map(j=>frame.reduce((sum,v,k)=>sum+v[i]*rest[k][j],0)));
+ return {A:headSolveWorld(point,p),R};
+}
+
+export function headEarWorld(point,side,p){
+ const anchor=side==='left'?[369,465]:[636,464.5],{A,R}=attachedTransform(anchor,p);
+ const offset=[point[0]-anchor[0],point[1]-anchor[1],5];
+ return A.map((x,i)=>x+R[i].reduce((sum,v,j)=>sum+v*offset[j],0));
 }
 
 export function headSolveWorld(point,p,relief=0){

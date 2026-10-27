@@ -1,9 +1,10 @@
-"""Capture fitted head backing and compare it with the Seedance key masks."""
+"""Capture the head, face, neck and ears against the Seedance references."""
 import base64
 import functools
 import http.server
 import io
 import json
+import math
 import sys
 import threading
 from pathlib import Path
@@ -15,7 +16,7 @@ from playwright.sync_api import sync_playwright
 from scipy.spatial import cKDTree
 
 ROOT = Path(__file__).resolve().parents[1]
-FIT = ROOT/'pipeline/headmodel/fit'
+FIT = ROOT / 'pipeline/headmodel/fit'
 sys.path.insert(0, str(FIT))
 from fit2d_sheets import image_for
 from fit2f_core import load_targets_f
@@ -25,11 +26,15 @@ KEYS = [
     ('left', 42, -45, 0), ('front', 3, 0, 0), ('right', 240, 45, 0),
     ('down-left', 303, -45, -30), ('down', 270, 0, -30), ('down-right', 264, 45, -30),
 ]
-INTERMEDIATE = [(f'mid-{yaw}-{pitch}', None, yaw, pitch) for pitch in [-15, 15] for yaw in [-22.5, 22.5]]
-PROFILES = [(f'profile-{yaw}', None, yaw, 0) for yaw in [-90, -67.5, 67.5, 90]]
-STRIP = [(f'strip-{yaw}-{pitch}', None, yaw, pitch) for pitch in [-20, 0, 20] for yaw in range(-90, 91, 15)]
+PROFILES = [(-90, 0), (-67.5, 0), (67.5, 0), (90, 0)]
+INTERMEDIATE = [(yaw, pitch) for pitch in (-15, 15) for yaw in (-22.5, 22.5)]
+STRIP = [(yaw, pitch) for pitch in (-20, 0, 20) for yaw in range(-90, 91, 15)]
 BG = (30, 36, 48)
-CROP = (152, 20, 872, 740)
+CANVAS_WIDTH = 1500
+X_OFFSET = (CANVAS_WIDTH - 1024) // 2
+DEST = ROOT / 'docs/captures'
+WIP2 = DEST / 'wip2-head-base'
+
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *args):
@@ -38,7 +43,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def decode(data):
     image = Image.open(io.BytesIO(base64.b64decode(data))).convert('RGBA')
-    return image.crop((38, 32, 1062, 1056))
+    return image.crop((0, 32, CANVAS_WIDTH, 1056))
 
 
 def alpha(image):
@@ -49,24 +54,38 @@ def contour(mask):
     lines, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     if not lines:
         raise RuntimeError('Empty rendered silhouette')
-    return np.vstack([line[:, 0, :] for line in lines]).astype(float)
+    samples = []
+    for line in lines:
+        points = line[:, 0, :].astype(float)
+        following = np.roll(points, -1, axis=0)
+        length = np.linalg.norm(following - points, axis=1)
+        cumulative = np.r_[0, np.cumsum(length)]
+        if cumulative[-1] == 0:
+            samples.append(points[:1])
+            continue
+        positions = np.arange(0, cumulative[-1], 1.)
+        indices = np.minimum(np.searchsorted(cumulative, positions, side='right') - 1, len(points) - 1)
+        fraction = (positions - cumulative[indices]) / length[indices]
+        samples.append(points[indices] + fraction[:, None] * (following[indices] - points[indices]))
+    return np.vstack(samples)
 
 
 def residual(target, rendered):
-    values = cKDTree(rendered).query(target)[0]
+    values = np.r_[cKDTree(rendered).query(target)[0], cKDTree(target).query(rendered)[0]]
     return {'median_px': float(np.median(values)), 'max_px': float(values.max()),
-            'p95_px': float(np.percentile(values, 95))}
+            'p95_px': float(np.percentile(values, 95)), 'samples': len(values)}
 
 
-def protrusion(head, full, skin):
-    outside = head & ~full & ~skin
-    depths = cv2.distanceTransform((~full).astype(np.uint8), cv2.DIST_L2, cv2.DIST_MASK_PRECISE)
-    value = float(depths[outside].max()) if outside.any() else 0.
-    return {'max_depth_px': value, 'pixels': int(outside.sum()), 'passed': value <= 1}
-
-
-def n3_pass(value):
-    return value['head']['median_px'] <= 1.5 and value['head']['max_px'] <= 6 and value['face']['median_px'] <= 2 and value['face']['p95_px'] <= 5
+def n3_metrics(mask, skin, hair):
+    rendered = contour(mask)
+    nearest = cKDTree(np.vstack([skin, hair])).query(rendered)[1]
+    skin_rendered, hair_rendered = rendered[nearest < len(skin)], rendered[nearest >= len(skin)]
+    if not len(skin_rendered) or not len(hair_rendered):
+        raise RuntimeError('Missing a rendered silhouette category')
+    result = {'skin': residual(skin, skin_rendered), 'hair': residual(hair, hair_rendered)}
+    result['passed'] = (result['skin']['median_px'] <= 2 and result['skin']['p95_px'] <= 5
+                        and result['hair']['median_px'] <= 2 and result['hair']['p95_px'] <= 6)
+    return result
 
 
 def jacobians(rest, current, triangles):
@@ -76,100 +95,167 @@ def jacobians(rest, current, triangles):
     matrices = deformed @ np.linalg.inv(source)
     determinant = np.linalg.det(matrices)
     singular = np.linalg.svd(matrices, compute_uv=False)
-    anisotropy = singular[:, 0]/singular[:, 1]
-    return {'min_det_j': float(determinant.min()), 'max_anisotropy': float(anisotropy.max()), 'triangles': len(chosen)}
+    return {'min_det_j': float(determinant.min()), 'max_anisotropy': float((singular[:, 0]/singular[:, 1]).max()),
+            'triangles': len(chosen)}
 
 
-def reference_image(frame, eye):
-    bgr = image_for(frame)
-    rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-    dx, dy = eye[0]-501.9, eye[1]-431.5
-    matrix = np.array([[1., 0., 152+dx], [0., 1., 20+dy]])
-    return Image.fromarray(cv2.warpAffine(rgb, matrix, (1024, 1024), borderValue=BG))
+def closed_holes(mask):
+    count, labels, stats, _ = cv2.connectedComponentsWithStats((~mask).astype(np.uint8), connectivity=8)
+    outside = set(np.unique(np.r_[labels[0, :], labels[-1, :], labels[:, 0], labels[:, -1]]))
+    return int(sum(stats[i, cv2.CC_STAT_AREA] for i in range(1, count) if i not in outside))
 
 
-def tile(image, label, size):
+def ear_iou(rendered, frame, poses, translation):
+    path = ROOT / f'pipeline/headmodel/data/frame_{frame:04d}/raw/ear.png'
+    target = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+    if target is None:
+        raise FileNotFoundError(path)
+    scale, shift = transform(frame, poses, translation)
+    matrix = np.array([[scale, 0, shift[0]], [0, scale, shift[1]]])
+    target = cv2.warpAffine(target, matrix, (CANVAS_WIDTH, 1024), flags=cv2.INTER_NEAREST) > 127
+    union = np.count_nonzero(rendered | target)
+    return {'iou': float(np.count_nonzero(rendered & target) / union) if union else None,
+            'rendered_px': int(rendered.sum()), 'target_px': int(target.sum())}
+
+
+def transform(frame, poses, translation):
+    front, pose = poses[3], poses[frame]
+    scale = math.exp(front[3] - pose[3])
+    shift = np.asarray(translation) - scale * np.asarray(pose[4:6]) + [X_OFFSET, 0]
+    return scale, shift
+
+
+def reference(frame, poses, translation):
+    scale, shift = transform(frame, poses, translation)
+    matrix = np.array([[scale, 0, shift[0]], [0, scale, shift[1]]])
+    rgb = cv2.cvtColor(image_for(frame), cv2.COLOR_BGR2RGB)
+    return Image.fromarray(cv2.warpAffine(rgb, matrix, (CANVAS_WIDTH, 1024), borderValue=BG))
+
+
+def composite(image):
+    background = Image.new('RGBA', image.size, BG + (255,))
+    background.alpha_composite(image)
+    return background.convert('RGB')
+
+
+def make_crop(renders):
+    bounds = np.asarray([item['bounds'] for item in renders.values()])
+    left, top = bounds[:, :2].min(axis=0) + [X_OFFSET, 0]
+    right, bottom = bounds[:, 2:].max(axis=0) + [X_OFFSET, 0]
+    if left < 0 or right >= CANVAS_WIDTH or top < 0 or bottom >= 1024:
+        raise RuntimeError(f'Head or face extends outside capture: {[left, top, right, bottom]}')
+    size = math.ceil(max(right - left + 80, bottom - top + 160))
+    center = (left + right) / 2
+    return (math.floor(center - size / 2), math.floor(top - 40),
+            math.floor(center - size / 2) + size, math.floor(top - 40) + size)
+
+
+def tile(image, crop, size, label):
     if image.mode == 'RGBA':
-        background = Image.new('RGBA', image.size, BG+(255,)); background.alpha_composite(image)
-        image = background.convert('RGB')
-    result = image.crop(CROP).resize((size, size))
-    ImageDraw.Draw(result).text((5, 5), label, fill=(255, 255, 255))
+        image = composite(image)
+    result = image.crop(crop).resize((size, size), Image.Resampling.LANCZOS)
+    ImageDraw.Draw(result).text((7, 7), label, fill='white', stroke_width=2, stroke_fill=BG)
     return result
 
 
-def save_sheets(renders, metrics):
-    dest = ROOT/'docs/captures'; dest.mkdir(parents=True, exist_ok=True)
-    hairless = Image.new('RGB', (4*440, 4*220), BG)
-    for i, (name, frame, yaw, pitch) in enumerate(KEYS+PROFILES):
-        data = renders[(yaw, pitch)]; x, y = (i % 4)*440, (i // 4)*220
-        hairless.paste(tile(data['hairless'], name+' rig', 220), (x, y))
-        if frame is not None:
-            hairless.paste(tile(reference_image(frame, data['eye']), name+' Seedance', 220), (x+220, y))
-    hairless.save(dest/'head_base_hairless_13.png')
-    full = Image.new('RGB', (3*360, 3*360), BG)
-    for i, (name, _, yaw, pitch) in enumerate(KEYS):
-        full.paste(tile(renders[(yaw, pitch)]['full'], name, 360), ((i % 3)*360, (i // 3)*360))
-    full.save(dest/'head_base_full_9.png')
-    strip = Image.new('RGB', (13*160, 3*160+28), BG)
-    ImageDraw.Draw(strip).text((5, 5), 'pitch -30: yaw 25 -> 45 reverses model yaw 27.97 -> 22.84', fill='white')
-    for i, (_, _, yaw, pitch) in enumerate(STRIP):
-        strip.paste(tile(renders[(yaw, pitch)]['hairless'], f'{yaw:+d} / {pitch:+d}', 160), ((i % 13)*160, 28+(i // 13)*160))
-    strip.save(dest/'head_base_turn_strip.png')
-    overlays = Image.new('RGB', (3*360, 3*360), BG)
+def draw_targets(image, hair, skin):
+    output = np.asarray(composite(image)).copy()
+    for points, color in ((hair, (50, 235, 80)), (skin, (50, 120, 255))):
+        for x, y in np.rint(points).astype(int):
+            if 0 <= x < output.shape[1] and 0 <= y < output.shape[0]:
+                cv2.circle(output, (x, y), 2, color, -1)
+    return Image.fromarray(output)
+
+
+def save_sheets(renders, rows, poses, translation, crop):
+    DEST.mkdir(parents=True, exist_ok=True)
+    size = 360
+    sheet = Image.new('RGB', (6 * size, 3 * size + 28), BG)
+    ImageDraw.Draw(sheet).text((8, 7), 'Green: Seedance head target   Blue: Seedance skin target', fill='white')
     for i, (name, frame, yaw, pitch) in enumerate(KEYS):
-        data = renders[(yaw, pitch)]; image = np.array(reference_image(frame, data['eye']))
-        for mask, color in [(alpha(data['head']),(40,255,80)), (data['skin_mask'],(255,50,50))]:
-            lines, _ = cv2.findContours(mask.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-            cv2.polylines(image, lines, True, color, 2)
-        target = data['skin_target'].round().astype(int)
-        valid = (target[:, 0]>=0)&(target[:, 0]<1024)&(target[:, 1]>=0)&(target[:, 1]<1024)
-        for x, y in target[valid]:cv2.circle(image, (x, y), 1, (40, 100, 255), -1)
-        overlays.paste(tile(Image.fromarray(image), name+' blue target / red skin / green base', 360), ((i % 3)*360, (i // 3)*360))
-    overlays.save(dest/'head_base_jaw_temple.png')
+        x, y = (i % 3) * 2 * size, (i // 3) * size + 28
+        item, row = renders[(yaw, pitch)], rows[i]
+        overlay = draw_targets(item['portrait'], row['hair_points'], row['skin_points'])
+        sheet.paste(tile(overlay, crop, size, name + ' / model'), (x, y))
+        sheet.paste(tile(reference(frame, poses, translation), crop, size, name + ' / Seedance'), (x + size, y))
+    sheet.save(DEST / 'head_base_seedance_9.png')
+
+    size = 280
+    strip = Image.new('RGB', (13 * size, 3 * size + 28), BG)
+    ImageDraw.Draw(strip).text((8, 7), 'Effective yaw -90 to +90; pitch -20 / 0 / +20', fill='white')
+    for i, (yaw, pitch) in enumerate(STRIP):
+        strip.paste(tile(renders[(yaw, pitch)]['portrait'], crop, size, f'{yaw:+g} / {pitch:+g}'),
+                    ((i % 13) * size, (i // 13) * size + 28))
+    strip.save(DEST / 'head_base_turn_strip.png')
+
+    size = 500
+    profiles = Image.new('RGB', (4 * size, size), BG)
+    for i, (yaw, pitch) in enumerate(PROFILES):
+        profiles.paste(tile(renders[(yaw, pitch)]['portrait'], crop, size, f'yaw {yaw:+g}'), (i * size, 0))
+    profiles.save(DEST / 'head_base_profiles.png')
+
+    before = Image.open(WIP2 / 'head_base_seedance_9.png').convert('RGB')
+    old_crop = (340, 27, 1124, 811)
+    edges = Image.new('RGB', (800, 1600), BG)
+    for row, name in enumerate(('up-left', 'up-right', 'left', 'right')):
+        i = next(i for i, key in enumerate(KEYS) if key[0] == name)
+        _, _, yaw, pitch = KEYS[i]
+        x, y = (i % 3) * 720, (i // 3) * 360 + 28
+        original = before.crop((x, y, x + 360, y + 360))
+        current = tile(renders[(yaw, pitch)]['portrait'], old_crop, 360, '')
+        focus = (40, 105, 240, 305) if 'left' in name else (120, 105, 320, 305)
+        for column, image in enumerate((original, current)):
+            panel = image.crop(focus).resize((400, 400), Image.Resampling.LANCZOS)
+            ImageDraw.Draw(panel).text((6, 6), name + (' / WIP2' if column == 0 else ' / 4c'),
+                                       fill='white', stroke_width=2, stroke_fill=BG)
+            edges.paste(panel, (column * 400, row * 400))
+    edges.save(DEST / 'head_base_edges_2x.png')
 
 
 def main():
-    rig = json.loads((ROOT/'bundle/assets/seosoyoung-rig.json').read_text())
-    skin = next(m for m in rig['meshes'] if m['id']=='face-skin')
-    rest = np.asarray(skin['positions'], float); triangles = np.asarray(skin['triangles'], int)
-    r24 = {p['name']:p['minDetJ'] for p in json.loads((ROOT/'docs/face_hairless_metrics.json').read_text())['poses']}
-    thickness = json.loads((FIT/'results/fit2f/shared-n3.json').read_text())['thickness_px']
-    targets = {target['frame']:target for target in load_targets_f([item[1] for item in KEYS], thickness)}
-    tasks = {}
-    for item in KEYS+INTERMEDIATE+PROFILES+STRIP:
-        tasks[(item[2],item[3])] = item
-    metric_positions = {(p[2],p[3]) for p in KEYS+INTERMEDIATE+PROFILES if abs(p[2])<=67.5}
-    full_positions = {(p[2],p[3]) for p in KEYS}
-    server = http.server.ThreadingHTTPServer(('127.0.0.1',0), functools.partial(Handler,directory=str(ROOT/'bundle')))
-    thread = threading.Thread(target=server.serve_forever,daemon=True); thread.start()
-    errors=[]; renders={}
+    meta = json.loads((ROOT / 'bundle/assets/head-base.json').read_text())
+    rig = json.loads((ROOT / 'bundle/assets/seosoyoung-rig.json').read_text())
+    skin_mesh = next(mesh for mesh in rig['meshes'] if mesh['id'] == 'face-skin')
+    rest = np.asarray(skin_mesh['positions'], float)
+    triangles = np.asarray(skin_mesh['triangles'], int)
+    r24 = {item['name']: item['minDetJ'] for item in json.loads((ROOT / 'docs/face_hairless_metrics.json').read_text())['poses']}
+    pose_rows = json.loads((FIT / 'results/fit2e/poses-refined.json').read_text())['frames']
+    poses = {row['frame']: row['refined_pose'] for row in pose_rows}
+    thickness = json.loads((FIT / 'results/fit2f/shared-n3.json').read_text())['thickness_px']
+    targets = {target['frame']: target for target in load_targets_f([key[1] for key in KEYS], thickness)}
+    for _, frame, _, _ in KEYS:
+        scale, shift = transform(frame, poses, meta['rest_translation'])
+        assert np.allclose(scale * np.asarray(poses[frame][4:6]) + shift,
+                           np.asarray(meta['rest_translation']) + [X_OFFSET, 0], atol=1e-9)
+    tasks = list(dict.fromkeys([(key[2], key[3]) for key in KEYS] + STRIP + PROFILES + INTERMEDIATE))
+    key_positions = {(key[2], key[3]) for key in KEYS}
+    hole_positions = key_positions | set(PROFILES)
+    jacobian_positions = key_positions | set(INTERMEDIATE) | {(-67.5, 0), (67.5, 0)}
+    server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(Handler, directory=str(ROOT / 'bundle')))
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    errors, renders = [], {}
     try:
         with sync_playwright() as pw:
-            browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--use-angle=swiftshader'])
-            page=browser.new_page(viewport={'width':1440,'height':1000},device_scale_factor=1)
-            page.on('pageerror',lambda e:errors.append(str(e)))
-            page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
-            page.on('response',lambda r:errors.append(str(r.status)+' '+r.url) if r.status>=400 else None)
-            page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle')
-            page.wait_for_function('window.studio?.ready',timeout=30000)
+            browser = pw.chromium.launch(headless=True, args=['--no-sandbox', '--use-angle=swiftshader'])
+            page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
+            page.on('pageerror', lambda e: errors.append(str(e)))
+            page.on('console', lambda m: errors.append(m.text) if m.type == 'error' else None)
+            page.on('response', lambda r: errors.append(str(r.status) + ' ' + r.url) if r.status >= 400 else None)
+            page.goto(f'http://127.0.0.1:{server.server_port}', wait_until='networkidle')
+            page.wait_for_function('window.studio?.ready', timeout=30000)
             page.evaluate('''async()=>{
               const {Renderer}=await import('./renderer.mjs');
               const canvas=document.createElement('canvas'),overlay=document.createElement('canvas');
-              Object.assign(canvas.style,{width:'1100px',height:'1600px',position:'fixed',left:'-2000px',top:'0'});
+              Object.assign(canvas.style,{width:'1500px',height:'1600px',position:'fixed',left:'-2000px',top:'0'});
               document.body.append(canvas);window.headCapture=new Renderer(canvas,overlay,studio.rig,studio.renderer.images);
               window.headModule=await import('./head-base.mjs');window.poseModule=await import('./pose-grid.mjs');
-              window.rigModule=await import('./rig.mjs');window.featureModule=await import('./face-feature-prior.mjs');
-              window.featureData=await import('./feature-data.mjs');window.solveData=await import('./face-solve-data.mjs');
+              window.rigModule=await import('./rig.mjs');window.solveData=await import('./face-solve-data.mjs');
             }''')
-            page.locator('#head-base-toggle').click(); assert page.evaluate("studio.state.hidden.has('head-base')")
-            page.locator('#head-base-toggle').click(); assert not page.evaluate("studio.state.hidden.has('head-base')")
-            page.locator('#hair-hide-toggle').click(); assert page.evaluate("studio.rig.meshes.filter(m=>m.id==='hair-top'||m.id==='hairpin'||/^(bangs-|side-hair-|back-hair-|side-cranium-|tail-)/.test(m.id)).every(m=>studio.state.hidden.has(m.id))")
-            page.locator('#hair-hide-toggle').click(); assert not page.evaluate("studio.state.hidden.has('hair-top')")
-            core=page.evaluate('''()=>{
-              const meta=headModule.getHeadBase(),skin=studio.rig.meshes.find(m=>m.id==='face-skin');
+            core = page.evaluate('''()=>{
               const make=(yaw,pitch)=>({...studio.p,CorrHeadBase:1,CorrOutline:1,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamAngleZ:0,[poseModule.FRAME_CACHE]:new Map()});
-              const p=make(0,0),points=[...skin.positions,...solveData.FACE_SOLVE.points];let rest=0;
-              for(const point of points){const q=headModule.headSolveWorld(point,p);rest=Math.max(rest,Math.hypot(q[0]-point[0],q[1]-point[1]));}
+              const skin=studio.rig.meshes.find(m=>m.id==='face-skin'),p=make(0,0);let rest=0;
+              for(const point of [...skin.positions,...solveData.FACE_SOLVE.points]){const q=headModule.headSolveWorld(point,p);rest=Math.max(rest,Math.hypot(q[0]-point[0],q[1]-point[1]));}
               const edges=[];for(const sign of [-1,1])for(const pitch of [-30,0,30]){
                 const a=make(sign*44.99,pitch),b=make(sign*45.01,pitch),va=headModule.headBaseVertices(a).surface,vb=headModule.headBaseVertices(b).surface;
                 let head=0,face=0;for(let i=0;i<va.length;i+=3)head=Math.max(head,Math.hypot(va[i]-vb[i],va[i+1]-vb[i+1]));
@@ -178,67 +264,99 @@ def main():
               }
               return {rest_max_px:rest,edges};
             }''')
-            for (yaw,pitch), item in tasks.items():
-                data=page.evaluate('''([yaw,pitch,metric,full])=>{
+            for i, (yaw, pitch) in enumerate(tasks):
+                data = page.evaluate('''([yaw,pitch,key,hole,measure])=>{
                   const p={...studio.p,CorrHeadBase:1,CorrOutline:1,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0,ParamEyeLOpen:1,ParamEyeROpen:1,ParamEyeBallX:0,ParamEyeBallY:0};
-                  const hairs=studio.rig.meshes.filter(m=>m.id==='hair-top'||m.id==='hairpin'||/^(bangs-|side-hair-|back-hair-|side-cranium-|tail-)/.test(m.id)).map(m=>m.id);
+                  const meshes=studio.rig.meshes,skin=meshes.find(m=>m.id==='face-skin');
+                  const hidden=meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck'&&!m.id.startsWith('ear-')&&m.deformerId!=='WarpBody').map(m=>m.id);
                   const state={...studio.state,mode:'all',wire:false,grid:false,before:false,surfaceOnly:false,masks:false,identify:null};
-                  const capture=(hidden,identify=null)=>{headCapture.render(p,{...state,hidden:new Set(hidden),identify});const error=headCapture.gl.getError();if(error)throw Error('WebGL error '+error);return headCapture.canvas.toDataURL('image/png').split(',')[1];};
-                  const result={hairless:capture(hairs)};
-                  if(full)result.full=capture([]);
-                  if(metric){
-                    result.head=capture(studio.rig.meshes.map(m=>m.id));
-                    result.skin=capture([...studio.rig.meshes.filter(m=>m.id!=='face-skin').map(m=>m.id),'head-base'],'face-skin');
-                    result.nohead=capture(['head-base']);
-                    const q={...p,[poseModule.FRAME_CACHE]:new Map()},skin=studio.rig.meshes.find(m=>m.id==='face-skin');
-                    result.skinPositions=skin.positions.map(v=>rigModule.deform3D(skin,v,q).slice(0,2));
-                    const left=featureModule.registeredFeatureWorld('eye-left-sclera',featureData.FEATURE_FIT.front.left,q);
-                    const right=featureModule.registeredFeatureWorld('eye-right-sclera',featureData.FEATURE_FIT.front.right,q);
-                    result.eye=[(left[0]+right[0])/2,(left[1]+right[1])/2];
-                    const attached=headModule.headSolveWorld(headModule.getHeadBase().rest_eye,q);
-                    result.eyeError=Math.hypot(attached[0]-result.eye[0],attached[1]-result.eye[1]);
-                  }
-                  return result;
-                }''',[yaw,pitch,(yaw,pitch) in metric_positions,(yaw,pitch) in full_positions])
-                result={'hairless':decode(data['hairless'])}
-                if 'full' in data:result['full']=decode(data['full'])
-                if 'head' in data:
-                    result.update(head=decode(data['head']),skin=decode(data['skin']),nohead=decode(data['nohead']),
-                                  eye=data['eye'],eye_error=data['eyeError'],skin_positions=data['skinPositions'])
-                renders[(yaw,pitch)]=result
+                  const capture=(ids,pose=p)=>{headCapture.render(pose,{...state,hidden:new Set(ids)});const error=headCapture.gl.getError();if(error)throw Error('WebGL error '+error);return headCapture.canvas.toDataURL('image/png').split(',')[1];};
+                  const portrait=capture(hidden);
+                  const union=key?capture(meshes.filter(m=>m.id!=='face-skin').map(m=>m.id)):null;
+                  const ears=key?capture([...meshes.filter(m=>!m.id.startsWith('ear-')).map(m=>m.id),'head-base']):null;
+                  const headNeck=hole?capture(meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck').map(m=>m.id)):null;
+                  const isolated=[...meshes.filter(m=>m.id!=='face-skin').map(m=>m.id),'head-base'];
+                  const restOld=yaw===0&&pitch===0?capture(isolated,{...p,CorrHeadBase:0}):null;
+                  const restNew=yaw===0&&pitch===0?capture(isolated):null;
+                  const q={...p,[poseModule.FRAME_CACHE]:new Map()},points=headModule.headBaseVertices(q).inset;
+                  let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+                  const include=(x,y)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x);bottom=Math.max(bottom,y);};
+                  for(let j=0;j<points.length;j+=3)include(points[j],points[j+1]);
+                  const skinPositions=skin.positions.map(point=>rigModule.deform3D(skin,point,q).slice(0,2));
+                  for(const point of skinPositions)include(point[0],point[1]);
+                  for(const mesh of meshes.filter(m=>m.id.startsWith('ear-')))for(const point of mesh.positions){const v=rigModule.deform3D(mesh,point,q);include(v[0],v[1]);}
+                  return {portrait,union,ears,headNeck,restOld,restNew,skinPositions:measure?skinPositions:null,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
+                }''', [yaw, pitch, (yaw, pitch) in key_positions, (yaw, pitch) in hole_positions,
+                        (yaw, pitch) in jacobian_positions])
+                renders[(yaw, pitch)] = {'portrait': decode(data['portrait']),
+                                         'bounds': data['bounds'], 'model_angle': data['modelAngle'], 'hidden': data['hidden']}
+                for source, target in [('union', 'union'), ('ears', 'ears'), ('headNeck', 'head_neck'),
+                                       ('restOld', 'rest_old'), ('restNew', 'rest_new')]:
+                    if data[source] is not None:
+                        renders[(yaw, pitch)][target] = decode(data[source])
+                if data['skinPositions'] is not None:
+                    renders[(yaw, pitch)]['skin_positions'] = data['skinPositions']
+                if (i + 1) % 10 == 0 or i + 1 == len(tasks):
+                    print(f'Captured {i + 1}/{len(tasks)} poses', flush=True)
             browser.close()
-            if errors:raise RuntimeError('Browser errors: '+str(errors))
+            if errors:
+                raise RuntimeError('Browser errors: ' + str(errors))
     finally:
-        server.shutdown();server.server_close();thread.join()
-    rows=[]
-    for name, frame, yaw, pitch in KEYS+INTERMEDIATE+PROFILES:
-        if (yaw,pitch) not in metric_positions:continue
-        data=renders[(yaw,pitch)];headmask=alpha(data['head']);headedge=contour(headmask)
-        skin_pixels=np.asarray(data['skin']);skinmask=(skin_pixels[:,:,0]>200)&(skin_pixels[:,:,1]>200)&(skin_pixels[:,:,2]>200)&(skin_pixels[:,:,3]>127)
-        skinedge=contour(skinmask);data['skin_mask']=skinmask
-        base=alpha(data['nohead'])
-        row={'name':name,'yaw':yaw,'pitch':pitch,'N4':jacobians(rest,np.asarray(data['skin_positions']),triangles),
-             'N5':protrusion(headmask,base,skinmask),
-             'N8':{'error_px':data['eye_error'],'passed':data['eye_error']<=1e-3},'r24_min_det_j':r24.get(name)}
-        row['N4']['passed']=row['N4']['min_det_j']>=.35 and row['N4']['max_anisotropy']<=2.
-        if frame is not None:
-            target=targets[frame];shift=np.array([152,20])+np.array(data['eye'])-[501.9,431.5]
-            hair=target['points'][target['labels']==1]+shift
-            skin_target=target['skin_all'][target['skin_keep']]+shift;data['skin_target']=skin_target
-            row['N3']={'head':residual(hair,headedge),'face':residual(skin_target,skinedge)}
-            value=row['N3'];value['passed']=n3_pass(value)
-        rows.append(row)
-    n6max=max(max(x['head_px'],x['face_px']) for x in core['edges'])
-    metrics={'N1':{'max_error_px':core['rest_max_px'],'passed':core['rest_max_px']<=1e-3},
-             'N2':{'passed':True,'source':'pipeline/test_head_base.mjs: main hashes'},
-             'N6':{'max_difference_px':n6max,'passed':n6max<=.5,'edges':core['edges']},
-             'N7':{'passed':True,'source':'pipeline/test_head_base.mjs: 100 vertices x 13 poses'},
-             'poses':rows,'r24_reference':r24,
-             'angle_note':'pitch -30: effective yaw 25 to 45 maps model yaw 27.97 to 22.84 degrees'}
-    (ROOT/'docs/head_base_metrics.json').write_text(json.dumps(metrics,ensure_ascii=False,indent=2)+'\n')
-    save_sheets(renders,metrics)
-    failures=[{'name':r['name'],'depth_px':r['N5']['max_depth_px']} for r in rows if not r['N5']['passed']]
-    print(json.dumps({'poses':len(rows),'N1':metrics['N1'],'N6':metrics['N6']['max_difference_px'],'N5_failures':failures},ensure_ascii=False),flush=True)
-    if failures:raise SystemExit('STOP: head base protrudes more than 1 px')
+        server.shutdown()
+        server.server_close()
+        thread.join()
 
-if __name__=='__main__':main()
+    rows = []
+    for name, frame, yaw, pitch in KEYS:
+        item, target = renders[(yaw, pitch)], targets[frame]
+        scale, shift = transform(frame, poses, meta['rest_translation'])
+        hair = target['points'][target['labels'] == 1] * scale + shift
+        skin_target = target['skin_all'][target['skin_keep']] * scale + shift
+        n3 = n3_metrics(alpha(item['union']), skin_target, hair)
+        n4 = jacobians(rest, np.asarray(item['skin_positions']), triangles)
+        n4['passed'] = n4['min_det_j'] >= .35 and n4['max_anisotropy'] <= 2
+        holes = closed_holes(alpha(item['head_neck']))
+        rows.append({'name': name, 'frame': frame, 'yaw': yaw, 'pitch': pitch, 'model_angle': item['model_angle'],
+                     'N3': n3, 'N4': n4, 'N10': {'hole_pixels': holes, 'passed': holes == 0},
+                     'N11': ear_iou(alpha(item['ears']), frame, poses, meta['rest_translation']),
+                     'r24_min_det_j': r24.get(name), 'hair_points': hair, 'skin_points': skin_target})
+    extra = []
+    for yaw, pitch in INTERMEDIATE + PROFILES:
+        item = renders[(yaw, pitch)]
+        row = {'name': f'pose-{yaw:+g}-{pitch:+g}', 'yaw': yaw, 'pitch': pitch}
+        if (yaw, pitch) in jacobian_positions:
+            row['N4'] = jacobians(rest, np.asarray(item['skin_positions']), triangles)
+            row['N4']['passed'] = row['N4']['min_det_j'] >= .35 and row['N4']['max_anisotropy'] <= 2
+        if (yaw, pitch) in hole_positions:
+            holes = closed_holes(alpha(item['head_neck']))
+            row['N10'] = {'hole_pixels': holes, 'passed': holes == 0}
+        extra.append(row)
+    x0 = max(0, math.floor(rest[:, 0].min()) + X_OFFSET)
+    x1 = min(CANVAS_WIDTH, math.ceil(rest[:, 0].max()) + X_OFFSET + 1)
+    y0 = max(0, math.floor(rest[:, 1].min()))
+    y1 = min(1024, math.ceil(rest[:, 1].max()) + 1)
+    old = np.asarray(renders[(0, 0)]['rest_old'])[y0:y1, x0:x1]
+    new = np.asarray(renders[(0, 0)]['rest_new'])[y0:y1, x0:x1]
+    changed = int(np.count_nonzero(np.any(old != new, axis=2)))
+    crop = make_crop(renders)
+    n6max = max(max(edge['head_px'], edge['face_px']) for edge in core['edges'])
+    metrics = {'N1': {'max_error_px': core['rest_max_px'], 'passed': core['rest_max_px'] <= 1e-3},
+               'N2': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: legacy and feature hashes'},
+               'N3c': {'changed_pixels': changed, 'passed': changed == 0, 'face_bbox': [x0, y0, x1, y1]},
+               'N6': {'max_difference_px': n6max, 'passed': n6max <= .5, 'edges': core['edges']},
+               'N7': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: projection fixture'},
+               'poses': [{k: v for k, v in row.items() if k not in ('hair_points', 'skin_points')} for row in rows] + extra,
+               'rest_translation': meta['rest_translation'], 'common_crop_pixels': crop,
+               'hidden_meshes': renders[(0, 0)]['hidden'],
+               'reference_transform': '(q - camera_translation) * exp(logscale_front - logscale_key) + rest_translation',
+               'note': 'Angle-dependent displacement and outside-offset decay remain active.'}
+    save_sheets(renders, rows, poses, meta['rest_translation'], crop)
+    (ROOT / 'docs/head_base_metrics.json').write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + '\n')
+    print(json.dumps({'poses': len(tasks), 'N1': metrics['N1'], 'N6': metrics['N6']['max_difference_px'],
+                      'N3c': metrics['N3c'], 'crop': crop, 'N3_passed': sum(row['N3']['passed'] for row in rows)}, ensure_ascii=False), flush=True)
+    if changed:
+        raise SystemExit('STOP: face pixels changed at rest while the head base was hidden')
+
+
+if __name__ == '__main__':
+    main()

@@ -56,6 +56,68 @@ def vertex_normals(vertices, triangles):
     return normals / np.linalg.norm(normals, axis=1)[:, None]
 
 
+def neck_skirt(vertices, triangles, fields, edges, excluded, s_ref):
+    neighbors = {}
+    for a, b in edges:
+        a, b = int(a), int(b)
+        neighbors.setdefault(a, []).append(b)
+        neighbors.setdefault(b, []).append(a)
+    if any(len(items) != 2 for items in neighbors.values()):
+        raise ValueError('STOP: open boundary is not a set of closed loops')
+    remaining, loops = set(neighbors), []
+    while remaining:
+        first = next(iter(remaining))
+        loop, previous, current = [], None, first
+        while current not in loop:
+            loop.append(current)
+            remaining.discard(current)
+            adjacent = neighbors[current]
+            previous, current = current, adjacent[0] if adjacent[0] != previous else adjacent[1]
+        if current != first:
+            raise ValueError('STOP: open boundary does not form a closed loop')
+        loops.append(loop)
+    ring = max(loops, key=len)
+    if len(loops) > 1:
+        print(json.dumps({'open_loops': list(map(len, loops)), 'selected': len(ring)}), flush=True)
+    directed = {}
+    for tri in triangles:
+        for a, b in zip(tri, np.roll(tri, -1)):
+            key = tuple(sorted((int(a), int(b))))
+            if key in directed:
+                directed[key] = None
+            else:
+                directed[key] = (int(a), int(b))
+    if directed[tuple(sorted(ring[:2]))] != tuple(ring[:2]):
+        ring = [ring[0]] + ring[:0:-1]
+    if any(directed[tuple(sorted((a, b)))] != (a, b) for a, b in zip(ring, ring[1:] + ring[:1])):
+        raise ValueError('STOP: open boundary winding is inconsistent')
+    ring = np.asarray(ring, dtype=int)
+    count, original = len(ring), len(vertices)
+    center = vertices[ring][:, [0, 2]].mean(axis=0)
+    rings = [ring]
+    values = vertices[ring].copy()
+    extras = []
+    for step in range(2):
+        values = values.copy()
+        values[:, [0, 2]] = center + (values[:, [0, 2]] - center) * .95
+        values[:, 1] -= 45 / s_ref
+        extras.append(values)
+        rings.append(np.arange(original + step * count, original + (step + 1) * count))
+    additions = []
+    for upper, lower in zip(rings, rings[1:]):
+        for i in range(count):
+            j = (i + 1) % count
+            additions.extend([[upper[j], upper[i], lower[i]], [upper[j], lower[i], lower[j]]])
+    vertices = np.concatenate([vertices, *extras])
+    fields = np.concatenate([fields, fields[:, ring, :], fields[:, ring, :]], axis=1)
+    triangles = np.concatenate([triangles, np.asarray(additions, dtype=triangles.dtype)])
+    excluded = np.r_[excluded, np.ones(2 * count, dtype=bool)]
+    excluded[ring] = True
+    stats = {'ring_length': count, 'added_vertices': 2 * count, 'added_triangles': len(additions),
+             'rings': [r.tolist() for r in rings], 'loop_lengths': list(map(len, loops))}
+    return vertices, triangles, fields, excluded, stats
+
+
 def ear_sheet(vertices, triangles):
     normal = np.cross(vertices[triangles[:, 1]] - vertices[triangles[:, 0]],
                       vertices[triangles[:, 2]] - vertices[triangles[:, 0]])
@@ -73,6 +135,27 @@ def ear_sheet(vertices, triangles):
         images.append(image)
     path = FIT / 'sheets/head-base-ears.png'
     path.parent.mkdir(parents=True, exist_ok=True)
+    if not cv2.imwrite(str(path), np.hstack(images)):
+        raise RuntimeError(f'Could not write {path}')
+    return path
+
+
+def neck_sheet(vertices, triangles):
+    normal = np.cross(vertices[triangles[:, 1]] - vertices[triangles[:, 0]],
+                      vertices[triangles[:, 2]] - vertices[triangles[:, 0]])
+    normal /= np.linalg.norm(normal, axis=1)[:, None]
+    light = np.array([-.32, .52, .79]); light /= np.linalg.norm(light)
+    color = np.clip(180 * (.35 + .65 * np.maximum(normal @ light, 0)), 0, 255).astype(np.uint8)
+    images = []
+    for label, yaw, pitch in [('FRONT', 0., 0.), ('SIDE 90', 90., 0.), ('DOWN 30', 0., -30.)]:
+        q = project_np(vertices, [yaw, pitch, 0, np.log(19), 360, 300])
+        _, owner = raster_silhouette(q, triangles)
+        image = np.full((720, 720, 3), 248, np.uint8)
+        mask = owner >= 0
+        image[mask] = color[owner[mask], None]
+        cv2.putText(image, label, (15, 30), cv2.FONT_HERSHEY_SIMPLEX, .8, (20, 20, 20), 2)
+        images.append(image)
+    path = FIT / 'sheets/head-base-neck.png'
     if not cv2.imwrite(str(path), np.hstack(images)):
         raise RuntimeError(f'Could not write {path}')
     return path
@@ -138,6 +221,7 @@ class Attachments:
 def main():
     with np.load(FIT / 'results/fit2f/fit-state-n3.npz') as source:
         vertices, triangles, s_ref = source['vertices'].copy(), source['triangles'].copy(), float(source['s_ref'])
+        open_edges, excluded = source['open_edges'].copy(), source['excluded'].copy()
     with np.load(FIT / 'results/fit2f/surface-a.npz') as source:
         ear = source['ear_excluded'].copy()
     with np.load(FIT / 'results/fit2e/final-state.npz') as source:
@@ -152,8 +236,12 @@ def main():
     vertices, fields = flatten_ears(vertices, triangles, fields, ear)
     vertices = vertices.astype('<f4')
     fields = fields.astype('<f4')
-    normals = vertex_normals(vertices.astype(float), triangles).astype('<f4')
     sheet = ear_sheet(vertices, triangles)
+    vertices, triangles, fields, excluded, skirt = neck_skirt(vertices, triangles, fields, open_edges, excluded, s_ref)
+    vertices = vertices.astype('<f4')
+    fields = fields.astype('<f4')
+    normals = vertex_normals(vertices.astype(float), triangles).astype('<f4')
+    neck = neck_sheet(vertices, triangles)
     front = np.array(refined[3])
     theta_rest = front[:2]
     rest_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta_rest, nodes, sigma), fields.astype(float)) / s_ref
@@ -163,7 +251,8 @@ def main():
     projected[:, :2] += [152, 20]
     projected[:, 2] *= np.exp(front[3])
     binder = Attachments(projected, triangles, owner)
-    groups = {'skin': skin['positions'], 'solve': solve['points'], 'eye': [[501.9, 431.5]]}
+    groups = {'skin': skin['positions'], 'solve': solve['points'], 'eye': [[501.9, 431.5]],
+              'ear': [[369, 465], [636, 464.5]]}
     attachments, statistics, outside_points = {}, {}, set()
     for name, points in groups.items():
         outside = []
@@ -180,9 +269,12 @@ def main():
                             'max_distance_px': max(outside, default=0.),
                             'min_weight': min(all_weights), 'max_weight': max(all_weights)}
     outside = outside_sheet(outside_points)
-    print(json.dumps({'sheet': str(sheet), 'outside_sheet': str(outside), 'attachments': statistics}, ensure_ascii=False), flush=True)
+    print(json.dumps({'sheet': str(sheet), 'neck_sheet': str(neck), 'outside_sheet': str(outside),
+                      'skirt': {k: v for k, v in skirt.items() if k != 'rings'}, 'attachments': statistics}, ensure_ascii=False), flush=True)
     if statistics['solve']['outside'] > 111 or statistics['solve']['max_distance_px'] > 15:
         raise SystemExit('STOP: solve points exceed the approved outside count or distance')
+    if statistics['ear']['outside']:
+        raise SystemExit('STOP: ear attachment is outside the visible surface')
 
     colors = np.asarray(Image.open(ROOT / 'bundle/assets/texture_00.png').convert('RGB'))
     uv = np.asarray(skin['uvs']) * np.array([colors.shape[1], colors.shape[0]])
@@ -204,7 +296,8 @@ def main():
                          for frame, yaw, pitch in KEYS],
                 'logscale_front': front[3], 'rest_translation': [front[4]+152, front[5]+20],
                 'rest_eye': [501.9, 431.5], 'attachments': attachments,
-                'inset_px': 3, 'color': base_color, 'attachmentStatistics': statistics}
+                'inset_px': 0, 'color': base_color, 'attachmentStatistics': statistics,
+                'neck_skirt': skirt, 'excluded_vertices': np.flatnonzero(excluded).tolist()}
     (ROOT / 'bundle/assets/head-base.json').write_text(json.dumps(metadata, ensure_ascii=False, separators=(',', ':')))
     indices = np.linspace(0, len(vertices)-1, 100, dtype=int)
     fixture_poses = [refined[frame] for frame, _, _ in KEYS]

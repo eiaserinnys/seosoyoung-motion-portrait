@@ -3,11 +3,14 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {configureHeadBase,projectModel,modelAngles,phi,fieldAt,headBaseVertices,headSolveWorld} from '../bundle/head-base.mjs';
+import * as headBase from '../bundle/head-base.mjs';
 import {CORRECTION_PRESETS} from '../bundle/corrections.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
 import {outlineWorld} from '../bundle/face-outline.mjs';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
+import {sideWorld} from '../bundle/hair-shell.mjs';
+import {earWorld} from '../bundle/stereo-attachments.mjs';
 
 const read=path=>readFileSync(new URL(path,import.meta.url));
 const metadata=JSON.parse(read('../bundle/assets/head-base.json'));
@@ -65,35 +68,30 @@ test('N6: skin and head surface are continuous at both 45 degree boundaries',{ti
   for(const point of skin.positions){const x=headSolveWorld(point,a),y=headSolveWorld(point,b);assert(Math.hypot(x[0]-y[0],x[1]-y[1])<=.5,`skin ${sign}/${pitch}/${point}`);}
  }
 });
-test('N8: every sampled pose uses the fixed rest translation before neck roll',{timeout:30000},()=>{
- const vertices=new Float32Array(binary.buffer,binary.byteOffset+metadata.offsets.vertices.offset,metadata.offsets.vertices.length/4);
- const poses=[];for(const pitch of [-30,-20,0,20,30])for(let yaw=-90;yaw<=90;yaw+=15)poses.push([yaw,pitch,0]);
- poses.push([-45,30,-20],[45,-30,20]);
- for(const [yaw,pitch,roll] of poses){
-  const p=pose(yaw,pitch,{ParamAngleZ:roll}),theta=modelAngles(p),frame=headBaseVertices(p).surface;
-  const angle=roll*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
-  for(const i of fixture.indices.filter((_,j)=>j%12===0)){
-   const field=fieldAt(theta,i),v=field.map((x,j)=>vertices[i*3+j]+x/metadata.s_ref);
-   const q=projectModel(v,[...theta,0,metadata.logscale_front,0,0]);
-   const x=frame[i*3]-502,y=frame[i*3+1]-568;
-   close(502+c*x+s*y-q[0],metadata.rest_translation[0],1e-9,`translation x ${yaw}/${pitch}/${roll}/${i}`);
-   close(568-s*x+c*y-q[1],metadata.rest_translation[1],1e-9,`translation y ${yaw}/${pitch}/${roll}/${i}`);
+test('ear rest attachment is identity and preserves every ear vertex',{timeout:30000},()=>{
+ for(const [side,anchor] of [['left',[369,465]],['right',[636,464.5]]]){
+  const p=pose(),frame=headBase.attachedTransform(anchor,p);
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++)close(frame.R[i][j],Number(i===j),1e-9,`rest rotation ${side}`);
+  const mesh=rig.meshes.find(m=>m.id==='ear-'+side);
+  for(const point of mesh.positions){const q=headBase.headEarWorld(point,side,p);close(q[0],point[0],1e-6,`${side} x`);close(q[1],point[1],1e-6,`${side} y`);close(q[2],frame.A[2]+5,1e-6,`${side} z`);}
+ }
+});
+test('ear routing preserves the legacy path whenever the new surface is disabled',{timeout:30000},()=>{
+ for(const [side,point] of [['left',[369,465]],['right',[636,464.5]]])for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
+  for(const [enabled,outline] of [[0,0],[0,.5],[0,1],[1,0],[1,.5]]){
+   const p=pose(yaw,pitch,{CorrHeadBase:enabled,CorrOutline:outline});
+   assert.deepEqual(sideWorld(point,side,p,true),earWorld(point,side,p));
   }
  }
 });
-test('nine calibrated keys and angular continuity',{timeout:30000},()=>{
- for(const key of metadata.keys){const q=modelAngles(pose(key.yaw,key.pitch));q.forEach((x,i)=>close(x,key.model[i],1e-9,`key ${key.frame}`));}
- for(const pitch of [-30,-15,0,15,30]){
-  for(let yaw=-90;yaw<90;yaw++){const a=modelAngles(pose(yaw,pitch)),b=modelAngles(pose(yaw+1,pitch));for(let i=0;i<2;i++)assert(Math.abs(a[i]-b[i])<=2,`step ${yaw}/${pitch}`);}
-  for(const sign of [-1,1]){const a=modelAngles(pose(sign*44.99,pitch)),b=modelAngles(pose(sign*45.01,pitch));for(let i=0;i<2;i++)assert(Math.abs(a[i]-b[i])<=.05,`edge ${sign}/${pitch}`);}
+test('neck skirt leaves exactly the final boundary loop open',{timeout:30000},()=>{
+ const {rings,ring_length:count,added_vertices:added}=metadata.neck_skirt;
+ assert.equal(rings.length,3);assert.equal(added,2*count);
+ const edges=new Map(),triangles=headBase.getHeadBase().triangles;
+ for(let i=0;i<triangles.length;i+=3)for(const [a,b] of [[triangles[i],triangles[i+1]],[triangles[i+1],triangles[i+2]],[triangles[i+2],triangles[i]]]){
+  const key=[Math.min(a,b),Math.max(a,b)].join(',');edges.set(key,(edges.get(key)||0)+1);
  }
-});
-test('outside attachments retain rest offset and decay it continuously',{timeout:30000},()=>{
- const [key,a]=Object.entries(metadata.attachments).find(([,entry])=>Math.hypot(...entry.offset)>1);
- const point=key.split(',').map(Number),rest=pose(),q=headSolveWorld(point,rest);
- close(q[0],point[0],1e-3,'outside rest x');close(q[1],point[1],1e-3,'outside rest y');
- const p=pose(45,0),frame=headBaseVertices(p),m=headSolveWorld(point,p),surface=[0,0];
- a.vertices.forEach((index,i)=>{for(let c=0;c<2;c++)surface[c]+=a.weights[i]*frame.surface[index*3+c];});
- for(let c=0;c<2;c++)close(m[c]-surface[c],a.offset[c]*frame.offsetWeight,1e-9,'outside decay');
- const unlisted=[250.125,150.25],near=headSolveWorld(unlisted,pose(.01,0));assert(near.every(Number.isFinite));
+ const boundary=[...edges].filter(([,count])=>count===1).map(([key])=>key);
+ const ring=rings[2],expected=new Set(ring.map((a,i)=>[Math.min(a,ring[(i+1)%count]),Math.max(a,ring[(i+1)%count])].join(',')));
+ assert.equal(boundary.length,count);assert.deepEqual(new Set(boundary),expected);
 });

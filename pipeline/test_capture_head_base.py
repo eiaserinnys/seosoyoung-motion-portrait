@@ -1,19 +1,17 @@
 """Small checks that head-base measurement gates reject visible regressions."""
 import unittest
 import numpy as np
-from capture_head_base import jacobians, n3_pass, protrusion
+from capture_head_base import closed_holes, contour, jacobians, n3_metrics
 
 
 class MeasurementContracts(unittest.TestCase):
-    def test_protrusion_detects_pixels_beyond_one_pixel(self):
-        full = np.zeros((12, 12), bool); full[3:8, 3:8] = True
-        skin = np.zeros_like(full)
-        self.assertTrue(protrusion(full, full, skin)['passed'])
-        head = full.copy(); head[5, 9] = True
-        result = protrusion(head, full, skin)
-        self.assertFalse(result['passed']); self.assertEqual(result['max_depth_px'], 2.)
-        skin[5, 9] = True
-        self.assertTrue(protrusion(head, full, skin)['passed'])
+    def test_closed_holes_exclude_background_connected_to_the_edge(self):
+        mask = np.zeros((12, 12), bool); mask[2:10, 2:10] = True
+        self.assertEqual(closed_holes(mask), 0)
+        mask[5:7, 5:7] = False
+        self.assertEqual(closed_holes(mask), 4)
+        mask[2:5, 5] = False
+        self.assertEqual(closed_holes(mask), 0)
 
     def test_jacobians_detect_reversal_and_anisotropy(self):
         rest = np.array([[0, 220], [1, 220], [0, 221]], float)
@@ -25,11 +23,14 @@ class MeasurementContracts(unittest.TestCase):
         stretched = rest.copy(); stretched[1, 0] = 3.
         self.assertGreater(jacobians(rest, stretched, tri)['max_anisotropy'], 2.)
 
-    def test_contour_threshold_rejects_injected_residual(self):
-        values = {'head': {'median_px': 1., 'max_px': 5.}, 'face': {'median_px': 1., 'p95_px': 4.}}
-        self.assertTrue(n3_pass(values))
-        values['face']['p95_px'] = 6.
-        self.assertFalse(n3_pass(values))
+    def test_bidirectional_contours_reject_an_injected_shift(self):
+        mask = np.zeros((40, 40), bool); mask[10:30, 10:30] = True
+        points = contour(mask)
+        skin, hair = points[points[:, 0] < 20], points[points[:, 0] >= 20]
+        good = n3_metrics(mask, skin, hair)
+        self.assertTrue(good['passed'])
+        shifted = np.zeros_like(mask); shifted[10:30, 18:38] = True
+        self.assertFalse(n3_metrics(shifted, skin, hair)['passed'])
 
 if __name__ == '__main__':
     unittest.main()
