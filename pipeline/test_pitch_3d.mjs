@@ -150,6 +150,7 @@ test('landmark-mapped jaw uses the actual registered chin without a synthetic li
   assert(Math.abs(lip[1]-featurePose.centers.mouth[1])<1e-7,`registered mouth ${yaw},${pitch}`);
  }
  const up=pose(0,30),jaw=outlineWorld([outlineRow(550)[0],550],up),chin=outlineWorld([502.5,616],up);
+ // Reference curvature 28px minus approved F2 RMS 7.847817231187131px.
  assert(chin[1]-jaw[1]>20.15218276881287,'low-angle jaw keeps curvature instead of a horizontal brick');
 });
 test('downward pitch retains only the accepted A-stage triangle reversals',()=>{

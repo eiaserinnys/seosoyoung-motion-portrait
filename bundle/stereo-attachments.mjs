@@ -1,6 +1,7 @@
 import {FACE_SOLVE} from './face-solve-data.mjs';
 import {EAR_TRANSFORMS} from './ear-transform-data.mjs';
 import {gridValue} from './pose-grid.mjs';
+import {smoothstep} from './face-profile.mjs';
 import {HEAD_CENTER,NECK_PIVOT,artWorld,correction,radians,clamp,rotateXYZ} from './geometry.mjs';
 import {profileExtension,earProfileTarget,beadProfileTarget} from './profile-attachments.mjs';
 const ears={left:{front:[287,407,379,523],target:[324,400,442,515],angle:45},right:{front:[626,407,716,522],target:[576,385,688,511],angle:-45}};
@@ -26,7 +27,11 @@ export function earTransform(point,side,p){
  return [c[0]+face[0]+t[0]+Math.cos(angle)*x-Math.sin(angle)*y,
          c[1]+face[1]+t[1]+Math.sin(angle)*x+Math.cos(angle)*y];
 }
-function earSimilarityBase(q,side,p){return [...earTransform(q,side,p),earBase(q,side,p)[2]];}
+function earSimilarityBase(q,side,p){
+ const current=earTransform(q,side,p),legacy=earBase(q,side,p);
+ const w=smoothstep(0,22.5,Math.abs(p.ParamAngleX*correction(p,'CorrTurn'))-45);
+ return [...current.map((v,i)=>(1-w)*v+w*legacy[i]),legacy[2]];
+}
 export function earWorld(point,side,p){
  const yaw=p.ParamAngleX*correction(p,'CorrTurn'),world=earSimilarityBase(point,side,p);
  if(Math.abs(yaw)<=45||side!==(yaw<0?'right':'left'))return world;

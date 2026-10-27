@@ -164,7 +164,7 @@ test('profile bangs precede the forehead and the near front chart stays oriented
    const skin=mesh('face-skin').positions.filter(v=>Math.abs(v[1]-y)<12).map(v=>deform3D(mesh('face-skin'),v,p)[0]);
    assert(skin.length);
    const diff=sign>0?Math.min(...skin)-hair:hair-Math.max(...skin);
-   assert(Number.isFinite(diff));console.log('7.17 visual-only forehead clearance',yaw,y,diff);
+   assert(diff>=15&&diff<=30,`${yaw}/${y} forehead clearance ${diff} outside 15..30px`);
   }
   for(const m of [mesh('hair-top'),mesh('bangs-'+(sign>0?'right':'left')),mesh('side-hair-'+(sign>0?'right':'left')),mesh('hairpin')]){
    let checked=0;

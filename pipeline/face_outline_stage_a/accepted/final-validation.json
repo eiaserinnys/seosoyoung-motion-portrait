@@ -276,7 +276,7 @@
   },
   "currentSHA": {
     "face-solve-data.mjs": "32e1908f0ddcb904feb0853844fac8ce4dc7ffe073d3298c3c0852ca5ee544e5",
-    "stereo-attachments.mjs": "d4e5a6b65579e253f77a4852581deb01134a8dd071fbfea40c436255e56fe9f9",
+    "stereo-attachments.mjs": "2b839653947f5931bf222662ad0962005a548f5dd073a33de986eaf9ea46c897",
     "ear-transform-data.mjs": "7baf74abb04b05d1f39c693422e33d1580464a5199f7ad7f153cdc5cb769dd34"
   },
   "runtimeSHA": "4ada25597539bd047f3559f1249cddb9e3327e3dbbb5456dccbcb869dada8de1",
@@ -294,6 +294,122 @@
     "final-eight-between-hairless.png": "70899a342688d98a9522fbc9df6e8db632ad95a03b51008e65dfe6702cef58e3",
     "final-nine-keys-hairless.png": "06cb8273c838b4f48709ac4b2a92315b964d2891ae517e08c881757b41e37f63",
     "final-eight-between-full.png": "d050c6085ee71802a22a2690489b98dff0bb3a3754ae3ecaf8c765e972f9b7a2",
-    "final-F7-left-2x.png": "bc00c33e7c0866b86d0ab987da2cd2e7af34dcc4cc7b141e9b8a97ef8f784d0e"
+    "final-F7-left-2x.png": "bc00c33e7c0866b86d0ab987da2cd2e7af34dcc4cc7b141e9b8a97ef8f784d0e",
+    "ear-pitch-hairless-2x.png": "fa581aa9a78884bdcaca56caf35b05c2918d1de4c99518d70250548db25ff4c0",
+    "ear-pitch-full-2x.png": "cf7fc0ce4628bf722601912f2b6f80d14362a65bae4f9367347b899ec38d981a",
+    "ear-pitch-hairless.png": "190de845f8f27971eba726fb70806f0cd130818b1a01dc37ffe65704763061aa",
+    "ear-pitch-full.png": "316d51ab9d2a47cbe1c2f8dbde30a3b0e9ec31ad24cb71060a6e4a17f270332f"
+  },
+  "earProfileReview": {
+    "previousHead": "7abde821755e818963428b79bd2174c3ad39d9d4",
+    "contractsPassed": 2,
+    "rendererPoses": 6,
+    "pageErrors": 0,
+    "comparisons": [
+      {
+        "name": "minus67-up",
+        "yaw": -67.5,
+        "pitch": 30,
+        "ears": [
+          {
+            "id": "ear-left",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          },
+          {
+            "id": "ear-right",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          }
+        ]
+      },
+      {
+        "name": "minus67-down",
+        "yaw": -67.5,
+        "pitch": -30,
+        "ears": [
+          {
+            "id": "ear-left",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          },
+          {
+            "id": "ear-right",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          }
+        ]
+      },
+      {
+        "name": "plus67-up",
+        "yaw": 67.5,
+        "pitch": 30,
+        "ears": [
+          {
+            "id": "ear-left",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          },
+          {
+            "id": "ear-right",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          }
+        ]
+      },
+      {
+        "name": "plus67-down",
+        "yaw": 67.5,
+        "pitch": -30,
+        "ears": [
+          {
+            "id": "ear-left",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          },
+          {
+            "id": "ear-right",
+            "maximumWorldDelta": 0.0,
+            "changedPixels": 0
+          }
+        ]
+      },
+      {
+        "name": "minus56-up",
+        "yaw": -56.25,
+        "pitch": 30,
+        "ears": [
+          {
+            "id": "ear-left",
+            "maximumWorldDelta": 11.298356320904704,
+            "changedPixels": 0
+          },
+          {
+            "id": "ear-right",
+            "maximumWorldDelta": 59.43892246307204,
+            "changedPixels": 9090
+          }
+        ]
+      },
+      {
+        "name": "plus56-down",
+        "yaw": 56.25,
+        "pitch": -30,
+        "ears": [
+          {
+            "id": "ear-left",
+            "maximumWorldDelta": 10.266813350558397,
+            "changedPixels": 4725
+          },
+          {
+            "id": "ear-right",
+            "maximumWorldDelta": 6.570381668605525,
+            "changedPixels": 0
+          }
+        ]
+      }
+    ],
+    "nonFaceLayers": "Fable verified 29 poses: hair, ponytail, eyes and body have zero changed pixels versus 6dd",
+    "visual": "67.5 four pitched poses match 6dd exactly. In mixed -56.25/+30 hairless view, a background gap remains between ear and cheek; retained A contract, no additional fix."
   }
 }
