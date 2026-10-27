@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -25,6 +26,7 @@ from render_overlay import (  # noqa: E402
     load_registered_frame,
     render_overlay_sheet,
     render_raw_sheet,
+    select_pose_coverage_samples,
 )
 from sam_mask_ops import (  # noqa: E402
     DATA_DIR,
@@ -51,6 +53,22 @@ REGISTRATION_PATH = REPO_ROOT / "source/viewer/ponytail-seedance-registration.js
 SAMPLE_STEP = 3
 
 
+def to720_transform(key_row: dict[str, object] | None) -> tuple[list[list[float]], str]:
+    scale = WIDTH / 640.0
+    source_to_scaled = np.array(
+        [[scale, 0.0, 0.0], [0.0, scale, 0.0], [0.0, 0.0, 1.0]],
+        dtype=np.float64,
+    )
+    normalization = key_row.get("normalization") if key_row else None
+    if normalization:
+        affine = np.asarray(normalization, dtype=np.float64)
+        if affine.shape != (2, 3):
+            raise ValueError("Key normalization must be a 2x3 affine matrix")
+        normalized = np.vstack((affine, [0.0, 0.0, 1.0]))
+        return (normalized @ source_to_scaled).tolist(), "normalization"
+    return source_to_scaled.tolist(), "scale"
+
+
 
 def read_registration() -> dict[str, object]:
     registration = json.loads(REGISTRATION_PATH.read_text(encoding="utf-8"))
@@ -69,11 +87,14 @@ def build_frame_index(registration: dict[str, object]) -> list[dict[str, object]
         if len(pose) != 6:
             raise ValueError(f"Frame {frame_number} does not have a six-value pose")
         key_row = key_rows.get(frame_number)
+        to720, to720_source = to720_transform(key_row)
         row: dict[str, object] = {
             "frame": frame_number,
             "role": "key" if key_row else "sample",
             "pose": pose,
             "has_normalization": bool(key_row and key_row.get("normalization")),
+            "to720": to720,
+            "to720_source": to720_source,
         }
         if key_row:
             row["key_name"] = key_row["name"]
@@ -83,7 +104,7 @@ def build_frame_index(registration: dict[str, object]) -> list[dict[str, object]
 
 def process_frame(
     frame_row: dict[str, object],
-    key_row: dict[str, object],
+    key_row: dict[str, object] | None,
     fal_key: str,
     failure_state: dict[str, int],
 ) -> dict[str, object]:
@@ -102,9 +123,11 @@ def process_frame(
     else:
         manifest = {
             "frame": frame_number,
-            "key_name": key_row["name"],
-            "role": "key",
+            "key_name": key_row["name"] if key_row else None,
+            "role": frame_row["role"],
             "pose": frame_row["pose"],
+            "to720": frame_row["to720"],
+            "to720_source": frame_row["to720_source"],
             "source_image_sha256": source_sha256,
             "normalization_applied": normalized,
             "masks": {},
@@ -112,6 +135,11 @@ def process_frame(
             "endpoint": SAM3_ENDPOINT,
         }
     manifest["mask_definition_revision"] = MASK_REVISION
+    manifest["key_name"] = key_row["name"] if key_row else None
+    manifest["role"] = frame_row["role"]
+    manifest["pose"] = frame_row["pose"]
+    manifest["to720"] = frame_row["to720"]
+    manifest["to720_source"] = frame_row["to720_source"]
     manifest["normalization_applied"] = normalized
     raw_manifest = manifest.setdefault("raw_masks", {})
     masks_manifest = manifest.setdefault("masks", {})
@@ -197,7 +225,13 @@ def process_frame(
         head = cv2.bitwise_and(head, cv2.bitwise_not(neck_raw))
     head = fill_holes_and_keep_largest(head)
     skin_raw = prompt_unions["face skin"]
-    skin = fill_holes_and_keep_largest(skin_raw)
+    neck_subtracted = bool(instances_by_prompt["neck"])
+    skin_input = (
+        cv2.bitwise_and(skin_raw, cv2.bitwise_not(neck_raw))
+        if neck_subtracted
+        else skin_raw
+    )
+    skin = fill_holes_and_keep_largest(skin_input)
     head_success = raw_success["head"] and bool(cv2.countNonZero(head))
     skin_success = raw_success["face skin"] and bool(cv2.countNonZero(skin))
     write_mask(frame_dir / "head.png", head)
@@ -275,7 +309,13 @@ def process_frame(
         "success": skin_success,
         "area_px": int(cv2.countNonZero(skin)),
         "prompt": "face skin",
-        "postprocess": ["union all returned instances", "fill holes", "keep largest component"],
+        "neck_subtracted": neck_subtracted,
+        "postprocess": [
+            "union all face skin instances",
+            "subtract neck raw when returned",
+            "fill holes",
+            "keep largest component",
+        ],
     }
     masks_manifest["ear-left"] = ear_results["ear-left"]
     masks_manifest["ear-right"] = ear_results["ear-right"]
@@ -301,8 +341,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--frames",
-        help="Comma-separated key frame numbers to process, for example 3 or 42,192,206",
+        help="Comma-separated registered frame numbers to process",
     )
+    parser.add_argument("--include-samples", action="store_true")
+    parser.add_argument("--run-landmarks", action="store_true")
+    parser.add_argument("--landmark-python")
     parser.add_argument("--final-sheets", action="store_true")
     return parser.parse_args()
 
@@ -313,13 +356,14 @@ def main() -> None:
     frame_rows = build_frame_index(registration)
     key_rows = {int(row["sourceFrame"]): row for row in registration["keys"]}
     selected_keys = [row for row in frame_rows if row["role"] == "key"]
+    selected_all = frame_rows if args.include_samples else selected_keys
     if args.frames:
         frame_numbers = {int(value) for value in args.frames.split(",")}
-        selected = [row for row in selected_keys if int(row["frame"]) in frame_numbers]
+        selected = [row for row in frame_rows if int(row["frame"]) in frame_numbers]
         if {int(row["frame"]) for row in selected} != frame_numbers:
-            raise ValueError(f"Requested frames are not registered keys: {sorted(frame_numbers)}")
+            raise ValueError(f"Requested frames are not registered: {sorted(frame_numbers)}")
     else:
-        selected = selected_keys
+        selected = selected_all
 
     missing = [
         int(row["frame"])
@@ -337,6 +381,17 @@ def main() -> None:
             "source_size": [640, 640],
             "normalized_size": [WIDTH, HEIGHT],
             "sample_step": SAMPLE_STEP,
+            "pose_coordinate_space": (
+                "video[].pose tx/ty are in 720x720 scaled source-image coordinates before key-only "
+                "normalization; evidence: pipeline/seedance_temporal.py:9-21,55-57; "
+                "pipeline/ponytail_observations.py:160,184,213,218; "
+                "pipeline/seedance_references.py:43-51"
+            ),
+            "to720_definition": "homogeneous transform from original 640x640 frame pixels to mask pixels",
+            "to720_source_counts": {
+                "normalization": sum(row["to720_source"] == "normalization" for row in frame_rows),
+                "scale": sum(row["to720_source"] == "scale" for row in frame_rows),
+            },
             "frames": frame_rows,
         },
     )
@@ -350,7 +405,7 @@ def main() -> None:
         for frame_row in selected:
             manifest = process_frame(
                 frame_row,
-                key_rows[int(frame_row["frame"])],
+                key_rows.get(int(frame_row["frame"])),
                 fal_key,
                 failure_state,
             )
@@ -363,16 +418,33 @@ def main() -> None:
         render_raw_sheet(registration, selected)
         raise
 
+    if args.run_landmarks:
+        try:
+            if args.landmark_python:
+                subprocess.run(
+                    [args.landmark_python, str(DATA_DIR / "anime_landmarks.py")],
+                    check=True,
+                )
+            else:
+                from anime_landmarks import run_landmarks
+
+                run_landmarks(registration, selected)
+        except Exception as error:
+            print(
+                f"landmarks unavailable: {type(error).__name__}: {error}",
+                flush=True,
+            )
+
     if args.final_sheets:
-        expected = {int(row["frame"]) for row in selected_keys}
+        expected = {int(row["frame"]) for row in frame_rows}
         available = {
             int(row["frame"])
-            for row in selected_keys
+            for row in frame_rows
             if (DATA_DIR / f"frame_{int(row['frame']):04d}" / "manifest.json").is_file()
         }
         if expected - available:
-            raise RuntimeError(f"Cannot render final sheets; missing key frames: {sorted(expected - available)}")
-        for row in selected_keys:
+            raise RuntimeError(f"Cannot render final sheets; missing frames: {sorted(expected - available)}")
+        for row in frame_rows:
             manifest_path = DATA_DIR / f"frame_{int(row['frame']):04d}" / "manifest.json"
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
             head = cv2.imread(str(manifest_path.parent / "head.png"), cv2.IMREAD_GRAYSCALE)
@@ -383,14 +455,25 @@ def main() -> None:
             )
             manifest["head_bbox_width_px"] = width
             save_json(manifest_path, manifest)
-        overlay = render_overlay_sheet(registration, selected_keys)
-        raw_sheet = render_raw_sheet(registration, selected_keys)
+        landmarks_path = DATA_DIR / "landmarks.json"
+        landmark_rows = None
+        if landmarks_path.is_file():
+            landmark_payload = json.loads(landmarks_path.read_text(encoding="utf-8"))
+            landmark_rows = {
+                int(row["frame"]): row for row in landmark_payload.get("frames", [])
+            }
+        coverage_samples = select_pose_coverage_samples(frame_rows, count=24)
+        review_rows = sorted(
+            [*selected_keys, *coverage_samples], key=lambda row: int(row["frame"])
+        )
+        overlay = render_overlay_sheet(registration, review_rows, landmark_rows)
+        raw_sheet = render_raw_sheet(registration, review_rows)
 
         manifests = [
             json.loads(
                 (DATA_DIR / f"frame_{int(row['frame']):04d}" / "manifest.json").read_text(encoding="utf-8")
             )
-            for row in selected_keys
+            for row in frame_rows
         ]
         front_width = next(
             (int(item.get("head_bbox_width_px", 0)) for item in manifests if int(item["frame"]) == 3),
@@ -405,6 +488,17 @@ def main() -> None:
             for item in manifests
             if front_width and int(item.get("head_bbox_width_px", 0)) > front_width * 1.3
         ]
+        width_report_path = DATA_DIR / "head_width_report.json"
+        save_json(
+            width_report_path,
+            {
+                "reference_frame": 3,
+                "reference_width_px": front_width,
+                "threshold_ratio": 1.3,
+                "frame_count": len(manifests),
+                "frames_over_threshold": wider,
+            },
+        )
         revision_calls = [
             call
             for item in manifests
@@ -434,6 +528,24 @@ def main() -> None:
             f"request time: {sum(float(call.get('duration_seconds', 0)) for call in revision_calls):.3f}s"
         )
         print(f"head width > 1.3x front 3: {wider}")
+        print(
+            "to720 source counts: "
+            f"normalization={sum(row['to720_source'] == 'normalization' for row in frame_rows)}, "
+            f"scale={sum(row['to720_source'] == 'scale' for row in frame_rows)}"
+        )
+        print(f"pose coordinate space: {json.loads((DATA_DIR / 'frames.json').read_text())['pose_coordinate_space']}")
+        print(f"coverage sample frames: {[int(row['frame']) for row in coverage_samples]}")
+        if landmark_rows is None:
+            print("landmarks usable: unavailable")
+        else:
+            usable_landmarks = sum(bool(row.get("usable")) for row in landmark_rows.values())
+            expected_landmarks = {int(row["frame"]) for row in frame_rows}
+            missing_landmarks = sorted(expected_landmarks - set(landmark_rows))
+            print(
+                f"landmarks usable: {usable_landmarks}/{len(expected_landmarks)}; "
+                f"records={len(landmark_rows)}, missing={len(missing_landmarks)}"
+            )
+        print(f"head width report: {width_report_path}")
         print(f"overlay sheet: {overlay}")
         print(f"raw sheet: {raw_sheet}")
 

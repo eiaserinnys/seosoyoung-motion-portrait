@@ -1,0 +1,298 @@
+{
+  "frame": 244,
+  "key_name": null,
+  "role": "sample",
+  "pose": [
+    34.80519599068505,
+    -4.1831363142499605,
+    1.6738547079551755,
+    0.03726965417041508,
+    467.43827174542815,
+    422.66951012866167
+  ],
+  "to720": [
+    [
+      1.125,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.125,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "to720_source": "scale",
+  "source_image_sha256": "c2dc7fe1b2817bdb2c49fc23eea9f45691fe68a567b1991c0fb6303119d35513",
+  "normalization_applied": false,
+  "masks": {
+    "head": {
+      "file": "head.png",
+      "success": true,
+      "area_px": 200143,
+      "source_prompts": {
+        "head": "head",
+        "hair_bun": "hair bun",
+        "ponytail": "ponytail",
+        "neck": "neck"
+      },
+      "neck_returned": true,
+      "postprocess": [
+        "subtract hair bun",
+        "subtract ponytail",
+        "subtract neck when returned",
+        "fill holes",
+        "keep largest component"
+      ]
+    },
+    "skin": {
+      "file": "skin.png",
+      "success": true,
+      "area_px": 99642,
+      "prompt": "face skin",
+      "neck_subtracted": true,
+      "postprocess": [
+        "union all face skin instances",
+        "subtract neck raw when returned",
+        "fill holes",
+        "keep largest component"
+      ]
+    },
+    "ear-left": {
+      "file": "ear-left.png",
+      "success": true,
+      "visible": true,
+      "area_px": 5572,
+      "selected_instance_index": 0,
+      "candidates": [
+        {
+          "instance_index": 0,
+          "score": 0.914828896522522,
+          "area_px": 5572,
+          "center_x": 239.7622038765255,
+          "overlap_with_head_px": 5572,
+          "side": "ear-left"
+        }
+      ],
+      "discarded_instances": [],
+      "head_center_x": 382.27885561823297,
+      "prompt": "ear"
+    },
+    "ear-right": {
+      "file": "ear-right.png",
+      "success": true,
+      "visible": false,
+      "area_px": 0,
+      "selected_instance_index": null,
+      "candidates": [],
+      "discarded_instances": [],
+      "head_center_x": 382.27885561823297,
+      "prompt": "ear"
+    }
+  },
+  "calls": [
+    {
+      "prompt": "head",
+      "num_masks_returned": 1,
+      "scores": [
+        0.9408901333808899
+      ],
+      "instance_area_px": [
+        216018
+      ],
+      "mask": "head",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:12:49+00:00",
+      "duration_seconds": 5.851,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "hair bun",
+      "num_masks_returned": 1,
+      "scores": [
+        0.8940762877464294
+      ],
+      "instance_area_px": [
+        16577
+      ],
+      "mask": "hair bun",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:12:55+00:00",
+      "duration_seconds": 3.476,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "ponytail",
+      "num_masks_returned": 0,
+      "scores": [],
+      "instance_area_px": [],
+      "mask": "ponytail",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:12:59+00:00",
+      "duration_seconds": 3.766,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "neck",
+      "num_masks_returned": 1,
+      "scores": [
+        0.7358611226081848
+      ],
+      "instance_area_px": [
+        17856
+      ],
+      "mask": "neck",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:13:02+00:00",
+      "duration_seconds": 3.368,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "face skin",
+      "num_masks_returned": 1,
+      "scores": [
+        0.8324705958366394
+      ],
+      "instance_area_px": [
+        99647
+      ],
+      "mask": "face skin",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:13:06+00:00",
+      "duration_seconds": 3.54,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "ear",
+      "num_masks_returned": 1,
+      "scores": [
+        0.914828896522522
+      ],
+      "instance_area_px": [
+        5572
+      ],
+      "mask": "ear",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:13:09+00:00",
+      "duration_seconds": 3.927,
+      "http_post_attempts": 1,
+      "success": true
+    }
+  ],
+  "endpoint": "https://fal.run/fal-ai/sam-3/image",
+  "mask_definition_revision": "b-stage-mask-revision-1",
+  "raw_masks": {
+    "head": {
+      "file": "raw/head.png",
+      "prompt": "head",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "c2dc7fe1b2817bdb2c49fc23eea9f45691fe68a567b1991c0fb6303119d35513",
+      "called_at_utc": "2026-10-27T12:12:49+00:00",
+      "duration_seconds": 5.851,
+      "num_instances": 1,
+      "scores": [
+        0.9408901333808899
+      ],
+      "instance_area_px": [
+        216018
+      ],
+      "instance_files": []
+    },
+    "hair bun": {
+      "file": "raw/hair bun.png",
+      "prompt": "hair bun",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "c2dc7fe1b2817bdb2c49fc23eea9f45691fe68a567b1991c0fb6303119d35513",
+      "called_at_utc": "2026-10-27T12:12:55+00:00",
+      "duration_seconds": 3.476,
+      "num_instances": 1,
+      "scores": [
+        0.8940762877464294
+      ],
+      "instance_area_px": [
+        16577
+      ],
+      "instance_files": []
+    },
+    "ponytail": {
+      "file": "raw/ponytail.png",
+      "prompt": "ponytail",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "c2dc7fe1b2817bdb2c49fc23eea9f45691fe68a567b1991c0fb6303119d35513",
+      "called_at_utc": "2026-10-27T12:12:59+00:00",
+      "duration_seconds": 3.766,
+      "num_instances": 0,
+      "scores": [],
+      "instance_area_px": [],
+      "instance_files": []
+    },
+    "neck": {
+      "file": "raw/neck.png",
+      "prompt": "neck",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "c2dc7fe1b2817bdb2c49fc23eea9f45691fe68a567b1991c0fb6303119d35513",
+      "called_at_utc": "2026-10-27T12:13:02+00:00",
+      "duration_seconds": 3.368,
+      "num_instances": 1,
+      "scores": [
+        0.7358611226081848
+      ],
+      "instance_area_px": [
+        17856
+      ],
+      "instance_files": []
+    },
+    "face skin": {
+      "file": "raw/face skin.png",
+      "prompt": "face skin",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "c2dc7fe1b2817bdb2c49fc23eea9f45691fe68a567b1991c0fb6303119d35513",
+      "called_at_utc": "2026-10-27T12:13:06+00:00",
+      "duration_seconds": 3.54,
+      "num_instances": 1,
+      "scores": [
+        0.8324705958366394
+      ],
+      "instance_area_px": [
+        99647
+      ],
+      "instance_files": []
+    },
+    "ear": {
+      "file": "raw/ear.png",
+      "prompt": "ear",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "c2dc7fe1b2817bdb2c49fc23eea9f45691fe68a567b1991c0fb6303119d35513",
+      "called_at_utc": "2026-10-27T12:13:09+00:00",
+      "duration_seconds": 3.927,
+      "num_instances": 1,
+      "scores": [
+        0.914828896522522
+      ],
+      "instance_area_px": [
+        5572
+      ],
+      "instance_files": [
+        "raw/ear/instance_00.png"
+      ]
+    }
+  },
+  "head_bbox_width_px": 482,
+  "neck_returned": true
+}
