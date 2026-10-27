@@ -126,7 +126,7 @@ def refresh_step1_curvature():
     print('STEP1 CORRECTED CURVATURE',stats,flush=True)
 
 
-def save_b130(vertices,d,trace,elapsed,cameras,stage,camera_trace=None):
+def save_b130(vertices,d,trace,elapsed,cameras,stage,camera_trace=None,suffix=''):
     initial,shared,sref=context(); surface=load_surface('surface-a')
     base,tri=surface['vertices'],surface['triangles']
     frames=frame_sets()[1]; keys=frame_sets()[0][:9]
@@ -163,11 +163,14 @@ def save_b130(vertices,d,trace,elapsed,cameras,stage,camera_trace=None):
     prefix='b130-initial-' if stage=='initial' else 'b130-refined-'
     state=dict(vertices=vertices,triangles=tri,base_vertices=base,displacement_px=d,
                curvature=curvature,excluded=excluded,s_ref=sref,open_edges=surface['open_edges'])
-    for name in (prefix+'state','fit-state'): np.savez_compressed(RESULTS/(name+'.npz'),**state)
-    for name in (prefix+'shared','shared'): write_json(RESULTS/(name+'.json'),info)
-    for name in (prefix+'residuals','residuals'): write_json(RESULTS/(name+'.json'),residuals)
-    write_json(RESULTS/'poses.json',{'frames':cameras,'stage':stage,'rotations_fixed':True})
-    with (RESULTS/'fitted_neutral.obj').open('w',encoding='utf-8') as output:
+    for name in ([f'fit-state{suffix}'] if suffix else [prefix+'state','fit-state']):
+        np.savez_compressed(RESULTS/(name+'.npz'),**state)
+    for name in ([f'shared{suffix}'] if suffix else [prefix+'shared','shared']):
+        write_json(RESULTS/(name+'.json'),info)
+    for name in ([f'residuals{suffix}'] if suffix else [prefix+'residuals','residuals']):
+        write_json(RESULTS/(name+'.json'),residuals)
+    write_json(RESULTS/f'poses{suffix}.json',{'frames':cameras,'stage':stage,'rotations_fixed':True})
+    with (RESULTS/f'fitted_neutral{suffix}.obj').open('w',encoding='utf-8') as output:
         for x,y,z in vertices: output.write(f'v {x:.10f} {y:.10f} {z:.10f}\n')
         for a,b,c in tri+1: output.write(f'f {a} {b} {c}\n')
     print('B130 SUMMARY',stage,distributions,'curvature',stats,'displacement',info['displacement_stats_px'],
@@ -197,11 +200,46 @@ def fit_b130(refine=False):
     print('B130 SOLVE SECONDS',solve_seconds,flush=True)
 
 
+def fit_b130_n3():
+    """The single approved normalized fit and its sheets in one runner."""
+    import hashlib
+    import shutil
+    started=time.perf_counter()
+    if (RESULTS/'shared-n3.json').exists(): raise ValueError('Normalized B130 already run; no repeat')
+    source_commit='c318c2fed7148ffc2160fa2fd45d86ab39a7f319'
+    pose_path=RESULTS/'poses.json'; pose_bytes=pose_path.read_bytes()
+    committed=subprocess.check_output(['git','-C',str(ROOT),'show',
+        source_commit+':pipeline/headmodel/fit/results/fit2f/poses.json'])
+    if pose_bytes!=committed: raise ValueError('Expected the unchanged c318c2f cameras')
+    cameras=read_json(pose_path)['frames']; _,shared,sref=context(); frames=frame_sets()[1]
+    if len(frames)!=130: raise ValueError('Expected exactly 130 frames')
+    surface=load_surface('surface-a'); v,tri=surface['vertices'],surface['triangles']
+    targets=load_targets_f(frames,shared['thickness_px'])
+    vertices,d,trace,solve_seconds=solve_surface(v,tri,[cameras[str(f)] for f in frames],targets,sref,
+                                               reference_frames=3)
+    save_b130(vertices,d,trace,time.perf_counter()-started,cameras,'frame-normalized',suffix='-n3')
+    shutil.copyfile(pose_path,RESULTS/'poses-n3.json')
+    info=read_json(RESULTS/'shared-n3.json')
+    info.update(reference_frames=3,frame_count=len(frames),frame_weight=3/len(frames),
+        sample_spacing_px=1.,reference_spacing_px=3.,data_weights={'skin':10/130,'hair':1/130},
+        camera_source_commit=source_commit,camera_source_sha256=hashlib.sha256(pose_bytes).hexdigest(),
+        camera_refinement_triggered=False,camera_refinement_performed=False,
+        camera_refinement_allowed=False,initial_displacement='zero on remeshed A',
+        solve_seconds=solve_seconds)
+    write_json(RESULTS/'shared-n3.json',info)
+    __import__('fit2f_sheets').b130_n3_sheets()
+    if pose_bytes!=pose_path.read_bytes() or pose_bytes!=(RESULTS/'poses-n3.json').read_bytes():
+        raise ValueError('Fixed cameras changed')
+    info.update(total_runner_seconds=time.perf_counter()-started)
+    write_json(RESULTS/'shared-n3.json',info)
+    print('N3 COMPLETE',info['total_runner_seconds'],'seconds; camera bytes identical',flush=True)
+
+
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(); parser.add_argument('phase',choices=['prepare','step1','step2','refresh-step1-curvature','b130','b130-refine','b130-sheets'])
+    parser=argparse.ArgumentParser(); parser.add_argument('phase',choices=['prepare','step1','step2','refresh-step1-curvature','b130','b130-refine','b130-sheets','b130-n3'])
     phase=parser.parse_args().phase
     torch.set_num_threads(2); torch.set_num_interop_threads(1); cv2.setNumThreads(2)
     {'prepare':prepare,'step1':lambda:step(1),'step2':lambda:step(2),
      'refresh-step1-curvature':refresh_step1_curvature,'b130':fit_b130,
      'b130-refine':lambda:fit_b130(True),
-     'b130-sheets':lambda:__import__('fit2f_sheets').b130_sheets()}[phase]()
+     'b130-sheets':lambda:__import__('fit2f_sheets').b130_sheets(),'b130-n3':fit_b130_n3}[phase]()

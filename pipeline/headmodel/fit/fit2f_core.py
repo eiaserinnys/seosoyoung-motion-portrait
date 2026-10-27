@@ -168,9 +168,10 @@ def curvature_stats(base,tri,d,ear=None):
     return stats,curvature,excluded
 
 
-def solve_surface(v,tri,poses,targets,sref,geometric=True,lam=None):
+def solve_surface(v,tri,poses,targets,sref,geometric=True,lam=None,reference_frames=None):
     base=np.asarray(v,float)*sref; d=np.zeros_like(base); started=time.perf_counter()
     poses=np.asarray(poses,float).copy(); poses[:,3]-=np.log(sref)
+    frame_weight=1. if reference_frames is None else float(reference_frames)/len(poses)
     if geometric:
         lap,mass=geometric_operator(base,tri)
         energy=lap.T@sparse.diags(1/mass)@lap
@@ -193,7 +194,7 @@ def solve_surface(v,tri,poses,targets,sref,geometric=True,lam=None):
             vv.append(coefficients.ravel())
             original=(base[ids]*bary[:,:,None]).sum(1)@a.T+t
             rhs.append(((target['points'][ti]-original)*normals).sum(1))
-            weights.append(np.where(target['labels'][ti]==0,10.,1.)/3.)
+            weights.append(np.where(target['labels'][ti]==0,10.,1.)/3.*frame_weight)
             counts[str(target['frame'])]={'skin':int((target['labels'][ti]==0).sum()),
                 'hair':int((target['labels'][ti]==1).sum()),'cut_rejected':model['boundary_rejected']}
             offset+=count

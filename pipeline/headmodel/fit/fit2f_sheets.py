@@ -363,6 +363,50 @@ def b130_sheets():
     print('B130 SHEETS',info,flush=True)
 
 
+def b130_n3_sheets():
+    """The three requested n3 sheets, inside the single normalized-fit runner."""
+    from fit_core import boundary
+    started=time.perf_counter(); manifest=[]
+    summary=read_json(RESULTS/'shared-n3.json'); cameras=read_json(RESULTS/'poses-n3.json')['frames']
+    names=[('B3 STEP2','b3-step2-state','b3-step2-residuals.json'),
+           ('B130','fit-state','shared.json'),('B130 N3','fit-state-n3','shared-n3.json')]
+    models=[]; rows=[]
+    for title,state,report in names:
+        surface=load_surface(state); stats=read_json(RESULTS/report)['curvature']
+        models.append((title,surface,stats))
+        rows.append((title,surface['vertices'],surface['triangles'],None))
+    for title,surface,stats in models:
+        rows.append((f'{title} p99={stats["p99"]:.4f} max={stats["max"]:.4f}',
+            surface['vertices'],surface['triangles'],heat(surface['curvature'],.05,surface['excluded'])))
+    manifest.append(save(FIT/'sheets/fit2f-shape-n3.png',shape_rows(rows)))
+    model=models[-1][1]; keys=frame_sets()[0][:9]
+    targets=load_targets_f(keys,summary['thickness_px'])
+    manifest.append(save(FIT/'sheets/fit2f-jaw-n3.png',padded_stack([
+        panel(model,t,cameras[str(t['frame'])],'B130 N3') for t in targets])))
+    frames=[316,157,160,313,322,303]; panels=[]
+    for target in load_targets_f(frames,summary['thickness_px']):
+        frame=target['frame']; pose=cameras[str(frame)]; image=image_for(frame)
+        contour=surface_contour(model['vertices'],model['triangles'],pose)
+        head=boundary(target['head'])
+        draw_points(image,head,(145,145,145))
+        draw_points(image,target['points'][target['labels']==1],(0,190,25))
+        draw_points(image,target['points'][target['labels']==0],(240,80,0))
+        draw_points(image,contour['xy'],(20,25,240))
+        points=np.vstack([head,target['points'],contour['xy']])
+        lo=np.maximum(np.floor(points.min(0)).astype(int)-40,0)
+        hi=np.minimum(np.ceil(points.max(0)).astype(int)+41,720)
+        crop=image[lo[1]:hi[1],lo[0]:hi[0]].copy()
+        label(crop,f'f{frame} yaw{pose[0]:.1f} pitch{pose[1]:.1f}')
+        label(crop,'hair green / skin blue / model red / H gray',(12,47))
+        panels.append(crop)
+    manifest.append(save(FIT/'sheets/fit2f-hairworst-n3.png',padded_stack(panels)))
+    info={'sheets':manifest,'elapsed_seconds':time.perf_counter()-started,
+          'hair_diagnostic_frames':frames,'keys':keys,'cameras_fixed':True,
+          'crop':'whole H boundary, targets and model silhouette with 40px source-image margin'}
+    write_json(RESULTS/'sheet-sha256-n3.json',info)
+    print('N3 SHEETS',info,flush=True)
+
+
 if __name__=='__main__':
     import argparse
     import torch
