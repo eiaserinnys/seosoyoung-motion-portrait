@@ -1,0 +1,70 @@
+{
+  "sheets": [
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-shape-step1.png",
+      "sha256": "dc3cb2f8f18bc3c28ea04aec879365c95e481e816ee0a19c076044497af311ac",
+      "validity": "superseded cotangent implementation"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-jaw-step1.png",
+      "sha256": "0fcdcb56c17ad8a651c0c763d6de02a3c342dc87ebc61386f50169134db7a72e",
+      "validity": "valid: unchanged uniform-L geometry and mask contours"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-err-step1.png",
+      "sha256": "5f51a166bc0be21fcdb3687d101f1794c3230e06d8a7ad4acdd5256f8bf6fe04",
+      "validity": "valid: unchanged uniform-L geometry and mask contours"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-sideburn-step1.png",
+      "sha256": "bc9c9c30668607e275a3a1c94854207053701c1a0a212db7351056f6d79ccd1b",
+      "validity": "valid: unchanged uniform-L geometry and mask contours"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-shape-step2.png",
+      "sha256": "e57643d216f447b1b04c863d79d321ccf7853b7a599bd11e55d3c0d8054d742a",
+      "validity": "superseded cotangent implementation"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-jaw-step2.png",
+      "sha256": "1aea0a8b92b5d5bc60c8951de905991f1366a759201b6f66b5870229b80cb294",
+      "validity": "superseded cotangent implementation"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-err-step2.png",
+      "sha256": "9d22bdba64e382f69b1611ed4a6f428d79387d6d00a016c1ea9656390335d02c",
+      "validity": "superseded cotangent implementation"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-sideburn-step2.png",
+      "sha256": "9a7c8aebdcc3ef8b05a840dd7b89986f3e29bc81f2e3e18640c6800dc95d68cd",
+      "validity": "superseded cotangent implementation"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-err-step2-pre-edge-clamp.png",
+      "sha256": "9d22bdba64e382f69b1611ed4a6f428d79387d6d00a016c1ea9656390335d02c",
+      "validity": "superseded operator archive"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-jaw-step2-pre-edge-clamp.png",
+      "sha256": "1aea0a8b92b5d5bc60c8951de905991f1366a759201b6f66b5870229b80cb294",
+      "validity": "superseded operator archive"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-shape-step1-pre-edge-clamp.png",
+      "sha256": "dc3cb2f8f18bc3c28ea04aec879365c95e481e816ee0a19c076044497af311ac",
+      "validity": "superseded operator archive"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-shape-step2-pre-edge-clamp.png",
+      "sha256": "e57643d216f447b1b04c863d79d321ccf7853b7a599bd11e55d3c0d8054d742a",
+      "validity": "superseded operator archive"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-sideburn-step2-pre-edge-clamp.png",
+      "sha256": "9a7c8aebdcc3ef8b05a840dd7b89986f3e29bc81f2e3e18640c6800dc95d68cd",
+      "validity": "superseded operator archive"
+    }
+  ],
+  "elapsed_seconds": 35.74914506007917
+}

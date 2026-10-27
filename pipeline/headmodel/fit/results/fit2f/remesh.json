@@ -1,0 +1,50 @@
+{
+  "tool": "pymeshlab 2025.7",
+  "installation": {
+    "pymeshlab_install_returncode": 0
+  },
+  "s_ref": 24.793355646783024,
+  "target_edge_length_px": 8.0,
+  "iterations": 10,
+  "original_vertices": 7480,
+  "original_faces": 14879,
+  "vertices": 12257,
+  "faces": 24389,
+  "open_edges": 123,
+  "edge_length_px": {
+    "median": 8.289108033264778,
+    "p10": 6.871271143001896,
+    "p90": 9.477585492259209
+  },
+  "distance_px": {
+    "max": 3.0878357047105056,
+    "p99": 0.7163669168036694,
+    "original_to_remesh_max": 3.0878357047105056,
+    "remesh_to_original_max": 1.3970709727402148e-13,
+    "method": "bidirectional vertex-to-triangle closest distances"
+  },
+  "target_collision": [
+    {
+      "frame": 3,
+      "before_median_px": 7.0710678118654755,
+      "after_median_px": 1.0,
+      "skin_points": 310,
+      "ear_excluded_points": 2
+    },
+    {
+      "frame": 42,
+      "before_median_px": 7.0,
+      "after_median_px": 1.0,
+      "skin_points": 432,
+      "ear_excluded_points": 0
+    },
+    {
+      "frame": 264,
+      "before_median_px": 6.708203932499369,
+      "after_median_px": 0.6661667604447163,
+      "skin_points": 453,
+      "ear_excluded_points": 46
+    }
+  ],
+  "elapsed_seconds": 41.51016328902915
+}

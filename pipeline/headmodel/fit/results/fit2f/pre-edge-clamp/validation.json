@@ -1,0 +1,110 @@
+{
+  "contracts": [
+    {
+      "test": 1,
+      "name": "t_local mask distance",
+      "passed": true
+    },
+    {
+      "test": 2,
+      "name": "skin/head conflict removed",
+      "passed": true,
+      "measurements": [
+        {
+          "frame": 3,
+          "before_median_px": 7.0710678118654755,
+          "after_median_px": 1.0,
+          "skin_points": 310,
+          "ear_excluded_points": 2
+        },
+        {
+          "frame": 42,
+          "before_median_px": 7.0,
+          "after_median_px": 1.0,
+          "skin_points": 432,
+          "ear_excluded_points": 0
+        },
+        {
+          "frame": 264,
+          "before_median_px": 6.708203932499369,
+          "after_median_px": 0.6661667604447163,
+          "skin_points": 453,
+          "ear_excluded_points": 46
+        }
+      ]
+    },
+    {
+      "test": 3,
+      "name": "open edge attachment exclusion",
+      "passed": true,
+      "note": "Initial fixture demanded zero points, but two corner samples attach to the internal diagonal under imported attach_contour +.5 convention. Corrected fixture checks actual selected edges. Targeted rerun passed."
+    },
+    {
+      "test": 4,
+      "name": "ear 10px exclusion both directions",
+      "passed": true
+    },
+    {
+      "test": 5,
+      "name": "geometric Laplacian bump and constant",
+      "passed": true,
+      "bump_max_inverse_px": 0.02212374877928758
+    },
+    {
+      "test": 6,
+      "name": "remesh surface distance <=1.5px",
+      "passed": false,
+      "actual_max_px": 3.0878357047105056
+    }
+  ],
+  "six_contracts_result": "5 passed, 1 failed (remesh distance); each bounded to 30 seconds",
+  "initial_prepare_test_log": "tests.json, 6 tests .436 seconds, original two failures preserved",
+  "targeted_boundary_and_reused_2d_contracts": "4 tests passed .357 seconds: open boundary, linear camera, uniform L, classified ear join",
+  "independent_review": {
+    "implementation": "passed; no new P1",
+    "visual": "step2 smoother than step1 but local chin and preauricular curvature remains; strict smoothness failed",
+    "endpoint_correction": "global .ai authentication passed; balance zero, create request 2010; no tasks"
+  },
+  "direct_visual_review": {
+    "opened_sheets": 8,
+    "step1": "Fine jagged/faceted bands remain along chin, cheek and ear-front transitions.",
+    "step2": "Fine bands strongly reduced; local chin and cheek/ear-front bends remain. Curvature maximum threshold still failed.",
+    "jaw": "3/42/264 majority of used skin contour aligns closely; localized chin and sideburn gaps remain.",
+    "T1_features": "Unmeasured: no model created due to credit failure."
+  },
+  "runner_calls": 6,
+  "corrective_runner_calls": 1,
+  "runner_breakdown": [
+    "prepare",
+    "step1",
+    "step2",
+    "Tripo import requests missing (before API)",
+    "Tripo retry after installing requests: wrong .com endpoint rejected upload",
+    "sheets"
+  ],
+  "additional_network_only_calls": "Corrected .ai balance read succeeded, upload succeeded, T1 task creation failed 2010; no heavy work or generation retry followed.",
+  "api_key_changes": 0,
+  "created_generation_tasks": 0,
+  "generation_attempts_on_correct_endpoint": 1,
+  "unrelated_dependency_warning": "pip reported preexisting pdfminer-six requires cryptography>=36 missing through host PYTHONPATH. PDF functionality untested; no PDF/package manifest changes.",
+  "ui_ux_scope": "Scientific evidence renderings only; no application UI or interaction changed.",
+  "not_done": [
+    "B130",
+    "2e",
+    "A refit",
+    "lambda/mu/weight/taper/gate search",
+    "ear loss",
+    "rig/runtime/data edits",
+    "PR",
+    "merge",
+    "deployment"
+  ],
+  "tripo_unexecuted": [
+    "mesh preparation",
+    "Tripo-A alignment",
+    "T1-B3",
+    "Tripo three sheets",
+    "feature-height comparison"
+  ],
+  "sheet_hashes_verified": 8
+}

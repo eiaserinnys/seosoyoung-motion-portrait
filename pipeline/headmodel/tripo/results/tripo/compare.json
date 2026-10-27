@@ -1,0 +1,718 @@
+{
+  "definition": "2f label-free full silhouette, ear10px and open-edge exclusions; directed skin/hair, tapered head IoU",
+  "frames": [
+    3,
+    42,
+    192,
+    206,
+    219,
+    240,
+    264,
+    270,
+    303
+  ],
+  "models": {
+    "A": {
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 1.876800932364071,
+            "max_px": 8.211527203345193,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 1.33235597188982,
+            "max_px": 20.157119438416366,
+            "count": 882
+          },
+          "head_iou": 0.9674778749115807
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 3.7982232225779966,
+            "max_px": 11.524694449414168,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 3.0880065251458646,
+            "max_px": 15.051157243022242,
+            "count": 970
+          },
+          "head_iou": 0.9625332224941165
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 7.703475882567584,
+            "max_px": 28.34503528976693,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 2.7692276989141567,
+            "max_px": 22.483542048500325,
+            "count": 974
+          },
+          "head_iou": 0.9387147609875679
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 10.210798261309801,
+            "max_px": 15.556550539710845,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 1.2772373647679902,
+            "max_px": 20.929221326843482,
+            "count": 985
+          },
+          "head_iou": 0.9601505229864515
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 6.966385682742851,
+            "max_px": 19.633863673534297,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 4.225233926848261,
+            "max_px": 24.09693976096224,
+            "count": 877
+          },
+          "head_iou": 0.9370381181090871
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.8663292466134185,
+            "max_px": 11.52586636741358,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 2.4031170889177504,
+            "max_px": 18.002570941711575,
+            "count": 999
+          },
+          "head_iou": 0.968083271033412
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 4.818418206771023,
+            "max_px": 9.81673355445714,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 5.004809865152984,
+            "max_px": 18.970400218267386,
+            "count": 926
+          },
+          "head_iou": 0.9531529566868058
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 5.021214322796228,
+            "max_px": 12.815214414102753,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 5.308808202031017,
+            "max_px": 23.57915713039902,
+            "count": 964
+          },
+          "head_iou": 0.9471333009281763
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 4.736622549511253,
+            "max_px": 14.96699744959271,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 8.522792909697708,
+            "max_px": 28.851562735306814,
+            "count": 905
+          },
+          "head_iou": 0.9285744830977785
+        }
+      ]
+    },
+    "B3-w3": {
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 0.728950631133258,
+            "max_px": 4.696244417991078,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 0.7808721919185342,
+            "max_px": 5.620783199304193,
+            "count": 882
+          },
+          "head_iou": 0.9888507951686779
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.5970159814982836,
+            "max_px": 8.70851026093889,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 1.2533743393007242,
+            "max_px": 23.54511998917466,
+            "count": 970
+          },
+          "head_iou": 0.9842698875664487
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 5.602935537410433,
+            "max_px": 23.605333410285024,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 3.6107446000794035,
+            "max_px": 22.586192613044844,
+            "count": 974
+          },
+          "head_iou": 0.9549057392128616
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 6.6594623604059375,
+            "max_px": 16.35391021971347,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 3.682087151110871,
+            "max_px": 18.54768181003884,
+            "count": 985
+          },
+          "head_iou": 0.9561827974931087
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 5.453788455564163,
+            "max_px": 20.34490421626008,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 3.2127429569568533,
+            "max_px": 18.9318366027542,
+            "count": 877
+          },
+          "head_iou": 0.9443891124012214
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.382281264437028,
+            "max_px": 18.538102444398813,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 2.6944065587168575,
+            "max_px": 18.11097652267279,
+            "count": 999
+          },
+          "head_iou": 0.9671042558620885
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.6510929935266291,
+            "max_px": 5.695374649604861,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 1.7477466306756249,
+            "max_px": 10.290353236961682,
+            "count": 926
+          },
+          "head_iou": 0.9799483760377115
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 3.608807229824965,
+            "max_px": 8.285263075533386,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 4.3989282670792225,
+            "max_px": 9.90394057772785,
+            "count": 964
+          },
+          "head_iou": 0.9603209965932403
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 1.8084651784247472,
+            "max_px": 8.384764909577463,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 7.94341184469103,
+            "max_px": 21.45965527928662,
+            "count": 905
+          },
+          "head_iou": 0.9438258623082425
+        }
+      ],
+      "curvature_status": "Pending corrected cotangent remeasurement; geometric projection residuals remain valid."
+    },
+    "B3-step1": {
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 0.7617031605902436,
+            "max_px": 3.8864290714322207,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 1.1001420590125655,
+            "max_px": 10.910811247091498,
+            "count": 882
+          },
+          "head_iou": 0.9828773235407056
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.5936700283404968,
+            "max_px": 8.119544013604896,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 1.2292528012163415,
+            "max_px": 17.61723039452385,
+            "count": 970
+          },
+          "head_iou": 0.987192309502518
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 5.541144750532546,
+            "max_px": 21.60701997668811,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 2.847913489120999,
+            "max_px": 23.734953820180056,
+            "count": 974
+          },
+          "head_iou": 0.956631045733286
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 5.367327153489075,
+            "max_px": 16.359501151663217,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 3.35247823246614,
+            "max_px": 22.168646150581072,
+            "count": 985
+          },
+          "head_iou": 0.9501165253533939
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 5.193410380104997,
+            "max_px": 22.681167070566524,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 3.838006655986529,
+            "max_px": 25.18078551682824,
+            "count": 877
+          },
+          "head_iou": 0.9370557114176035
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.486745015681024,
+            "max_px": 17.260777143376774,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 4.058819464229448,
+            "max_px": 20.715384829586828,
+            "count": 999
+          },
+          "head_iou": 0.9597211024176423
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.6492025433723642,
+            "max_px": 5.279357456218852,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 1.5229281512717647,
+            "max_px": 12.182400705861875,
+            "count": 926
+          },
+          "head_iou": 0.9813388907536083
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 3.8326187194443495,
+            "max_px": 6.889491384749538,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 4.300100116221996,
+            "max_px": 11.67498820162792,
+            "count": 964
+          },
+          "head_iou": 0.9584027703634245
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 2.1356283594556102,
+            "max_px": 8.247624912034553,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 7.197857755551851,
+            "max_px": 19.028935060777798,
+            "count": 905
+          },
+          "head_iou": 0.9449694274596998
+        }
+      ],
+      "curvature": {
+        "p50": 0.0029506339798047645,
+        "p95": 0.033214442956159815,
+        "p99": 0.08620935907936148,
+        "max": 0.6455335966120397,
+        "passed": false,
+        "excluded_vertices": 954,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
+    },
+    "B3-step2": {
+      "available": false,
+      "reason": "Corrective solve with sum-edge-then-clamp cotangent weights pending.",
+      "superseded_results": "pipeline/headmodel/fit/results/fit2f/pre-edge-clamp/"
+    },
+    "T1-A": {
+      "aligned": true,
+      "measured": false,
+      "parameters": {
+        "rotation_offset_deg": [
+          -2.5642723379780037,
+          -3.847084132921153,
+          2.2056556292160283
+        ],
+        "scale_xyz": [
+          1.0207658795259933,
+          1.0183207042184304,
+          1.1393742192839489
+        ],
+        "translation_ict": [
+          0.21093636775879537,
+          -1.026001142857388,
+          0.06646555360215142
+        ],
+        "thickness_px": 14.0,
+        "icp": [
+          {
+            "iteration": 1,
+            "gate_px": 15.0,
+            "pairs": 63601,
+            "loss": 21.479669408095045,
+            "rotation_offset_deg": [
+              -2.1393440833626793,
+              -4.741885979058367,
+              0.3254124495106562
+            ],
+            "scales_xyz": [
+              1.0437539131094984,
+              0.995082246759717,
+              1.1124357260048847
+            ],
+            "t": 9.907667783115818,
+            "seconds": 75.46870670095086
+          },
+          {
+            "iteration": 2,
+            "gate_px": 13.714285714285714,
+            "pairs": 64295,
+            "loss": 21.15360495873817,
+            "rotation_offset_deg": [
+              -2.962441177007275,
+              -4.896322877206018,
+              0.7470426984758837
+            ],
+            "scales_xyz": [
+              1.0405059337626714,
+              1.004031317405511,
+              1.1132469349724472
+            ],
+            "t": 10.891733563396011,
+            "seconds": 73.72384354902897
+          },
+          {
+            "iteration": 3,
+            "gate_px": 12.428571428571429,
+            "pairs": 63158,
+            "loss": 19.32180734569619,
+            "rotation_offset_deg": [
+              -3.24011556476598,
+              -4.980008496192435,
+              1.0270385038654668
+            ],
+            "scales_xyz": [
+              1.0389642932353358,
+              1.007638920799553,
+              1.1138021097291375
+            ],
+            "t": 11.832587085166066,
+            "seconds": 59.05007666395977
+          },
+          {
+            "iteration": 4,
+            "gate_px": 11.142857142857142,
+            "pairs": 61524,
+            "loss": 16.72182865659005,
+            "rotation_offset_deg": [
+              -3.361922302566268,
+              -5.0734071052536915,
+              1.2490114009665467
+            ],
+            "scales_xyz": [
+              1.0367741945532334,
+              1.009159586801336,
+              1.1138337367066202
+            ],
+            "t": 12.785100313005815,
+            "seconds": 88.93842060898896
+          },
+          {
+            "iteration": 5,
+            "gate_px": 9.857142857142858,
+            "pairs": 59506,
+            "loss": 14.558815626129359,
+            "rotation_offset_deg": [
+              -3.305426127470819,
+              -4.948865420662201,
+              1.4137654282567227
+            ],
+            "scales_xyz": [
+              1.030766649126056,
+              1.0110435846625536,
+              1.1190349363668624
+            ],
+            "t": 13.78099419454846,
+            "seconds": 75.59465906198602
+          },
+          {
+            "iteration": 6,
+            "gate_px": 8.571428571428571,
+            "pairs": 56853,
+            "loss": 11.941942708590041,
+            "rotation_offset_deg": [
+              -3.1964662281734433,
+              -4.726722655665907,
+              1.6282129266815513
+            ],
+            "scales_xyz": [
+              1.0261268543732187,
+              1.014133068751486,
+              1.1262989915433477
+            ],
+            "t": 14.0,
+            "seconds": 70.45049207797274
+          },
+          {
+            "iteration": 7,
+            "gate_px": 7.285714285714286,
+            "pairs": 53273,
+            "loss": 9.209372200956368,
+            "rotation_offset_deg": [
+              -2.9973474524744055,
+              -4.441077251977983,
+              1.8589211748168892
+            ],
+            "scales_xyz": [
+              1.022592053048853,
+              1.0164152428786368,
+              1.1339491377413964
+            ],
+            "t": 14.0,
+            "seconds": 69.43016234203242
+          },
+          {
+            "iteration": 8,
+            "gate_px": 6.0,
+            "pairs": 48980,
+            "loss": 6.663099735111099,
+            "rotation_offset_deg": [
+              -2.794287624950528,
+              -4.160208256210751,
+              1.9594512310593317
+            ],
+            "scales_xyz": [
+              1.02163962502051,
+              1.0169964605814954,
+              1.1367902204048375
+            ],
+            "t": 14.0,
+            "seconds": 84.54646981495898
+          },
+          {
+            "iteration": 9,
+            "gate_px": 6.0,
+            "pairs": 48922,
+            "loss": 6.427854358531192,
+            "rotation_offset_deg": [
+              -2.668520558301901,
+              -3.969153424066893,
+              2.091982836899832
+            ],
+            "scales_xyz": [
+              1.0211368426580139,
+              1.0177950520636843,
+              1.1382587656953451
+            ],
+            "t": 14.0,
+            "seconds": 140.0573660490336
+          },
+          {
+            "iteration": 10,
+            "gate_px": 6.0,
+            "pairs": 48837,
+            "loss": 6.383111668889254,
+            "rotation_offset_deg": [
+              -2.5642723379780037,
+              -3.847084132921153,
+              2.2056556292160283
+            ],
+            "scales_xyz": [
+              1.0207658795259933,
+              1.0183207042184304,
+              1.1393742192839489
+            ],
+            "t": 14.0,
+            "seconds": 68.0613194250036
+          }
+        ],
+        "elapsed_seconds": 811.4299753139494,
+        "camera_rotations_unchanged": true,
+        "gauge": "global/camera similarity retains initialization gauge; no geometric vertex displacement"
+      },
+      "reason": "Nine-key residuals and final sheets await approved runner."
+    },
+    "T1-B3": {
+      "available": false,
+      "reason": "Not executed; additional runner approval pending."
+    },
+    "T2-A": {
+      "available": false,
+      "reason": "MeshLab meshing_close_holes requires edge manifoldness; largest position-welded component has non-manifold edges."
+    }
+  },
+  "tripo_status": {
+    "status": "partial",
+    "checked_at": "2026-10-27T17:37:42.641326+00:00",
+    "endpoint": "https://openapi.tripo3d.ai/v3",
+    "authenticated": true,
+    "created_models": 2,
+    "credits_consumed": 60.0,
+    "T1": "global alignment complete",
+    "T2": "MeshLab meshing_close_holes requires edge manifoldness; largest position-welded component has non-manifold edges.",
+    "additional_runners_pending": 4
+  },
+  "generation": [
+    {
+      "name": "T1",
+      "attempt": 1,
+      "model": "v3.1-20260211",
+      "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
+      "parameters": {
+        "input": "uploaded file_token (asset reference omitted)",
+        "model": "v3.1-20260211"
+      },
+      "input_path": "pipeline/headmodel/tripo/inputs/T1-input.png",
+      "status": "failed",
+      "error_code": 2010,
+      "message": "Tripo error code 2010: You don't have enough credit to create this task",
+      "elapsed_seconds": 2.3066467790631577
+    },
+    {
+      "name": "T1",
+      "attempt": 1,
+      "model": "v3.1-20260211",
+      "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
+      "parameters": {
+        "input": "uploaded file_token (asset reference omitted)",
+        "model": "v3.1-20260211"
+      },
+      "input_path": "pipeline/headmodel/tripo/inputs/T1-input.png",
+      "status": "success",
+      "task_id": "d2acfb47-c2d1-4f77-b000-213b7f404207",
+      "elapsed_seconds": 124.52920128696132,
+      "credits_consumed": 30.0,
+      "created_at": "2026-10-27T16:39:32.862672Z",
+      "completed_at": "2026-10-27T16:41:26.143573Z",
+      "glb_path": "pipeline/headmodel/tripo/results/tripo/T1.glb",
+      "glb_bytes": 42057580,
+      "sha256": "1891aa2055427c209e3965fbd1cefef0caea00bcda4c09903ff2bcdf3a7cee9f"
+    },
+    {
+      "name": "T2",
+      "attempt": 1,
+      "model": "v3.1-20260211",
+      "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
+      "parameters": {
+        "input": "uploaded file_token (asset reference omitted)",
+        "model": "v3.1-20260211"
+      },
+      "input_path": "source/character/still.png",
+      "status": "success",
+      "task_id": "1141e696-0158-4822-83a0-7d0ffa4c6007",
+      "elapsed_seconds": 145.59954578091856,
+      "credits_consumed": 30.0,
+      "created_at": "2026-10-27T16:41:41.802801Z",
+      "completed_at": "2026-10-27T16:43:54.932197Z",
+      "glb_path": "pipeline/headmodel/tripo/results/tripo/T2.glb",
+      "glb_bytes": 45886696,
+      "sha256": "26471eb63805e53ee0b75a3d9cb2cdfad93fabd7f8dd6897fae2f96a12f5451b"
+    }
+  ],
+  "endpoint_check": {
+    "endpoint": "https://openapi.tripo3d.ai/v3",
+    "authenticated": true,
+    "balance": {
+      "balance": 0.0,
+      "frozen": 0.0
+    },
+    "correction": "Initial .com China endpoint rejected the global key; key unchanged.",
+    "earlier_failed_uploads": 2,
+    "earlier_generation_tasks": 0
+  },
+  "status": "partial; awaiting additional runner approval and T2 topology decision"
+}

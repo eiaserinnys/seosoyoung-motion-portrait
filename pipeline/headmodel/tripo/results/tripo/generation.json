@@ -1,0 +1,57 @@
+[
+  {
+    "name": "T1",
+    "attempt": 1,
+    "model": "v3.1-20260211",
+    "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
+    "parameters": {
+      "input": "uploaded file_token (asset reference omitted)",
+      "model": "v3.1-20260211"
+    },
+    "input_path": "pipeline/headmodel/tripo/inputs/T1-input.png",
+    "status": "failed",
+    "error_code": 2010,
+    "message": "Tripo error code 2010: You don't have enough credit to create this task",
+    "elapsed_seconds": 2.3066467790631577
+  },
+  {
+    "name": "T1",
+    "attempt": 1,
+    "model": "v3.1-20260211",
+    "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
+    "parameters": {
+      "input": "uploaded file_token (asset reference omitted)",
+      "model": "v3.1-20260211"
+    },
+    "input_path": "pipeline/headmodel/tripo/inputs/T1-input.png",
+    "status": "success",
+    "task_id": "d2acfb47-c2d1-4f77-b000-213b7f404207",
+    "elapsed_seconds": 124.52920128696132,
+    "credits_consumed": 30.0,
+    "created_at": "2026-10-27T16:39:32.862672Z",
+    "completed_at": "2026-10-27T16:41:26.143573Z",
+    "glb_path": "pipeline/headmodel/tripo/results/tripo/T1.glb",
+    "glb_bytes": 42057580,
+    "sha256": "1891aa2055427c209e3965fbd1cefef0caea00bcda4c09903ff2bcdf3a7cee9f"
+  },
+  {
+    "name": "T2",
+    "attempt": 1,
+    "model": "v3.1-20260211",
+    "endpoint": "https://openapi.tripo3d.ai/v3/generation/image-to-model",
+    "parameters": {
+      "input": "uploaded file_token (asset reference omitted)",
+      "model": "v3.1-20260211"
+    },
+    "input_path": "source/character/still.png",
+    "status": "success",
+    "task_id": "1141e696-0158-4822-83a0-7d0ffa4c6007",
+    "elapsed_seconds": 145.59954578091856,
+    "credits_consumed": 30.0,
+    "created_at": "2026-10-27T16:41:41.802801Z",
+    "completed_at": "2026-10-27T16:43:54.932197Z",
+    "glb_path": "pipeline/headmodel/tripo/results/tripo/T2.glb",
+    "glb_bytes": 45886696,
+    "sha256": "26471eb63805e53ee0b75a3d9cb2cdfad93fabd7f8dd6897fae2f96a12f5451b"
+  }
+]

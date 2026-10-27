@@ -1,0 +1,27 @@
+{
+  "raw": {
+    "vertices": 724974,
+    "faces": 1412014
+  },
+  "original_after_position_weld": {
+    "vertices": 724974,
+    "faces": 1412014,
+    "watertight": false,
+    "manifold": true,
+    "components": 174,
+    "nonmanifold_edges": 0,
+    "nonmanifold_vertices": 0
+  },
+  "original_components": 174,
+  "prepared": {
+    "vertices": 44077,
+    "faces": 88150,
+    "watertight": true,
+    "manifold": true,
+    "components": 1,
+    "nonmanifold_edges": 0,
+    "nonmanifold_vertices": 0
+  },
+  "largest_component_selection": "surface area",
+  "hole_fill": "one pymeshlab meshing_close_holes, all boundary loop sizes"
+}

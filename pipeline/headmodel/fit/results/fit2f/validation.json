@@ -1,0 +1,128 @@
+{
+  "status": "incomplete; awaiting additional execution approval",
+  "runner_calls": 9,
+  "original_runner_limit": 6,
+  "overrun_acknowledged": true,
+  "runner_history": [
+    "prepare",
+    "step1",
+    "step2 with incorrect cot clamp",
+    "Tripo import missing requests",
+    "Tripo wrong .com endpoint upload rejected",
+    "ICT sheets",
+    "funded Tripo generation; UV-island preparation stopped",
+    "position-weld preparation; dense raster processing stopped",
+    "prefiltered Tripo alignment: T1 complete, T2 hole-fill failed"
+  ],
+  "additional_runners_requested": 4,
+  "pending_runs": [
+    "ICT step2 with corrected cot weights",
+    "T2 topology repair and global alignment",
+    "T1-B3",
+    "final corrected ICT and Tripo comparison/sheets"
+  ],
+  "pending_design_decision": "T2 coordinate-preserving non-manifold splitting before hole fill is proposed, not implemented.",
+  "contracts_result": "5 passed, 1 failed (remesh maximum distance 3.0878357047105056px >1.5px)",
+  "latest_targeted_checks": {
+    "open_boundary_and_raster_equivalence": "1 passed .226s",
+    "edge_cot_clamp_gaussian_constant": "RED old edge1.2 instead of.325; GREEN1 passed .009s",
+    "API_auth_resume_fixture": "1 passed .001s",
+    "reused_2d_contracts": "3 passed with boundary test,4 total .357s",
+    "legacy_zbuffer_mask": "2 passed .027s"
+  },
+  "test2_collision_median_before_after_px": [
+    {
+      "frame": 3,
+      "before_median_px": 7.0710678118654755,
+      "after_median_px": 1.0,
+      "skin_points": 310,
+      "ear_excluded_points": 2
+    },
+    {
+      "frame": 42,
+      "before_median_px": 7.0,
+      "after_median_px": 1.0,
+      "skin_points": 432,
+      "ear_excluded_points": 0
+    },
+    {
+      "frame": 264,
+      "before_median_px": 6.708203932499369,
+      "after_median_px": 0.6661667604447163,
+      "skin_points": 453,
+      "ear_excluded_points": 46
+    }
+  ],
+  "step1_curvature": {
+    "p50": 0.0029506339798047645,
+    "p95": 0.033214442956159815,
+    "p99": 0.08620935907936148,
+    "max": 0.6455335966120397,
+    "passed": false,
+    "excluded_vertices": 954,
+    "unit": "1/px",
+    "operator": "cotangent: sum per edge, then clamp"
+  },
+  "step2_status": "Original result superseded: triangle-wise cot clamp differed from the specified edge-wise clamp. Correction implemented and unit-tested; solve not rerun.",
+  "T1_visibility_equivalence": {
+    "pixels_and_owners_identical": true,
+    "triangles": 1408616,
+    "full_seconds": 4.122211756068282,
+    "prefilter_seconds": 2.30833846796304
+  },
+  "T1_A_final_parameters": {
+    "rotation_offset_deg": [
+      -2.5642723379780037,
+      -3.847084132921153,
+      2.2056556292160283
+    ],
+    "scale_xyz": [
+      1.0207658795259933,
+      1.0183207042184304,
+      1.1393742192839489
+    ],
+    "translation_ict": [
+      0.21093636775879537,
+      -1.026001142857388,
+      0.06646555360215142
+    ],
+    "thickness_px": 14.0,
+    "elapsed_seconds": 811.4299753139494
+  },
+  "generated_models": 2,
+  "credits_consumed": 60.0,
+  "generation_create_attempts": 3,
+  "prior_2010_attempts": 1,
+  "api_key_changes": 0,
+  "T2": {
+    "status": "hole_fill_failed",
+    "raw_glb": {
+      "declared_position_vertices": 776806,
+      "declared_triangles": 1471848,
+      "bytes": 45886696,
+      "note": "GLB accessor declarations, before position welding"
+    },
+    "failure": "MeshLab meshing_close_holes requires edge manifoldness; largest position-welded component has non-manifold edges.",
+    "prepared_mesh": null,
+    "alignment": null,
+    "repair_applied": false
+  },
+  "independent_review": "Current code/edge-clamp correction passed static review. Initial ICT images reviewed; corrected step2 and Tripo final visual review pending.",
+  "visual_findings": "Initial step2 reduced fine faceting, but was produced by the superseded operator and is not the specified experiment. Generated T1 is a complete head after position welding; fitted T1 sheets not generated.",
+  "not_executed": [
+    "corrected step2 solve",
+    "T1-B3",
+    "T2-A",
+    "nine-key Tripo residuals",
+    "final three Tripo sheets",
+    "B130",
+    "2e",
+    "A refit",
+    "lambda/mu/weight/taper/gate search",
+    "PR",
+    "merge",
+    "deployment"
+  ],
+  "unrelated_warning": "pip reported existing pdfminer-six requires missing cryptography through host PYTHONPATH; no PDF functionality or unrelated package was modified.",
+  "protected_paths": "No existing 2d source, headmodel data/model, bundle or runtime modified."
+}

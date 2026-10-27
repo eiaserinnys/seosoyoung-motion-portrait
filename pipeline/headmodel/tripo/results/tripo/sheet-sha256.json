@@ -1,0 +1,15 @@
+{
+  "status": "partial; final three Tripo sheets not generated",
+  "sheets": [
+    {
+      "path": "pipeline/headmodel/tripo/sheets/T1-axes.png",
+      "sha256": "8d804fa11c66086522940858c589e2c844b331574177232ff96a42c413e4ab68",
+      "role": "initial generated mesh axis review, before global fitting"
+    },
+    {
+      "path": "pipeline/headmodel/tripo/sheets/T1-uv-seam-diagnostic.png",
+      "sha256": "0da832a01cfcc04a48863f356ac5bb938689e647388aa9753255f0b00aae5c8c",
+      "role": "superseded UV seam diagnostic"
+    }
+  ]
+}

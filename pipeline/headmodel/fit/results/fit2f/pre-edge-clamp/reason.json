@@ -1,0 +1,8 @@
+{
+  "incorrect": "sum(max(cot contribution,0))/2",
+  "specified": "max(sum(cot contribution)/2,0)",
+  "observed_contract": "edge opposite cots -1.75 and 2.4: old weight1.2, corrected .325",
+  "step1": "displacement unchanged, curvature remeasured",
+  "step2": "old deformation and curvature invalid for the specified operator; corrective solve pending",
+  "test": "RED weight1.2 != .325; GREEN 1 test .009s, Gaussian bump .02212374877928758 unchanged"
+}
