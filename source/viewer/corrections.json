@@ -83,6 +83,13 @@
       "min": 0,
       "max": 1,
       "step": 0.01
+    },
+    {
+      "id": "CorrHeadBase",
+      "label": "두상 바탕 연결",
+      "min": 0,
+      "max": 1,
+      "step": 1
     }
   ],
   "presets": {
@@ -98,7 +105,8 @@
       "CorrTurn": 1,
       "CorrHairDepth": 1,
       "CorrHairOcclusion": 0.8,
-      "CorrOutline": 0
+      "CorrOutline": 0,
+      "CorrHeadBase": 0
     },
     "recommended": {
       "CorrDepth": 0.55,
@@ -112,7 +120,8 @@
       "CorrTurn": 0.65,
       "CorrHairDepth": 1,
       "CorrHairOcclusion": 0.8,
-      "CorrOutline": 1
+      "CorrOutline": 1,
+      "CorrHeadBase": 1
     }
   }
 }

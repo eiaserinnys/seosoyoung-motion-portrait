@@ -123,3 +123,9 @@ Run `python3 pipeline/bake_face90.py` again after changing the face solution or 
 The generic [deformation module](src/head-turn.mjs), [model](docs/deformation-model.md), [measurements](docs/measurements.md) and [surface comparison](docs/surface-comparison.md) were integrated from analysis commit `230782b`. They contain aggregate measurements and generic code, without third-party model files or per-vertex data. Viewer defaults are authored for this portrait, not recovered coefficients from those models.
 
 `source/viewer/index.html` and `source/viewer/corrections.json` are the HTML and correction-schema sources. The viewer builder generates `bundle/index.html`, `bundle/corrections.mjs`, copies the shared deformation module, and writes the matching rig metadata. Local geometry and residual corrections in `bundle/geometry.mjs` are specific to this portrait. The guide sphere and child eye spheres stay rigid when art-surface settings change.
+
+## Head base
+
+The viewer loads `bundle/assets/head-base.bin` and `head-base.json` as a fitted head backing. `CorrHeadBase` is 1 in the recommended preset and 0 in the pure preset; the face-skin uses this surface when both `CorrHeadBase` and `CorrOutline` are 1. The toolbar can hide the backing or hide and restore all hair layers. Existing feature, ear and hair evaluators remain unchanged.
+
+The head and face outline follow the Seedance key frames, with the model's eye midpoint aligned to the registered rig eyes. At rest, points outside the fitted surface retain their original 2D offsets; those offsets fade with angular distance from rest. The fitted head and the existing hair attachment field remain separate, and the ear pieces still use their existing geometry. The calibrated lower row turns backward between effective yaw 25° and 45° because the keys themselves differ; the viewer retains those key values.

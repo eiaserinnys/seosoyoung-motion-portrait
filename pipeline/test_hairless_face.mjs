@@ -10,7 +10,7 @@ import {OUTLINE_POSES} from '../bundle/outline-data.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {faceSolveWorld} from '../bundle/face-solve.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
-const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
+const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrHeadBase:0};
 const at=(yaw,pitch)=>({...base,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()});
 const near=(a,b,label)=>assert(Math.abs(a-b)<1e-7,`${label}: ${a} vs ${b}`);
 test('intermediate corneal dome has spatial curvature while reference anchors stay measured',()=>{

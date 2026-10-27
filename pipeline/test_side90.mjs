@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {bindRig,deform3D,opacity,HAIRPIN_ANCHOR} from '../bundle/rig.mjs';
 import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
@@ -11,10 +12,20 @@ import {BEADS,beadWorld} from '../bundle/stereo-attachments.mjs';
 import {applyHairSolve,applyTailSolve} from '../bundle/hair-solve.mjs';
 import {ponytailSkinDelta} from '../bundle/ponytail-skin.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
-const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
+const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1,CorrHeadBase:0};
 const at=yaw=>({...base,ParamAngleX:yaw,[FRAME_CACHE]:new Map()});
 const state={hidden:new Set(),outfit:'sweater'};
 const mesh=id=>rig.meshes.find(m=>m.id===id);
+function assertPreservedAsset(name){
+ const actual=readFileSync(new URL('../bundle/'+name,import.meta.url));
+ const expected=execFileSync('git',['show',`0b75a0211691965ca234ad9114073ba934568394:bundle/${name}`],{maxBuffer:16*1024*1024});
+ if(name==='assets/seosoyoung-rig.json'){
+  const a=JSON.parse(actual),b=JSON.parse(expected);delete a.corrections;delete b.corrections;assert.deepEqual(a,b);
+ }else{
+  const sha=data=>createHash('sha256').update(data).digest('hex');
+  assert.equal(sha(actual),sha(expected),name+' differs from the frozen baseline');
+ }
+}
 function assertProtectedGeometry(actual,expected,id,point,p){
  if(id==='face-skin'&&point[1]<410&&p.ParamAngleY){
   const delta=ponytailSkinDelta(point,p.ParamAngleX*p.CorrTurn,p.ParamAngleY*p.CorrTurn,p);
@@ -54,9 +65,7 @@ test('side90 keeps all nine poses unchanged apart from the approved face calibra
     }
    }
   }
-  for(const file of ['texture_00.png','texture_before_00.png','seosoyoung-rig.json']){
-   assert.deepEqual(readFileSync(new URL('../bundle/assets/'+file,import.meta.url)),execFileSync('git',['show',`0b75a0211691965ca234ad9114073ba934568394:bundle/assets/${file}`],{maxBuffer:16*1024*1024}));
-  }
+  for(const file of ['texture_00.png','texture_before_00.png','seosoyoung-rig.json'])assertPreservedAsset('assets/'+file);
  }finally{old.dispose();}
 });
 test('far eyes and brows fade on the specified side, and the frontal nose disappears',()=>{
@@ -104,8 +113,7 @@ test('bead split preserves non-hair geometry with only the registered upper-skin
    }
   }
  }finally{old.dispose();}
- for(const name of ['hair-shell.mjs','hair-surface.mjs','dome-data.mjs','assets/texture_00.png','assets/texture_before_00.png','assets/seosoyoung-rig.json'])
-  assert.deepEqual(readFileSync(new URL('../bundle/'+name,import.meta.url)),execFileSync('git',['show',`0b75a0211691965ca234ad9114073ba934568394:bundle/${name}`],{maxBuffer:16*1024*1024}));
+ for(const name of ['hair-shell.mjs','hair-surface.mjs','dome-data.mjs','assets/texture_00.png','assets/texture_before_00.png','assets/seosoyoung-rig.json'])assertPreservedAsset(name);
 });
 test('geometry protection rejects extra drift in upper skin, lower skin, neutral and other parts',()=>{
  for(const [id,point,pitch] of [['face-skin',[400,300],15],['face-skin',[400,497],15],['face-skin',[400,300],0],['eye-left-sclera',[400,300],15]]){
