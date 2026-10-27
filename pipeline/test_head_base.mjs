@@ -10,6 +10,8 @@ import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
 import {outlineWorld} from '../bundle/face-outline.mjs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {backgroundLayerPolicy,neckDepthPositions} from '../bundle/renderer.mjs';
+import {createNeckTube,neckTubePositions} from '../bundle/neck-tube.mjs';
+import {skinFillPositions} from '../bundle/skin-fill.mjs';
 import {sideWorld} from '../bundle/hair-shell.mjs';
 import {earWorld} from '../bundle/stereo-attachments.mjs';
 
@@ -130,4 +132,27 @@ test('neck depth uses the original xy and the rest ring cylinder',{timeout:30000
  const ref=headBase.getHeadBase().reference,values=neckDepthPositions(neck,points,ref,metadata.open_boundary);
  const ring=metadata.open_boundary,zc=ring.reduce((sum,i)=>sum+ref[i*3+2],0)/ring.length;
  points.forEach((v,i)=>{close(values[i][0],v[0],1e-10,'neck x');close(values[i][1],v[1],1e-10,'neck y');assert(values[i][2]>=zc-1e-10);});
+});
+test('neck tube joins the head ring and keeps its lower ring with the body',{timeout:30000},()=>{
+ const neck=rig.meshes.find(m=>m.id==='neck'),rest=pose(),tube=createNeckTube(neck,headBase.getHeadBase(),rest);
+ assert.equal(tube.rows,10);assert.equal(tube.ringCount,metadata.open_boundary.length);assert.equal(tube.bottom,685.375);
+ for(const pitch of [-30,0,30])for(const yaw of [-90,-45,0,45,90])for(const roll of [-12,0,12]){
+  const p=pose(yaw,pitch,{ParamAngleZ:roll,ParamBodyAngleX:2,ParamBreath:.2}),points=neckTubePositions(tube,p),head=headBaseVertices(p).surface;
+  for(let j=0;j<tube.ringCount;j++){
+   const last=(tube.rows-1)*tube.ringCount+j,top=tube.vertices[last],body=deform3D(neck,tube.vertices[j].raw,p);
+   for(let c=0;c<3;c++)close(points[last][c],head[top.index*3+c],1e-6,'top head ring');
+   close(points[j][0],body[0],1e-6,'bottom body x');close(points[j][1],body[1],1e-6,'bottom body y');
+   close(points[j][2],tube.vertices[j].point[2],1e-6,'bottom body z');
+  }
+ }
+});
+test('ear bias covers each rest ear depth and preserves legacy neck and fill positions',{timeout:30000},()=>{
+ const evidence=JSON.parse(read('../docs/captures/fix4-baseline/rest_analysis.json'));
+ for(const side of ['left','right'])close(metadata.ear_depth_bias_px[side],evidence.ears[side].min_bias_px+1,1e-9,'ear rest margin');
+ const neck=rig.meshes.find(m=>m.id==='neck'),values=[];
+ for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
+  const p=pose(yaw,pitch,{CorrHeadBase:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0});
+  values.push({neck:neck.positions.map(q=>deform3D(neck,q,p)),fill:skinFillPositions(p,skin)});
+ }
+ assert.equal(digest(values),'5e43bf076d88b50f7a325f9e2bbdb983ef00fe1ab3f2b1d52ac5dad17a4c2b7a');
 });

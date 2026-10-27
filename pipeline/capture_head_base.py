@@ -249,7 +249,7 @@ def save_fix3(renders, baseline):
         pair.paste(before.crop(box).resize(size, Image.Resampling.NEAREST), (0, 24))
         pair.paste(after.crop(box).resize(size, Image.Resampling.NEAREST), (size[0], 24))
         label = ImageDraw.Draw(pair)
-        label.text((6, 5), f'{yaw:+g}/{pitch:+g}  8330ac7', fill='white')
+        label.text((6, 5), f'{yaw:+g}/{pitch:+g}  5f4afd2', fill='white')
         label.text((size[0]+6, 5), 'current', fill='white')
         rows.append(pair)
     sheet = Image.new('RGB', (max(row.width for row in rows), sum(row.height for row in rows)), BG)
@@ -335,40 +335,46 @@ def main():
                   const meshes=studio.rig.meshes,skin=meshes.find(m=>m.id==='face-skin');
                   const hidden=meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck'&&!m.id.startsWith('ear-')&&m.deformerId!=='WarpBody').map(m=>m.id);
                   const state={...studio.state,mode:'all',wire:false,grid:false,before:false,surfaceOnly:false,masks:false,identify:null};
-                  const capture=(ids,pose=p,identify=null)=>{headCapture.render(pose,{...state,identify,hidden:new Set(ids)});const error=headCapture.gl.getError();if(error)throw Error('WebGL error '+error);return headCapture.canvas.toDataURL('image/png').split(',')[1];};
+                  const capture=(ids,pose=p,identify=null,extra={})=>{headCapture.render(pose,{...state,...extra,identify,hidden:new Set(ids)});const error=headCapture.gl.getError();if(error)throw Error('WebGL error '+error);return headCapture.canvas.toDataURL('image/png').split(',')[1];};
                   const portrait=capture(hidden);
-                  const union=key?capture(meshes.filter(m=>m.id!=='face-skin').map(m=>m.id)):null;
+                  const unionIds=meshes.filter(m=>m.id!=='face-skin').map(m=>m.id);
+                  const union=key?capture(unionIds,p,null,{hideHeadCap:true}):null;
+                  const unionWithCap=key?capture(unionIds):null;
                   const ears=key?capture(meshes.filter(m=>!m.id.startsWith('ear-')).map(m=>m.id),p,['ear-left','ear-right']):null;
                   const headNeck=capture(meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck').map(m=>m.id));
                   const headOnly=capture(meshes.map(m=>m.id));
-                  const neckOnly=capture(meshes.filter(m=>m.id!=='neck').map(m=>m.id),p,'neck');
+                  const neckOnly=capture(meshes.filter(m=>m.id!=='neck').map(m=>m.id),p,['neck','neck-tube']);
                   const isolated=[...meshes.filter(m=>m.id!=='face-skin').map(m=>m.id),'head-base'];
                   const restOld=yaw===0&&pitch===0?capture(isolated,{...p,CorrHeadBase:0}):null;
                   const restNew=yaw===0&&pitch===0?capture(isolated):null;
+                  const restEars=yaw===0&&pitch===0?Object.fromEntries(['left','right'].map(side=>[side,capture(meshes.filter(m=>m.id!=='ear-'+side).map(m=>m.id),p,'ear-'+side)])):null;
                   const q={...p,[poseModule.FRAME_CACHE]:new Map()},points=headModule.headBaseVertices(q).inset;
                   let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
                   const include=(x,y)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x);bottom=Math.max(bottom,y);};
                   for(let j=0;j<points.length;j+=3)include(points[j],points[j+1]);
                   const skinPositions=skin.positions.map(point=>rigModule.deform3D(skin,point,q).slice(0,2));
-                  const neck=meshes.find(m=>m.id==='neck'),neckTop=Math.min(...neck.positions.map(point=>point[1]));
-                  const neckXs=neck.positions.filter(point=>point[1]===neckTop).map(point=>rigModule.deform3D(neck,point,q)[0]);
+                  const neck=meshes.find(m=>m.id==='neck');
                   const base=headModule.getHeadBase(),ring=base.open_boundary,ref=base.reference;
                   const axis=[0,2].map(c=>ring.reduce((sum,i)=>sum+ref[i*3+c],0)/ring.length),rows=new Map();
+                  const tubeSpec=base.neck_tube,topProfile=tubeSpec.profile[tubeSpec.first_opaque_y-tubeSpec.bbox[1]],radius=(topProfile[1]-topProfile[0])/2;
+                  const neckXs=[axis[0]-radius,axis[0]+radius];
                   for(const point of neck.positions){const x=rigModule.deform3D(neck,point,q)[0],row=rows.get(point[1])||[Infinity,-Infinity];row[0]=Math.min(row[0],x);row[1]=Math.max(row[1],x);rows.set(point[1],row);}
                   const differences=[...rows.values()].map(([a,b])=>Math.abs((a+b)/2-axis[0]));
                   const neckAxis={center_x:axis[0],depth:axis[1],max_row_difference:Math.max(...differences),fallback_rows:differences.filter(d=>d>5).length};
                   for(const point of skinPositions)include(point[0],point[1]);
                   for(const mesh of meshes.filter(m=>m.id.startsWith('ear-')))for(const point of mesh.positions){const v=rigModule.deform3D(mesh,point,q);include(v[0],v[1]);}
-                  return {portrait,union,ears,headNeck,headOnly,neckOnly,neckColumn:[Math.min(...neckXs),Math.max(...neckXs)],neckAxis,restOld,restNew,skinPositions:measure?skinPositions:null,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
+                  return {portrait,union,unionWithCap,ears,headNeck,headOnly,neckOnly,neckColumn:[Math.min(...neckXs),Math.max(...neckXs)],neckAxis,restOld,restNew,restEars,skinPositions:measure?skinPositions:null,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
                 }''', [yaw, pitch, (yaw, pitch) in key_positions, (yaw, pitch) in jacobian_positions])
                 renders[(yaw, pitch)] = {'portrait': decode(data['portrait']),
                                          'bounds': data['bounds'], 'neck_column': data['neckColumn'], 'neck_axis': data['neckAxis'],
                                          'model_angle': data['modelAngle'], 'hidden': data['hidden']}
-                for source, target in [('union', 'union'), ('ears', 'ears'), ('headNeck', 'head_neck'),
+                for source, target in [('union', 'union'), ('unionWithCap', 'union_with_cap'), ('ears', 'ears'), ('headNeck', 'head_neck'),
                                        ('headOnly', 'head_only'), ('neckOnly', 'neck_only'),
                                        ('restOld', 'rest_old'), ('restNew', 'rest_new')]:
                     if data[source] is not None:
                         renders[(yaw, pitch)][target] = decode(data[source])
+                if data['restEars']:
+                    renders[(yaw, pitch)]['rest_ears'] = {side: decode(value) for side, value in data['restEars'].items()}
                 if data['skinPositions'] is not None:
                     renders[(yaw, pitch)]['skin_positions'] = data['skinPositions']
                 if (i + 1) % 10 == 0 or i + 1 == len(tasks):
@@ -397,10 +403,11 @@ def main():
         hair = target['points'][target['labels'] == 1] * scale + shift
         skin_target = target['skin_all'][target['skin_keep']] * scale + shift
         n3 = n3_metrics(alpha(item['union']), skin_target, hair)
+        n3_with_cap = n3_metrics(alpha(item['union_with_cap']), skin_target, hair)
         n4 = jacobians(rest, np.asarray(item['skin_positions']), triangles)
         n4['passed'] = n4['min_det_j'] >= .35 and n4['max_anisotropy'] <= 2
         rows.append({'name': name, 'frame': frame, 'yaw': yaw, 'pitch': pitch, 'model_angle': item['model_angle'],
-                     'N3': n3, 'N4': n4, 'N10': gaps[(yaw, pitch)],
+                     'N3': n3, 'N3_with_cap': n3_with_cap, 'N4': n4, 'N10': gaps[(yaw, pitch)],
                      'N11': ear_iou(identified(item['ears']), frame, poses, meta['rest_translation']),
                      'r24_min_det_j': r24.get(name), 'hair_points': hair, 'skin_points': skin_target})
     extra = []
@@ -419,12 +426,24 @@ def main():
     old = np.asarray(renders[(0, 0)]['rest_old'])[y0:y1, x0:x1]
     new = np.asarray(renders[(0, 0)]['rest_new'])[y0:y1, x0:x1]
     changed = int(np.count_nonzero(np.any(old != new, axis=2)))
-    baseline = DEST / 'fix3-baseline'
+    baseline = DEST / 'fix4-baseline'
     before = np.asarray(Image.open(baseline / '+0_+0_portrait.png').convert('RGBA'))
     after = np.asarray(renders[(0, 0)]['portrait'])
     difference = np.any(before != after, axis=2)
     yy, xx = np.where(difference)
-    rest_diff = {'changed_pixels': int(difference.sum()), 'bbox': None}
+    rest_ear = np.zeros_like(difference)
+    ear_occlusion = {}
+    for side in ('left', 'right'):
+        old_ear = Image.open(baseline / f'rest_ear_{side}.png').convert('RGBA')
+        mask = identified(old_ear)
+        rest_ear |= mask
+        ear_occlusion[side] = int(np.count_nonzero(mask & ~identified(renders[(0, 0)]['rest_ears'][side])))
+    rest_ear = cv2.dilate(rest_ear.astype('uint8'), np.ones((3, 3), dtype='uint8')) > 0
+    older = np.asarray(Image.open(DEST / 'fix3-baseline/+0_+0_portrait.png').convert('RGBA'))
+    older_difference = np.any(older != after, axis=2)
+    rest_diff = {'changed_pixels': int(difference.sum()), 'ear_changed_pixels': int(np.count_nonzero(difference & rest_ear)),
+                 'other_changed_pixels': int(np.count_nonzero(difference & ~rest_ear)),
+                 'ear_changed_from_8330_pixels': int(np.count_nonzero(older_difference & rest_ear)), 'bbox': None}
     if len(xx):
         box = (max(0, int(xx.min())-8), max(0, int(yy.min())-8),
                min(CANVAS_WIDTH, int(xx.max())+9), min(1024, int(yy.max())+9))
@@ -443,12 +462,16 @@ def main():
                'N7': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: projection fixture'},
                'N10': {'poses': [{'yaw': yaw, 'pitch': pitch, **gaps[(yaw, pitch)]} for yaw, pitch in tasks]},
                'rest_full_difference': rest_diff,
+               'rest_ear_occluded_pixels': ear_occlusion,
+               'rest_fill_outside_head': json.loads((baseline / 'rest_analysis.json').read_text())['fill_outside_pixels'],
+               'ear_depth_bias_px': meta['ear_depth_bias_px'],
+               'neck_tube': {key: meta['neck_tube'][key] for key in ('bottom_y', 'first_opaque_y', 'rings')},
                'neck_axis': {'center_x': renders[(0, 0)]['neck_axis']['center_x'],
                              'rest_depth': renders[(0, 0)]['neck_axis']['depth'],
                              'max_row_difference': max(item['neck_axis']['max_row_difference'] for item in renders.values()),
                              'max_fallback_rows': max(item['neck_axis']['fallback_rows'] for item in renders.values())},
-               'temple_diagnosis': {'status': 'unresolved', 'layer': 'exposed-skin',
-                                    'inventory': json.loads((baseline / 'fill-inventory.json').read_text())},
+               'temple_diagnosis': {'status': 'clipped', 'layer': 'exposed-skin',
+                                    'inventory': json.loads((DEST / 'fix3-baseline/fill-inventory.json').read_text())},
                'poses': [{k: v for k, v in row.items() if k not in ('hair_points', 'skin_points')} for row in rows] + extra,
                'rest_translation': meta['rest_translation'], 'common_crop_pixels': crop,
                'hidden_meshes': renders[(0, 0)]['hidden'],
@@ -456,7 +479,7 @@ def main():
                'note': 'Angle-dependent displacement and outside-offset decay remain active.'}
     save_sheets(renders, rows, poses, meta['rest_translation'], crop)
     save_fix3(renders, baseline)
-    save_temple_diagnosis(baseline)
+    save_temple_diagnosis(DEST / 'fix3-baseline')
     (ROOT / 'docs/head_base_metrics.json').write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + '\n')
     print(json.dumps({'poses': len(tasks), 'N1': metrics['N1'], 'N6': metrics['N6']['max_difference_px'],
                       'N3c': metrics['N3c'], 'crop': crop, 'N3_passed': sum(row['N3']['passed'] for row in rows)}, ensure_ascii=False), flush=True)

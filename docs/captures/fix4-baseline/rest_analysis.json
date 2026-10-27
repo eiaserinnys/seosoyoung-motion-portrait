@@ -1,0 +1,48 @@
+{
+  "canvas": [
+    1500,
+    1600
+  ],
+  "ears": {
+    "left": {
+      "rest_ear_depth": 39.8476682405864,
+      "head_overlap_pixels": 1654,
+      "min_bias_px": 151.44603954902692,
+      "bias_px": 152.44603954902692,
+      "maximum_at": [
+        372,
+        506
+      ],
+      "maximum_ear_alpha": 42,
+      "percentiles": [
+        96.98536713796331,
+        140.85944923308512,
+        147.6352746251289
+      ]
+    },
+    "right": {
+      "rest_ear_depth": 43.394252212139364,
+      "head_overlap_pixels": 1606,
+      "min_bias_px": 151.60827610653143,
+      "bias_px": 152.60827610653143,
+      "maximum_at": [
+        632,
+        502
+      ],
+      "maximum_ear_alpha": 42,
+      "percentiles": [
+        96.99358414039465,
+        140.5940252377103,
+        147.5062548929711
+      ]
+    }
+  },
+  "fill_outside_pixels": 0,
+  "fill_outside_bbox": null,
+  "ring_outside_face_pixels": 0,
+  "ring_outside": [],
+  "before_diff": {
+    "ear": 3012,
+    "other": 1741
+  }
+}
