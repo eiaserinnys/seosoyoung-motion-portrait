@@ -163,7 +163,7 @@ def load_targets():
     return targets
 
 
-def rasterize(q, triangles, size=SIZE):
+def rasterize(q, triangles, size=SIZE, cull_backfaces=False):
     """Vectorized numpy barycentric z-buffer; no differentiable rasterizer."""
     depth = np.full(size*size, -np.inf, np.float32)
     owner = np.full(size*size, -1, np.int32)
@@ -184,7 +184,9 @@ def rasterize(q, triangles, size=SIZE):
         py = lo[ix, 1]+steps//widths[ix]+.5
         a,b,c = tri[ix, 0],tri[ix, 1],tri[ix, 2]
         det = (b[:,1]-c[:,1])*(a[:,0]-c[:,0])+(c[:,0]-b[:,0])*(a[:,1]-c[:,1])
-        valid = np.abs(det)>1e-8
+        # Projection flips world Y. Outward, camera-facing +Z normals therefore
+        # have clockwise (negative signed-area) winding in screen coordinates.
+        valid = det < -1e-8 if cull_backfaces else np.abs(det)>1e-8
         det = np.where(valid, det, 1.)
         u = ((b[:,1]-c[:,1])*(px-c[:,0])+(c[:,0]-b[:,0])*(py-c[:,1]))/det
         v = ((c[:,1]-a[:,1])*(px-c[:,0])+(a[:,0]-c[:,0])*(py-c[:,1]))/det

@@ -1,0 +1,61 @@
+{
+  "status": "bounded_experiment_finished_targets_not_all_met",
+  "template": {
+    "decision": "pass",
+    "rendering": "depth test and backface culling enabled",
+    "method": "이목구비의 접힌 기존 패치를 제거하고 정면 XY 단일 패치로 교체했다. 원본 바깥 두 고리의 높이를 TPS로 보간하고, 중립 UV를 고정해 같은 선형 사상을 중립과 100모드에 적용했다.",
+    "diagnosis": "원본의 안쪽 면은 모두 열린 구멍이 아니었다. v4의 3D biharmonic 후에도 정면 XY가 뒤집힌 면 167개와 국소 돌출이 남았다. v4 컬링 비교에서 정면과 45도는 깊이 테스트만으로도 보이는 뒷면 픽셀 0개였지만 코 아래 돌기는 남았다. 컬링만으로 사라지는 안쪽 면 비침과, 평활 결과의 실제 겉면 요철을 구분했다.",
+    "outside_neutral_and_100_modes_exact": true,
+    "removed_original_vertices": 4895,
+    "removed_original_faces": 9816,
+    "preserved_original_vertices": 6353,
+    "new_interior_vertices": 2460,
+    "shared_boundary_vertices": 180,
+    "same_linear_map": true,
+    "front_max_change_px": 0.0,
+    "nose_vertex": 7202,
+    "sheet_sha256": "f43499a8dbbe92636c40f74d839eba3189558d58996c7656cf8a595a378b2bd1"
+  },
+  "fit": {
+    "decision": "targets_and_visible_shape_not_all_met",
+    "passed": ["세 프레임 머리 IoU >= .96", "턱선 중앙값 세 프레임 모두 1px", "검출된 코 재투영 오차 세 프레임 모두 1px 미만", "42와 264 보이는 귀 IoU >= .3", "등록 회전 고정"],
+    "unmet": ["턱선 최대 오차 45.651/60.531/113.146px > 5px", "정면 오른귀 visible IoU .210 < .3", "이마 가장자리, 관자, 귀와 볼 접합부에 겉으로 보이는 깊은 홈과 거친 띠가 남음"],
+    "jaw_location": "최대 오차점은 각 프레임 상부 옆경계 끝점이다. 좌표는 [557,425], [243,432], [105,393]. 턱 중앙 구간의 최대는 3.162/5.099/2.828px이다. 42번 화면 오른쪽 귀 아래에는 최대 36.359px의 실제 외곽 벌어짐도 남는다.",
+    "beta_abs_max": 3.0,
+    "scale_xyz": [0.9445318579673767, 0.7603416442871094, 0.7832724452018738],
+    "thickness_px": 3.0,
+    "delta_abs_max_px": 26.0,
+    "delta_saturated_vertex_count": 31,
+    "neck_nonzero_delta_count": 0,
+    "rotation_max_abs_delta_deg": 0.0,
+    "falsification_criterion_1_all_head_iou_below_090": false,
+    "falsification_criterion_3_down_right_ear_iou_below_030": false,
+    "source_of_truth_for_numeric_residuals": "pipeline/headmodel/fit/results/fit2c/residuals.json"
+  },
+  "rendering_update": {
+    "final_sheets_and_residuals": "depth test plus backface culling",
+    "optimization": "디렉터의 추가 지시가 도착했을 때 네 단계 정합이 이미 실행 중이어서 진행 중인 깊이 테스트 기반 윤곽 목적은 유지했다. 최종 평가와 시트는 모두 깊이 테스트와 컬링을 적용했다.",
+    "overlap_or_reversal_counts": "diagnostic only, not a failure criterion under the latest instruction"
+  },
+  "execution": {
+    "runner_calls": 4,
+    "template_attempts": 2,
+    "fit_runs": 1,
+    "sheet_runs": 1,
+    "corrective_runner_reruns": 0,
+    "iterations": [300, 500, 500, 800],
+    "iteration_mean_seconds": 0.31545199875381685,
+    "last_stage_iteration_mean_seconds": 0.27566364136873744,
+    "elapsed_fit_seconds": 665.7867508210475,
+    "estimated_130_frames_last_800_iterations_seconds": 9556.339567449566,
+    "tests": "템플릿 3, 2c 변형 3, 턱 잔차 판정 1, 컬링 1, 영향받은 기존 core 7 계약 통과. 전체 스위트는 실행하지 않았다."
+  },
+  "independent_review": {
+    "template": "네 조건 통과",
+    "code": "P0/P1/P2 지적 없음",
+    "fitted_visible_shape": "P1 미충족: 깊이 테스트와 컬링 뒤에도 표면 홈과 돌출이 보임. 내부 뒤집힘 숫자는 판정에 사용하지 않음.",
+    "stop": "정해진 실험 결과로 종료. 추가 실행, 가중 탐색과 수정 없음."
+  },
+  "not_done": ["눈과 입 위치 정합", "전체 프레임 정합", "리그 연결", "가중 탐색", "추가 템플릿 시도", "PR", "머지", "배포"],
+  "unrelated_failures": []
+}

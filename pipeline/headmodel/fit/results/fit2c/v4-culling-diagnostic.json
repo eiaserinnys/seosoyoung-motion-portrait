@@ -1,0 +1,45 @@
+{
+  "views": [
+    {
+      "view": "FRONT",
+      "backface_culling": false,
+      "visible_backface_pixels": 0
+    },
+    {
+      "view": "YAW 45",
+      "backface_culling": false,
+      "visible_backface_pixels": 0
+    },
+    {
+      "view": "SIDE 90",
+      "backface_culling": false,
+      "visible_backface_pixels": 85
+    },
+    {
+      "view": "FROM BELOW 30",
+      "backface_culling": false,
+      "visible_backface_pixels": 6907
+    },
+    {
+      "view": "FRONT",
+      "backface_culling": true,
+      "visible_backface_pixels": 0
+    },
+    {
+      "view": "YAW 45",
+      "backface_culling": true,
+      "visible_backface_pixels": 0
+    },
+    {
+      "view": "SIDE 90",
+      "backface_culling": true,
+      "visible_backface_pixels": 0
+    },
+    {
+      "view": "FROM BELOW 30",
+      "backface_culling": true,
+      "visible_backface_pixels": 0
+    }
+  ],
+  "purpose": "Existing v4 geometry only; no new template, smoothing, optimization or geometry change."
+}

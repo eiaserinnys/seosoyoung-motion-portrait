@@ -1,0 +1,344 @@
+{
+  "frames": [
+    {
+      "frame": 3,
+      "head_iou": 0.977206765678322,
+      "head": {
+        "mean_px": 2.6485257148742676,
+        "max_px": 20.0,
+        "model_to_target_mean_px": 2.850816488265991,
+        "target_to_model_mean_px": 2.446235179901123
+      },
+      "skin_lower": {
+        "median_px": 1.0,
+        "mean_px": 2.468801736831665,
+        "max_px": 45.650848388671875,
+        "worst_point_xy": [
+          557.0,
+          425.0
+        ],
+        "worst_direction": "target_to_model",
+        "regions": {
+          "screen-left": {
+            "mean_px": 2.9136457443237305,
+            "max_px": 42.72002029418945
+          },
+          "center-chin": {
+            "mean_px": 1.6177096366882324,
+            "max_px": 3.1622776985168457
+          },
+          "screen-right": {
+            "mean_px": 3.1025640964508057,
+            "max_px": 45.650848388671875
+          }
+        },
+        "target_median_le_2": true,
+        "target_max_le_5": false
+      },
+      "skull_upper": {
+        "mean_px": 1.503662109375,
+        "max_px": 8.9442720413208,
+        "model_to_target_mean_px": 1.4965287446975708,
+        "target_to_model_mean_px": 1.5107954740524292
+      },
+      "ears": {
+        "ear-left": {
+          "visible_iou": 0.40679711637487126,
+          "isolated_iou": 0.5153035624686403,
+          "visible_area_px": 2033,
+          "target_area_px": 3431
+        },
+        "ear-right": {
+          "visible_iou": 0.20997229916897506,
+          "isolated_iou": 0.6245323356493854,
+          "visible_area_px": 835,
+          "target_area_px": 3533
+        }
+      },
+      "required_projected_displacement_estimate_px": 45.650848388671875,
+      "skin_over_10px": true,
+      "failure_candidate_over_26px": true,
+      "visible_reversed_patch_faces": 0,
+      "nose": {
+        "score": 0.9588761925697327,
+        "used": true,
+        "detected_xy": [
+          355.16253662109375,
+          482.47698974609375
+        ],
+        "projected_xy": [
+          354.9343566894531,
+          481.56756591796875
+        ],
+        "error_px": 0.9376128094075132
+      },
+      "targets": {
+        "head_iou_ge_096": true,
+        "jaw_median_le_2": true,
+        "jaw_max_le_5": false,
+        "nose_error_le_3": true,
+        "visible_ear_iou_ge_030": {
+          "ear-left": true,
+          "ear-right": false
+        }
+      },
+      "beta_abs_max": 3.0,
+      "scale_xyz": [
+        0.9445318579673767,
+        0.7603416442871094,
+        0.7832724452018738
+      ],
+      "thickness_px": 3.0,
+      "iteration_mean_seconds": 0.31545199875381685
+    },
+    {
+      "frame": 42,
+      "head_iou": 0.9818966460972925,
+      "head": {
+        "mean_px": 2.027165412902832,
+        "max_px": 22.472204208374023,
+        "model_to_target_mean_px": 2.067504644393921,
+        "target_to_model_mean_px": 1.986825942993164
+      },
+      "skin_lower": {
+        "median_px": 1.0,
+        "mean_px": 5.78975772857666,
+        "max_px": 60.530982971191406,
+        "worst_point_xy": [
+          243.0,
+          432.0
+        ],
+        "worst_direction": "target_to_model",
+        "regions": {
+          "screen-left": {
+            "mean_px": 2.0728540420532227,
+            "max_px": 60.530982971191406
+          },
+          "center-chin": {
+            "mean_px": 0.9830653667449951,
+            "max_px": 5.099019527435303
+          },
+          "screen-right": {
+            "mean_px": 14.38818359375,
+            "max_px": 36.359317779541016
+          }
+        },
+        "target_median_le_2": true,
+        "target_max_le_5": false
+      },
+      "skull_upper": {
+        "mean_px": 0.8867080211639404,
+        "max_px": 4.0,
+        "model_to_target_mean_px": 0.8859953880310059,
+        "target_to_model_mean_px": 0.8874205946922302
+      },
+      "ears": {
+        "ear-right": {
+          "visible_iou": 0.5097664543524416,
+          "isolated_iou": 0.7126920648284572,
+          "visible_area_px": 2496,
+          "target_area_px": 4615
+        }
+      },
+      "required_projected_displacement_estimate_px": 60.530982971191406,
+      "skin_over_10px": true,
+      "failure_candidate_over_26px": true,
+      "visible_reversed_patch_faces": 3,
+      "nose": {
+        "score": 1.0351308584213257,
+        "used": true,
+        "detected_xy": [
+          297.88800048828125,
+          477.32354736328125
+        ],
+        "projected_xy": [
+          297.7130126953125,
+          476.8236999511719
+        ],
+        "error_px": 0.5295924499844323
+      },
+      "targets": {
+        "head_iou_ge_096": true,
+        "jaw_median_le_2": true,
+        "jaw_max_le_5": false,
+        "nose_error_le_3": true,
+        "visible_ear_iou_ge_030": {
+          "ear-right": true
+        }
+      },
+      "beta_abs_max": 3.0,
+      "scale_xyz": [
+        0.9445318579673767,
+        0.7603416442871094,
+        0.7832724452018738
+      ],
+      "thickness_px": 3.0,
+      "iteration_mean_seconds": 0.31545199875381685
+    },
+    {
+      "frame": 264,
+      "head_iou": 0.9860837632418383,
+      "head": {
+        "mean_px": 1.6397031545639038,
+        "max_px": 15.65247631072998,
+        "model_to_target_mean_px": 1.7093089818954468,
+        "target_to_model_mean_px": 1.5700973272323608
+      },
+      "skin_lower": {
+        "median_px": 1.0,
+        "mean_px": 8.914810180664062,
+        "max_px": 113.14591979980469,
+        "worst_point_xy": [
+          105.0,
+          393.0
+        ],
+        "worst_direction": "target_to_model",
+        "regions": {
+          "screen-left": {
+            "mean_px": 25.250633239746094,
+            "max_px": 113.14591979980469
+          },
+          "center-chin": {
+            "mean_px": 0.893788754940033,
+            "max_px": 2.8284270763397217
+          },
+          "screen-right": {
+            "mean_px": 9.002309799194336,
+            "max_px": 97.69339752197266
+          }
+        },
+        "target_median_le_2": true,
+        "target_max_le_5": false
+      },
+      "skull_upper": {
+        "mean_px": 1.2611258029937744,
+        "max_px": 15.65247631072998,
+        "model_to_target_mean_px": 1.326974630355835,
+        "target_to_model_mean_px": 1.1952769756317139
+      },
+      "ears": {
+        "ear-left": {
+          "visible_iou": 0.5265486725663717,
+          "isolated_iou": 0.6566315789473685,
+          "visible_area_px": 2523,
+          "target_area_px": 4722
+        }
+      },
+      "required_projected_displacement_estimate_px": 113.14591979980469,
+      "skin_over_10px": true,
+      "failure_candidate_over_26px": true,
+      "visible_reversed_patch_faces": 19,
+      "nose": {
+        "score": 1.0205520391464233,
+        "used": true,
+        "detected_xy": [
+          378.40985107421875,
+          497.6951904296875
+        ],
+        "projected_xy": [
+          378.2757263183594,
+          497.42181396484375
+        ],
+        "error_px": 0.30450639018714043
+      },
+      "targets": {
+        "head_iou_ge_096": true,
+        "jaw_median_le_2": true,
+        "jaw_max_le_5": false,
+        "nose_error_le_3": true,
+        "visible_ear_iou_ge_030": {
+          "ear-left": true
+        }
+      },
+      "beta_abs_max": 3.0,
+      "scale_xyz": [
+        0.9445318579673767,
+        0.7603416442871094,
+        0.7832724452018738
+      ],
+      "thickness_px": 3.0,
+      "iteration_mean_seconds": 0.31545199875381685
+    }
+  ],
+  "delta_stats": {
+    "abs_max_px": 26.0,
+    "abs_mean_px": 2.321120023727417,
+    "saturated_vertex_count": 31,
+    "saturated_vertex_ids": [
+      1164,
+      1168,
+      1171,
+      1197,
+      1211,
+      1213,
+      1792,
+      2145,
+      4233,
+      4242,
+      4250,
+      4281,
+      4285,
+      4293,
+      4336,
+      4339,
+      4340,
+      4692,
+      5155,
+      5200,
+      5202,
+      5203,
+      5633,
+      5634,
+      5639,
+      5647,
+      5648,
+      5649,
+      5658,
+      5661,
+      5675
+    ],
+    "limit_px": 26.0,
+    "neck_nonzero_count": 0
+  },
+  "beta_abs_max": 3.0,
+  "mesh_quality": {
+    "patch_nonpositive_front_xy_triangles": 30,
+    "note": "Diagnostic only; this is not a failure gate after the director removed the overlap/reversal constraint."
+  },
+  "rendering": {
+    "depth_test": true,
+    "backface_culling": true,
+    "template_front_silhouette": {
+      "reference_face_width_px": 315.0,
+      "max_inward_px": 0.0,
+      "max_outward_px": 0.0,
+      "max_change_fraction_of_reference_width": 0.0,
+      "within_five_percent": true
+    },
+    "optimization": "In-flight bounded fit retained its depth-only silhouette objective; final assessment and sheets use depth plus culling."
+  },
+  "scale_xyz": [
+    0.9445318579673767,
+    0.7603416442871094,
+    0.7832724452018738
+  ],
+  "thickness_px": 3.0,
+  "iteration_mean_seconds": 0.31545199875381685,
+  "stage_mean_seconds": {
+    "similarity": 0.21077808519088043,
+    "shape": 0.3053363008378074,
+    "ears": 0.4520334166237153,
+    "normal_delta_and_nose": 0.27566364136873744
+  },
+  "estimated_130_frames_800_iterations_seconds": 9556.339567449566,
+  "rotation_max_abs_delta_deg": 0.0,
+  "criteria": {
+    "1_all_three_head_iou_below_090": false,
+    "3_down_right_visible_ear_iou_below_030": false
+  },
+  "notes": [
+    "Exact DT residuals in 720px coordinates; symmetric jaw median pools both directed contour samples.",
+    "Visible ear IoU includes head occlusion; isolated ear IoU is reported separately.",
+    "No weight search, new template attempt, full-video fit or rig connection after this bounded fit."
+  ]
+}

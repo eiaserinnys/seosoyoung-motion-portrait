@@ -11,9 +11,9 @@ from fit_core import (FIT, ROOT, WORKSPACE, SIZE, read_json, write_json, load_mo
 LIGHT = np.array([-.32,.52,.79]); LIGHT /= np.linalg.norm(LIGHT)
 
 
-def shade(vertices, tri, pose, size=720, colors=None):
+def shade(vertices, tri, pose, size=720, colors=None, cull_backfaces=False):
     q = project(torch.tensor(vertices), torch.tensor(pose,dtype=torch.float32)).numpy()
-    _, owner = rasterize(q,tri,size)
+    _, owner = rasterize(q,tri,size,cull_backfaces=cull_backfaces)
     normals = np.cross(vertices[tri[:,1]]-vertices[tri[:,0]],vertices[tri[:,2]]-vertices[tri[:,0]])
     normals /= np.maximum(np.linalg.norm(normals,axis=1)[:,None],1e-8)
     # One fixed world-space light and constant ambient, shared by every view.
@@ -121,19 +121,19 @@ def iou(a,b):
     return float(np.logical_and(a,b).sum()/np.logical_or(a,b).sum())
 
 
-def measure(v,tri,faces,poses,targets,t):
+def measure(v,tri,faces,poses,targets,t,cull_backfaces=False):
     result=[]
     for pose,target in zip(poses,targets):
         q=project(torch.tensor(v),torch.tensor(pose,dtype=torch.float32)).numpy()
-        _,owner=rasterize(q,tri[faces['head']]); model=owner>=0
+        _,owner=rasterize(q,tri[faces['head']],cull_backfaces=cull_backfaces); model=owner>=0
         global_owner=np.full_like(owner,-1); global_owner[model]=faces['head'][owner[model]]
-        _,faceowner=rasterize(q,tri[faces['face']]); skin=faceowner>=0
+        _,faceowner=rasterize(q,tri[faces['face']],cull_backfaces=cull_backfaces); skin=faceowner>=0
         h=eroded_target(target['head'],t)
         ears={}
         for key,wanted in target['ears'].items():
             visible=np.isin(global_owner,faces[key])
             # Also retain the isolated projection: occlusion is not silently ignored.
-            _,eo=rasterize(q,tri[faces[key]])
+            _,eo=rasterize(q,tri[faces[key]],cull_backfaces=cull_backfaces)
             ears[key]={'visible_iou':iou(visible,wanted),'isolated_iou':iou(eo>=0,wanted),
                        'visible_area_px':int(visible.sum()),'target_area_px':int(wanted.sum())}
         head_res=contour_residual(boundary(model),boundary(h))

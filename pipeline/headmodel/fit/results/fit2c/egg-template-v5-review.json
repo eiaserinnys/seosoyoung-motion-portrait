@@ -1,0 +1,47 @@
+{
+  "decision": "template_pass_proceed_to_three_frame_fit",
+  "diagnosis": {
+    "hypothesis": "닫힌 안쪽 면을 남긴 3D 평활이 국소적인 점과 바늘 돌기를 만든다.",
+    "evidence": "원본 이목구비 선택 영역의 757정점이 뒤를 향하고, XY 면적이 음수인 면은 1621개였다. v4에도 167개의 역방향 투영 면이 남았다. 원본 비강 안쪽 정점 5357은 z=10.3452에서 v4의 z=12.3568로 이동해 국소 돌출 위치로 나왔다. 콧구멍에 별도 열린 경계는 없었으며, 눈 42+42점과 입 74점의 세 고리만 열려 있었다.",
+    "interpretation": "개구부를 막는 연산만으로는 안쪽으로 접힌 연결이 사라지지 않는다. 3D 좌표 biharmonic에는 투영의 일대일 대응이나 면 뒤집힘 방지 조건이 없어, 그 연결이 국소 돌출과 패임으로 남았다.",
+    "details": "pipeline/headmodel/fit/results/fit2c/v5-diagnosis.json"
+  },
+  "selected_method": "이목구비 패치를 제거하고, 원본 경계 180점을 공유하는 정면 XY 단일 높이장으로 교체한다. 고른 간격의 격자와 경계 제약 Delaunay 삼각망을 쓰고, 원본 바깥 두 고리의 TPS 보간을 중립과 100모드에 똑같이 적용한다. 보간 UV와 앵커 선택은 중립에서 고정한다.",
+  "attempts": [
+    {
+      "number": 1,
+      "result": "fail",
+      "reason": "ear clipping 뒤 중심점 세분화는 긴 대각선을 유지해 방사형 패싯 음영을 만들었다. 첫 시트와 JSON을 attempt1로 보존했다."
+    },
+    {
+      "number": 2,
+      "result": "pass",
+      "reason": "높이 보간과 원본 경계는 유지하고 삼각망만 고른 간격의 제약 Delaunay로 바꿨다. 방사형 패싯과 국소 이목구비 흔적이 사라졌다."
+    }
+  ],
+  "conditions": {
+    "no_facial_features": "pass",
+    "convex_smooth_side_profile_without_needle_or_kink": "pass",
+    "no_visible_boundary_groove_ridge_or_step": "pass",
+    "front_silhouette_change_within_five_percent": "pass; inward and outward both 0px / reference width 315px"
+  },
+  "mesh": {
+    "deleted_original_vertices": 4895,
+    "deleted_original_faces": 9816,
+    "preserved_original_vertices": 6353,
+    "new_patch_interior_vertices": 2460,
+    "patch_faces": 5098,
+    "shared_rim_vertices": 180,
+    "total_vertices": 8813,
+    "total_faces": 17570,
+    "patch_negative_xy_triangles": 0,
+    "nonmanifold_edges": 0,
+    "remaining_boundary": "original lower neck, 54 vertices",
+    "outside_neutral_and_100_modes_exact": true,
+    "same_linear_map_for_neutral_and_modes": true,
+    "nose_vertex": 7202
+  },
+  "independent_review": "최종 시트의 네 조건 모두 통과. 고정 UV TPS 303열의 선형 사상, 외부 정점과 모드의 정확한 보존, 경계 변 집합 일치, 면 반전과 비다양체 0을 코드와 JSON에서 확인. P0/P1/P2 없음.",
+  "tests": "test_egg_v5.py: 3 passed in 0.075s",
+  "template_runner_runs": 2
+}
