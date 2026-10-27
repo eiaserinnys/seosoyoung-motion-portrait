@@ -1,0 +1,405 @@
+{
+  "records": [
+    {
+      "pose": "left",
+      "triangleId": 316,
+      "vertices": [
+        608,
+        267,
+        269
+      ],
+      "runtimeDeterminant": -0.03562313052491704,
+      "screenCenter": [
+        519.1944619391526,
+        354.6760547355497
+      ],
+      "screenVertices": [
+        [
+          512.6322312219173,
+          345.9227984253772
+        ],
+        [
+          529.3689603256762,
+          368.6731353896519
+        ],
+        [
+          515.5821942698643,
+          349.43223039161984
+        ]
+      ],
+      "samplePixel": [
+        519,
+        354
+      ],
+      "hairAlpha": 0.8823529411764706,
+      "earAlpha": 0.0,
+      "classification": "머리카락 아래",
+      "classificationCode": "under hair"
+    },
+    {
+      "pose": "left",
+      "triangleId": 1075,
+      "vertices": [
+        585,
+        578,
+        621
+      ],
+      "runtimeDeterminant": -0.1617769323096038,
+      "screenCenter": [
+        414.72068458435797,
+        498.2235001884553
+      ],
+      "screenVertices": [
+        [
+          409.96037079654684,
+          489.34966490735104
+        ],
+        [
+          411.91205814409307,
+          496.335830864887
+        ],
+        [
+          422.2896248124339,
+          508.9850047931279
+        ]
+      ],
+      "samplePixel": [
+        414,
+        498
+      ],
+      "hairAlpha": 0.0,
+      "earAlpha": 0.0,
+      "classification": "보임",
+      "classificationCode": "visible"
+    },
+    {
+      "pose": "up-left",
+      "triangleId": 203,
+      "vertices": [
+        88,
+        154,
+        83
+      ],
+      "runtimeDeterminant": -1.2358681375367195,
+      "screenCenter": [
+        644.8617132197105,
+        526.1734079475984
+      ],
+      "screenVertices": [
+        [
+          647.3568836340899,
+          523.7289903072841
+        ],
+        [
+          642.0029125222127,
+          526.2498869317812
+        ],
+        [
+          645.2253435028289,
+          528.5413466037301
+        ]
+      ],
+      "samplePixel": [
+        644,
+        526
+      ],
+      "hairAlpha": 0.0,
+      "earAlpha": 0.00392156862745098,
+      "classification": "보임",
+      "classificationCode": "visible"
+    },
+    {
+      "pose": "up-left",
+      "triangleId": 204,
+      "vertices": [
+        87,
+        154,
+        88
+      ],
+      "runtimeDeterminant": -1.0816957706590702,
+      "screenCenter": [
+        645.5662834392712,
+        523.8649609306632
+      ],
+      "screenVertices": [
+        [
+          647.3390541615111,
+          521.6160055529242
+        ],
+        [
+          642.0029125222127,
+          526.2498869317812
+        ],
+        [
+          647.3568836340899,
+          523.7289903072841
+        ]
+      ],
+      "samplePixel": [
+        645,
+        523
+      ],
+      "hairAlpha": 0.011764705882352941,
+      "earAlpha": 0.6784313725490196,
+      "classification": "귀 아래",
+      "classificationCode": "under ear"
+    },
+    {
+      "pose": "up",
+      "triangleId": 199,
+      "vertices": [
+        83,
+        89,
+        88
+      ],
+      "runtimeDeterminant": -0.1981892279117326,
+      "screenCenter": [
+        645.4194525857514,
+        510.55461247614994
+      ],
+      "screenVertices": [
+        [
+          644.6804858699579,
+          513.775663554735
+        ],
+        [
+          646.7702971845954,
+          507.1696517310026
+        ],
+        [
+          644.8075747027008,
+          510.7185221427122
+        ]
+      ],
+      "samplePixel": [
+        645,
+        510
+      ],
+      "hairAlpha": 0.0,
+      "earAlpha": 0.25098039215686274,
+      "classification": "보임",
+      "classificationCode": "visible"
+    },
+    {
+      "pose": "up",
+      "triangleId": 203,
+      "vertices": [
+        88,
+        154,
+        83
+      ],
+      "runtimeDeterminant": -0.1928388584940125,
+      "screenCenter": [
+        644.3765949997597,
+        512.7403534109645
+      ],
+      "screenVertices": [
+        [
+          644.8075747027008,
+          510.7185221427122
+        ],
+        [
+          643.6417244266206,
+          513.7268745354463
+        ],
+        [
+          644.6804858699579,
+          513.775663554735
+        ]
+      ],
+      "samplePixel": [
+        644,
+        512
+      ],
+      "hairAlpha": 0.0,
+      "earAlpha": 0.3058823529411765,
+      "classification": "보임",
+      "classificationCode": "visible"
+    },
+    {
+      "pose": "up",
+      "triangleId": 205,
+      "vertices": [
+        83,
+        154,
+        84
+      ],
+      "runtimeDeterminant": -0.29682170060065505,
+      "screenCenter": [
+        644.9209943741745,
+        514.644197212429
+      ],
+      "screenVertices": [
+        [
+          644.6804858699579,
+          513.775663554735
+        ],
+        [
+          643.6417244266206,
+          513.7268745354463
+        ],
+        [
+          646.4407728259449,
+          516.4300535471059
+        ]
+      ],
+      "samplePixel": [
+        644,
+        514
+      ],
+      "hairAlpha": 0.0,
+      "earAlpha": 0.7450980392156863,
+      "classification": "귀 아래",
+      "classificationCode": "under ear"
+    },
+    {
+      "pose": "down-left",
+      "triangleId": 1075,
+      "vertices": [
+        585,
+        578,
+        621
+      ],
+      "runtimeDeterminant": -0.2637821931225116,
+      "screenCenter": [
+        401.048474088105,
+        507.47439594711267
+      ],
+      "screenVertices": [
+        [
+          398.74857157328296,
+          497.2627173316377
+        ],
+        [
+          398.92621405923234,
+          509.3503712863767
+        ],
+        [
+          405.47063663179983,
+          515.8100992233235
+        ]
+      ],
+      "samplePixel": [
+        401,
+        507
+      ],
+      "hairAlpha": 0.0,
+      "earAlpha": 0.0,
+      "classification": "보임",
+      "classificationCode": "visible"
+    },
+    {
+      "pose": "down",
+      "triangleId": 97,
+      "vertices": [
+        55,
+        183,
+        56
+      ],
+      "runtimeDeterminant": -0.23838349783043908,
+      "screenCenter": [
+        337.1331136361188,
+        465.86734324169487
+      ],
+      "screenVertices": [
+        [
+          335.25350914864407,
+          467.61846710841695
+        ],
+        [
+          341.8218128213296,
+          464.5429746759883
+        ],
+        [
+          334.32401893838284,
+          465.4405879406793
+        ]
+      ],
+      "samplePixel": [
+        337,
+        465
+      ],
+      "hairAlpha": 1.0,
+      "earAlpha": 0.0,
+      "classification": "머리카락 아래",
+      "classificationCode": "under hair"
+    },
+    {
+      "pose": "down",
+      "triangleId": 174,
+      "vertices": [
+        255,
+        182,
+        51
+      ],
+      "runtimeDeterminant": -0.041032712560790593,
+      "screenCenter": [
+        337.73320898478505,
+        458.5290031375177
+      ],
+      "screenVertices": [
+        [
+          342.5559049614557,
+          457.00209465898604
+        ],
+        [
+          338.1786834750393,
+          457.84810353891555
+        ],
+        [
+          332.46503851786025,
+          460.7368112146514
+        ]
+      ],
+      "samplePixel": [
+        337,
+        458
+      ],
+      "hairAlpha": 1.0,
+      "earAlpha": 0.0,
+      "classification": "머리카락 아래",
+      "classificationCode": "under hair"
+    },
+    {
+      "pose": "down-right",
+      "triangleId": 204,
+      "vertices": [
+        87,
+        154,
+        88
+      ],
+      "runtimeDeterminant": -0.03139365230508631,
+      "screenCenter": [
+        673.7189707508766,
+        475.78522839972555
+      ],
+      "screenVertices": [
+        [
+          673.1098716505508,
+          475.03648117487995
+        ],
+        [
+          675.0353311499616,
+          477.5837846251304
+        ],
+        [
+          673.0117094521172,
+          474.7354193991663
+        ]
+      ],
+      "samplePixel": [
+        673,
+        475
+      ],
+      "hairAlpha": 0.0,
+      "earAlpha": 0.0,
+      "classification": "보임",
+      "classificationCode": "visible"
+    }
+  ],
+  "counts": {
+    "머리카락 아래": 3,
+    "귀 아래": 2,
+    "보임": 6
+  }
+}

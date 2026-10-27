@@ -1,8 +1,11 @@
+import {FACE_SOLVE} from './face-solve-data.mjs';
+import {EAR_TRANSFORMS} from './ear-transform-data.mjs';
+import {gridValue} from './pose-grid.mjs';
 import {HEAD_CENTER,NECK_PIVOT,artWorld,correction,radians,clamp,rotateXYZ} from './geometry.mjs';
 import {profileExtension,earProfileTarget,beadProfileTarget} from './profile-attachments.mjs';
 const ears={left:{front:[287,407,379,523],target:[324,400,442,515],angle:45},right:{front:[626,407,716,522],target:[576,385,688,511],angle:-45}};
 // Recover the slanted rest plane from independently registered front/near views.
-function earBase([x,y],side,p){
+export function earBase([x,y],side,p){
  const {front:f,target:t,angle}=ears[side],a=radians(angle);
  const u=(x-f[0])/(f[2]-f[0]),v=(y-f[1])/(f[3]-f[1]);
  const targetX=t[0]+u*(t[2]-t[0]),targetY=t[1]+v*(t[3]-t[1]);
@@ -11,10 +14,23 @@ function earBase([x,y],side,p){
  const near=clamp(theta/a,0,1),vertical=near*near*(3-2*near)*(targetY-y);
  return artWorld([x-HEAD_CENTER[0],y-HEAD_CENTER[1]+vertical,z],p);
 }
+// Fable 7.6.3: one shape-preserving screen transform, with old z only.
+export function earTransform(point,side,p){
+ const center=side==='right'?[671,464.5]:[333,465];
+ const yaw=p.ParamAngleX*correction(p,'CorrTurn'),pitch=p.ParamAngleY*correction(p,'CorrTurn');
+ const face=[0,1].map(i=>gridValue(FACE_SOLVE.poses,yaw,pitch,k=>k.t[i]));
+ const t=[0,1].map(i=>gridValue(EAR_TRANSFORMS,yaw,pitch,k=>k[side].t[i]));
+ const sx=gridValue(EAR_TRANSFORMS,yaw,pitch,k=>k[side].sx),s=gridValue(EAR_TRANSFORMS,yaw,pitch,k=>k[side].s);
+ const angle=radians(gridValue(EAR_TRANSFORMS,yaw,pitch,k=>k[side].theta));
+ const q=earBase(point,side,p),c=earBase(center,side,p),x=(q[0]-c[0])*s*sx,y=(q[1]-c[1])*s;
+ return [c[0]+face[0]+t[0]+Math.cos(angle)*x-Math.sin(angle)*y,
+         c[1]+face[1]+t[1]+Math.sin(angle)*x+Math.cos(angle)*y];
+}
+function earSimilarityBase(q,side,p){return [...earTransform(q,side,p),earBase(q,side,p)[2]];}
 export function earWorld(point,side,p){
- const yaw=p.ParamAngleX*correction(p,'CorrTurn'),world=earBase(point,side,p);
+ const yaw=p.ParamAngleX*correction(p,'CorrTurn'),world=earSimilarityBase(point,side,p);
  if(Math.abs(yaw)<=45||side!==(yaw<0?'right':'left'))return world;
- return profileExtension(world,point,side,p,earBase,a=>earProfileTarget(point,side,a));
+ return profileExtension(world,point,side,p,earSimilarityBase,a=>earProfileTarget(point,side,a));
 }
 export const BEADS={left:{front:[306.5,544.2],negative:[304,542.2],positive:[310.5,544.2],near:45},right:{front:[691.5,542.6],negative:[686.8,542.3],positive:[709.3,544],near:-45}};
 function beadBase(side,p){

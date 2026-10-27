@@ -35,7 +35,7 @@ test('side90 keeps all nine poses unchanged apart from the approved face calibra
  // Compare the side90 code against the old runtime using the same approved
  // face targets; the independent face/hair tests verify those calibrations.
  const old=await frozenRig(false,'0b75a0211691965ca234ad9114073ba934568394',
-  ['face-solve-data.mjs','feature-data.mjs','outline-data.mjs','face-feature-prior.mjs','face-features.mjs','face-profile.mjs']);
+  ['face-solve-data.mjs','feature-data.mjs','outline-data.mjs','face-feature-prior.mjs','face-features.mjs','face-profile.mjs','stereo-attachments.mjs','ear-transform-data.mjs']);
  try{
   for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
    const p={...at(yaw),ParamAngleY:pitch},q={...p,[old.FRAME_CACHE]:new Map()};delete q[FRAME_CACHE];
@@ -91,7 +91,7 @@ test('all modified attachment vertices meet the 45 degree seam continuously',{ti
 });
 test('bead split preserves non-hair geometry with only the registered upper-skin prior added',{timeout:60000},async()=>{
  const old=await frozenRig(false,'3ba80b1fb3ed36e87258367fdaabab8deb0973bc',
-  ['face-solve-data.mjs','feature-data.mjs','outline-data.mjs','face-feature-prior.mjs','face-features.mjs','face-profile.mjs']);
+  ['face-solve-data.mjs','feature-data.mjs','outline-data.mjs','face-feature-prior.mjs','face-features.mjs','face-profile.mjs','stereo-attachments.mjs','ear-transform-data.mjs']);
  try{
   const poses=[...[-45,0,45].flatMap(y=>[-30,0,30].map(p=>[y,p])),[-44.99,0],[44.99,0],
    ...[-30,-22.5,-15,15,22.5,30].flatMap(y=>(Math.abs(y)===22.5?[-15,15]:[-20,20]).map(p=>[y,p]))];

@@ -1,0 +1,30 @@
+{
+  "prompt": "ear",
+  "crop_box": [
+    279,
+    296,
+    446,
+    576
+  ],
+  "upscale": 1,
+  "num_masks_returned": 1,
+  "score": 0.9660425186157227,
+  "area_px": 6555,
+  "id": "up-right-ear-left",
+  "pose": "up-right",
+  "part": "ear-left",
+  "frameSHA256": "6223e16e66adb555e97408a09c8e9c453150246f76cd1b3aef7a84b6bf35f0fc",
+  "boxPrompts": [
+    [
+      319,
+      336,
+      406,
+      536
+    ]
+  ],
+  "requestFingerprint": "c9a77480c717ec23dec3de52bdf24720de3f7e0e00f417d448f0e6fa9b349b18",
+  "endpoint": "fal-ai/sam-3/image",
+  "elapsedSeconds": 2.21,
+  "logicalRequestCount": 1,
+  "maskSHA256": "b5d6e49902ee5a494ea74cc39a082a1f41a891e160d882bed67fe7a60acfae34"
+}

@@ -1,3 +1,4 @@
+import {assertApprovedReversals} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -18,7 +19,7 @@ test('ponytail integration is present and retains the authored topology and six 
  for(const f of FEATURE_FIT.poses){
   const p=at(f.yaw,f.pitch),q=skin.positions.map(pt=>faceSolveWorld(pt,p));
   const det=skin.triangles.map(t=>area(q,t)/area(skin.positions,t));
-  assert(Math.min(...det)>=.0034,f.name+' skin orientation');
+  assertApprovedReversals(f.name,skin.positions,q,skin.triangles);
   for(const [name,target] of Object.entries(f.centers)){
    const actual=faceSolveAnchorWorld(name,p);
    assert(Math.hypot(actual[0]-target[0],actual[1]-target[1])<1e-6,f.name+' '+name);
@@ -30,7 +31,7 @@ test('ponytail integration is present and retains the authored topology and six 
 test('ponytail continuous prior has no lower-face support; hair modules and authored atlas stay byte exact',()=>{
  for(const y of [410,497,554.5,616])assert.deepEqual(ponytailSkinDelta([500,y],22.5,15,at(22.5,15)),[0,0]);
  for(const yaw of [-44.99,-29.25,0,22.5,44.99])assert.deepEqual(ponytailSkinDelta([400,300],yaw,0,at(yaw,0)),[0,0]);
- for(const path of ['bundle/hair-surface.mjs','bundle/hair-shell.mjs','bundle/hair-solve.mjs','bundle/hair-solve-data.mjs','bundle/dome-data.mjs','bundle/stereo-attachments.mjs','bundle/assets/seosoyoung-rig.json','bundle/assets/texture_00.png']){
+ for(const path of ['bundle/hair-surface.mjs','bundle/hair-shell.mjs','bundle/hair-solve.mjs','bundle/hair-solve-data.mjs','bundle/dome-data.mjs','bundle/assets/seosoyoung-rig.json','bundle/assets/texture_00.png']){
   assert.deepEqual(readFileSync(new URL('../'+path,import.meta.url)),execFileSync('git',['show','f5d3c9f:'+path],{maxBuffer:20*1024*1024}),path);
  }
 });

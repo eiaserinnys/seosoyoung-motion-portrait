@@ -1,0 +1,762 @@
+[
+  {
+    "pose": "left",
+    "side": "right",
+    "yaw": -45,
+    "pitch": 0,
+    "targetBox": [
+      625,
+      408,
+      714,
+      537
+    ],
+    "grid": {
+      "theta": [
+        -8,
+        12,
+        1.1,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.6628334866605335
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.6630384792273494,
+      "earAlphaPixels": 4358,
+      "outsideBoxPixels": 13,
+      "outsideBoxFraction": 0.0029830197338228544,
+      "helixSymmetricRMS": 12.587087932031604,
+      "helixSymmetricMax": 38.0,
+      "helixOneWayRMS": 10.988630487917955,
+      "helixOneWayMax": 32.57299494980466
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.6630351388675771,
+      "earAlphaPixels": 4348,
+      "outsideBoxPixels": 13,
+      "outsideBoxFraction": 0.002989880404783809,
+      "helixSymmetricRMS": 12.584364428534936,
+      "helixSymmetricMax": 38.0,
+      "helixOneWayRMS": 11.001446185925657,
+      "helixOneWayMax": 32.57299494980466
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.7434406678592725,
+      "earAlphaPixels": 5205,
+      "outsideBoxPixels": 18,
+      "outsideBoxFraction": 0.00345821325648415,
+      "helixSymmetricRMS": 10.365342696607142,
+      "helixSymmetricMax": 38.0,
+      "helixOneWayRMS": 7.47054823350274,
+      "helixOneWayMax": 24.73863375370596
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.7422910770147475,
+      "earAlphaPixels": 5206,
+      "outsideBoxPixels": 21,
+      "outsideBoxFraction": 0.004033807145601229,
+      "helixSymmetricRMS": 10.394189494988629,
+      "helixSymmetricMax": 38.0,
+      "helixOneWayRMS": 7.513623989430497,
+      "helixOneWayMax": 24.698178070456937
+    },
+    "parameters": {
+      "t": [
+        -10.400830564026174,
+        9.724605518980669
+      ],
+      "sx": 1.0938407151065217,
+      "s": 1.0969954320429578,
+      "theta": -7.320585318499249
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 14.238863329682264,
+    "translationWithin40": true,
+    "firstNfev": 54,
+    "secondNfev": 293
+  },
+  {
+    "pose": "right",
+    "side": "left",
+    "yaw": 45,
+    "pitch": 0,
+    "targetBox": [
+      264,
+      396,
+      375,
+      534
+    ],
+    "grid": {
+      "theta": [
+        -12,
+        -4,
+        1.1,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.6230142284845973
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.6234286503660726,
+      "earAlphaPixels": 4513,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 9.479520761547661,
+      "helixSymmetricMax": 15.811388300841896,
+      "helixOneWayRMS": 9.620039007284339,
+      "helixOneWayMax": 15.811388300841896
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.6232905097389142,
+      "earAlphaPixels": 4512,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 9.338192269512623,
+      "helixSymmetricMax": 17.69180601295413,
+      "helixOneWayRMS": 9.382257503012951,
+      "helixOneWayMax": 17.69180601295413
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.7528664180135378,
+      "earAlphaPixels": 5450,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 6.698537362895095,
+      "helixSymmetricMax": 15.652475842498529,
+      "helixOneWayRMS": 6.820194291017235,
+      "helixOneWayMax": 15.652475842498529
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.7518994336234287,
+      "earAlphaPixels": 5443,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 6.724920921729026,
+      "helixSymmetricMax": 15.652475842498529,
+      "helixOneWayRMS": 6.838314251774341,
+      "helixOneWayMax": 15.652475842498529
+    },
+    "parameters": {
+      "t": [
+        -11.51981233040957,
+        -0.9703464502025967
+      ],
+      "sx": 1.0978607809972198,
+      "s": 1.0996933081161866,
+      "theta": 3.3401447963501294
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 11.560607612114389,
+    "translationWithin40": true,
+    "firstNfev": 58,
+    "secondNfev": 309
+  },
+  {
+    "pose": "up",
+    "side": "left",
+    "yaw": 0,
+    "pitch": 30,
+    "targetBox": [
+      292,
+      445,
+      381,
+      541
+    ],
+    "grid": {
+      "theta": [
+        12,
+        40,
+        1.1,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.6871381306865177
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.6874095513748191,
+      "earAlphaPixels": 4513,
+      "outsideBoxPixels": 456,
+      "outsideBoxFraction": 0.10104143585198316,
+      "helixSymmetricRMS": 10.870769355184866,
+      "helixSymmetricMax": 35.805027579936315,
+      "helixOneWayRMS": 5.60416796363147,
+      "helixOneWayMax": 19.1049731745428
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.6919698870765371,
+      "earAlphaPixels": 4442,
+      "outsideBoxPixels": 383,
+      "outsideBoxFraction": 0.08622242233228275,
+      "helixSymmetricRMS": 10.117391321030196,
+      "helixSymmetricMax": 33.60059523282288,
+      "helixOneWayRMS": 5.5311211734517896,
+      "helixOneWayMax": 18.35755975068582
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.6949914383561644,
+      "earAlphaPixels": 4270,
+      "outsideBoxPixels": 325,
+      "outsideBoxFraction": 0.07611241217798595,
+      "helixSymmetricRMS": 9.6455147636702,
+      "helixSymmetricMax": 31.906112267087632,
+      "helixOneWayRMS": 5.533715710928597,
+      "helixOneWayMax": 17.69180601295413
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.6942661531878477,
+      "earAlphaPixels": 4270,
+      "outsideBoxPixels": 327,
+      "outsideBoxFraction": 0.0765807962529274,
+      "helixSymmetricRMS": 9.675665876724638,
+      "helixSymmetricMax": 31.906112267087632,
+      "helixOneWayRMS": 5.545376107375297,
+      "helixOneWayMax": 17.69180601295413
+    },
+    "parameters": {
+      "t": [
+        10.664361323155042,
+        38.43352668530218
+      ],
+      "sx": 1.0767755341079412,
+      "s": 0.9844919557257796,
+      "theta": -1.5130872454345288
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 39.885643731807065,
+    "translationWithin40": true,
+    "firstNfev": 119,
+    "secondNfev": 174
+  },
+  {
+    "pose": "up",
+    "side": "right",
+    "yaw": 0,
+    "pitch": 30,
+    "targetBox": [
+      626,
+      444,
+      720,
+      538
+    ],
+    "grid": {
+      "theta": [
+        0,
+        32,
+        1.1,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.6894539391413089
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.6897270264638466,
+      "earAlphaPixels": 4358,
+      "outsideBoxPixels": 179,
+      "outsideBoxFraction": 0.04107388710417623,
+      "helixSymmetricRMS": 8.036592137642247,
+      "helixSymmetricMax": 24.596747752497688,
+      "helixOneWayRMS": 5.664425327049011,
+      "helixOneWayMax": 16.1245154965971
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.6987192945622507,
+      "earAlphaPixels": 4340,
+      "outsideBoxPixels": 336,
+      "outsideBoxFraction": 0.07741935483870968,
+      "helixSymmetricRMS": 9.091467891309314,
+      "helixSymmetricMax": 29.068883707497267,
+      "helixOneWayRMS": 5.417344279960343,
+      "helixOneWayMax": 16.97056274847714
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.7348015599908236,
+      "earAlphaPixels": 3811,
+      "outsideBoxPixels": 3,
+      "outsideBoxFraction": 0.0007871949619522435,
+      "helixSymmetricRMS": 6.647856450094448,
+      "helixSymmetricMax": 17.88854381999832,
+      "helixOneWayRMS": 5.707138387268051,
+      "helixOneWayMax": 14.142135623730951
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.7344645723457922,
+      "earAlphaPixels": 3813,
+      "outsideBoxPixels": 3,
+      "outsideBoxFraction": 0.0007867820613690008,
+      "helixSymmetricRMS": 6.657056198398615,
+      "helixSymmetricMax": 17.88854381999832,
+      "helixOneWayRMS": 5.709640969448079,
+      "helixOneWayMax": 14.142135623730951
+    },
+    "parameters": {
+      "t": [
+        -1.1491875758362056,
+        30.91110755754914
+      ],
+      "sx": 1.0945064732615069,
+      "s": 0.9386508154760794,
+      "theta": 8.34784964994818
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 30.932461953727962,
+    "translationWithin40": true,
+    "firstNfev": 227,
+    "secondNfev": 531
+  },
+  {
+    "pose": "down",
+    "side": "left",
+    "yaw": 0,
+    "pitch": -30,
+    "targetBox": [
+      264,
+      357,
+      347,
+      480
+    ],
+    "grid": {
+      "theta": [
+        -20,
+        -40,
+        0.9,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.7441077441077442
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.7443536761172513,
+      "earAlphaPixels": 3691,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 4.534951981408867,
+      "helixSymmetricMax": 9.848857801796104,
+      "helixOneWayRMS": 4.524074370332228,
+      "helixOneWayMax": 8.246211251235321
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.7432762836185819,
+      "earAlphaPixels": 3561,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 4.592332702522218,
+      "helixSymmetricMax": 9.219544457292887,
+      "helixOneWayRMS": 4.60823261785492,
+      "helixOneWayMax": 8.54400374531753
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.7519474196689386,
+      "earAlphaPixels": 3628,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 4.32811837819302,
+      "helixSymmetricMax": 7.810249675906654,
+      "helixOneWayRMS": 4.369905018303674,
+      "helixOneWayMax": 7.810249675906654
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.7532309192879786,
+      "earAlphaPixels": 3621,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 4.308737331435318,
+      "helixSymmetricMax": 7.810249675906654,
+      "helixOneWayRMS": 4.350877038525315,
+      "helixOneWayMax": 7.810249675906654
+    },
+    "parameters": {
+      "t": [
+        -20.599679676067616,
+        -39.970500440087214
+      ],
+      "sx": 0.8722289262649573,
+      "s": 1.0070040849643203,
+      "theta": 2.143663511705073
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 44.96651763465351,
+    "translationWithin40": false,
+    "firstNfev": 61,
+    "secondNfev": 442
+  },
+  {
+    "pose": "down",
+    "side": "right",
+    "yaw": 0,
+    "pitch": -30,
+    "targetBox": [
+      636,
+      364,
+      691,
+      459
+    ],
+    "grid": {
+      "theta": [
+        -12,
+        -40,
+        0.6,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.40429112326461925
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.4007553503986572,
+      "earAlphaPixels": 2366,
+      "outsideBoxPixels": 245,
+      "outsideBoxFraction": 0.10355029585798817,
+      "helixSymmetricRMS": 9.348708555108114,
+      "helixSymmetricMax": 25.317977802344327,
+      "helixOneWayRMS": 6.251797127247608,
+      "helixOneWayMax": 12.529964086141668
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.40285354595048256,
+      "earAlphaPixels": 2371,
+      "outsideBoxPixels": 251,
+      "outsideBoxFraction": 0.10586250527203711,
+      "helixSymmetricRMS": 9.343123462951565,
+      "helixSymmetricMax": 25.179356624028344,
+      "helixOneWayRMS": 6.086522129589848,
+      "helixOneWayMax": 13.0
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.4704926908500271,
+      "earAlphaPixels": 1744,
+      "outsideBoxPixels": 88,
+      "outsideBoxFraction": 0.05045871559633028,
+      "helixSymmetricRMS": 7.009003219155069,
+      "helixSymmetricMax": 18.439088914585774,
+      "helixOneWayRMS": 4.978384650214384,
+      "helixOneWayMax": 11.180339887498949
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.4682454251883746,
+      "earAlphaPixels": 1756,
+      "outsideBoxPixels": 94,
+      "outsideBoxFraction": 0.05353075170842825,
+      "helixSymmetricRMS": 7.100223493151086,
+      "helixSymmetricMax": 18.681541692269406,
+      "helixOneWayRMS": 5.021522306483344,
+      "helixOneWayMax": 11.180339887498949
+    },
+    "parameters": {
+      "t": [
+        -8.676248816347234,
+        -39.943154253029455
+      ],
+      "sx": 0.602180578356078,
+      "s": 0.8579928737347066,
+      "theta": -0.0916118723210031
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 40.87459926659186,
+    "translationWithin40": false,
+    "firstNfev": 227,
+    "secondNfev": 400
+  },
+  {
+    "pose": "up-left",
+    "side": "right",
+    "yaw": -45,
+    "pitch": 30,
+    "targetBox": [
+      624,
+      460,
+      737,
+      584
+    ],
+    "grid": {
+      "theta": [
+        12,
+        40,
+        1.1,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.5
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.500198544010589,
+      "earAlphaPixels": 4358,
+      "outsideBoxPixels": 74,
+      "outsideBoxFraction": 0.01698026617714548,
+      "helixSymmetricRMS": 14.009830916854085,
+      "helixSymmetricMax": 25.612496949731394,
+      "helixOneWayRMS": 14.828223814684325,
+      "helixOneWayMax": 25.612496949731394
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.49920508744038156,
+      "earAlphaPixels": 4340,
+      "outsideBoxPixels": 74,
+      "outsideBoxFraction": 0.017050691244239632,
+      "helixSymmetricRMS": 14.137820197156996,
+      "helixSymmetricMax": 26.248809496813376,
+      "helixOneWayRMS": 14.950188738690745,
+      "helixOneWayMax": 26.248809496813376
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.5484402739031194,
+      "earAlphaPixels": 5235,
+      "outsideBoxPixels": 178,
+      "outsideBoxFraction": 0.03400191021967526,
+      "helixSymmetricRMS": 12.932230391430286,
+      "helixSymmetricMax": 24.20743687382041,
+      "helixOneWayRMS": 13.198928986261151,
+      "helixOneWayMax": 24.20743687382041
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.5460417986067131,
+      "earAlphaPixels": 5230,
+      "outsideBoxPixels": 183,
+      "outsideBoxFraction": 0.03499043977055449,
+      "helixSymmetricRMS": 13.01544291931569,
+      "helixSymmetricMax": 24.413111231467404,
+      "helixOneWayRMS": 13.296297640494718,
+      "helixOneWayMax": 24.413111231467404
+    },
+    "parameters": {
+      "t": [
+        10.97269485407341,
+        39.965457381469626
+      ],
+      "sx": 1.0987680760761451,
+      "s": 1.0974517642378316,
+      "theta": 3.636779491572028
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 41.44439426593993,
+    "translationWithin40": false,
+    "firstNfev": 107,
+    "secondNfev": 602
+  },
+  {
+    "pose": "up-right",
+    "side": "left",
+    "yaw": 45,
+    "pitch": 30,
+    "targetBox": [
+      306,
+      429,
+      419,
+      537
+    ],
+    "grid": {
+      "theta": [
+        28,
+        20,
+        1.1,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.6417145519490605
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.6426906944228677,
+      "earAlphaPixels": 4513,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 9.976860019517995,
+      "helixSymmetricMax": 27.730849247724095,
+      "helixOneWayRMS": 11.264373972682248,
+      "helixOneWayMax": 27.730849247724095
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.6421804628047834,
+      "earAlphaPixels": 4513,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 9.861349406709618,
+      "helixSymmetricMax": 27.294688127912362,
+      "helixOneWayRMS": 11.140481151399948,
+      "helixOneWayMax": 27.294688127912362
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.7080773265397872,
+      "earAlphaPixels": 5337,
+      "outsideBoxPixels": 10,
+      "outsideBoxFraction": 0.001873711823121604,
+      "helixSymmetricRMS": 8.122814075127895,
+      "helixSymmetricMax": 25.495097567963924,
+      "helixOneWayRMS": 8.950834470730644,
+      "helixOneWayMax": 25.495097567963924
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.7078651685393258,
+      "earAlphaPixels": 5339,
+      "outsideBoxPixels": 9,
+      "outsideBoxFraction": 0.0016857089342573516,
+      "helixSymmetricRMS": 8.193897922697566,
+      "helixSymmetricMax": 25.495097567963924,
+      "helixOneWayRMS": 9.037092405520012,
+      "helixOneWayMax": 25.495097567963924
+    },
+    "parameters": {
+      "t": [
+        33.35989684888007,
+        19.368386669927485
+      ],
+      "sx": 1.093943983884901,
+      "s": 1.0907152524042603,
+      "theta": -13.840184356609868
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 38.574824950526256,
+    "translationWithin40": true,
+    "firstNfev": 55,
+    "secondNfev": 361
+  },
+  {
+    "pose": "down-left",
+    "side": "right",
+    "yaw": -45,
+    "pitch": -30,
+    "targetBox": [
+      619,
+      408,
+      721,
+      533
+    ],
+    "grid": {
+      "theta": [
+        -4,
+        8,
+        1.1,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.7101305569327384
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.7103436880370125,
+      "earAlphaPixels": 4358,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 7.265708075197633,
+      "helixSymmetricMax": 18.788294228055936,
+      "helixOneWayRMS": 7.506574385419185,
+      "helixOneWayMax": 18.788294228055936
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.7132219096475261,
+      "earAlphaPixels": 4360,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 7.419943096517355,
+      "helixSymmetricMax": 19.6468827043885,
+      "helixOneWayRMS": 7.691613584952762,
+      "helixOneWayMax": 19.6468827043885
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.7764705882352941,
+      "earAlphaPixels": 5181,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 5.769542360327987,
+      "helixSymmetricMax": 16.492422502470642,
+      "helixOneWayRMS": 6.010527163370048,
+      "helixOneWayMax": 16.492422502470642
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.7756400063603116,
+      "earAlphaPixels": 5174,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 5.772182883285598,
+      "helixSymmetricMax": 16.492422502470642,
+      "helixOneWayRMS": 6.0089333241005916,
+      "helixOneWayMax": 16.492422502470642
+    },
+    "parameters": {
+      "t": [
+        -4.118732807766601,
+        5.7314677713624285
+      ],
+      "sx": 1.0974874458125263,
+      "s": 1.0931208015217657,
+      "theta": -4.729478343916348
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 7.057880896978862,
+    "translationWithin40": true,
+    "firstNfev": 251,
+    "secondNfev": 382
+  },
+  {
+    "pose": "down-right",
+    "side": "left",
+    "yaw": 45,
+    "pitch": -30,
+    "targetBox": [
+      329,
+      409,
+      421,
+      515
+    ],
+    "grid": {
+      "theta": [
+        40,
+        -12,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "warpIoU": 0.7556173268473477
+    },
+    "gridRenderer": {
+      "wholeScreenIoU": 0.7556173268473477,
+      "earAlphaPixels": 4062,
+      "outsideBoxPixels": 96,
+      "outsideBoxFraction": 0.023633677991137372,
+      "helixSymmetricRMS": 5.786056366460844,
+      "helixSymmetricMax": 16.492422502470642,
+      "helixOneWayRMS": 4.7871355387816905,
+      "helixOneWayMax": 14.866068747318506
+    },
+    "after3DOF": {
+      "wholeScreenIoU": 0.7679903730445247,
+      "earAlphaPixels": 3829,
+      "outsideBoxPixels": 70,
+      "outsideBoxFraction": 0.018281535648994516,
+      "helixSymmetricRMS": 5.277309920783504,
+      "helixSymmetricMax": 15.297058540778355,
+      "helixOneWayRMS": 4.4578926655476865,
+      "helixOneWayMax": 14.0
+    },
+    "finalRenderer": {
+      "wholeScreenIoU": 0.8003771551724138,
+      "earAlphaPixels": 3166,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 4.127294781328511,
+      "helixSymmetricMax": 10.63014581273465,
+      "helixOneWayRMS": 4.370455032714838,
+      "helixOneWayMax": 10.295630140987
+    },
+    "finalWarp": {
+      "wholeScreenIoU": 0.8001615943980609,
+      "earAlphaPixels": 3167,
+      "outsideBoxPixels": 0,
+      "outsideBoxFraction": 0.0,
+      "helixSymmetricRMS": 4.101583658265076,
+      "helixSymmetricMax": 10.63014581273465,
+      "helixOneWayRMS": 4.3558792695076285,
+      "helixOneWayMax": 10.63014581273465
+    },
+    "parameters": {
+      "t": [
+        39.71350634814164,
+        -7.431666406868427
+      ],
+      "sx": 0.9826764198642421,
+      "s": 0.8858591489017195,
+      "theta": -5.166741947618694
+    },
+    "conditionalScaleRotationUsed": true,
+    "translationNorm": 40.40287430427275,
+    "translationWithin40": false,
+    "firstNfev": 225,
+    "secondNfev": 424
+  }
+]

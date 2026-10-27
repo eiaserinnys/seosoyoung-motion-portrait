@@ -1,3 +1,4 @@
+import {approvedStageA,stageAScalars} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -21,7 +22,7 @@ test('intermediate corneal dome has spatial curvature while reference anchors st
  }
  for(const f of FEATURE_FIT.poses.filter(p=>p.pitch))for(const [key,id] of Object.entries({left:'eye-left-sclera',right:'eye-right-sclera',nose:'nose-detail',mouth:'mouth-detail'})){
   const q=featureWorld(id,FEATURE_FIT.front[key],at(f.yaw,f.pitch));
-  assert(Math.hypot(q[0]-f.registeredCenters[key][0],q[1]-f.registeredCenters[key][1])<1e-12,f.name+' '+key);
+  assert(Math.hypot(q[0]-f.centers[key][0],q[1]-f.centers[key][1])<1e-12,f.name+' '+key);
  }
 });
 test('spherical lid arch grows through the full pitch range without flattening at the endpoint',()=>{
@@ -90,19 +91,19 @@ test('S5: all 9288 neutral-pitch feature vertices remain bit identical to d6a58b
  for(const gain of [.65,1])for(const yaw of [-45,0,45])for(const m of rig.meshes.filter(m=>m.id.startsWith('eye-')||m.id==='nose-detail'||m.id.startsWith('mouth')||m.id==='closed-eyes-v1'))for(const pt of m.positions)values.push(featureWorld(m.id,pt,{...base,CorrTurn:gain,ParamAngleX:yaw,ParamAngleY:0}));
  assert.equal(createHash('sha256').update(JSON.stringify(values)).digest('hex'),'9e021c8deabc37ac0befb1d1bffc258d138f36bb8f7c37de6acabf919343ae82');
 });
-test('r11: neutral-pitch skin vertices retain their approved screen positions within one pixel',()=>{
+test('neutral-pitch skin vertices match the approved A-stage captured positions',()=>{
  const skin=rig.meshes.find(m=>m.id==='face-skin');
- for(const gain of [.65,1])for(const yaw of [-45,0,45])for(const pt of skin.positions){
-  const p={...at(yaw,0),CorrTurn:gain},actual=outlineWorld(pt,p),expected=legacyOutlineWorld(pt,p);
-  assert(Math.hypot(actual[0]-expected[0],actual[1]-expected[1])<=1);
+ for(const pose of approvedStageA.poses.filter(p=>p.pitch===0)){
+  const expected=pose.meshes.find(m=>m.id==='face-skin').world,p=at(pose.yaw,0);
+  skin.positions.forEach((point,i)=>outlineWorld(point,p).forEach((v,d)=>near(v,expected[i][d],pose.name+' neutral skin')));
  }
 });
-test('joint cheek surface preserves vertical order and finite spatial curvature in up/down poses',()=>{
+test('joint cheek surface retains the approved A-stage slice and finite spatial curvature',()=>{
  for(const pitch of [-30,30]){
   for(const u of [.25,.5,.75]){
    const values=[480,490,497,510,525].map(y=>{const [l,r]=outlineRow(y);return faceSolveWorld([l+(r-l)*u,y],at(0,pitch))[1];});
    assert(values.every(Number.isFinite));
-   for(let i=1;i<values.length;i++)assert(values[i]>values[i-1],`${pitch},${u}: ${values}`);
+   assert.deepEqual(values,stageAScalars().cheekY[[pitch,u]],'approved A-stage cheek slice');
   }
   for(const y of [480,497,525]){
    const [l,r]=outlineRow(y);

@@ -1,0 +1,44 @@
+{
+  "prompt": "ear",
+  "crop_box": [
+    560,
+    320,
+    740,
+    500
+  ],
+  "upscale": 1,
+  "num_masks_returned": 1,
+  "score": 0.9202293157577515,
+  "area_px": 1003,
+  "id": "down-ear-right",
+  "pose": "down",
+  "part": "ear-right",
+  "crop": [
+    560,
+    320,
+    740,
+    500
+  ],
+  "points": [
+    [
+      650,
+      410,
+      1
+    ],
+    [
+      585,
+      415,
+      0
+    ],
+    [
+      650,
+      355,
+      0
+    ]
+  ],
+  "boxes": null,
+  "frame": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/inputs/down/reference-frame.png",
+  "frameSHA256": "14d4221eb4bf460ec842aeeda78ec1f1c9e13333801c45337cfb69c23220936f",
+  "requestFingerprint": "34f46e6c15bca75ff297cfb6fbc931e602c9bb97ebf171c7ba770df1df5986dc",
+  "elapsedSeconds": 4.79
+}

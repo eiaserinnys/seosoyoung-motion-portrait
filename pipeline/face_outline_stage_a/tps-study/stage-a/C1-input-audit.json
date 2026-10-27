@@ -1,0 +1,1525 @@
+{
+  "poses": [
+    {
+      "name": "left",
+      "addedPixels": 0,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 0,
+      "addedPixelsHairbandOverlap": 0,
+      "TPSAttempts": [],
+      "TPS": {
+        "success": true,
+        "message": "`xtol` termination condition is satisfied.",
+        "nfev": 113,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 142,
+        "earHalfWeightSamples": 260,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 1199351.1835840964,
+        "finalCost": 47837.98339012862,
+        "maxControlDisplacement": 147.68718597543173,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.9239788963158047,
+            -0.004313053682379065
+          ],
+          [
+            0.004313053682379065,
+            0.9239788963158047
+          ]
+        ],
+        "initialShift": [
+          -34.18392539695577,
+          28.66338459654429
+        ],
+        "earRegion": [
+          517.35,
+          429.52500000000003
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 347.80879039058897,
+        "referenceChinY": 621.6276510438606,
+        "frame": 42
+      },
+      "TPSReused": true
+    },
+    {
+      "name": "right",
+      "addedPixels": 3283,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 3555,
+      "addedPixelsHairbandOverlap": 3281,
+      "TPSAttempts": [
+        {
+          "success": true,
+          "message": "`xtol` termination condition is satisfied.",
+          "nfev": 60,
+          "maxNfev": 120,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 96,
+          "earHalfWeightSamples": 325,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 1633331.3942293087,
+          "finalCost": 19914.397108727047,
+          "maxControlDisplacement": 140.26018205690445,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.9240589670471929,
+              0.005547084954373265
+            ],
+            [
+              -0.005547084954373265,
+              0.9240589670471929
+            ]
+          ],
+          "initialShift": [
+            109.92123728120185,
+            33.57763765773626
+          ],
+          "earRegions": [
+            [
+              "left",
+              486.45000000000005,
+              429.52500000000003
+            ]
+          ],
+          "earBoxes": [
+            [
+              278,
+              357,
+              412,
+              585
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 348.21493112322213,
+          "referenceChinY": 627.3411183324129,
+          "pose": "right"
+        }
+      ],
+      "TPS": {
+        "success": true,
+        "message": "`xtol` termination condition is satisfied.",
+        "nfev": 60,
+        "maxNfev": 120,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 96,
+        "earHalfWeightSamples": 325,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 1633331.3942293087,
+        "finalCost": 19914.397108727047,
+        "maxControlDisplacement": 140.26018205690445,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.9240589670471929,
+            0.005547084954373265
+          ],
+          [
+            -0.005547084954373265,
+            0.9240589670471929
+          ]
+        ],
+        "initialShift": [
+          109.92123728120185,
+          33.57763765773626
+        ],
+        "earRegions": [
+          [
+            "left",
+            486.45000000000005,
+            429.52500000000003
+          ]
+        ],
+        "earBoxes": [
+          [
+            278,
+            357,
+            412,
+            585
+          ]
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 348.21493112322213,
+        "referenceChinY": 627.3411183324129,
+        "pose": "right"
+      },
+      "TPSReused": false
+    },
+    {
+      "name": "up",
+      "addedPixels": 0,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 0,
+      "addedPixelsHairbandOverlap": 0,
+      "TPSAttempts": [],
+      "TPS": {
+        "success": true,
+        "message": "`xtol` termination condition is satisfied.",
+        "nfev": 164,
+        "maxNfev": 200,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 288,
+        "earHalfWeightSamples": 551,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 259434.5884419306,
+        "finalCost": 61444.83422198719,
+        "maxControlDisplacement": 134.27160787664818,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.9999406067677088,
+            0.010898758508511184
+          ],
+          [
+            -0.010898758508511184,
+            0.9999406067677088
+          ]
+        ],
+        "initialShift": [
+          -4.6730048331356215,
+          -47.63378385818703
+        ],
+        "earRegions": [
+          [
+            "left",
+            405.71274882757945,
+            378.37050106665754
+          ],
+          [
+            "right",
+            598.0872511724206,
+            378.37050106665754
+          ]
+        ],
+        "earBoxes": [
+          [
+            263,
+            314,
+            364,
+            516
+          ],
+          [
+            636,
+            454,
+            710,
+            528
+          ]
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 321.4883521568859,
+        "referenceChinY": 559.1733809686306,
+        "pose": "up"
+      },
+      "TPSReused": true
+    },
+    {
+      "name": "down",
+      "addedPixels": 2418,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 3089,
+      "addedPixelsHairbandOverlap": 2406,
+      "TPSAttempts": [
+        {
+          "success": false,
+          "message": "The maximum number of function evaluations is exceeded.",
+          "nfev": 120,
+          "maxNfev": 120,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 92,
+          "earHalfWeightSamples": 620,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 999525.3870512156,
+          "finalCost": 24683.873548555166,
+          "maxControlDisplacement": 137.245210479232,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.9999026820690126,
+              -0.013950856288929381
+            ],
+            [
+              0.013950856288929381,
+              0.9999026820690126
+            ]
+          ],
+          "initialShift": [
+            6.068638358235603,
+            17.83367312316568
+          ],
+          "earRegions": [
+            [
+              "left",
+              405.69862320624884,
+              456.29361520735824
+            ],
+            [
+              "right",
+              598.1013767937511,
+              456.29361520735824
+            ]
+          ],
+          "earBoxes": [
+            [
+              274,
+              367,
+              337,
+              470
+            ],
+            [
+              644,
+              374,
+              681,
+              455
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 393.46371622761365,
+          "referenceChinY": 581.6352731725601,
+          "pose": "down"
+        },
+        {
+          "success": false,
+          "message": "The maximum number of function evaluations is exceeded.",
+          "nfev": 200,
+          "maxNfev": 200,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 92,
+          "earHalfWeightSamples": 620,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 999525.3870512156,
+          "finalCost": 23440.248411388064,
+          "maxControlDisplacement": 129.45285928310904,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.9999026820690126,
+              -0.013950856288929381
+            ],
+            [
+              0.013950856288929381,
+              0.9999026820690126
+            ]
+          ],
+          "initialShift": [
+            6.068638358235603,
+            17.83367312316568
+          ],
+          "earRegions": [
+            [
+              "left",
+              405.69862320624884,
+              456.29361520735824
+            ],
+            [
+              "right",
+              598.1013767937511,
+              456.29361520735824
+            ]
+          ],
+          "earBoxes": [
+            [
+              274,
+              367,
+              337,
+              470
+            ],
+            [
+              644,
+              374,
+              681,
+              455
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 393.46371622761365,
+          "referenceChinY": 581.6352731725601,
+          "pose": "down"
+        }
+      ],
+      "TPS": {
+        "success": false,
+        "message": "The maximum number of function evaluations is exceeded.",
+        "nfev": 200,
+        "maxNfev": 200,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 92,
+        "earHalfWeightSamples": 620,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 999525.3870512156,
+        "finalCost": 23440.248411388064,
+        "maxControlDisplacement": 129.45285928310904,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.9999026820690126,
+            -0.013950856288929381
+          ],
+          [
+            0.013950856288929381,
+            0.9999026820690126
+          ]
+        ],
+        "initialShift": [
+          6.068638358235603,
+          17.83367312316568
+        ],
+        "earRegions": [
+          [
+            "left",
+            405.69862320624884,
+            456.29361520735824
+          ],
+          [
+            "right",
+            598.1013767937511,
+            456.29361520735824
+          ]
+        ],
+        "earBoxes": [
+          [
+            274,
+            367,
+            337,
+            470
+          ],
+          [
+            644,
+            374,
+            681,
+            455
+          ]
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 393.46371622761365,
+        "referenceChinY": 581.6352731725601,
+        "pose": "down"
+      },
+      "TPSReused": false
+    },
+    {
+      "name": "up-left",
+      "addedPixels": 2456,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 2677,
+      "addedPixelsHairbandOverlap": 2436,
+      "TPSAttempts": [
+        {
+          "success": true,
+          "message": "`xtol` termination condition is satisfied.",
+          "nfev": 76,
+          "maxNfev": 120,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 116,
+          "earHalfWeightSamples": 256,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 2717971.3107946096,
+          "finalCost": 46054.82555248383,
+          "maxControlDisplacement": 272.6185216133357,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.8499253794612517,
+              -0.037760414914418026
+            ],
+            [
+              0.037760414914418026,
+              0.8499253794612517
+            ]
+          ],
+          "initialShift": [
+            17.416071083969086,
+            -2.8082234406631414
+          ],
+          "earRegions": [
+            [
+              "right",
+              510.9899999999999,
+              382.88653004241337
+            ]
+          ],
+          "earBoxes": [
+            [
+              633,
+              470,
+              727,
+              574
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 306.5551478509967,
+          "referenceChinY": 596.8496368560611,
+          "pose": "up-left"
+        }
+      ],
+      "TPS": {
+        "success": true,
+        "message": "`xtol` termination condition is satisfied.",
+        "nfev": 76,
+        "maxNfev": 120,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 116,
+        "earHalfWeightSamples": 256,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 2717971.3107946096,
+        "finalCost": 46054.82555248383,
+        "maxControlDisplacement": 272.6185216133357,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.8499253794612517,
+            -0.037760414914418026
+          ],
+          [
+            0.037760414914418026,
+            0.8499253794612517
+          ]
+        ],
+        "initialShift": [
+          17.416071083969086,
+          -2.8082234406631414
+        ],
+        "earRegions": [
+          [
+            "right",
+            510.9899999999999,
+            382.88653004241337
+          ]
+        ],
+        "earBoxes": [
+          [
+            633,
+            470,
+            727,
+            574
+          ]
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 306.5551478509967,
+        "referenceChinY": 596.8496368560611,
+        "pose": "up-left"
+      },
+      "TPSReused": false
+    },
+    {
+      "name": "up-right",
+      "addedPixels": 2446,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 2858,
+      "addedPixelsHairbandOverlap": 2439,
+      "TPSAttempts": [
+        {
+          "success": true,
+          "message": "`xtol` termination condition is satisfied.",
+          "nfev": 53,
+          "maxNfev": 120,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 98,
+          "earHalfWeightSamples": 300,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 1440154.4036627947,
+          "finalCost": 56207.66904369615,
+          "maxControlDisplacement": 192.35276607233934,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.814699505983773,
+              -0.03271797742678227
+            ],
+            [
+              0.03271797742678227,
+              0.814699505983773
+            ]
+          ],
+          "initialShift": [
+            181.32012520640092,
+            14.749976291609585
+          ],
+          "earRegions": [
+            [
+              "left",
+              495.85,
+              382.7139659941096
+            ]
+          ],
+          "earBoxes": [
+            [
+              319,
+              336,
+              406,
+              536
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 318.93516227454535,
+          "referenceChinY": 562.701511788325,
+          "pose": "up-right"
+        }
+      ],
+      "TPS": {
+        "success": true,
+        "message": "`xtol` termination condition is satisfied.",
+        "nfev": 53,
+        "maxNfev": 120,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 98,
+        "earHalfWeightSamples": 300,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 1440154.4036627947,
+        "finalCost": 56207.66904369615,
+        "maxControlDisplacement": 192.35276607233934,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.814699505983773,
+            -0.03271797742678227
+          ],
+          [
+            0.03271797742678227,
+            0.814699505983773
+          ]
+        ],
+        "initialShift": [
+          181.32012520640092,
+          14.749976291609585
+        ],
+        "earRegions": [
+          [
+            "left",
+            495.85,
+            382.7139659941096
+          ]
+        ],
+        "earBoxes": [
+          [
+            319,
+            336,
+            406,
+            536
+          ]
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 318.93516227454535,
+        "referenceChinY": 562.701511788325,
+        "pose": "up-right"
+      },
+      "TPSReused": false
+    },
+    {
+      "name": "down-left",
+      "addedPixels": 2123,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 2398,
+      "addedPixelsHairbandOverlap": 2051,
+      "TPSAttempts": [
+        {
+          "success": true,
+          "message": "`xtol` termination condition is satisfied.",
+          "nfev": 108,
+          "maxNfev": 120,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 84,
+          "earHalfWeightSamples": 288,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 1556819.3364207614,
+          "finalCost": 44839.75370195534,
+          "maxControlDisplacement": 171.18918456183462,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.8747290043103623,
+              -0.14051404063825143
+            ],
+            [
+              0.14051404063825143,
+              0.8747290043103623
+            ]
+          ],
+          "initialShift": [
+            49.305321272034746,
+            -0.141976124657333
+          ],
+          "earRegions": [
+            [
+              "right",
+              513.2,
+              447.82758623160237
+            ]
+          ],
+          "earBoxes": [
+            [
+              601,
+              401,
+              713,
+              624
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 382.4945377823783,
+          "referenceChinY": 633.6959743722465,
+          "pose": "down-left"
+        }
+      ],
+      "TPS": {
+        "success": true,
+        "message": "`xtol` termination condition is satisfied.",
+        "nfev": 108,
+        "maxNfev": 120,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 84,
+        "earHalfWeightSamples": 288,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 1556819.3364207614,
+        "finalCost": 44839.75370195534,
+        "maxControlDisplacement": 171.18918456183462,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.8747290043103623,
+            -0.14051404063825143
+          ],
+          [
+            0.14051404063825143,
+            0.8747290043103623
+          ]
+        ],
+        "initialShift": [
+          49.305321272034746,
+          -0.141976124657333
+        ],
+        "earRegions": [
+          [
+            "right",
+            513.2,
+            447.82758623160237
+          ]
+        ],
+        "earBoxes": [
+          [
+            601,
+            401,
+            713,
+            624
+          ]
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 382.4945377823783,
+        "referenceChinY": 633.6959743722465,
+        "pose": "down-left"
+      },
+      "TPSReused": false
+    },
+    {
+      "name": "down-right",
+      "addedPixels": 2377,
+      "outsideCircleChanges": 0,
+      "hullHairbandOverlap": 2844,
+      "addedPixelsHairbandOverlap": 2377,
+      "TPSAttempts": [
+        {
+          "success": false,
+          "message": "The maximum number of function evaluations is exceeded.",
+          "nfev": 120,
+          "maxNfev": 120,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 65,
+          "earHalfWeightSamples": 365,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 1265540.9573137877,
+          "finalCost": 18488.922525470363,
+          "maxControlDisplacement": 146.7025554654615,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.8772253271124879,
+              0.166890281566372
+            ],
+            [
+              -0.166890281566372,
+              0.8772253271124879
+            ]
+          ],
+          "initialShift": [
+            63.8074518263528,
+            153.23965394902962
+          ],
+          "earRegions": [
+            [
+              "left",
+              490.6,
+              448.00015027990605
+            ]
+          ],
+          "earBoxes": [
+            [
+              304,
+              425,
+              476,
+              613
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 396.31136404241227,
+          "referenceChinY": 588.1688707386875,
+          "pose": "down-right"
+        },
+        {
+          "success": false,
+          "message": "The maximum number of function evaluations is exceeded.",
+          "nfev": 200,
+          "maxNfev": 200,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 65,
+          "earHalfWeightSamples": 365,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 1265540.9573137877,
+          "finalCost": 18480.444872199623,
+          "maxControlDisplacement": 146.93944414639597,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.8772253271124879,
+              0.166890281566372
+            ],
+            [
+              -0.166890281566372,
+              0.8772253271124879
+            ]
+          ],
+          "initialShift": [
+            63.8074518263528,
+            153.23965394902962
+          ],
+          "earRegions": [
+            [
+              "left",
+              490.6,
+              448.00015027990605
+            ]
+          ],
+          "earBoxes": [
+            [
+              304,
+              425,
+              476,
+              613
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 396.31136404241227,
+          "referenceChinY": 588.1688707386875,
+          "pose": "down-right"
+        }
+      ],
+      "TPS": {
+        "success": false,
+        "message": "The maximum number of function evaluations is exceeded.",
+        "nfev": 200,
+        "maxNfev": 200,
+        "sourceSamples": 1246,
+        "zeroWeightSamples": 65,
+        "earHalfWeightSamples": 365,
+        "secondDifferenceLambda": 0.25,
+        "initialCost": 1265540.9573137877,
+        "finalCost": 18480.444872199623,
+        "maxControlDisplacement": 146.93944414639597,
+        "controlGrid": [
+          8,
+          8
+        ],
+        "initialLinear": [
+          [
+            0.8772253271124879,
+            0.166890281566372
+          ],
+          [
+            -0.166890281566372,
+            0.8772253271124879
+          ]
+        ],
+        "initialShift": [
+          63.8074518263528,
+          153.23965394902962
+        ],
+        "earRegions": [
+          [
+            "left",
+            490.6,
+            448.00015027990605
+          ]
+        ],
+        "earBoxes": [
+          [
+            304,
+            425,
+            476,
+            613
+          ]
+        ],
+        "sourceBrowY": 348,
+        "sourceBottomY": 656,
+        "referenceBrowY": 396.31136404241227,
+        "referenceChinY": 588.1688707386875,
+        "pose": "down-right"
+      },
+      "TPSReused": false
+    }
+  ],
+  "leftCopiedSHA256": {
+    "tps/left.json": "2fc20f8a52dd31563b458ecd63a72f743b479ee9fdf47bc31dd788af2130ffd9",
+    "inputs/left/reference-mask.png": "7e554b493fd8b04f3a9a5e8c92702d9595b90db630b1f6bf90b846f01f78d106",
+    "inputs/left/ear-right-mask.png": "08dea7b04191fdcd80e9229dac6fd92e0a2d156e5110be5b380c3712ae24ccd8",
+    "inputs/left/hairband.png": "c1adae00393edb06ec9c8d45355732c6605682e88908e85bc6e0070260732758"
+  },
+  "leftRefit": false,
+  "TPSRefitPoses": [
+    "right",
+    "down",
+    "up-left",
+    "up-right",
+    "down-left",
+    "down-right"
+  ],
+  "failedTPSPoses": [
+    "down",
+    "down-right"
+  ],
+  "hullHairbandOverlapAbove200": [
+    "right",
+    "down",
+    "up-left",
+    "up-right",
+    "down-left",
+    "down-right"
+  ],
+  "sheet": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/sheets/C1-eight-pose-v2-hull-overlays.png",
+  "earFittingStarted": false,
+  "ASolveStarted": false,
+  "elapsedSeconds": 23.02,
+  "runnerExecution": 5,
+  "verification": [
+    {
+      "name": "left",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    },
+    {
+      "name": "right",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    },
+    {
+      "name": "up",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    },
+    {
+      "name": "down",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    },
+    {
+      "name": "up-left",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    },
+    {
+      "name": "up-right",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    },
+    {
+      "name": "down-left",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    },
+    {
+      "name": "down-right",
+      "outsideEyeChanges": 0,
+      "TPSReportMatchesSaved": true
+    }
+  ],
+  "upTPSByteUnchanged": true,
+  "bundleChangedFiles": [],
+  "status": "STOP before ear fitting/C2: down and down-right TPS 200 failed",
+  "visualReview": {
+    "sheetViewed": true,
+    "largeEyeNotchesReduced": true,
+    "downUpperOuterEyeCornerStillIndented": true,
+    "hairbandOverlapContainsDarkEyePixels": true
+  },
+  "independentStaticReview": "pass; no findings; read-only review",
+  "C1Status": "all 8 approved",
+  "hairbandHullOverlap": "withdrawn as acceptance criterion; dark lash pixels remain recorded only",
+  "TPSResultGate": {
+    "initial": [
+      {
+        "name": "left",
+        "IoU": 0.9043799039700199,
+        "maxControlDisplacement": 147.6871859754313,
+        "coefficientNormMax": 147.68718597543173,
+        "intersectionPixels": 61780,
+        "unionPixels": 68312,
+        "roiYInclusive": [
+          347,
+          661
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 113,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "right",
+        "IoU": 0.988456473244282,
+        "maxControlDisplacement": 140.26018205690713,
+        "coefficientNormMax": 140.26018205690445,
+        "intersectionPixels": 73555,
+        "unionPixels": 74414,
+        "roiYInclusive": [
+          348,
+          667
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 60,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "up",
+        "IoU": 0.9060563990027916,
+        "maxControlDisplacement": 134.2716078766503,
+        "coefficientNormMax": 134.27160787664818,
+        "intersectionPixels": 60694,
+        "unionPixels": 66987,
+        "roiYInclusive": [
+          321,
+          599
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 164,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "down",
+        "IoU": 0.93060699812628,
+        "maxControlDisplacement": 129.45285928310906,
+        "coefficientNormMax": 129.45285928310904,
+        "intersectionPixels": 42713,
+        "unionPixels": 45898,
+        "roiYInclusive": [
+          393,
+          621
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": false,
+        "nfev": 200,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "up-left",
+        "IoU": 0.9389936519790889,
+        "maxControlDisplacement": 272.6185216133362,
+        "coefficientNormMax": 272.6185216133357,
+        "intersectionPixels": 80468,
+        "unionPixels": 85696,
+        "roiYInclusive": [
+          306,
+          636
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 76,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "up-right",
+        "IoU": 0.9105055279729708,
+        "maxControlDisplacement": 192.3527660723453,
+        "coefficientNormMax": 192.35276607233934,
+        "intersectionPixels": 57401,
+        "unionPixels": 63043,
+        "roiYInclusive": [
+          318,
+          602
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 53,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "down-left",
+        "IoU": 0.8586275216138328,
+        "maxControlDisplacement": 171.18918456183923,
+        "coefficientNormMax": 171.18918456183462,
+        "intersectionPixels": 47671,
+        "unionPixels": 55520,
+        "roiYInclusive": [
+          382,
+          673
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 108,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "down-right",
+        "IoU": 0.9825282881129092,
+        "maxControlDisplacement": 146.93944414640083,
+        "coefficientNormMax": 146.93944414639597,
+        "intersectionPixels": 40377,
+        "unionPixels": 41095,
+        "roiYInclusive": [
+          396,
+          628
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": false,
+        "nfev": 200,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      }
+    ],
+    "final": [
+      {
+        "name": "left",
+        "IoU": 0.9043799039700199,
+        "maxControlDisplacement": 147.6871859754313,
+        "coefficientNormMax": 147.68718597543173,
+        "intersectionPixels": 61780,
+        "unionPixels": 68312,
+        "roiYInclusive": [
+          347,
+          661
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 113,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "right",
+        "IoU": 0.988456473244282,
+        "maxControlDisplacement": 140.26018205690713,
+        "coefficientNormMax": 140.26018205690445,
+        "intersectionPixels": 73555,
+        "unionPixels": 74414,
+        "roiYInclusive": [
+          348,
+          667
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 60,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "up",
+        "IoU": 0.9060563990027916,
+        "maxControlDisplacement": 134.2716078766503,
+        "coefficientNormMax": 134.27160787664818,
+        "intersectionPixels": 60694,
+        "unionPixels": 66987,
+        "roiYInclusive": [
+          321,
+          599
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 164,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "down",
+        "IoU": 0.9315205786870602,
+        "maxControlDisplacement": 127.33452489439715,
+        "coefficientNormMax": 127.33452489439715,
+        "intersectionPixels": 42754,
+        "unionPixels": 45897,
+        "roiYInclusive": [
+          393,
+          621
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 217,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "up-left",
+        "IoU": 0.9389936519790889,
+        "maxControlDisplacement": 272.6185216133362,
+        "coefficientNormMax": 272.6185216133357,
+        "intersectionPixels": 80468,
+        "unionPixels": 85696,
+        "roiYInclusive": [
+          306,
+          636
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 76,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "up-right",
+        "IoU": 0.9105055279729708,
+        "maxControlDisplacement": 192.3527660723453,
+        "coefficientNormMax": 192.35276607233934,
+        "intersectionPixels": 57401,
+        "unionPixels": 63043,
+        "roiYInclusive": [
+          318,
+          602
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 53,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "down-left",
+        "IoU": 0.8586275216138328,
+        "maxControlDisplacement": 171.18918456183923,
+        "coefficientNormMax": 171.18918456183462,
+        "intersectionPixels": 47671,
+        "unionPixels": 55520,
+        "roiYInclusive": [
+          382,
+          673
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 108,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "down-right",
+        "IoU": 0.9803368052175606,
+        "maxControlDisplacement": 161.21943665615981,
+        "coefficientNormMax": 161.21943665615487,
+        "intersectionPixels": 40284,
+        "unionPixels": 41092,
+        "roiYInclusive": [
+          396,
+          628
+        ],
+        "roiHairbandExcluded": true,
+        "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+        "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+        "successFlag": true,
+        "nfev": 257,
+        "acceptedByResult": false,
+        "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+      },
+      {
+        "name": "front",
+        "IoU": 1.0,
+        "maxControlDisplacement": 0.0,
+        "acceptedByResult": true,
+        "definition": "fixed identity / source self-comparison; no nonfront reference fit"
+      }
+    ],
+    "retries400": [
+      {
+        "name": "down",
+        "fit": {
+          "success": true,
+          "message": "`xtol` termination condition is satisfied.",
+          "nfev": 217,
+          "maxNfev": 400,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 92,
+          "earHalfWeightSamples": 620,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 999525.3870512156,
+          "finalCost": 23368.061164854418,
+          "maxControlDisplacement": 127.33452489439715,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.9999026820690126,
+              -0.013950856288929381
+            ],
+            [
+              0.013950856288929381,
+              0.9999026820690126
+            ]
+          ],
+          "initialShift": [
+            6.068638358235603,
+            17.83367312316568
+          ],
+          "earRegions": [
+            [
+              "left",
+              405.69862320624884,
+              456.29361520735824
+            ],
+            [
+              "right",
+              598.1013767937511,
+              456.29361520735824
+            ]
+          ],
+          "earBoxes": [
+            [
+              274,
+              367,
+              337,
+              470
+            ],
+            [
+              644,
+              374,
+              681,
+              455
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 393.46371622761365,
+          "referenceChinY": 581.6352731725601,
+          "pose": "down"
+        },
+        "measuredResult": {
+          "name": "down",
+          "IoU": 0.9315205786870602,
+          "maxControlDisplacement": 127.33452489439715,
+          "coefficientNormMax": 127.33452489439715,
+          "intersectionPixels": 42754,
+          "unionPixels": 45897,
+          "roiYInclusive": [
+            393,
+            621
+          ],
+          "roiHairbandExcluded": true,
+          "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+          "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+          "successFlag": true,
+          "nfev": 217,
+          "acceptedByResult": false,
+          "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+        }
+      },
+      {
+        "name": "down-right",
+        "fit": {
+          "success": true,
+          "message": "`ftol` termination condition is satisfied.",
+          "nfev": 257,
+          "maxNfev": 400,
+          "sourceSamples": 1246,
+          "zeroWeightSamples": 65,
+          "earHalfWeightSamples": 365,
+          "secondDifferenceLambda": 0.25,
+          "initialCost": 1265540.9573137877,
+          "finalCost": 18162.908304036835,
+          "maxControlDisplacement": 161.21943665615487,
+          "controlGrid": [
+            8,
+            8
+          ],
+          "initialLinear": [
+            [
+              0.8772253271124879,
+              0.166890281566372
+            ],
+            [
+              -0.166890281566372,
+              0.8772253271124879
+            ]
+          ],
+          "initialShift": [
+            63.8074518263528,
+            153.23965394902962
+          ],
+          "earRegions": [
+            [
+              "left",
+              490.6,
+              448.00015027990605
+            ]
+          ],
+          "earBoxes": [
+            [
+              304,
+              425,
+              476,
+              613
+            ]
+          ],
+          "sourceBrowY": 348,
+          "sourceBottomY": 656,
+          "referenceBrowY": 396.31136404241227,
+          "referenceChinY": 588.1688707386875,
+          "pose": "down-right"
+        },
+        "measuredResult": {
+          "name": "down-right",
+          "IoU": 0.9803368052175606,
+          "maxControlDisplacement": 161.21943665615981,
+          "coefficientNormMax": 161.21943665615487,
+          "intersectionPixels": 40284,
+          "unionPixels": 41092,
+          "roiYInclusive": [
+            396,
+            628
+          ],
+          "roiHairbandExcluded": true,
+          "ROIConvention": "int(referenceBrowY)..int(referenceChinY+40), inclusive; v7 definition",
+          "controlDefinition": "max Euclidean norm of TPS(control)-control; full fitted displacement, equals coefficientNormMax",
+          "successFlag": true,
+          "nfev": 257,
+          "acceptedByResult": false,
+          "silhouetteConstruction": "1px sampled source contour with hierarchy forward TPS; rounded polygon rasterization; full silhouette before ROI"
+        }
+      }
+    ],
+    "failedDownPosesAfter400": [
+      "down",
+      "down-right"
+    ],
+    "otherPoseResultFailures": [
+      "left",
+      "right",
+      "up",
+      "up-left",
+      "up-right",
+      "down-left"
+    ],
+    "C1Masks": "all 8 approved by coordinator",
+    "hairbandOverlapGate": "withdrawn; record only because gray<90 includes lashes",
+    "sourceSHA256": "a8e5ede9b03ad572a73cabbe172c49f0b2f9a878b55deb5704c6dcdf79104407",
+    "earFitStarted": false,
+    "ASolveStarted": false,
+    "status": "STOP before ear fitting/C2: down/down-right result gates not met after authorized 400 retry",
+    "elapsedSeconds": 8.84,
+    "runnerExecution": 7,
+    "correctedSmallChecks": "3 pass before resumed runner",
+    "independentStaticReview": "pass; no findings",
+    "visualReview": "eight-pose forward-TPS versus reference overlay viewed",
+    "savedControlValuesVerified": true,
+    "unchangedSixTPSVerified": true,
+    "verifiedV2LeftStillByteEqual": true,
+    "bundleChangedFiles": [],
+    "C1Approved": true
+  },
+  "TPSStatus": "all 8 approved as saved; intermediate IoU/control gates withdrawn",
+  "C2ResultFile": "C2.json",
+  "C2Stop": true,
+  "runnerConsumed": 10,
+  "runnerLimit": 11
+}

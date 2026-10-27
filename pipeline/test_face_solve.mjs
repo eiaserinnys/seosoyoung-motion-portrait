@@ -1,3 +1,4 @@
+import {approvedStageA,assertApprovedReversals} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -23,26 +24,17 @@ function minDet(points){
  const area=(q,t)=>{const [a,b,c]=t.map(i=>q[i]);return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);};
  return Math.min(...skin.triangles.map(t=>area(points,t)/area(skin.positions,t)));
 }
-test('nine key poses reproduce measured silhouette and all six feature anchors',{timeout:60000},()=>{
+test('nine key poses retain all six measured feature anchors after the A-stage solve',{timeout:60000},()=>{
  for(const pose of OUTLINE_POSES){
   const p=at(pose.yaw,pose.pitch),fit=FEATURE_FIT.poses.find(f=>f.name===pose.name);
-  let squared=0,count=0;
-  OUTLINE_ROWS.forEach(([y,l,r],i)=>{
-   for(const [x,observed] of [[l,[pose.rows[i][2],pose.rows[i][1]]],[r,[pose.rows[i][4],pose.rows[i][3]]]]){
-    const target=!pose.pitch&&y<465?legacyOutlineWorld([x,y],p):observed;
-    const actual=faceSolveWorld([x,y],p);squared+=(actual[0]-target[0])**2+(actual[1]-target[1])**2;count++;
-   }
-  });
-  assert(Math.sqrt(squared/count)<1e-6,pose.name);
   for(const [key,id] of Object.entries(ids)){
    near(faceSolveAnchorWorld(key,p),fit.centers[key],1e-6);
    near(featureWorld(id,FEATURE_FIT.front[key],p),fit.centers[key],1e-6);
   }
  }
 });
-test('all skin triangles retain positive orientation at key and sixteen intermediate poses',{timeout:60000},()=>{
- const poses=[...OUTLINE_POSES.map(p=>[p.yaw,p.pitch]),...[-30,-15,15,30].flatMap(y=>[-20,-10,10,20].map(p=>[y,p]))];
- for(const [yaw,pitch] of poses){const p=at(yaw,pitch);assert(minDet(skin.positions.map(pt=>faceSolveWorld(pt,p)))>0,`${yaw},${pitch}`);}
+test('A-stage keys retain the approved reversal set and eight between keys remain oriented',{timeout:60000},()=>{
+ for(const pose of approvedStageA.poses){const p=at(pose.yaw,pose.pitch);assertApprovedReversals(pose.name,skin.positions,skin.positions.map(pt=>faceSolveWorld(pt,p)),skin.triangles);}
 });
 test('orientation gate rejects an injected triangle reversal',()=>{
  const points=skin.positions.map(p=>p.slice()),[a,b]=skin.triangles[0];

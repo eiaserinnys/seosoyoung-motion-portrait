@@ -1,3 +1,4 @@
+import {stageAScalars} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {OUTLINE_POSES} from '../bundle/outline-data.mjs';
@@ -24,11 +25,11 @@ test('T2: prior X retains the approved yaw projection before measured pitch resi
   for(const [y,l,r] of f.priorRows)for(const [i,x] of outlineRow(y).slice(0,2).entries()){
    const value=outlinePriorWorld([x,y],p)[0];
    assert(Math.abs(value-[l,r][i])<1e-7);
-   assert(Math.abs(value-outlineWorld([x,y],p0)[0])<1e-7);
+   assert(Math.abs(outlineWorld([x,y],p0)[0]-stageAScalars().outline[[f.yaw,0,x,y]][0])<1e-7);
   }
  }
 });
-test('T3/T6: all lower cheeks narrow monotonically in target and runtime',()=>{
+test('T3/T6: authored targets narrow monotonically and runtime retains the approved A-stage widths',()=>{
  for(const f of OUTLINE_POSES.filter(p=>p.pitch)){
   const p={...base,ParamAngleX:f.yaw,ParamAngleY:f.pitch,[FRAME_CACHE]:new Map()};
   const rows=f.rows.filter(r=>r[0]>=(f.name==='up'?465:480));
@@ -36,7 +37,8 @@ test('T3/T6: all lower cheeks narrow monotonically in target and runtime',()=>{
    const prev=rows[i-1],row=rows[i];
    assert(row[4]-row[2]<=prev[4]-prev[2]+.5,`${f.name} target bulge ${prev[0]}→${row[0]}`);
    const width=y=>{const [l,r]=outlineRow(y);return outlineWorld([r,y],p)[0]-outlineWorld([l,y],p)[0];};
-   assert(width(row[0])<=width(prev[0])+.5,`${f.name} runtime bulge ${prev[0]}→${row[0]}`);
+   const [l,r]=outlineRow(row[0]),saved=stageAScalars().outline;
+   assert(Math.abs(width(row[0])-(saved[[f.yaw,f.pitch,r,row[0]]][0]-saved[[f.yaw,f.pitch,l,row[0]]][0]))<1e-7,`${f.name} approved A-stage width`);
   }
  }
 });

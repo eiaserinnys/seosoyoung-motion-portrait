@@ -1,0 +1,69 @@
+{
+  "prompt": "face",
+  "crop_box": [
+    150,
+    0,
+    850,
+    780
+  ],
+  "upscale": 1,
+  "num_masks_returned": 1,
+  "score": 0.9477069973945618,
+  "area_px": 88278,
+  "id": "down-face",
+  "pose": "down",
+  "part": "face",
+  "crop": [
+    150,
+    0,
+    850,
+    780
+  ],
+  "points": [
+    [
+      416,
+      496,
+      1
+    ],
+    [
+      588,
+      497,
+      1
+    ],
+    [
+      502,
+      396,
+      1
+    ],
+    [
+      509,
+      531,
+      1
+    ],
+    [
+      494,
+      642,
+      0
+    ],
+    [
+      502,
+      196,
+      0
+    ],
+    [
+      310,
+      410,
+      0
+    ],
+    [
+      650,
+      410,
+      0
+    ]
+  ],
+  "boxes": null,
+  "frame": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/inputs/down/reference-frame.png",
+  "frameSHA256": "14d4221eb4bf460ec842aeeda78ec1f1c9e13333801c45337cfb69c23220936f",
+  "requestFingerprint": "16b2ce3821c6d3cb8d4696e805083a4bbd5badf716438f11029547d68ba112d0",
+  "elapsedSeconds": 3.96
+}

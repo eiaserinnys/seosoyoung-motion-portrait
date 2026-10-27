@@ -1,0 +1,23 @@
+{
+  "prompt": "face (skin) of anime girl excluding ears neck and hair",
+  "crop_box": [
+    150,
+    120,
+    850,
+    740
+  ],
+  "upscale": 1,
+  "num_masks_returned": 1,
+  "score": 0.9790974259376526,
+  "area_px": 265102,
+  "id": "up-left-face",
+  "pose": "up-left",
+  "part": "face",
+  "frameSHA256": "4a75f9d44aec8ada5067b2921b605bc2f73bad95f9670a321c6edcc8b79ae37e",
+  "boxPrompts": null,
+  "requestFingerprint": "060316543d67eb8d6e9af60a6b4e102dd3f19cdc1ea8fd7138a6e31a447cd678",
+  "endpoint": "fal-ai/sam-3/image",
+  "elapsedSeconds": 2.02,
+  "logicalRequestCount": 1,
+  "maskSHA256": "eac04752551edf47966dd087c0c4fa6beebc87f75ded95bf9c2a769f431b6966"
+}

@@ -1,0 +1,378 @@
+{
+  "schemaVersion": 1,
+  "status": "frozen-approved-A-stage",
+  "acceptedSolution": "7.11-filled + ear translation norm bound80 (runner18)",
+  "acceptedBy": "card615 assignee seosoyoung",
+  "createdAt": "2026-10-27T01:24:59.171139+00:00",
+  "sourceBundle": ".local/tmp/card615-outline/tps-left-stage-a/bundle",
+  "baselineBundle": ".local/tmp/card615-outline/tps-left-v7/bundle",
+  "frozenBundle": ".local/tmp/card615-outline/a-final/bundle",
+  "hashAlgorithm": "SHA-256",
+  "fileCount": 47,
+  "sourceCopyVerified": true,
+  "ZAndFaceTranslationUnchangedFrom711Filled": true,
+  "frontChangedPixels": 0,
+  "pageErrors": 0,
+  "runnerExecutionsConsumed": 18,
+  "changedFilesComparedToV7": [
+    {
+      "path": "ear-transform-data.mjs",
+      "sha256": "7baf74abb04b05d1f39c693422e33d1580464a5199f7ad7f153cdc5cb769dd34",
+      "bytes": 1706,
+      "v7Sha256": "dbe1bd765fd30504994994f6b3922536fbe4e841629ebc4fab0ecdb279825b7c",
+      "status": "modified"
+    },
+    {
+      "path": "face-solve-data.mjs",
+      "sha256": "4fccdd677bb9490d20ad72f0455eb4f4a03138950dc030111215498cd5a355c5",
+      "bytes": 492952,
+      "v7Sha256": "e65b901d2c44301f70490af6cd3bcecb174b6d1d05d33ceafabcdc2f20ee0dff",
+      "status": "modified"
+    },
+    {
+      "path": "stereo-attachments.mjs",
+      "sha256": "d4e5a6b65579e253f77a4852581deb01134a8dd071fbfea40c436255e56fe9f9",
+      "bytes": 4123,
+      "v7Sha256": "c0d449d975cc6e8c29b9b04ea3d2eb27f7bc082685466290ca58cc7087fa3247",
+      "status": "modified"
+    }
+  ],
+  "removedFilesComparedToV7": [],
+  "files": [
+    {
+      "path": "app.mjs",
+      "sha256": "7e21eddf5b1ddeb39fc211e0731a1364cbef0e3336436b5563cb6fca3176124b",
+      "bytes": 12890,
+      "v7Sha256": "7e21eddf5b1ddeb39fc211e0731a1364cbef0e3336436b5563cb6fca3176124b",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/before_after_parts_comparison.png",
+      "sha256": "4ccfb72811ff2806779e1ae3635177f887825d9902a42aad4090f9d4b9a90376",
+      "bytes": 243383,
+      "v7Sha256": "4ccfb72811ff2806779e1ae3635177f887825d9902a42aad4090f9d4b9a90376",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/exposed-skin.png",
+      "sha256": "607bfc6c30588f1d6ba06bfb8c0ff24e098ee8d6b4e2c72956764eac2959a2e0",
+      "bytes": 53123,
+      "v7Sha256": "607bfc6c30588f1d6ba06bfb8c0ff24e098ee8d6b4e2c72956764eac2959a2e0",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/face-profile.png",
+      "sha256": "b79dadc0a8a4a1660346c7ca3a306c9977fea2651907083fe5cf5aa9f07c6830",
+      "bytes": 94923,
+      "v7Sha256": "b79dadc0a8a4a1660346c7ca3a306c9977fea2651907083fe5cf5aa9f07c6830",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/head-surface-before.png",
+      "sha256": "55ca56bb42eeef1766927766d7fc18e90899aa8d75763a472cc03068bf8b29b9",
+      "bytes": 153769,
+      "v7Sha256": "55ca56bb42eeef1766927766d7fc18e90899aa8d75763a472cc03068bf8b29b9",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/head-surface.png",
+      "sha256": "55ca56bb42eeef1766927766d7fc18e90899aa8d75763a472cc03068bf8b29b9",
+      "bytes": 153769,
+      "v7Sha256": "55ca56bb42eeef1766927766d7fc18e90899aa8d75763a472cc03068bf8b29b9",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/ponytail-skin-alpha.png",
+      "sha256": "b682f6fd041e3d66b2da740d73f90ed8f5d160fac896835c05a47ab9c73c1876",
+      "bytes": 58853,
+      "v7Sha256": "b682f6fd041e3d66b2da740d73f90ed8f5d160fac896835c05a47ab9c73c1876",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/provenance.json",
+      "sha256": "ddaf71544bbd5f62bdea4b058bf2baac4b3702e5bf402bf9ae518123a4d95f5e",
+      "bytes": 329,
+      "v7Sha256": "ddaf71544bbd5f62bdea4b058bf2baac4b3702e5bf402bf9ae518123a4d95f5e",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/sam3_masks_grid.png",
+      "sha256": "f208ee4ecd71cc47e0b4317d119e8d50113b57c844fc74f850fd42662f3afe15",
+      "bytes": 863711,
+      "v7Sha256": "f208ee4ecd71cc47e0b4317d119e8d50113b57c844fc74f850fd42662f3afe15",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/seosoyoung-rig.json",
+      "sha256": "c87c907669190f99992b0fe152dfbda5f942e09d0792606d30bfa4af96036819",
+      "bytes": 791945,
+      "v7Sha256": "c87c907669190f99992b0fe152dfbda5f942e09d0792606d30bfa4af96036819",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/texture_00.png",
+      "sha256": "9eca11b327ee80a8c4e6f4f026daa243ce142e2aba812bf862652c7e616ad057",
+      "bytes": 4129092,
+      "v7Sha256": "9eca11b327ee80a8c4e6f4f026daa243ce142e2aba812bf862652c7e616ad057",
+      "status": "unchanged"
+    },
+    {
+      "path": "assets/texture_before_00.png",
+      "sha256": "42200050bf3ccd4785e897cc5bb61e52638602a34c59aef3b28db26b697851da",
+      "bytes": 4132138,
+      "v7Sha256": "42200050bf3ccd4785e897cc5bb61e52638602a34c59aef3b28db26b697851da",
+      "status": "unchanged"
+    },
+    {
+      "path": "corrections.mjs",
+      "sha256": "b953c4f6f781606e0ed992b8fd7139154aa53b88ab2a21c03937b6049d5baf25",
+      "bytes": 1613,
+      "v7Sha256": "b953c4f6f781606e0ed992b8fd7139154aa53b88ab2a21c03937b6049d5baf25",
+      "status": "unchanged"
+    },
+    {
+      "path": "cranium-surface.mjs",
+      "sha256": "f0e7a51ba30b6944c09d81a5a9ce0c041e730b04ffd646db4985f5f687dc9c7f",
+      "bytes": 127,
+      "v7Sha256": "f0e7a51ba30b6944c09d81a5a9ce0c041e730b04ffd646db4985f5f687dc9c7f",
+      "status": "unchanged"
+    },
+    {
+      "path": "dome-data.mjs",
+      "sha256": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
+      "bytes": 60532,
+      "v7Sha256": "0659a5d4a8e50b7ac7438e2ae81b29678c11b449c1d77835534ebcf6ff6c84fc",
+      "status": "unchanged"
+    },
+    {
+      "path": "ear-transform-data.mjs",
+      "sha256": "7baf74abb04b05d1f39c693422e33d1580464a5199f7ad7f153cdc5cb769dd34",
+      "bytes": 1706,
+      "v7Sha256": "dbe1bd765fd30504994994f6b3922536fbe4e841629ebc4fab0ecdb279825b7c",
+      "status": "modified"
+    },
+    {
+      "path": "face-contour.mjs",
+      "sha256": "a03cc267de4d7cb337d78fda82e1f9845a8913a9374c6dee7cd9c5dad2261b6a",
+      "bytes": 810,
+      "v7Sha256": "a03cc267de4d7cb337d78fda82e1f9845a8913a9374c6dee7cd9c5dad2261b6a",
+      "status": "unchanged"
+    },
+    {
+      "path": "face-depth.mjs",
+      "sha256": "276614c28c2e991c068ffeaa1180670878afaf4165d4fa97e2dbd3584f472327",
+      "bytes": 36746,
+      "v7Sha256": "276614c28c2e991c068ffeaa1180670878afaf4165d4fa97e2dbd3584f472327",
+      "status": "unchanged"
+    },
+    {
+      "path": "face-feature-prior.mjs",
+      "sha256": "2c1f27b871e77a6ac3faee650798d94655f93c9efdfe5ff680d44ed08dafa7d9",
+      "bytes": 5317,
+      "v7Sha256": "2c1f27b871e77a6ac3faee650798d94655f93c9efdfe5ff680d44ed08dafa7d9",
+      "status": "unchanged"
+    },
+    {
+      "path": "face-features.mjs",
+      "sha256": "ced3c91ef175741c435482e44d2623ed9459476be7bebda656b72dbefe0b142c",
+      "bytes": 3572,
+      "v7Sha256": "ced3c91ef175741c435482e44d2623ed9459476be7bebda656b72dbefe0b142c",
+      "status": "unchanged"
+    },
+    {
+      "path": "face-outline.mjs",
+      "sha256": "51d561f4bd60f63c2d6cf19834e4507be830f54720b8b52b9cfa2aac1471cf16",
+      "bytes": 760,
+      "v7Sha256": "51d561f4bd60f63c2d6cf19834e4507be830f54720b8b52b9cfa2aac1471cf16",
+      "status": "unchanged"
+    },
+    {
+      "path": "face-prior.mjs",
+      "sha256": "99e5062b9ecb9898357702fc785c1c5dcc8396d1fd9e2afe6e35c583c62f902c",
+      "bytes": 8175,
+      "v7Sha256": "99e5062b9ecb9898357702fc785c1c5dcc8396d1fd9e2afe6e35c583c62f902c",
+      "status": "unchanged"
+    },
+    {
+      "path": "face-profile.mjs",
+      "sha256": "fe30d46b53fa237611b627c8c3aaf8b18c93c946c78978af9c97e7bc3911aa74",
+      "bytes": 346,
+      "v7Sha256": "fe30d46b53fa237611b627c8c3aaf8b18c93c946c78978af9c97e7bc3911aa74",
+      "status": "unchanged"
+    },
+    {
+      "path": "face-solve-data.mjs",
+      "sha256": "4fccdd677bb9490d20ad72f0455eb4f4a03138950dc030111215498cd5a355c5",
+      "bytes": 492952,
+      "v7Sha256": "e65b901d2c44301f70490af6cd3bcecb174b6d1d05d33ceafabcdc2f20ee0dff",
+      "status": "modified"
+    },
+    {
+      "path": "face-solve.mjs",
+      "sha256": "385da50e260eb0b9316996692b3affe41763812a0e9cc9a4a79b50453418ffba",
+      "bytes": 8391,
+      "v7Sha256": "385da50e260eb0b9316996692b3affe41763812a0e9cc9a4a79b50453418ffba",
+      "status": "unchanged"
+    },
+    {
+      "path": "feature-data.mjs",
+      "sha256": "ede312bbf51cb390be89197d466535ff27d04c4027347dc71615e5473500e9be",
+      "bytes": 17426,
+      "v7Sha256": "ede312bbf51cb390be89197d466535ff27d04c4027347dc71615e5473500e9be",
+      "status": "unchanged"
+    },
+    {
+      "path": "geometry.mjs",
+      "sha256": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d",
+      "bytes": 6344,
+      "v7Sha256": "62206df2ac69f39f00eb64660e3df95a7550400d9431215c61ea0732b1e8330d",
+      "status": "unchanged"
+    },
+    {
+      "path": "hair-shell.mjs",
+      "sha256": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
+      "bytes": 8901,
+      "v7Sha256": "02acc92154f2e8f155d66db40c6feea0ba57f4d647e996299173af753991f630",
+      "status": "unchanged"
+    },
+    {
+      "path": "hair-solve-data.mjs",
+      "sha256": "f96e5b5311fdc4282acf0ca41de58c945c71d180c6fd552cb2c5b05a18060005",
+      "bytes": 50046,
+      "v7Sha256": "f96e5b5311fdc4282acf0ca41de58c945c71d180c6fd552cb2c5b05a18060005",
+      "status": "unchanged"
+    },
+    {
+      "path": "hair-solve.mjs",
+      "sha256": "9c0eb6bcf4844c8c4e0f2354b8b96840d2bfa46882d59eb4d6ba073da2147cc2",
+      "bytes": 6725,
+      "v7Sha256": "9c0eb6bcf4844c8c4e0f2354b8b96840d2bfa46882d59eb4d6ba073da2147cc2",
+      "status": "unchanged"
+    },
+    {
+      "path": "hair-surface.mjs",
+      "sha256": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
+      "bytes": 8160,
+      "v7Sha256": "6df8a9171ca8e29d0b8713c8d15316770fd1d694bd400a12835037db8f163040",
+      "status": "unchanged"
+    },
+    {
+      "path": "head-turn.mjs",
+      "sha256": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf",
+      "bytes": 3292,
+      "v7Sha256": "75e08c05dba74b112fb1c952a29ed80acdb17d3a596d583905243b2b81bd81cf",
+      "status": "unchanged"
+    },
+    {
+      "path": "index.html",
+      "sha256": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
+      "bytes": 5978,
+      "v7Sha256": "ea46ddeb87634f7f2b63ee9fa3870677cbfc758519548d1b74a4c4fec6b67ab4",
+      "status": "unchanged"
+    },
+    {
+      "path": "og.png",
+      "sha256": "6c77ba2b2e6ce49606bba730ce9549e9eafcd08cd3722caa536d7c53692a8144",
+      "bytes": 168673,
+      "v7Sha256": "6c77ba2b2e6ce49606bba730ce9549e9eafcd08cd3722caa536d7c53692a8144",
+      "status": "unchanged"
+    },
+    {
+      "path": "outline-data.mjs",
+      "sha256": "4d509c8ed9c9219661fc45ce9c3d62a43496535002ac6d3bd661e70727ab5702",
+      "bytes": 51838,
+      "v7Sha256": "4d509c8ed9c9219661fc45ce9c3d62a43496535002ac6d3bd661e70727ab5702",
+      "status": "unchanged"
+    },
+    {
+      "path": "ponytail-skin.mjs",
+      "sha256": "87a55807da252ce051d03af354ed8401773da4bb7cad8ccc9dad631f16d5111e",
+      "bytes": 1332,
+      "v7Sha256": "87a55807da252ce051d03af354ed8401773da4bb7cad8ccc9dad631f16d5111e",
+      "status": "unchanged"
+    },
+    {
+      "path": "pose-grid.mjs",
+      "sha256": "4e37923756f7924ee4d06cf103ed242fe7824d82604a6d05a0605e9fb9152c44",
+      "bytes": 827,
+      "v7Sha256": "4e37923756f7924ee4d06cf103ed242fe7824d82604a6d05a0605e9fb9152c44",
+      "status": "unchanged"
+    },
+    {
+      "path": "profile-attachments.mjs",
+      "sha256": "1dc5cb5f5ba7a6ee4b44e416c4923e38a02004b072006422919e26116749cadc",
+      "bytes": 2343,
+      "v7Sha256": "1dc5cb5f5ba7a6ee4b44e416c4923e38a02004b072006422919e26116749cadc",
+      "status": "unchanged"
+    },
+    {
+      "path": "renderer-diagnostic.mjs",
+      "sha256": "6dba42cc0ab0269c04074b7b6fd0aba0afdf26b02d73724e0d4974986a6bfe47",
+      "bytes": 21719,
+      "v7Sha256": "6dba42cc0ab0269c04074b7b6fd0aba0afdf26b02d73724e0d4974986a6bfe47",
+      "status": "unchanged"
+    },
+    {
+      "path": "renderer.mjs",
+      "sha256": "a9e96b9683ed1062a4d81754c3ab30516efbbf07adbfef79e52604dc0eaee8c7",
+      "bytes": 21631,
+      "v7Sha256": "a9e96b9683ed1062a4d81754c3ab30516efbbf07adbfef79e52604dc0eaee8c7",
+      "status": "unchanged"
+    },
+    {
+      "path": "rig.mjs",
+      "sha256": "d71eebf21183d8d2c250b6a06ed409e0a3ecdfdfa4997ec3d43367955e2c770c",
+      "bytes": 8108,
+      "v7Sha256": "d71eebf21183d8d2c250b6a06ed409e0a3ecdfdfa4997ec3d43367955e2c770c",
+      "status": "unchanged"
+    },
+    {
+      "path": "side-strands.mjs",
+      "sha256": "da5bcefb883fc6f73fd92545a1a9be937cd06ea1381923efdab05cb60cba496c",
+      "bytes": 5034,
+      "v7Sha256": "da5bcefb883fc6f73fd92545a1a9be937cd06ea1381923efdab05cb60cba496c",
+      "status": "unchanged"
+    },
+    {
+      "path": "skin-fill-data.mjs",
+      "sha256": "d010c83f22d3c7137285eba1a0f1d1ab230b91058249e439374147a15addf778",
+      "bytes": 61475,
+      "v7Sha256": "d010c83f22d3c7137285eba1a0f1d1ab230b91058249e439374147a15addf778",
+      "status": "unchanged"
+    },
+    {
+      "path": "skin-fill.mjs",
+      "sha256": "5b716bb8dd134e93c8aac429334c76811a0d2bc5a1118fb5c700cea90deec284",
+      "bytes": 5835,
+      "v7Sha256": "5b716bb8dd134e93c8aac429334c76811a0d2bc5a1118fb5c700cea90deec284",
+      "status": "unchanged"
+    },
+    {
+      "path": "stereo-attachments.mjs",
+      "sha256": "d4e5a6b65579e253f77a4852581deb01134a8dd071fbfea40c436255e56fe9f9",
+      "bytes": 4123,
+      "v7Sha256": "c0d449d975cc6e8c29b9b04ea3d2eb27f7bc082685466290ca58cc7087fa3247",
+      "status": "modified"
+    },
+    {
+      "path": "style.css",
+      "sha256": "631a46373275cbe1aa0f2f8ffd4dbebaa971e7551dc388ed8ab77bf844dec1e0",
+      "bytes": 7091,
+      "v7Sha256": "631a46373275cbe1aa0f2f8ffd4dbebaa971e7551dc388ed8ab77bf844dec1e0",
+      "status": "unchanged"
+    },
+    {
+      "path": "viewer-pose.mjs",
+      "sha256": "9d85bc932b228d520564b75eec18ffc94b6970c208fc4c037740c048e3b7e832",
+      "bytes": 792,
+      "v7Sha256": "9d85bc932b228d520564b75eec18ffc94b6970c208fc4c037740c048e3b7e832",
+      "status": "unchanged"
+    }
+  ],
+  "knownRemainders": [
+    "up-left right ear near translation radius80, IoU0.47167059351509033, slightly above reference",
+    "side-hair stripes and horizontally cut hair pieces reserved for O2",
+    "11 negative key triangles: no visible cracks per assignee review"
+  ],
+  "F3Record": "all-ear-row definition failed v7 validation at y417; future definition must restrict to screen y>=y_c; no new measurement; between-key gaps accepted by assignee visual review"
+}

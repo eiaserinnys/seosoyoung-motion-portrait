@@ -1,0 +1,258 @@
+{
+  "name": "down",
+  "sourceImage": "source/references/seedance_9dir/down.png",
+  "registrationMatrix": [
+    [
+      0.9357751134052054,
+      -0.024049794772738345,
+      181.74533248488945
+    ],
+    [
+      0.024049794772738345,
+      0.9357751134052054,
+      55.36827121103721
+    ]
+  ],
+  "registeredLandmarks": [
+    [
+      415.69862320624884,
+      455.7909832727008
+    ],
+    [
+      588.1013767937511,
+      456.79624714201566
+    ],
+    [
+      406.2987899367886,
+      387.6919640907533
+    ],
+    [
+      611.6511271764605,
+      393.46371622761365
+    ],
+    [
+      509.28159553728904,
+      530.5528999285119
+    ],
+    [
+      492.35939020459926,
+      568.3172007369342
+    ],
+    [
+      494.0086660366979,
+      581.6352731725601
+    ],
+    [
+      309.0273732456159,
+      431.31100809946366
+    ],
+    [
+      636.288450092822,
+      446.6215349381871
+    ]
+  ],
+  "anchorCenters": {
+    "left": [
+      415.6986232062488,
+      455.7909832727008
+    ],
+    "right": [
+      588.1013767937511,
+      456.79624714201566
+    ],
+    "browLeft": [
+      414.1907274022765,
+      395.47515111380784
+    ],
+    "browRight": [
+      588.1013767937511,
+      391.45409563654835
+    ],
+    "nose": [
+      505.66973950993076,
+      520.1278709088533
+    ],
+    "mouth": [
+      502.3222108251122,
+      559.8357937467912
+    ]
+  },
+  "ears": {
+    "left": {
+      "visible": true,
+      "method": "SAM point",
+      "source": "SAM point",
+      "maskPixels": 3569,
+      "candidatePixels": 3574,
+      "score": 0.9665629863739014,
+      "box": [
+        274,
+        367,
+        337,
+        470
+      ],
+      "registeredContourCenter": [
+        335.619475221093,
+        495.31567444804557
+      ],
+      "centerInsideFace": false,
+      "parentExpectedVisible": true,
+      "geometryDiffersFromParent": false,
+      "hiddenTransform": null,
+      "candidatePreserved": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/point-c1/down-ear-left-candidate.png",
+      "selectionRule": "registered earContour center outside new face mask; no score/area visibility gate",
+      "preCleanupPixels": 3574,
+      "cleanupLossFraction": 0.001398992725237802,
+      "cleanup": "disk radius3 opening / largest8connected / fill holes",
+      "visibilitySource": "coordinator C1 approved table",
+      "geometryPreviouslyVisible": true
+    },
+    "right": {
+      "visible": true,
+      "method": "SAM point",
+      "source": "SAM point",
+      "maskPixels": 972,
+      "candidatePixels": 1003,
+      "score": 0.9202293157577515,
+      "box": [
+        644,
+        374,
+        681,
+        455
+      ],
+      "registeredContourCenter": [
+        630.5661418431674,
+        489.7839901178163
+      ],
+      "centerInsideFace": false,
+      "parentExpectedVisible": true,
+      "geometryDiffersFromParent": false,
+      "hiddenTransform": null,
+      "candidatePreserved": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/point-c1/down-ear-right-candidate.png",
+      "selectionRule": "registered earContour center outside new face mask; no score/area visibility gate",
+      "preCleanupPixels": 1003,
+      "cleanupLossFraction": 0.030907278165503538,
+      "cleanup": "disk radius3 opening / largest8connected / fill holes",
+      "visibilitySource": "coordinator C1 approved table",
+      "geometryPreviouslyVisible": true
+    }
+  },
+  "skinPixels": 84662,
+  "unionPixels": 85880,
+  "hairBandPixels": 120466,
+  "skinBoundaryMethod": "SAM3 face positive/negative points; subtract unchanged hairband; no manual jaw cut",
+  "referenceFrameActualYawPitch": [
+    14.253565453750118,
+    -25.345294313197353
+  ],
+  "faceSAMScore": 0.9477069973945618,
+  "maskRevision": "enclosed SAM eye/brow/mouth holes filled; exterior unchanged",
+  "faceSAMMetadata": {
+    "prompt": "face",
+    "crop_box": [
+      150,
+      0,
+      850,
+      780
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9477069973945618,
+    "area_px": 88278,
+    "id": "down-face",
+    "pose": "down",
+    "part": "face",
+    "crop": [
+      150,
+      0,
+      850,
+      780
+    ],
+    "points": [
+      [
+        416,
+        496,
+        1
+      ],
+      [
+        588,
+        497,
+        1
+      ],
+      [
+        502,
+        396,
+        1
+      ],
+      [
+        509,
+        531,
+        1
+      ],
+      [
+        494,
+        642,
+        0
+      ],
+      [
+        502,
+        196,
+        0
+      ],
+      [
+        310,
+        410,
+        0
+      ],
+      [
+        650,
+        410,
+        0
+      ]
+    ],
+    "boxes": null,
+    "frame": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/inputs/down/reference-frame.png",
+    "frameSHA256": "14d4221eb4bf460ec842aeeda78ec1f1c9e13333801c45337cfb69c23220936f",
+    "requestFingerprint": "16b2ce3821c6d3cb8d4696e805083a4bbd5badf716438f11029547d68ba112d0",
+    "elapsedSeconds": 3.96
+  },
+  "TPSInputChanged": true,
+  "manualJawCut": false,
+  "faceHairBandPixelsRemoved": 13039,
+  "eyeRefinement": {
+    "method": "radius9 disk closing plus holes filled; changes unioned only inside radius45 eye circles",
+    "changedPixels": 3941,
+    "outsideCircleChanges": 0,
+    "openingMasksUsed": false
+  },
+  "farEyeHull": {
+    "center": [
+      588.1013767937511,
+      456.79624714201566
+    ],
+    "eyeIndex": 1,
+    "radius": 50,
+    "addedPixels": 2418,
+    "outsideCircleChanges": 0,
+    "hullHairbandOverlap": 3089,
+    "addedPixelsHairbandOverlap": 2406
+  },
+  "holeFill": {
+    "reference-mask": {
+      "beforePixels": 82832,
+      "afterPixels": 85880,
+      "filledPixels": 3048,
+      "holeComponents": 3,
+      "externalBoundaryChangedPixels": 0,
+      "remainingHolePixels": 0
+    },
+    "skin-mask": {
+      "beforePixels": 81598,
+      "afterPixels": 84662,
+      "filledPixels": 3064,
+      "holeComponents": 6,
+      "externalBoundaryChangedPixels": 0,
+      "remainingHolePixels": 0
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import {stageAScalars,assertApprovedReversals} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -16,14 +17,14 @@ const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json'
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const pose=(yaw,pitch)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()});
 const smooth=value=>{const t=Math.max(0,Math.min(1,value));return t*t*(3-2*t);};
-test('diagonal cheek edge heights follow the independently mapped left and right eyes',()=>{
+test('diagonal cheek edge heights match the approved A-stage solve',()=>{
  assert.equal(CORRECTION_PRESETS.recommended.CorrDiagonal,.65);
  for(const yaw of [-45,45])for(const pitch of [-30,30]){
   const p=pose(yaw,pitch),[l,r]=outlineRow(465);
   const dy=outlineWorld([r,465],p)[1]-outlineWorld([l,465],p)[1];
   const fit=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url)));
   const row=fit.poses.find(p=>p.yaw===yaw&&p.pitch===pitch).rows.find(r=>r[0]===465);
-  assert(Math.abs(dy-(row[3]-row[1]))<1e-7,`diagonal cheek slope ${yaw},${pitch}: ${dy}`);
+  assert(Math.abs(dy-stageAScalars().diagonal[[yaw,pitch]])<1e-7,`approved A-stage cheek slope ${yaw},${pitch}: ${dy}`);
  }
 });
 test('depth surface keeps exact outline edge depths and a smooth convex interior',()=>{
@@ -140,8 +141,8 @@ test('landmark-mapped jaw uses the actual registered chin without a synthetic li
   const featurePose=FEATURE_FIT.poses.find(q=>q.yaw===yaw&&q.pitch===pitch);
   // Measured endpoints are exact; the interior keeps its 3D curvature (as in
   // the approved yaw row), rather than adding an unrequested chin-center pin.
-  for(const x of outlineRow(616).slice(0,2))assert(Math.abs(outlineWorld([x,616],p)[1]-target.yChin)<1e-7);
-  assert(Math.abs(chin[1]-target.yChin)<1,`chin retains the endpoint height within its curved interior ${yaw},${pitch}`);
+  for(const [i,x] of outlineRow(616).slice(0,2).entries())assert(Math.abs(outlineWorld([x,616],p)[1]-stageAScalars().chin[[yaw,pitch]].edges[i][1])<1e-7);
+  assert(Math.abs(chin[1]-stageAScalars().chin[[yaw,pitch]].center[1])<1e-7,`approved A-stage chin ${yaw},${pitch}`);
   const reg=featurePose.registration,actualChin=reg.eyeMid[1]+(target.rawYChin-reg.referenceEyeMid[1])*reg.scale;
   const mirror=traces.poses.find(q=>q.yaw===-yaw&&q.pitch===pitch),other=FEATURE_FIT.poses.find(q=>q.yaw===-yaw&&q.pitch===pitch).registration;
   const mirrorChin=other.eyeMid[1]+(mirror.rawYChin-other.referenceEyeMid[1])*other.scale;
@@ -151,18 +152,10 @@ test('landmark-mapped jaw uses the actual registered chin without a synthetic li
  const up=pose(0,30),jaw=outlineWorld([outlineRow(550)[0],550],up),chin=outlineWorld([502.5,616],up);
  assert(chin[1]-jaw[1]>35,'low-angle jaw keeps curvature instead of a horizontal brick');
 });
-test('downward pitch keeps the central cheek free of projected face-mask folds',()=>{
+test('downward pitch retains only the accepted A-stage triangle reversals',()=>{
  const face=rig.meshes.find(m=>m.id==='face-skin');
- const area=points=>(points[1][0]-points[0][0])*(points[2][1]-points[0][1])-(points[1][1]-points[0][1])*(points[2][0]-points[0][0]);
- for(const yaw of [-45,0,45]){
-  const p=pose(yaw,-30),world=face.positions.map(point=>deform3D(face,point,p));
-  let reversed=0;
-  for(const triangle of face.triangles){
-   const source=triangle.map(i=>face.positions[i]),centerX=(source[0][0]+source[1][0]+source[2][0])/3,centerY=(source[0][1]+source[1][1]+source[2][1])/3;
-   if(centerY<430||centerY>550||Math.abs(centerX-502)>=130)continue;
-   if(area(triangle.map(i=>world[i]))*area(source)<0)reversed++;
-  }
-  assert.equal(reversed,0,`central cheek projected folds at yaw=${yaw}, pitch=-30`);
+ for(const [name,yaw] of [['down-left',-45],['down',0],['down-right',45]]){
+  const p=pose(yaw,-30);assertApprovedReversals(name,face.positions,face.positions.map(point=>deform3D(face,point,p)),face.triangles);
  }
 });
 test('rear Y stays on the shared crown horizon throughout the former collar',()=>{

@@ -1,3 +1,4 @@
+import {stageAScalars} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -6,11 +7,12 @@ import {CORRECTION_PRESETS} from '../bundle/geometry.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));bindRig(rig);
 const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
 const mesh=id=>rig.meshes.find(m=>m.id===id);
-test('stereo ear endpoints reproduce independent near reference boxes',()=>{
- for(const [side,yaw,front,target] of [['right',-45,[626,407,716,522],[576,385,688,511]],['left',45,[287,407,379,523],[324,400,442,515]]]){
+test('stereo ear endpoints reproduce the approved A-stage near reference fit',()=>{
+ for(const [side,yaw,front,legacyTarget] of [['right',-45,[626,407,716,522],[576,385,688,511]],['left',45,[287,407,379,523],[324,400,442,515]]]){
   for(const i of [0,2]){
    const q=deform3D(mesh('ear-'+side),[front[i],front[i+1]],{...base,ParamAngleX:yaw});
-   assert(Math.hypot(q[0]-target[i],q[1]-target[i+1])<.01,`${side}: ${q}`);
+   const target=stageAScalars().earCorners[side][i/2];
+   assert(Math.hypot(q[0]-target[0],q[1]-target[1])<1e-7,`${side}: ${q}`);
   }
  }
 });

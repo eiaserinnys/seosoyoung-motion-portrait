@@ -1,0 +1,1143 @@
+{
+  "base": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+  "accepted": "7.11-filled + ear translation radius80",
+  "source": "card615 archived harness; paths relocated, no solve/refit rerun",
+  "files": [
+    {
+      "path": "tps-study/tps_distance.py",
+      "sourceSHA256": "9dd56ccd5f03f0640c98b45b449a43685a4f78c02d7cffd061bd02eaa70d957f",
+      "SHA256": "9dd56ccd5f03f0640c98b45b449a43685a4f78c02d7cffd061bd02eaa70d957f"
+    },
+    {
+      "path": "tps-study/solve.py",
+      "sourceSHA256": "de3f2286ca17c1949f4b8961c145a08bf0814cf3fbe9ebaba79e5b622e0823d5",
+      "SHA256": "8caecabf0190b922492c4de5db15bd24ea0b9aaf20d412f52583d08c51a1d463"
+    },
+    {
+      "path": "tps-study/stage-a/input_masks.py",
+      "sourceSHA256": "2474ba786eb64c46cbd29e34874547610366f72dd00e0303fb8d4dff59cb53a4",
+      "SHA256": "10e5f8f36b501b641b573f08f273f4da29428216371d7470c6bbef7e101ccda3"
+    },
+    {
+      "path": "tps-study/stage-a/fit_inputs.py",
+      "sourceSHA256": "9ec7d7487a619854dabc9f47fd2c247a1c68131d08b946542eba859977cdcccd",
+      "SHA256": "9ec7d7487a619854dabc9f47fd2c247a1c68131d08b946542eba859977cdcccd"
+    },
+    {
+      "path": "tps-study/stage-a/tps_distance_inputs.py",
+      "sourceSHA256": "d3b75f2896312d8b3d78e5e6a50cd42a2eeb1eb89b379b2c539b7b7aa0f5ea57",
+      "SHA256": "d3b75f2896312d8b3d78e5e6a50cd42a2eeb1eb89b379b2c539b7b7aa0f5ea57"
+    },
+    {
+      "path": "tps-study/stage-a/c1_sheet.py",
+      "sourceSHA256": "13633f09da8f61dc4b16933c138368f83c259b1e853cc6c43259b1426ee42ba5",
+      "SHA256": "13633f09da8f61dc4b16933c138368f83c259b1e853cc6c43259b1426ee42ba5"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/sam_requests.py",
+      "sourceSHA256": "0f04a14ec384a24fc72e5b380f1c7a86b96b1d4aeaa9cc8708a141596c0de189",
+      "SHA256": "3e8eb4e2f4a5933bc21d189d66664932f25c5eed3f8d4067abdca4fdd9f9739f"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/requests_points.py",
+      "sourceSHA256": "e4375dc3dd13b9413441c1d3dc70219f82dbbe54ed972f113ecb575e90d1267f",
+      "SHA256": "45b2d3fad22029328186ff2ba0225a395b92a223e9e3f4ff32c7bfe7eeb57994"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/build_inputs.py",
+      "sourceSHA256": "ea6d3c24d6229afa01e22db5d6cf2bcd25f36c3e87baa0c1e24b23c4cfffd66d",
+      "SHA256": "ea6d3c24d6229afa01e22db5d6cf2bcd25f36c3e87baa0c1e24b23c4cfffd66d"
+    },
+    {
+      "path": "tps-study/stage-a/correct-c1/masks.py",
+      "sourceSHA256": "72766bef3f136b68a11639963664425b0daf3d5b7a8e8baf33d245a7743dc6d4",
+      "SHA256": "72766bef3f136b68a11639963664425b0daf3d5b7a8e8baf33d245a7743dc6d4"
+    },
+    {
+      "path": "tps-study/stage-a/hull-c1/hull_masks.py",
+      "sourceSHA256": "c1eac8b4599da528119743d8cdfe4b9452c08b95b24a383a287257e6ee43373b",
+      "SHA256": "c1eac8b4599da528119743d8cdfe4b9452c08b95b24a383a287257e6ee43373b"
+    },
+    {
+      "path": "tps-study/stage-a/ear-fit/ear_model.py",
+      "sourceSHA256": "4eb46a0089401637cb335f6ebe0f093a88ca0b66a0ffdab2bb60acc33afa0a8e",
+      "SHA256": "4eb46a0089401637cb335f6ebe0f093a88ca0b66a0ffdab2bb60acc33afa0a8e"
+    },
+    {
+      "path": "tps-study/stage-a/ear-fit/renderer.js",
+      "sourceSHA256": "d2c5dc54822629b9fb35e07eaa23b1de1b4a1293da1b80fc9820782950fc608a",
+      "SHA256": "d2c5dc54822629b9fb35e07eaa23b1de1b4a1293da1b80fc9820782950fc608a"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/config.py",
+      "sourceSHA256": "6df7cf16220f62a491b07b4408128090f7165a6d71b3dabe91173e5bcaa2836a",
+      "SHA256": "47125452e1499133c50a4217e444af754b159788c56996fdcd948d9aa927ebaf"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/build_inputs.py",
+      "sourceSHA256": "b536b74699e8ee0a30ce496693469570044a4ffd4e0c5e3a58886a894ed0cce3",
+      "SHA256": "ebd963fdb17248724548c672d47725c2085de9d3dc450feb9a64cdf203dfe6f2"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/policy.py",
+      "sourceSHA256": "dc4af93044206d8ce59caa28586f13bb262a293b57c8a70ec5bbed328a02adaa",
+      "SHA256": "dc4af93044206d8ce59caa28586f13bb262a293b57c8a70ec5bbed328a02adaa"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/hair_mass.py",
+      "sourceSHA256": "66206d16a069e68df3ad3be6b7e518865d2cdf095f2c43fbca78796ac3d56a48",
+      "SHA256": "66206d16a069e68df3ad3be6b7e518865d2cdf095f2c43fbca78796ac3d56a48"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/stage_a.py",
+      "sourceSHA256": "807a21d012bd5ab4c5b3d2a351bc927af5f36c054d7bb0a68d324724d743665f",
+      "SHA256": "d4e0dc8a359673faeecd8b73802c8c873c04a7507338c7e6887cb1ba17853b8e"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/solve_observed.py",
+      "sourceSHA256": "ee0a7dfcf3894324a2dc720637fe82b0602234209c051d268f2879968480a9da",
+      "SHA256": "ee0a7dfcf3894324a2dc720637fe82b0602234209c051d268f2879968480a9da"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/earmath.py",
+      "sourceSHA256": "61903eb5d7f171866883ad3946b4b2e9a8b02a209a7f651f4e98052b8fa00695",
+      "SHA256": "61903eb5d7f171866883ad3946b4b2e9a8b02a209a7f651f4e98052b8fa00695"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/optimizer_coords.py",
+      "sourceSHA256": "c85a5dcc1207c84d497581c6619012a9bd612503194d43a064209dffd1f755b4",
+      "SHA256": "c85a5dcc1207c84d497581c6619012a9bd612503194d43a064209dffd1f755b4"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/fit_ears.py",
+      "sourceSHA256": "1f43020a90a8edd7eb8d78655c24fc2120287fca03f6d5d5f6b6b55920ea01fe",
+      "SHA256": "1f43020a90a8edd7eb8d78655c24fc2120287fca03f6d5d5f6b6b55920ea01fe"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/export_bases.mjs",
+      "sourceSHA256": "12552240ac96d75fd969901121b2e52731212c7ebe1d470c5136b3c4941b20c9",
+      "SHA256": "12552240ac96d75fd969901121b2e52731212c7ebe1d470c5136b3c4941b20c9"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/final_c2.py",
+      "sourceSHA256": "48f71384d09a59696c763cc8160064a1b5dcfe33d5e78f3da87fd4e3b7a096af",
+      "SHA256": "48f71384d09a59696c763cc8160064a1b5dcfe33d5e78f3da87fd4e3b7a096af"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/active.py",
+      "sourceSHA256": "a960eba06d1cdaae698a86e449d621d768bfa56a7812ccef379008b885496ec9",
+      "SHA256": "a960eba06d1cdaae698a86e449d621d768bfa56a7812ccef379008b885496ec9"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/fill_masks.py",
+      "sourceSHA256": "7188a92ba8566b78f8fdf0cfc2ec8abf0558480db9db93da8988849313d70b8a",
+      "SHA256": "7188a92ba8566b78f8fdf0cfc2ec8abf0558480db9db93da8988849313d70b8a"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/config.py",
+      "sourceSHA256": "6df7cf16220f62a491b07b4408128090f7165a6d71b3dabe91173e5bcaa2836a",
+      "SHA256": "47125452e1499133c50a4217e444af754b159788c56996fdcd948d9aa927ebaf"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/earmath.py",
+      "sourceSHA256": "61903eb5d7f171866883ad3946b4b2e9a8b02a209a7f651f4e98052b8fa00695",
+      "SHA256": "61903eb5d7f171866883ad3946b4b2e9a8b02a209a7f651f4e98052b8fa00695"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/stage_a.py",
+      "sourceSHA256": "807a21d012bd5ab4c5b3d2a351bc927af5f36c054d7bb0a68d324724d743665f",
+      "SHA256": "d4e0dc8a359673faeecd8b73802c8c873c04a7507338c7e6887cb1ba17853b8e"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/merge_fit.py",
+      "sourceSHA256": "c279885bc46b01c02440b82d129da54bb0ceb08342c9d8d0a0123f5e2535e9fb",
+      "SHA256": "c279885bc46b01c02440b82d129da54bb0ceb08342c9d8d0a0123f5e2535e9fb"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/update_active.py",
+      "sourceSHA256": "4f8093e144a6a8688e3660c06e927c1dbe864bffeb86a79393b4c42235d30d10",
+      "SHA256": "4f8093e144a6a8688e3660c06e927c1dbe864bffeb86a79393b4c42235d30d10"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/refit/config.py",
+      "sourceSHA256": "0a294969663f233aa8eb54ac7c5b60c73659ab914c92b27ea0df375385489b9c",
+      "SHA256": "bedeac98de8e643b11f058101778453254f273b7fc4fe5d4e1a62bb2a2932e40"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/refit/earmath.py",
+      "sourceSHA256": "3815d90c105246877f95a0d30c4ed8255e42710f8214b799ba55f35e0e6b0f37",
+      "SHA256": "3815d90c105246877f95a0d30c4ed8255e42710f8214b799ba55f35e0e6b0f37"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/refit/optimizer_coords.py",
+      "sourceSHA256": "4e09e5ba8b54443e0f4b7ba318ae1828698263811b8871e79c2bb89f28f519fd",
+      "SHA256": "4e09e5ba8b54443e0f4b7ba318ae1828698263811b8871e79c2bb89f28f519fd"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/refit/fit_ears.py",
+      "sourceSHA256": "9c2616e74bf5665f42cc3dfab7302dca7e3f914b5dff94bca56ebb0db0fd6f49",
+      "SHA256": "9c2616e74bf5665f42cc3dfab7302dca7e3f914b5dff94bca56ebb0db0fd6f49"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/refit/export_bases.mjs",
+      "sourceSHA256": "12552240ac96d75fd969901121b2e52731212c7ebe1d470c5136b3c4941b20c9",
+      "SHA256": "12552240ac96d75fd969901121b2e52731212c7ebe1d470c5136b3c4941b20c9"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/hairband.png",
+      "sourceSHA256": "c1adae00393edb06ec9c8d45355732c6605682e88908e85bc6e0070260732758",
+      "SHA256": "c1adae00393edb06ec9c8d45355732c6605682e88908e85bc6e0070260732758"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/skin-mask.png",
+      "sourceSHA256": "8e418745c88033da163bd1bcd135fb832d174c470b1d0dd5012fb0f5e39f8a81",
+      "SHA256": "8e418745c88033da163bd1bcd135fb832d174c470b1d0dd5012fb0f5e39f8a81"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/C1-overlay.png",
+      "sourceSHA256": "fc8213c8401c07173c858f7db81568fbe375c591c228be82c431c76d3e9eb872",
+      "SHA256": "fc8213c8401c07173c858f7db81568fbe375c591c228be82c431c76d3e9eb872"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/reference-mask.png",
+      "sourceSHA256": "7e554b493fd8b04f3a9a5e8c92702d9595b90db630b1f6bf90b846f01f78d106",
+      "SHA256": "7e554b493fd8b04f3a9a5e8c92702d9595b90db630b1f6bf90b846f01f78d106"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/reference-frame.png",
+      "sourceSHA256": "9dca0912346f6a97ef67c64b0228c3a1c4a631793efd275885b02b6d4db6e809",
+      "SHA256": "9dca0912346f6a97ef67c64b0228c3a1c4a631793efd275885b02b6d4db6e809"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/ear-right-mask.png",
+      "sourceSHA256": "08dea7b04191fdcd80e9229dac6fd92e0a2d156e5110be5b380c3712ae24ccd8",
+      "SHA256": "08dea7b04191fdcd80e9229dac6fd92e0a2d156e5110be5b380c3712ae24ccd8"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/tps.json",
+      "sourceSHA256": "2fc20f8a52dd31563b458ecd63a72f743b479ee9fdf47bc31dd788af2130ffd9",
+      "SHA256": "2fc20f8a52dd31563b458ecd63a72f743b479ee9fdf47bc31dd788af2130ffd9"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/ear-left-mask.png",
+      "sourceSHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665",
+      "SHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/left/manifest.json",
+      "sourceSHA256": "322d3ae75b1cc03689de5bdae0316d1d91733ac2656b255c2989518f35dc521f",
+      "SHA256": "322d3ae75b1cc03689de5bdae0316d1d91733ac2656b255c2989518f35dc521f"
+    },
+    {
+      "path": "tps-study/stage-a/tps/left.json",
+      "sourceSHA256": "2fc20f8a52dd31563b458ecd63a72f743b479ee9fdf47bc31dd788af2130ffd9",
+      "SHA256": "2fc20f8a52dd31563b458ecd63a72f743b479ee9fdf47bc31dd788af2130ffd9"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/left/ear-right.png",
+      "sourceSHA256": "e30f7feac3485e72e5127a07f0d6c9d056e60747c44d850121fc7b8085424317",
+      "SHA256": "e30f7feac3485e72e5127a07f0d6c9d056e60747c44d850121fc7b8085424317"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/left/ear-right.json",
+      "sourceSHA256": "abfffc460318385dc64d36547d2ab01f07c862d6522a1b9c4ff7ae3d334d5bfa",
+      "SHA256": "abfffc460318385dc64d36547d2ab01f07c862d6522a1b9c4ff7ae3d334d5bfa"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/left/face.png",
+      "sourceSHA256": "0116a04663430e209530837c1774c648a9dd317b249b3e79ef96335462b70bf1",
+      "SHA256": "0116a04663430e209530837c1774c648a9dd317b249b3e79ef96335462b70bf1"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/left/ear-left.png",
+      "sourceSHA256": "e729fab87380a8c006f4e75cffc2226caa83c5846620e9b5cd8da8e1a10760ef",
+      "SHA256": "e729fab87380a8c006f4e75cffc2226caa83c5846620e9b5cd8da8e1a10760ef"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/left/face.json",
+      "sourceSHA256": "6ca0898833edd74a0ae9e10b558bb56f5921fa2d251204d87103a0168d3669ce",
+      "SHA256": "6ca0898833edd74a0ae9e10b558bb56f5921fa2d251204d87103a0168d3669ce"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/left/ear-left.json",
+      "sourceSHA256": "96053573cfa902ab9443249a65828e42f24eb4cb2dcaefe84ad69bc2d8528094",
+      "SHA256": "96053573cfa902ab9443249a65828e42f24eb4cb2dcaefe84ad69bc2d8528094"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/left/face.png",
+      "sourceSHA256": "76fde81f3f757957800bb1a13ad0de24c2ce46bf05516f760b3dc069ce11ceff",
+      "SHA256": "76fde81f3f757957800bb1a13ad0de24c2ce46bf05516f760b3dc069ce11ceff"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/left/face.json",
+      "sourceSHA256": "38389d5a2ed17366265ab65ea526be09deebd4cb9661c46f48a7624998a06ffd",
+      "SHA256": "38389d5a2ed17366265ab65ea526be09deebd4cb9661c46f48a7624998a06ffd"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/left/manifest.json",
+      "sourceSHA256": "92ea607c3190bebc0877929d0f5468f445aa791e429b205c5e9f7217f64a7d9d",
+      "SHA256": "92ea607c3190bebc0877929d0f5468f445aa791e429b205c5e9f7217f64a7d9d"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/hairband.png",
+      "sourceSHA256": "516ff12c3e4cd00aa469b73b0439ba8e2e6af2708175265d917ba3c71e40991e",
+      "SHA256": "516ff12c3e4cd00aa469b73b0439ba8e2e6af2708175265d917ba3c71e40991e"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/skin-mask.png",
+      "sourceSHA256": "31a663e0a51ca550a7defea476b081932243b7b6705fc7139a802d5e1b4a4753",
+      "SHA256": "31a663e0a51ca550a7defea476b081932243b7b6705fc7139a802d5e1b4a4753"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/C1-overlay.png",
+      "sourceSHA256": "98e87db85fd5de9c3c14c89e26cbc6f62001e12e96943eaea9482af3b7068a49",
+      "SHA256": "98e87db85fd5de9c3c14c89e26cbc6f62001e12e96943eaea9482af3b7068a49"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/reference-mask.png",
+      "sourceSHA256": "f2e7a7da24ebc522ecb74062d79f51aceff15558e5307bd916cff86cebe3bd96",
+      "SHA256": "f2e7a7da24ebc522ecb74062d79f51aceff15558e5307bd916cff86cebe3bd96"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/reference-frame.png",
+      "sourceSHA256": "d250a27415cca7ab26c9d839d30723839a599bd81caad6dd004c571cdeee0001",
+      "SHA256": "d250a27415cca7ab26c9d839d30723839a599bd81caad6dd004c571cdeee0001"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/ear-right-mask.png",
+      "sourceSHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665",
+      "SHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/tps.json",
+      "sourceSHA256": "7fc804ae7f9a1408492a6195da73d6eb90d4a20134ba5a914a8f86a534eb5936",
+      "SHA256": "7fc804ae7f9a1408492a6195da73d6eb90d4a20134ba5a914a8f86a534eb5936"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/ear-left-mask.png",
+      "sourceSHA256": "e229be22223e786755868dafe70ed182f6074597b68dcb89bf80665a3517e21e",
+      "SHA256": "e229be22223e786755868dafe70ed182f6074597b68dcb89bf80665a3517e21e"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/right/manifest.json",
+      "sourceSHA256": "ddf0b6d2845597d16d24629196727b1d44358700ee0c51b8d556d32ad283bcf8",
+      "SHA256": "ddf0b6d2845597d16d24629196727b1d44358700ee0c51b8d556d32ad283bcf8"
+    },
+    {
+      "path": "tps-study/stage-a/tps/right.json",
+      "sourceSHA256": "7fc804ae7f9a1408492a6195da73d6eb90d4a20134ba5a914a8f86a534eb5936",
+      "SHA256": "7fc804ae7f9a1408492a6195da73d6eb90d4a20134ba5a914a8f86a534eb5936"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/right/ear-right.png",
+      "sourceSHA256": "34dc78b97d2fc764b0fb50353f22a92638a72fdf861f5862d964af8ab31c7e4d",
+      "SHA256": "34dc78b97d2fc764b0fb50353f22a92638a72fdf861f5862d964af8ab31c7e4d"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/right/ear-right.json",
+      "sourceSHA256": "c4dc251e8bdb38c165798498486a2c03f8d694204f7f4511e90d7a3db9a681f0",
+      "SHA256": "c4dc251e8bdb38c165798498486a2c03f8d694204f7f4511e90d7a3db9a681f0"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/right/face.png",
+      "sourceSHA256": "5342ac55518ba7ede8c1bbce2b2032520713e7c8d899368785c8b3a07d821bff",
+      "SHA256": "5342ac55518ba7ede8c1bbce2b2032520713e7c8d899368785c8b3a07d821bff"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/right/ear-left.png",
+      "sourceSHA256": "add5d325ce00cbfee8bf6f65d92eaef4b7928f803eb48ca7f6accc247d243d04",
+      "SHA256": "add5d325ce00cbfee8bf6f65d92eaef4b7928f803eb48ca7f6accc247d243d04"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/right/face.json",
+      "sourceSHA256": "36c534efed0b6bab26aba2debc42cdbcc429ab229d8d6bd6149f3f71ebb83b47",
+      "SHA256": "36c534efed0b6bab26aba2debc42cdbcc429ab229d8d6bd6149f3f71ebb83b47"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/right/ear-left.json",
+      "sourceSHA256": "7bc1292e97f88ba163cc908f2f6d3d9d5e7f20934a63a3c01972c2e74ef208ea",
+      "SHA256": "7bc1292e97f88ba163cc908f2f6d3d9d5e7f20934a63a3c01972c2e74ef208ea"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/right/face.png",
+      "sourceSHA256": "b1251ccb6135479712c566d7cb7c3827c68f87b0c98cb63a339bacc27f6b08a0",
+      "SHA256": "b1251ccb6135479712c566d7cb7c3827c68f87b0c98cb63a339bacc27f6b08a0"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/right/face.json",
+      "sourceSHA256": "5ad46a458ff59d37114f98383e4cc480cbf54673c1dacd120eb7a1828092a56e",
+      "SHA256": "5ad46a458ff59d37114f98383e4cc480cbf54673c1dacd120eb7a1828092a56e"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/right/manifest.json",
+      "sourceSHA256": "f2a01e754da78d25864d390a706e9a481144c7eef848163cb81c9500b8f34877",
+      "SHA256": "f2a01e754da78d25864d390a706e9a481144c7eef848163cb81c9500b8f34877"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/hairband.png",
+      "sourceSHA256": "db57fba778deddd19595bdf0d1f06a0dfadb010a0b1d0978ee230dc03d177509",
+      "SHA256": "db57fba778deddd19595bdf0d1f06a0dfadb010a0b1d0978ee230dc03d177509"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/skin-mask.png",
+      "sourceSHA256": "036a32ab87cce508c544b329343a970c7019053e5172473d56a95fac97269dad",
+      "SHA256": "036a32ab87cce508c544b329343a970c7019053e5172473d56a95fac97269dad"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/C1-overlay.png",
+      "sourceSHA256": "9cbf8075d153d20faa508f90c4b38a63f70936e48c975b5ebc00ad30e79a77c0",
+      "SHA256": "9cbf8075d153d20faa508f90c4b38a63f70936e48c975b5ebc00ad30e79a77c0"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/reference-mask.png",
+      "sourceSHA256": "9e51f56a463e2feebfb81ede112538b22b299e25275b2c5b7a292fc38fed0684",
+      "SHA256": "9e51f56a463e2feebfb81ede112538b22b299e25275b2c5b7a292fc38fed0684"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/reference-frame.png",
+      "sourceSHA256": "aaf77e77c31f3a7a01a26deb8bc2240007c0f71cbe90c89fd81d17e198f93d7a",
+      "SHA256": "aaf77e77c31f3a7a01a26deb8bc2240007c0f71cbe90c89fd81d17e198f93d7a"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/ear-right-mask.png",
+      "sourceSHA256": "13d3948e78ef622ab14fff283d48e1bab29663985e5fa1e87172277293b3ae2d",
+      "SHA256": "13d3948e78ef622ab14fff283d48e1bab29663985e5fa1e87172277293b3ae2d"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/tps.json",
+      "sourceSHA256": "1f97c2a600c1437762f5e490df3f1ee19a941d4bda3a24e764f88ca5f23fc6fe",
+      "SHA256": "1f97c2a600c1437762f5e490df3f1ee19a941d4bda3a24e764f88ca5f23fc6fe"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/ear-left-mask.png",
+      "sourceSHA256": "40f56e613b6ca8e83aad0594dff80c516fd4e123aeedad12a00f80312f785f25",
+      "SHA256": "40f56e613b6ca8e83aad0594dff80c516fd4e123aeedad12a00f80312f785f25"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up/manifest.json",
+      "sourceSHA256": "5bd01a0598f2c450c2bdc4e55648d0ab97c7b5326eb95c6fbc13c1faac111863",
+      "SHA256": "5bd01a0598f2c450c2bdc4e55648d0ab97c7b5326eb95c6fbc13c1faac111863"
+    },
+    {
+      "path": "tps-study/stage-a/tps/up.json",
+      "sourceSHA256": "1f97c2a600c1437762f5e490df3f1ee19a941d4bda3a24e764f88ca5f23fc6fe",
+      "SHA256": "1f97c2a600c1437762f5e490df3f1ee19a941d4bda3a24e764f88ca5f23fc6fe"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up/ear-right.png",
+      "sourceSHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665",
+      "SHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up/ear-right.json",
+      "sourceSHA256": "41958b0f71e9ae890631c786143ea79edd12e1493f7e7aa7c1c2a4d8d88a4013",
+      "SHA256": "41958b0f71e9ae890631c786143ea79edd12e1493f7e7aa7c1c2a4d8d88a4013"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up/face.png",
+      "sourceSHA256": "eb2c4da29825514ff128c019bbf9ac5d81f7082c3e1d163ddcb6572022860e18",
+      "SHA256": "eb2c4da29825514ff128c019bbf9ac5d81f7082c3e1d163ddcb6572022860e18"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up/ear-left.png",
+      "sourceSHA256": "fee9f5d45592d8a3c7d70789a6a9b08fa25dd0f34fee065479b8a186fb17c4cf",
+      "SHA256": "fee9f5d45592d8a3c7d70789a6a9b08fa25dd0f34fee065479b8a186fb17c4cf"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up/face.json",
+      "sourceSHA256": "ad383da6c72d39dcac1c9b06b052afa08f490c58eb1584dd9b8d2fa30b3f08f5",
+      "SHA256": "ad383da6c72d39dcac1c9b06b052afa08f490c58eb1584dd9b8d2fa30b3f08f5"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up/ear-left.json",
+      "sourceSHA256": "c6937e191030d7b4885d4850483b310175843d6d75e521ab140bdcc7d334d903",
+      "SHA256": "c6937e191030d7b4885d4850483b310175843d6d75e521ab140bdcc7d334d903"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up/ear-right.png",
+      "sourceSHA256": "e948675846fa4dca7af4cf6d54da3a675ee0ee69061d44e0824187b44de70d4d",
+      "SHA256": "e948675846fa4dca7af4cf6d54da3a675ee0ee69061d44e0824187b44de70d4d"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up/ear-right.json",
+      "sourceSHA256": "835442b29e11113246c650ac2e1fdd1bafe927f5283e09f6ef46660604a88e56",
+      "SHA256": "835442b29e11113246c650ac2e1fdd1bafe927f5283e09f6ef46660604a88e56"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up/face.png",
+      "sourceSHA256": "ac8c1df51b17bf877bf1697cacb27331daa2026f74f45a91911b594a2a9604e7",
+      "SHA256": "ac8c1df51b17bf877bf1697cacb27331daa2026f74f45a91911b594a2a9604e7"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up/face.json",
+      "sourceSHA256": "0c0b8264f3c216181a14c3fb235bfa0db0c80f68d64665f67485701a10a3d875",
+      "SHA256": "0c0b8264f3c216181a14c3fb235bfa0db0c80f68d64665f67485701a10a3d875"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/up/manifest.json",
+      "sourceSHA256": "dc9a5fe793010ba36db7fa2e30822e1ffe218df0f14dd35229bd26f92cc3024f",
+      "SHA256": "dc9a5fe793010ba36db7fa2e30822e1ffe218df0f14dd35229bd26f92cc3024f"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/hairband.png",
+      "sourceSHA256": "b87fb7ea7ba4f68908f36a0def42282bacf826b6c06788060dd586d2f83af6c7",
+      "SHA256": "b87fb7ea7ba4f68908f36a0def42282bacf826b6c06788060dd586d2f83af6c7"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/skin-mask.png",
+      "sourceSHA256": "dab9c3a02a06978984a85d7513e2ec8757cfe331ad3852f535542d0cde3f60d2",
+      "SHA256": "dab9c3a02a06978984a85d7513e2ec8757cfe331ad3852f535542d0cde3f60d2"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/C1-overlay.png",
+      "sourceSHA256": "14bdb7c53be8093957aeb0226e8d705a3ca7ef4ca21924d0205852ff617abd9f",
+      "SHA256": "14bdb7c53be8093957aeb0226e8d705a3ca7ef4ca21924d0205852ff617abd9f"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/reference-mask.png",
+      "sourceSHA256": "5bf726ac4f35ffba128d6bfacae9a085ebb96fc3335eb1ab635a56fa2c788348",
+      "SHA256": "5bf726ac4f35ffba128d6bfacae9a085ebb96fc3335eb1ab635a56fa2c788348"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/reference-frame.png",
+      "sourceSHA256": "14d4221eb4bf460ec842aeeda78ec1f1c9e13333801c45337cfb69c23220936f",
+      "SHA256": "14d4221eb4bf460ec842aeeda78ec1f1c9e13333801c45337cfb69c23220936f"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/ear-right-mask.png",
+      "sourceSHA256": "d9bd2098998db02cf031da6a97c5b96823c43834d854be27683cae48c7e3dcca",
+      "SHA256": "d9bd2098998db02cf031da6a97c5b96823c43834d854be27683cae48c7e3dcca"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/tps.json",
+      "sourceSHA256": "c4954aa855f1ef88d3d66b0c1450fa96ec10b51d7d091bfb9af48bd110010a4b",
+      "SHA256": "c4954aa855f1ef88d3d66b0c1450fa96ec10b51d7d091bfb9af48bd110010a4b"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/ear-left-mask.png",
+      "sourceSHA256": "b2e37e0ed04dd2b0f6279e73a1356ede6aaca13b0fa93ad73a9b8e9a4625ce87",
+      "SHA256": "b2e37e0ed04dd2b0f6279e73a1356ede6aaca13b0fa93ad73a9b8e9a4625ce87"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down/manifest.json",
+      "sourceSHA256": "69f392b8fc4eb869524cc46f7fb8c573a48abdbc1346bded525b19f86948f3b3",
+      "SHA256": "69f392b8fc4eb869524cc46f7fb8c573a48abdbc1346bded525b19f86948f3b3"
+    },
+    {
+      "path": "tps-study/stage-a/tps/down.json",
+      "sourceSHA256": "c4954aa855f1ef88d3d66b0c1450fa96ec10b51d7d091bfb9af48bd110010a4b",
+      "SHA256": "c4954aa855f1ef88d3d66b0c1450fa96ec10b51d7d091bfb9af48bd110010a4b"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down/ear-right.png",
+      "sourceSHA256": "1d772951acbc17bd66fc01c96eb2037cac869e345402d8dc5a51ab7be0d5d2a1",
+      "SHA256": "1d772951acbc17bd66fc01c96eb2037cac869e345402d8dc5a51ab7be0d5d2a1"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down/ear-right.json",
+      "sourceSHA256": "faa28f896cac8f5724516f60d5a16ea0cc7d6ac3c4b54c224536d9e66e6d0ffd",
+      "SHA256": "faa28f896cac8f5724516f60d5a16ea0cc7d6ac3c4b54c224536d9e66e6d0ffd"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down/face.png",
+      "sourceSHA256": "c41af558ac38b6d6e3ca42ee8ecbb4b3e2d430a2682700b3c7107f146777ad6e",
+      "SHA256": "c41af558ac38b6d6e3ca42ee8ecbb4b3e2d430a2682700b3c7107f146777ad6e"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down/ear-left.png",
+      "sourceSHA256": "79c50c9b4ccb44b1e7000e79d34a22bb111014b24a045f4550b31b2935ebb45e",
+      "SHA256": "79c50c9b4ccb44b1e7000e79d34a22bb111014b24a045f4550b31b2935ebb45e"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down/face.json",
+      "sourceSHA256": "1e497daeadec29d9be8c29ec2d04ee22425f460679930e53971421ef3b543c0e",
+      "SHA256": "1e497daeadec29d9be8c29ec2d04ee22425f460679930e53971421ef3b543c0e"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down/ear-left.json",
+      "sourceSHA256": "96e82c23d2bc38b35053bef9f3226b62a2f87299a04c5274302be0f9a9f28013",
+      "SHA256": "96e82c23d2bc38b35053bef9f3226b62a2f87299a04c5274302be0f9a9f28013"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down/ear-right.png",
+      "sourceSHA256": "5fec543093452a6042f366b9b240c55a2a9c337659a66c44192c207ea6d5060a",
+      "SHA256": "5fec543093452a6042f366b9b240c55a2a9c337659a66c44192c207ea6d5060a"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down/ear-right.json",
+      "sourceSHA256": "61b60d6943182958150cf295ea0be6ae8a8fa84cd9d2ffe8d673b9c2ebabdb8c",
+      "SHA256": "61b60d6943182958150cf295ea0be6ae8a8fa84cd9d2ffe8d673b9c2ebabdb8c"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down/face.png",
+      "sourceSHA256": "55fb00c60bc530b3326da4fab86e376124479422d2fca15c77d3da4a03714934",
+      "SHA256": "55fb00c60bc530b3326da4fab86e376124479422d2fca15c77d3da4a03714934"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down/ear-left.png",
+      "sourceSHA256": "0e044aa30242b87ecc4da11f4921b4f19ad94298c58ad579434eec2bc1aa5803",
+      "SHA256": "0e044aa30242b87ecc4da11f4921b4f19ad94298c58ad579434eec2bc1aa5803"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down/face.json",
+      "sourceSHA256": "05b51b576cbd427319204e81278bcc079fb3919e9ebe886f3d3663d7033bbf9d",
+      "SHA256": "05b51b576cbd427319204e81278bcc079fb3919e9ebe886f3d3663d7033bbf9d"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down/ear-left.json",
+      "sourceSHA256": "ad5ce25290f70b1bbc47eda6b954e752dd735b329106c09e4f9ffddaea2992d7",
+      "SHA256": "ad5ce25290f70b1bbc47eda6b954e752dd735b329106c09e4f9ffddaea2992d7"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/down/manifest.json",
+      "sourceSHA256": "ea872609f1d85d75632b106a9a3254d80a55c49f2224fa1642215d669aaf7d1a",
+      "SHA256": "ea872609f1d85d75632b106a9a3254d80a55c49f2224fa1642215d669aaf7d1a"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/hairband.png",
+      "sourceSHA256": "5c310f881234443765d274201210ba08a073fbb76e3a6a12201dc5b2dbb4d4cb",
+      "SHA256": "5c310f881234443765d274201210ba08a073fbb76e3a6a12201dc5b2dbb4d4cb"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/skin-mask.png",
+      "sourceSHA256": "aee094b52a645d42652254d53d587231caa591b86ff9b52fa173c3588e15737f",
+      "SHA256": "aee094b52a645d42652254d53d587231caa591b86ff9b52fa173c3588e15737f"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/C1-overlay.png",
+      "sourceSHA256": "f9b80a058b791564359a90f50a08ab8a0a93b25b9ae251e16f6aa1416250c568",
+      "SHA256": "f9b80a058b791564359a90f50a08ab8a0a93b25b9ae251e16f6aa1416250c568"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/reference-mask.png",
+      "sourceSHA256": "09f5e54f667794e6a96e76fefb16f68ec7dfb39c00ba7833cda5621dd81615b0",
+      "SHA256": "09f5e54f667794e6a96e76fefb16f68ec7dfb39c00ba7833cda5621dd81615b0"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/reference-frame.png",
+      "sourceSHA256": "4a75f9d44aec8ada5067b2921b605bc2f73bad95f9670a321c6edcc8b79ae37e",
+      "SHA256": "4a75f9d44aec8ada5067b2921b605bc2f73bad95f9670a321c6edcc8b79ae37e"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/ear-right-mask.png",
+      "sourceSHA256": "6268e956c4edc0399d7193fc1b9942dc7803ca3c84bf07773804e835ae190cfa",
+      "SHA256": "6268e956c4edc0399d7193fc1b9942dc7803ca3c84bf07773804e835ae190cfa"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/tps.json",
+      "sourceSHA256": "6f1501df5b34065d785615a4789a3aeb4db9902122e497ccfe13db316b950148",
+      "SHA256": "6f1501df5b34065d785615a4789a3aeb4db9902122e497ccfe13db316b950148"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/ear-left-mask.png",
+      "sourceSHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665",
+      "SHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-left/manifest.json",
+      "sourceSHA256": "9a62fc699689c17b05d6391eaf7ce3a2fe7029c4a2992e550dc5c80440e71d9a",
+      "SHA256": "9a62fc699689c17b05d6391eaf7ce3a2fe7029c4a2992e550dc5c80440e71d9a"
+    },
+    {
+      "path": "tps-study/stage-a/tps/up-left.json",
+      "sourceSHA256": "6f1501df5b34065d785615a4789a3aeb4db9902122e497ccfe13db316b950148",
+      "SHA256": "6f1501df5b34065d785615a4789a3aeb4db9902122e497ccfe13db316b950148"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-left/ear-right.png",
+      "sourceSHA256": "69ff6a94bf397d8700c4b03fbd083e21259d68a08471b961030d723466dcd7b2",
+      "SHA256": "69ff6a94bf397d8700c4b03fbd083e21259d68a08471b961030d723466dcd7b2"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-left/ear-right.json",
+      "sourceSHA256": "3b8ca2fbb40422b24ed3384090f5f301662173e29e38276ef7b7b16e27c0eeaa",
+      "SHA256": "3b8ca2fbb40422b24ed3384090f5f301662173e29e38276ef7b7b16e27c0eeaa"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-left/face.png",
+      "sourceSHA256": "eac04752551edf47966dd087c0c4fa6beebc87f75ded95bf9c2a769f431b6966",
+      "SHA256": "eac04752551edf47966dd087c0c4fa6beebc87f75ded95bf9c2a769f431b6966"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-left/ear-left.png",
+      "sourceSHA256": "1eeaed5ff224d88de4257920cb71a4508127e6c8f192043a09caf92e15dbe3c1",
+      "SHA256": "1eeaed5ff224d88de4257920cb71a4508127e6c8f192043a09caf92e15dbe3c1"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-left/face.json",
+      "sourceSHA256": "7d1ec696483dd7c9dfc555bb9bdb919d120b311745aa549eb95017f71f1cc2a2",
+      "SHA256": "7d1ec696483dd7c9dfc555bb9bdb919d120b311745aa549eb95017f71f1cc2a2"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-left/ear-left.json",
+      "sourceSHA256": "642a74751f456dacc73d31cfe9f3f1c0a227850bde3cd750873331848ef2af10",
+      "SHA256": "642a74751f456dacc73d31cfe9f3f1c0a227850bde3cd750873331848ef2af10"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up-left/ear-right.png",
+      "sourceSHA256": "8b262c3bb0db44143733eef0bb100fb78cb8da895da8dcea5ed8846348b4d09c",
+      "SHA256": "8b262c3bb0db44143733eef0bb100fb78cb8da895da8dcea5ed8846348b4d09c"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up-left/ear-right.json",
+      "sourceSHA256": "ad4338d35830ee7c399bf9ab65fb52acef691f79e7375b68b1f895ea4b09d268",
+      "SHA256": "ad4338d35830ee7c399bf9ab65fb52acef691f79e7375b68b1f895ea4b09d268"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up-left/face.png",
+      "sourceSHA256": "73411c437189886b19537b951752dda38b0c9b30041c9c2c95714edb791b0652",
+      "SHA256": "73411c437189886b19537b951752dda38b0c9b30041c9c2c95714edb791b0652"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up-left/face.json",
+      "sourceSHA256": "c63a4e9908ef372fb852f63ca684a725833ab232fd3a11c2330a0356d4050f25",
+      "SHA256": "c63a4e9908ef372fb852f63ca684a725833ab232fd3a11c2330a0356d4050f25"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/up-left/manifest.json",
+      "sourceSHA256": "5aa77d9fbe3e576e6a37da7a798b6bdad3eb04fb8f47a1878ac5b84653b3fd88",
+      "SHA256": "5aa77d9fbe3e576e6a37da7a798b6bdad3eb04fb8f47a1878ac5b84653b3fd88"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/hairband.png",
+      "sourceSHA256": "8cb59548f156d8bdc2985ca80df1ada454c1ff4a6015b9c2500c6f92f79f9934",
+      "SHA256": "8cb59548f156d8bdc2985ca80df1ada454c1ff4a6015b9c2500c6f92f79f9934"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/skin-mask.png",
+      "sourceSHA256": "ed4e5b1209cc3841fb10b1feb1eb1924dfe733d3002b42fcf771a3747bfb429c",
+      "SHA256": "ed4e5b1209cc3841fb10b1feb1eb1924dfe733d3002b42fcf771a3747bfb429c"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/C1-overlay.png",
+      "sourceSHA256": "9dbe4fa8cc4b1f424fa8d6899657288b8501e24baa19c2655c48c78263f8b6ce",
+      "SHA256": "9dbe4fa8cc4b1f424fa8d6899657288b8501e24baa19c2655c48c78263f8b6ce"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/reference-mask.png",
+      "sourceSHA256": "d97282d1c10695a9a9597d336f6e9dd151df5265b415050188763309f41376d9",
+      "SHA256": "d97282d1c10695a9a9597d336f6e9dd151df5265b415050188763309f41376d9"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/reference-frame.png",
+      "sourceSHA256": "6223e16e66adb555e97408a09c8e9c453150246f76cd1b3aef7a84b6bf35f0fc",
+      "SHA256": "6223e16e66adb555e97408a09c8e9c453150246f76cd1b3aef7a84b6bf35f0fc"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/ear-right-mask.png",
+      "sourceSHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665",
+      "SHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/tps.json",
+      "sourceSHA256": "3e205b13cdd31f24dc951f1827ae579990e3197e512535bb05d4b5acda76b4eb",
+      "SHA256": "3e205b13cdd31f24dc951f1827ae579990e3197e512535bb05d4b5acda76b4eb"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/ear-left-mask.png",
+      "sourceSHA256": "0f24009cf04a115db62cd1788b4d89efcff455d052e821525080c91812436bb1",
+      "SHA256": "0f24009cf04a115db62cd1788b4d89efcff455d052e821525080c91812436bb1"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/up-right/manifest.json",
+      "sourceSHA256": "bd90a45169acabf07e640b0ea56c6297ff33c997054b9e07ba7976f393f0f659",
+      "SHA256": "bd90a45169acabf07e640b0ea56c6297ff33c997054b9e07ba7976f393f0f659"
+    },
+    {
+      "path": "tps-study/stage-a/tps/up-right.json",
+      "sourceSHA256": "3e205b13cdd31f24dc951f1827ae579990e3197e512535bb05d4b5acda76b4eb",
+      "SHA256": "3e205b13cdd31f24dc951f1827ae579990e3197e512535bb05d4b5acda76b4eb"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-right/ear-right.png",
+      "sourceSHA256": "7f579528f7d9b4896f449ae87185996e483f0cff5f45ed7bdc7ea988450a5111",
+      "SHA256": "7f579528f7d9b4896f449ae87185996e483f0cff5f45ed7bdc7ea988450a5111"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-right/ear-right.json",
+      "sourceSHA256": "b6fa1c7c3a56923fad213c3d7c1973a06942c7c0f8d247aebe8b804b3f86b4b5",
+      "SHA256": "b6fa1c7c3a56923fad213c3d7c1973a06942c7c0f8d247aebe8b804b3f86b4b5"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-right/face.png",
+      "sourceSHA256": "75518ca9575a1b8ed4e5a28397278e6ce080f0a2237d6e5983d4828bd1225e08",
+      "SHA256": "75518ca9575a1b8ed4e5a28397278e6ce080f0a2237d6e5983d4828bd1225e08"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-right/ear-left.png",
+      "sourceSHA256": "b5d6e49902ee5a494ea74cc39a082a1f41a891e160d882bed67fe7a60acfae34",
+      "SHA256": "b5d6e49902ee5a494ea74cc39a082a1f41a891e160d882bed67fe7a60acfae34"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-right/face.json",
+      "sourceSHA256": "585af9d20584480342f8f3da2340e5cdf136b3d965326829f123a5cae7aa249b",
+      "SHA256": "585af9d20584480342f8f3da2340e5cdf136b3d965326829f123a5cae7aa249b"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/up-right/ear-left.json",
+      "sourceSHA256": "c5533112cd1ba0bd3786902450e7b079e87f7f7ba531dcfaaef8f365910629d6",
+      "SHA256": "c5533112cd1ba0bd3786902450e7b079e87f7f7ba531dcfaaef8f365910629d6"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up-right/face.png",
+      "sourceSHA256": "49f1d23bce5921ee524612085c6e32b22ff5583c760c994ceb9e42935189edc6",
+      "SHA256": "49f1d23bce5921ee524612085c6e32b22ff5583c760c994ceb9e42935189edc6"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/up-right/face.json",
+      "sourceSHA256": "e18aed9201a443e607121561314220b7b5cd08aeda7ccbf50a4e8ccad97b07ab",
+      "SHA256": "e18aed9201a443e607121561314220b7b5cd08aeda7ccbf50a4e8ccad97b07ab"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/up-right/manifest.json",
+      "sourceSHA256": "a86b2e8e37092b9247585df8aab5a1e982e4f7afb0af83d8e531a3e3007d18e6",
+      "SHA256": "a86b2e8e37092b9247585df8aab5a1e982e4f7afb0af83d8e531a3e3007d18e6"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/hairband.png",
+      "sourceSHA256": "2fa0321f232c718d398b617e1bfc3c0c05e523f201065f98aa48998de789c66d",
+      "SHA256": "2fa0321f232c718d398b617e1bfc3c0c05e523f201065f98aa48998de789c66d"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/skin-mask.png",
+      "sourceSHA256": "5315ca4a7e2fc08a080e587bd9a27748d9539a48c7d7c67fa44c252bcc7078e7",
+      "SHA256": "5315ca4a7e2fc08a080e587bd9a27748d9539a48c7d7c67fa44c252bcc7078e7"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/C1-overlay.png",
+      "sourceSHA256": "b15a5a87d463839bd5246d4913ccf769b69181271392eefa5f8425eb4d90a047",
+      "SHA256": "b15a5a87d463839bd5246d4913ccf769b69181271392eefa5f8425eb4d90a047"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/reference-mask.png",
+      "sourceSHA256": "7b7ea4d2123db35aa73231f61766829a862d2651d8cf0caf9b6f44e7b593f013",
+      "SHA256": "7b7ea4d2123db35aa73231f61766829a862d2651d8cf0caf9b6f44e7b593f013"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/reference-frame.png",
+      "sourceSHA256": "df444626d808c093453fb6958e89aed6e7b45513ec45d52fd0142a258551abe9",
+      "SHA256": "df444626d808c093453fb6958e89aed6e7b45513ec45d52fd0142a258551abe9"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/ear-right-mask.png",
+      "sourceSHA256": "b038d51d7836fbd0573aa0fb9f8b585f9a682898b1f61465ce987283468e0930",
+      "SHA256": "b038d51d7836fbd0573aa0fb9f8b585f9a682898b1f61465ce987283468e0930"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/tps.json",
+      "sourceSHA256": "31bfbf2244fed7667446f05baa54e2c842da31644cfe98359033420874c95462",
+      "SHA256": "31bfbf2244fed7667446f05baa54e2c842da31644cfe98359033420874c95462"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/ear-left-mask.png",
+      "sourceSHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665",
+      "SHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-left/manifest.json",
+      "sourceSHA256": "d13eb4abe13f59748abf055f12ae3328b9952d26be66cdae072f4152dd88a86f",
+      "SHA256": "d13eb4abe13f59748abf055f12ae3328b9952d26be66cdae072f4152dd88a86f"
+    },
+    {
+      "path": "tps-study/stage-a/tps/down-left.json",
+      "sourceSHA256": "31bfbf2244fed7667446f05baa54e2c842da31644cfe98359033420874c95462",
+      "SHA256": "31bfbf2244fed7667446f05baa54e2c842da31644cfe98359033420874c95462"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-left/ear-right.png",
+      "sourceSHA256": "d81e5d2ce4b0bd3c83292b851cd0883477bd567e4d885e41ffe977db0fca8474",
+      "SHA256": "d81e5d2ce4b0bd3c83292b851cd0883477bd567e4d885e41ffe977db0fca8474"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-left/ear-right.json",
+      "sourceSHA256": "b16710ec9265543bf17f840ef030cea789f542f3c3a4100a43dc189fdf9c769d",
+      "SHA256": "b16710ec9265543bf17f840ef030cea789f542f3c3a4100a43dc189fdf9c769d"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-left/face.png",
+      "sourceSHA256": "aeb06099f40c4f94da589bee54e8e3503250b2fad25028d70f6be1862758f93d",
+      "SHA256": "aeb06099f40c4f94da589bee54e8e3503250b2fad25028d70f6be1862758f93d"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-left/ear-left.png",
+      "sourceSHA256": "a399bb6354b76ab3db584c08489c1a9d1b6cf3ae43d3d207aea87f7615362528",
+      "SHA256": "a399bb6354b76ab3db584c08489c1a9d1b6cf3ae43d3d207aea87f7615362528"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-left/face.json",
+      "sourceSHA256": "d60ab7c19f80844e07fd612118be8b98216f3329ba9af09c4274e39d651504d5",
+      "SHA256": "d60ab7c19f80844e07fd612118be8b98216f3329ba9af09c4274e39d651504d5"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-left/ear-left.json",
+      "sourceSHA256": "5bcfac782cc5d356f15814514fc3ac609c0bc36def30f487ab62c4d508e181b0",
+      "SHA256": "5bcfac782cc5d356f15814514fc3ac609c0bc36def30f487ab62c4d508e181b0"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down-left/face.png",
+      "sourceSHA256": "44f5975a813b2e40267ccbd9f60f4033fe2c8549a326f332effb43fc2ccdf80f",
+      "SHA256": "44f5975a813b2e40267ccbd9f60f4033fe2c8549a326f332effb43fc2ccdf80f"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down-left/face.json",
+      "sourceSHA256": "d0297f9c593014601d3104c282cd75418114abfa0516dc5ee2e770ce6144d848",
+      "SHA256": "d0297f9c593014601d3104c282cd75418114abfa0516dc5ee2e770ce6144d848"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/down-left/manifest.json",
+      "sourceSHA256": "b92e7ea874b0396f80a5f2d8b53e90be2ed3c79d5365ed8c42251c98409d7b2e",
+      "SHA256": "b92e7ea874b0396f80a5f2d8b53e90be2ed3c79d5365ed8c42251c98409d7b2e"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/hairband.png",
+      "sourceSHA256": "5285a3ba7c4222a803769dabd6be524d06e329b1e0f3b81c2a3d71a377b7c64d",
+      "SHA256": "5285a3ba7c4222a803769dabd6be524d06e329b1e0f3b81c2a3d71a377b7c64d"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/skin-mask.png",
+      "sourceSHA256": "8dc2194de5fee7b0bac7e8838c2588aa386e78e4e79137f6fda121ebecb8bf46",
+      "SHA256": "8dc2194de5fee7b0bac7e8838c2588aa386e78e4e79137f6fda121ebecb8bf46"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/C1-overlay.png",
+      "sourceSHA256": "079bde2ca61f961aeefc1b06cee764772b78932ceb18e8d7060a5b891da42c7d",
+      "SHA256": "079bde2ca61f961aeefc1b06cee764772b78932ceb18e8d7060a5b891da42c7d"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/reference-mask.png",
+      "sourceSHA256": "6c591d871e1bdb12096bb949565ae9db82a6738bf38504a4815b7aad4a4cdb12",
+      "SHA256": "6c591d871e1bdb12096bb949565ae9db82a6738bf38504a4815b7aad4a4cdb12"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/reference-frame.png",
+      "sourceSHA256": "ab69f90179199908168e04d97b26340005f9b0d5160b7fe342d46c1585b84690",
+      "SHA256": "ab69f90179199908168e04d97b26340005f9b0d5160b7fe342d46c1585b84690"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/ear-right-mask.png",
+      "sourceSHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665",
+      "SHA256": "c8b6bb3e837f846489438b47ae42f3960b820a17095ea66df3c5fa00fcd60665"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/tps.json",
+      "sourceSHA256": "7945b1f660ca499293f8f5f0a77bda4547fcbbeddb7cf67327195d92bf051a49",
+      "SHA256": "7945b1f660ca499293f8f5f0a77bda4547fcbbeddb7cf67327195d92bf051a49"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/ear-left-mask.png",
+      "sourceSHA256": "d35f6b307df1b1d1f88467ae1b1e6fa9b5167c8d4d51643a50a4c2b20de24ab3",
+      "SHA256": "d35f6b307df1b1d1f88467ae1b1e6fa9b5167c8d4d51643a50a4c2b20de24ab3"
+    },
+    {
+      "path": "tps-study/stage-a/inputs/down-right/manifest.json",
+      "sourceSHA256": "e7b92029e78165d29ae851e755ffa1b962e622098ab719940ab1c4d2a56cc50b",
+      "SHA256": "e7b92029e78165d29ae851e755ffa1b962e622098ab719940ab1c4d2a56cc50b"
+    },
+    {
+      "path": "tps-study/stage-a/tps/down-right.json",
+      "sourceSHA256": "7945b1f660ca499293f8f5f0a77bda4547fcbbeddb7cf67327195d92bf051a49",
+      "SHA256": "7945b1f660ca499293f8f5f0a77bda4547fcbbeddb7cf67327195d92bf051a49"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-right/ear-right.png",
+      "sourceSHA256": "e0709819c12adfc755785225cfeb4e4e3611b930e7747c399197e46dc9b280eb",
+      "SHA256": "e0709819c12adfc755785225cfeb4e4e3611b930e7747c399197e46dc9b280eb"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-right/ear-right.json",
+      "sourceSHA256": "3006c7f1a2261cc72f68a1a7a3e0efd434c00fbccf58801436960c0c5e62de0f",
+      "SHA256": "3006c7f1a2261cc72f68a1a7a3e0efd434c00fbccf58801436960c0c5e62de0f"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-right/face.png",
+      "sourceSHA256": "d2f56e5515140beeff74601ef23567037543a375acee7921686fa1ecfc4044f2",
+      "SHA256": "d2f56e5515140beeff74601ef23567037543a375acee7921686fa1ecfc4044f2"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-right/ear-left.png",
+      "sourceSHA256": "5f25f219dc379bc147081977b9fc20eb044498da17af114a4b40f9c2be9ae1e9",
+      "SHA256": "5f25f219dc379bc147081977b9fc20eb044498da17af114a4b40f9c2be9ae1e9"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-right/face.json",
+      "sourceSHA256": "4e988353e9d74bdd1403ac5a08f5635a338dd6bb178223ad32c5550614b78697",
+      "SHA256": "4e988353e9d74bdd1403ac5a08f5635a338dd6bb178223ad32c5550614b78697"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-c1/raw/down-right/ear-left.json",
+      "sourceSHA256": "2d6c7049cc83c6126f1c395819f16c8449dc5604d292c9a815a25acd38fed465",
+      "SHA256": "2d6c7049cc83c6126f1c395819f16c8449dc5604d292c9a815a25acd38fed465"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down-right/face.png",
+      "sourceSHA256": "193b2ce0bc0f72b6e017b271377c41c59ce0b08656ed5228f62aa7594d63c54f",
+      "SHA256": "193b2ce0bc0f72b6e017b271377c41c59ce0b08656ed5228f62aa7594d63c54f"
+    },
+    {
+      "path": "tps-study/stage-a/point-c1/raw/down-right/face.json",
+      "sourceSHA256": "c032339ae09e1f7318907f752cba41afddd8e4367d7f49b2ad535a48730dbeb0",
+      "SHA256": "c032339ae09e1f7318907f752cba41afddd8e4367d7f49b2ad535a48730dbeb0"
+    },
+    {
+      "path": "tps-study/stage-a/c1-rejected-color/inputs/down-right/manifest.json",
+      "sourceSHA256": "2d472725e00d7ac4274bbcdd92088e732d1727e698ac0641abf0d19a5dbd8d60",
+      "SHA256": "2d472725e00d7ac4274bbcdd92088e732d1727e698ac0641abf0d19a5dbd8d60"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/base-inputs.json",
+      "sourceSHA256": "b35359401d889f1a864d6c868140d77c8ca6335926b37055486c54753f82d6c2",
+      "SHA256": "b35359401d889f1a864d6c868140d77c8ca6335926b37055486c54753f82d6c2"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/a-inputs.json",
+      "sourceSHA256": "83e46ebd4ce52fb7d25b170957b6daecef3e7334e38413ace6ebcb0311170a86",
+      "SHA256": "83e46ebd4ce52fb7d25b170957b6daecef3e7334e38413ace6ebcb0311170a86"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/runtime-current.json",
+      "sourceSHA256": "49fec8054343bd645cc1a0419957092766f249444f1d67083a2eec190167d879",
+      "SHA256": "49fec8054343bd645cc1a0419957092766f249444f1d67083a2eec190167d879"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/runtime-projection.json",
+      "sourceSHA256": "b97e9c9b1c6721cee5c31fcbb815b1ca5edccf220dae590f5d4ff10d168b3460",
+      "SHA256": "b97e9c9b1c6721cee5c31fcbb815b1ca5edccf220dae590f5d4ff10d168b3460"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/goals.json",
+      "sourceSHA256": "d8e2dfe996a5a4ab08937b493f81b51913362016deb945c6c40d1698f04e021e",
+      "SHA256": "d8e2dfe996a5a4ab08937b493f81b51913362016deb945c6c40d1698f04e021e"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/pin-inventory.json",
+      "sourceSHA256": "30b0f3fccc0a24e1dbc79136f8d00ffb0fe1ec09c2b0a799a8a7d60028927894",
+      "SHA256": "30b0f3fccc0a24e1dbc79136f8d00ffb0fe1ec09c2b0a799a8a7d60028927894"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/face-observed.json",
+      "sourceSHA256": "d0bca8c28169e6541f48b770b5ca821248c9e3935a563ac0caefc7db7356f6e9",
+      "SHA256": "d0bca8c28169e6541f48b770b5ca821248c9e3935a563ac0caefc7db7356f6e9"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/face-active.json",
+      "sourceSHA256": "eebda9971a8822e811a6baeab2ef270dbb2b10a3188e1db20c7af7e0b295a8f0",
+      "SHA256": "eebda9971a8822e811a6baeab2ef270dbb2b10a3188e1db20c7af7e0b295a8f0"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/ear-fit.json",
+      "sourceSHA256": "8ed59767634eef7036824abba3a3da22e44d769c201f57928ada51395d37dd80",
+      "SHA256": "8ed59767634eef7036824abba3a3da22e44d769c201f57928ada51395d37dd80"
+    },
+    {
+      "path": "tps-study/stage-a/v711-filled/ear-bases.json",
+      "sourceSHA256": "40b26eb2fcecce5163873a6eae67cc5d9674ce2dc2f7c469a824f81fbd3054b9",
+      "SHA256": "40b26eb2fcecce5163873a6eae67cc5d9674ce2dc2f7c469a824f81fbd3054b9"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/a-inputs.json",
+      "sourceSHA256": "83e46ebd4ce52fb7d25b170957b6daecef3e7334e38413ace6ebcb0311170a86",
+      "SHA256": "83e46ebd4ce52fb7d25b170957b6daecef3e7334e38413ace6ebcb0311170a86"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/runtime-projection.json",
+      "sourceSHA256": "b97e9c9b1c6721cee5c31fcbb815b1ca5edccf220dae590f5d4ff10d168b3460",
+      "SHA256": "b97e9c9b1c6721cee5c31fcbb815b1ca5edccf220dae590f5d4ff10d168b3460"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/goals.json",
+      "sourceSHA256": "d8e2dfe996a5a4ab08937b493f81b51913362016deb945c6c40d1698f04e021e",
+      "SHA256": "d8e2dfe996a5a4ab08937b493f81b51913362016deb945c6c40d1698f04e021e"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/face-observed.json",
+      "sourceSHA256": "d0bca8c28169e6541f48b770b5ca821248c9e3935a563ac0caefc7db7356f6e9",
+      "SHA256": "d0bca8c28169e6541f48b770b5ca821248c9e3935a563ac0caefc7db7356f6e9"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/face-active.json",
+      "sourceSHA256": "818d9154982b17037d24244f9e27dc7030ab89cd4bb67337b31cbc05fb6ef960",
+      "SHA256": "818d9154982b17037d24244f9e27dc7030ab89cd4bb67337b31cbc05fb6ef960"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/ear-fit.json",
+      "sourceSHA256": "70243bc40c1729493778050e9f2501ba09577066f4a3e5bdbb481873ca81f320",
+      "SHA256": "70243bc40c1729493778050e9f2501ba09577066f4a3e5bdbb481873ca81f320"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/ear-bases.json",
+      "sourceSHA256": "40b26eb2fcecce5163873a6eae67cc5d9674ce2dc2f7c469a824f81fbd3054b9",
+      "SHA256": "40b26eb2fcecce5163873a6eae67cc5d9674ce2dc2f7c469a824f81fbd3054b9"
+    },
+    {
+      "path": "tps-study/stage-a/v711-ear80/selection.json",
+      "sourceSHA256": "8d31556e1f5ee4b2b845f0b19e1fa2148c6626664b69295160bf0ca7c2d009df",
+      "SHA256": "8d31556e1f5ee4b2b845f0b19e1fa2148c6626664b69295160bf0ca7c2d009df"
+    },
+    {
+      "path": "tps-study/stage-a/ear-fit/ear-fit.json",
+      "sourceSHA256": "c31a9ecc548905fd85e928c5cc0702a39a115aaf18628921f377301bdc050b10",
+      "SHA256": "c31a9ecc548905fd85e928c5cc0702a39a115aaf18628921f377301bdc050b10"
+    },
+    {
+      "path": "tps-study/stage-a/ear-fit/front-left-ear-alpha.png",
+      "sourceSHA256": "ceba699c6bd366af391be6a9debb58a922f89000ca2ba18703ed38ce3463339c",
+      "SHA256": "ceba699c6bd366af391be6a9debb58a922f89000ca2ba18703ed38ce3463339c"
+    },
+    {
+      "path": "tps-study/stage-a/ear-fit/front-right-ear-alpha.png",
+      "sourceSHA256": "d7d92c978d724699f8a6e9f3d794fd55ab1187339bfb7009c4cf28294c51280a",
+      "SHA256": "d7d92c978d724699f8a6e9f3d794fd55ab1187339bfb7009c4cf28294c51280a"
+    },
+    {
+      "path": "tps-study/stage-a/v711/goals.json",
+      "sourceSHA256": "214020ed6e1bcc13e122a56716ea05d4f642f5b80c59255b8fd713ff766c01aa",
+      "SHA256": "214020ed6e1bcc13e122a56716ea05d4f642f5b80c59255b8fd713ff766c01aa"
+    },
+    {
+      "path": "tps-study/stage-a/base-inputs.json",
+      "sourceSHA256": "b35359401d889f1a864d6c868140d77c8ca6335926b37055486c54753f82d6c2",
+      "SHA256": "b35359401d889f1a864d6c868140d77c8ca6335926b37055486c54753f82d6c2"
+    },
+    {
+      "path": "tps-study/stage-a/C1-input-audit.json",
+      "sourceSHA256": "74ca9647d3e8f41343f78e50227d3b077e478d709818fd3b7dac97dcb4f14966",
+      "SHA256": "74ca9647d3e8f41343f78e50227d3b077e478d709818fd3b7dac97dcb4f14966"
+    },
+    {
+      "path": "tps-study/stage-a/design.md",
+      "sourceSHA256": "b909290becc62eac95325f13c8e17856f7f427ecb13911648b729472ab770e89",
+      "SHA256": "b909290becc62eac95325f13c8e17856f7f427ecb13911648b729472ab770e89"
+    },
+    {
+      "path": "tps-study/stage-a/sam3-source-comparison.json",
+      "sourceSHA256": "8e4280c375e5361935f2549363d897a782421bde033597bdb890c2676003e40e",
+      "SHA256": "8e4280c375e5361935f2549363d897a782421bde033597bdb890c2676003e40e"
+    },
+    {
+      "path": "tps-study/v2/tps.json",
+      "sourceSHA256": "2fc20f8a52dd31563b458ecd63a72f743b479ee9fdf47bc31dd788af2130ffd9",
+      "SHA256": "2fc20f8a52dd31563b458ecd63a72f743b479ee9fdf47bc31dd788af2130ffd9"
+    },
+    {
+      "path": "tps-study/v2/reference-mask.png",
+      "sourceSHA256": "7e554b493fd8b04f3a9a5e8c92702d9595b90db630b1f6bf90b846f01f78d106",
+      "SHA256": "7e554b493fd8b04f3a9a5e8c92702d9595b90db630b1f6bf90b846f01f78d106"
+    },
+    {
+      "path": "tps-study/v2/reference-ear-mask.png",
+      "sourceSHA256": "08dea7b04191fdcd80e9229dac6fd92e0a2d156e5110be5b380c3712ae24ccd8",
+      "SHA256": "08dea7b04191fdcd80e9229dac6fd92e0a2d156e5110be5b380c3712ae24ccd8"
+    },
+    {
+      "path": "tps-study/v2/hairband.png",
+      "sourceSHA256": "c1adae00393edb06ec9c8d45355732c6605682e88908e85bc6e0070260732758",
+      "SHA256": "c1adae00393edb06ec9c8d45355732c6605682e88908e85bc6e0070260732758"
+    },
+    {
+      "path": "tps-study/original/front-skin.png",
+      "sourceSHA256": "a8e5ede9b03ad572a73cabbe172c49f0b2f9a878b55deb5704c6dcdf79104407",
+      "SHA256": "a8e5ede9b03ad572a73cabbe172c49f0b2f9a878b55deb5704c6dcdf79104407"
+    }
+  ],
+  "derivedSeed": "tps-study/seeds/left-chin-boundary.json retains only the unchanged indices/rest used for the 3px/6px chin pin threshold choice"
+}

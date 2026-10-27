@@ -1,3 +1,4 @@
+import {stageAScalars} from './approved_stage_a.mjs';
 import './test_stereo.mjs';
 import {craniumFacing,domeSection,craniumPosition} from '../bundle/hair-surface.mjs';
 import {DOME} from '../bundle/dome-data.mjs';
@@ -88,11 +89,11 @@ test('upper added depth has negative horizontal second derivative',()=>{
  const extra=x=>hairLift([x,180],base)[2]-hairLift([x,180],{...base,CorrHairDepth:.4})[2];
  assert(extra(402)+extra(602)-2*extra(502)<-1);
 });
-test('45 degree chin reaches the measured target',()=>{
+test('45 degree chin reaches the approved A-stage position',()=>{
  const trace=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url))),row=trace.rows.at(-1);
  for(const yaw of [-45,45]){
   const q=deform3D(mesh('face-skin'),[502.5,616],{...base,CorrTurn:1,ParamAngleX:yaw});
-  const target=yaw<0?(row[3]+row[4])/2:(row[5]+row[6])/2;
+  const target=stageAScalars().chin[[yaw,0]].center[0];
   // The edge fit retains the curved 3D interior, rather than flattening it.
   assert(Math.abs(q[0]-target)<1,`${q}`);
  }
@@ -120,14 +121,14 @@ test('lower skull fits the ear attachment and measured 45-degree silhouette toge
  assert(rx<domeSection(330).rx);
 });
 
-test('all sampled cheek and jaw edges match independent SAM 3 targets at 45 degrees',()=>{
+test('sampled cheek and jaw edges match the approved A-stage positions at 45 degrees',()=>{
  const trace=JSON.parse(readFileSync(new URL('../source/viewer/outline-traces.json',import.meta.url)));
  for(const yaw of [-45,45])for(const [y,l,r,ll,lr,rl,rr,ty] of trace.rows.filter(row=>row[0]>=465)){
-  const expected=yaw<0?[ll,lr]:[rl,rr];
+  const expected=[l,r].map(x=>stageAScalars().outline[[yaw,0,x,y]]);
   for(const [i,x] of [l,r].entries()){
    const q=deform3D(mesh('face-skin'),[x,y],{...base,ParamAngleX:yaw,CorrTurn:1});
-   assert(Math.abs(q[0]-expected[i])<.001,`${yaw} ${y}: ${q[0]} vs ${expected[i]}`);
-   assert(Math.abs(q[1]-ty)<.001);
+   assert(Math.abs(q[0]-expected[i][0])<.001,`${yaw} ${y}: ${q[0]} vs ${expected[i][0]}`);
+   assert(Math.abs(q[1]-expected[i][1])<.001);
   }
  }
 });

@@ -1,0 +1,44 @@
+{
+  "prompt": "ear",
+  "crop_box": [
+    570,
+    425,
+    750,
+    605
+  ],
+  "upscale": 1,
+  "num_masks_returned": 1,
+  "score": 0.8359933495521545,
+  "area_px": 6998,
+  "id": "up-left-ear-right",
+  "pose": "up-left",
+  "part": "ear-right",
+  "crop": [
+    570,
+    425,
+    750,
+    605
+  ],
+  "points": [
+    [
+      660,
+      515,
+      1
+    ],
+    [
+      595,
+      520,
+      0
+    ],
+    [
+      660,
+      460,
+      0
+    ]
+  ],
+  "boxes": null,
+  "frame": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/inputs/up-left/reference-frame.png",
+  "frameSHA256": "4a75f9d44aec8ada5067b2921b605bc2f73bad95f9670a321c6edcc8b79ae37e",
+  "requestFingerprint": "3843d8cf62296a6383a1eee8f70aee6d57624570dde4670f084625396ea5fe94",
+  "elapsedSeconds": 4.75
+}

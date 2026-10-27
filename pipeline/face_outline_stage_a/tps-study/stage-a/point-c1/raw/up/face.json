@@ -1,0 +1,69 @@
+{
+  "prompt": "face",
+  "crop_box": [
+    150,
+    0,
+    850,
+    780
+  ],
+  "upscale": 1,
+  "num_masks_returned": 1,
+  "score": 0.9124230146408081,
+  "area_px": 105059,
+  "id": "up-face",
+  "pose": "up",
+  "part": "face",
+  "crop": [
+    150,
+    0,
+    850,
+    780
+  ],
+  "points": [
+    [
+      416,
+      420,
+      1
+    ],
+    [
+      588,
+      417,
+      1
+    ],
+    [
+      502,
+      318,
+      1
+    ],
+    [
+      523,
+      447,
+      1
+    ],
+    [
+      523,
+      619,
+      0
+    ],
+    [
+      502,
+      118,
+      0
+    ],
+    [
+      331,
+      496,
+      0
+    ],
+    [
+      665,
+      480,
+      0
+    ]
+  ],
+  "boxes": null,
+  "frame": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/inputs/up/reference-frame.png",
+  "frameSHA256": "aaf77e77c31f3a7a01a26deb8bc2240007c0f71cbe90c89fd81d17e198f93d7a",
+  "requestFingerprint": "755ce4a4165f0971c9ff9d40390e2addd231886bcddb0bd0f8293dee55dd80b4",
+  "elapsedSeconds": 6.39
+}

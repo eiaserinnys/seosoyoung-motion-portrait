@@ -1,0 +1,258 @@
+{
+  "name": "up-right",
+  "sourceImage": "source/references/seedance_9dir/up_right.png",
+  "registrationMatrix": [
+    [
+      1.0341239778502154,
+      0.02484655955781336,
+      201.52894054830165
+    ],
+    [
+      -0.02484655955781336,
+      1.0341239778502154,
+      -23.50098317175332
+    ]
+  ],
+  "registeredLandmarks": [
+    [
+      505.85,
+      380.4639659941096
+    ],
+    [
+      646.35,
+      384.9639659941096
+    ],
+    [
+      492.1188839941172,
+      316.20588488344055
+    ],
+    [
+      640.5145409404354,
+      318.93516227454535
+    ],
+    [
+      669.2964890753975,
+      434.3735759799467
+    ],
+    [
+      615.0050186718089,
+      480.3552742066299
+    ],
+    [
+      607.1118434981108,
+      562.701511788325
+    ],
+    [
+      355.6849641667469,
+      482.532919402847
+    ],
+    [
+      682.300249384323,
+      447.59102023437924
+    ]
+  ],
+  "anchorCenters": {
+    "left": [
+      505.85,
+      380.46396599410957
+    ],
+    "right": [
+      646.35,
+      384.96396599410957
+    ],
+    "browLeft": [
+      517.35,
+      296.46396599410957
+    ],
+    "browRight": [
+      663.35,
+      307.46396599410957
+    ],
+    "nose": [
+      638.35,
+      420.46396599410957
+    ],
+    "mouth": [
+      611.46,
+      480.46396599410957
+    ]
+  },
+  "ears": {
+    "left": {
+      "visible": true,
+      "method": "SAM text",
+      "source": "SAM text",
+      "maskPixels": 6061,
+      "candidatePixels": 6555,
+      "score": 0.9660425186157227,
+      "box": [
+        319,
+        336,
+        406,
+        536
+      ],
+      "registeredContourCenter": [
+        361.0788109130112,
+        433.6713338759286
+      ],
+      "centerInsideFace": false,
+      "parentExpectedVisible": true,
+      "geometryDiffersFromParent": false,
+      "hiddenTransform": null,
+      "candidatePreserved": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/point-c1/up-right-ear-left-candidate.png",
+      "selectionRule": "registered earContour center outside new face mask; no score/area visibility gate",
+      "preCleanupPixels": 6555,
+      "cleanupLossFraction": 0.07536231884057976,
+      "cleanup": "disk radius3 opening / largest8connected / fill holes",
+      "visibilitySource": "coordinator C1 approved table",
+      "geometryPreviouslyVisible": true
+    },
+    "right": {
+      "visible": false,
+      "method": "SAM text",
+      "source": "SAM text",
+      "maskPixels": 0,
+      "candidatePixels": 815,
+      "score": 0.687326967716217,
+      "box": [
+        643,
+        314,
+        730,
+        519
+      ],
+      "registeredContourCenter": [
+        686.2651100415715,
+        413.2500888283802
+      ],
+      "centerInsideFace": false,
+      "parentExpectedVisible": false,
+      "geometryDiffersFromParent": true,
+      "hiddenTransform": "identity",
+      "candidatePreserved": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/point-c1/up-right-ear-right-candidate.png",
+      "selectionRule": "registered earContour center outside new face mask; no score/area visibility gate",
+      "preCleanupPixels": 815,
+      "cleanupLossFraction": null,
+      "cleanup": "hidden zero mask; identity transform",
+      "visibilitySource": "coordinator C1 approved table",
+      "geometryPreviouslyVisible": true
+    }
+  },
+  "skinPixels": 92883,
+  "unionPixels": 97993,
+  "hairBandPixels": 93062,
+  "skinBoundaryMethod": "SAM3 face positive/negative points; subtract unchanged hairband; no manual jaw cut",
+  "referenceFrameActualYawPitch": [
+    36.376549246237346,
+    20.861991527889202
+  ],
+  "faceSAMScore": 0.9252350330352783,
+  "maskRevision": "enclosed SAM eye/brow/mouth holes filled; exterior unchanged",
+  "faceSAMMetadata": {
+    "prompt": "face",
+    "crop_box": [
+      150,
+      0,
+      850,
+      780
+    ],
+    "upscale": 1,
+    "num_masks_returned": 1,
+    "score": 0.9252350330352783,
+    "area_px": 94515,
+    "id": "up-right-face",
+    "pose": "up-right",
+    "part": "face",
+    "crop": [
+      150,
+      0,
+      850,
+      780
+    ],
+    "points": [
+      [
+        506,
+        420,
+        1
+      ],
+      [
+        646,
+        425,
+        1
+      ],
+      [
+        576,
+        323,
+        1
+      ],
+      [
+        669,
+        434,
+        1
+      ],
+      [
+        607,
+        623,
+        0
+      ],
+      [
+        576,
+        123,
+        0
+      ],
+      [
+        360,
+        478,
+        0
+      ],
+      [
+        686,
+        413,
+        0
+      ]
+    ],
+    "boxes": null,
+    "frame": "/home/eias/workspace/.local/tmp/card615-outline/tps-study/stage-a/inputs/up-right/reference-frame.png",
+    "frameSHA256": "6223e16e66adb555e97408a09c8e9c453150246f76cd1b3aef7a84b6bf35f0fc",
+    "requestFingerprint": "3ed36b01ca31638826e23d90d5d2a81a2fdda900df01d86b1edaf3bb6871c934",
+    "elapsedSeconds": 3.79
+  },
+  "TPSInputChanged": true,
+  "manualJawCut": false,
+  "faceHairBandPixelsRemoved": 10593,
+  "eyeRefinement": {
+    "method": "radius9 disk closing plus holes filled; changes unioned only inside radius45 eye circles",
+    "changedPixels": 4149,
+    "outsideCircleChanges": 0,
+    "openingMasksUsed": false
+  },
+  "farEyeHull": {
+    "center": [
+      646.35,
+      384.9639659941096
+    ],
+    "eyeIndex": 1,
+    "radius": 50,
+    "addedPixels": 2446,
+    "outsideCircleChanges": 0,
+    "hullHairbandOverlap": 2858,
+    "addedPixelsHairbandOverlap": 2439
+  },
+  "holeFill": {
+    "reference-mask": {
+      "beforePixels": 95627,
+      "afterPixels": 97993,
+      "filledPixels": 2366,
+      "holeComponents": 5,
+      "externalBoundaryChangedPixels": 0,
+      "remainingHolePixels": 0
+    },
+    "skin-mask": {
+      "beforePixels": 90517,
+      "afterPixels": 92883,
+      "filledPixels": 2366,
+      "holeComponents": 5,
+      "externalBoundaryChangedPixels": 0,
+      "remainingHolePixels": 0
+    }
+  }
+}

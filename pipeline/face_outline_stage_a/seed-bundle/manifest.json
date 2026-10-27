@@ -1,0 +1,13 @@
+{
+  "source": "pre-A1 product neutral baseline",
+  "files": [
+    {
+      "path": "face-solve-data.mjs",
+      "SHA256": "eb234a18410b3480bd6cb39f9485c73f1ba37851cd7a6fe94e4ca08641335370"
+    },
+    {
+      "path": "stereo-attachments.mjs",
+      "SHA256": "afa1e3790e6e4014b1c0181e9c9c1a0279c31ec6040c7b22828536b1125a52aa"
+    }
+  ]
+}

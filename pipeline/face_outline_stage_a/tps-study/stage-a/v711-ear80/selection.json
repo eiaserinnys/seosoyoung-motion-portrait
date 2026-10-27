@@ -1,0 +1,281 @@
+{
+  "selected": [
+    [
+      "right",
+      "left"
+    ],
+    [
+      "up",
+      "left"
+    ],
+    [
+      "up",
+      "right"
+    ],
+    [
+      "up-left",
+      "right"
+    ],
+    [
+      "up-right",
+      "left"
+    ],
+    [
+      "down-left",
+      "right"
+    ]
+  ],
+  "inventory": [
+    {
+      "pose": "left",
+      "side": "right",
+      "selected": false,
+      "mandatory": false,
+      "oldTranslationNorm": 29.333039429534832,
+      "bestSquareGrid": [
+        16,
+        20,
+        1.1,
+        0.7261739372047791,
+        true
+      ],
+      "bestFeasible": {
+        "theta": [
+          16,
+          20,
+          1.1,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.7261739372047791
+      },
+      "translationLimitedGrid": false
+    },
+    {
+      "pose": "right",
+      "side": "left",
+      "selected": true,
+      "mandatory": false,
+      "oldTranslationNorm": 39.938898649847545,
+      "bestSquareGrid": [
+        -40,
+        16,
+        1.1,
+        0.5764977518532021,
+        false
+      ],
+      "bestFeasible": {
+        "theta": [
+          -36,
+          16,
+          1.1,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.5307374631268437
+      },
+      "translationLimitedGrid": true
+    },
+    {
+      "pose": "up",
+      "side": "left",
+      "selected": true,
+      "mandatory": true,
+      "oldTranslationNorm": 27.7469599536539,
+      "bestSquareGrid": [
+        4,
+        28,
+        0.9,
+        0.838527673293928,
+        true
+      ],
+      "bestFeasible": {
+        "theta": [
+          4,
+          28,
+          0.9,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.838527673293928
+      },
+      "translationLimitedGrid": false
+    },
+    {
+      "pose": "up",
+      "side": "right",
+      "selected": true,
+      "mandatory": true,
+      "oldTranslationNorm": 19.206548974993684,
+      "bestSquareGrid": [
+        4,
+        20,
+        1.0,
+        0.8731440479291482,
+        true
+      ],
+      "bestFeasible": {
+        "theta": [
+          4,
+          20,
+          1.0,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.8731440479291482
+      },
+      "translationLimitedGrid": false
+    },
+    {
+      "pose": "down",
+      "side": "left",
+      "selected": false,
+      "mandatory": false,
+      "oldTranslationNorm": 22.089026255551705,
+      "bestSquareGrid": [
+        -16,
+        -12,
+        0.9,
+        0.7956960680127524,
+        true
+      ],
+      "bestFeasible": {
+        "theta": [
+          -16,
+          -12,
+          0.9,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.7956960680127524
+      },
+      "translationLimitedGrid": false
+    },
+    {
+      "pose": "down",
+      "side": "right",
+      "selected": false,
+      "mandatory": false,
+      "oldTranslationNorm": 12.539839172846227,
+      "bestSquareGrid": [
+        -4,
+        -12,
+        0.6,
+        0.47322297955209347,
+        true
+      ],
+      "bestFeasible": {
+        "theta": [
+          -4,
+          -12,
+          0.6,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.47322297955209347
+      },
+      "translationLimitedGrid": false
+    },
+    {
+      "pose": "up-left",
+      "side": "right",
+      "selected": true,
+      "mandatory": true,
+      "oldTranslationNorm": 39.998602798966736,
+      "bestSquareGrid": [
+        40,
+        40,
+        0.9,
+        0.1421713818813196,
+        false
+      ],
+      "bestFeasible": {
+        "theta": [
+          24,
+          32,
+          1.1,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.04178488522053134
+      },
+      "translationLimitedGrid": true
+    },
+    {
+      "pose": "up-right",
+      "side": "left",
+      "selected": true,
+      "mandatory": true,
+      "oldTranslationNorm": 39.997340575537805,
+      "bestSquareGrid": [
+        -40,
+        40,
+        1.0,
+        0.3617870477661903,
+        false
+      ],
+      "bestFeasible": {
+        "theta": [
+          -24,
+          32,
+          1.0,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.21407254361799816
+      },
+      "translationLimitedGrid": true
+    },
+    {
+      "pose": "down-left",
+      "side": "right",
+      "selected": true,
+      "mandatory": false,
+      "oldTranslationNorm": 39.51336392394869,
+      "bestSquareGrid": [
+        32,
+        24,
+        1.1,
+        0.7026778882938026,
+        true
+      ],
+      "bestFeasible": {
+        "theta": [
+          32,
+          24,
+          1.1,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.7026778882938026
+      },
+      "translationLimitedGrid": false,
+      "reason": "old selected grid seed has translation norm exactly40"
+    },
+    {
+      "pose": "down-right",
+      "side": "left",
+      "selected": false,
+      "mandatory": false,
+      "oldTranslationNorm": 5.537368931737113,
+      "bestSquareGrid": [
+        -4,
+        0,
+        0.8,
+        0.8241927216811892,
+        true
+      ],
+      "bestFeasible": {
+        "theta": [
+          -4,
+          0,
+          0.8,
+          1.0,
+          0.0
+        ],
+        "warpIoU": 0.8241927216811892
+      },
+      "translationLimitedGrid": false
+    }
+  ]
+}

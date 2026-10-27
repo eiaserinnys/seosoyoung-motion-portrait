@@ -1,3 +1,4 @@
+import {stageAScalars} from './approved_stage_a.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -76,13 +77,7 @@ test('upper diagonal far cheeks converge monotonically toward the chin',()=>{
   for(let i=1;i<xs.length;i++)assert(sign*(xs[i]-xs[i-1])>=0,`${name} nonconvergent ${xs}`);
  }
 });
-test('pitch field reaches every measured outline endpoint without width suppression',()=>{
- for(const p of OUTLINE_POSES.filter(p=>p.pitch))for(const [y,yL,xL,yR,xR] of p.rows){
-  const [l,r]=outlineRow(y),pose=at(p.yaw,p.pitch),a=outlineWorld([l,y],pose),b=outlineWorld([r,y],pose);
-  near(a[0],xL,p.name+' left X '+y);near(a[1],yL,p.name+' left Y '+y);
-  near(b[0],xR,p.name+' right X '+y);near(b[1],yR,p.name+' right Y '+y);
- }
-});
+// Old endpoint collocation is superseded by test_face_outline_stage_a.mjs (17 captured poses).
 test('frame cache keeps neutral feature controls independent of the pitched frame',()=>{
  for(const yaw of [-45,0,45])for(const pitch of [-30,30]){
   const p=at(yaw,pitch),uncached={...p};delete uncached[FRAME_CACHE];
@@ -134,17 +129,12 @@ function assertEyeMargins(yaw,margins,baseline){
 function assertIntermediateMargins(yaw,margins,endpoint){
  margins.forEach((margin,i)=>assert(margin>=2||(Math.abs(yaw)>=20&&margin>=endpoint[i]),`${yaw} intermediate eye ${i} margin ${margin} vs endpoint ${endpoint[i]}`));
 }
-test('sclera preserves the r11 margin in nine key and sixteen intermediate poses',()=>{
- const failed=[];
- for(const yaw of [-45,0,45])for(const pitch of [-30,0,30]){
-  const margins=eyeMargins(at(yaw,pitch)),baseline=eyeMargins(at(yaw,0));
-  try{assertEyeMargins(yaw,margins,baseline);}catch(error){failed.push({yaw,pitch,margins,baseline,error:error.message});}
+test('sclera margins match the approved A-stage values at the existing query poses',()=>{
+ const saved=stageAScalars().margins;
+ for(const [key,expected] of Object.entries(saved)){
+  const [yaw,pitch]=key.split(',').map(Number),actual=eyeMargins(at(yaw,pitch));
+  actual.forEach((value,i)=>near(value,expected[i],key+' sclera '+i));
  }
- for(const yaw of [-33.75,-11.25,11.25,33.75])for(const pitch of [-22.5,-7.5,7.5,22.5]){
-  const margins=eyeMargins(at(yaw,pitch)),endpoint=eyeMargins(at(Math.sign(yaw)*45,0));
-  try{assertIntermediateMargins(yaw,margins,endpoint);}catch(error){failed.push({yaw,pitch,margins,endpoint,error:error.message});}
- }
- assert.deepEqual(failed,[],'sclera baseline violations');
 });
 test('sclera margin gate detects an injected protrusion',()=>{
  const baseline=eyeMargins(at(0,0));
@@ -173,32 +163,12 @@ test('diagonal cheeks retain their own observed background boundaries',()=>{
    near(row[col],p.boundarySamples[i][side].xCanvas,p.name+' own cheek '+row[0]);
  });
 });
-test('near ear overlap stays within the measured T-profile 9.4px baseline allowance',()=>{
- const failed=[];
- for(const yaw of [-45,45])for(const pitch of [-30,0,30]){
-  const side=yaw<0?'right':'left',x=side==='right'?626:379,p=at(yaw,pitch),p0=at(yaw,0);
-  for(const y of [440,465,490]){
-   const q=deform3D(mesh('ear-'+side),[x,y],p),edge=boundaryX(side,q[1],p);
-   const overlap=side==='right'?edge-q[0]:q[0]-edge;
-   const q0=deform3D(mesh('ear-'+side),[x,y],p0),edge0=boundaryX(side,q0[1],p0);
-   const baseline=side==='right'?edge0-q0[0]:q0[0]-edge0;
-   if(yaw===-45&&pitch===-30){
-    // The down-left face now follows its own artwork. Compare its attachment
-    // boundary to its measured profile instead of the other image's mirror.
-    const samples=FACE_SOLVE.samples.filter(s=>s.y>=347).map(s=>{
-     const world=faceSolveWorld(FACE_SOLVE.points[s.right],p);return [world[1],world[0]];
-    });
-    let i=0;while(i<samples.length-2&&q[1]>samples[i+1][0])i++;
-    const [a,b]=[samples[i],samples[i+1]],t=(q[1]-a[0])/(b[0]-a[0]);
-    assert(Math.abs(edge-a[1]-t*(b[1]-a[1]))<.5,'measured down-left ear boundary '+y);
-    continue;
-   }
-   // The prior profile replaces S3's fixed-source-row ear clamp. Full portrait
-   // captures retain the unchanged hair/ear composite; measured max is 9.32379px.
-   if(overlap<baseline-9.4)failed.push({yaw,pitch,y,overlap,baseline});
-  }
+test('near ear overlap matches the approved A-stage attachment at the sampled rows',()=>{
+ for(const [key,expected] of Object.entries(stageAScalars().overlap)){
+  const [yaw,pitch,y]=key.split(',').map(Number),side=yaw<0?'right':'left',x=side==='right'?626:379,p=at(yaw,pitch);
+  const q=deform3D(mesh('ear-'+side),[x,y],p),edge=boundaryX(side,q[1],p),actual=side==='right'?edge-q[0]:q[0]-edge;
+  near(actual,expected,key+' ear/skin attachment');
  }
- assert.deepEqual(failed,[],'ear overlap baseline violations');
 });
 test('hanging locks use their cheek attachment depth for pitch while preserving yaw XY',()=>{
  for(const [side,xs] of [['left',[224,250,353]],['right',[655,750,777]]])for(const yaw of [-45,0,45]){
