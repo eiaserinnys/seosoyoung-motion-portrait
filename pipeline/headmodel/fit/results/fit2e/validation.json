@@ -662,5 +662,7 @@
     "merge",
     "deployment"
   ],
-  "base_commit": "6696e228bed37c7707fad38c140d6826d85f1b37"
+  "base_commit": "6696e228bed37c7707fad38c140d6826d85f1b37",
+  "snapshot_only": true,
+  "superseded_by": "validation-k9.json"
 }

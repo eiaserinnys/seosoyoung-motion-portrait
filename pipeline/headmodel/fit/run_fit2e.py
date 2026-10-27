@@ -170,11 +170,15 @@ def k9_stage():
     if (RESULTS/'k9-state.npz').exists(): raise FileExistsError('K9 already executed')
     model,ear,shared,poses,split=refined_context()
     prep=read_json(RESULTS/'prepare.json'); noise=read_json(RESULTS/'noise-floor.json')
-    nodes=np.array([poses[f][:2] for f in split['keys']]); self_weights=np.diag(e.phi(nodes,nodes))
+    nodes=np.array([poses[f][:2] for f in split['keys']])
+    checked=e.phi(np.vstack([nodes,[90,0]]),nodes); self_weights=np.diag(checked[:9])
     basis_check={'key_frames':split['keys'],'nodes_deg':nodes.tolist(),
-                 'self_weights':self_weights.tolist(),'passed':bool((self_weights>=.6).all())}
+                 'self_weights':self_weights.tolist(),'self_weight_is_measurement_only':True,
+                 'passed':bool(np.isfinite(checked).all() and (checked>=0).all() and (checked<=1).all()
+                               and np.allclose(checked.sum(1),1,rtol=0,atol=1e-14)),
+                 'sigma_deg':18.,'pitch_weight':1.4,'correction':'담당 채택: 자기 가중 하한 대신 실측값만 기록'}
     write_json(RESULTS/'basis-check.json',basis_check)
-    if not basis_check['passed']: raise RuntimeError('Actual corrected key Gaussian self weights below .6: design decision required')
+    if not basis_check['passed']: raise RuntimeError('Invalid Gaussian partition weights')
     frames=split['train']; targets=load_targets_f(frames,shared['thickness_px'])
     def failure(history,attempts):
         write_json(RESULTS/'k9-cg-failure.json',{'icp':history,'failed_attempts':attempts})

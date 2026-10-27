@@ -1,0 +1,405 @@
+{
+  "status": "K9_completed_awaiting_coordinator_judgment",
+  "basis_correction": "담당 채택: 자기 가중은 실측만 기록; 합1·유한·0~1·yaw90 검사 유지",
+  "refine_rotation": true,
+  "rotation_delta_abs_median_deg": 1.6152139803503192,
+  "rotation_delta_abs_max_deg": 8.754454718632351,
+  "boundary_frames": [],
+  "excluded_frames": [
+    {
+      "frame": 103,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 10.83713260906685,
+      "rotation_delta_deg": [
+        1.2944499326076284,
+        1.6532598623883494,
+        -0.8120885344943777
+      ]
+    },
+    {
+      "frame": 301,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 9.8124913966883,
+      "rotation_delta_deg": [
+        0.060796421470072914,
+        0.8674148082295154,
+        0.5710647709419483
+      ]
+    },
+    {
+      "frame": 303,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 9.178189559225958,
+      "rotation_delta_deg": [
+        1.564226629078636,
+        0.7468467540576569,
+        1.1346788531689647
+      ]
+    },
+    {
+      "frame": 310,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 9.909346936423862,
+      "rotation_delta_deg": [
+        -0.7521659669143261,
+        -3.1024666567438963,
+        3.9970320789353764
+      ]
+    },
+    {
+      "frame": 313,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 9.930109269033828,
+      "rotation_delta_deg": [
+        -1.451730794329265,
+        -2.6346341504372717,
+        3.5244152683999577
+      ]
+    },
+    {
+      "frame": 316,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 14.770489759596074,
+      "rotation_delta_deg": [
+        1.2388975516514762,
+        0.45491519426014726,
+        1.4712116725000222
+      ]
+    },
+    {
+      "frame": 319,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 9.345608235647276,
+      "rotation_delta_deg": [
+        -1.1840028137334713,
+        -2.2637305376291135,
+        3.4185628231957583
+      ]
+    },
+    {
+      "frame": 322,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 9.114676843331255,
+      "rotation_delta_deg": [
+        -1.326025247340887,
+        -2.3399158467512855,
+        3.538143160959388
+      ]
+    },
+    {
+      "frame": 325,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 8.749045809458169,
+      "rotation_delta_deg": [
+        -1.2624223826831553,
+        -2.223964066873627,
+        3.5129437451966563
+      ]
+    },
+    {
+      "frame": 328,
+      "reasons": [
+        "hair_median_above_8px"
+      ],
+      "hair_median_px": 8.251878430993067,
+      "rotation_delta_deg": [
+        -1.3846375807207352,
+        -2.0540911670678508,
+        3.357555330795564
+      ]
+    }
+  ],
+  "train_count": 92,
+  "heldout_count": 28,
+  "noise_pair_count": 68,
+  "noise_floor": {
+    "skin": {
+      "median_px": 1.0,
+      "max_px": 2.8284271247461903
+    },
+    "hair": {
+      "median_px": 0.0,
+      "max_px": 2.6287964078103894
+    }
+  },
+  "aggregate": {
+    "train": {
+      "skin": {
+        "median_px": 0.5888487697160723,
+        "frame_max_p95_px": 11.482284975269703,
+        "top_5pct_frames": [
+          {
+            "frame": 219,
+            "max_px": 21.666829084139376
+          },
+          {
+            "frame": 187,
+            "max_px": 17.55960998183875
+          },
+          {
+            "frame": 58,
+            "max_px": 14.04268486370394
+          },
+          {
+            "frame": 206,
+            "max_px": 11.578596194911187
+          },
+          {
+            "frame": 226,
+            "max_px": 11.499204509651637
+          }
+        ],
+        "worst_point": {
+          "frame": 219,
+          "xy": [
+            217.0,
+            585.0
+          ],
+          "max_px": 21.666829084139376
+        }
+      },
+      "hair": {
+        "median_px": 0.7035822293681467,
+        "frame_max_p95_px": 29.56633411665844,
+        "top_5pct_frames": [
+          {
+            "frame": 172,
+            "max_px": 39.592652742006045
+          },
+          {
+            "frame": 175,
+            "max_px": 33.974296307422804
+          },
+          {
+            "frame": 178,
+            "max_px": 32.22391439264078
+          },
+          {
+            "frame": 166,
+            "max_px": 31.735045579311453
+          },
+          {
+            "frame": 28,
+            "max_px": 29.746857693151817
+          }
+        ],
+        "worst_point": {
+          "frame": 172,
+          "xy": [
+            413.78833227084266,
+            533.3649968125279
+          ],
+          "max_px": 39.592652742006045
+        }
+      }
+    },
+    "heldout": {
+      "skin": {
+        "median_px": 0.5734938876233071,
+        "frame_max_p95_px": 13.282458134655329,
+        "top_5pct_frames": [
+          {
+            "frame": 217,
+            "max_px": 23.26582089903148
+          },
+          {
+            "frame": 229,
+            "max_px": 13.805136625866844
+          }
+        ],
+        "worst_point": {
+          "frame": 217,
+          "xy": [
+            300.0,
+            535.0
+          ],
+          "max_px": 23.26582089903148
+        }
+      },
+      "hair": {
+        "median_px": 0.7005344276455125,
+        "frame_max_p95_px": 29.430347174494646,
+        "top_5pct_frames": [
+          {
+            "frame": 169,
+            "max_px": 38.85093137408932
+          },
+          {
+            "frame": 37,
+            "max_px": 30.40573875737226
+          }
+        ],
+        "worst_point": {
+          "frame": 169,
+          "xy": [
+            421.99390745162964,
+            538.0
+          ],
+          "max_px": 38.85093137408932
+        }
+      }
+    }
+  },
+  "targets_met": {
+    "train": false,
+    "heldout": false
+  },
+  "node_load_range": [
+    0.49095607476856074,
+    2.6803251784765445
+  ],
+  "303_node_load_is_not_the_lowest": true,
+  "global_worst_valid_point": {
+    "skin": {
+      "frame": 217,
+      "xy": [
+        300.0,
+        535.0
+      ],
+      "max_px": 23.26582089903148
+    },
+    "hair": {
+      "frame": 172,
+      "xy": [
+        413.78833227084266,
+        533.3649968125279
+      ],
+      "max_px": 39.592652742006045
+    }
+  },
+  "heldout_within_noise_plus_point3": {
+    "skin": true,
+    "hair": false
+  },
+  "node_curvature_all_passed": false,
+  "rotation_curvature_all_passed": false,
+  "maximum_vertex_movement_per_5deg_px": 4.918043475844149,
+  "pose_maximum_curvature": 0.06820882279983051,
+  "runners": {
+    "preparation": 1,
+    "pose_including_pose_sheet": 1,
+    "noise": 1,
+    "K9": 1,
+    "K9_sheets": 1,
+    "preparation_seconds": 4.181944076903164,
+    "pose_seconds": 737.4760695549194,
+    "noise_seconds": 4.217831221991219,
+    "K9_fit_seconds": 896.208620483987,
+    "K9_total_seconds": 932.7418710750062,
+    "K9_sheets_seconds": 23.119717285968363,
+    "CG_fallback_attempts": 0
+  },
+  "CG_iterations": [
+    67,
+    62,
+    59,
+    56,
+    55,
+    52,
+    53,
+    52
+  ],
+  "tests": {
+    "initial_red": "Missing fit2e_core before implementation",
+    "preparation": "10 passed .428s: six new plus four reused 2f contracts",
+    "actual_mesh_matvec_preconditioner": "1 passed .278s",
+    "actual_key_phi_before_correction": "1 failed .011s on old .6 bound",
+    "actual_key_phi_after_authorized_correction": "1 passed .008s",
+    "full_suite_run": false
+  },
+  "input_sha256_after": {
+    "fit-state-n3.npz": "6f93b2bba69e51c533b0a4f91638a4c690c17482a2a5888246fa6bb5c23b6c40",
+    "poses-n3.json": "3396e7470b52249eddd8ed8968ca7b39ce9f3f86ddf136e3d94539f48d522892",
+    "surface-a.npz": "2bad2923c142f38ff934b98fd6775ff3f74d9bc711f2c5dc9f0e5822540a606b",
+    "shared-n3.json": "0562fe35734c3f974316b2e450d76686e48fb89671db6b470350b3fdde24eeda",
+    "b3-step2-residuals.json": "e721044d912ae9d6aac62d86acdbeeac24806576bfa8c57601e06da8dc95b104"
+  },
+  "all_five_2f_inputs_unchanged": true,
+  "poses_and_exclusions_identical_to_02c2fdb": true,
+  "sheets": [
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-pose-refine.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-pose-refine.png",
+      "sha256": "131287d93babe755db5f0eb4510dc48e33345295f47141067858b9ab30d74231"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-rotation-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-rotation-k9.png",
+      "sha256": "e98b60899e1b11ceaead5db1c6f1357a199436e2ac59da39987ab51fc23fbdb9"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-keys-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-keys-k9.png",
+      "sha256": "e3de7e6f5c73a718ace2dc978614813117e5a4270219ce245bcd99f02f0c133b"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-jaw-keys-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-jaw-keys-k9.png",
+      "sha256": "0cdb3bbc8745e7a0d7f20d3b72e32469a32450a44f10779c5fe0fb69c00baa43"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-jaw-heldout-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-jaw-heldout-k9.png",
+      "sha256": "7c9c61e8120b7184da035cd89bf6262679dc04a143b67886c2a994b0d990529f"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-profile-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-profile-k9.png",
+      "sha256": "0984c042c1cf8f0db9b6f20c83567b5b939f83cbfc41167de223b815948473a5"
+    }
+  ],
+  "independent_static_review": "pass; Gaussian correction pass",
+  "review": {
+    "overall": "G1 failed; contour targets unmet",
+    "root_and_independent_viewed_all_five_new_sheets": true,
+    "broad_forehead_cheek_ridges": "No broad band or large ridge visible in the inspected static sheets.",
+    "remaining_surface_issue": "Local chin-tip/submandibular unevenness and side-of-face near-ear roughness remain.",
+    "skin_worst_location": "Submandibular contour at the jaw/neck-mask junction, not the central chin tip.",
+    "hair_worst_location": "Behind-ear lower occiput/neck junction, not the crown.",
+    "angle_continuity": "No large jump visible in the 5-degree static views and silhouette stacks.",
+    "continuous_video_examined": false,
+    "303_EXCLUDED_label_confirmed": true,
+    "noise_interpretation": "Skin validation median is below measured pair-distance noise value. Hair validation median exceeds hair noise + .3. This does not establish that all remaining error is drawing noise.",
+    "appendix5_case": "No full pass row applies. Skin fails insertion condition 2 because .57349 <= 1+.3; hair maxima and curvature failures remain.",
+    "source_code_static_review": "pass; Gaussian correction approved and verified"
+  },
+  "scientific_evidence_only_no_product_UI_changes": true,
+  "source_scope": [
+    "fit2e_core.py",
+    "run_fit2e.py",
+    "fit2e_sheets.py",
+    "test_fit2e_core.py"
+  ],
+  "existing_2f_data_model_bundle_runtime_tripo_changed": false,
+  "insertion_history": [],
+  "sigma_correction": false,
+  "not_done": [
+    "node insertion",
+    "sigma correction",
+    "pose rerun",
+    "V_B change",
+    "remesh",
+    "PR",
+    "merge",
+    "deployment"
+  ],
+  "base_commit": "02c2fdbbe28930ca8c103b10c881057a40164df1"
+}

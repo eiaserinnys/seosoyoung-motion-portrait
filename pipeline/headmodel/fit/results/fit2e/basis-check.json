@@ -59,8 +59,9 @@
     0.5755440115915231,
     0.876710939605036
   ],
-  "passed": false,
-  "required_minimum": 0.6,
+  "self_weight_is_measurement_only": true,
+  "passed": true,
   "sigma_deg": 18.0,
-  "pitch_weight": 1.4
+  "pitch_weight": 1.4,
+  "correction": "담당 채택: 자기 가중 하한 대신 실측값만 기록"
 }

@@ -1,0 +1,1195 @@
+{
+  "rotation_poses": [
+    {
+      "yaw": -45,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008743005370900615,
+        "p95": 0.005383396500125397,
+        "p99": 0.011625492494787112,
+        "max": 0.037202192134202665,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -40,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008716800392071008,
+        "p95": 0.005361129558205009,
+        "p99": 0.011621864642456865,
+        "max": 0.037037109553734224,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -35,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008667490108854938,
+        "p95": 0.005299819059705068,
+        "p99": 0.011520382192804227,
+        "max": 0.03659257175314135,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -30,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008580218539432445,
+        "p95": 0.005189063931469756,
+        "p99": 0.011281509982046906,
+        "max": 0.03564157310245882,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -25,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008424063290091234,
+        "p95": 0.005064533716888911,
+        "p99": 0.010861031182442287,
+        "max": 0.03380134736585019,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -20,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008387459717892902,
+        "p95": 0.005000737593441696,
+        "p99": 0.010404496290459399,
+        "max": 0.0305406558978511,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -15,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008462640007519472,
+        "p95": 0.004940962132929667,
+        "p99": 0.009941674341005131,
+        "max": 0.02544226002428701,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -10,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008566621928912922,
+        "p95": 0.004916547243421028,
+        "p99": 0.010203719045593487,
+        "max": 0.029144475657593368,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -5,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0008719175266263077,
+        "p95": 0.00530062610046377,
+        "p99": 0.010979093154691184,
+        "max": 0.041226639894816626,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 0,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009100087550172168,
+        "p95": 0.005824403030618731,
+        "p99": 0.01207028845394748,
+        "max": 0.051631382853586594,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 5,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009375865182936838,
+        "p95": 0.0063684085601776064,
+        "p99": 0.013130148601921417,
+        "max": 0.05896379379439174,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 10,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009615204888351566,
+        "p95": 0.0066961919156068245,
+        "p99": 0.013725628459514218,
+        "max": 0.06349293474945297,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 15,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009719420020875075,
+        "p95": 0.006899897779961431,
+        "p99": 0.014073258467884191,
+        "max": 0.06607527145184931,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 20,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.000981135261235307,
+        "p95": 0.006972959336556885,
+        "p99": 0.014313997422793394,
+        "max": 0.0674445666317594,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 25,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009807096119851637,
+        "p95": 0.006987221383875214,
+        "p99": 0.014405316957181372,
+        "max": 0.068067593789917,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 30,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009785014129045809,
+        "p95": 0.007003266468258213,
+        "p99": 0.014434185382850854,
+        "max": 0.06820882279983051,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 35,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009733263561767585,
+        "p95": 0.006988860629885378,
+        "p99": 0.014242985510555523,
+        "max": 0.06801145290669615,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 40,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.000968182908582495,
+        "p95": 0.006961692238789082,
+        "p99": 0.014070979037042622,
+        "max": 0.06755138931179279,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 45,
+      "pitch": -25,
+      "curvature": {
+        "p50": 0.0009591757397691109,
+        "p95": 0.0068874183246423045,
+        "p99": 0.013964431740459523,
+        "max": 0.06686770274683022,
+        "passed": false
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -45,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005275908248800799,
+        "p95": 0.004106242992652117,
+        "p99": 0.007641458455804725,
+        "max": 0.03274484290164805,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -40,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005294229601735302,
+        "p95": 0.004073104504516558,
+        "p99": 0.007460332080838539,
+        "max": 0.0318558381995119,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -35,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005297462468403928,
+        "p95": 0.0039754981570998505,
+        "p99": 0.007386021483071196,
+        "max": 0.030580292296746452,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -30,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.000530870040797123,
+        "p95": 0.0038910579324129718,
+        "p99": 0.007181653350834566,
+        "max": 0.028791889756352284,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -25,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005350373712199169,
+        "p95": 0.003853519137732323,
+        "p99": 0.007017816566115001,
+        "max": 0.026416476682319785,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -20,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005591450819303275,
+        "p95": 0.003711552611608956,
+        "p99": 0.0067645174312549435,
+        "max": 0.023518353605936262,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -15,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005797863643299054,
+        "p95": 0.0036784572291182083,
+        "p99": 0.007026929307605724,
+        "max": 0.020340772520582553,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -10,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0006114878600973049,
+        "p95": 0.00369308775611309,
+        "p99": 0.007269208568551016,
+        "max": 0.01949680983151573,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -5,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0006331240701900124,
+        "p95": 0.0037691688799228224,
+        "p99": 0.007829580155870807,
+        "max": 0.020187780036370628,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 0,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0006656413149119947,
+        "p95": 0.0038606688416148584,
+        "p99": 0.008192414589589204,
+        "max": 0.02089135361740703,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 5,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0006966178997637632,
+        "p95": 0.0040699230226274065,
+        "p99": 0.008728654030039671,
+        "max": 0.022596057940325282,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 10,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007194878700041515,
+        "p95": 0.0044022708865150174,
+        "p99": 0.008935976850868037,
+        "max": 0.02591815071407542,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 15,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.000741076611994776,
+        "p95": 0.004735273679993104,
+        "p99": 0.009320530828806864,
+        "max": 0.028527671636428314,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 20,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007614013894108329,
+        "p95": 0.005008889857092426,
+        "p99": 0.009989156549667245,
+        "max": 0.030168683298460716,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 25,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007762697038055251,
+        "p95": 0.005172468313861873,
+        "p99": 0.010623566661567174,
+        "max": 0.030789510446610546,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 30,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007900363438400782,
+        "p95": 0.005356482085418533,
+        "p99": 0.011316736081599763,
+        "max": 0.030531472816062114,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 35,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007970537961301458,
+        "p95": 0.005538768450113045,
+        "p99": 0.011811264286662002,
+        "max": 0.02963787193379826,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 40,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007973686840801463,
+        "p95": 0.00565307858571972,
+        "p99": 0.011984639343889684,
+        "max": 0.0283586350680029,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 45,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007943719874668224,
+        "p95": 0.005676824921878634,
+        "p99": 0.012271717064968709,
+        "max": 0.02689578619007236,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -45,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0005489135408246131,
+        "p95": 0.005358445763190882,
+        "p99": 0.011993369645075804,
+        "max": 0.034582493478384775,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -40,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0005639788646311109,
+        "p95": 0.00507038357131013,
+        "p99": 0.011215113069237375,
+        "max": 0.03378416829949572,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -35,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0005923015548732622,
+        "p95": 0.004755716529745088,
+        "p99": 0.010187846580816085,
+        "max": 0.032432813620122666,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -30,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0006277408667294445,
+        "p95": 0.004316666384196609,
+        "p99": 0.0088229022720089,
+        "max": 0.030392998345925966,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -25,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.000655849317538629,
+        "p95": 0.004152521836700324,
+        "p99": 0.007281338508513131,
+        "max": 0.027740838591511597,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -20,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0006879567814654521,
+        "p95": 0.004103871293475439,
+        "p99": 0.006570904598617565,
+        "max": 0.024848888470246314,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -15,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0007136741099799859,
+        "p95": 0.004112838259163823,
+        "p99": 0.006416774879982563,
+        "max": 0.02219410980886126,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -10,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.000752176767837667,
+        "p95": 0.004197135165293818,
+        "p99": 0.006835141411436131,
+        "max": 0.020491959244922045,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -5,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0007801929050960087,
+        "p95": 0.0042767662860474865,
+        "p99": 0.0070957785936235866,
+        "max": 0.021470548808411285,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 0,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0008010430047588646,
+        "p95": 0.004288827610376287,
+        "p99": 0.007258039325191372,
+        "max": 0.02132446211491709,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 5,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0008241028522601678,
+        "p95": 0.004192436595321729,
+        "p99": 0.007310828013774844,
+        "max": 0.020069931334772598,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 10,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0008552827637859865,
+        "p95": 0.0041212702991023755,
+        "p99": 0.007267532243334275,
+        "max": 0.01838056368508483,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 15,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0008841195023555138,
+        "p95": 0.004148136504676398,
+        "p99": 0.007869294764988587,
+        "max": 0.017344836968310143,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 20,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0008834743321748136,
+        "p95": 0.004389837693205343,
+        "p99": 0.009267924908310639,
+        "max": 0.02171468512743069,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 25,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0008495923446739885,
+        "p95": 0.004696272730732214,
+        "p99": 0.010710878398792109,
+        "max": 0.026916614489327938,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 30,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0008239660472256161,
+        "p95": 0.005116571927659004,
+        "p99": 0.012006969053605474,
+        "max": 0.030947035839504554,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 35,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0007996632744276275,
+        "p95": 0.005462023145815976,
+        "p99": 0.012895006438151356,
+        "max": 0.03375039325248572,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 40,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0007865472115731821,
+        "p95": 0.005638331925376867,
+        "p99": 0.013327554181126071,
+        "max": 0.035590309264351826,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": 45,
+      "pitch": 25,
+      "curvature": {
+        "p50": 0.0007720227212424644,
+        "p95": 0.005775833603947183,
+        "p99": 0.013596157783480872,
+        "max": 0.036782716647116735,
+        "passed": true
+      },
+      "extrapolated": false
+    },
+    {
+      "yaw": -60,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005284132017867156,
+        "p95": 0.0042928784415051146,
+        "p99": 0.008112877461135455,
+        "max": 0.03414267167023246,
+        "passed": true
+      },
+      "extrapolated": true
+    },
+    {
+      "yaw": -55,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005284452858687534,
+        "p95": 0.004265000915833825,
+        "p99": 0.00794119953032217,
+        "max": 0.03381204593862073,
+        "passed": true
+      },
+      "extrapolated": true
+    },
+    {
+      "yaw": -50,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0005276785160490985,
+        "p95": 0.004195191152383346,
+        "p99": 0.00786677730589056,
+        "max": 0.033366667141389125,
+        "passed": true
+      },
+      "extrapolated": true
+    },
+    {
+      "yaw": 50,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007934256891749475,
+        "p95": 0.0056981925008179855,
+        "p99": 0.01241049060205388,
+        "max": 0.025389472075647915,
+        "passed": true
+      },
+      "extrapolated": true
+    },
+    {
+      "yaw": 55,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007916072991772094,
+        "p95": 0.005716729287462577,
+        "p99": 0.01255746476814798,
+        "max": 0.023926012072585365,
+        "passed": true
+      },
+      "extrapolated": true
+    },
+    {
+      "yaw": 60,
+      "pitch": 0,
+      "curvature": {
+        "p50": 0.0007891202667636193,
+        "p95": 0.0057217098275923785,
+        "p99": 0.012661716682636976,
+        "max": 0.024135300139020675,
+        "passed": true
+      },
+      "extrapolated": true
+    }
+  ],
+  "pose_maximum_curvature": 0.06820882279983051,
+  "all_rotation_poses_passed": false,
+  "maximum_vertex_movement_per_5deg_px": 4.918043475844149,
+  "silhouette_adjacent_intervals": [
+    {
+      "pitch": -25,
+      "yaw_from": -45,
+      "yaw_to": -40,
+      "min_render_px": 0.0,
+      "max_render_px": 3.0
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -40,
+      "yaw_to": -35,
+      "min_render_px": 0.0,
+      "max_render_px": 3.0
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -35,
+      "yaw_to": -30,
+      "min_render_px": 0.0,
+      "max_render_px": 3.0
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -30,
+      "yaw_to": -25,
+      "min_render_px": 0.0,
+      "max_render_px": 3.0
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -25,
+      "yaw_to": -20,
+      "min_render_px": 0.0,
+      "max_render_px": 2.23606797749979
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -20,
+      "yaw_to": -15,
+      "min_render_px": 0.0,
+      "max_render_px": 2.23606797749979
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -15,
+      "yaw_to": -10,
+      "min_render_px": 0.0,
+      "max_render_px": 2.23606797749979
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -10,
+      "yaw_to": -5,
+      "min_render_px": 0.0,
+      "max_render_px": 2.23606797749979
+    },
+    {
+      "pitch": -25,
+      "yaw_from": -5,
+      "yaw_to": 0,
+      "min_render_px": 0.0,
+      "max_render_px": 2.23606797749979
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 0,
+      "yaw_to": 5,
+      "min_render_px": 0.0,
+      "max_render_px": 2.23606797749979
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 5,
+      "yaw_to": 10,
+      "min_render_px": 0.0,
+      "max_render_px": 2.0
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 10,
+      "yaw_to": 15,
+      "min_render_px": 0.0,
+      "max_render_px": 2.23606797749979
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 15,
+      "yaw_to": 20,
+      "min_render_px": 0.0,
+      "max_render_px": 2.8284271247461903
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 20,
+      "yaw_to": 25,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 25,
+      "yaw_to": 30,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 30,
+      "yaw_to": 35,
+      "min_render_px": 0.0,
+      "max_render_px": 3.0
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 35,
+      "yaw_to": 40,
+      "min_render_px": 0.0,
+      "max_render_px": 3.0
+    },
+    {
+      "pitch": -25,
+      "yaw_from": 40,
+      "yaw_to": 45,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -45,
+      "yaw_to": -40,
+      "min_render_px": 0.0,
+      "max_render_px": 4.0
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -40,
+      "yaw_to": -35,
+      "min_render_px": 0.0,
+      "max_render_px": 4.0
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -35,
+      "yaw_to": -30,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -30,
+      "yaw_to": -25,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -25,
+      "yaw_to": -20,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -20,
+      "yaw_to": -15,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -15,
+      "yaw_to": -10,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -10,
+      "yaw_to": -5,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": -5,
+      "yaw_to": 0,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 0,
+      "yaw_to": 5,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 5,
+      "yaw_to": 10,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 10,
+      "yaw_to": 15,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 15,
+      "yaw_to": 20,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 20,
+      "yaw_to": 25,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 25,
+      "yaw_to": 30,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 30,
+      "yaw_to": 35,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 35,
+      "yaw_to": 40,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 0,
+      "yaw_from": 40,
+      "yaw_to": 45,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -45,
+      "yaw_to": -40,
+      "min_render_px": 0.0,
+      "max_render_px": 4.242640687119285
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -40,
+      "yaw_to": -35,
+      "min_render_px": 0.0,
+      "max_render_px": 4.242640687119285
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -35,
+      "yaw_to": -30,
+      "min_render_px": 0.0,
+      "max_render_px": 5.0
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -30,
+      "yaw_to": -25,
+      "min_render_px": 0.0,
+      "max_render_px": 4.47213595499958
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -25,
+      "yaw_to": -20,
+      "min_render_px": 0.0,
+      "max_render_px": 4.0
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -20,
+      "yaw_to": -15,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -15,
+      "yaw_to": -10,
+      "min_render_px": 0.0,
+      "max_render_px": 4.123105625617661
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -10,
+      "yaw_to": -5,
+      "min_render_px": 0.0,
+      "max_render_px": 4.242640687119285
+    },
+    {
+      "pitch": 25,
+      "yaw_from": -5,
+      "yaw_to": 0,
+      "min_render_px": 0.0,
+      "max_render_px": 2.8284271247461903
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 0,
+      "yaw_to": 5,
+      "min_render_px": 0.0,
+      "max_render_px": 3.1622776601683795
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 5,
+      "yaw_to": 10,
+      "min_render_px": 0.0,
+      "max_render_px": 4.242640687119285
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 10,
+      "yaw_to": 15,
+      "min_render_px": 0.0,
+      "max_render_px": 3.605551275463989
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 15,
+      "yaw_to": 20,
+      "min_render_px": 0.0,
+      "max_render_px": 4.123105625617661
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 20,
+      "yaw_to": 25,
+      "min_render_px": 0.0,
+      "max_render_px": 5.0
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 25,
+      "yaw_to": 30,
+      "min_render_px": 0.0,
+      "max_render_px": 5.0
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 30,
+      "yaw_to": 35,
+      "min_render_px": 0.0,
+      "max_render_px": 5.0
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 35,
+      "yaw_to": 40,
+      "min_render_px": 0.0,
+      "max_render_px": 4.242640687119285
+    },
+    {
+      "pitch": 25,
+      "yaw_from": 40,
+      "yaw_to": 45,
+      "min_render_px": 0.0,
+      "max_render_px": 4.242640687119285
+    }
+  ],
+  "silhouette_interval_min_render_px": 0.0,
+  "silhouette_interval_max_render_px": 5.0,
+  "profile_frames": [
+    172,
+    184,
+    192,
+    240,
+    219,
+    226
+  ],
+  "heldout_crop_frames": [
+    181,
+    193,
+    289,
+    229,
+    217,
+    169,
+    37,
+    265,
+    25,
+    253,
+    241,
+    61
+  ],
+  "elapsed_seconds": 23.119717285968363,
+  "sheets": [
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-rotation-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-rotation-k9.png",
+      "sha256": "e98b60899e1b11ceaead5db1c6f1357a199436e2ac59da39987ab51fc23fbdb9"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-keys-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-keys-k9.png",
+      "sha256": "e3de7e6f5c73a718ace2dc978614813117e5a4270219ce245bcd99f02f0c133b"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-jaw-keys-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-jaw-keys-k9.png",
+      "sha256": "0cdb3bbc8745e7a0d7f20d3b72e32469a32450a44f10779c5fe0fb69c00baa43"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-jaw-heldout-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-jaw-heldout-k9.png",
+      "sha256": "7c9c61e8120b7184da035cd89bf6262679dc04a143b67886c2a994b0d990529f"
+    },
+    {
+      "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/sheets/fit2e-profile-k9.png",
+      "artifact_path": "/home/eias/workspace/.local/artifacts/fit2e/fit2e-profile-k9.png",
+      "sha256": "0984c042c1cf8f0db9b6f20c83567b5b939f83cbfc41167de223b815948473a5"
+    }
+  ]
+}

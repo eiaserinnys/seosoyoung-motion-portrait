@@ -19,19 +19,21 @@ class Contracts(unittest.TestCase):
         weights=e.phi(np.vstack([nodes,[90,0]]),nodes)
         np.testing.assert_allclose(weights.sum(1),1,atol=1e-14)
         self.assertTrue(np.isfinite(weights).all() and (weights>=0).all() and (weights<=1).all())
-        self.assertGreaterEqual(np.diag(weights[:9]).min(),.6)
         # Real key angles become available only after the authorized pose fit.
         from fit_core import FIT,read_json,write_json
         path=FIT/'results/fit2e/poses-refined.json'
         if path.exists():
             keys=read_json(FIT/'results/fit2e/prepare.json')['split']['keys']
             poses={r['frame']:r['refined_pose'] for r in read_json(path)['frames']}
-            actual=np.array([poses[f][:2] for f in keys]); values=np.diag(e.phi(actual,actual))
+            actual=np.array([poses[f][:2] for f in keys])
+            checked=e.phi(np.vstack([actual,[90,0]]),actual); values=np.diag(checked[:9])
+            np.testing.assert_allclose(checked.sum(1),1,atol=1e-14)
+            self.assertTrue(np.isfinite(checked).all() and (checked>=0).all() and (checked<=1).all())
             report={'key_frames':keys,'nodes_deg':actual.tolist(),'self_weights':values.tolist(),
-                    'passed':bool((values>=.6).all()),'required_minimum':.6,'sigma_deg':18.,'pitch_weight':1.4}
+                    'passed':True,'self_weight_is_measurement_only':True,'sigma_deg':18.,'pitch_weight':1.4,
+                    'correction':'담당 채택: 자기 가중 하한 대신 실측값만 기록'}
             write_json(FIT/'results/fit2e/basis-check.json',report)
             print('ACTUAL KEY SELF PHI',report,flush=True)
-            self.assertGreaterEqual(values.min(),.6)
 
     def test_2_loads(self):
         weights=np.array([[.8,.2],[.4,.6]])

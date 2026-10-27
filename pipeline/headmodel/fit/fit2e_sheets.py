@@ -101,12 +101,13 @@ def k9_sheets():
         rendered,mask,_=shade(v,tri,pose,720,cull_backfaces=True)
         original=image_for(f); blended=original.copy()
         blended[mask]=np.rint(.48*original[mask]+.52*rendered[mask]).astype(np.uint8)
-        first=cv2.resize(blended,(300,300)); label(first,f'key {f}',(6,20)); rows[0].append(first)
+        status=' EXCLUDED' if f in split['excluded'] else ''
+        first=cv2.resize(blended,(300,300)); label(first,f'key {f}{status}',(6,20)); rows[0].append(first)
         for index,yaw,colors in [(1,0,None),(2,90,None),(3,0,heat(np.linalg.norm(displacement,axis=1),6.)),
                                   (4,0,heat(curvature,.05,excluded))]:
             image,_,_=shade(v-center,tri,[yaw,0,0,np.log(scale),150,150],300,colors=colors,cull_backfaces=True)
             title=['','','','|D| 0-6px','|L D/M| 0-.05'][index]
-            label(image,f'{f} {title}',(6,20))
+            label(image,f'{f}{status} {title}',(6,20))
             if index==4: label(image,f'p99 {stats["p99"]:.3f} max {stats["max"]:.3f}',(6,290))
             rows[index].append(image)
     manifest.append(save('fit2e-keys-k9.png',np.vstack([np.hstack(row) for row in rows])))
@@ -115,7 +116,8 @@ def k9_sheets():
         for target in targets:
             f=target['frame']; pose=poses[f]; v=base+field(*pose[:2])/sref
             if not full_head:
-                image=panel({'vertices':v,'triangles':tri},target,pose,f'{title} {f}')
+                status=' EXCLUDED' if f in split['excluded'] else ''
+                image=panel({'vertices':v,'triangles':tri},target,pose,f'{title} {f}{status}')
             else:
                 image=image_for(f); contours=surface_contour(v,tri,pose)
                 draw_points(image,contours['xy'],(20,25,240))
@@ -125,7 +127,8 @@ def k9_sheets():
                 lo=np.maximum(np.floor(points.min(0)).astype(int)-25,0)
                 hi=np.minimum(np.ceil(points.max(0)).astype(int)+26,720)
                 image=cv2.resize(image[lo[1]:hi[1],lo[0]:hi[0]],None,fx=2,fy=2,interpolation=cv2.INTER_NEAREST)
-                label(image,f'{title} {f}')
+                status=' EXCLUDED' if f in split['excluded'] else ''
+                label(image,f'{title} {f}{status}')
             images.append(image)
         manifest.append(save(name,grid(images,3)))
     crop_sheet(split['keys'],'fit2e-jaw-keys-k9.png','KEY')
