@@ -1,0 +1,62 @@
+{
+  "frame_number": 42,
+  "decode_index_zero_based": 41,
+  "pose_source_commit": "66aed9016fb1002845fa789a97ca0e04b4d45d35",
+  "pose": {
+    "yaw": -36.82991693704355,
+    "pitch": 0.7006801983402771
+  },
+  "elapsed_seconds": null,
+  "elapsed_seconds_status": "not measured; reused existing output",
+  "inference_status": "reused_existing",
+  "failed": false,
+  "failure": null,
+  "layers": [
+    "head",
+    "face",
+    "ears",
+    "neck",
+    "front hair",
+    "back hair",
+    "headwear"
+  ],
+  "requested_layers": [
+    "head",
+    "face",
+    "ears",
+    "neck",
+    "front hair",
+    "back hair",
+    "headwear"
+  ],
+  "masks": {
+    "skull": "largest connected head alpha component, holes filled, threshold >= 128",
+    "ears-st": "ears alpha threshold >= 128"
+  },
+  "transform": {
+    "method": "center_square_pad_resize; final output canvas uses full-frame coordinates",
+    "source_size_px": [
+      640,
+      640
+    ],
+    "layerdiff_canvas_size_px": [
+      1280,
+      1280
+    ],
+    "canvas_to_source_scale": 0.5,
+    "source_to_canvas_scale": 2.0,
+    "canvas_padding_offset_xy_px": [
+      0,
+      0
+    ],
+    "canvas_content_offset_xy_px": [
+      0,
+      0
+    ],
+    "inverse_resampling": "premultiplied RGBA, cv2.INTER_AREA",
+    "output_size_px": [
+      640,
+      640
+    ]
+  }
+}
