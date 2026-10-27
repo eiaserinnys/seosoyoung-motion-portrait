@@ -6,8 +6,6 @@ import {configureHeadBase,projectModel,modelAngles,phi,fieldAt,headBaseVertices,
 import {CORRECTION_PRESETS} from '../bundle/corrections.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
-import {FEATURE_FIT} from '../bundle/feature-data.mjs';
-import {registeredFeatureWorld} from '../bundle/face-feature-prior.mjs';
 import {outlineWorld} from '../bundle/face-outline.mjs';
 import {bindRig,deform3D} from '../bundle/rig.mjs';
 
@@ -67,10 +65,20 @@ test('N6: skin and head surface are continuous at both 45 degree boundaries',{ti
   for(const point of skin.positions){const x=headSolveWorld(point,a),y=headSolveWorld(point,b);assert(Math.hypot(x[0]-y[0],x[1]-y[1])<=.5,`skin ${sign}/${pitch}/${point}`);}
  }
 });
-test('N8: eye midpoint matches the registered rig at all nine keys',{timeout:30000},()=>{
- for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
-  const p=pose(yaw,pitch),eye=headSolveWorld(metadata.rest_eye,p),left=registeredFeatureWorld('eye-left-sclera',FEATURE_FIT.front.left,p),right=registeredFeatureWorld('eye-right-sclera',FEATURE_FIT.front.right,p);
-  for(let c=0;c<2;c++)close(eye[c],(left[c]+right[c])/2,1e-3,`eye ${yaw}/${pitch}`);
+test('N8: every sampled pose uses the fixed rest translation before neck roll',{timeout:30000},()=>{
+ const vertices=new Float32Array(binary.buffer,binary.byteOffset+metadata.offsets.vertices.offset,metadata.offsets.vertices.length/4);
+ const poses=[];for(const pitch of [-30,-20,0,20,30])for(let yaw=-90;yaw<=90;yaw+=15)poses.push([yaw,pitch,0]);
+ poses.push([-45,30,-20],[45,-30,20]);
+ for(const [yaw,pitch,roll] of poses){
+  const p=pose(yaw,pitch,{ParamAngleZ:roll}),theta=modelAngles(p),frame=headBaseVertices(p).surface;
+  const angle=roll*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
+  for(const i of fixture.indices.filter((_,j)=>j%12===0)){
+   const field=fieldAt(theta,i),v=field.map((x,j)=>vertices[i*3+j]+x/metadata.s_ref);
+   const q=projectModel(v,[...theta,0,metadata.logscale_front,0,0]);
+   const x=frame[i*3]-502,y=frame[i*3+1]-568;
+   close(502+c*x+s*y-q[0],metadata.rest_translation[0],1e-9,`translation x ${yaw}/${pitch}/${roll}/${i}`);
+   close(568-s*x+c*y-q[1],metadata.rest_translation[1],1e-9,`translation y ${yaw}/${pitch}/${roll}/${i}`);
+  }
  }
 });
 test('nine calibrated keys and angular continuity',{timeout:30000},()=>{

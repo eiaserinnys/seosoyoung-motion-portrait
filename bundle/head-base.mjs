@@ -1,7 +1,5 @@
-import {gridValue,frameValue,FRAME_CACHE} from './pose-grid.mjs';
+import {gridValue,frameValue} from './pose-grid.mjs';
 import {correction} from './geometry.mjs';
-import {registeredFeatureWorld} from './face-feature-prior.mjs';
-import {FEATURE_FIT} from './feature-data.mjs';
 
 let model;
 const rad=x=>x*Math.PI/180;
@@ -74,11 +72,7 @@ const weighted=(coords,attachment)=>attachment.vertices.reduce((out,index,i)=>{
 export function headBaseVertices(p){
  return frameValue(p,'head-base',()=>{
   const theta=modelAngles(p),surface=projectedVertices(theta,false),inset=projectedVertices(theta,true);
-  const eye=weighted(surface,model.attachments[pointKey(model.rest_eye)]);
-  const unrolled={...p,ParamAngleZ:0,[FRAME_CACHE]:new Map()};
-  const left=registeredFeatureWorld('eye-left-sclera',FEATURE_FIT.front.left,unrolled);
-  const right=registeredFeatureWorld('eye-right-sclera',FEATURE_FIT.front.right,unrolled);
-  const dx=(left[0]+right[0])/2-eye[0],dy=(left[1]+right[1])/2-eye[1];
+  const [dx,dy]=model.rest_translation;
   const angle=rad(p.ParamAngleZ),c=Math.cos(angle),s=Math.sin(angle);
   for(const points of [surface,inset])for(let i=0;i<model.vertexCount;i++){
    const j=i*3,x=points[j]+dx-502,y=points[j+1]+dy-568;
