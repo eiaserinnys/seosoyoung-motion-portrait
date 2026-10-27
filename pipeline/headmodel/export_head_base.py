@@ -102,6 +102,31 @@ def smooth_open_boundary(vertices, fields, edges):
     return vertices, fields, ring
 
 
+def cap_open_boundary(vertices, fields, triangles, ring):
+    """Close the existing boundary without moving its vertices or adding a skirt."""
+    oriented = {}
+    for face in triangles:
+        for a, b in ((face[0], face[1]), (face[1], face[2]), (face[2], face[0])):
+            key = tuple(sorted((int(a), int(b))))
+            if key in oriented:
+                del oriented[key]
+            else:
+                oriented[key] = (int(a), int(b))
+    center = len(vertices)
+    cap = []
+    for a, b in zip(ring, np.roll(ring, -1)):
+        edge = oriented[tuple(sorted((int(a), int(b))))]
+        cap.append([edge[1], edge[0], center])
+    vertices = np.concatenate([vertices, vertices[ring].mean(axis=0, keepdims=True)])
+    fields = np.concatenate([fields, fields[:, ring, :].mean(axis=1, keepdims=True)], axis=1)
+    cap = np.asarray(cap, dtype=triangles.dtype)
+    normal = np.cross(vertices[cap[:, 1]] - vertices[cap[:, 0]],
+                      vertices[cap[:, 2]] - vertices[cap[:, 0]]).sum(axis=0)
+    if normal[1] >= 0:
+        raise ValueError('STOP: neck cap winding does not face down')
+    return vertices, fields, np.concatenate([triangles, cap])
+
+
 def ear_root_rings(vertices, triangles, ear):
     rings = {}
     for side, selected in [('left', ear & (vertices[:, 0] < 0)), ('right', ear & (vertices[:, 0] >= 0))]:
@@ -239,6 +264,9 @@ def main():
     sheet = ear_sheet(vertices.astype('<f4'), triangles)
     vertices, fields, open_ring = smooth_open_boundary(vertices, fields, open_edges)
     excluded[open_ring] = True
+    attachment_triangles = triangles.copy()
+    vertices, fields, triangles = cap_open_boundary(vertices, fields, triangles, open_ring)
+    excluded = np.r_[excluded, True]
     vertices = vertices.astype('<f4')
     fields = fields.astype('<f4')
     normals = vertex_normals(vertices.astype(float), triangles).astype('<f4')
@@ -248,7 +276,8 @@ def main():
     rest_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta_rest, nodes, sigma), fields.astype(float)) / s_ref
     rest_pose = [front[0], front[1], 0., front[3], front[4], front[5]]
     projected = project_np(rest_vertices, rest_pose)
-    _, owner = raster_silhouette(projected, triangles)
+    # The cap closes the neck opening; existing face attachments stay on the head surface.
+    _, owner = raster_silhouette(projected, attachment_triangles)
     projected[:, :2] += [152, 20]
     projected[:, 2] *= np.exp(front[3])
     ear_roots = {}
@@ -257,7 +286,7 @@ def main():
         center = projected[ring].mean(axis=0)
         ear_roots[side] = {'ring': ring.tolist(), 'anchor': anchor, 'rest_center_ict': rest_vertices[ring].mean(axis=0).tolist(),
                            'rest_center': center.tolist(), 'delta': [anchor[0] - center[0], anchor[1] - center[1], 0.]}
-    binder = Attachments(projected, triangles, owner)
+    binder = Attachments(projected, attachment_triangles, owner)
     groups = {'skin': skin['positions'], 'solve': solve['points'], 'eye': [[501.9, 431.5]],
               'ear': [[369, 465], [636, 464.5]]}
     attachments, statistics, outside_points = {}, {}, set()
@@ -277,7 +306,8 @@ def main():
                             'min_weight': min(all_weights), 'max_weight': max(all_weights)}
     outside = outside_sheet(outside_points)
     print(json.dumps({'sheet': str(sheet), 'neck_sheet': str(neck), 'outside_sheet': str(outside),
-                      'open_ring': len(open_ring), 'ear_roots': {side: {'count': len(data['ring']), 'center': data['rest_center'], 'delta': data['delta']} for side, data in ear_roots.items()},
+                      'open_ring': len(open_ring), 'cap_vertices': 1, 'cap_triangles': len(open_ring),
+                      'ear_roots': {side: {'count': len(data['ring']), 'center': data['rest_center'], 'delta': data['delta']} for side, data in ear_roots.items()},
                       'attachments': statistics}, ensure_ascii=False), flush=True)
     if statistics['solve']['outside'] > 111 or statistics['solve']['max_distance_px'] > 15:
         raise SystemExit('STOP: solve points exceed the approved outside count or distance')

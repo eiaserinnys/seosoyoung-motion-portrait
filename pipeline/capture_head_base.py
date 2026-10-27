@@ -34,6 +34,7 @@ CANVAS_WIDTH = 1500
 X_OFFSET = (CANVAS_WIDTH - 1024) // 2
 DEST = ROOT / 'docs/captures'
 WIP2 = DEST / 'wip2-head-base'
+FIX3 = [(-15, 0), (15, 20), (-30, 20), (45, 20), (15, -20), (0, -20), (-90, 0), (90, 0)]
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -48,6 +49,11 @@ def decode(data):
 
 def alpha(image):
     return np.asarray(image)[:, :, 3] > 127
+
+
+def identified(image):
+    pixels = np.asarray(image)
+    return (pixels[:, :, 0] > 127) & (pixels[:, :, 3] > 127)
 
 
 def contour(mask):
@@ -103,6 +109,19 @@ def closed_holes(mask):
     count, labels, stats, _ = cv2.connectedComponentsWithStats((~mask).astype(np.uint8), connectivity=8)
     outside = set(np.unique(np.r_[labels[0, :], labels[-1, :], labels[:, 0], labels[:, -1]]))
     return int(sum(stats[i, cv2.CC_STAT_AREA] for i in range(1, count) if i not in outside))
+
+
+def neck_gap(head, neck, combined, bounds):
+    left = max(0, math.floor(bounds[0] + X_OFFSET))
+    right = min(head.shape[1], math.ceil(bounds[1] + X_OFFSET) + 1)
+    gap, columns = 0, 0
+    for x in range(left, right):
+        h, n = np.flatnonzero(head[:, x]), np.flatnonzero(neck[:, x])
+        if len(h) and len(n):
+            columns += 1
+            if n[0] > h[-1] + 1:
+                gap += int(np.count_nonzero(~combined[h[-1]+1:n[0], x]))
+    return gap, columns
 
 
 def ear_iou(rendered, frame, poses, translation):
@@ -212,6 +231,53 @@ def save_sheets(renders, rows, poses, translation, crop):
     edges.save(DEST / 'head_base_edges_2x.png')
 
 
+def save_fix3(renders, baseline):
+    boxes = {
+        (-15, 0): (250, 300, 750, 650), (15, 20): (250, 300, 750, 650),
+        (-30, 20): (275, 400, 725, 730), (45, 20): (275, 400, 725, 730),
+        (15, -20): (250, 280, 500, 530), (0, -20): (250, 280, 500, 530),
+        (-90, 0): (250, 370, 750, 750), (90, 0): (250, 370, 750, 750),
+    }
+    rows = []
+    for yaw, pitch in FIX3:
+        x0, y0, x1, y1 = boxes[(yaw, pitch)]
+        box = (x0 + X_OFFSET, y0, x1 + X_OFFSET, y1)
+        before = composite(Image.open(baseline / f'{yaw:+g}_{pitch:+g}_portrait.png').convert('RGBA'))
+        after = composite(renders[(yaw, pitch)]['portrait'])
+        size = ((x1-x0)*2, (y1-y0)*2)
+        pair = Image.new('RGB', (size[0]*2, size[1]+24), BG)
+        pair.paste(before.crop(box).resize(size, Image.Resampling.NEAREST), (0, 24))
+        pair.paste(after.crop(box).resize(size, Image.Resampling.NEAREST), (size[0], 24))
+        label = ImageDraw.Draw(pair)
+        label.text((6, 5), f'{yaw:+g}/{pitch:+g}  8330ac7', fill='white')
+        label.text((size[0]+6, 5), 'current', fill='white')
+        rows.append(pair)
+    sheet = Image.new('RGB', (max(row.width for row in rows), sum(row.height for row in rows)), BG)
+    y = 0
+    for row in rows:
+        sheet.paste(row, (0, y))
+        y += row.height
+    sheet.save(DEST / 'head_base_fix3.png')
+
+
+def save_temple_diagnosis(baseline):
+    crop = (250 + X_OFFSET, 280, 500 + X_OFFSET, 530)
+    sheet = Image.new('RGB', (1500, 1500), BG)
+    for row, yaw in enumerate((0, 15, 30)):
+        label = f'{yaw:+g}_-20'
+        head = Image.open(baseline / f'{label}_head.png').convert('RGBA')
+        face = Image.open(baseline / f'{label}_face.png').convert('RGBA')
+        outside = alpha(face) & ~alpha(head)
+        highlighted = np.asarray(composite(face)).copy()
+        highlighted[outside] = [255, 40, 40]
+        for column, image in enumerate((composite(head), composite(face), Image.fromarray(highlighted))):
+            panel = image.crop(crop).resize((500, 500), Image.Resampling.NEAREST)
+            ImageDraw.Draw(panel).text((6, 6), f'{yaw:+g}/-20 ' + ('head' if column == 0 else 'face + fill' if column == 1 else 'outside head'),
+                                       fill='white', stroke_width=2, stroke_fill=BG)
+            sheet.paste(panel, (column*500, row*500))
+    sheet.save(DEST / 'head_base_temple_diagnosis.png')
+
+
 def main():
     meta = json.loads((ROOT / 'bundle/assets/head-base.json').read_text())
     rig = json.loads((ROOT / 'bundle/assets/seosoyoung-rig.json').read_text())
@@ -229,7 +295,6 @@ def main():
                            np.asarray(meta['rest_translation']) + [X_OFFSET, 0], atol=1e-9)
     tasks = list(dict.fromkeys([(key[2], key[3]) for key in KEYS] + STRIP + PROFILES + INTERMEDIATE))
     key_positions = {(key[2], key[3]) for key in KEYS}
-    hole_positions = key_positions | set(PROFILES)
     jacobian_positions = key_positions | set(INTERMEDIATE) | {(-67.5, 0), (67.5, 0)}
     server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(Handler, directory=str(ROOT / 'bundle')))
     thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -265,16 +330,18 @@ def main():
               return {rest_max_px:rest,edges};
             }''')
             for i, (yaw, pitch) in enumerate(tasks):
-                data = page.evaluate('''([yaw,pitch,key,hole,measure])=>{
+                data = page.evaluate('''([yaw,pitch,key,measure])=>{
                   const p={...studio.p,CorrHeadBase:1,CorrOutline:1,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0,ParamEyeLOpen:1,ParamEyeROpen:1,ParamEyeBallX:0,ParamEyeBallY:0};
                   const meshes=studio.rig.meshes,skin=meshes.find(m=>m.id==='face-skin');
                   const hidden=meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck'&&!m.id.startsWith('ear-')&&m.deformerId!=='WarpBody').map(m=>m.id);
                   const state={...studio.state,mode:'all',wire:false,grid:false,before:false,surfaceOnly:false,masks:false,identify:null};
-                  const capture=(ids,pose=p)=>{headCapture.render(pose,{...state,hidden:new Set(ids)});const error=headCapture.gl.getError();if(error)throw Error('WebGL error '+error);return headCapture.canvas.toDataURL('image/png').split(',')[1];};
+                  const capture=(ids,pose=p,identify=null)=>{headCapture.render(pose,{...state,identify,hidden:new Set(ids)});const error=headCapture.gl.getError();if(error)throw Error('WebGL error '+error);return headCapture.canvas.toDataURL('image/png').split(',')[1];};
                   const portrait=capture(hidden);
                   const union=key?capture(meshes.filter(m=>m.id!=='face-skin').map(m=>m.id)):null;
-                  const ears=key?capture([...meshes.filter(m=>!m.id.startsWith('ear-')).map(m=>m.id),'head-base']):null;
-                  const headNeck=hole?capture(meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck').map(m=>m.id)):null;
+                  const ears=key?capture(meshes.filter(m=>!m.id.startsWith('ear-')).map(m=>m.id),p,['ear-left','ear-right']):null;
+                  const headNeck=capture(meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck').map(m=>m.id));
+                  const headOnly=capture(meshes.map(m=>m.id));
+                  const neckOnly=capture(meshes.filter(m=>m.id!=='neck').map(m=>m.id),p,'neck');
                   const isolated=[...meshes.filter(m=>m.id!=='face-skin').map(m=>m.id),'head-base'];
                   const restOld=yaw===0&&pitch===0?capture(isolated,{...p,CorrHeadBase:0}):null;
                   const restNew=yaw===0&&pitch===0?capture(isolated):null;
@@ -283,14 +350,22 @@ def main():
                   const include=(x,y)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x);bottom=Math.max(bottom,y);};
                   for(let j=0;j<points.length;j+=3)include(points[j],points[j+1]);
                   const skinPositions=skin.positions.map(point=>rigModule.deform3D(skin,point,q).slice(0,2));
+                  const neck=meshes.find(m=>m.id==='neck'),neckTop=Math.min(...neck.positions.map(point=>point[1]));
+                  const neckXs=neck.positions.filter(point=>point[1]===neckTop).map(point=>rigModule.deform3D(neck,point,q)[0]);
+                  const base=headModule.getHeadBase(),ring=base.open_boundary,ref=base.reference;
+                  const axis=[0,2].map(c=>ring.reduce((sum,i)=>sum+ref[i*3+c],0)/ring.length),rows=new Map();
+                  for(const point of neck.positions){const x=rigModule.deform3D(neck,point,q)[0],row=rows.get(point[1])||[Infinity,-Infinity];row[0]=Math.min(row[0],x);row[1]=Math.max(row[1],x);rows.set(point[1],row);}
+                  const differences=[...rows.values()].map(([a,b])=>Math.abs((a+b)/2-axis[0]));
+                  const neckAxis={center_x:axis[0],depth:axis[1],max_row_difference:Math.max(...differences),fallback_rows:differences.filter(d=>d>5).length};
                   for(const point of skinPositions)include(point[0],point[1]);
                   for(const mesh of meshes.filter(m=>m.id.startsWith('ear-')))for(const point of mesh.positions){const v=rigModule.deform3D(mesh,point,q);include(v[0],v[1]);}
-                  return {portrait,union,ears,headNeck,restOld,restNew,skinPositions:measure?skinPositions:null,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
-                }''', [yaw, pitch, (yaw, pitch) in key_positions, (yaw, pitch) in hole_positions,
-                        (yaw, pitch) in jacobian_positions])
+                  return {portrait,union,ears,headNeck,headOnly,neckOnly,neckColumn:[Math.min(...neckXs),Math.max(...neckXs)],neckAxis,restOld,restNew,skinPositions:measure?skinPositions:null,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
+                }''', [yaw, pitch, (yaw, pitch) in key_positions, (yaw, pitch) in jacobian_positions])
                 renders[(yaw, pitch)] = {'portrait': decode(data['portrait']),
-                                         'bounds': data['bounds'], 'model_angle': data['modelAngle'], 'hidden': data['hidden']}
+                                         'bounds': data['bounds'], 'neck_column': data['neckColumn'], 'neck_axis': data['neckAxis'],
+                                         'model_angle': data['modelAngle'], 'hidden': data['hidden']}
                 for source, target in [('union', 'union'), ('ears', 'ears'), ('headNeck', 'head_neck'),
+                                       ('headOnly', 'head_only'), ('neckOnly', 'neck_only'),
                                        ('restOld', 'rest_old'), ('restNew', 'rest_new')]:
                     if data[source] is not None:
                         renders[(yaw, pitch)][target] = decode(data[source])
@@ -306,6 +381,15 @@ def main():
         server.server_close()
         thread.join()
 
+    gaps = {}
+    for yaw, pitch in tasks:
+        item = renders[(yaw, pitch)]
+        combined = alpha(item['head_neck'])
+        hole_pixels = closed_holes(combined)
+        gap_pixels, columns = neck_gap(alpha(item['head_only']), identified(item['neck_only']), combined, item['neck_column'])
+        gaps[(yaw, pitch)] = {'hole_pixels': hole_pixels, 'neck_gap_pixels': gap_pixels,
+                              'measured_columns': columns, 'passed': columns > 0 and hole_pixels == 0 and gap_pixels == 0}
+
     rows = []
     for name, frame, yaw, pitch in KEYS:
         item, target = renders[(yaw, pitch)], targets[frame]
@@ -315,10 +399,9 @@ def main():
         n3 = n3_metrics(alpha(item['union']), skin_target, hair)
         n4 = jacobians(rest, np.asarray(item['skin_positions']), triangles)
         n4['passed'] = n4['min_det_j'] >= .35 and n4['max_anisotropy'] <= 2
-        holes = closed_holes(alpha(item['head_neck']))
         rows.append({'name': name, 'frame': frame, 'yaw': yaw, 'pitch': pitch, 'model_angle': item['model_angle'],
-                     'N3': n3, 'N4': n4, 'N10': {'hole_pixels': holes, 'passed': holes == 0},
-                     'N11': ear_iou(alpha(item['ears']), frame, poses, meta['rest_translation']),
+                     'N3': n3, 'N4': n4, 'N10': gaps[(yaw, pitch)],
+                     'N11': ear_iou(identified(item['ears']), frame, poses, meta['rest_translation']),
                      'r24_min_det_j': r24.get(name), 'hair_points': hair, 'skin_points': skin_target})
     extra = []
     for yaw, pitch in INTERMEDIATE + PROFILES:
@@ -327,9 +410,7 @@ def main():
         if (yaw, pitch) in jacobian_positions:
             row['N4'] = jacobians(rest, np.asarray(item['skin_positions']), triangles)
             row['N4']['passed'] = row['N4']['min_det_j'] >= .35 and row['N4']['max_anisotropy'] <= 2
-        if (yaw, pitch) in hole_positions:
-            holes = closed_holes(alpha(item['head_neck']))
-            row['N10'] = {'hole_pixels': holes, 'passed': holes == 0}
+        row['N10'] = gaps[(yaw, pitch)]
         extra.append(row)
     x0 = max(0, math.floor(rest[:, 0].min()) + X_OFFSET)
     x1 = min(CANVAS_WIDTH, math.ceil(rest[:, 0].max()) + X_OFFSET + 1)
@@ -338,6 +419,21 @@ def main():
     old = np.asarray(renders[(0, 0)]['rest_old'])[y0:y1, x0:x1]
     new = np.asarray(renders[(0, 0)]['rest_new'])[y0:y1, x0:x1]
     changed = int(np.count_nonzero(np.any(old != new, axis=2)))
+    baseline = DEST / 'fix3-baseline'
+    before = np.asarray(Image.open(baseline / '+0_+0_portrait.png').convert('RGBA'))
+    after = np.asarray(renders[(0, 0)]['portrait'])
+    difference = np.any(before != after, axis=2)
+    yy, xx = np.where(difference)
+    rest_diff = {'changed_pixels': int(difference.sum()), 'bbox': None}
+    if len(xx):
+        box = (max(0, int(xx.min())-8), max(0, int(yy.min())-8),
+               min(CANVAS_WIDTH, int(xx.max())+9), min(1024, int(yy.max())+9))
+        rest_diff['bbox'] = [int(xx.min())-X_OFFSET, int(yy.min()), int(xx.max())-X_OFFSET, int(yy.max())]
+        before_crop, after_crop = composite(Image.fromarray(before)).crop(box), composite(Image.fromarray(after)).crop(box)
+        comparison = Image.new('RGB', (before_crop.width*4, before_crop.height*2), BG)
+        for col, image in enumerate((before_crop, after_crop)):
+            comparison.paste(image.resize((image.width*2, image.height*2), Image.Resampling.NEAREST), (col*image.width*2, 0))
+        comparison.save(DEST / 'head_base_rest_diff.png')
     crop = make_crop(renders)
     n6max = max(max(edge['head_px'], edge['face_px']) for edge in core['edges'])
     metrics = {'N1': {'max_error_px': core['rest_max_px'], 'passed': core['rest_max_px'] <= 1e-3},
@@ -345,12 +441,22 @@ def main():
                'N3c': {'changed_pixels': changed, 'passed': changed == 0, 'face_bbox': [x0, y0, x1, y1]},
                'N6': {'max_difference_px': n6max, 'passed': n6max <= .5, 'edges': core['edges']},
                'N7': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: projection fixture'},
+               'N10': {'poses': [{'yaw': yaw, 'pitch': pitch, **gaps[(yaw, pitch)]} for yaw, pitch in tasks]},
+               'rest_full_difference': rest_diff,
+               'neck_axis': {'center_x': renders[(0, 0)]['neck_axis']['center_x'],
+                             'rest_depth': renders[(0, 0)]['neck_axis']['depth'],
+                             'max_row_difference': max(item['neck_axis']['max_row_difference'] for item in renders.values()),
+                             'max_fallback_rows': max(item['neck_axis']['fallback_rows'] for item in renders.values())},
+               'temple_diagnosis': {'status': 'unresolved', 'layer': 'exposed-skin',
+                                    'inventory': json.loads((baseline / 'fill-inventory.json').read_text())},
                'poses': [{k: v for k, v in row.items() if k not in ('hair_points', 'skin_points')} for row in rows] + extra,
                'rest_translation': meta['rest_translation'], 'common_crop_pixels': crop,
                'hidden_meshes': renders[(0, 0)]['hidden'],
                'reference_transform': '(q - camera_translation) * exp(logscale_front - logscale_key) + rest_translation',
                'note': 'Angle-dependent displacement and outside-offset decay remain active.'}
     save_sheets(renders, rows, poses, meta['rest_translation'], crop)
+    save_fix3(renders, baseline)
+    save_temple_diagnosis(baseline)
     (ROOT / 'docs/head_base_metrics.json').write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + '\n')
     print(json.dumps({'poses': len(tasks), 'N1': metrics['N1'], 'N6': metrics['N6']['max_difference_px'],
                       'N3c': metrics['N3c'], 'crop': crop, 'N3_passed': sum(row['N3']['passed'] for row in rows)}, ensure_ascii=False), flush=True)

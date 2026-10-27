@@ -8,7 +8,8 @@ import {CORRECTION_PRESETS} from '../bundle/corrections.mjs';
 import {FRAME_CACHE} from '../bundle/pose-grid.mjs';
 import {FACE_SOLVE} from '../bundle/face-solve-data.mjs';
 import {outlineWorld} from '../bundle/face-outline.mjs';
-import {bindRig,deform3D} from '../bundle/rig.mjs';
+import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
+import {backgroundLayerPolicy,neckDepthPositions} from '../bundle/renderer.mjs';
 import {sideWorld} from '../bundle/hair-shell.mjs';
 import {earWorld} from '../bundle/stereo-attachments.mjs';
 
@@ -96,14 +97,37 @@ test('ear routing preserves the legacy path whenever the new surface is disabled
   }
  }
 });
-test('the smoothed neck retains the original single open boundary',{timeout:30000},()=>{
+test('neck cap closes the original boundary without adding a skirt',{timeout:30000},()=>{
  const ring=metadata.open_boundary,count=ring.length;
- assert.equal(metadata.vertexCount,12257);assert.equal(metadata.triangleCount,24389);
+ assert.equal(metadata.vertexCount,12258);assert.equal(metadata.triangleCount,24389+count);
  const edges=new Map(),triangles=headBase.getHeadBase().triangles;
  for(let i=0;i<triangles.length;i+=3)for(const [a,b] of [[triangles[i],triangles[i+1]],[triangles[i+1],triangles[i+2]],[triangles[i+2],triangles[i]]]){
   const key=[Math.min(a,b),Math.max(a,b)].join(',');edges.set(key,(edges.get(key)||0)+1);
  }
  const boundary=[...edges].filter(([,count])=>count===1).map(([key])=>key);
- const expected=new Set(ring.map((a,i)=>[Math.min(a,ring[(i+1)%count]),Math.max(a,ring[(i+1)%count])].join(',')));
- assert.equal(boundary.length,count);assert.deepEqual(new Set(boundary),expected);
+ assert.equal(boundary.length,0);
+});
+test('legacy ear alpha and neck mask are preserved when the new surface is inactive',{timeout:30000},()=>{
+ const state={hidden:new Set(),outfit:'sweater',bangs:false};
+ const ear=rig.meshes.find(m=>m.id==='ear-left'),neck=rig.meshes.find(m=>m.id==='neck');
+ for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,0,true],[1,.5,true],[1,1,false]])for(const yaw of [-45,-15,0,15,45]){
+  const p=pose(yaw,0,{CorrHeadBase:enabled,CorrOutline:outline});
+  const ep=backgroundLayerPolicy(ear,p,state,visible),np=backgroundLayerPolicy(neck,p,state,visible);
+  assert.equal(ep.alpha,opacity(ear,p,state));assert.equal(ep.compareHead,false);
+  assert.equal(np.alpha,opacity(neck,p,state));assert.equal(np.compareHead,false);
+  assert.equal(np.neckMask,true);
+ }
+ for(const yaw of [-45,-15,0,15,45]){
+  const p=pose(yaw),ep=backgroundLayerPolicy(ear,p,state,true),np=backgroundLayerPolicy(neck,p,state,true);
+  assert.equal(ep.alpha,1);assert.equal(ep.compareHead,true);
+  assert.equal(np.compareHead,true);assert.equal(np.neckMask,false);
+ }
+ const hidden={...state,hidden:new Set(['ear-left'])};
+ assert.equal(backgroundLayerPolicy(ear,pose(-15),hidden,true).alpha,0);
+});
+test('neck depth uses the original xy and the rest ring cylinder',{timeout:30000},()=>{
+ const neck=rig.meshes.find(m=>m.id==='neck'),p=pose(),points=neck.positions.map(point=>deform3D(neck,point,p));
+ const ref=headBase.getHeadBase().reference,values=neckDepthPositions(neck,points,ref,metadata.open_boundary);
+ const ring=metadata.open_boundary,zc=ring.reduce((sum,i)=>sum+ref[i*3+2],0)/ring.length;
+ points.forEach((v,i)=>{close(values[i][0],v[0],1e-10,'neck x');close(values[i][1],v[1],1e-10,'neck y');assert(values[i][2]>=zc-1e-10);});
 });
