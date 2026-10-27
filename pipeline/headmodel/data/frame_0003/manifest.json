@@ -1,0 +1,175 @@
+{
+  "frame": 3,
+  "key_name": "front",
+  "role": "key",
+  "pose": [
+    -1.016282113547139,
+    1.287185042771068,
+    -0.16349410162592282,
+    -0.00563952036839034,
+    361.62223103498326,
+    411.4800642546058
+  ],
+  "source_image_sha256": "734407b9cd8b1288d2fe5d0451cec9a0b517fad7c10f4fa5fed6a69d5a8b43fe",
+  "normalization_applied": true,
+  "masks": {
+    "head": {
+      "file": "head.png",
+      "success": true,
+      "area_px": 189749,
+      "source_prompts": {
+        "head": "head",
+        "hair_bun": "hair bun",
+        "ponytail": "ponytail"
+      },
+      "postprocess": [
+        "subtract hair bun",
+        "subtract ponytail",
+        "fill holes",
+        "keep largest component"
+      ]
+    },
+    "skin": {
+      "file": "skin.png",
+      "success": true,
+      "score": 0.9123003482818604,
+      "area_px": 78184,
+      "prompt": "face of anime girl excluding ears neck and hair",
+      "jaw_clip_applied": false
+    },
+    "ear-left": {
+      "file": "ear-left.png",
+      "visible": true,
+      "success": true,
+      "score": 0.9795349836349487,
+      "area_px": 6975,
+      "bbox": [
+        132,
+        368,
+        225,
+        523
+      ],
+      "prompt": "human ear"
+    },
+    "ear-right": {
+      "file": "ear-right.png",
+      "visible": true,
+      "success": true,
+      "score": 0.982504665851593,
+      "area_px": 6197,
+      "bbox": [
+        479,
+        369,
+        570,
+        526
+      ],
+      "prompt": "human ear"
+    }
+  },
+  "calls": [
+    {
+      "mask": "head",
+      "prompt": "head",
+      "called_at_utc": "2026-10-27T10:53:12+00:00",
+      "duration_seconds": 2.389,
+      "http_post_attempts": 1,
+      "crop_box": [
+        0,
+        0,
+        720,
+        720
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.9279950857162476,
+      "area_px": 194467,
+      "success": true
+    },
+    {
+      "mask": "hair_bun",
+      "prompt": "hair bun",
+      "called_at_utc": "2026-10-27T10:53:14+00:00",
+      "duration_seconds": 2.011,
+      "http_post_attempts": 1,
+      "crop_box": [
+        0,
+        0,
+        720,
+        720
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.9459168314933777,
+      "area_px": 4977,
+      "success": true
+    },
+    {
+      "mask": "ponytail",
+      "prompt": "ponytail",
+      "called_at_utc": "2026-10-27T10:53:16+00:00",
+      "duration_seconds": 1.262,
+      "http_post_attempts": 1,
+      "success": false,
+      "error_type": "ValueError"
+    },
+    {
+      "mask": "skin",
+      "prompt": "face of anime girl excluding ears neck and hair",
+      "called_at_utc": "2026-10-27T10:53:18+00:00",
+      "duration_seconds": 2.371,
+      "http_post_attempts": 1,
+      "crop_box": [
+        130,
+        200,
+        555,
+        620
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.9123003482818604,
+      "area_px": 78184,
+      "success": true
+    },
+    {
+      "mask": "ear-left",
+      "prompt": "human ear",
+      "called_at_utc": "2026-10-27T10:53:20+00:00",
+      "duration_seconds": 1.598,
+      "http_post_attempts": 1,
+      "crop_box": [
+        132,
+        368,
+        225,
+        523
+      ],
+      "upscale": 2,
+      "num_masks_returned": 1,
+      "score": 0.9795349836349487,
+      "area_px": 6975,
+      "success": true
+    },
+    {
+      "mask": "ear-right",
+      "prompt": "human ear",
+      "called_at_utc": "2026-10-27T10:53:22+00:00",
+      "duration_seconds": 2.024,
+      "http_post_attempts": 1,
+      "crop_box": [
+        479,
+        369,
+        570,
+        526
+      ],
+      "upscale": 2,
+      "num_masks_returned": 1,
+      "score": 0.982504665851593,
+      "area_px": 6197,
+      "success": true
+    }
+  ],
+  "endpoint": "https://fal.run/fal-ai/sam-3/image",
+  "head_bbox_width_px": 457,
+  "recovery_notes": [
+    "두 번째 A 실행에서 head.png를 기록했지만, bbox 폭 계산 오류로 manifest 저장 전에 종료되어 재호출별 시각과 점수는 남지 않았습니다."
+  ]
+}

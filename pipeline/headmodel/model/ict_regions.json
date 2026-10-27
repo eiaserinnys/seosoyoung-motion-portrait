@@ -1,0 +1,291 @@
+{
+  "source_commit": "da5f95a607f5e6b37755b38d3385d7f2853732e5",
+  "index_base": 0,
+  "readme_topology_table": [
+    {
+      "ordinal": "n/a",
+      "geometry_name": "All",
+      "vertex_indices_inclusive": [
+        0,
+        26718
+      ],
+      "polygon_indices_inclusive": [
+        0,
+        26383
+      ],
+      "vertex_count": 26719,
+      "face_count": 26384
+    },
+    {
+      "ordinal": "#0",
+      "geometry_name": "Face",
+      "vertex_indices_inclusive": [
+        0,
+        9408
+      ],
+      "polygon_indices_inclusive": [
+        0,
+        9229
+      ],
+      "vertex_count": 9409,
+      "face_count": 9230
+    },
+    {
+      "ordinal": "#1",
+      "geometry_name": "Head and Neck",
+      "vertex_indices_inclusive": [
+        9409,
+        11247
+      ],
+      "polygon_indices_inclusive": [
+        9230,
+        11143
+      ],
+      "vertex_count": 1839,
+      "face_count": 1914
+    },
+    {
+      "ordinal": "#2",
+      "geometry_name": "Mouth socket",
+      "vertex_indices_inclusive": [
+        11248,
+        13293
+      ],
+      "polygon_indices_inclusive": [
+        11144,
+        13225
+      ],
+      "vertex_count": 2046,
+      "face_count": 2082
+    },
+    {
+      "ordinal": "#3",
+      "geometry_name": "Eye socket left",
+      "vertex_indices_inclusive": [
+        13294,
+        13677
+      ],
+      "polygon_indices_inclusive": [
+        13226,
+        13629
+      ],
+      "vertex_count": 384,
+      "face_count": 404
+    },
+    {
+      "ordinal": "#4",
+      "geometry_name": "Eye socket right",
+      "vertex_indices_inclusive": [
+        13678,
+        14061
+      ],
+      "polygon_indices_inclusive": [
+        13630,
+        14033
+      ],
+      "vertex_count": 384,
+      "face_count": 404
+    },
+    {
+      "ordinal": "#5",
+      "geometry_name": "Gums and tongue",
+      "vertex_indices_inclusive": [
+        14062,
+        17038
+      ],
+      "polygon_indices_inclusive": [
+        14034,
+        17005
+      ],
+      "vertex_count": 2977,
+      "face_count": 2972
+    },
+    {
+      "ordinal": "#6",
+      "geometry_name": "Teeth",
+      "vertex_indices_inclusive": [
+        17039,
+        21450
+      ],
+      "polygon_indices_inclusive": [
+        17006,
+        21495
+      ],
+      "vertex_count": 4412,
+      "face_count": 4490
+    },
+    {
+      "ordinal": "#7",
+      "geometry_name": "Eyeball left",
+      "vertex_indices_inclusive": [
+        21451,
+        23020
+      ],
+      "polygon_indices_inclusive": [
+        21496,
+        23093
+      ],
+      "vertex_count": 1570,
+      "face_count": 1598
+    },
+    {
+      "ordinal": "#8",
+      "geometry_name": "Eyeball right",
+      "vertex_indices_inclusive": [
+        23021,
+        24590
+      ],
+      "polygon_indices_inclusive": [
+        23094,
+        24691
+      ],
+      "vertex_count": 1570,
+      "face_count": 1598
+    },
+    {
+      "ordinal": "#9",
+      "geometry_name": "Lacrimal fluid left",
+      "vertex_indices_inclusive": [
+        24591,
+        24794
+      ],
+      "polygon_indices_inclusive": [
+        24692,
+        24854
+      ],
+      "vertex_count": 204,
+      "face_count": 163
+    },
+    {
+      "ordinal": "#10",
+      "geometry_name": "Lacrimal fluid right",
+      "vertex_indices_inclusive": [
+        24795,
+        24998
+      ],
+      "polygon_indices_inclusive": [
+        24855,
+        25017
+      ],
+      "vertex_count": 204,
+      "face_count": 163
+    },
+    {
+      "ordinal": "#11",
+      "geometry_name": "Eye blend left",
+      "vertex_indices_inclusive": [
+        24999,
+        25022
+      ],
+      "polygon_indices_inclusive": [
+        25018,
+        25032
+      ],
+      "vertex_count": 24,
+      "face_count": 15
+    },
+    {
+      "ordinal": "#12",
+      "geometry_name": "Eye blend right",
+      "vertex_indices_inclusive": [
+        25023,
+        25046
+      ],
+      "polygon_indices_inclusive": [
+        25033,
+        25047
+      ],
+      "vertex_count": 24,
+      "face_count": 15
+    },
+    {
+      "ordinal": "#13",
+      "geometry_name": "Eye occlusion left",
+      "vertex_indices_inclusive": [
+        25047,
+        25198
+      ],
+      "polygon_indices_inclusive": [
+        25048,
+        25175
+      ],
+      "vertex_count": 152,
+      "face_count": 128
+    },
+    {
+      "ordinal": "#14",
+      "geometry_name": "Eye occlusion right",
+      "vertex_indices_inclusive": [
+        25199,
+        25350
+      ],
+      "polygon_indices_inclusive": [
+        25176,
+        25303
+      ],
+      "vertex_count": 152,
+      "face_count": 128
+    },
+    {
+      "ordinal": "#15",
+      "geometry_name": "Eyelashes left",
+      "vertex_indices_inclusive": [
+        25351,
+        26034
+      ],
+      "polygon_indices_inclusive": [
+        25304,
+        25843
+      ],
+      "vertex_count": 684,
+      "face_count": 540
+    },
+    {
+      "ordinal": "#16",
+      "geometry_name": "Eyelashes right",
+      "vertex_indices_inclusive": [
+        26035,
+        26718
+      ],
+      "polygon_indices_inclusive": [
+        25844,
+        26383
+      ],
+      "vertex_count": 684,
+      "face_count": 540
+    }
+  ],
+  "registration_surface": {
+    "name": "Face + Head and Neck outer surface",
+    "vertex_indices_inclusive": [
+      0,
+      11247
+    ],
+    "polygon_indices_inclusive": [
+      0,
+      11143
+    ],
+    "included_geometries": [
+      "Face",
+      "Head and Neck"
+    ],
+    "excluded_internal_geometries": [
+      "Mouth socket",
+      "Eye socket left",
+      "Eye socket right",
+      "Gums and tongue",
+      "Teeth",
+      "Eyeball left",
+      "Eyeball right",
+      "Lacrimal fluid left",
+      "Lacrimal fluid right",
+      "Eye blend left",
+      "Eye blend right",
+      "Eye occlusion left",
+      "Eye occlusion right",
+      "Eyelashes left",
+      "Eyelashes right"
+    ],
+    "triangulation": "fan from the first polygon vertex; original polygon order retained"
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "frame": 42,
+  "key_name": "left",
+  "role": "key",
+  "pose": [
+    -36.82991693704355,
+    0.7006801983402771,
+    0.11248245113502914,
+    0.052233283858241546,
+    266.1777747372005,
+    402.48416952525537
+  ],
+  "source_image_sha256": "4b0225a7020f45aa44a74c7cb0576d3be5775fb677d5df4dc605417decffa66e",
+  "normalization_applied": true,
+  "masks": {
+    "head": {
+      "file": "head.png",
+      "success": true,
+      "area_px": 175817,
+      "source_prompts": {
+        "head": "head",
+        "hair_bun": "hair bun",
+        "ponytail": "ponytail"
+      },
+      "postprocess": [
+        "subtract hair bun",
+        "subtract ponytail",
+        "fill holes",
+        "keep largest component"
+      ]
+    },
+    "skin": {
+      "file": "skin.png",
+      "success": true,
+      "score": 0.9359362125396729,
+      "area_px": 60897,
+      "prompt": "face of anime girl excluding ears neck and hair",
+      "jaw_clip_applied": false
+    },
+    "ear-left": {
+      "file": "ear-left.png",
+      "visible": true,
+      "success": true,
+      "score": 0.9463046193122864,
+      "area_px": 164,
+      "bbox": [
+        219,
+        377,
+        265,
+        519
+      ],
+      "prompt": "human ear"
+    },
+    "ear-right": {
+      "file": "ear-right.png",
+      "visible": true,
+      "success": true,
+      "score": 0.9918010234832764,
+      "area_px": 6602,
+      "bbox": [
+        515,
+        375,
+        582,
+        521
+      ],
+      "prompt": "human ear"
+    }
+  },
+  "calls": [
+    {
+      "mask": "head",
+      "prompt": "head",
+      "called_at_utc": "2026-10-27T10:53:24+00:00",
+      "duration_seconds": 2.284,
+      "http_post_attempts": 1,
+      "crop_box": [
+        0,
+        0,
+        720,
+        720
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.9101343154907227,
+      "area_px": 189936,
+      "success": true
+    },
+    {
+      "mask": "hair_bun",
+      "prompt": "hair bun",
+      "called_at_utc": "2026-10-27T10:53:26+00:00",
+      "duration_seconds": 2.587,
+      "http_post_attempts": 1,
+      "crop_box": [
+        0,
+        0,
+        720,
+        720
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.9419986605644226,
+      "area_px": 14629,
+      "success": true
+    },
+    {
+      "mask": "ponytail",
+      "prompt": "ponytail",
+      "called_at_utc": "2026-10-27T10:53:28+00:00",
+      "duration_seconds": 1.649,
+      "http_post_attempts": 1,
+      "success": false,
+      "error_type": "ValueError"
+    },
+    {
+      "mask": "skin",
+      "prompt": "face of anime girl excluding ears neck and hair",
+      "called_at_utc": "2026-10-27T10:53:30+00:00",
+      "duration_seconds": 1.849,
+      "http_post_attempts": 1,
+      "crop_box": [
+        130,
+        200,
+        555,
+        620
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.9359362125396729,
+      "area_px": 60897,
+      "success": true
+    },
+    {
+      "mask": "ear-left",
+      "prompt": "human ear",
+      "called_at_utc": "2026-10-27T10:53:32+00:00",
+      "duration_seconds": 2.728,
+      "http_post_attempts": 1,
+      "crop_box": [
+        219,
+        377,
+        265,
+        519
+      ],
+      "upscale": 2,
+      "num_masks_returned": 1,
+      "score": 0.9463046193122864,
+      "area_px": 164,
+      "success": true
+    },
+    {
+      "mask": "ear-right",
+      "prompt": "human ear",
+      "called_at_utc": "2026-10-27T10:53:35+00:00",
+      "duration_seconds": 5.734,
+      "http_post_attempts": 1,
+      "crop_box": [
+        515,
+        375,
+        582,
+        521
+      ],
+      "upscale": 2,
+      "num_masks_returned": 1,
+      "score": 0.9918010234832764,
+      "area_px": 6602,
+      "success": true
+    },
+    {
+      "mask": "head",
+      "prompt": "head",
+      "called_at_utc": "2026-10-27T11:06:27+00:00",
+      "duration_seconds": 2.858,
+      "http_post_attempts": 1,
+      "crop_box": [
+        0,
+        0,
+        720,
+        720
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.9105287194252014,
+      "area_px": 189951,
+      "success": true
+    },
+    {
+      "mask": "hair_bun",
+      "prompt": "hair bun",
+      "called_at_utc": "2026-10-27T11:06:29+00:00",
+      "duration_seconds": 2.33,
+      "http_post_attempts": 1,
+      "crop_box": [
+        0,
+        0,
+        720,
+        720
+      ],
+      "upscale": 1,
+      "num_masks_returned": 1,
+      "score": 0.941454291343689,
+      "area_px": 14630,
+      "success": true
+    },
+    {
+      "mask": "ponytail",
+      "prompt": "ponytail",
+      "called_at_utc": "2026-10-27T11:06:32+00:00",
+      "duration_seconds": 1.388,
+      "http_post_attempts": 1,
+      "success": true,
+      "visible": false,
+      "empty_result": true,
+      "score": null,
+      "area_px": 0
+    }
+  ],
+  "endpoint": "https://fal.run/fal-ai/sam-3/image",
+  "head_bbox_width_px": 455
+}
