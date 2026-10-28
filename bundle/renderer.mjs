@@ -5,7 +5,7 @@ import {profileWeights,smoothstep} from './face-profile.mjs';
 import {skinFillMesh,skinFillPositions,skinFillClipMesh,skinFillClipPositions} from './skin-fill.mjs';
 import {deform3D,opacity,bindRig} from './rig.mjs';
 import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction,headBaseActive} from './geometry.mjs';
-import {getHeadBase,headBaseVertices,headSurfaceFacingDelta,HEAD_BASE} from './head-base.mjs';
+import {getHeadBase,headBaseVertices,headPoseDistance,headSurfaceFacingDelta,HEAD_BASE} from './head-base.mjs';
 import {CORRECTION_PRESETS} from './corrections.mjs';
 
 export function faceBoundaryDistances(mesh){
@@ -25,6 +25,18 @@ export function faceBoundaryDistances(mesh){
     return distance;
   });
 }
+
+export function faceIslandVertices(mesh){
+  const parent=mesh.positions.map((_,i)=>i);
+  const find=i=>parent[i]===i?i:(parent[i]=find(parent[i]));
+  for(const tri of mesh.triangles)for(const i of tri.slice(1))parent[find(i)]=find(tri[0]);
+  const groups=new Map();
+  for(const tri of mesh.triangles){const root=find(tri[0]);if(!groups.has(root))groups.set(root,[]);groups.get(root).push(tri);}
+  return new Set([...groups.values()].filter(group=>group.length<10).flat(2));
+}
+
+export const faceIslandOpacity=p=>headBaseActive(p)
+  ?1-smoothstep(5,20,headPoseDistance(headBaseVertices(p).theta)):1;
 
 export function backgroundLayerPolicy(mesh,p,state,headVisible){
   const ear=mesh.id.startsWith('ear-'),neck=mesh.id==='neck';
@@ -72,7 +84,8 @@ export class Renderer {
     bindRig(rig);this.shell={...makeSphereMesh(rig.geometry.head.radius),id:'head-surface',surface:true,masks:[]};this.canvas=canvas;this.overlay=overlay;this.rig=rig;this.images=images;this.headBase=getHeadBase();
     const rest={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrHeadBase:1,CorrOutline:1};
     this.neckExtension=this.headBase?createNeckExtension(rig.meshes.find(m=>m.id==='neck'),this.headBase,rest):null;
-    this.faceBoundary=faceBoundaryDistances(rig.meshes.find(m=>m.id==='face-skin'));
+    const face=rig.meshes.find(m=>m.id==='face-skin');
+    this.faceBoundary=faceBoundaryDistances(face);this.faceIslands=faceIslandVertices(face);
     const gl=canvas.getContext('webgl',{alpha:true,antialias:true,preserveDrawingBuffer:true});
     if(!gl)throw new Error('WebGL을 사용할 수 없습니다');this.gl=gl;
     if(!gl.getExtension('OES_standard_derivatives'))throw new Error('WebGL 경계 보간을 사용할 수 없습니다');
@@ -140,7 +153,8 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceClean;unif
       const width=HEAD_BASE.faceRimWidth+(HEAD_BASE.foreheadRimWidth-HEAD_BASE.faceRimWidth)*upper*foreheadTurn;
       return Math.max(0,Math.min(1,1-this.faceBoundary[i]/width));
     };
-    const data=new Float32Array(points.flatMap((pt,i)=>[...pt,...mesh.uvs[i],mesh.positions[i][0],mesh.positions[i][1],mesh.id.startsWith('side-cranium')?craniumFacing(mesh.positions[i],p):1,mesh.id.startsWith('side-cranium')?craniumSeam(mesh.positions[i]):1,...(mesh.id==='face-skin'?[faceDirection?.[i]||0,0,rimWeight(i)]:reference(mesh.positions[i]))]));
+    const islandOpacity=mesh.id==='face-skin'&&this.headBase?faceIslandOpacity(p):1;
+    const data=new Float32Array(points.flatMap((pt,i)=>[...pt,...mesh.uvs[i],mesh.positions[i][0],mesh.positions[i][1],mesh.id.startsWith('side-cranium')?craniumFacing(mesh.positions[i],p):1,mesh.id.startsWith('side-cranium')?craniumSeam(mesh.positions[i]):mesh.id==='face-skin'&&this.faceIslands.has(i)?islandOpacity:1,...(mesh.id==='face-skin'?[faceDirection?.[i]||0,0,rimWeight(i)]:reference(mesh.positions[i]))]));
     gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(mesh.triangles.flat()),gl.STATIC_DRAW);
     const ear=compareHead&&mesh.id.startsWith('ear-'),side=mesh.id.endsWith('left')?'left':'right';

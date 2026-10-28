@@ -163,6 +163,14 @@ test('the restored head and nine-key ear inputs match the measured 030dea1 basel
   assert.deepEqual(metadata[key],oldMeta[key],key);
  for(const key of ['bbox','sample_y'])assert.deepEqual(metadata.neck_extension[key],oldMeta.neck_extension[key],key);
 });
+test('only the three face islands fade with the new path and keep rest pixels',()=>{
+ assert.deepEqual([...renderer.faceIslandVertices(skin)].sort((a,b)=>a-b),Array.from({length:20},(_,i)=>i));
+ close(renderer.faceIslandOpacity(pose()),1,1e-12,'rest');
+ for(const yaw of [-60,60])close(renderer.faceIslandOpacity(pose(yaw)),0,1e-12,'turned');
+ for(const yaw of [-60,0,60])close(renderer.faceIslandOpacity(pose(yaw,0,{CorrHeadBase:0})),1,1e-12,'legacy');
+ const values=[0,5,10,15,20].map(yaw=>renderer.faceIslandOpacity(pose(yaw)));
+ for(let i=1;i<values.length;i++)assert(values[i]<=values[i-1],'smooth fade');
+});
 test('ear routing preserves the legacy path whenever the new surface is disabled',{timeout:30000},()=>{
  for(const [side,point] of [['left',[369,465]],['right',[636,464.5]]])for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
   for(const [enabled,outline] of [[0,0],[0,.5],[0,1]]){

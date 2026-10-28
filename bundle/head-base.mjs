@@ -58,6 +58,10 @@ export function earTiltDegrees(p){
  return HEAD_BASE.earTiltDegrees*t*t*(3-2*t);
 }
 
+export function headPoseDistance(theta){
+ return Math.hypot(theta[0]-model.thetaRest[0],HEAD_BASE.pitchWeight*(theta[1]-model.thetaRest[1]));
+}
+
 export function phi(theta){
  const logits=model.theta_k.map(k=>-((theta[0]-k[0])**2+(HEAD_BASE.pitchWeight*(theta[1]-k[1]))**2)/(2*model.sigma**2));
  const max=Math.max(...logits),values=logits.map(v=>Math.exp(v-max)),total=values.reduce((a,b)=>a+b,0);
