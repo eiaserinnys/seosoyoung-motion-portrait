@@ -1,0 +1,15 @@
+{
+  "baseline": "43d4eeaf1d3b5c5cfb9e22ab77cc5def8abc3ca5",
+  "rest_head_on_changed_pixels": 31,
+  "rest_head_off_changed_pixels": 0,
+  "rest_difference_outside_old_head_pixels": 0,
+  "rest_difference_outside_new_head_pixels": 0,
+  "rest_ear_face_boundary_changed_pixels": 0,
+  "rest_other_changed_pixels": 31,
+  "rest_change_bbox": [
+    677,
+    619,
+    799,
+    647
+  ]
+}

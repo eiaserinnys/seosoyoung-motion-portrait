@@ -1,0 +1,1448 @@
+{
+  "reference": "same pitch, yaw 0",
+  "projection": "pitch then yaw, original model units",
+  "height_band": 0.15,
+  "scale_px_per_ict": 24.793355646783024,
+  "rows": [
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": -2.3,
+      "near_px": 4.915419539859206,
+      "far_px": 73.44507009649641,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": -1.3,
+      "near_px": 4.6964831963355795,
+      "far_px": 58.656589374610974,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": -0.3,
+      "near_px": 4.483203627795809,
+      "far_px": 56.561234022204694,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 0.7,
+      "near_px": 6.245676510901472,
+      "far_px": 48.10318244888245,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 1.7,
+      "near_px": 7.5973407908965696,
+      "far_px": 40.758988389785124,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 2.7,
+      "near_px": 7.09644216463556,
+      "far_px": 36.40148907978565,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 3.7,
+      "near_px": 7.038996468378231,
+      "far_px": 34.63636461131975,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 4.7,
+      "near_px": 8.297539878953613,
+      "far_px": 27.00702155435175,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 5.7,
+      "near_px": 8.993622730557336,
+      "far_px": 29.967683184911266,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 6.7,
+      "near_px": 7.986304033884348,
+      "far_px": 34.59824170505463,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 7.7,
+      "near_px": 7.393926925907847,
+      "far_px": 38.27817674500216,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 8.7,
+      "near_px": 6.601544741787893,
+      "far_px": 36.795111257884194,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 9.7,
+      "near_px": 5.179520854271614,
+      "far_px": 35.37031460250343,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 10.7,
+      "near_px": 3.3631023974841545,
+      "far_px": 31.723725634531764,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -35,
+      "height": 11.7,
+      "near_px": 0.4958256281516222,
+      "far_px": 26.940441018207665,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": -2.3,
+      "near_px": 5.529516550691926,
+      "far_px": 53.06292379432851,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": -1.3,
+      "near_px": 4.7426937838932215,
+      "far_px": 41.022581784146745,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": -0.3,
+      "near_px": 3.8028690513605468,
+      "far_px": 39.188967221529225,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 0.7,
+      "near_px": 6.311972916143113,
+      "far_px": 32.11999995124951,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 1.7,
+      "near_px": 7.8705448807058955,
+      "far_px": 24.388667661411716,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 2.7,
+      "near_px": 6.804145204513975,
+      "far_px": 22.847786371203807,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 3.7,
+      "near_px": 7.014836753217417,
+      "far_px": 21.304954325668422,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 4.7,
+      "near_px": 8.30887336531539,
+      "far_px": 15.260576219583543,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 5.7,
+      "near_px": 8.900209374961278,
+      "far_px": 18.062133584124386,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 6.7,
+      "near_px": 8.213334244432332,
+      "far_px": 21.14796946046932,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 7.7,
+      "near_px": 7.303730491897101,
+      "far_px": 23.274739302270444,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 8.7,
+      "near_px": 6.560971696184081,
+      "far_px": 21.250490609667974,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 9.7,
+      "near_px": 4.338345014704325,
+      "far_px": 19.413708085384688,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 10.7,
+      "near_px": 2.567226835499244,
+      "far_px": 16.25678150347037,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -25,
+      "height": 11.7,
+      "near_px": 0.9474063402029037,
+      "far_px": 14.080323225090766,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": -2.3,
+      "near_px": 1.909790325338511,
+      "far_px": 33.081565458058385,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": -1.3,
+      "near_px": 4.455443994406249,
+      "far_px": 21.95782018742277,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": -0.3,
+      "near_px": 5.352197400231915,
+      "far_px": 23.458892970224408,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 0.7,
+      "near_px": 6.468791073195027,
+      "far_px": 18.50418377624115,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 1.7,
+      "near_px": 7.8471115388138095,
+      "far_px": 14.205784432872633,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 2.7,
+      "near_px": 7.271724820177248,
+      "far_px": 16.596262697336687,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 3.7,
+      "near_px": 7.038536992143436,
+      "far_px": 15.94660509871668,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 4.7,
+      "near_px": 8.308698950529454,
+      "far_px": 8.403679751107845,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 5.7,
+      "near_px": 8.996208087661588,
+      "far_px": 8.191792950388711,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 6.7,
+      "near_px": 8.171034949984918,
+      "far_px": 9.127391094286283,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 7.7,
+      "near_px": 7.075598143439274,
+      "far_px": 11.439729007019011,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 8.7,
+      "near_px": 6.144064816446239,
+      "far_px": 10.199594991921986,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 9.7,
+      "near_px": 4.73703998765398,
+      "far_px": 7.911431936341949,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 10.7,
+      "near_px": 3.4721154524400513,
+      "far_px": 7.466479351260855,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": -16,
+      "height": 11.7,
+      "near_px": 2.5742592413912653,
+      "far_px": 3.79544523620157,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": -2.3,
+      "near_px": 11.93629673811787,
+      "far_px": 30.542849153564905,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": -1.3,
+      "near_px": 6.0524747793871905,
+      "far_px": 24.60887063408178,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": -0.3,
+      "near_px": 3.459133603786937,
+      "far_px": 25.706957917859295,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 0.7,
+      "near_px": 2.8954061532190964,
+      "far_px": 20.769493346937626,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 1.7,
+      "near_px": 4.312000002018585,
+      "far_px": 14.177795674383967,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 2.7,
+      "near_px": 6.768876550098749,
+      "far_px": 12.116891197976456,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 3.7,
+      "near_px": 0.9947681177069297,
+      "far_px": 16.72493433076091,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 4.7,
+      "near_px": 0.22564720018066184,
+      "far_px": 11.995518158944668,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 5.7,
+      "near_px": 0.11472818834698051,
+      "far_px": 13.995652056557374,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 6.7,
+      "near_px": 0.48536216548492433,
+      "far_px": 14.580940229369446,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 7.7,
+      "near_px": 2.019118459032606,
+      "far_px": 14.892493557792008,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 8.7,
+      "near_px": 1.1253935765733605,
+      "far_px": 14.086484427325372,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 9.7,
+      "near_px": 1.394311509011102,
+      "far_px": 10.623551517848046,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 10.7,
+      "near_px": -0.023214413211978122,
+      "far_px": 7.80382456461975,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 16,
+      "height": 11.7,
+      "near_px": 2.3465134060638064,
+      "far_px": 3.558596066952825,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": -2.3,
+      "near_px": 14.01925658041438,
+      "far_px": 48.68054281699641,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": -1.3,
+      "near_px": 5.90343986377502,
+      "far_px": 41.51535194695005,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": -0.3,
+      "near_px": 4.043121407259411,
+      "far_px": 41.875720290728836,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 0.7,
+      "near_px": 3.3827743398995995,
+      "far_px": 36.574671178162056,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 1.7,
+      "near_px": 4.486361622373676,
+      "far_px": 26.278139055645987,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 2.7,
+      "near_px": 6.710515595234241,
+      "far_px": 20.47721035516257,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 3.7,
+      "near_px": 0.9467700754215795,
+      "far_px": 25.658236605747827,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 4.7,
+      "near_px": 0.20785205845859728,
+      "far_px": 22.382929271902714,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 5.7,
+      "near_px": 0.13392779445328407,
+      "far_px": 26.732788363445373,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 6.7,
+      "near_px": 0.5002687533415837,
+      "far_px": 28.005185307021378,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 7.7,
+      "near_px": 2.0573152546552356,
+      "far_px": 26.13273626378181,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 8.7,
+      "near_px": 1.829278766453738,
+      "far_px": 24.752189413213422,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 9.7,
+      "near_px": 1.5722256442639666,
+      "far_px": 21.037765660407057,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 10.7,
+      "near_px": 2.5037268959627568,
+      "far_px": 16.894949182705727,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 25,
+      "height": 11.7,
+      "near_px": 2.0624612920754286,
+      "far_px": 12.612771561793584,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": -2.3,
+      "near_px": 11.680303595355976,
+      "far_px": 70.15020695657363,
+      "near_pass": false
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": -1.3,
+      "near_px": 5.92876643236006,
+      "far_px": 60.82124078627071,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": -0.3,
+      "near_px": 4.22250357907264,
+      "far_px": 60.80917315255592,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 0.7,
+      "near_px": 2.842979546084811,
+      "far_px": 54.241730726173394,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 1.7,
+      "near_px": 2.5133257331274925,
+      "far_px": 45.62621789198862,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 2.7,
+      "near_px": 6.771125899888809,
+      "far_px": 39.22966428637268,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 3.7,
+      "near_px": 1.3326896881032626,
+      "far_px": 42.7315250416993,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 4.7,
+      "near_px": 0.20965004335270174,
+      "far_px": 38.569812709597834,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 5.7,
+      "near_px": 0.03714508023220021,
+      "far_px": 41.109237077714084,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 6.7,
+      "near_px": 0.40985458997808816,
+      "far_px": 41.0880119809245,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 7.7,
+      "near_px": 2.1385842484714632,
+      "far_px": 39.50491966383675,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 8.7,
+      "near_px": 1.3711381829718605,
+      "far_px": 38.794159044115425,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 9.7,
+      "near_px": 1.3754063654202824,
+      "far_px": 36.12770003867782,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 10.7,
+      "near_px": 2.216519138560004,
+      "far_px": 30.01247674191291,
+      "near_pass": true
+    },
+    {
+      "pitch": 0,
+      "yaw": 35,
+      "height": 11.7,
+      "near_px": 1.9075634864381612,
+      "far_px": 24.216746016584313,
+      "near_pass": true
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": -2.3,
+      "near_px": 2.1372141053339435,
+      "far_px": 52.76379840133202,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": -1.3,
+      "near_px": 5.888931608808649,
+      "far_px": 56.88094067671599,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": -0.3,
+      "near_px": 18.60101967835206,
+      "far_px": 51.608652053580485,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 0.7,
+      "near_px": 25.176678685760542,
+      "far_px": 33.36659249330896,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 1.7,
+      "near_px": 18.378970335414706,
+      "far_px": 21.80046806599383,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 2.7,
+      "near_px": 26.546503830540296,
+      "far_px": 19.399551654004135,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 3.7,
+      "near_px": 22.797677193678172,
+      "far_px": 17.41088806909569,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 4.7,
+      "near_px": 22.855432109910193,
+      "far_px": 14.822770449103032,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 5.7,
+      "near_px": 25.80047516765565,
+      "far_px": 15.098880330720606,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 6.7,
+      "near_px": 24.87875857884802,
+      "far_px": 16.187297760401993,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 7.7,
+      "near_px": 23.70003502082761,
+      "far_px": 20.347627933595664,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 8.7,
+      "near_px": 21.982588425900282,
+      "far_px": 23.899946628333854,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 9.7,
+      "near_px": 22.04072208316902,
+      "far_px": 25.647552632860545,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 10.7,
+      "near_px": 20.717058326469402,
+      "far_px": 23.217372024361808,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -35,
+      "height": 11.7,
+      "near_px": 20.770710477602716,
+      "far_px": 24.276312071123304,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": -2.3,
+      "near_px": 3.706044775667283,
+      "far_px": 29.133395326173503,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": -1.3,
+      "near_px": 5.21650616781138,
+      "far_px": 34.040432969905254,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": -0.3,
+      "near_px": 14.112086205308032,
+      "far_px": 31.84484802451513,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 0.7,
+      "near_px": 18.632473196488387,
+      "far_px": 16.966280061670037,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 1.7,
+      "near_px": 15.104020224473205,
+      "far_px": 7.42952249883385,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 2.7,
+      "near_px": 20.07547586997202,
+      "far_px": 8.826761534934077,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 3.7,
+      "near_px": 18.791714678788853,
+      "far_px": 7.324913785382953,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 4.7,
+      "near_px": 18.72413336593434,
+      "far_px": 6.21415140939557,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 5.7,
+      "near_px": 21.722678040782707,
+      "far_px": 6.400404604931312,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 6.7,
+      "near_px": 20.40236198139387,
+      "far_px": 9.313513310269283,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 7.7,
+      "near_px": 19.442362185284136,
+      "far_px": 12.338350321957162,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 8.7,
+      "near_px": 17.92799724263168,
+      "far_px": 13.709917220577609,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 9.7,
+      "near_px": 16.537265206735658,
+      "far_px": 14.952818092580912,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 10.7,
+      "near_px": 15.305566225191884,
+      "far_px": 12.651678352524216,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -25,
+      "height": 11.7,
+      "near_px": 15.140845200981616,
+      "far_px": 13.085088808222457,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": -2.3,
+      "near_px": 4.856667854164581,
+      "far_px": 5.961379270728853,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": -1.3,
+      "near_px": 5.550910715939862,
+      "far_px": 13.904568697553023,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": -0.3,
+      "near_px": 10.964870364820435,
+      "far_px": 14.29556270127602,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 0.7,
+      "near_px": 13.747827658262178,
+      "far_px": 1.5664680924738195,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 1.7,
+      "near_px": 11.02909720568704,
+      "far_px": -2.6079365863957067,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 2.7,
+      "near_px": 12.925086469212223,
+      "far_px": 4.239260878566288,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 3.7,
+      "near_px": 15.496244604023518,
+      "far_px": 4.408636431029512,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 4.7,
+      "near_px": 14.990319272812583,
+      "far_px": 3.3951553875138685,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 5.7,
+      "near_px": 17.42123063471793,
+      "far_px": 2.555716874594881,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 6.7,
+      "near_px": 16.076357296769608,
+      "far_px": 3.1416525430897013,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 7.7,
+      "near_px": 14.188474216362547,
+      "far_px": 4.510028785721187,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 8.7,
+      "near_px": 12.105490088433802,
+      "far_px": 5.026069131468186,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 9.7,
+      "near_px": 10.450906202323234,
+      "far_px": 4.815358262179372,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 10.7,
+      "near_px": 9.471847990609662,
+      "far_px": 2.5524017231412364,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": -16,
+      "height": 11.7,
+      "near_px": 8.066873653873557,
+      "far_px": 3.1327697866649027,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": -2.3,
+      "near_px": 4.760740116926105,
+      "far_px": 9.334910704779302,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": -1.3,
+      "near_px": 4.434636393850464,
+      "far_px": 19.289315469120975,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": -0.3,
+      "near_px": 8.856696033453481,
+      "far_px": 18.86482279912847,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 0.7,
+      "near_px": 12.17033473218877,
+      "far_px": 5.794604365049704,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 1.7,
+      "near_px": 11.415025252995374,
+      "far_px": -5.351296518145265,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 2.7,
+      "near_px": 11.486041590839719,
+      "far_px": 1.3758907393235118,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 3.7,
+      "near_px": 14.880888229360512,
+      "far_px": 0.9045292004251761,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 4.7,
+      "near_px": 12.020748393434525,
+      "far_px": 2.1071116524551994,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 5.7,
+      "near_px": 10.589364213989626,
+      "far_px": 5.855882360700044,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 6.7,
+      "near_px": 9.567126911812665,
+      "far_px": 7.194852496045829,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 7.7,
+      "near_px": 8.577878240519144,
+      "far_px": 8.375105307727374,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 8.7,
+      "near_px": 7.227370477975195,
+      "far_px": 7.4325393392018455,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 9.7,
+      "near_px": 8.624920646753347,
+      "far_px": 5.898079187269831,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 10.7,
+      "near_px": 7.890667214261355,
+      "far_px": 3.745868048083914,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 16,
+      "height": 11.7,
+      "near_px": 6.9390100349894475,
+      "far_px": 4.0260371176455845,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": -2.3,
+      "near_px": 4.369312226846397,
+      "far_px": 30.93887496989961,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": -1.3,
+      "near_px": 4.219504906813009,
+      "far_px": 39.33784650944675,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": -0.3,
+      "near_px": 14.476498353662768,
+      "far_px": 35.194221576535526,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 0.7,
+      "near_px": 16.231250759287903,
+      "far_px": 21.2987409083821,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 1.7,
+      "near_px": 17.877815456110817,
+      "far_px": 8.403038368261635,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 2.7,
+      "near_px": 18.595717122766345,
+      "far_px": 10.459820380106446,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 3.7,
+      "near_px": 18.162197466706182,
+      "far_px": 7.146927575811909,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 4.7,
+      "near_px": 15.764522320362717,
+      "far_px": 7.714519373946213,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 5.7,
+      "near_px": 14.88488492438297,
+      "far_px": 12.729177187208983,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 6.7,
+      "near_px": 14.03213935190174,
+      "far_px": 15.641337489566183,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 7.7,
+      "near_px": 13.065156159628078,
+      "far_px": 17.82996579528902,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 8.7,
+      "near_px": 12.351645556146723,
+      "far_px": 14.883682239280327,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 9.7,
+      "near_px": 13.93544700569627,
+      "far_px": 12.092288309686975,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 10.7,
+      "near_px": 12.804948702934034,
+      "far_px": 10.055860884356424,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 25,
+      "height": 11.7,
+      "near_px": 11.565084114788991,
+      "far_px": 9.386416039298584,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": -2.3,
+      "near_px": 3.234203157886918,
+      "far_px": 55.29074555064344,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": -1.3,
+      "near_px": 4.732890758306843,
+      "far_px": 62.504530677325356,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": -0.3,
+      "near_px": 18.009323394848256,
+      "far_px": 56.94992527711808,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 0.7,
+      "near_px": 21.640113381215684,
+      "far_px": 38.78737467933998,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 1.7,
+      "near_px": 20.12834652141034,
+      "far_px": 21.75586274199617,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 2.7,
+      "near_px": 25.32956385561274,
+      "far_px": 23.322974515747948,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 3.7,
+      "near_px": 21.979747721267703,
+      "far_px": 19.737517042447024,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 4.7,
+      "near_px": 19.54980634471886,
+      "far_px": 19.54785425788348,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 5.7,
+      "near_px": 18.865494983066856,
+      "far_px": 25.0461190828002,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 6.7,
+      "near_px": 17.356559384371806,
+      "far_px": 25.69501703966396,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 7.7,
+      "near_px": 17.391101271102954,
+      "far_px": 26.362944209497137,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 8.7,
+      "near_px": 17.705374955008217,
+      "far_px": 23.08242457870228,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 9.7,
+      "near_px": 19.190794074209784,
+      "far_px": 20.94127446131347,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 10.7,
+      "near_px": 17.760434288355405,
+      "far_px": 19.526890974137277,
+      "near_pass": null
+    },
+    {
+      "pitch": 12,
+      "yaw": 35,
+      "height": 11.7,
+      "near_px": 18.81914784336352,
+      "far_px": 16.060955529332702,
+      "near_pass": null
+    }
+  ]
+}
