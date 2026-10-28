@@ -61,8 +61,9 @@ export function skinFillPositions(p,face){
   const symDst=[reroll([cx-eyeHalf,h]),reroll([cx+eyeHalf,h])];
   const destination=target.map((q,i)=>q.map((v,d)=>v*(1-sym)+symDst[i][d]*sym));
   const map=similarity2D(source,destination);
-  const center=rotate(S.shell.center.point3D).map((q,d)=>q+B.reduce((sum,c,j)=>sum+c*S.shell.center.residual[j][d],0));
-  const radii=S.theta.map((theta,i)=>Math.hypot(...rotate([S.shell.front[i]*Math.cos(theta),S.shell.front[i]*Math.sin(theta),S.shell.depth[i]]))+B.reduce((sum,c,j)=>sum+c*S.shell.residual[j][i],0));
+  // The scalp outline keeps its front shape while the head turns (card #615): no per-angle depth or residual.
+  const center=rotate(S.shell.center.point3D).map((q,d)=>q+S.shell.center.residual[0][d]);
+  const radii=S.theta.map((theta,i)=>Math.hypot(...rotate([S.shell.front[i]*Math.cos(theta),S.shell.front[i]*Math.sin(theta),0]))+S.shell.residual[0][i]);
   const C=map(center),shell=S.theta.map((th,i)=>map([center[0]+radii[i]*Math.cos(th),center[1]+radii[i]*Math.sin(th)]));
   let left=Math.atan2(EL[1]-C[1],EL[0]-C[0]),right=Math.atan2(ER[1]-C[1],ER[0]-C[0]);
   if(left>0)left-=2*Math.PI;

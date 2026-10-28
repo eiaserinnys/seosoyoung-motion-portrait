@@ -11,7 +11,7 @@ import {outlineWorld} from '../bundle/face-outline.mjs';
 import {bindRig,deform3D,opacity} from '../bundle/rig.mjs';
 import {backgroundLayerPolicy,neckDepthPositions} from '../bundle/renderer.mjs';
 import * as renderer from '../bundle/renderer.mjs';
-import {skinFillPositions} from '../bundle/skin-fill.mjs';
+import {skinFillMesh,skinFillPositions} from '../bundle/skin-fill.mjs';
 import {sideWorld} from '../bundle/hair-shell.mjs';
 import {earWorld} from '../bundle/stereo-attachments.mjs';
 
@@ -211,14 +211,19 @@ test('neck depth uses the original xy and the rest ring cylinder',{timeout:30000
  const ring=metadata.open_boundary,zc=ring.reduce((sum,i)=>sum+ref[i*3+2],0)/ring.length;
  points.forEach((v,i)=>{close(values[i][0],v[0],1e-10,'neck x');close(values[i][1],v[1],1e-10,'neck y');assert(values[i][2]>=zc-1e-10);});
 });
-test('ear margin is available and legacy neck and fill positions are preserved',{timeout:30000},()=>{
+test('귀 여유와 목은 보존하고 노출 피부의 머리 윤곽은 정면 모양을 유지한다(카드 #615)',{timeout:30000},()=>{
  for(const side of ['left','right'])assert(metadata.ear_depth_bias_px[side]>0,'ear rest margin');
- const neck=rig.meshes.find(m=>m.id==='neck'),values=[];
+ const neck=rig.meshes.find(m=>m.id==='neck'),necks=[],fills=[];
  for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
   const p=pose(yaw,pitch,{CorrHeadBase:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0});
-  values.push({neck:neck.positions.map(q=>deform3D(neck,q,p)),fill:skinFillPositions(p,skin)});
+  necks.push(neck.positions.map(q=>deform3D(neck,q,p)));
+  fills.push(skinFillPositions(p,skin));
  }
- assert.equal(digest(values),'5e43bf076d88b50f7a325f9e2bbdb983ef00fe1ab3f2b1d52ac5dad17a4c2b7a');
+ assert.equal(digest(necks),'fcea23d86d5c9d628a56a9b47ee3d145eadad1fcf6d61f9a7f823a10303f4afe');
+ assert.equal(digest(fills),'98e70701417d27e0783844cb36f1d93e8166150021221fb08ca15fe0464b3988');
+ // 노출 피부의 머리 윤곽은 정면 모양을 유지한다(카드 #615): neutral은 main의 정면 좌표다.
+ const front=pose(0,0,{CorrHeadBase:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0});
+ assert.deepEqual(skinFillPositions(front,skin),skinFillMesh().positions.map(([x,y])=>[x,y,-200]));
 });
 
 test('head-base routing does not depend on the selected face-morph preset',()=>{
