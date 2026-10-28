@@ -5,7 +5,8 @@ import math
 import shutil
 import numpy as np
 from silhouette_mesh import silhouette_mesh
-from neck_art import clear_background
+from neck_art import clear_background, load_removal_mask
+from face_art import write_clean_assets
 from pathlib import Path
 from PIL import Image
 
@@ -139,7 +140,7 @@ def build():
     build_cranium()
     parts=json.loads((ROOT/'parts/parts_index.json').read_text())
     manifest=json.loads((SOURCE/'manifest.json').read_text()); clothing=json.loads((SOURCE/'clothing.json').read_text())
-    still=np.asarray(Image.open(SOURCE/'still.png').convert('RGBA'))
+    neck_remove=load_removal_mask(ROOT)
     old={p['id']:p for p in manifest['leaves']+manifest['expressions']+clothing['parts']}
     boxes=pack([(p['id'],*p['bbox'][2:]) for p in parts])
     assets=ROOT/'bundle/assets';assets.mkdir(parents=True,exist_ok=True)
@@ -164,9 +165,10 @@ def build():
             full.paste(raw,(bounds['x'],bounds['y']))
             original=full.crop((x,y,x+w,y+h))
         if key=='neck':
-            reference=still[y:y+h,x:x+w]
-            im=Image.fromarray(clear_background(im,reference))
-            original=Image.fromarray(clear_background(original,reference))
+            remove=neck_remove[y:y+h,x:x+w]
+            im=Image.fromarray(clear_background(im,remove))
+            original=Image.fromarray(clear_background(original,remove))
+            Image.fromarray(np.where(remove,0,255).astype('uint8')).save(assets/'neck-keep.png')
         if key=='upper-body-short-sleeve':
             alpha=original.getchannel('A')
             alpha.putdata([round(a*max(0,min(1,(y+i//w-680)/12))) for i,a in enumerate(alpha.tobytes())])
@@ -181,6 +183,7 @@ def build():
         mesh_seams=coarse_seams if key.startswith('back-hair-') else seams if key=='hair-top' or key.startswith('side-hair') else ()
         meshes.append(dict(id=key,label=p.get('label',key),partId=group,drawOrder=draw,deformerId=deformer_for(key),bbox=p['bbox'],atlas=box,masks=masks,**(cranium_mesh(key.split('-')[-1],p['bbox'],box) if key.startswith('side-cranium') else silhouette_mesh(union,p['bbox'],box,SIZE,[(306.5,544.2),(691.5,542.6),(379,465),(626,465)],mesh_seams,max_area=800 if coarse else 150,simplify_tol=3.0 if coarse else .65) if key.startswith(('ear-','tail-','side-hair','back-hair','bangs')) or key in ['face-skin','hair-top','hairpin'] else mesh(union,p['bbox'],box))))
     after.save(assets/'texture_00.png');before.save(assets/'texture_before_00.png')
+    write_clean_assets(next(mesh for mesh in meshes if mesh['id']=='face-skin'),after,before,assets)
     build_head_surface(parts,assets)
     build_head_surface(parts,assets,originals)
     deformers=[]

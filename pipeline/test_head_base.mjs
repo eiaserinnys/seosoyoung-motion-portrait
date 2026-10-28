@@ -72,6 +72,14 @@ test('surface direction fade is zero at rest',{timeout:30000},()=>{
  const up=pose(0,30);assert(skin.positions.some(point=>renderer.faceDirectionFade(point,up)>0),'up pose activates direction fade');
  for(const side of ['left','right'])assert(rig.meshes.find(m=>m.id==='side-cranium-'+side).atlas[1]>.5,'face refUV.y=0 remains outside hair atlas');
 });
+test('line-free face follows the selected atlas and stays off the old path',{timeout:30000},()=>{
+ assert.equal(renderer.faceCleanTextureIndex(false),7);
+ assert.equal(renderer.faceCleanTextureIndex(true),8);
+ for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,0,true],[1,.5,true],[1,1,false]]){
+  assert.equal(renderer.faceCleanPolicy(pose(30,20,{CorrHeadBase:enabled,CorrOutline:outline}),visible),false);
+ }
+ assert.equal(renderer.faceCleanPolicy(pose(30,20),true),true);
+});
 
 test('N7: Python projection fixture, 100 vertices and 13 poses',{timeout:30000},()=>{
  const vertices=new Float32Array(binary.buffer,binary.byteOffset+metadata.offsets.vertices.offset,metadata.offsets.vertices.length/4);

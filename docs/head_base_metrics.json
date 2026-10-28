@@ -6,7 +6,7 @@
   "N2": {
     "passed": true,
     "evidence": "pipeline/test_head_base.mjs: legacy and feature hashes",
-    "scope": "Geometry and feature vertex hashes; neck atlas alpha was intentionally changed by one pixel in each view."
+    "scope": "Geometry and feature vertex hashes only; neck texture alpha changes intentionally apply to old and new paths."
   },
   "N3c": {
     "changed_pixels": 0,
@@ -186,7 +186,7 @@
       {
         "yaw": -90,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 18,
         "neck_gap_pixels": 3643,
         "measured_columns": 107,
         "opaque_band": {
@@ -199,7 +199,7 @@
       {
         "yaw": -75,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 18,
         "neck_gap_pixels": 2019,
         "measured_columns": 107,
         "opaque_band": {
@@ -212,7 +212,7 @@
       {
         "yaw": -60,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 23,
         "neck_gap_pixels": 1059,
         "measured_columns": 107,
         "opaque_band": {
@@ -316,7 +316,7 @@
       {
         "yaw": 60,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 23,
         "neck_gap_pixels": 1025,
         "measured_columns": 107,
         "opaque_band": {
@@ -329,7 +329,7 @@
       {
         "yaw": 75,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 18,
         "neck_gap_pixels": 2137,
         "measured_columns": 107,
         "opaque_band": {
@@ -342,7 +342,7 @@
       {
         "yaw": 90,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 23,
         "neck_gap_pixels": 3434,
         "measured_columns": 107,
         "opaque_band": {
@@ -355,7 +355,7 @@
       {
         "yaw": -90,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1452,
         "measured_columns": 107,
         "opaque_band": {
@@ -368,7 +368,7 @@
       {
         "yaw": -75,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1178,
         "measured_columns": 107,
         "opaque_band": {
@@ -381,7 +381,7 @@
       {
         "yaw": -60,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 656,
         "measured_columns": 107,
         "opaque_band": {
@@ -446,7 +446,7 @@
       {
         "yaw": 60,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 675,
         "measured_columns": 107,
         "opaque_band": {
@@ -459,7 +459,7 @@
       {
         "yaw": 75,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1300,
         "measured_columns": 107,
         "opaque_band": {
@@ -472,7 +472,7 @@
       {
         "yaw": 90,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1729,
         "measured_columns": 107,
         "opaque_band": {
@@ -654,7 +654,7 @@
       {
         "yaw": -67.5,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 948,
         "measured_columns": 107,
         "opaque_band": {
@@ -667,7 +667,7 @@
       {
         "yaw": 67.5,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1023,
         "measured_columns": 107,
         "opaque_band": {
@@ -730,13 +730,13 @@
         "passed": true
       }
     ],
-    "limitation": "front and up select an isolated 2px band after head occlusion; their zero is not evidence that the whole neck junction is gap-free."
+    "limitation": "Front and up use a two-pixel band after head occlusion, so zero does not prove the entire neck junction is gap-free."
   },
   "rest_full_difference": {
-    "changed_pixels": 3264,
+    "changed_pixels": 3454,
     "ear_changed_pixels": 2770,
     "neck_opaque_changed_pixels": 2,
-    "other_changed_pixels": 492,
+    "other_changed_pixels": 682,
     "ear_changed_from_8330_pixels": 0,
     "bbox": [
       310,
@@ -766,18 +766,25 @@
     "sample_y": 640
   },
   "rest_extension_difference": {
-    "changed_pixels": 251,
+    "changed_pixels": 284,
     "on_opaque_original_neck_pixels": 2,
     "bbox": [
-      440,
+      373,
       600,
-      563,
+      628,
       772
     ]
   },
   "rest_views": {
-    "neck_opaque_changed_pixels": 3212
+    "neck_opaque_changed_pixels": 2879
   },
+  "face_clean_checks": {
+    "before_rest": 0,
+    "before_legacy": 0,
+    "after_rest": 0,
+    "after_legacy": 0
+  },
+  "rest_changed_pixels_vs_49ef685": 195,
   "neck_axis": {
     "center_x": 500.421755073873,
     "rest_depth": 47.143816374334676,
@@ -2745,7 +2752,7 @@
       "yaw": -90,
       "pitch": 0,
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1452,
         "measured_columns": 107,
         "opaque_band": {
@@ -2767,7 +2774,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 948,
         "measured_columns": 107,
         "opaque_band": {
@@ -2789,7 +2796,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1023,
         "measured_columns": 107,
         "opaque_band": {
@@ -2805,7 +2812,7 @@
       "yaw": 90,
       "pitch": 0,
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 24,
         "neck_gap_pixels": 1729,
         "measured_columns": 107,
         "opaque_band": {
@@ -2883,49 +2890,59 @@
       }
     },
     "portrait_changes": {
-      "sweater": 1,
-      "shirt": 1
-    },
-    "part_bbox_canvas": [
-      339,
-      531,
-      323,
-      247
-    ],
-    "atlas_bbox": [
-      1666,
-      873,
-      323,
-      247
-    ],
-    "source_background_alpha_0_changed_texels": 1,
-    "changed_canvas_pixel": [
-      566,
-      594
-    ],
-    "previous_alpha": 9,
-    "assessment": "The texture rule is satisfied, but the two-layer shoulder strip remains visible: still.png includes opaque hair overlapping the neck part, so its alpha alone does not mark the shoulder line.",
-    "example_opaque_hair_canvas_pixel": [
-      345,
-      713
-    ],
-    "example_still_rgba": [
-      40,
-      29,
-      33,
-      255
-    ],
-    "example_neck_rgba": [
-      156,
-      110,
-      71,
-      255
-    ]
+      "sweater": 195,
+      "shirt": 3
+    }
   },
-  "jaw_fade_review": {
-    "formula": "1 - max(r*m, smoothstep(0,0.25,r)*f)",
-    "six_upward_cheek_lines": "The crossing lines are no longer visible in the six comparison crops.",
-    "color_boundary": "Angular skin color patches are visible near the faded face edge at yaw ±60 degrees.",
-    "color_crop": "docs/captures/head_base_direction_color.png"
+  "head_art_generation": "docs/head_art_generation.json",
+  "visual_review": {
+    "neck_shoulders": "Skin band remains where the dilated neck mask already contains it; small background gaps appear by the sweater shoulders.",
+    "neck_mask_example": {
+      "row": 670,
+      "opaque_neck_span": [
+        426,
+        574
+      ],
+      "neck_mask_span": [
+        426,
+        575
+      ],
+      "left_outline_x": 434
+    },
+    "neck_hole": {
+      "hole_poses": 14,
+      "max_hole_px": 24,
+      "removed_island_px": 21,
+      "island_canvas_bbox": [
+        499,
+        554,
+        509,
+        556
+      ],
+      "sample_canvas": [
+        504,
+        555
+      ],
+      "sample_masks": {
+        "neck": 0,
+        "face-skin": 0,
+        "sweater_top_y": 773
+      },
+      "deformed_sample_yaw_minus_or_plus_60": [
+        503.17857142857144,
+        546.2380952380952
+      ],
+      "render_dark_samples": [
+        499.6,
+        544.6,
+        502.4,
+        544.6
+      ],
+      "evidence": "docs/captures/head_base_neck_holes.png"
+    },
+    "shirt_rest": "No obvious shoulder hole in the front hair-hidden shirt comparison.",
+    "jaw": "The angular color patch at yaw ±60 was reduced; faint crossing traces are visible again in up, −30/+20 and +45/+20.",
+    "jaw_evidence": "docs/captures/head_base_faint_jaw.png",
+    "shoulder_evidence": "docs/captures/head_base_shoulder_detail.png"
   }
 }

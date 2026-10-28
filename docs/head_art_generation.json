@@ -1,0 +1,40 @@
+{
+  "neck_removed": {
+    "parts/neck.png": {
+      "removed_nonzero": 1161,
+      "removed_opaque": 1138,
+      "restored_previous_rule": 1
+    },
+    "bundle/assets/texture_00.png": {
+      "removed_nonzero": 1161,
+      "removed_opaque": 1138,
+      "restored_previous_rule": 1
+    },
+    "bundle/assets/texture_before_00.png": {
+      "removed_nonzero": 145,
+      "removed_opaque": 139,
+      "restored_previous_rule": 1
+    }
+  },
+  "face_strokes": {
+    "face-clean.png": 1171,
+    "face-clean-before.png": 1961
+  },
+  "stroke_luma_delta_min": 30,
+  "skin_reference": "15px median of nearest interior skin",
+  "inpaint": "OpenCV Telea",
+  "inpaint_radius_px": 3,
+  "neck_dilation": "2px elliptical",
+  "neck_bbox": [
+    339,
+    531,
+    323,
+    247
+  ],
+  "face_bbox": [
+    306,
+    218,
+    392,
+    408
+  ]
+}
