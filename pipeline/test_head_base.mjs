@@ -211,7 +211,7 @@ test('neck depth uses the original xy and the rest ring cylinder',{timeout:30000
  const ring=metadata.open_boundary,zc=ring.reduce((sum,i)=>sum+ref[i*3+2],0)/ring.length;
  points.forEach((v,i)=>{close(values[i][0],v[0],1e-10,'neck x');close(values[i][1],v[1],1e-10,'neck y');assert(values[i][2]>=zc-1e-10);});
 });
-test('귀 여유와 목은 보존하고 노출 피부의 머리 윤곽은 정면 모양을 유지한다(카드 #615)',{timeout:30000},()=>{
+test('귀 여유와 목은 보존하고 노출 피부는 얼굴 마스크를 따라 움직인다(카드 #615)',{timeout:30000},()=>{
  for(const side of ['left','right'])assert(metadata.ear_depth_bias_px[side]>0,'ear rest margin');
  const neck=rig.meshes.find(m=>m.id==='neck'),necks=[],fills=[];
  for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
@@ -220,8 +220,8 @@ test('귀 여유와 목은 보존하고 노출 피부의 머리 윤곽은 정면
   fills.push(skinFillPositions(p,skin));
  }
  assert.equal(digest(necks),'fcea23d86d5c9d628a56a9b47ee3d145eadad1fcf6d61f9a7f823a10303f4afe');
- assert.equal(digest(fills),'98e70701417d27e0783844cb36f1d93e8166150021221fb08ca15fe0464b3988');
- // 노출 피부의 머리 윤곽은 정면 모양을 유지한다(카드 #615): neutral은 main의 정면 좌표다.
+ assert.equal(digest(fills),'b7869086b9f03375286c99e8927599173f04a02a2e50f6b12b68951f817354c6');
+ // 노출 피부는 얼굴 마스크를 따라 움직인다(카드 #615): 정면에서는 main의 정면 좌표와 같다.
  const front=pose(0,0,{CorrHeadBase:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0});
  assert.deepEqual(skinFillPositions(front,skin),skinFillMesh().positions.map(([x,y])=>[x,y,-200]));
 });
