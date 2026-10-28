@@ -17,7 +17,8 @@ export const getHeadBase=()=>model;
 export function configureHeadBase(metadata,buffer){
  const array=(name,Type)=>{const {offset,length}=metadata.offsets[name];return new Type(buffer,offset,length/Type.BYTES_PER_ELEMENT);};
  model={...metadata,vertices:array('vertices',Float32Array),normals:array('normals',Float32Array),
-  fields:array('fields',Float32Array),triangles:array('triangles',Uint32Array),queries:new Map()};
+  fields:array('fields',Float32Array),triangles:array('triangles',Uint32Array),
+  cheekField:array('cheek_field',Float32Array),queries:new Map()};
  model.thetaRest=model.keys.find(k=>k.yaw===0&&k.pitch===0).model;
  model.reference=projectedVertices(model.thetaRest);
  for(let i=0;i<model.vertexCount;i++){
@@ -62,6 +63,10 @@ export function headPoseDistance(theta){
  return Math.hypot(theta[0]-model.thetaRest[0],HEAD_BASE.pitchWeight*(theta[1]-model.thetaRest[1]));
 }
 
+export function cheekWeight(theta){
+ return Math.exp(-(headPoseDistance(theta)**2)/(2*model.cheek_sigma**2));
+}
+
 export function phi(theta){
  const logits=model.theta_k.map(k=>-((theta[0]-k[0])**2+(HEAD_BASE.pitchWeight*(theta[1]-k[1]))**2)/(2*model.sigma**2));
  const max=Math.max(...logits),values=logits.map(v=>Math.exp(v-max)),total=values.reduce((a,b)=>a+b,0);
@@ -76,10 +81,11 @@ export function fieldAt(theta,index){
 
 function projectedVertices(theta){
  const weights=phi(theta),n=model.vertexCount,out=new Float64Array(n*3),scale=Math.exp(model.logscale_front);
+ const cheek=cheekWeight(theta);
  const pose=[theta[0],theta[1],0,model.logscale_front,0,0];
  for(let i=0;i<n;i++){
   const xyz=[0,1,2].map(c=>{
-   let v=model.vertices[i*3+c];
+   let v=model.vertices[i*3+c]+cheek*model.cheekField[i*3+c];
    for(let k=0;k<weights.length;k++)v+=weights[k]*model.fields[(k*n+i)*3+c]/model.s_ref;
    return v;
   });

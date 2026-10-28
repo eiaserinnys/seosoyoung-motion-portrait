@@ -293,11 +293,17 @@ def main():
     excluded = np.r_[excluded, True]
     vertices = vertices.astype('<f4')
     fields = fields.astype('<f4')
+    with np.load(ROOT / 'pipeline/headmodel/cheek-field.npz') as source:
+        cheek = source['displacement'].copy()
+    if cheek.shape != (len(vertices)-1, 3):
+        raise ValueError('STOP: cheek field and head topology do not match')
+    cheek = np.concatenate([cheek, cheek[open_ring].mean(axis=0, keepdims=True)]).astype('<f4')
+    cheek_sigma = 8.
     normals = vertex_normals(vertices.astype(float), triangles).astype('<f4')
     neck = neck_sheet(vertices, triangles)
     front = np.array(refined[3])
     theta_rest = front[:2]
-    rest_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta_rest, nodes, sigma), fields.astype(float)) / s_ref
+    rest_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta_rest, nodes, sigma), fields.astype(float)) / s_ref + cheek
     rest_pose = [front[0], front[1], 0., front[3], front[4], front[5]]
     projected = project_np(rest_vertices, rest_pose)
     # The cap closes the neck opening; existing face attachments stay on the head surface.
@@ -332,6 +338,8 @@ def main():
     outside = outside_sheet(outside_points)
     print(json.dumps({'sheet': str(sheet), 'neck_sheet': str(neck), 'outside_sheet': str(outside),
                       'open_ring': len(open_ring), 'cap_vertices': 1, 'cap_triangles': len(open_ring),
+                      'cheek_weights': {str(frame): float(np.exp(-((refined[frame][0]-theta_rest[0])**2 +
+                          (1.4*(refined[frame][1]-theta_rest[1]))**2)/(2*cheek_sigma**2))) for frame, _, _ in KEYS},
                       'ear_bias_px': ear_biases, 'neck_extension': neck_extension,
                       'ear_roots': {side: {'count': len(data['ring']), 'center': data['rest_center'], 'delta': data['delta']} for side, data in ear_roots.items()},
                       'attachments': statistics}, ensure_ascii=False), flush=True)
@@ -347,13 +355,14 @@ def main():
     asset_path = ROOT / 'bundle/assets/head-base.bin'
     offsets, offset = {}, 0
     with asset_path.open('wb') as output:
-        for name, array in [('vertices', vertices), ('normals', normals), ('fields', fields), ('triangles', triangles.astype('<u4'))]:
+        for name, array in [('vertices', vertices), ('normals', normals), ('fields', fields),
+                            ('triangles', triangles.astype('<u4')), ('cheek_field', cheek)]:
             payload = array.tobytes(order='C')
             output.write(payload)
             offsets[name] = {'offset': offset, 'length': len(payload)}
             offset += len(payload)
     metadata = {'offsets': offsets, 'vertexCount': len(vertices), 'triangleCount': len(triangles),
-                's_ref': s_ref, 'sigma': sigma, 'theta_k': nodes.tolist(),
+                's_ref': s_ref, 'sigma': sigma, 'cheek_sigma': cheek_sigma, 'theta_k': nodes.tolist(),
                 'keys': [{'frame': frame, 'yaw': yaw, 'pitch': pitch, 'model': refined[frame][:2]}
                          for frame, yaw, pitch in KEYS],
                 'logscale_front': front[3], 'rest_translation': (front[4:6]+CANVAS_SHIFT).tolist(),
@@ -370,7 +379,9 @@ def main():
     fixtures['ear_roots'] = []
     for frame, yaw, pitch in KEYS:
         theta = refined[frame][:2]
-        posed_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta, nodes, sigma), fields.astype(float)) / s_ref
+        distance2 = (theta[0]-theta_rest[0])**2 + (1.4*(theta[1]-theta_rest[1]))**2
+        weight = np.exp(-distance2/(2*cheek_sigma**2))
+        posed_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta, nodes, sigma), fields.astype(float)) / s_ref + weight*cheek
         q = project_np(posed_vertices, [theta[0], theta[1], 0., front[3], front[4], front[5]])
         q[:, :2] += CANVAS_SHIFT
         q[:, 2] *= np.exp(front[3])

@@ -154,14 +154,23 @@ test('ear inclination is zero at every fitted key and grows smoothly outside the
   close(last,55,1e-9,'profile tilt');
  }
 });
-test('the restored head and nine-key ear inputs match the measured 030dea1 baseline',()=>{
+test('the original head geometry and ear inputs remain based on 030dea1',()=>{
  const oldBin=execFileSync('git',['show','030dea1:bundle/assets/head-base.bin'],{maxBuffer:8*1024*1024});
  const oldMeta=JSON.parse(execFileSync('git',['show','030dea1:bundle/assets/head-base.json']));
- const sha=data=>createHash('sha256').update(data).digest('hex');
- assert.equal(sha(binary),sha(oldBin));
- for(const key of ['offsets','vertexCount','triangleCount','s_ref','sigma','theta_k','keys','logscale_front','rest_translation','attachments','color','open_boundary','ear_roots','ear_depth_bias_px'])
+ for(const name of ['vertices','normals','fields','triangles']){
+  const now=metadata.offsets[name],old=oldMeta.offsets[name];
+  assert.deepEqual(binary.subarray(now.offset,now.offset+now.length),oldBin.subarray(old.offset,old.offset+old.length),name);
+ }
+ for(const key of ['vertexCount','triangleCount','s_ref','sigma','theta_k','keys','logscale_front','rest_translation','color','open_boundary','ear_depth_bias_px'])
   assert.deepEqual(metadata[key],oldMeta[key],key);
+ for(const side of ['left','right'])assert.deepEqual(metadata.ear_roots[side].ring,oldMeta.ear_roots[side].ring,side+' ring');
  for(const key of ['bbox','sample_y'])assert.deepEqual(metadata.neck_extension[key],oldMeta.neck_extension[key],key);
+});
+test('cheek field is full at rest and below the limit at other fitted keys',()=>{
+ close(headBase.cheekWeight(metadata.keys.find(k=>k.frame===3).model),1,1e-12,'rest');
+ for(const key of metadata.keys.filter(k=>k.frame!==3))
+  assert(headBase.cheekWeight(key.model)<.05,'key '+key.frame);
+ assert(headBase.getHeadBase().cheekField.some(value=>value!==0),'precomputed cheek field is loaded');
 });
 test('only the three face islands fade with the new path and keep rest pixels',()=>{
  assert.deepEqual([...renderer.faceIslandVertices(skin)].sort((a,b)=>a-b),Array.from({length:20},(_,i)=>i));

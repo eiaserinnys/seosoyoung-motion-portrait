@@ -7,6 +7,8 @@ import json
 import math
 import subprocess
 import sys
+import tarfile
+import tempfile
 import threading
 from pathlib import Path
 
@@ -485,7 +487,7 @@ def save_temple_diagnosis(baseline):
     sheet.save(DEST / 'head_base_temple_diagnosis.png')
 
 
-def save_review2(renders, extra_ear, crop):
+def save_review4(renders, extra_ear, crop):
     baseline = DEST / 'review2-baseline'
     mask = np.asarray(Image.open(ROOT / 'sam3_masks/face-skin_mask.png').convert('L'))[:1024] > 127
     contours, _ = cv2.findContours(mask.astype('uint8'), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
@@ -497,7 +499,7 @@ def save_review2(renders, extra_ear, crop):
     counts = {}
     box = (X_OFFSET+320, 490, X_OFFSET+690, 640)
     sheet = Image.new('RGB', ((box[2]-box[0])*4, (box[3]-box[1])*2+28), BG)
-    for i, (label, image) in enumerate((('ee2a224', old_head), ('current', new_head))):
+    for i, (label, image) in enumerate((('030dea1', old_head), ('current', new_head))):
         head = np.asarray(image)[:, X_OFFSET:X_OFFSET+1024, 3] > 127
         outside = head & (distance > 1)
         outside[:515] = False
@@ -511,7 +513,7 @@ def save_review2(renders, extra_ear, crop):
         panel = Image.fromarray(canvas).crop(box).resize(((box[2]-box[0])*2, (box[3]-box[1])*2), Image.Resampling.NEAREST)
         sheet.paste(panel, (i*panel.width, 28))
         ImageDraw.Draw(sheet).text((i*panel.width+5, 6), f'{label}: outside >1px = {counts[label]}', fill='white')
-    sheet.save(DEST / 'head_base_review2_cheek.png')
+    sheet.save(DEST / 'head_base_review4_cheek_layers.png')
 
     strip = Image.new('RGB', (5*360, 2*360), BG)
     for row, sign in enumerate((-1, 1)):
@@ -520,7 +522,7 @@ def save_review2(renders, extra_ear, crop):
             item = renders[(yaw, 0)] if (yaw, 0) in renders else extra_ear[yaw]
             label = f'{yaw:+}: model {item["model_angle"][0]:+.1f} / tilt {item["ear_tilt"]:.1f}'
             strip.paste(tile(item['portrait'], crop, 360, label), (col*360, row*360))
-    strip.save(DEST / 'head_base_review2_ear_tilt.png')
+    strip.save(DEST / 'head_base_review4_ear_tilt.png')
 
     ear = Image.new('RGB', (1200, 1200), BG)
     for row, yaw in enumerate((-60, 60)):
@@ -528,18 +530,117 @@ def save_review2(renders, extra_ear, crop):
         for col, key in enumerate(('legacy_portrait', 'portrait')):
             panel = tile(renders[(yaw, 0)][key], box, 600, f'{yaw:+} / '+('legacy' if col == 0 else '3D'))
             ear.paste(panel, (col*600, row*600))
-    ear.save(DEST / 'head_base_review2_ear_edge.png')
+    ear.save(DEST / 'head_base_review4_ear_edge.png')
 
     old_face = Image.open(baseline / 'head_base_m60_face.png').convert('RGBA')
     new_face = renders[(-60, 0)]['face_only']
     box = (X_OFFSET+480, 360, X_OFFSET+565, 445)
     sheet = Image.new('RGB', (680, 370), BG)
-    for i, (label, image) in enumerate((('ee2a224', old_face), ('current', new_face))):
+    for i, (label, image) in enumerate((('030dea1', old_face), ('current', new_face))):
         panel = composite(image).crop(box).resize((340, 340), Image.Resampling.NEAREST)
         sheet.paste(panel, (i*340, 30))
         ImageDraw.Draw(sheet).text((i*340+5, 6), label+' / face only', fill='white')
-    sheet.save(DEST / 'head_base_review2_fragments.png')
+    sheet.save(DEST / 'head_base_review4_fragments.png')
+
+    angles = (-15, -10, -5, 0, 5, 10, 15)
+    box = (X_OFFSET+320, 490, X_OFFSET+690, 640)
+    width, height = (box[2]-box[0])*2, (box[3]-box[1])*2
+    strip = Image.new('RGB', (width*len(angles), height+28), BG)
+    for col, yaw in enumerate(angles):
+        item = renders[(yaw, 0)] if (yaw, 0) in renders else extra_ear[yaw]
+        image = composite(item['portrait']).crop(box).resize((width, height), Image.Resampling.NEAREST)
+        strip.paste(image, (col*width, 28))
+        ImageDraw.Draw(strip).text((col*width+5, 6), f'{yaw:+} / c={item["cheek_weight"]:.4f}', fill='white')
+    strip.save(DEST / 'head_base_review4_near_rest.png')
     return counts
+
+
+def rest_comparison_030(baseline, current):
+    old = np.asarray(baseline['full'])
+    new = np.asarray(current['portrait'])
+    old_no_ear = np.asarray(baseline['withoutEars'])
+    new_no_ear = np.asarray(current['rest_comparison']['withoutEars'])
+    old_ear = np.asarray(baseline['earOnly'])
+    new_ear = np.asarray(current['rest_comparison']['earOnly'])
+    old_ident = np.asarray(baseline['visibleEars'])
+    new_ident = np.asarray(current['rest_comparison']['visibleEars'])
+    old_visible = (old_ident[:, :, 0] > 0) & (old_ident[:, :, 3] > 0)
+    new_visible = (new_ident[:, :, 0] > 0) & (new_ident[:, :, 3] > 0)
+    ear_region = (old_ear[:, :, 3] > 0) | (new_ear[:, :, 3] > 0)
+    changed = np.any(old != new, axis=2)
+    without_ear_changed = np.any(old_no_ear != new_no_ear, axis=2)
+    ear_only_changed = np.any(old_ear != new_ear, axis=2)
+    visible = old_visible | new_visible
+    x = np.arange(CANVAS_WIDTH)[None, :]
+    y = np.arange(old.shape[0])[:, None]
+    same_delta = np.all((new.astype(np.int16)-old.astype(np.int16)) ==
+                        (new_no_ear.astype(np.int16)-old_no_ear.astype(np.int16)), axis=2)
+    ys, xs = np.where(changed)
+    result = {
+        'baseline': '030dea1', 'full_changed_pixels': int(changed.sum()),
+        'full_changed_bbox_canvas': [int(xs.min())-X_OFFSET, int(ys.min()),
+                                     int(xs.max())-X_OFFSET, int(ys.max())] if len(xs) else None,
+        'field_constraint_y_515_617_changed_pixels': int(np.count_nonzero(changed & (y >= 515) & (y <= 617))),
+        'outside_field_constraint_y_changed_pixels': int(np.count_nonzero(changed & ((y < 515) | (y > 617)))),
+        'ears_only_rgba_changed_pixels': int(ear_only_changed.sum()),
+        'ear_region_changed_pixels': {
+            'left': int(np.count_nonzero(changed & ear_region & (x < X_OFFSET+502))),
+            'right': int(np.count_nonzero(changed & ear_region & (x >= X_OFFSET+502)))},
+        'visible_ear_region_full_rgba_changed_pixels': int(np.count_nonzero(changed & visible)),
+        'visible_ear_coverage_changed_pixels': int(np.count_nonzero(old_visible != new_visible)),
+        'without_ears_full_changed_pixels': int(without_ear_changed.sum()),
+        'full_change_also_without_ears_pixels': int(np.count_nonzero(changed & without_ear_changed)),
+        'full_change_only_with_ears_pixels': int(np.count_nonzero(changed & ~without_ear_changed)),
+        'same_full_rgba_delta_with_and_without_ears_pixels': int(np.count_nonzero(changed & same_delta)),
+    }
+    box = (X_OFFSET+270, 375, X_OFFSET+740, 640)
+    width, height = (box[2]-box[0])*2, (box[3]-box[1])*2
+    sheet = Image.new('RGB', (width*2, height+28), BG)
+    for col, (image, label) in enumerate(((baseline['full'], '030dea1'), (current['portrait'], 'current'))):
+        panel = composite(image).crop(box).resize((width, height), Image.Resampling.NEAREST)
+        sheet.paste(panel, (col*width, 28))
+        ImageDraw.Draw(sheet).text((col*width+5, 6), label, fill='white')
+    sheet.save(DEST / 'head_base_review4_rest_ears.png')
+    heat = np.asarray(composite(current['portrait'])).copy()
+    heat[changed & ~visible] = [255, 45, 45]
+    heat[changed & visible] = [255, 220, 0]
+    Image.fromarray(heat).crop(box).resize((width, height), Image.Resampling.NEAREST).save(
+        DEST / 'head_base_review4_rest_difference.png')
+    return result
+
+
+def capture_rest_baseline(browser, port, errors):
+    page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
+    page.on('pageerror', lambda e: errors.append(str(e)))
+    page.goto(f'http://127.0.0.1:{port}', wait_until='networkidle')
+    page.wait_for_function('window.studio?.ready', timeout=30000)
+    page.evaluate('''async()=>{
+      const {Renderer}=await import('./renderer.mjs');
+      const canvas=document.createElement('canvas'),overlay=document.createElement('canvas');
+      Object.assign(canvas.style,{width:'1500px',height:'1600px',position:'fixed',left:'-2000px',top:'0'});
+      document.body.append(canvas);window.headCapture=new Renderer(canvas,overlay,studio.rig,studio.renderer.images);
+    }''')
+    result = page.evaluate('''()=>{
+      const meshes=studio.rig.meshes;
+      const hidden=meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck'&&!m.id.startsWith('ear-')&&m.deformerId!=='WarpBody').map(m=>m.id);
+      const p={...studio.p,CorrHeadBase:1,CorrOutline:1,CorrTurn:1,ParamAngleX:0,ParamAngleY:0,ParamAngleZ:0,
+               ParamBodyAngleX:0,ParamBreath:0,ParamEyeLOpen:1,ParamEyeROpen:1,ParamEyeBallX:0,ParamEyeBallY:0};
+      const state={...studio.state,mode:'all',wire:false,grid:false,before:false,surfaceOnly:false,masks:false};
+      const capture=(ids,identify=null)=>{
+        headCapture.render(p,{...state,identify,hidden:new Set(ids)});
+        if(headCapture.gl.getError())throw Error('WebGL error during 030dea1 comparison');
+        return headCapture.canvas.toDataURL('image/png').split(',')[1];
+      };
+      return {
+        full:capture(hidden),
+        withoutEars:capture([...hidden,'ear-left','ear-right']),
+        visibleEars:capture(hidden,['ear-left','ear-right']),
+        earOnly:capture([...meshes.filter(m=>!m.id.startsWith('ear-')).map(m=>m.id),'head-base']),
+        headOnly:capture(meshes.map(m=>m.id))
+      };
+    }''')
+    page.close()
+    return {key: decode(value) for key, value in result.items()}
 
 
 def main():
@@ -564,10 +665,19 @@ def main():
     server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(Handler, directory=str(ROOT / 'bundle')))
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
+    baseline_tmp = tempfile.TemporaryDirectory(prefix='head-base-030-')
+    archive = subprocess.check_output(['git', 'archive', '030dea1', 'bundle'], cwd=ROOT)
+    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+        tar.extractall(baseline_tmp.name, filter='data')
+    baseline_server = http.server.ThreadingHTTPServer(
+        ('127.0.0.1', 0), functools.partial(Handler, directory=str(Path(baseline_tmp.name) / 'bundle')))
+    baseline_thread = threading.Thread(target=baseline_server.serve_forever, daemon=True)
+    baseline_thread.start()
     errors, renders = [], {}
     try:
         with sync_playwright() as pw:
             browser = pw.chromium.launch(headless=True, args=['--no-sandbox', '--use-angle=swiftshader'])
+            baseline_rest = capture_rest_baseline(browser, baseline_server.server_port, errors)
             page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
             page.on('pageerror', lambda e: errors.append(str(e)))
             page.on('console', lambda m: errors.append(m.text) if m.type == 'error' else None)
@@ -680,6 +790,11 @@ def main():
                   const restOld=yaw===0&&pitch===0?capture(isolated,{...p,CorrHeadBase:0}):null;
                   const restNew=yaw===0&&pitch===0?capture(isolated):null;
                   const restEars=yaw===0&&pitch===0?Object.fromEntries(['left','right'].map(side=>[side,capture(meshes.filter(m=>m.id!=='ear-'+side).map(m=>m.id),p,'ear-'+side)])):null;
+                  const restComparison=yaw===0&&pitch===0?{
+                    withoutEars:capture([...hidden,'ear-left','ear-right']),
+                    visibleEars:capture(hidden,p,['ear-left','ear-right']),
+                    earOnly:capture([...meshes.filter(m=>!m.id.startsWith('ear-')).map(m=>m.id),'head-base'])
+                  }:null;
                   const restBefore=captureBefore&&yaw===0&&pitch===0?capture(hidden,p,null,{before:true}):null;
                   const q={...p,[poseModule.FRAME_CACHE]:new Map()},points=headModule.headBaseVertices(q).surface;
                   let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
@@ -727,12 +842,12 @@ def main():
                       neckEdges[name+'_clean']=capture(onlyFace,pose,null,{before});
                     }
                   }
-                  return {portrait,legacyPortrait,faceOnly,union,unionWithCap,ears,headNeck,headOnly,neckOnly,neckArt,neckAxis,restOld,restNew,restEars,restBefore,restOriginalNeck,restOriginalNeckOnly,necklaceHidden,assembled,neckEdges,skinPositions,neckPositions,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),earTilt:headModule.earTiltDegrees(q),hidden};
+                  return {portrait,legacyPortrait,faceOnly,union,unionWithCap,ears,headNeck,headOnly,neckOnly,neckArt,neckAxis,restOld,restNew,restEars,restComparison,restBefore,restOriginalNeck,restOriginalNeckOnly,necklaceHidden,assembled,neckEdges,skinPositions,neckPositions,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),earTilt:headModule.earTiltDegrees(q),cheekWeight:headModule.cheekWeight(headModule.modelAngles(q)),hidden};
                 }''', [yaw, pitch, (yaw, pitch) in key_positions, (yaw, pitch) in jacobian_positions, not reuse_before])
                 renders[(yaw, pitch)] = {'portrait': decode(data['portrait']),
                                          'bounds': data['bounds'], 'neck_axis': data['neckAxis'],
                                          'model_angle': data['modelAngle'], 'hidden': data['hidden'],
-                                         'ear_tilt': data['earTilt'],
+                                         'ear_tilt': data['earTilt'], 'cheek_weight': data['cheekWeight'],
                                          'neck_positions': data['neckPositions']}
                 for source, target in [('legacyPortrait', 'legacy_portrait'), ('faceOnly', 'face_only'), ('union', 'union'), ('unionWithCap', 'union_with_cap'), ('ears', 'ears'), ('headNeck', 'head_neck'),
                                        ('headOnly', 'head_only'), ('neckOnly', 'neck_only'), ('neckArt', 'neck_art'),
@@ -744,6 +859,8 @@ def main():
                         renders[(yaw, pitch)][target] = decode(data[source])
                 if data['restEars']:
                     renders[(yaw, pitch)]['rest_ears'] = {side: decode(value) for side, value in data['restEars'].items()}
+                if data['restComparison']:
+                    renders[(yaw, pitch)]['rest_comparison'] = {name: decode(value) for name, value in data['restComparison'].items()}
                 if data['neckEdges']:
                     renders[(yaw, pitch)].update({name: decode(value) for name, value in data['neckEdges'].items()})
                 if data['skinPositions'] is not None:
@@ -751,16 +868,16 @@ def main():
                 if (i + 1) % 10 == 0 or i + 1 == len(tasks):
                     print(f'Captured {i + 1}/{len(tasks)} poses', flush=True)
             extra_ear = {}
-            for yaw in (-80, -70, -50, 50, 70, 80):
+            for yaw in (-80, -70, -50, -10, -5, 5, 10, 50, 70, 80):
                 data = page.evaluate('''yaw=>{
                   const meshes=studio.rig.meshes;
                   const hidden=meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck'&&!m.id.startsWith('ear-')&&m.deformerId!=='WarpBody').map(m=>m.id);
                   const p={...studio.p,CorrHeadBase:1,CorrOutline:1,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0};
                   headCapture.render(p,{...studio.state,mode:'all',wire:false,grid:false,before:false,surfaceOnly:false,masks:false,hidden:new Set(hidden)});
                   if(headCapture.gl.getError())throw Error('WebGL error during extra ear poses');
-                  return {image:headCapture.canvas.toDataURL('image/png').split(',')[1],angle:headModule.modelAngles(p),tilt:headModule.earTiltDegrees(p)};
+                  return {image:headCapture.canvas.toDataURL('image/png').split(',')[1],angle:headModule.modelAngles(p),tilt:headModule.earTiltDegrees(p),cheek:headModule.cheekWeight(headModule.modelAngles(p))};
                 }''', yaw)
-                extra_ear[yaw] = {'portrait': decode(data['image']), 'model_angle': data['angle'], 'ear_tilt': data['tilt']}
+                extra_ear[yaw] = {'portrait': decode(data['image']), 'model_angle': data['angle'], 'ear_tilt': data['tilt'], 'cheek_weight': data['cheek']}
             browser.close()
             if errors:
                 raise RuntimeError('Browser errors: ' + str(errors))
@@ -768,6 +885,10 @@ def main():
         server.shutdown()
         server.server_close()
         thread.join()
+        baseline_server.shutdown()
+        baseline_server.server_close()
+        baseline_thread.join()
+        baseline_tmp.cleanup()
 
     gaps = {}
     neck_mesh = next(mesh for mesh in rig['meshes'] if mesh['id'] == 'neck')
@@ -816,6 +937,7 @@ def main():
         n4 = jacobians(rest, np.asarray(item['skin_positions']), triangles)
         n4['passed'] = n4['min_det_j'] >= .35 and n4['max_anisotropy'] <= 2
         rows.append({'name': name, 'frame': frame, 'yaw': yaw, 'pitch': pitch, 'model_angle': item['model_angle'],
+                     'cheek_weight': item['cheek_weight'],
                      'N3': n3, 'N3_with_cap': n3_with_cap, 'N4': n4, 'N10': gaps[(yaw, pitch)],
                      'N11': ear_iou(identified(item['ears']), frame, poses, meta['rest_translation']),
                      'r24_min_det_j': r24.get(name), 'hair_points': hair, 'skin_points': skin_target})
@@ -905,7 +1027,8 @@ def main():
         row['N3_skin_median_change_px'] = row['N3']['skin']['median_px'] - prior['N3']['skin']['median_px']
         row['N11_previous'] = prior['N11']['iou']
         row['N11_change'] = row['N11']['iou'] - prior['N11']['iou']
-    cheek_pixels = save_review2(renders, extra_ear, crop)
+    cheek_pixels = save_review4(renders, extra_ear, crop)
+    comparison_030 = rest_comparison_030(baseline_rest, renders[(0, 0)])
     metrics = {'N1': {'max_error_px': core['rest_max_px'], 'passed': core['rest_max_px'] <= 1e-3},
                'N2': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: legacy and feature hashes'},
                'N3c': {'changed_pixels': changed, 'passed': changed == 0, 'face_bbox': [x0, y0, x1, y1]},
@@ -913,6 +1036,7 @@ def main():
                'N7': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: projection fixture'},
                'N10': {'poses': [{'yaw': yaw, 'pitch': pitch, **gaps[(yaw, pitch)]} for yaw, pitch in tasks]},
                'cheek_outside_pixels': cheek_pixels, 'face_islands': islands,
+               'rest_comparison_030dea1': comparison_030,
                'rest_full_difference': rest_diff,
                'rest_ear_occluded_pixels': ear_occlusion, 'rest_ear_rgba_difference': ear_pixel_difference,
                'rest_fill_outside_head': json.loads((baseline / 'rest_analysis.json').read_text())['fill_outside_pixels'],
@@ -945,9 +1069,13 @@ def main():
         raise SystemExit('STOP: face pixels changed at rest while the head base was hidden')
     if any(face_clean_checks.values()):
         raise SystemExit('STOP: clean face changed rest or legacy path: '+str(face_clean_checks))
-    worst = max(rows, key=lambda row: row['N3_skin_median_change_px'])
-    if worst['N3_skin_median_change_px'] > .5:
-        raise SystemExit('STOP: N3 skin median worsened by more than 0.5px: '+
+    worst_weight = max((row for row in rows if row['name'] != 'front'), key=lambda row: row['cheek_weight'])
+    if worst_weight['cheek_weight'] > .05:
+        raise SystemExit('STOP: non-front cheek weight exceeds 0.05: '+
+                         worst_weight['name']+' '+str(worst_weight['cheek_weight']))
+    worst = max((row for row in rows if row['name'] != 'front'), key=lambda row: abs(row['N3_skin_median_change_px']))
+    if abs(worst['N3_skin_median_change_px']) > .1:
+        raise SystemExit('STOP: non-front N3 skin median changed by more than 0.1px: '+
                          worst['name']+' '+str(worst['N3_skin_median_change_px']))
 
 
