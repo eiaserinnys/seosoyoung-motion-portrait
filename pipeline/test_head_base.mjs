@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import {configureHeadBase,projectModel,modelAngles,phi,fieldAt,headBaseVertices,headSolveWorld} from '../bundle/head-base.mjs';
 import * as headBase from '../bundle/head-base.mjs';
 import {CORRECTION_PRESETS} from '../bundle/corrections.mjs';
@@ -124,19 +125,43 @@ test('ear root preserves rest coordinates and matches the Kabsch fixture',{timeo
   const p=pose();
   const mesh=rig.meshes.find(m=>m.id==='ear-'+side),root=metadata.ear_roots[side],ref=headBase.getHeadBase().reference;
   const depth=root.ring.reduce((sum,i)=>sum+ref[i*3+2],0)/root.ring.length;
-  for(const point of mesh.positions){const q=headBase.headEarWorld(point,side,p);close(q[0],point[0],1e-6,`${side} x`);close(q[1],point[1],1e-6,`${side} y`);close(q[2],depth+5+(side==='left'?1:-1)*(point[0]-anchor[0])*Math.tan(55*Math.PI/180),1e-6,`${side} z`);}
+  for(const point of mesh.positions){const q=headBase.headEarWorld(point,side,p);close(q[0],point[0],1e-6,`${side} x`);close(q[1],point[1],1e-6,`${side} y`);close(q[2],depth+5,1e-6,`${side} z`);}
   for(const item of fixture.ear_roots){
    const q=pose(item.yaw,item.pitch),expected=item.expected[side],origin=headBase.headEarWorld(anchor,side,q);
    for(let i=0;i<3;i++)close(origin[i],expected.anchor[i],1e-6,`${side} key ${item.frame} anchor`);
    for(let j=0;j<2;j++){const point=anchor.map((x,i)=>x+Number(i===j)),value=headBase.headEarWorld(point,side,q);
-    for(let i=0;i<3;i++)close(value[i]-origin[i],expected.R[i][j]+(j===0?(side==='left'?1:-1)*Math.tan(55*Math.PI/180)*expected.R[i][2]:0),1e-6,`${side} key ${item.frame} rotation`);
+    for(let i=0;i<3;i++)close(value[i]-origin[i],expected.R[i][j],1e-6,`${side} key ${item.frame} rotation`);
    }
   }
   const point=mesh.positions[0],angle=17*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
   const rolled=headBase.headEarWorld(point,side,pose(0,0,{ParamAngleZ:17})),x=point[0]-502,y=point[1]-568;
   close(rolled[0],502+c*x-s*y,1e-6,`${side} roll x`);close(rolled[1],568+s*x+c*y,1e-6,`${side} roll y`);
-  close(rolled[2],depth+5+(side==='left'?1:-1)*(point[0]-anchor[0])*Math.tan(55*Math.PI/180),1e-6,`${side} roll z`);
+  close(rolled[2],depth+5,1e-6,`${side} roll z`);
  }
+});
+test('ear inclination is zero at every fitted key and grows smoothly outside the data',()=>{
+ for(const key of metadata.keys){
+  const p=pose(key.yaw,key.pitch);
+  close(headBase.modelAngles(p)[0],key.model[0],1e-9,'key yaw');
+  close(headBase.earTiltDegrees(p),0,1e-12,'key tilt');
+ }
+ for(const sign of [-1,1]){
+  let last=0;
+  for(let yaw=45;yaw<=90;yaw++){
+   const tilt=headBase.earTiltDegrees(pose(sign*yaw));
+   assert(tilt+1e-10>=last,'tilt is continuous and monotonic');last=tilt;
+  }
+  close(last,55,1e-9,'profile tilt');
+ }
+});
+test('the restored head and nine-key ear inputs match the measured 030dea1 baseline',()=>{
+ const oldBin=execFileSync('git',['show','030dea1:bundle/assets/head-base.bin'],{maxBuffer:8*1024*1024});
+ const oldMeta=JSON.parse(execFileSync('git',['show','030dea1:bundle/assets/head-base.json']));
+ const sha=data=>createHash('sha256').update(data).digest('hex');
+ assert.equal(sha(binary),sha(oldBin));
+ for(const key of ['offsets','vertexCount','triangleCount','s_ref','sigma','theta_k','keys','logscale_front','rest_translation','attachments','color','open_boundary','ear_roots','ear_depth_bias_px'])
+  assert.deepEqual(metadata[key],oldMeta[key],key);
+ for(const key of ['bbox','sample_y'])assert.deepEqual(metadata.neck_extension[key],oldMeta.neck_extension[key],key);
 });
 test('ear routing preserves the legacy path whenever the new surface is disabled',{timeout:30000},()=>{
  for(const [side,point] of [['left',[369,465]],['right',[636,464.5]]])for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){

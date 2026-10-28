@@ -851,8 +851,8 @@
   },
   "rest_fill_outside_head": 0,
   "ear_depth_bias_px": {
-    "left": 167.76597944654526,
-    "right": 156.64208445060183
+    "left": 152.44603954902692,
+    "right": 152.60827610653143
   },
   "neck_extension": {
     "bbox": [
@@ -861,6 +861,8 @@
       323,
       247
     ],
+    "top_y": 473.7478980815439,
+    "raw_top_y": 489.7478980815439,
     "sample_y": 640
   },
   "rest_extension_difference": {
@@ -2269,8 +2271,8 @@
         "passed": true
       },
       "N11": {
-        "iou": 0.10100560647859749,
-        "rendered_px": 6468,
+        "iou": 0.3737206999009574,
+        "rendered_px": 2418,
         "target_px": 5904
       },
       "r24_min_det_j": 0.016252023937253328
@@ -2334,8 +2336,8 @@
         "passed": true
       },
       "N11": {
-        "iou": 0.35477423457799584,
-        "rendered_px": 7041,
+        "iou": 0.5921610169491526,
+        "rendered_px": 7159,
         "target_px": 7871
       },
       "r24_min_det_j": 0.12855454995225185
@@ -2399,8 +2401,8 @@
         "passed": true
       },
       "N11": {
-        "iou": 0.22467352592006332,
-        "rendered_px": 6585,
+        "iou": 0.4326194398682043,
+        "rendered_px": 2902,
         "target_px": 5794
       },
       "r24_min_det_j": 0.13812748822493245
@@ -2464,8 +2466,8 @@
         "passed": false
       },
       "N11": {
-        "iou": 0.15708008787697225,
-        "rendered_px": 6490,
+        "iou": 0.4938826916156891,
+        "rendered_px": 3206,
         "target_px": 5097
       },
       "r24_min_det_j": 0.42829691934470776
@@ -2594,8 +2596,8 @@
         "passed": false
       },
       "N11": {
-        "iou": 0.11594854726994692,
-        "rendered_px": 6691,
+        "iou": 0.4173302107728337,
+        "rendered_px": 3363,
         "target_px": 5715
       },
       "r24_min_det_j": 0.42992344903257973
@@ -2659,8 +2661,8 @@
         "passed": false
       },
       "N11": {
-        "iou": 0.16781846312532234,
-        "rendered_px": 6252,
+        "iou": 0.36737149733539626,
+        "rendered_px": 2884,
         "target_px": 5070
       },
       "r24_min_det_j": 0.003449648537460901
@@ -2724,8 +2726,8 @@
         "passed": true
       },
       "N11": {
-        "iou": 0.2849502487562189,
-        "rendered_px": 5441,
+        "iou": 0.4823906083244397,
+        "rendered_px": 3444,
         "target_px": 4890
       },
       "r24_min_det_j": 0.3343225319614733
@@ -2789,8 +2791,8 @@
         "passed": false
       },
       "N11": {
-        "iou": 0.28307880268784363,
-        "rendered_px": 5946,
+        "iou": 0.564097672644029,
+        "rendered_px": 3643,
         "target_px": 4556
       },
       "r24_min_det_j": 0.1911464651375664
@@ -3045,5 +3047,10 @@
       "sweater": 513,
       "shirt": 511
     }
+  },
+  "provenance": {
+    "capture_commit": "030dea1",
+    "current_head_recaptured": false,
+    "note": "원 표면으로 복귀했고 9키 귀 기울기가 0이다. 9키의 과거 측정값이며 범위 밖 귀 기울기에는 적용하지 않는다."
   }
 }

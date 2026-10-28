@@ -485,6 +485,63 @@ def save_temple_diagnosis(baseline):
     sheet.save(DEST / 'head_base_temple_diagnosis.png')
 
 
+def save_review2(renders, extra_ear, crop):
+    baseline = DEST / 'review2-baseline'
+    mask = np.asarray(Image.open(ROOT / 'sam3_masks/face-skin_mask.png').convert('L'))[:1024] > 127
+    contours, _ = cv2.findContours(mask.astype('uint8'), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    solid = np.zeros_like(mask, dtype='uint8')
+    cv2.drawContours(solid, contours, -1, 1, cv2.FILLED)
+    distance = cv2.distanceTransform(1-solid, cv2.DIST_L2, cv2.DIST_MASK_PRECISE)
+    old_head = Image.open(baseline / 'head_base_rest_head.png').convert('RGBA')
+    new_head = renders[(0, 0)]['head_only']
+    counts = {}
+    box = (X_OFFSET+320, 490, X_OFFSET+690, 640)
+    sheet = Image.new('RGB', ((box[2]-box[0])*4, (box[3]-box[1])*2+28), BG)
+    for i, (label, image) in enumerate((('ee2a224', old_head), ('current', new_head))):
+        head = np.asarray(image)[:, X_OFFSET:X_OFFSET+1024, 3] > 127
+        outside = head & (distance > 1)
+        outside[:515] = False
+        outside[618:] = False
+        counts[label] = int(outside.sum())
+        canvas = np.asarray(composite(image)).copy()
+        shifted = [line + np.array([[[X_OFFSET, 0]]], dtype='int32') for line in contours]
+        cv2.drawContours(canvas, shifted, -1, (70, 150, 255), 1)
+        yy, xx = np.where(outside)
+        canvas[yy, xx+X_OFFSET] = [255, 60, 60]
+        panel = Image.fromarray(canvas).crop(box).resize(((box[2]-box[0])*2, (box[3]-box[1])*2), Image.Resampling.NEAREST)
+        sheet.paste(panel, (i*panel.width, 28))
+        ImageDraw.Draw(sheet).text((i*panel.width+5, 6), f'{label}: outside >1px = {counts[label]}', fill='white')
+    sheet.save(DEST / 'head_base_review2_cheek.png')
+
+    strip = Image.new('RGB', (5*360, 2*360), BG)
+    for row, sign in enumerate((-1, 1)):
+        for col, magnitude in enumerate((50, 60, 70, 80, 90)):
+            yaw = sign*magnitude
+            item = renders[(yaw, 0)] if (yaw, 0) in renders else extra_ear[yaw]
+            label = f'{yaw:+}: model {item["model_angle"][0]:+.1f} / tilt {item["ear_tilt"]:.1f}'
+            strip.paste(tile(item['portrait'], crop, 360, label), (col*360, row*360))
+    strip.save(DEST / 'head_base_review2_ear_tilt.png')
+
+    ear = Image.new('RGB', (1200, 1200), BG)
+    for row, yaw in enumerate((-60, 60)):
+        box = (X_OFFSET+(450 if yaw < 0 else 250), 350, X_OFFSET+(750 if yaw < 0 else 550), 650)
+        for col, key in enumerate(('legacy_portrait', 'portrait')):
+            panel = tile(renders[(yaw, 0)][key], box, 600, f'{yaw:+} / '+('legacy' if col == 0 else '3D'))
+            ear.paste(panel, (col*600, row*600))
+    ear.save(DEST / 'head_base_review2_ear_edge.png')
+
+    old_face = Image.open(baseline / 'head_base_m60_face.png').convert('RGBA')
+    new_face = renders[(-60, 0)]['face_only']
+    box = (X_OFFSET+480, 360, X_OFFSET+565, 445)
+    sheet = Image.new('RGB', (680, 370), BG)
+    for i, (label, image) in enumerate((('ee2a224', old_face), ('current', new_face))):
+        panel = composite(image).crop(box).resize((340, 340), Image.Resampling.NEAREST)
+        sheet.paste(panel, (i*340, 30))
+        ImageDraw.Draw(sheet).text((i*340+5, 6), label+' / face only', fill='white')
+    sheet.save(DEST / 'head_base_review2_fragments.png')
+    return counts
+
+
 def main():
     reuse_before = '--reuse-before' in sys.argv
     meta = json.loads((ROOT / 'bundle/assets/head-base.json').read_text())
@@ -518,13 +575,56 @@ def main():
             page.goto(f'http://127.0.0.1:{server.server_port}', wait_until='networkidle')
             page.wait_for_function('window.studio?.ready', timeout=30000)
             page.evaluate('''async()=>{
-              const {Renderer}=await import('./renderer.mjs');
+              const rendererModule=await import('./renderer.mjs');
+              const {Renderer}=rendererModule;window.rendererModule=rendererModule;
               const canvas=document.createElement('canvas'),overlay=document.createElement('canvas');
               Object.assign(canvas.style,{width:'1500px',height:'1600px',position:'fixed',left:'-2000px',top:'0'});
               document.body.append(canvas);window.headCapture=new Renderer(canvas,overlay,studio.rig,studio.renderer.images);
               window.headModule=await import('./head-base.mjs');window.poseModule=await import('./pose-grid.mjs');
               window.rigModule=await import('./rig.mjs');window.solveData=await import('./face-solve-data.mjs');
             }''')
+            # Compare each disconnected face component at rest before removing it.
+            # The same renderer and exact pixel comparison cover both atlases and paths.
+            islands = page.evaluate('''()=>{
+              const meshes=studio.rig.meshes,skin=meshes.find(m=>m.id==='face-skin');
+              const parent=skin.positions.map((_,i)=>i);
+              const find=i=>parent[i]===i?i:(parent[i]=find(parent[i]));
+              for(const t of skin.triangles)for(const i of t.slice(1))parent[find(i)]=find(t[0]);
+              const groups=new Map();
+              for(const t of skin.triangles){const id=find(t[0]);if(!groups.has(id))groups.set(id,[]);groups.get(id).push(t);}
+              const candidates=[...groups.values()].filter(group=>group.length<10).sort((a,b)=>a.length-b.length);
+              const hairless=meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck'&&!m.id.startsWith('ear-')&&m.deformerId!=='WarpBody').map(m=>m.id);
+              const scenes=[['new_full',1,false,[]],['new_hairless',1,false,hairless],['legacy_full',0,false,[]],
+                            ['new_before',1,true,[]],['legacy_before',0,true,[]]];
+              const pose={...studio.p,CorrOutline:1,CorrTurn:1,ParamAngleX:0,ParamAngleY:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0};
+              const pixels=([name,active,before,hidden])=>{
+                headCapture.render({...pose,CorrHeadBase:active},{...studio.state,mode:'all',wire:false,grid:false,masks:false,before,hidden:new Set(hidden)});
+                const gl=headCapture.gl,data=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);
+                gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,data);
+                if(gl.getError())throw Error('WebGL error during face component check');
+                return data;
+              };
+              let baseline=scenes.map(pixels),accepted=[];
+              for(const group of candidates){
+                const ids=[...new Set(group.flat())].sort((a,b)=>a-b),set=new Set(ids);
+                const prior=skin.triangles;
+                skin.triangles=prior.filter(t=>!t.every(i=>set.has(i)));
+                headCapture.faceBoundary=rendererModule.faceBoundaryDistances(skin);
+                const after=scenes.map(pixels),difference={};
+                for(let k=0;k<scenes.length;k++){
+                  let count=0;for(let i=0;i<after[k].length;i+=4)
+                    if(after[k][i]!==baseline[k][i]||after[k][i+1]!==baseline[k][i+1]||after[k][i+2]!==baseline[k][i+2]||after[k][i+3]!==baseline[k][i+3])count++;
+                  difference[scenes[k][0]]=count;
+                }
+                const eligible=Object.values(difference).every(n=>n===0);
+                skin.triangles=prior;headCapture.faceBoundary=rendererModule.faceBoundaryDistances(skin);
+                const points=ids.map(i=>skin.positions[i]);
+                accepted.push({vertices:ids,triangles:group.length,bbox:[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))],difference,eligible,removed:false});
+              }
+              return accepted;
+            }''')
+            (ROOT / 'docs/head_base_islands.json').write_text(json.dumps(islands, ensure_ascii=False, indent=2) + '\n')
+            print('Face components: '+json.dumps(islands, ensure_ascii=False), flush=True)
             prior_atlas = [base64.b64encode(subprocess.check_output(
                 ['git', 'show', NECK_EDGE_BASELINE+':bundle/assets/'+name], cwd=ROOT)).decode('ascii')
                 for name in ('texture_00.png', 'neck-keep.png')]
@@ -563,6 +663,8 @@ def main():
                   const state={...studio.state,mode:'all',wire:false,grid:false,before:false,surfaceOnly:false,masks:false,identify:null};
                   const capture=(ids,pose=p,identify=null,extra={})=>{headCapture.render(pose,{...state,...extra,identify,hidden:new Set(ids)});const error=headCapture.gl.getError();if(error)throw Error('WebGL error '+error);return headCapture.canvas.toDataURL('image/png').split(',')[1];};
                   const portrait=capture(hidden);
+                  const legacyPortrait=Math.abs(yaw)===60&&pitch===0?capture(hidden,{...p,CorrHeadBase:0}):null;
+                  const faceOnly=yaw===-60&&pitch===0?capture([...meshes.filter(m=>m.id!=='face-skin').map(m=>m.id),'head-base']):null;
                   const unionIds=meshes.filter(m=>m.id!=='face-skin').map(m=>m.id);
                   const union=key?capture(unionIds,p,null,{hideHeadCap:true}):null;
                   const unionWithCap=key?capture(unionIds):null;
@@ -625,13 +727,14 @@ def main():
                       neckEdges[name+'_clean']=capture(onlyFace,pose,null,{before});
                     }
                   }
-                  return {portrait,union,unionWithCap,ears,headNeck,headOnly,neckOnly,neckArt,neckAxis,restOld,restNew,restEars,restBefore,restOriginalNeck,restOriginalNeckOnly,necklaceHidden,assembled,neckEdges,skinPositions,neckPositions,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),hidden};
+                  return {portrait,legacyPortrait,faceOnly,union,unionWithCap,ears,headNeck,headOnly,neckOnly,neckArt,neckAxis,restOld,restNew,restEars,restBefore,restOriginalNeck,restOriginalNeckOnly,necklaceHidden,assembled,neckEdges,skinPositions,neckPositions,bounds:[left,top,right,bottom],modelAngle:headModule.modelAngles(q),earTilt:headModule.earTiltDegrees(q),hidden};
                 }''', [yaw, pitch, (yaw, pitch) in key_positions, (yaw, pitch) in jacobian_positions, not reuse_before])
                 renders[(yaw, pitch)] = {'portrait': decode(data['portrait']),
                                          'bounds': data['bounds'], 'neck_axis': data['neckAxis'],
                                          'model_angle': data['modelAngle'], 'hidden': data['hidden'],
+                                         'ear_tilt': data['earTilt'],
                                          'neck_positions': data['neckPositions']}
-                for source, target in [('union', 'union'), ('unionWithCap', 'union_with_cap'), ('ears', 'ears'), ('headNeck', 'head_neck'),
+                for source, target in [('legacyPortrait', 'legacy_portrait'), ('faceOnly', 'face_only'), ('union', 'union'), ('unionWithCap', 'union_with_cap'), ('ears', 'ears'), ('headNeck', 'head_neck'),
                                        ('headOnly', 'head_only'), ('neckOnly', 'neck_only'), ('neckArt', 'neck_art'),
                                        ('restOld', 'rest_old'), ('restNew', 'rest_new'),
                                        ('restBefore', 'rest_before'),
@@ -647,6 +750,17 @@ def main():
                     renders[(yaw, pitch)]['skin_positions'] = data['skinPositions']
                 if (i + 1) % 10 == 0 or i + 1 == len(tasks):
                     print(f'Captured {i + 1}/{len(tasks)} poses', flush=True)
+            extra_ear = {}
+            for yaw in (-80, -70, -50, 50, 70, 80):
+                data = page.evaluate('''yaw=>{
+                  const meshes=studio.rig.meshes;
+                  const hidden=meshes.filter(m=>m.id!=='face-skin'&&m.id!=='neck'&&!m.id.startsWith('ear-')&&m.deformerId!=='WarpBody').map(m=>m.id);
+                  const p={...studio.p,CorrHeadBase:1,CorrOutline:1,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0};
+                  headCapture.render(p,{...studio.state,mode:'all',wire:false,grid:false,before:false,surfaceOnly:false,masks:false,hidden:new Set(hidden)});
+                  if(headCapture.gl.getError())throw Error('WebGL error during extra ear poses');
+                  return {image:headCapture.canvas.toDataURL('image/png').split(',')[1],angle:headModule.modelAngles(p),tilt:headModule.earTiltDegrees(p)};
+                }''', yaw)
+                extra_ear[yaw] = {'portrait': decode(data['image']), 'model_angle': data['angle'], 'ear_tilt': data['tilt']}
             browser.close()
             if errors:
                 raise RuntimeError('Browser errors: ' + str(errors))
@@ -725,14 +839,19 @@ def main():
     before = np.asarray(Image.open(baseline / '+0_+0_portrait.png').convert('RGBA'))
     after = np.asarray(renders[(0, 0)]['portrait'])
     difference = np.any(before != after, axis=2)
+    previous_portrait = np.asarray(Image.open(DEST / 'review2-baseline/head_base_rest_portrait.png').convert('RGBA'))
     yy, xx = np.where(difference)
     rest_ear = np.zeros_like(difference)
-    ear_occlusion = {}
+    ear_occlusion, ear_pixel_difference = {}, {}
     for side in ('left', 'right'):
         old_ear = Image.open(baseline / f'rest_ear_{side}.png').convert('RGBA')
         mask = identified(old_ear)
         rest_ear |= mask
+        current_ear = np.asarray(renders[(0, 0)]['rest_ears'][side])
+        previous_ear = np.asarray(old_ear)
         ear_occlusion[side] = int(np.count_nonzero(mask & ~identified(renders[(0, 0)]['rest_ears'][side])))
+        ear_region = (previous_ear[:, :, 0] > 0) | (current_ear[:, :, 0] > 0)
+        ear_pixel_difference[side] = int(np.count_nonzero(ear_region & np.any(previous_portrait != after, axis=2)))
     rest_ear = cv2.dilate(rest_ear.astype('uint8'), np.ones((3, 3), dtype='uint8')) > 0
     older = np.asarray(Image.open(DEST / 'fix3-baseline/+0_+0_portrait.png').convert('RGBA'))
     older_difference = np.any(older != after, axis=2)
@@ -778,14 +897,24 @@ def main():
         comparison.save(DEST / 'head_base_rest_diff.png')
     crop = make_crop(renders)
     n6max = max(max(edge['head_px'], edge['face_px']) for edge in core['edges'])
+    previous_metrics = json.loads(subprocess.check_output(
+        ['git', 'show', '030dea1:docs/head_base_metrics.json'], cwd=ROOT))
+    previous_keys = {item['name']: item for item in previous_metrics['poses']}
+    for row in rows:
+        prior = previous_keys[row['name']]
+        row['N3_skin_median_change_px'] = row['N3']['skin']['median_px'] - prior['N3']['skin']['median_px']
+        row['N11_previous'] = prior['N11']['iou']
+        row['N11_change'] = row['N11']['iou'] - prior['N11']['iou']
+    cheek_pixels = save_review2(renders, extra_ear, crop)
     metrics = {'N1': {'max_error_px': core['rest_max_px'], 'passed': core['rest_max_px'] <= 1e-3},
                'N2': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: legacy and feature hashes'},
                'N3c': {'changed_pixels': changed, 'passed': changed == 0, 'face_bbox': [x0, y0, x1, y1]},
                'N6': {'max_difference_px': n6max, 'passed': n6max <= .5, 'edges': core['edges']},
                'N7': {'passed': True, 'evidence': 'pipeline/test_head_base.mjs: projection fixture'},
                'N10': {'poses': [{'yaw': yaw, 'pitch': pitch, **gaps[(yaw, pitch)]} for yaw, pitch in tasks]},
+               'cheek_outside_pixels': cheek_pixels, 'face_islands': islands,
                'rest_full_difference': rest_diff,
-               'rest_ear_occluded_pixels': ear_occlusion,
+               'rest_ear_occluded_pixels': ear_occlusion, 'rest_ear_rgba_difference': ear_pixel_difference,
                'rest_fill_outside_head': json.loads((baseline / 'rest_analysis.json').read_text())['fill_outside_pixels'],
                'ear_depth_bias_px': meta['ear_depth_bias_px'],
                'neck_extension': meta['neck_extension'], 'rest_extension_difference': rest_extension_diff, 'rest_views': rest_views,
@@ -816,6 +945,10 @@ def main():
         raise SystemExit('STOP: face pixels changed at rest while the head base was hidden')
     if any(face_clean_checks.values()):
         raise SystemExit('STOP: clean face changed rest or legacy path: '+str(face_clean_checks))
+    worst = max(rows, key=lambda row: row['N3_skin_median_change_px'])
+    if worst['N3_skin_median_change_px'] > .5:
+        raise SystemExit('STOP: N3 skin median worsened by more than 0.5px: '+
+                         worst['name']+' '+str(worst['N3_skin_median_change_px']))
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,pr
 import {getHeadBase,headBaseVertices,headSurfaceFacingDelta,HEAD_BASE} from './head-base.mjs';
 import {CORRECTION_PRESETS} from './corrections.mjs';
 
-function faceBoundaryDistances(mesh){
+export function faceBoundaryDistances(mesh){
   const edges=new Map();
   for(const tri of mesh.triangles)for(const [a,b] of [[tri[0],tri[1]],[tri[1],tri[2]],[tri[2],tri[0]]]){
     const key=[Math.min(a,b),Math.max(a,b)].join(','),edge=edges.get(key);

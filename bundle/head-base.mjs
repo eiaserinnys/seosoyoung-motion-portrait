@@ -2,7 +2,7 @@ import {gridValue,frameValue} from './pose-grid.mjs';
 import {correction,NECK_PIVOT} from './geometry.mjs';
 
 export const HEAD_BASE = Object.freeze({
- pitchWeight:1.4, earRelief:5, earTiltDegrees:55, neckAxisTolerance:5,
+ pitchWeight:1.4, earRelief:5, earTiltDegrees:55, earTiltStart:47, earTiltEnd:80, neckAxisTolerance:5,
  earFadeDegrees:20, earMinMargin:2, faceRimWidth:12, rimStep:6,
  facingStart:.05, facingEnd:.20,
  foreheadFadeYawStart:45, foreheadFadeYawEnd:60, foreheadRimWidth:48,
@@ -50,6 +50,12 @@ export function modelAngles(p){
  const y=gridValue(model.keys,edge,pitch,k=>k.model[0]);
  const v=gridValue(model.keys,edge,pitch,k=>k.model[1]);
  return [Math.abs(yaw)<=45?y:y+Math.sign(yaw)*(Math.abs(yaw)-45)*(90-Math.abs(y))/45,v];
+}
+
+export function earTiltDegrees(p){
+ const yaw=Math.abs(modelAngles(p)[0]);
+ const t=Math.max(0,Math.min(1,(yaw-HEAD_BASE.earTiltStart)/(HEAD_BASE.earTiltEnd-HEAD_BASE.earTiltStart)));
+ return HEAD_BASE.earTiltDegrees*t*t*(3-2*t);
 }
 
 export function phi(theta){
@@ -187,7 +193,7 @@ export function headEarWorld(point,side,p){
  const {center,R,root}=earRootTransform(side,p);
  const dx=point[0]-root.anchor[0];
  // Scale the tilted plane by 1/cos(alpha): its rest x projection stays exact.
- const depth=(side==='left'?dx:-dx)*Math.tan(rad(HEAD_BASE.earTiltDegrees));
+ const depth=(side==='left'?dx:-dx)*Math.tan(rad(earTiltDegrees(p)));
  const offset=[root.delta[0]+dx,root.delta[1]+point[1]-root.anchor[1],HEAD_BASE.earRelief+depth];
  return center.map((x,i)=>x+R[i].reduce((sum,v,j)=>sum+v*offset[j],0));
 }

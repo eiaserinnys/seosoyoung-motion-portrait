@@ -1,0 +1,17 @@
+{
+  "anchors": 92,
+  "affected_vertices": 1718,
+  "max_screen_px": 4.718599200248758,
+  "max_3d_px": 4.719373395019071,
+  "rest_band_y": [
+    515,
+    617
+  ],
+  "fixed_ear_root_vertices": 168,
+  "applied": false,
+  "reason": "up N3 피부 중앙값 +1.680px",
+  "outside_pixels_before_after": [
+    206,
+    0
+  ]
+}

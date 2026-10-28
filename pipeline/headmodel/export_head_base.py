@@ -14,7 +14,6 @@ from scipy.sparse.linalg import splu
 ROOT = Path(__file__).resolve().parents[2]
 FIT = ROOT / 'pipeline/headmodel/fit'
 CANVAS_SHIFT = np.array([152., 20.])
-EAR_TILT_DEGREES = 55.
 sys.path.insert(0, str(FIT))
 from fit_core import project
 from fit2f_core import geometric_operator, raster_silhouette
@@ -138,15 +137,10 @@ def ear_depth_biases():
     head_z = (.5 - window_z) * 2048
     present = depth[:, :, 3] > 127
     result = {}
-    # At rest the inclined ear keeps its x/y projection. Its depth varies
-    # linearly with x, so compare each visible ear pixel with the head depth.
-    x = np.arange(depth.shape[1], dtype=float)[None, :] - (depth.shape[1] - 1024) / 2 + .5
+    # The ear tilt is zero at rest and throughout the nine fitted keys.
     for side in ('left', 'right'):
         ear = np.asarray(Image.open(baseline / f'rest_ear_{side}.png').convert('RGBA'))[:, :, 3] > 0
-        anchor = 369. if side == 'left' else 636.
-        direction = 1. if side == 'left' else -1.
-        ear_z = geometry['earDepth'][side] + direction * (x - anchor) * np.tan(np.deg2rad(EAR_TILT_DEGREES))
-        difference = (head_z - ear_z)[ear & present]
+        difference = head_z[ear & present] - geometry['earDepth'][side]
         result[side] = max(0., float(difference.max(initial=0.))) + 1.
     return result
 
