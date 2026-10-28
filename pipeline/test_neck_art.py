@@ -12,6 +12,22 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class NeckArtTest(unittest.TestCase):
+    def test_jaw_outline_and_white_source_spot_are_in_face_protection(self):
+        x, y, w, h = 339, 531, 323, 247
+        _, _, face, _, _ = crop_inputs(ROOT, (x, y, w, h))
+        for px, py in [(502, 616), (501, 617), (506, 556)]:
+            self.assertTrue(face[py-y, px-x], (px, py))
+
+    def test_isolated_transparent_neck_texel_is_filled_from_opaque_neighbors(self):
+        neck = np.full((5, 5, 4), [200, 160, 140, 255], np.uint8)
+        neck[2, 2] = [0, 0, 0, 0]
+        still = neck.copy()
+        sweater = np.zeros((5, 5), np.uint8)
+        masks = np.zeros((5, 5), bool)
+        result, _, counts = apply_reference(neck, still, sweater, masks, masks, masks, origin=(10, 20))
+        np.testing.assert_array_equal(result[2, 2], [200, 160, 140, 255])
+        self.assertEqual(counts['filled_isolated_holes'], [[12, 22]])
+
     def test_masks_take_priority_and_collar_or_missing_columns_are_untouched(self):
         neck = np.full((8, 8, 4), [60, 70, 80, 255], np.uint8)
         still = np.full_like(neck, [200, 190, 180, 255])
