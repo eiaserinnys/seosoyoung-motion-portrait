@@ -11,4 +11,7 @@ main{display:grid;grid-template-columns:280px minmax(0,1fr) 340px;gap:var(--s3);
 .parameter-scroll details>summary{cursor:pointer;font-size:var(--body);padding:var(--s2) 0}
 .parameter-scroll .params{max-height:none;overflow:visible;padding-right:0}
 .correction-presets{display:flex;flex-direction:column;gap:var(--s2);margin-bottom:var(--s3)}
+.param[data-inactive=true]{opacity:.5}
+.param[data-inactive=true] input,button:disabled{cursor:not-allowed}
+button:disabled{opacity:.5}
 @media(max-width:1024px){.parameter-scroll{grid-column:1;grid-row:2/4;max-height:none}.inspector .params{display:grid}}

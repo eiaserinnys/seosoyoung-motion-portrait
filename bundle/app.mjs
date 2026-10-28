@@ -13,7 +13,7 @@ async function main(){
   const p=Object.fromEntries(rig.parameters.map(param=>[param.id,param.default]));
   Object.assign(p,CORRECTION_PRESETS.recommended);p.CorrHeadBase=0;
   let headBaseError=null;
-  try{await loadHeadBase();}catch(error){headBaseError=error.message;p.CorrHeadBase=0;}
+  try{await loadHeadBase();}catch(error){headBaseError=error.message;}
   const state={selected:'face-skin',selectedIds:new Set(['face-skin']),hidden:new Set(),mode:'all',before:false,bangs:false,outfit:'sweater',wire:false,grid:false,masks:false,auto:false,track:false,tab:'parts'};
   const renderer=new Renderer($('stage'),$('overlay'),rig,images);
   const inputs={};
@@ -28,9 +28,11 @@ async function main(){
     row.innerHTML=`<label for="${param.id}">${param.label}</label><output for="${param.id}"></output><input id="${param.id}" aria-label="${param.label}" type="range" min="${param.min}" max="${param.max}" step="${param.step}" value="${p[param.id]}">`;
     inputs[param.id]=row.querySelector('input');inputs[param.id].oninput=e=>{p[param.id]=+e.target.value;sync();};$('corrections').append(row);
   }
-  function setCorrection(name){Object.assign(p,CORRECTION_PRESETS[name]);if(headBaseError)p.CorrHeadBase=0;sync();}
+  function setCorrection(name){Object.assign(p,CORRECTION_PRESETS[name]);sync();}
   for(const name of ['pure','recommended'])$('correction-'+name).onclick=()=>setCorrection(name);
-  function sync(){const view=viewerPose(p);for(const [name,values]of Object.entries(CORRECTION_PRESETS))pressed('correction-'+name,Object.entries(values).every(([k,v])=>Math.abs(p[k]-v)<.00001));for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}$('angles').textContent=`X ${(view.ParamAngleX*view.CorrTurn).toFixed(Math.abs(p.ParamAngleX)>45?1:0).replace(/\.0$/,'')}° / Y ${(p.ParamAngleY*p.CorrTurn).toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
+  function sync(){const view=viewerPose(p);for(const [name,values]of Object.entries(CORRECTION_PRESETS))pressed('correction-'+name,Object.entries(values).every(([k,v])=>Math.abs(p[k]-v)<.00001));for(const [key,input]of Object.entries(inputs)){input.value=p[key];input.previousElementSibling.value=p[key].toFixed(2).replace(/\.00$/,'');}
+    const locked=headBaseActive(p),row=inputs.CorrOutline.closest('.param');inputs.CorrOutline.disabled=locked;row.dataset.inactive=String(locked);row.title=locked?'3D 두상을 켜면 쓰지 않습니다':'';
+    $('angles').textContent=`X ${(view.ParamAngleX*view.CorrTurn).toFixed(Math.abs(p.ParamAngleX)>45?1:0).replace(/\.0$/,'')}° / Y ${(p.ParamAngleY*p.CorrTurn).toFixed(0)}° / Z ${p.ParamAngleZ.toFixed(0)}°`;}
   function pressed(id,value){$(id).setAttribute('aria-pressed',String(value));}
   function stopMotion(){state.auto=false;state.track=false;pressed('auto',false);pressed('track',false);}
   function setPose(x,y,z,name){stopMotion();p.ParamAngleX=x;p.ParamAngleY=y;p.ParamAngleZ=z;$('pose-label').textContent=name;sync();}
@@ -46,7 +48,7 @@ async function main(){
   hairButton.id='hair-hide-toggle';hairButton.textContent='머리카락 숨김';$('bangs').after(headBaseButton,hairButton);
   const hairIds=rig.meshes.filter(m=>m.id==='hair-top'||m.id==='hairpin'||/^(bangs-|side-hair-|back-hair-|side-cranium-|tail-)/.test(m.id)).map(m=>m.id);
   let hiddenHairBefore=null;
-  headBaseButton.onclick=()=>{p.CorrHeadBase=headBaseActive(p)?0:1;renderTree();};
+  headBaseButton.onclick=()=>{p.CorrHeadBase=headBaseActive(p)?0:1;sync();renderTree();};
   hairButton.onclick=()=>{if(hiddenHairBefore===null){hiddenHairBefore=new Set(hairIds.filter(id=>state.hidden.has(id)));for(const id of hairIds)state.hidden.add(id);}
     else{for(const id of hairIds)if(!hiddenHairBefore.has(id))state.hidden.delete(id);hiddenHairBefore=null;}renderTree();};
   $('compare').onclick=()=>{state.before=!state.before;pressed('compare',state.before);$('compare').textContent=state.before?'복원 전 (기존 파츠)':'복원 후 (SAM3+Inpaint)';$('version-label').textContent=state.before?'BEFORE':'AFTER';};
@@ -54,11 +56,11 @@ async function main(){
   $('reset').onclick=()=>{stopMotion();for(const param of rig.parameters)p[param.id]=param.default;$('pose-label').textContent='정면 0°';sync();};
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));});
   function descendants(id){const ids=new Set([id]);let changed=true;while(changed){changed=false;for(const d of rig.deformers)if(ids.has(d.parentId)&&!ids.has(d.id)){ids.add(d.id);changed=true;}}return rig.meshes.filter(m=>ids.has(m.deformerId)).map(m=>m.id);}
-  function choose(id,ids=[id]){state.selected=id;state.selectedIds=new Set(ids);const mesh=rig.meshes.find(m=>m.id===id)||rig.meshes.find(m=>ids.includes(m.id));if(mesh){state.inspect=mesh.id;$('selected-label').textContent=rig.deformers.some(d=>d.id===id)?id:mesh.label;updateInspector(mesh);}else if(id==='head-base')$('selected-label').textContent='두상 바탕';renderTree();}
+  function choose(id,ids=[id]){state.selected=id;state.selectedIds=new Set(ids);const mesh=rig.meshes.find(m=>m.id===id)||rig.meshes.find(m=>ids.includes(m.id));if(mesh){state.inspect=mesh.id;$('selected-label').textContent=rig.deformers.some(d=>d.id===id)?id:mesh.label;updateInspector(mesh);}else if(id==='head-base')$('selected-label').textContent='3D 두상';renderTree();}
   function treeRow(id,text,ids){const row=document.createElement('div');row.className='tree-row';row.dataset.active=state.selected===id;row.dataset.hidden=ids.every(key=>state.hidden.has(key));row.dataset.inactive=id==='head-base'&&!headBaseActive(p);const select=document.createElement('button');select.className='select';select.title=id;const span=document.createElement('span');span.textContent=text;select.append(span);select.onclick=()=>choose(id,ids);const eye=document.createElement('button');eye.className='eye';eye.innerHTML=eyeIcon;eye.setAttribute('aria-label',text+' 가시성');eye.setAttribute('aria-pressed',String(!ids.every(key=>state.hidden.has(key))));eye.onclick=()=>{const hide=!ids.every(key=>state.hidden.has(key));for(const key of ids)hide?state.hidden.add(key):state.hidden.delete(key);renderTree();};row.append(select,eye);return row;}
   function renderTree(){const query=$('search').value.toLowerCase();$('tree').replaceChildren();$('counts').textContent=state.tab==='parts'?`${rig.parts.length} Part / ${rig.meshes.length} ArtMesh`:`${rig.deformers.length} Deformer`;
     headBaseButton.setAttribute('aria-pressed',String(headBaseActive(p)));hairButton.setAttribute('aria-pressed',String(hiddenHairBefore!==null));
-    if(state.tab==='parts'&&'두상 바탕 head-base'.includes(query))$('tree').append(treeRow('head-base','두상 바탕',['head-base']));
+    if(state.tab==='parts'&&'3d 두상 head-base'.includes(query))$('tree').append(treeRow('head-base','3D 두상',['head-base']));
     if(state.tab==='parts')for(const part of rig.parts){const members=rig.meshes.filter(m=>m.partId===part.id&&(`${m.id} ${m.label} ${part.label}`).toLowerCase().includes(query));if(!members.length)continue;const group=document.createElement('details');group.open=true;const title=document.createElement('summary');title.textContent=part.label+' / '+members.length;group.append(title);for(const mesh of members)group.append(treeRow(mesh.id,mesh.label,[mesh.id]));$('tree').append(group);}
     else for(const d of rig.deformers){if(!d.id.toLowerCase().includes(query))continue;const row=treeRow(d.id,d.id,descendants(d.id));let depth=0,parent=d.parentId;while(parent){depth++;parent=rig.deformers.find(item=>item.id===parent)?.parentId;}row.style.paddingLeft=`${Math.min(depth,4)*8}px`;$('tree').append(row);}}
   for(const [id,tab]of [['part-tab','parts'],['deformer-tab','deformers']])$(id).onclick=()=>{state.tab=tab;$('part-tab').setAttribute('aria-selected',String(tab==='parts'));$('deformer-tab').setAttribute('aria-selected',String(tab==='deformers'));renderTree();};$('search').oninput=renderTree;

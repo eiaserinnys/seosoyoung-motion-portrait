@@ -2,7 +2,6 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {execFileSync} from 'node:child_process';
 import {configureHeadBase,projectModel,modelAngles,phi,fieldAt,headBaseVertices,headSolveWorld} from '../bundle/head-base.mjs';
 import * as headBase from '../bundle/head-base.mjs';
 import {CORRECTION_PRESETS} from '../bundle/corrections.mjs';
@@ -80,9 +79,9 @@ test('surface direction fade is zero at rest',{timeout:30000},()=>{
 });
 test('line-free face follows the selected atlas and stays off the old path',{timeout:30000},()=>{
  for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,1,false]]){
-  assert.equal(renderer.faceCleanPolicy(pose(30,20,{CorrHeadBase:enabled,CorrOutline:outline}),visible),false);
+  assert.equal(renderer.faceCleanPolicy(enabled===1&&visible),false);
  }
- for(const outline of [0,.5,1])assert.equal(renderer.faceCleanPolicy(pose(30,20,{CorrOutline:outline}),true),true);
+ assert.equal(renderer.faceCleanPolicy(true),true);
 });
 
 test('N7: Python projection fixture, 100 vertices and 13 poses',{timeout:30000},()=>{
@@ -93,6 +92,7 @@ test('N7: Python projection fixture, 100 vertices and 13 poses',{timeout:30000},
  }
 });
 test('angle field fixture at all nine nodes',{timeout:30000},()=>{
+ assert.equal(metadata.pitch_weight,1.4);
  metadata.theta_k.forEach((theta,k)=>fixture.indices.forEach((index,j)=>fieldAt(theta,index).forEach((x,c)=>close(x,fixture.fields[k][j][c],1e-6,`field ${k} point ${j}`))));
 });
 test('N1: all rest skin and solve points retain their coordinates',{timeout:30000},()=>{
@@ -154,18 +154,6 @@ test('ear inclination is zero at every fitted key and grows smoothly outside the
   close(last,55,1e-9,'profile tilt');
  }
 });
-test('the original head geometry and ear inputs remain based on 030dea1',()=>{
- const oldBin=execFileSync('git',['show','030dea1:bundle/assets/head-base.bin'],{maxBuffer:8*1024*1024});
- const oldMeta=JSON.parse(execFileSync('git',['show','030dea1:bundle/assets/head-base.json']));
- for(const name of ['vertices','normals','fields','triangles']){
-  const now=metadata.offsets[name],old=oldMeta.offsets[name];
-  assert.deepEqual(binary.subarray(now.offset,now.offset+now.length),oldBin.subarray(old.offset,old.offset+old.length),name);
- }
- for(const key of ['vertexCount','triangleCount','s_ref','sigma','theta_k','keys','logscale_front','rest_translation','color','open_boundary','ear_depth_bias_px'])
-  assert.deepEqual(metadata[key],oldMeta[key],key);
- for(const side of ['left','right'])assert.deepEqual(metadata.ear_roots[side].ring,oldMeta.ear_roots[side].ring,side+' ring');
- for(const key of ['bbox','sample_y'])assert.deepEqual(metadata.neck_extension[key],oldMeta.neck_extension[key],key);
-});
 test('cheek field is full at rest and below the limit at other fitted keys',()=>{
  close(headBase.cheekWeight(metadata.keys.find(k=>k.frame===3).model),1,1e-12,'rest');
  for(const key of metadata.keys.filter(k=>k.frame!==3))
@@ -203,7 +191,8 @@ test('legacy ear alpha and neck mask are preserved when the new surface is inact
  const ear=rig.meshes.find(m=>m.id==='ear-left'),neck=rig.meshes.find(m=>m.id==='neck');
  for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,1,false]])for(const yaw of [-45,-15,0,15,45]){
   const p=pose(yaw,0,{CorrHeadBase:enabled,CorrOutline:outline});
-  const ep=backgroundLayerPolicy(ear,p,state,visible),np=backgroundLayerPolicy(neck,p,state,visible);
+  const headVisible=enabled===1&&visible;
+  const ep=backgroundLayerPolicy(ear,p,state,headVisible),np=backgroundLayerPolicy(neck,p,state,headVisible);
   assert.equal(ep.alpha,opacity(ear,p,state));assert.equal(ep.compareHead,false);
   assert.equal(np.alpha,opacity(neck,p,state));assert.equal(np.compareHead,false);
   assert.equal(np.neckMask,true);

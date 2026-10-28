@@ -14,6 +14,7 @@ from scipy.sparse.linalg import splu
 ROOT = Path(__file__).resolve().parents[2]
 FIT = ROOT / 'pipeline/headmodel/fit'
 CANVAS_SHIFT = np.array([152., 20.])
+PITCH_WEIGHT = 1.4
 sys.path.insert(0, str(FIT))
 from fit_core import project
 from fit2f_core import geometric_operator, raster_silhouette
@@ -30,7 +31,7 @@ def project_np(vertices, pose):
 
 
 def phi(theta, nodes, sigma):
-    delta = (nodes - theta) * [1., 1.4]
+    delta = (nodes - theta) * [1., PITCH_WEIGHT]
     logits = -np.sum(delta * delta, axis=1) / (2 * sigma * sigma)
     weights = np.exp(logits - logits.max())
     return weights / weights.sum()
@@ -339,7 +340,7 @@ def main():
     print(json.dumps({'sheet': str(sheet), 'neck_sheet': str(neck), 'outside_sheet': str(outside),
                       'open_ring': len(open_ring), 'cap_vertices': 1, 'cap_triangles': len(open_ring),
                       'cheek_weights': {str(frame): float(np.exp(-((refined[frame][0]-theta_rest[0])**2 +
-                          (1.4*(refined[frame][1]-theta_rest[1]))**2)/(2*cheek_sigma**2))) for frame, _, _ in KEYS},
+                          (PITCH_WEIGHT*(refined[frame][1]-theta_rest[1]))**2)/(2*cheek_sigma**2))) for frame, _, _ in KEYS},
                       'ear_bias_px': ear_biases, 'neck_extension': neck_extension,
                       'ear_roots': {side: {'count': len(data['ring']), 'center': data['rest_center'], 'delta': data['delta']} for side, data in ear_roots.items()},
                       'attachments': statistics}, ensure_ascii=False), flush=True)
@@ -362,7 +363,7 @@ def main():
             offsets[name] = {'offset': offset, 'length': len(payload)}
             offset += len(payload)
     metadata = {'offsets': offsets, 'vertexCount': len(vertices), 'triangleCount': len(triangles),
-                's_ref': s_ref, 'sigma': sigma, 'cheek_sigma': cheek_sigma, 'theta_k': nodes.tolist(),
+                's_ref': s_ref, 'sigma': sigma, 'pitch_weight': PITCH_WEIGHT, 'cheek_sigma': cheek_sigma, 'theta_k': nodes.tolist(),
                 'keys': [{'frame': frame, 'yaw': yaw, 'pitch': pitch, 'model': refined[frame][:2]}
                          for frame, yaw, pitch in KEYS],
                 'logscale_front': front[3], 'rest_translation': (front[4:6]+CANVAS_SHIFT).tolist(),
@@ -379,7 +380,7 @@ def main():
     fixtures['ear_roots'] = []
     for frame, yaw, pitch in KEYS:
         theta = refined[frame][:2]
-        distance2 = (theta[0]-theta_rest[0])**2 + (1.4*(theta[1]-theta_rest[1]))**2
+        distance2 = (theta[0]-theta_rest[0])**2 + (PITCH_WEIGHT*(theta[1]-theta_rest[1]))**2
         weight = np.exp(-distance2/(2*cheek_sigma**2))
         posed_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta, nodes, sigma), fields.astype(float)) / s_ref + weight*cheek
         q = project_np(posed_vertices, [theta[0], theta[1], 0., front[3], front[4], front[5]])

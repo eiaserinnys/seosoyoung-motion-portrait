@@ -32,7 +32,7 @@ export function faceIslandVertices(mesh){
   for(const tri of mesh.triangles)for(const i of tri.slice(1))parent[find(i)]=find(tri[0]);
   const groups=new Map();
   for(const tri of mesh.triangles){const root=find(tri[0]);if(!groups.has(root))groups.set(root,[]);groups.get(root).push(tri);}
-  return new Set([...groups.values()].filter(group=>group.length<10).flat(2));
+  return new Set([...groups.values()].filter(group=>group.length<HEAD_BASE.islandTriangleLimit).flat(2));
 }
 
 export const faceIslandOpacity=p=>headBaseActive(p)
@@ -40,7 +40,7 @@ export const faceIslandOpacity=p=>headBaseActive(p)
 
 export function backgroundLayerPolicy(mesh,p,state,headVisible){
   const ear=mesh.id.startsWith('ear-'),neck=mesh.id==='neck';
-  const compareHead=!!headVisible&&headBaseActive(p)&&(ear||neck);
+  const compareHead=!!headVisible&&(ear||neck);
   return {alpha:compareHead&&ear?(state.hidden.has(mesh.id)?0:1):opacity(mesh,p,state),compareHead,neckMask:neck&&!compareHead};
 }
 
@@ -51,7 +51,7 @@ export function earDepthMargin(side,p,bias){
 
 export const neckSampleY=(neck,size,row)=>(neck.atlas[1]+row-neck.bbox[1]+.5)/size;
 export const faceDirectionFade=(point,p)=>smoothstep(HEAD_BASE.facingStart,HEAD_BASE.facingEnd,headSurfaceFacingDelta(point,p));
-export const faceCleanPolicy=(p,headVisible)=>!!headVisible&&headBaseActive(p);
+export const faceCleanPolicy=headVisible=>!!headVisible;
 export const faceCleanTextureIndex=before=>before?8:7;
 
 export function createNeckExtension(neck,head,rest){
@@ -215,7 +215,7 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceClean;unif
       const alpha=(1-smoothstep(45,50,Math.abs(yaw)))*(state.mode==='dim'&&!state.selectedIds.has('face-skin')?.18:1);
       if(!alpha)return;
       gl.disable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.depthMask(false);
-      const clip=!!headVisible&&headBaseActive(p);
+      const clip=!!headVisible;
       if(clip){
         gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
         this.drawHeadBase(p);gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);gl.depthMask(false);
@@ -251,8 +251,8 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceClean;unif
       gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);
     }
     const headVisible=this.headBase&&headBaseActive(p)&&!state.hidden.has('head-base')&&!state.surfaceOnly;
-    gl.uniform1i(this.loc.faceCleanEnabled,faceCleanPolicy(p,headVisible));
-    if(headVisible&&headBaseActive(p)){
+    gl.uniform1i(this.loc.faceCleanEnabled,faceCleanPolicy(headVisible));
+    if(headVisible){
       // Keep the main depth buffer intact: only ears and neck sample this surface.
       gl.activeTexture(gl.TEXTURE5);gl.bindTexture(gl.TEXTURE_2D,null);gl.bindFramebuffer(gl.FRAMEBUFFER,this.headDepthFramebuffer);
       gl.clearColor(0,0,0,0);gl.clearDepth(1);gl.depthMask(true);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);

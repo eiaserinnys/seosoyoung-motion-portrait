@@ -2,7 +2,7 @@ import {gridValue,frameValue} from './pose-grid.mjs';
 import {correction,NECK_PIVOT} from './geometry.mjs';
 
 export const HEAD_BASE = Object.freeze({
- pitchWeight:1.4, earRelief:5, earTiltDegrees:55, earTiltStart:47, earTiltEnd:80, neckAxisTolerance:5,
+ islandTriangleLimit:10, earRelief:5, earTiltDegrees:55, earTiltStart:47, earTiltEnd:80, neckAxisTolerance:5,
  earFadeDegrees:20, earMinMargin:2, faceRimWidth:12, rimStep:6,
  facingStart:.05, facingEnd:.20,
  foreheadFadeYawStart:45, foreheadFadeYawEnd:60, foreheadRimWidth:48,
@@ -60,7 +60,7 @@ export function earTiltDegrees(p){
 }
 
 export function headPoseDistance(theta){
- return Math.hypot(theta[0]-model.thetaRest[0],HEAD_BASE.pitchWeight*(theta[1]-model.thetaRest[1]));
+ return Math.hypot(theta[0]-model.thetaRest[0],model.pitch_weight*(theta[1]-model.thetaRest[1]));
 }
 
 export function cheekWeight(theta){
@@ -68,7 +68,7 @@ export function cheekWeight(theta){
 }
 
 export function phi(theta){
- const logits=model.theta_k.map(k=>-((theta[0]-k[0])**2+(HEAD_BASE.pitchWeight*(theta[1]-k[1]))**2)/(2*model.sigma**2));
+ const logits=model.theta_k.map(k=>-((theta[0]-k[0])**2+(model.pitch_weight*(theta[1]-k[1]))**2)/(2*model.sigma**2));
  const max=Math.max(...logits),values=logits.map(v=>Math.exp(v-max)),total=values.reduce((a,b)=>a+b,0);
  return values.map(v=>v/total);
 }
@@ -107,7 +107,7 @@ export function headBaseVertices(p){
    const j=i*3,x=surface[j]+dx-NECK_PIVOT[0],y=surface[j+1]+dy-NECK_PIVOT[1];
    surface[j]=NECK_PIVOT[0]+c*x-s*y;surface[j+1]=NECK_PIVOT[1]+s*x+c*y;
   }
-  const distance2=(theta[0]-model.thetaRest[0])**2+(HEAD_BASE.pitchWeight*(theta[1]-model.thetaRest[1]))**2;
+  const distance2=(theta[0]-model.thetaRest[0])**2+(model.pitch_weight*(theta[1]-model.thetaRest[1]))**2;
   return {surface,theta,offsetWeight:Math.exp(-distance2/(2*model.sigma**2))};
  });
 }
