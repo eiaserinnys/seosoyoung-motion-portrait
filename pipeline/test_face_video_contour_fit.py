@@ -5,7 +5,7 @@ import numpy as np
 
 from face_video_contour import project
 from face_video_contour_fit import (correspondences, depth_jacobian, fit_diagnostics,
-                                    overlap_step_allowed)
+                                    overlap_step_allowed, feasible_start)
 
 
 class DirectContourFitTest(unittest.TestCase):
@@ -53,6 +53,13 @@ class DirectContourFitTest(unittest.TestCase):
         good[0] = {'overlap_pairs': 0, 'overlap_area': 0.}
         good[1]['overlap_area'] = 3.3
         self.assertFalse(overlap_step_allowed(old, good))
+
+    def test_start_depth_changes_only_the_probed_island_and_preserves_prior(self):
+        prior = np.arange(6., dtype=float)
+        proposal = {'island_vertices': [0, 1], 'feasible': [{'depth_offset': 4}, {'depth_offset': 8}]}
+        start = feasible_start(prior, proposal)
+        np.testing.assert_array_equal(prior, np.arange(6.))
+        np.testing.assert_array_equal(start, [4., 5., 2., 3., 4., 5.])
 
 
 if __name__ == '__main__':

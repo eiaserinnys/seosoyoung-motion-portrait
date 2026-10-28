@@ -1,5 +1,6 @@
 """Fit shared depth to visible video arcs with fixed tracked poses."""
 import argparse
+import hashlib
 import json
 import resource
 import sys
@@ -112,6 +113,13 @@ def overlap_step_allowed(old, new):
                b['overlap_area'] <= a['overlap_area'] + 1e-7 for a, b in zip(old, new))
 
 
+def feasible_start(prior, proposal):
+    choice = min(proposal['feasible'], key=lambda item: abs(item['depth_offset']))
+    start = prior.copy()
+    start[proposal['island_vertices']] += choice['depth_offset']
+    return start
+
+
 def objective(frames, z, zprior, incidence):
     data = 0.
     for frame in frames:
@@ -148,8 +156,8 @@ def overlap_rows(frame, triangles, count):
     return matrix, np.asarray(residuals)
 
 
-def fit_depth(rest, zprior, triangles, observations, iterations=16):
-    z = zprior.copy()
+def fit_depth(rest, zprior, triangles, observations, z_start, iterations=16):
+    z = z_start.copy()
     incidence = edge_incidence(rest, triangles)
     prior_scale = np.sqrt(DEPTH_PRIOR / len(z))
     smooth_scale = np.sqrt(DEPTH_SMOOTH / incidence.shape[0])
@@ -213,6 +221,7 @@ def fit_depth(rest, zprior, triangles, observations, iterations=16):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--start-probe', type=Path, required=True)
     args = parser.parse_args()
     resource.setrlimit(resource.RLIMIT_AS, (3 * 1024**3, 3 * 1024**3))
     data = json.loads((ROOT / 'source/viewer/face-solve.json').read_text())
@@ -221,11 +230,18 @@ def main():
     observations = [by_frame[f] for f in FRAMES]
     n = data['meshCount']
     rest, prior, triangles = np.asarray(data['points'][:n]), np.asarray(data['Z'][:n]), np.asarray(data['triangles'])
-    z, final, history = fit_depth(rest, prior, triangles, observations)
+    proposal = json.loads(args.start_probe.read_text())
+    if proposal['frames'] != FRAMES or not proposal['feasible']:
+        raise ValueError('The start probe must contain a feasible candidate for the five trial frames')
+    z_start = feasible_start(prior, proposal)
+    z, final, history = fit_depth(rest, prior, triangles, observations, z_start)
     stats = statistics(final)
     diagnostics = fit_diagnostics(stats, history)
     output = {'frames': FRAMES, 'depth': z.tolist(), 'depth_prior_weight': DEPTH_PRIOR,
               'depth_smooth_weight': DEPTH_SMOOTH, 'overlap_penalty': OVERLAP_PENALTY,
+              'start_probe_sha256': hashlib.sha256(args.start_probe.read_bytes()).hexdigest(),
+              'start_island_vertices': proposal['island_vertices'],
+              'start_depth_offset': float(z_start[proposal['island_vertices'][0]] - prior[proposal['island_vertices'][0]]),
               'stats': stats, 'history': history, 'diagnostics': diagnostics}
     args.output.write_text(json.dumps(output, ensure_ascii=False, separators=(',', ':')) + '\n')
     print(f'SAVED {args.output}', flush=True)
