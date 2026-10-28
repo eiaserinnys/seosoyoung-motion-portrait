@@ -5,52 +5,42 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from neck_art import clear_background, removal_mask
+from neck_art import apply_reference, crop_inputs
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class NeckArtTest(unittest.TestCase):
-    def test_outside_candidates_only_above_collar(self):
-        neck = np.zeros((12, 12, 4), np.uint8)
-        neck[2:10, 2:10] = [220, 190, 170, 255]
-        still = np.full_like(neck, [220, 190, 170, 255])
-        sweater = np.zeros((12, 12), np.uint8)
-        sweater[9, 2:10] = 255
-        still[3, 2, :3] = 0  # Candidate touches the outside.
-        still[5, 6, :3] = 0  # Interior candidate stays.
-        still[7, 2, :3] = 0  # Exactly at the collar cutoff stays.
-        neck[4, 2, :3] = 20  # The dark drawn outline stays.
-        still[4, 2, :3] = 0
-        remove, stats = removal_mask(neck, still, sweater, origin=(0, 0))
-        self.assertTrue(remove[3, 2])
-        self.assertFalse(remove[5, 6])
-        self.assertFalse(remove[7, 2])
-        self.assertFalse(remove[4, 2])
-        self.assertEqual(stats['removed_components'], 1)
-        self.assertEqual(stats['retained_pixels'], 1)
-        result = clear_background(neck, remove)
-        np.testing.assert_array_equal(result[:, :, :3], neck[:, :, :3])
-        np.testing.assert_array_equal(result[:, :, 3][~remove], neck[:, :, 3][~remove])
+    def test_masks_take_priority_and_collar_or_missing_columns_are_untouched(self):
+        neck = np.full((8, 8, 4), [60, 70, 80, 255], np.uint8)
+        still = np.full_like(neck, [200, 190, 180, 255])
+        sweater = np.zeros((8, 8), np.uint8)
+        sweater[7, 1:7] = 255  # The cutoff is y=5.
+        face = np.zeros((8, 8), bool)
+        necklace = np.zeros_like(face)
+        hair = np.zeros_like(face)
+        face[1, 1] = necklace[1, 1] = hair[1, 1] = True
+        necklace[1, 2] = hair[1, 2] = True
+        hair[1, 3] = True
+        still[1, 4] = [12, 13, 14, 0]
+        neck[2, 4] = [3, 4, 5, 0]
+        result, keep, counts = apply_reference(neck, still, sweater, face, necklace, hair)
+        for x in (1, 2, 3):
+            np.testing.assert_array_equal(result[1, x], neck[1, x])
+        self.assertEqual(result[1, 4, 3], 0)
+        self.assertEqual(keep[1, 4], 0)
+        np.testing.assert_array_equal(result[2, 4], still[2, 4])
+        np.testing.assert_array_equal(result[5], neck[5])
+        np.testing.assert_array_equal(result[:, 0], neck[:, 0])
+        self.assertEqual([counts[k] for k in ('face', 'necklace', 'hair', 'background')], [1, 1, 1, 1])
 
-    def test_component_touching_center_stops_before_removal(self):
-        neck = np.zeros((6, 6, 4), np.uint8)
-        neck[1:5, 1:5] = [220, 190, 170, 255]
-        still = np.full_like(neck, [220, 190, 170, 255])
-        still[2, 1, :3] = 0
-        sweater = np.zeros((6, 6), np.uint8)
-        sweater[5] = 255
-        with self.assertRaisesRegex(ValueError, '가운데'):
-            removal_mask(neck, still, sweater, origin=(494, 0))
-
-    def test_restored_neck_and_both_atlases_match_their_masks(self):
+    def test_restored_neck_and_both_atlases_follow_the_reference(self):
         rig = json.loads((ROOT / 'bundle/assets/seosoyoung-rig.json').read_text())
         mesh = next(mesh for mesh in rig['meshes'] if mesh['id'] == 'neck')
         x, y, w, h = mesh['bbox']
         ax, ay, _, _ = mesh['atlas']
-        still = np.asarray(Image.open(ROOT / 'source/character/still.png').convert('RGBA'))[y:y+h, x:x+w]
-        sweater = np.asarray(Image.open(ROOT / 'sam3_masks/sweater_mask.png').convert('L'))[:, x:x+w]
+        inputs = crop_inputs(ROOT, mesh['bbox'])
         manifest = json.loads((ROOT / 'source/character/manifest.json').read_text())
         source = next(item for item in manifest['leaves'] if item['id'] == 'neck')
         bounds = source['stageBounds']
@@ -63,12 +53,11 @@ class NeckArtTest(unittest.TestCase):
         for original, atlas, keep in [(after, 'texture_00.png', 'neck-keep.png'),
                                       (before, 'texture_before_00.png', 'neck-keep-before.png')]:
             with self.subTest(atlas=atlas):
-                remove, _ = removal_mask(original, still, sweater, origin=(x, y))
+                expected, keep_expected, _ = apply_reference(original, *inputs, origin=(x, y))
                 current = np.asarray(Image.open(ROOT / 'bundle/assets' / atlas).convert('RGBA'))[ay:ay+h, ax:ax+w]
-                np.testing.assert_array_equal(current, clear_background(original, remove))
-                np.testing.assert_array_equal(current[:, 495-x:506-x], original[:, 495-x:506-x])
+                np.testing.assert_array_equal(current, expected)
                 keep_image = np.asarray(Image.open(ROOT / 'bundle/assets' / keep).convert('L'))
-                np.testing.assert_array_equal(keep_image, np.where(remove, 0, 255).astype('uint8'))
+                np.testing.assert_array_equal(keep_image, keep_expected)
 
 
 if __name__ == '__main__':

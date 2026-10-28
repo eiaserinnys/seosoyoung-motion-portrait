@@ -1,29 +1,42 @@
 {
+  "neck_main_commit": "6dd12cfe12b89a3b67b23938996a62c70e281173",
   "neck": {
     "after": {
-      "candidate_pixels": 1058,
-      "candidate_components": 73,
-      "removed_components": 9,
-      "removed_pixels": 790,
-      "retained_pixels": 268,
-      "restored_previous_rule": 467,
-      "center_removed_pixels": 0
+      "face": 13632,
+      "necklace": 1516,
+      "hair": 10116,
+      "background": 18012,
+      "visible": 30884,
+      "outside_collar_rule": 5621,
+      "changed_pixels": 30121
     },
     "before": {
-      "candidate_pixels": 267,
-      "candidate_components": 28,
-      "removed_components": 11,
-      "removed_pixels": 116,
-      "retained_pixels": 151,
-      "restored_previous_rule": 93,
-      "center_removed_pixels": 0
+      "face": 13632,
+      "necklace": 1516,
+      "hair": 10116,
+      "background": 18012,
+      "visible": 30884,
+      "outside_collar_rule": 5621,
+      "changed_pixels": 30872
     }
   },
-  "skin_fraction": 0.7,
-  "still_fraction": 0.6,
-  "still_alpha_max_exclusive": 128,
-  "skin_reference": "per-column median of neck luma with alpha >= 128 above collar",
-  "candidate_connectivity": "8; keep candidates without outside-alpha-zero contact",
+  "neck_bbox": [
+    339,
+    531,
+    323,
+    247
+  ],
+  "neck_rule": "visible original RGBA, with face then expanded necklace then expanded hair protected; collar above only",
+  "dilation_px": 1,
+  "hair_masks": [
+    "bangs-front_mask.png",
+    "hair-crown-all_mask.png",
+    "hairpin_mask.png",
+    "side-hair-left_mask.png",
+    "side-hair-right_mask.png",
+    "tail-left-hair_mask.png",
+    "tail-right-hair_mask.png"
+  ],
   "face_extension": {
     "after": {
       "extended_pixels": 21595,
@@ -40,12 +53,6 @@
     "replace_lte": 9,
     "source_gt": 12
   },
-  "neck_bbox": [
-    339,
-    531,
-    323,
-    247
-  ],
   "face_bbox": [
     306,
     218,

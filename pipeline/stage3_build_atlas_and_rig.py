@@ -5,7 +5,7 @@ import math
 import shutil
 import numpy as np
 from silhouette_mesh import silhouette_mesh
-from neck_art import clear_background, crop_inputs, removal_mask
+from neck_art import apply_reference, crop_inputs
 from face_art import write_clean_assets
 from pathlib import Path
 from PIL import Image
@@ -164,14 +164,14 @@ def build():
             full.paste(raw,(bounds['x'],bounds['y']))
             original=full.crop((x,y,x+w,y+h))
         if key=='neck':
-            still,sweater=crop_inputs(ROOT,p['bbox'])
+            inputs=crop_inputs(ROOT,p['bbox'])
             untrimmed=np.asarray(Image.open(ROOT/'parts/neck-untrimmed.png').convert('RGBA'))
-            remove,_=removal_mask(untrimmed,still,sweater,(x,y))
-            remove_before,_=removal_mask(original,still,sweater,(x,y))
-            im=Image.fromarray(clear_background(untrimmed,remove))
-            original=Image.fromarray(clear_background(original,remove_before))
-            for name,mask in [('neck-keep.png',remove),('neck-keep-before.png',remove_before)]:
-                Image.fromarray(np.where(mask,0,255).astype('uint8')).save(assets/name)
+            result,keep,_=apply_reference(untrimmed,*inputs,origin=(x,y))
+            result_before,keep_before,_=apply_reference(original,*inputs,origin=(x,y))
+            im=Image.fromarray(result)
+            original=Image.fromarray(result_before)
+            for name,mask in [('neck-keep.png',keep),('neck-keep-before.png',keep_before)]:
+                Image.fromarray(mask).save(assets/name)
         if key=='upper-body-short-sleeve':
             alpha=original.getchannel('A')
             alpha.putdata([round(a*max(0,min(1,(y+i//w-680)/12))) for i,a in enumerate(alpha.tobytes())])
