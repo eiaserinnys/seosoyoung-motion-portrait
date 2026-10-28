@@ -1,0 +1,70 @@
+{
+  "neck_main_commit": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+  "neck": {
+    "after": {
+      "face": 14966,
+      "necklace": 1516,
+      "hair": 10000,
+      "background": 17592,
+      "visible": 30086,
+      "outside_collar_rule": 5621,
+      "filled_isolated_holes": [
+        [
+          620,
+          700
+        ]
+      ],
+      "changed_pixels": 29324
+    },
+    "before": {
+      "face": 14966,
+      "necklace": 1516,
+      "hair": 10000,
+      "background": 17592,
+      "visible": 30086,
+      "outside_collar_rule": 5621,
+      "filled_isolated_holes": [],
+      "changed_pixels": 30074
+    }
+  },
+  "neck_bbox": [
+    339,
+    531,
+    323,
+    247
+  ],
+  "neck_rule": "visible original RGBA, with face then expanded necklace then expanded hair protected; collar above only; isolated neck holes repaired from opaque neighbors",
+  "face_dilation_px": 4,
+  "necklace_hair_dilation_px": 1,
+  "hair_masks": [
+    "bangs-front_mask.png",
+    "hair-crown-all_mask.png",
+    "hairpin_mask.png",
+    "side-hair-left_mask.png",
+    "side-hair-right_mask.png",
+    "tail-left-hair_mask.png",
+    "tail-right-hair_mask.png"
+  ],
+  "face_extension": {
+    "after": {
+      "extended_pixels": 21595,
+      "changed_rgb_pixels": 17977,
+      "source_interior_pixels": 84189
+    },
+    "before": {
+      "extended_pixels": 21595,
+      "changed_rgb_pixels": 21505,
+      "source_interior_pixels": 84189
+    }
+  },
+  "face_distance_px": {
+    "replace_lte": 9,
+    "source_gt": 12
+  },
+  "face_bbox": [
+    306,
+    218,
+    392,
+    408
+  ]
+}

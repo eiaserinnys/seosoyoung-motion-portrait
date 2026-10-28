@@ -1,0 +1,38 @@
+{
+  "sheets": [
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-shape-n3.png",
+      "sha256": "876ae64b6e14774b5eda83073f9162bc5063a6bee66608a54e6e8255b160e0a1"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-jaw-n3.png",
+      "sha256": "c786219739c0768e82362d3c81a90c26d949095931cc62a200c3d2caf44f3cd0"
+    },
+    {
+      "path": "pipeline/headmodel/fit/sheets/fit2f-hairworst-n3.png",
+      "sha256": "d750ebd32d10058faff45645d43e480206800b0b31d4e7cb8986fd9c38188abc"
+    }
+  ],
+  "elapsed_seconds": 11.640711180050857,
+  "hair_diagnostic_frames": [
+    316,
+    157,
+    160,
+    313,
+    322,
+    303
+  ],
+  "keys": [
+    3,
+    42,
+    192,
+    206,
+    219,
+    240,
+    264,
+    270,
+    303
+  ],
+  "cameras_fixed": true,
+  "crop": "whole H boundary, targets and model silhouette with 40px source-image margin"
+}

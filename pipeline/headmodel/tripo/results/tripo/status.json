@@ -1,0 +1,16 @@
+{
+  "status": "six_model_quantitative_complete; front_feature_visual_invalid",
+  "checked_at": "2026-10-27T17:37:42.641326+00:00",
+  "endpoint": "https://openapi.tripo3d.ai/v3",
+  "authenticated": true,
+  "created_models": 2,
+  "credits_consumed": 60.0,
+  "T1": "T1-A and T1-B3 measured and rendered",
+  "T2": "excluded by caller; no topology repair or fit",
+  "additional_runners_pending": 0,
+  "additional_runners_approved": 3,
+  "visual_limitations": [
+    "canonical front eye-height unverified",
+    "eyelash eye crops usable in 7/9 keys"
+  ]
+}

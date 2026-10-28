@@ -1,0 +1,312 @@
+{
+  "frame": 268,
+  "key_name": null,
+  "role": "sample",
+  "pose": [
+    18.432320475997383,
+    -23.48243672368234,
+    0.7229762596630301,
+    -0.027542463586513515,
+    419.5899129645491,
+    491.4649920775465
+  ],
+  "to720": [
+    [
+      1.125,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.125,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "to720_source": "scale",
+  "source_image_sha256": "a98cf44b6d7ced502c939571c601b64b99dad15866cd97d0e36716128ddfed2b",
+  "normalization_applied": false,
+  "masks": {
+    "head": {
+      "file": "head.png",
+      "success": true,
+      "area_px": 207226,
+      "source_prompts": {
+        "head": "head",
+        "hair_bun": "hair bun",
+        "ponytail": "ponytail",
+        "neck": "neck"
+      },
+      "neck_returned": true,
+      "postprocess": [
+        "subtract hair bun",
+        "subtract ponytail",
+        "subtract neck when returned",
+        "fill holes",
+        "keep largest component"
+      ]
+    },
+    "skin": {
+      "file": "skin.png",
+      "success": true,
+      "area_px": 93428,
+      "prompt": "face skin",
+      "neck_subtracted": true,
+      "postprocess": [
+        "union all face skin instances",
+        "subtract neck raw when returned",
+        "fill holes",
+        "keep largest component"
+      ]
+    },
+    "ear-left": {
+      "file": "ear-left.png",
+      "success": true,
+      "visible": true,
+      "area_px": 4346,
+      "selected_instance_index": 0,
+      "candidates": [
+        {
+          "instance_index": 0,
+          "score": 0.90812748670578,
+          "area_px": 4346,
+          "center_x": 212.15002300966407,
+          "overlap_with_head_px": 4161,
+          "side": "ear-left"
+        }
+      ],
+      "discarded_instances": [],
+      "head_center_x": 388.2994749693571,
+      "prompt": "ear"
+    },
+    "ear-right": {
+      "file": "ear-right.png",
+      "success": true,
+      "visible": true,
+      "area_px": 342,
+      "selected_instance_index": 1,
+      "candidates": [
+        {
+          "instance_index": 1,
+          "score": 0.7108811736106873,
+          "area_px": 342,
+          "center_x": 579.3391812865497,
+          "overlap_with_head_px": 237,
+          "side": "ear-right"
+        }
+      ],
+      "discarded_instances": [],
+      "head_center_x": 388.2994749693571,
+      "prompt": "ear"
+    }
+  },
+  "calls": [
+    {
+      "prompt": "head",
+      "num_masks_returned": 1,
+      "scores": [
+        0.9261084198951721
+      ],
+      "instance_area_px": [
+        223125
+      ],
+      "mask": "head",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:16:12+00:00",
+      "duration_seconds": 3.965,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "hair bun",
+      "num_masks_returned": 1,
+      "scores": [
+        0.9434868693351746
+      ],
+      "instance_area_px": [
+        16406
+      ],
+      "mask": "hair bun",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:16:16+00:00",
+      "duration_seconds": 4.848,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "ponytail",
+      "num_masks_returned": 0,
+      "scores": [],
+      "instance_area_px": [],
+      "mask": "ponytail",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:16:21+00:00",
+      "duration_seconds": 2.616,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "neck",
+      "num_masks_returned": 1,
+      "scores": [
+        0.8172571659088135
+      ],
+      "instance_area_px": [
+        12217
+      ],
+      "mask": "neck",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:16:23+00:00",
+      "duration_seconds": 2.452,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "face skin",
+      "num_masks_returned": 1,
+      "scores": [
+        0.8739518523216248
+      ],
+      "instance_area_px": [
+        90265
+      ],
+      "mask": "face skin",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:16:26+00:00",
+      "duration_seconds": 2.336,
+      "http_post_attempts": 1,
+      "success": true
+    },
+    {
+      "prompt": "ear",
+      "num_masks_returned": 2,
+      "scores": [
+        0.90812748670578,
+        0.7108811736106873
+      ],
+      "instance_area_px": [
+        4346,
+        342
+      ],
+      "mask": "ear",
+      "mask_revision": "b-stage-mask-revision-1",
+      "called_at_utc": "2026-10-27T12:16:28+00:00",
+      "duration_seconds": 2.644,
+      "http_post_attempts": 1,
+      "success": true
+    }
+  ],
+  "endpoint": "https://fal.run/fal-ai/sam-3/image",
+  "mask_definition_revision": "b-stage-mask-revision-1",
+  "raw_masks": {
+    "head": {
+      "file": "raw/head.png",
+      "prompt": "head",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "a98cf44b6d7ced502c939571c601b64b99dad15866cd97d0e36716128ddfed2b",
+      "called_at_utc": "2026-10-27T12:16:12+00:00",
+      "duration_seconds": 3.965,
+      "num_instances": 1,
+      "scores": [
+        0.9261084198951721
+      ],
+      "instance_area_px": [
+        223125
+      ],
+      "instance_files": []
+    },
+    "hair bun": {
+      "file": "raw/hair bun.png",
+      "prompt": "hair bun",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "a98cf44b6d7ced502c939571c601b64b99dad15866cd97d0e36716128ddfed2b",
+      "called_at_utc": "2026-10-27T12:16:16+00:00",
+      "duration_seconds": 4.848,
+      "num_instances": 1,
+      "scores": [
+        0.9434868693351746
+      ],
+      "instance_area_px": [
+        16406
+      ],
+      "instance_files": []
+    },
+    "ponytail": {
+      "file": "raw/ponytail.png",
+      "prompt": "ponytail",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "a98cf44b6d7ced502c939571c601b64b99dad15866cd97d0e36716128ddfed2b",
+      "called_at_utc": "2026-10-27T12:16:21+00:00",
+      "duration_seconds": 2.616,
+      "num_instances": 0,
+      "scores": [],
+      "instance_area_px": [],
+      "instance_files": []
+    },
+    "neck": {
+      "file": "raw/neck.png",
+      "prompt": "neck",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "a98cf44b6d7ced502c939571c601b64b99dad15866cd97d0e36716128ddfed2b",
+      "called_at_utc": "2026-10-27T12:16:23+00:00",
+      "duration_seconds": 2.452,
+      "num_instances": 1,
+      "scores": [
+        0.8172571659088135
+      ],
+      "instance_area_px": [
+        12217
+      ],
+      "instance_files": []
+    },
+    "face skin": {
+      "file": "raw/face skin.png",
+      "prompt": "face skin",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "a98cf44b6d7ced502c939571c601b64b99dad15866cd97d0e36716128ddfed2b",
+      "called_at_utc": "2026-10-27T12:16:26+00:00",
+      "duration_seconds": 2.336,
+      "num_instances": 1,
+      "scores": [
+        0.8739518523216248
+      ],
+      "instance_area_px": [
+        90265
+      ],
+      "instance_files": []
+    },
+    "ear": {
+      "file": "raw/ear.png",
+      "prompt": "ear",
+      "success": true,
+      "mask_revision": "b-stage-mask-revision-1",
+      "source_image_sha256": "a98cf44b6d7ced502c939571c601b64b99dad15866cd97d0e36716128ddfed2b",
+      "called_at_utc": "2026-10-27T12:16:28+00:00",
+      "duration_seconds": 2.644,
+      "num_instances": 2,
+      "scores": [
+        0.90812748670578,
+        0.7108811736106873
+      ],
+      "instance_area_px": [
+        4346,
+        342
+      ],
+      "instance_files": [
+        "raw/ear/instance_00.png",
+        "raw/ear/instance_01.png"
+      ]
+    }
+  },
+  "head_bbox_width_px": 469,
+  "neck_returned": true
+}

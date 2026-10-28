@@ -1,0 +1,57 @@
+{
+  "runner_calls": 1,
+  "runner_limit": 1,
+  "icp_iterations": 10,
+  "camera_updates": 0,
+  "total_runner_seconds": 418.37791838194244,
+  "solve_seconds": 367.639621422044,
+  "sheet_seconds": 11.640711180050857,
+  "initial_displacement": "zero on remeshed A",
+  "lambda": 1000.0,
+  "mu": 0.01,
+  "frame_multiplier": 0.023076923076923078,
+  "skin_weight": 0.07692307692307693,
+  "hair_weight": 0.007692307692307693,
+  "camera_source_commit": "c318c2fed7148ffc2160fa2fd45d86ab39a7f319",
+  "camera_sha256": "3396e7470b52249eddd8ed8968ca7b39ce9f3f86ddf136e3d94539f48d522892",
+  "camera_bytes_identical_to_source_and_output": true,
+  "contracts": "RED unexpected reference_frames -> GREEN 1 test, 2.299s; normalized 130-copy vs 3-frame d max difference 2.5535e-15, unnormalized difference .00133034.",
+  "syntax_and_diff": "Four changed/new Python files py_compile and git diff --check passed.",
+  "independent_static_review": "Passed: all skin/hair and bidirectional rows scaled; suffix paths preserve previous outputs.",
+  "review": {
+    "visual_smoothness_passed": true,
+    "direct_and_independent_review": "실행 세션과 독립 검수자가 같은 3시트와 최종 JSON을 직접 열었다.",
+    "shape": "기존 B130의 큰 이마·관자 능선과 볼·턱 굴곡 띠가 해소돼 B3-step2에 가까운 매끈함으로 돌아왔다.",
+    "contours": "매끈함과 별개로 9키 피부 최대 35.138px(219번), hair 큰 잔차가 남는다.",
+    "hair_diagnostic": {
+      "316,303": "뒤통수의 빨강 모델 윤곽이 회색 H/초록 목표보다 안쪽으로 후퇴한다.",
+      "157,160": "정수리의 모델 윤곽이 낮고, 귀뒤 외곽은 목표보다 바깥이다.",
+      "313,322": "정수리의 모델 윤곽은 높고, 뒤통수 윤곽은 목표보다 안쪽이다.",
+      "target": "회색 H와 초록 목표는 묶음머리 바깥 부피가 아니라 머리 캡 경계를 따른다.",
+      "location": "오차가 묶음머리를 뺀 자리 한곳에 국한되지 않고 정수리·뒤통수·귀뒤 캡 전반의 위치 불일치로 남는다."
+    },
+    "scope": "수치 130프레임 전체, 형상 10각도, 9키 턱 크롭, 요청한 고정 여섯 hair 진단 프레임.",
+    "limitations": [
+      "정규화 후 hair 상위 프레임103은 수치에 있으나 요청한 고정6시트에는 없다.",
+      "목표 정의는 그대로이며, 연속영상이나 그 밖의 프레임 화면을 추가 검수하지 않았다."
+    ]
+  },
+  "existing_outputs": "No tracked result/sheet/Tripo/data/model changes before adding n3 outputs.",
+  "callsite_inventory": {
+    "step1_step2": "default multiplier1, unchanged",
+    "original_B130": "default multiplier1, unchanged",
+    "Tripo_T1_B3": "default multiplier1, unchanged; not executed",
+    "B130_n3": "explicit reference_frames3; all130 frames"
+  },
+  "not_executed": [
+    "additional runner",
+    "camera refinement",
+    "parameter search",
+    "target definition change",
+    "2e",
+    "Tripo work",
+    "PR",
+    "merge",
+    "deployment"
+  ]
+}

@@ -1,0 +1,523 @@
+{
+  "repository": "ICT-VGL/ICT-FaceKit",
+  "commit": "da5f95a607f5e6b37755b38d3385d7f2853732e5",
+  "source": "https://github.com/ICT-VGL/ICT-FaceKit/tree/da5f95a607f5e6b37755b38d3385d7f2853732e5",
+  "artifact_directory": ".local/artifacts/ict-facekit/da5f95a607f5e6b37755b38d3385d7f2853732e5",
+  "files": [
+    {
+      "path": "FaceXModel/generic_neutral_mesh.obj",
+      "sha256": "eedbc2576d8e5ea57f55255b8f98263213a1efb5431d8bfceed1d7aef10271f9",
+      "bytes": 2555599
+    },
+    {
+      "path": "FaceXModel/identity000.obj",
+      "sha256": "918160cf82d541336b4c367cf93199c9827832bde02511b8fbdf9019d6f1a773",
+      "bytes": 2559425
+    },
+    {
+      "path": "FaceXModel/identity001.obj",
+      "sha256": "325115059deb6691cb2d55da07ae38bb08ce36e4ea146982f294a17513155b3b",
+      "bytes": 2558978
+    },
+    {
+      "path": "FaceXModel/identity002.obj",
+      "sha256": "e140e8305cd5232def3b94331d08450a13f312e525130fca8eeaa653231decc3",
+      "bytes": 2559778
+    },
+    {
+      "path": "FaceXModel/identity003.obj",
+      "sha256": "be3481a6bed8953a6d9dd7f811a04bc6d2ab94d1bd76ecfaa6d4cae87a450f9d",
+      "bytes": 2559601
+    },
+    {
+      "path": "FaceXModel/identity004.obj",
+      "sha256": "a2f411cc763e881cff250eb23c04fe8375b63a05a7dfa0492422e3b943e8a01d",
+      "bytes": 2559142
+    },
+    {
+      "path": "FaceXModel/identity005.obj",
+      "sha256": "274178eb33e33c555e6024535a51a62ee50050abd4f7014bbc7a4dc90a638c65",
+      "bytes": 2559787
+    },
+    {
+      "path": "FaceXModel/identity006.obj",
+      "sha256": "c9ae0426ab88b49065c852148f7bcff8cb09253fbee068b78955bd76c19a3e0f",
+      "bytes": 2559268
+    },
+    {
+      "path": "FaceXModel/identity007.obj",
+      "sha256": "ba38037151277b94e2b6b9b9800275d92d2c0aa8d61057b0718c9d7b90fffc44",
+      "bytes": 2559156
+    },
+    {
+      "path": "FaceXModel/identity008.obj",
+      "sha256": "b03543b783a15c1d28c5a384cd93657eda915227756780f682bc7370cd94ce1d",
+      "bytes": 2559269
+    },
+    {
+      "path": "FaceXModel/identity009.obj",
+      "sha256": "0cbb5ca5db9c61fa91df8d1c04b9b383b40d797032ca3f5a28a234d495e31b54",
+      "bytes": 2558646
+    },
+    {
+      "path": "FaceXModel/identity010.obj",
+      "sha256": "7bd1c31b76428cfb4bf29a2ac38bc2711d8c254aec25bba7ebd7a9b7dc81ebc7",
+      "bytes": 2559280
+    },
+    {
+      "path": "FaceXModel/identity011.obj",
+      "sha256": "68684bafa7e460ce7dd69c618a260143e6ecfa1254d0d49ec40202092a4b05f3",
+      "bytes": 2559530
+    },
+    {
+      "path": "FaceXModel/identity012.obj",
+      "sha256": "b899f17f8727b903b36f9a879ec95427c4df93d415956a211745bf44ed2be2dd",
+      "bytes": 2559442
+    },
+    {
+      "path": "FaceXModel/identity013.obj",
+      "sha256": "57a17eb9945a21c0a869dca4401964742c8d47e512d680fef94447aff826abc3",
+      "bytes": 2559747
+    },
+    {
+      "path": "FaceXModel/identity014.obj",
+      "sha256": "8a1a490f6e695c9116b820a95137823282415fb20bb0362725bedf0a1c2d8bd3",
+      "bytes": 2559520
+    },
+    {
+      "path": "FaceXModel/identity015.obj",
+      "sha256": "9f3da084848efabf5b898f72d3006db7442497a560185483358a8d4aefb8ac2d",
+      "bytes": 2559388
+    },
+    {
+      "path": "FaceXModel/identity016.obj",
+      "sha256": "184d17ffd35e7796777bf6008e0f904810e3781b46b37f37f9a550f1969c2525",
+      "bytes": 2559604
+    },
+    {
+      "path": "FaceXModel/identity017.obj",
+      "sha256": "5b55b7a104f561d5df44a9d0249f21bcf80890dd59666d777c2db9eccd128759",
+      "bytes": 2559398
+    },
+    {
+      "path": "FaceXModel/identity018.obj",
+      "sha256": "8ae8dd9cb5c7173f49643974420261f10f0437a7636531a50c2ae9a2badaf9a3",
+      "bytes": 2559320
+    },
+    {
+      "path": "FaceXModel/identity019.obj",
+      "sha256": "a22d531cddb3a0aaed12e6feddf45993f73545253d35642300dc4eca6438117a",
+      "bytes": 2559500
+    },
+    {
+      "path": "FaceXModel/identity020.obj",
+      "sha256": "3cabf614779ef2e625dfd4323a8db70a174e80e20aa083cd4cd3310503a66f1d",
+      "bytes": 2558496
+    },
+    {
+      "path": "FaceXModel/identity021.obj",
+      "sha256": "9ab18156977d76b6651868c68ddf5e3da529678606c9cc451cefe1bbc29cd4e5",
+      "bytes": 2559513
+    },
+    {
+      "path": "FaceXModel/identity022.obj",
+      "sha256": "6d6d1fb2c7af1d8bf14b65c2f60aa3312b3c6ad5c5315218559f3f9dd16f4f73",
+      "bytes": 2559136
+    },
+    {
+      "path": "FaceXModel/identity023.obj",
+      "sha256": "8b0e809b2b07c36eefaf5a4e6be9efed0ac0e3a8d1cc84130f112e12b188b457",
+      "bytes": 2559425
+    },
+    {
+      "path": "FaceXModel/identity024.obj",
+      "sha256": "23f6b0c1ffa4395aae606a199aa29be6b10800e46fd05c804b5a79fd87f718ff",
+      "bytes": 2559557
+    },
+    {
+      "path": "FaceXModel/identity025.obj",
+      "sha256": "93089be89ad88e7fe701dad51b07ecfa7eddfa81afaf13e27976bf97cc43a000",
+      "bytes": 2558955
+    },
+    {
+      "path": "FaceXModel/identity026.obj",
+      "sha256": "66c02f3e68e7e298b5e0938003df67a804bf0b153342acaa9ec19e63a7043896",
+      "bytes": 2559520
+    },
+    {
+      "path": "FaceXModel/identity027.obj",
+      "sha256": "d652ae8402706cd0eafa78b3745dea8435c496ca8585fe7300718e992b8fe690",
+      "bytes": 2559452
+    },
+    {
+      "path": "FaceXModel/identity028.obj",
+      "sha256": "9857adc057878d3d6f54a058e373a4ce471f77ccd49497008e2700c9d89e3d98",
+      "bytes": 2558839
+    },
+    {
+      "path": "FaceXModel/identity029.obj",
+      "sha256": "cf5c15dcf37e3d8973be8c86696894d1a8f902ba80cca28d3fda5cff87a70f09",
+      "bytes": 2559532
+    },
+    {
+      "path": "FaceXModel/identity030.obj",
+      "sha256": "ed70813c94cbbbf57b417016c760f2da44406da63d2b4bbbf8eb55711478c75c",
+      "bytes": 2559442
+    },
+    {
+      "path": "FaceXModel/identity031.obj",
+      "sha256": "c45f199b1e6dca582513863acb625ed1e2b61b5646098cc29d042db071e57ef2",
+      "bytes": 2559664
+    },
+    {
+      "path": "FaceXModel/identity032.obj",
+      "sha256": "b15d9d537ac8bf0408f321dc16fdd825fb1f52eb771e0d5201f75c02c94301c6",
+      "bytes": 2559436
+    },
+    {
+      "path": "FaceXModel/identity033.obj",
+      "sha256": "3dec9b7de7830d43eb7e7239469c07b0d02a7a61614565ae880182411a3931fb",
+      "bytes": 2558789
+    },
+    {
+      "path": "FaceXModel/identity034.obj",
+      "sha256": "bdef7f09c2bd200e026eeaceec519683033d6967ec831e0f32a1d1fcadd47ae1",
+      "bytes": 2559442
+    },
+    {
+      "path": "FaceXModel/identity035.obj",
+      "sha256": "f3ada8ae8bc42a604835d3752d6ac7d30d71652ea459560f9b8e528ae1e611df",
+      "bytes": 2559549
+    },
+    {
+      "path": "FaceXModel/identity036.obj",
+      "sha256": "e18ae8cfc06d376584f9b12fc2dd6535f3784c37128b66ae49ec0bdc53babfa6",
+      "bytes": 2559401
+    },
+    {
+      "path": "FaceXModel/identity037.obj",
+      "sha256": "e2a78ab5ea24dc03a2369e86086afca681373e7a33e84490a63749f54aae8f5f",
+      "bytes": 2558790
+    },
+    {
+      "path": "FaceXModel/identity038.obj",
+      "sha256": "37080e0e0aef74921514d4fe6e4d9054fd49b317ab328bfed9ecf4452c8d39ab",
+      "bytes": 2559709
+    },
+    {
+      "path": "FaceXModel/identity039.obj",
+      "sha256": "bc1e7dc17ea65e0acd7cec7a54c4fb16fbd1a15982c5eda853d4a409850da3b5",
+      "bytes": 2559527
+    },
+    {
+      "path": "FaceXModel/identity040.obj",
+      "sha256": "904a520b80658b1a58605109d2a1a0ec765e326afa63a6b57ccdb7b37178fdeb",
+      "bytes": 2559255
+    },
+    {
+      "path": "FaceXModel/identity041.obj",
+      "sha256": "b38ac35811e8ce84b517bbcc6769754004adae0207f25067c111f290a5f3283e",
+      "bytes": 2559423
+    },
+    {
+      "path": "FaceXModel/identity042.obj",
+      "sha256": "19f9dcb5fdc1a29da1f61a86c00b2e5d29b6649d13bfe88ec9d737424b464cda",
+      "bytes": 2559565
+    },
+    {
+      "path": "FaceXModel/identity043.obj",
+      "sha256": "65fbc36dfb2a3ebe9a77d2f895d0342e8537a9d8c61d202c3feef27d442c995c",
+      "bytes": 2558955
+    },
+    {
+      "path": "FaceXModel/identity044.obj",
+      "sha256": "d1f69e1a428a9d68a536e53b65fc62db14f70feaadf2dd1374949a2e728aa543",
+      "bytes": 2559590
+    },
+    {
+      "path": "FaceXModel/identity045.obj",
+      "sha256": "322357988af125bcf58141e4a90a3c1a475c0271013a2326e6ad610188415d2d",
+      "bytes": 2559212
+    },
+    {
+      "path": "FaceXModel/identity046.obj",
+      "sha256": "694d4f4d4f4700f7e2c97cdc26f343259298328434943664f33616c699d93bc7",
+      "bytes": 2559286
+    },
+    {
+      "path": "FaceXModel/identity047.obj",
+      "sha256": "1c7e6758628334115ceca708def3151e4e7d0a7641d67579d939c0d71b99aa92",
+      "bytes": 2559570
+    },
+    {
+      "path": "FaceXModel/identity048.obj",
+      "sha256": "a75dcc8e295d06ef9df565dc1acb4bf6e0829963d552c9138587b141c8514958",
+      "bytes": 2559570
+    },
+    {
+      "path": "FaceXModel/identity049.obj",
+      "sha256": "bd7238c27895a311f2b743535b3026d911a65039a858de89cc76f1922cabf21a",
+      "bytes": 2559256
+    },
+    {
+      "path": "FaceXModel/identity050.obj",
+      "sha256": "8549f4a4a884cce460605acc2e1b0b3273759f38ae79eeb5712e4c14fe9e959f",
+      "bytes": 2559437
+    },
+    {
+      "path": "FaceXModel/identity051.obj",
+      "sha256": "82dc080a3e3db45e916425305e9b4394046c4c4473f0bab7871720a69084a08e",
+      "bytes": 2559068
+    },
+    {
+      "path": "FaceXModel/identity052.obj",
+      "sha256": "fbab456a6d5e24f9c51a5fb184775af67a39b5795588aef32dc486b1199d1a78",
+      "bytes": 2559265
+    },
+    {
+      "path": "FaceXModel/identity053.obj",
+      "sha256": "3b43055487765ffbf6382bbcbe4715ce67e318fab131365fb300b9253426f174",
+      "bytes": 2559092
+    },
+    {
+      "path": "FaceXModel/identity054.obj",
+      "sha256": "f3ca0b1e431571cf42f66ccfd214f9a7da7d202ca3543c762ce71be3f1a09ac1",
+      "bytes": 2559381
+    },
+    {
+      "path": "FaceXModel/identity055.obj",
+      "sha256": "2541899c09da268e71a6f016b549e61ca24d2f4155d118b523b0556ec9102b86",
+      "bytes": 2559534
+    },
+    {
+      "path": "FaceXModel/identity056.obj",
+      "sha256": "f2efa2690a737fe4ea1e722dc0c2dfe0befbbf847a0feba37bc8c364ae1cf11c",
+      "bytes": 2559431
+    },
+    {
+      "path": "FaceXModel/identity057.obj",
+      "sha256": "054ce6afa96c165b738c83e3a06beb21b8dd6cb2df6a3c110627878b09ff006c",
+      "bytes": 2559718
+    },
+    {
+      "path": "FaceXModel/identity058.obj",
+      "sha256": "d6c74d031636be8474e1ec2476095df688618e805cc4a561f08dd771761f0620",
+      "bytes": 2558868
+    },
+    {
+      "path": "FaceXModel/identity059.obj",
+      "sha256": "9c1686ae731f54d4935a231e411fc1e42d118024bf9a66806586df4ffa8cf17e",
+      "bytes": 2559547
+    },
+    {
+      "path": "FaceXModel/identity060.obj",
+      "sha256": "636639e54c07651bd47d9f5835204c7416f04c06272620cfda388225ce4acf95",
+      "bytes": 2559065
+    },
+    {
+      "path": "FaceXModel/identity061.obj",
+      "sha256": "be397c552e36997db58de5201f7eafee4e2727b010e34e200e721ff99d42f91f",
+      "bytes": 2559424
+    },
+    {
+      "path": "FaceXModel/identity062.obj",
+      "sha256": "19fcb3c4fcf199fdea44a88c1785c5c319242e0a5b0440e7bf9633473dec888f",
+      "bytes": 2559542
+    },
+    {
+      "path": "FaceXModel/identity063.obj",
+      "sha256": "cea787322714ae932330808d377bf65d5f4da7346a4727767e5f6c0461a84a87",
+      "bytes": 2559675
+    },
+    {
+      "path": "FaceXModel/identity064.obj",
+      "sha256": "af88254d5c5787c63b9a69310c7cad1ed9bf9205411652e4aea785b7ea82b7ae",
+      "bytes": 2559381
+    },
+    {
+      "path": "FaceXModel/identity065.obj",
+      "sha256": "8f3ba630ce276a87c65c6302cecd9352a57e80a24240be2786464384e39babbe",
+      "bytes": 2559045
+    },
+    {
+      "path": "FaceXModel/identity066.obj",
+      "sha256": "010a5fc1bd8e5b3cc9631a6233fb7019edfb5390f8216bddda04b62cf7977046",
+      "bytes": 2559575
+    },
+    {
+      "path": "FaceXModel/identity067.obj",
+      "sha256": "e9e831aacd500e9d0761b51e4d32ed5b82c75219006e62d8b7f7f566ebe66927",
+      "bytes": 2559139
+    },
+    {
+      "path": "FaceXModel/identity068.obj",
+      "sha256": "d5a2214066683dc2140e277b8d6089814f1a80b6dbf8a7c6f9792c34d709fed7",
+      "bytes": 2559758
+    },
+    {
+      "path": "FaceXModel/identity069.obj",
+      "sha256": "419c78440217fc4b2c0f130718536f2c1ef4ffc4710e4fa7367a680bbf78ed19",
+      "bytes": 2559329
+    },
+    {
+      "path": "FaceXModel/identity070.obj",
+      "sha256": "d04d9686c1c69754d9c0e7bc09acf720b93e9496daf5502aacdae12442d88329",
+      "bytes": 2559575
+    },
+    {
+      "path": "FaceXModel/identity071.obj",
+      "sha256": "42a5429e4e780550067662273284aa42fb17fd8be47b1abf8b6039e50202e5e7",
+      "bytes": 2558968
+    },
+    {
+      "path": "FaceXModel/identity072.obj",
+      "sha256": "3f60cf1c31d8fa72f5fe6e1e4bf52862a18b851ab1538a4c925b6d38cf91a2ed",
+      "bytes": 2559318
+    },
+    {
+      "path": "FaceXModel/identity073.obj",
+      "sha256": "916087dc9a8e28f19170f826b8071f5b2baa3ec8ba468a42f0880e6ed4427ba5",
+      "bytes": 2558876
+    },
+    {
+      "path": "FaceXModel/identity074.obj",
+      "sha256": "c8120bc13eb35de329c2d0c206b5f86c4df4a07e1d36987a05e56cd8a5301316",
+      "bytes": 2559297
+    },
+    {
+      "path": "FaceXModel/identity075.obj",
+      "sha256": "fe7678ed6e903b01b52d977eed4dcfcfa2e9ac5b4ae7949cc3a40249cebe3e0e",
+      "bytes": 2559369
+    },
+    {
+      "path": "FaceXModel/identity076.obj",
+      "sha256": "f059cbad69acbd5d21f149c362df502165ac2edc234633c9f951d7ee16c18e44",
+      "bytes": 2558888
+    },
+    {
+      "path": "FaceXModel/identity077.obj",
+      "sha256": "7d82c57e39e1f2e999e78f19a07ff7a407bdc1b22505b9519c26b54ec0d71bfb",
+      "bytes": 2559419
+    },
+    {
+      "path": "FaceXModel/identity078.obj",
+      "sha256": "6e18e072ff5718950c215e13434599e21d89cc4ad419aeba9a8988682d051d08",
+      "bytes": 2559494
+    },
+    {
+      "path": "FaceXModel/identity079.obj",
+      "sha256": "c78769be8238c1e6efa21c84a6149953b10ccc00be67028edf9c345ffde4c53d",
+      "bytes": 2559455
+    },
+    {
+      "path": "FaceXModel/identity080.obj",
+      "sha256": "c24276693121f87bc47ffd081e4ea624136b7a9ee6186f8a1d4dd79c2c7fb25d",
+      "bytes": 2559290
+    },
+    {
+      "path": "FaceXModel/identity081.obj",
+      "sha256": "ac84f6861264e7c8bbcd86a1bbc86e5d3ce1d9cdd98adff8ffef6a13e33986fb",
+      "bytes": 2559583
+    },
+    {
+      "path": "FaceXModel/identity082.obj",
+      "sha256": "33d75dd5d86812bfa22f2360383f25a6ecac69be32ef07a6dedbf28c0433c98e",
+      "bytes": 2559386
+    },
+    {
+      "path": "FaceXModel/identity083.obj",
+      "sha256": "6bbee0dfed711aa2336ae7614d821752d02e338da45d6f726f2cef1810699e87",
+      "bytes": 2559207
+    },
+    {
+      "path": "FaceXModel/identity084.obj",
+      "sha256": "7db8e5df79cf7442c232a9184f04feebfb3618e48fcd2c348907a04e7b4485ad",
+      "bytes": 2559598
+    },
+    {
+      "path": "FaceXModel/identity085.obj",
+      "sha256": "154f0743e1522e1c7f2b9b19cfb31dbc6fc0eadc46188c7097c2045864c81433",
+      "bytes": 2559060
+    },
+    {
+      "path": "FaceXModel/identity086.obj",
+      "sha256": "c1b7da51297b6cf036cc30585bcc12db6ad00783823657cc7bc7472d98adbf68",
+      "bytes": 2559467
+    },
+    {
+      "path": "FaceXModel/identity087.obj",
+      "sha256": "d5f123616f1628cfb1cf52faae2a8982d1533c8bf99282e219b682f27260382f",
+      "bytes": 2559410
+    },
+    {
+      "path": "FaceXModel/identity088.obj",
+      "sha256": "82bb4bdc9c4870ee984327a57cc8b62dce704093dbab3e4270afb8112aaef116",
+      "bytes": 2559477
+    },
+    {
+      "path": "FaceXModel/identity089.obj",
+      "sha256": "2d462a9844362cbf66b63794555b7aa63353daeec57960f2503540d7b3983e62",
+      "bytes": 2559026
+    },
+    {
+      "path": "FaceXModel/identity090.obj",
+      "sha256": "05baa39fa4ed9378680b2ad9636facf0f18045bfc1fb2c437e85b9035fd2d3ef",
+      "bytes": 2559361
+    },
+    {
+      "path": "FaceXModel/identity091.obj",
+      "sha256": "562e6c2e0f5fef6e8bba81c1049adef1d03cf01c55123029e3edcba861d91121",
+      "bytes": 2559325
+    },
+    {
+      "path": "FaceXModel/identity092.obj",
+      "sha256": "a7ee20c22ba7be28de2eef5878a43decc65b9c215d4087188b690a87201e9103",
+      "bytes": 2559442
+    },
+    {
+      "path": "FaceXModel/identity093.obj",
+      "sha256": "f7372bd3d4d7b1a107cb2fcc253b10deab0659d39ee1a883ac6352da5ee740ab",
+      "bytes": 2559308
+    },
+    {
+      "path": "FaceXModel/identity094.obj",
+      "sha256": "ea34d4dcf1934141d6a24fe5fc97c97621e6c2fd36c608b7031d074ab866568b",
+      "bytes": 2559483
+    },
+    {
+      "path": "FaceXModel/identity095.obj",
+      "sha256": "1ebee650c4db2b4b84fb0f677a1e3f72a565081524813f1c664d8c76367fa4c8",
+      "bytes": 2558959
+    },
+    {
+      "path": "FaceXModel/identity096.obj",
+      "sha256": "1192407c0209709e6c8edd8dfd6e6d663d471f95a379f83ffc4bae47983d4bfa",
+      "bytes": 2559461
+    },
+    {
+      "path": "FaceXModel/identity097.obj",
+      "sha256": "a3ba3be2427e8882eacaf658eb6e5781bcfa551bd743ffc753481d3b8bd58845",
+      "bytes": 2559346
+    },
+    {
+      "path": "FaceXModel/identity098.obj",
+      "sha256": "b8a13585231b382c6d8bb5dd96cd4de5fa5542a8981d4cd63fe39f1c251a5b90",
+      "bytes": 2559357
+    },
+    {
+      "path": "FaceXModel/identity099.obj",
+      "sha256": "6294bbed0197a06d091d1ad9f586c5f8d90fce4f580350a509749ae688472912",
+      "bytes": 2559425
+    },
+    {
+      "path": "README.md",
+      "sha256": "614116987854431bbdadbf7772f7352edeeca55580f62021dccb78aaf76febf6",
+      "bytes": 15029
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "b20a78d8fc51657e14f3e00c8abb538d786ad00aa63210328c22565e583167e1",
+      "bytes": 1096
+    }
+  ]
+}

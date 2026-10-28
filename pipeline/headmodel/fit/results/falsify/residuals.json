@@ -1,0 +1,146 @@
+{
+  "frames": [
+    {
+      "frame": 3,
+      "head_iou": 0.9800215867316406,
+      "head": {
+        "mean_px": 2.3605308532714844,
+        "max_px": 13.45362377166748,
+        "model_to_target_mean_px": 2.391338348388672,
+        "target_to_model_mean_px": 2.329723596572876
+      },
+      "skin_lower": {
+        "mean_px": 3.406914710998535,
+        "max_px": 21.954498291015625,
+        "model_to_target_mean_px": 3.179718494415283,
+        "target_to_model_mean_px": 3.634110689163208
+      },
+      "skull_upper": {
+        "mean_px": 2.235241651535034,
+        "max_px": 9.0,
+        "model_to_target_mean_px": 2.217895269393921,
+        "target_to_model_mean_px": 2.2525880336761475
+      },
+      "ears": {
+        "ear-left": {
+          "visible_iou": 0.10932825673103073,
+          "isolated_iou": 0.6280432822362488,
+          "visible_area_px": 648,
+          "target_area_px": 3431
+        },
+        "ear-right": {
+          "visible_iou": 0.2722689075630252,
+          "isolated_iou": 0.6411174785100286,
+          "visible_area_px": 1009,
+          "target_area_px": 3533
+        }
+      },
+      "required_projected_displacement_estimate_px": 21.954498291015625,
+      "skin_over_10px": true,
+      "failure_candidate_over_26px": false,
+      "beta_abs_max": 5.000624656677246,
+      "scale_xyz": [
+        1.3055157661437988,
+        1.0393013954162598,
+        1.1251548528671265
+      ],
+      "thickness_px": 3.0,
+      "iteration_mean_seconds": 0.1850775577773311
+    },
+    {
+      "frame": 42,
+      "head_iou": 0.9727710606507421,
+      "head": {
+        "mean_px": 2.94150447845459,
+        "max_px": 25.238859176635742,
+        "model_to_target_mean_px": 3.066476821899414,
+        "target_to_model_mean_px": 2.8165318965911865
+      },
+      "skin_lower": {
+        "mean_px": 5.1147942543029785,
+        "max_px": 48.02082824707031,
+        "model_to_target_mean_px": 3.9140820503234863,
+        "target_to_model_mean_px": 6.315506458282471
+      },
+      "skull_upper": {
+        "mean_px": 2.2182297706604004,
+        "max_px": 27.0,
+        "model_to_target_mean_px": 2.347259998321533,
+        "target_to_model_mean_px": 2.0891993045806885
+      },
+      "ears": {
+        "ear-right": {
+          "visible_iou": 0.6552182163187856,
+          "isolated_iou": 0.6601282534892493,
+          "visible_area_px": 4108,
+          "target_area_px": 4615
+        }
+      },
+      "required_projected_displacement_estimate_px": 48.02082824707031,
+      "skin_over_10px": true,
+      "failure_candidate_over_26px": true,
+      "beta_abs_max": 5.000624656677246,
+      "scale_xyz": [
+        1.3055157661437988,
+        1.0393013954162598,
+        1.1251548528671265
+      ],
+      "thickness_px": 3.0,
+      "iteration_mean_seconds": 0.1850775577773311
+    },
+    {
+      "frame": 264,
+      "head_iou": 0.9714211813164021,
+      "head": {
+        "mean_px": 3.5260422229766846,
+        "max_px": 28.792360305786133,
+        "model_to_target_mean_px": 3.585019111633301,
+        "target_to_model_mean_px": 3.4670653343200684
+      },
+      "skin_lower": {
+        "mean_px": 3.008592128753662,
+        "max_px": 41.62931823730469,
+        "model_to_target_mean_px": 2.147498846054077,
+        "target_to_model_mean_px": 3.869685649871826
+      },
+      "skull_upper": {
+        "mean_px": 3.8272647857666016,
+        "max_px": 29.068883895874023,
+        "model_to_target_mean_px": 3.755589485168457,
+        "target_to_model_mean_px": 3.898939847946167
+      },
+      "ears": {
+        "ear-left": {
+          "visible_iou": 0.021591871295512276,
+          "isolated_iou": 0.6701382653977375,
+          "visible_area_px": 104,
+          "target_area_px": 4722
+        }
+      },
+      "required_projected_displacement_estimate_px": 41.62931823730469,
+      "skin_over_10px": true,
+      "failure_candidate_over_26px": true,
+      "beta_abs_max": 5.000624656677246,
+      "scale_xyz": [
+        1.3055157661437988,
+        1.0393013954162598,
+        1.1251548528671265
+      ],
+      "thickness_px": 3.0,
+      "iteration_mean_seconds": 0.1850775577773311
+    }
+  ],
+  "criteria": {
+    "1_all_three_head_iou_below_090": false,
+    "2_any_skin_over_10px": true,
+    "2_any_displacement_over_26px_failure_candidate": true,
+    "3_down_right_visible_ear_iou_below_030": true
+  },
+  "joint_iteration_mean_seconds": 0.18473877643805595,
+  "stage3_130frames_seconds_linear_estimate": 6404.277583185939,
+  "notes": [
+    "Distances are symmetric dense contour DT measurements at 720.",
+    "26px estimate is projected contour displacement, not a recovered vertex delta.",
+    "No weight search or alternative base was run."
+  ]
+}

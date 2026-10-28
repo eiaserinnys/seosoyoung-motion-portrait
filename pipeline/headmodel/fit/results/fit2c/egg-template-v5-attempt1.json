@@ -1,0 +1,34 @@
+{
+  "method": "single neutral-XY patch, exact original rim, two-ring collar TPS, frozen UV linear map on all 303 RHS",
+  "deleted_original_vertices": 4895,
+  "deleted_original_faces": 9816,
+  "new_patch_interior_vertices": 2314,
+  "new_patch_faces": 4806,
+  "boundary_vertices": 180,
+  "interpolation_anchors": 513,
+  "vertex_count": 8667,
+  "face_count": 17278,
+  "outside_neutral_and_100_modes_exact": true,
+  "patch_negative_xy_triangles": 0,
+  "patch_min_xy_area2": 8.271075785160065e-06,
+  "nonmanifold_edges": 0,
+  "remaining_boundary_loop_sizes": [
+    54
+  ],
+  "front_silhouette": {
+    "reference_face_width_px": 315.0,
+    "max_inward_px": 0.0,
+    "max_outward_px": 0.0,
+    "max_change_fraction_of_reference_width": 0.0,
+    "within_five_percent": true
+  },
+  "nose_vertex": 7509,
+  "original_nose_vertex": 4857,
+  "nose_xyz": [
+    0.01172688975930214,
+    1.0522713661193848,
+    11.512839317321777
+  ],
+  "visual_conditions": "pending direct sheet inspection",
+  "source": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RBFInterpolator.html"
+}

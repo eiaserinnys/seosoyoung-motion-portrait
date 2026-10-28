@@ -27,7 +27,7 @@ def webgl_renders(poses,order=ORDER,save_grid=True,inspect=None,include_ears=Fal
             page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle')
             page.wait_for_function('window.studio?.ready',timeout=30000)
             page.evaluate('''async()=>{
-              studio.setPose(0,0,0,'Face-only verification');
+              studio.setPose(0,0,0,'Face-only verification');studio.p.CorrHeadBase=1;
               const {Renderer}=await import('./renderer.mjs');
               const canvas=document.createElement('canvas'),overlay=document.createElement('canvas');
               Object.assign(canvas.style,{width:'1100px',height:'1600px'});document.body.append(canvas);

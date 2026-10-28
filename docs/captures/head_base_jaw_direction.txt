@@ -1,0 +1,10 @@
+pose -30 20
+screen [745.5, 475.5] mask_inside [True, True, True, True] r 0.824 delta_vertices [0.464, 0.635, 0.604] f_interpolated 1.0
+screen [703.5, 495.5] mask_inside [True, True, True, True] r 0.626 delta_vertices [0.597, 0.38, 0.6] f_interpolated 1.0
+screen [665.5, 517.5] mask_inside [True, True, True, True] r 0.829 delta_vertices [0.426, 0.575, 0.562] f_interpolated 1.0
+screen [623.5, 530.5] mask_inside [True, True, True, True] r 0.873 delta_vertices [0.471, 0.399, 0.552] f_interpolated 1.0
+pose 45 20
+screen [755.5, 480.5] mask_inside [True, True, True, True] r 0.703 delta_vertices [0.628, 0.651, 0.577] f_interpolated 1.0
+screen [804.5, 490.5] mask_inside [True, True, True, True] r 0.261 delta_vertices [0.52, 0.59, 0.447] f_interpolated 1.0
+screen [836.5, 525.5] mask_inside [True, True, True, True] r 0.711 delta_vertices [0.42, 0.432, 0.469] f_interpolated 1.0
+screen [877.5, 543.5] mask_inside [True, True, True, True] r 0.825 delta_vertices [0.405, 0.349, 0.355] f_interpolated 1.0

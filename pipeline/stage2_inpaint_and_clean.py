@@ -16,6 +16,7 @@ from typing import Any
 
 from part_preview import render_before_after_comparison
 from part_pixels import dilate_bool, erode_bool, blur_f32, fill_holes_2d, inpaint_horizontal_and_diffuse, despill_green_and_clean_alpha
+from neck_art import apply_reference, crop_inputs
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
@@ -409,7 +410,15 @@ def main() -> int:
     rebuilt_map["face-skin"] = build_clean_face_skin(still_np, existing_map["face-skin"])
     rebuilt_map["ear-left"] = build_extended_ear(existing_map["ear-left"], "left")
     rebuilt_map["ear-right"] = build_extended_ear(existing_map["ear-right"], "right")
-    rebuilt_map["neck"] = build_clean_neck(existing_map["neck"], existing_map["upper-body-short-sleeve"])
+    neck_untrimmed = build_clean_neck(existing_map["neck"], existing_map["upper-body-short-sleeve"])
+    neck_y, neck_x = np.where(neck_untrimmed[:, :, 3] > 2)
+    nx0, ny0 = max(0, int(neck_x.min()) - 6), max(0, int(neck_y.min()) - 6)
+    nx1, ny1 = min(1024, int(neck_x.max()) + 7), min(1536, int(neck_y.max()) + 7)
+    neck_bbox = (nx0, ny0, nx1-nx0, ny1-ny0)
+    neck_referenced, _, _ = apply_reference(neck_untrimmed[ny0:ny1, nx0:nx1],
+                                           *crop_inputs(WORK_DIR, neck_bbox), origin=(nx0, ny0))
+    rebuilt_map["neck"] = neck_untrimmed.copy()
+    rebuilt_map["neck"][ny0:ny1, nx0:nx1] = neck_referenced
 
     eye_rebuilt = build_hole_free_sclera_and_iris(existing_map)
     rebuilt_map.update(eye_rebuilt)
@@ -460,9 +469,13 @@ def main() -> int:
         y0 = max(0, int(ys.min()) - pad)
         x1 = min(1024, int(xs.max()) + 1 + pad)
         y1 = min(1536, int(ys.max()) + 1 + pad)
+        if pid == 'neck':
+            x0, y0, x1, y1 = nx0, ny0, nx1, ny1
         crop_im = Image.fromarray(canvas_rgba[y0:y1, x0:x1], "RGBA")
         out_file = PARTS_DIR / f"{pid}.png"
         crop_im.save(out_file)
+        if pid == 'neck':
+            Image.fromarray(neck_untrimmed[y0:y1, x0:x1], 'RGBA').save(PARTS_DIR / 'neck-untrimmed.png')
         parts_index.append(
             {
                 "id": pid,

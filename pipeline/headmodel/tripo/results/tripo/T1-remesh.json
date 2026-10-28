@@ -1,0 +1,22 @@
+{
+  "tool": "pymeshlab 2025.7",
+  "original_vertices": 649363,
+  "original_faces": 1293867,
+  "vertices": 17394,
+  "faces": 33744,
+  "remesh_seconds": 157.0250177050475,
+  "target_edge_length_px": 8.0,
+  "iterations": 10,
+  "edge_length_px": {
+    "p10": 0.700012364703869,
+    "median": 7.576759464277298,
+    "p90": 9.211557985727543
+  },
+  "distance_px": {
+    "max": 13.225314101901695,
+    "p99": 2.9528642390653097,
+    "original_to_remesh_max": 13.225314101901695,
+    "remesh_to_original_max": 0.0028533965394072695,
+    "method": "bidirectional vertex-to-triangle closest distances"
+  }
+}

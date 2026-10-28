@@ -1,0 +1,307 @@
+{
+  "N1": {
+    "max_error_px": 2.2737367544323206e-13,
+    "passed": true
+  },
+  "N6": {
+    "max_difference_px": 0.15492271585827744,
+    "passed": true,
+    "edges": [
+      {
+        "sign": -1,
+        "pitch": -30,
+        "head_px": 0.15492271585827744,
+        "face_px": 0.15487857482618092
+      },
+      {
+        "sign": -1,
+        "pitch": 0,
+        "head_px": 0.0876934395021163,
+        "face_px": 0.08763631447112356
+      },
+      {
+        "sign": -1,
+        "pitch": 30,
+        "head_px": 0.07578383534607051,
+        "face_px": 0.07559846745751424
+      },
+      {
+        "sign": 1,
+        "pitch": -30,
+        "head_px": 0.05541686429614393,
+        "face_px": 0.05539394604502489
+      },
+      {
+        "sign": 1,
+        "pitch": 0,
+        "head_px": 0.08974671098825678,
+        "face_px": 0.08970607877190284
+      },
+      {
+        "sign": 1,
+        "pitch": 30,
+        "head_px": 0.08627467083321419,
+        "face_px": 0.0861404733165804
+      }
+    ]
+  },
+  "poses": [
+    {
+      "name": "up-left",
+      "frame": 192,
+      "yaw": -45,
+      "pitch": 30,
+      "model_angle": [
+        -46.414680869864014,
+        26.102451011833192
+      ],
+      "N3": {
+        "head": {
+          "median_px": 3.0672420927054005,
+          "max_px": 22.888312440009525,
+          "p95_px": 6.0870309379033225
+        },
+        "face": {
+          "median_px": 21.9637428221343,
+          "max_px": 61.370105859260576,
+          "p95_px": 56.94392473248924
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "up",
+      "frame": 206,
+      "yaw": 0,
+      "pitch": 30,
+      "model_angle": [
+        -3.1102626317356696,
+        27.139874068849014
+      ],
+      "N3": {
+        "head": {
+          "median_px": 3.0734378234417603,
+          "max_px": 20.627773520413488,
+          "p95_px": 14.356502623377544
+        },
+        "face": {
+          "median_px": 11.136523217012595,
+          "max_px": 28.641441626209303,
+          "p95_px": 20.867664866334074
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "up-right",
+      "frame": 219,
+      "yaw": 45,
+      "pitch": 30,
+      "model_angle": [
+        38.279587225697675,
+        22.668265753186425
+      ],
+      "N3": {
+        "head": {
+          "median_px": 2.3325993317484985,
+          "max_px": 13.12302677456373,
+          "p95_px": 6.630796172392932
+        },
+        "face": {
+          "median_px": 20.16785947000828,
+          "max_px": 87.1630244092216,
+          "p95_px": 69.44117551987776
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "left",
+      "frame": 42,
+      "yaw": -45,
+      "pitch": 0,
+      "model_angle": [
+        -34.62379845365239,
+        3.4042126660967256
+      ],
+      "N3": {
+        "head": {
+          "median_px": 4.18280930299227,
+          "max_px": 26.071941110342223,
+          "p95_px": 15.533972730911403
+        },
+        "face": {
+          "median_px": 3.764831134985421,
+          "max_px": 33.824446369815185,
+          "p95_px": 33.82143020706996
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "front",
+      "frame": 3,
+      "yaw": 0,
+      "pitch": 0,
+      "model_angle": [
+        -0.4823997451209566,
+        -0.49091206322522374
+      ],
+      "N3": {
+        "head": {
+          "median_px": 3.0060925483703613,
+          "max_px": 23.19927314651238,
+          "p95_px": 14.992108722654816
+        },
+        "face": {
+          "median_px": 1.0,
+          "max_px": 2.8284271247461903,
+          "p95_px": 2.0
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "right",
+      "frame": 240,
+      "yaw": 45,
+      "pitch": 0,
+      "model_angle": [
+        33.82500292852531,
+        3.536207459405677
+      ],
+      "N3": {
+        "head": {
+          "median_px": 3.9166215101167445,
+          "max_px": 19.923230615803092,
+          "p95_px": 14.969988730826756
+        },
+        "face": {
+          "median_px": 1.7214886728192398,
+          "max_px": 35.60031751022808,
+          "p95_px": 32.44695997246618
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "down-left",
+      "frame": 303,
+      "yaw": -45,
+      "pitch": -30,
+      "model_angle": [
+        -31.37429570978855,
+        -25.471769731538046
+      ],
+      "N3": {
+        "head": {
+          "median_px": 11.57300485052728,
+          "max_px": 29.308599434793376,
+          "p95_px": 25.62264478593193
+        },
+        "face": {
+          "median_px": 1.4777357610587676,
+          "max_px": 68.29843538009929,
+          "p95_px": 52.538185339428566
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "down",
+      "frame": 270,
+      "yaw": 0,
+      "pitch": -30,
+      "model_angle": [
+        19.312757106842884,
+        -27.493104446803358
+      ],
+      "N3": {
+        "head": {
+          "median_px": 5.297108023448414,
+          "max_px": 38.58030950009137,
+          "p95_px": 37.17915765780079
+        },
+        "face": {
+          "median_px": 1.3212667104706273,
+          "max_px": 11.133440521821386,
+          "p95_px": 5.018804085720666
+        },
+        "passed": false
+      }
+    },
+    {
+      "name": "down-right",
+      "frame": 264,
+      "yaw": 45,
+      "pitch": -30,
+      "model_angle": [
+        22.841583280397632,
+        -15.14020027068204
+      ],
+      "N3": {
+        "head": {
+          "median_px": 5.127718421715849,
+          "max_px": 20.251349588001318,
+          "p95_px": 7.9705238327293175
+        },
+        "face": {
+          "median_px": 3.198495088596159,
+          "max_px": 23.586839029980528,
+          "p95_px": 16.141507698320286
+        },
+        "passed": false
+      }
+    }
+  ],
+  "rest_translation": [
+    502.23801578678194,
+    444.88200857552545
+  ],
+  "common_crop_pixels": [
+    340,
+    27,
+    1124,
+    811
+  ],
+  "hidden_meshes": [
+    "back-hair-center",
+    "back-hair-left",
+    "back-hair-right",
+    "side-cranium-left",
+    "side-cranium-right",
+    "ear-left",
+    "ear-right",
+    "hair-top",
+    "eye-left-sclera",
+    "eye-right-sclera",
+    "eye-left-iris",
+    "eye-right-iris",
+    "eye-left-pupil",
+    "eye-right-pupil",
+    "eye-left-highlight",
+    "eye-right-highlight",
+    "eye-left-lower-line",
+    "eye-right-lower-line",
+    "eye-left-upper-lashes",
+    "eye-right-upper-lashes",
+    "closed-eyes-v1",
+    "eye-left-brow",
+    "eye-right-brow",
+    "nose-detail",
+    "mouth-detail",
+    "mouth-open-v1",
+    "mouth-round-v1",
+    "tail-left-hair",
+    "tail-right-hair",
+    "tail-left-tie",
+    "tail-right-tie",
+    "side-hair-left",
+    "side-hair-right",
+    "bangs-left",
+    "bangs-right",
+    "hairpin"
+  ],
+  "reference_transform": "(q - camera_translation) * exp(logscale_front - logscale_key) + rest_translation",
+  "note": "Angle-dependent displacement and outside-offset decay remain active."
+}

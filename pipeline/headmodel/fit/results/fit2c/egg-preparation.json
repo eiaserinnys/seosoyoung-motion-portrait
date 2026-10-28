@@ -1,0 +1,49 @@
+{
+  "operator": "uniform combinatorial L=D-A; (I+lambda L)x=x0, Dirichlet boundary",
+  "strengths": [
+    100.0,
+    1000.0,
+    10000.0
+  ],
+  "face_vertices": 8084,
+  "fixed_boundary_vertices": 292,
+  "interior_vertices": 7792,
+  "boundary_definition": "Face excluding ears/neck, adjacent by a triangle edge to a vertex outside that region",
+  "nose_vertex": 4857,
+  "nose_original_xyz": [
+    0.0,
+    0.40594199299812317,
+    13.069100379943848
+  ],
+  "nose_detector_index": 23,
+  "nose_observations": {
+    "3": {
+      "xy": [
+        355.16253662109375,
+        482.47698974609375
+      ],
+      "score": 0.9588761925697327,
+      "used": true
+    },
+    "42": {
+      "xy": [
+        297.88800048828125,
+        477.32354736328125
+      ],
+      "score": 1.0351308584213257,
+      "used": true
+    },
+    "264": {
+      "xy": [
+        378.40985107421875,
+        497.6951904296875
+      ],
+      "score": 1.0205520391464233,
+      "used": true
+    }
+  },
+  "sources": {
+    "scipy": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.splu.html",
+    "anime_landmarks": "https://github.com/hysts/anime-face-detector/blob/main/assets/landmarks.jpg"
+  }
+}

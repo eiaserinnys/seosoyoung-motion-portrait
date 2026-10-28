@@ -1,0 +1,21 @@
+{
+  "method": "두상·귀·얼굴·채움 삼각형을 안정 깊이 여유와 함께 투영하고, 두상 안쪽에서 앞쪽 얼굴과 채움이 덮지 않는 귀 화소를 5f4afd2 전후 캡처의 RGB와 대조했다. 소프트웨어 래스터의 픽셀 근사치다.",
+  "poses": [
+    {
+      "yaw": -15,
+      "pitch": 0,
+      "side": "left",
+      "eligible_inside_head": 232,
+      "visible_changed_pixels": 230,
+      "sample": {"xy": [305, 414], "before": [252, 222, 203], "after": [172, 149, 116]}
+    },
+    {
+      "yaw": 15,
+      "pitch": 20,
+      "side": "right",
+      "eligible_inside_head": 181,
+      "visible_changed_pixels": 180,
+      "sample": {"xy": [687, 406], "before": [196, 176, 165], "after": [252, 211, 191]}
+    }
+  ]
+}

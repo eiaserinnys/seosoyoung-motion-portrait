@@ -1,0 +1,82 @@
+[
+  {
+    "vertices": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "triangles": 2,
+    "bbox": [
+      652,
+      512,
+      656,
+      515
+    ],
+    "difference": {
+      "new_full": 4,
+      "new_hairless": 7,
+      "legacy_full": 4,
+      "new_before": 4,
+      "legacy_before": 4
+    },
+    "eligible": false,
+    "removed": false
+  },
+  {
+    "vertices": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "triangles": 5,
+    "bbox": [
+      683,
+      415,
+      692,
+      421
+    ],
+    "difference": {
+      "new_full": 0,
+      "new_hairless": 0,
+      "legacy_full": 0,
+      "new_before": 7,
+      "legacy_before": 7
+    },
+    "eligible": false,
+    "removed": false
+  },
+  {
+    "vertices": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "triangles": 8,
+    "bbox": [
+      311,
+      414,
+      322,
+      422
+    ],
+    "difference": {
+      "new_full": 0,
+      "new_hairless": 0,
+      "legacy_full": 0,
+      "new_before": 8,
+      "legacy_before": 9
+    },
+    "eligible": false,
+    "removed": false
+  }
+]

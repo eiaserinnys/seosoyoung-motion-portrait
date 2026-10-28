@@ -1,0 +1,18 @@
+{
+  "verdict": "failed_smooth_surface_condition",
+  "independent_review": "same verdict; no additional implementation P1",
+  "observations": [
+    "B3 has stronger local bumps and rough bands than A at temple/ear-front, chin surface and ear/cheek joins in oblique views.",
+    "Neck-cut boundary jaggedness excluded from the shape verdict.",
+    "Face target-to-model residuals of fitted frames concentrate at central/lower jaw; head and ear errors also remain at ear roots and temples."
+  ],
+  "interpretation": [
+    "Raw symmetric face maxima retain extra model contour points whose nearest full target boundary is excluded; separate directed values are supplemental, not replacements.",
+    "Dense mask boundary normal residual against a five-pixel local mean has median about .179px and p95 about .388px in fitted frames; this is spatial staircasing, not temporal mask accuracy."
+  ],
+  "hypotheses": [
+    "Shared geometry and the prescribed head-eroded versus skin contour constraints cannot all coincide; the observed solution trades residuals and surface smoothness. This is a hypothesis, not a separate ablation result."
+  ],
+  "lambda_correction": false,
+  "solver_reexecution": false
+}

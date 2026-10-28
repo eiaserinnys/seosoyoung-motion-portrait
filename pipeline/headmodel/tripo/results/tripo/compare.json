@@ -1,0 +1,860 @@
+{
+  "definition": "2f label-free full silhouette, ear10px and open-edge exclusions; directed skin/hair, tapered head IoU",
+  "frames": [
+    3,
+    42,
+    192,
+    206,
+    219,
+    240,
+    264,
+    270,
+    303
+  ],
+  "models": {
+    "A": {
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 1.876800932364071,
+            "max_px": 8.211527203345193,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 1.33235597188982,
+            "max_px": 20.157119438416366,
+            "count": 882
+          },
+          "head_iou": 0.9674778749115807
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 3.7982232225779966,
+            "max_px": 11.524694449414168,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 3.0880065251458646,
+            "max_px": 15.051157243022242,
+            "count": 970
+          },
+          "head_iou": 0.9625332224941165
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 7.703475882567584,
+            "max_px": 28.34503528976693,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 2.7692276989141567,
+            "max_px": 22.483542048500325,
+            "count": 974
+          },
+          "head_iou": 0.9387147609875679
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 10.210798261309801,
+            "max_px": 15.556550539710845,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 1.2772373647679902,
+            "max_px": 20.929221326843482,
+            "count": 985
+          },
+          "head_iou": 0.9601505229864515
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 6.966385682742851,
+            "max_px": 19.633863673534297,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 4.225233926848261,
+            "max_px": 24.09693976096224,
+            "count": 877
+          },
+          "head_iou": 0.9370381181090871
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.8663292466134185,
+            "max_px": 11.52586636741358,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 2.4031170889177504,
+            "max_px": 18.002570941711575,
+            "count": 999
+          },
+          "head_iou": 0.968083271033412
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 4.818418206771023,
+            "max_px": 9.81673355445714,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 5.004809865152984,
+            "max_px": 18.970400218267386,
+            "count": 926
+          },
+          "head_iou": 0.9531529566868058
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 5.021214322796228,
+            "max_px": 12.815214414102753,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 5.308808202031017,
+            "max_px": 23.57915713039902,
+            "count": 964
+          },
+          "head_iou": 0.9471333009281763
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 4.736622549511253,
+            "max_px": 14.96699744959271,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 8.522792909697708,
+            "max_px": 28.851562735306814,
+            "count": 905
+          },
+          "head_iou": 0.9285744830977785
+        }
+      ]
+    },
+    "B3-w3": {
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 0.728950631133258,
+            "max_px": 4.696244417991078,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 0.7808721919185342,
+            "max_px": 5.620783199304193,
+            "count": 882
+          },
+          "head_iou": 0.9888507951686779
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.5970159814982836,
+            "max_px": 8.70851026093889,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 1.2533743393007242,
+            "max_px": 23.54511998917466,
+            "count": 970
+          },
+          "head_iou": 0.9842698875664487
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 5.602935537410433,
+            "max_px": 23.605333410285024,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 3.6107446000794035,
+            "max_px": 22.586192613044844,
+            "count": 974
+          },
+          "head_iou": 0.9549057392128616
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 6.6594623604059375,
+            "max_px": 16.35391021971347,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 3.682087151110871,
+            "max_px": 18.54768181003884,
+            "count": 985
+          },
+          "head_iou": 0.9561827974931087
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 5.453788455564163,
+            "max_px": 20.34490421626008,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 3.2127429569568533,
+            "max_px": 18.9318366027542,
+            "count": 877
+          },
+          "head_iou": 0.9443891124012214
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.382281264437028,
+            "max_px": 18.538102444398813,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 2.6944065587168575,
+            "max_px": 18.11097652267279,
+            "count": 999
+          },
+          "head_iou": 0.9671042558620885
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.6510929935266291,
+            "max_px": 5.695374649604861,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 1.7477466306756249,
+            "max_px": 10.290353236961682,
+            "count": 926
+          },
+          "head_iou": 0.9799483760377115
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 3.608807229824965,
+            "max_px": 8.285263075533386,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 4.3989282670792225,
+            "max_px": 9.90394057772785,
+            "count": 964
+          },
+          "head_iou": 0.9603209965932403
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 1.8084651784247472,
+            "max_px": 8.384764909577463,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 7.94341184469103,
+            "max_px": 21.45965527928662,
+            "count": 905
+          },
+          "head_iou": 0.9438258623082425
+        }
+      ],
+      "curvature": {
+        "p50": 0.0037957175033000775,
+        "p95": 0.05299910825164944,
+        "p99": 0.13436433718639548,
+        "max": 0.6715928211269256,
+        "passed": false,
+        "excluded_vertices": 954,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
+    },
+    "B3-step1": {
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 0.7617031605902436,
+            "max_px": 3.8864290714322207,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 1.1001420590125655,
+            "max_px": 10.910811247091498,
+            "count": 882
+          },
+          "head_iou": 0.9828773235407056
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.5936700283404968,
+            "max_px": 8.119544013604896,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 1.2292528012163415,
+            "max_px": 17.61723039452385,
+            "count": 970
+          },
+          "head_iou": 0.987192309502518
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 5.541144750532546,
+            "max_px": 21.60701997668811,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 2.847913489120999,
+            "max_px": 23.734953820180056,
+            "count": 974
+          },
+          "head_iou": 0.956631045733286
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 5.367327153489075,
+            "max_px": 16.359501151663217,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 3.35247823246614,
+            "max_px": 22.168646150581072,
+            "count": 985
+          },
+          "head_iou": 0.9501165253533939
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 5.193410380104997,
+            "max_px": 22.681167070566524,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 3.838006655986529,
+            "max_px": 25.18078551682824,
+            "count": 877
+          },
+          "head_iou": 0.9370557114176035
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.486745015681024,
+            "max_px": 17.260777143376774,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 4.058819464229448,
+            "max_px": 20.715384829586828,
+            "count": 999
+          },
+          "head_iou": 0.9597211024176423
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.6492025433723642,
+            "max_px": 5.279357456218852,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 1.5229281512717647,
+            "max_px": 12.182400705861875,
+            "count": 926
+          },
+          "head_iou": 0.9813388907536083
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 3.8326187194443495,
+            "max_px": 6.889491384749538,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 4.300100116221996,
+            "max_px": 11.67498820162792,
+            "count": 964
+          },
+          "head_iou": 0.9584027703634245
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 2.1356283594556102,
+            "max_px": 8.247624912034553,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 7.197857755551851,
+            "max_px": 19.028935060777798,
+            "count": 905
+          },
+          "head_iou": 0.9449694274596998
+        }
+      ],
+      "curvature": {
+        "p50": 0.0029506339798047645,
+        "p95": 0.033214442956159815,
+        "p99": 0.08620935907936148,
+        "max": 0.6455335966120397,
+        "passed": false,
+        "excluded_vertices": 954,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
+    },
+    "B3-step2": {
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 0.7374896872714682,
+            "max_px": 3.4491314610985007,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 0.651038462844786,
+            "max_px": 12.890755806608484,
+            "count": 882
+          },
+          "head_iou": 0.9850196796041341
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.598128228179786,
+            "max_px": 7.7020922693918585,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 0.7371013813281526,
+            "max_px": 17.86205427192672,
+            "count": 970
+          },
+          "head_iou": 0.9900188434813332
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 4.939765515577637,
+            "max_px": 24.150085977770715,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 2.6368133180782793,
+            "max_px": 23.39242040585128,
+            "count": 974
+          },
+          "head_iou": 0.9535263604169784
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 5.668123564347819,
+            "max_px": 16.165710453494675,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 2.870184723091401,
+            "max_px": 23.603179248499924,
+            "count": 985
+          },
+          "head_iou": 0.9511517736716565
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 4.891239579465945,
+            "max_px": 21.54021990308064,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 3.869385087264192,
+            "max_px": 25.375839464609765,
+            "count": 877
+          },
+          "head_iou": 0.9384124985242611
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 2.6555364219423545,
+            "max_px": 17.445228282879714,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 4.035338038124522,
+            "max_px": 19.08634469416699,
+            "count": 999
+          },
+          "head_iou": 0.9599916034561989
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.5750542070944913,
+            "max_px": 4.282680495552866,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 0.6377413756187228,
+            "max_px": 4.522818445715621,
+            "count": 926
+          },
+          "head_iou": 0.98769189050754
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 3.6977891852508766,
+            "max_px": 6.22092262976538,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 4.466123811197177,
+            "max_px": 10.576464965209752,
+            "count": 964
+          },
+          "head_iou": 0.9604575133046652
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 1.585766409502365,
+            "max_px": 8.889888258826039,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 8.767695997372986,
+            "max_px": 17.033631269776283,
+            "count": 905
+          },
+          "head_iou": 0.9440153924267123
+        }
+      ],
+      "curvature": {
+        "p50": 0.0008049920505854538,
+        "p95": 0.007428896544797541,
+        "p99": 0.013142774300785856,
+        "max": 0.058454189561999624,
+        "passed": false,
+        "excluded_vertices": 1031,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
+    },
+    "T1-A": {
+      "available": true,
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 8.965501044600522,
+            "max_px": 26.421200570928054,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 1.6617642900931244,
+            "max_px": 40.29719584251915,
+            "count": 883
+          },
+          "head_iou": 0.9224260278685704
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 9.616661734881069,
+            "max_px": 52.555370985260595,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 4.478437603240071,
+            "max_px": 46.606952668740576,
+            "count": 970
+          },
+          "head_iou": 0.8984278994872664
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 21.331922784493575,
+            "max_px": 69.2123012149543,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 9.031365202348352,
+            "max_px": 48.940698521086986,
+            "count": 974
+          },
+          "head_iou": 0.8485677523329261
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 0.9860101348170323,
+            "max_px": 11.428386226276965,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 3.86283421889582,
+            "max_px": 36.55207914490833,
+            "count": 988
+          },
+          "head_iou": 0.8789567543468569
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 12.049680031740456,
+            "max_px": 47.62580765679112,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 10.579547825805122,
+            "max_px": 30.27769290377573,
+            "count": 877
+          },
+          "head_iou": 0.8654226991730671
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 9.533582431619385,
+            "max_px": 46.390342150123,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 5.107041761648772,
+            "max_px": 36.990893469243076,
+            "count": 999
+          },
+          "head_iou": 0.9061368837112544
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 7.566288600297301,
+            "max_px": 13.948591936309366,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 5.941430850700819,
+            "max_px": 41.747392581138214,
+            "count": 928
+          },
+          "head_iou": 0.9244152281010934
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 36.21523517739425,
+            "max_px": 51.133181688428365,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 8.930639412635015,
+            "max_px": 47.532185591753844,
+            "count": 965
+          },
+          "head_iou": 0.836430457809997
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 18.576412330018275,
+            "max_px": 41.81176599675804,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 5.25103572931239,
+            "max_px": 34.343648340538536,
+            "count": 908
+          },
+          "head_iou": 0.8807677534638529
+        }
+      ],
+      "evaluation_surface": "8px remesh of aligned T1-A; no alignment rerun"
+    },
+    "T1-B3": {
+      "available": true,
+      "frames": [
+        {
+          "frame": 3,
+          "skin": {
+            "median_px": 1.040620293959467,
+            "max_px": 5.745114060692663,
+            "count": 310
+          },
+          "hair": {
+            "median_px": 0.6694396649175874,
+            "max_px": 41.853715031741565,
+            "count": 883
+          },
+          "head_iou": 0.9459949158959381
+        },
+        {
+          "frame": 42,
+          "skin": {
+            "median_px": 0.9855074056698612,
+            "max_px": 39.218014931881896,
+            "count": 432
+          },
+          "hair": {
+            "median_px": 1.055171709687774,
+            "max_px": 45.95000937403178,
+            "count": 970
+          },
+          "head_iou": 0.9416988180537693
+        },
+        {
+          "frame": 192,
+          "skin": {
+            "median_px": 13.761530233384585,
+            "max_px": 65.32765906631529,
+            "count": 445
+          },
+          "hair": {
+            "median_px": 13.87179127652877,
+            "max_px": 46.75195930865952,
+            "count": 974
+          },
+          "head_iou": 0.8434400324409915
+        },
+        {
+          "frame": 206,
+          "skin": {
+            "median_px": 9.16697410914098,
+            "max_px": 14.548511533286534,
+            "count": 148
+          },
+          "hair": {
+            "median_px": 4.5742383994341145,
+            "max_px": 38.13869749910642,
+            "count": 988
+          },
+          "head_iou": 0.8682686816908142
+        },
+        {
+          "frame": 219,
+          "skin": {
+            "median_px": 9.433112224674069,
+            "max_px": 38.580004604044866,
+            "count": 499
+          },
+          "hair": {
+            "median_px": 12.282059226480737,
+            "max_px": 29.922751245050705,
+            "count": 877
+          },
+          "head_iou": 0.8638889627482783
+        },
+        {
+          "frame": 240,
+          "skin": {
+            "median_px": 4.386756221531913,
+            "max_px": 39.191973749495894,
+            "count": 407
+          },
+          "hair": {
+            "median_px": 7.638573244871107,
+            "max_px": 36.00066362259701,
+            "count": 999
+          },
+          "head_iou": 0.9160041828574145
+        },
+        {
+          "frame": 264,
+          "skin": {
+            "median_px": 0.5798797186984957,
+            "max_px": 2.930337719145431,
+            "count": 453
+          },
+          "hair": {
+            "median_px": 0.790093694590581,
+            "max_px": 41.64203191956365,
+            "count": 928
+          },
+          "head_iou": 0.9621834672510349
+        },
+        {
+          "frame": 270,
+          "skin": {
+            "median_px": 25.038829363034537,
+            "max_px": 51.23740315761356,
+            "count": 404
+          },
+          "hair": {
+            "median_px": 11.24261425007522,
+            "max_px": 49.58550750750915,
+            "count": 965
+          },
+          "head_iou": 0.8317331476189332
+        },
+        {
+          "frame": 303,
+          "skin": {
+            "median_px": 4.902756323626147,
+            "max_px": 30.771517597309305,
+            "count": 450
+          },
+          "hair": {
+            "median_px": 4.079076732598917,
+            "max_px": 35.960968536402376,
+            "count": 908
+          },
+          "head_iou": 0.9042406065150379
+        }
+      ],
+      "curvature": {
+        "p50": 0.0010960395503722777,
+        "p95": 0.009620239051362224,
+        "p99": 0.027715358913575867,
+        "max": 0.1699866460318513,
+        "passed": false,
+        "excluded_vertices": 1186,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      }
+    }
+  },
+  "tripo_status": {
+    "status": "six_model_quantitative_complete; front_feature_visual_invalid",
+    "checked_at": "2026-10-27T17:37:42.641326+00:00",
+    "endpoint": "https://openapi.tripo3d.ai/v3",
+    "authenticated": true,
+    "created_models": 2,
+    "credits_consumed": 60.0,
+    "T1": "T1-A and T1-B3 measured and rendered",
+    "T2": "excluded by caller; no topology repair or fit",
+    "additional_runners_pending": 0,
+    "additional_runners_approved": 3,
+    "visual_limitations": [
+      "canonical front eye-height unverified",
+      "eyelash eye crops usable in 7/9 keys"
+    ]
+  },
+  "excluded_models": {
+    "T2-A": "Caller excluded non-manifold T2; no repair or alignment attempted."
+  },
+  "status": "six-model quantitative comparison complete; visual limitations in review.json",
+  "review": "pipeline/headmodel/tripo/results/tripo/review.json"
+}

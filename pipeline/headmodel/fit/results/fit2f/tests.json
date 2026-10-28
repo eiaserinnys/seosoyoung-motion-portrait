@@ -1,0 +1,16 @@
+{
+  "run": 6,
+  "failures": [
+    [
+      "test_open_boundary_not_paired (test_fit2f_core.Contracts.test_open_boundary_not_paired)",
+      "Traceback (most recent call last):\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/test_fit2f_core.py\", line 44, in test_open_boundary_not_paired\n    self.assertEqual(len(cut['xy']),0)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\nAssertionError: 2 != 0\n"
+    ],
+    [
+      "test_remesh_surface_distance (test_fit2f_core.Contracts.test_remesh_surface_distance)",
+      "Traceback (most recent call last):\n  File \"/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-headmodel-fit-e6e6357f/pipeline/headmodel/fit/test_fit2f_core.py\", line 75, in test_remesh_surface_distance\n    self.assertLessEqual(info['distance_px']['max'],1.5)\n    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 3.0878357047105056 not less than or equal to 1.5\n"
+    ]
+  ],
+  "errors": [],
+  "passed": false,
+  "elapsed_seconds": 0.43673853599466383
+}

@@ -1,0 +1,35 @@
+{
+  "sheets": [
+    {
+      "path": "pipeline/headmodel/tripo/sheets/T1-axes.png",
+      "sha256": "8d804fa11c66086522940858c589e2c844b331574177232ff96a42c413e4ab68",
+      "validity": "current"
+    },
+    {
+      "path": "pipeline/headmodel/tripo/sheets/T1-uv-seam-diagnostic.png",
+      "sha256": "0da832a01cfcc04a48863f356ac5bb938689e647388aa9753255f0b00aae5c8c",
+      "validity": "superseded UV seam diagnostic"
+    },
+    {
+      "path": "pipeline/headmodel/tripo/sheets/tripo-eyelashes.png",
+      "sha256": "5df7f5d2656350a3e185ec7e52bced71ef7e57ce3b88155696a97b0f3ea634a4",
+      "validity": "7/9 eye-region crops usable; frames3/206 show only mouth/jaw"
+    },
+    {
+      "path": "pipeline/headmodel/tripo/sheets/tripo-front-features.png",
+      "sha256": "b88d99af35b9127fc47f66acbbe2ec23c08559bc7b62d1a5b3b5a86e2d49cf79",
+      "validity": "INVALID for eye-height judgment: framing error, preserved as failed evidence"
+    },
+    {
+      "path": "pipeline/headmodel/tripo/sheets/tripo-keys.png",
+      "sha256": "7faffce576f040ee476b3b757f4dcaae483a93ce68931d27e12246285d4d721d",
+      "validity": "current"
+    },
+    {
+      "path": "pipeline/headmodel/tripo/sheets/tripo-shape.png",
+      "sha256": "39b065d112b511e8bdc2f44f32c595d0d61a980d4616283e4ba1407dda7d9c88",
+      "validity": "current"
+    }
+  ],
+  "elapsed_seconds": 130.88012797397096
+}

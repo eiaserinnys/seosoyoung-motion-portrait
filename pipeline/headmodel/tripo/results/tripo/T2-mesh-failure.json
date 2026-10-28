@@ -1,0 +1,13 @@
+{
+  "status": "hole_fill_failed",
+  "raw_glb": {
+    "declared_position_vertices": 776806,
+    "declared_triangles": 1471848,
+    "bytes": 45886696,
+    "note": "GLB accessor declarations, before position welding"
+  },
+  "failure": "MeshLab meshing_close_holes requires edge manifoldness; largest position-welded component has non-manifold edges.",
+  "prepared_mesh": null,
+  "alignment": null,
+  "repair_applied": false
+}

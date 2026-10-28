@@ -1,0 +1,257 @@
+{
+  "status": "Quantitative scope complete; shape thresholds failed and front feature visual incomplete.",
+  "runner_calls": 12,
+  "original_runner_limit": 6,
+  "overrun_acknowledged": true,
+  "runner_history": [
+    "prepare",
+    "step1",
+    "step2 with incorrect cot clamp",
+    "Tripo import missing requests",
+    "Tripo wrong .com endpoint upload rejected",
+    "ICT sheets",
+    "funded Tripo generation; UV-island preparation stopped",
+    "position-weld preparation; dense raster processing stopped",
+    "prefiltered Tripo alignment: T1 complete, T2 hole-fill failed",
+    "approved corrected ICT step2",
+    "approved remesh T1-B3",
+    "approved final comparison and sheets"
+  ],
+  "additional_runners_requested": 0,
+  "pending_runs": [],
+  "pending_design_decision": null,
+  "contracts_result": "5 passed, 1 failed (remesh maximum distance 3.0878357047105056px >1.5px)",
+  "latest_targeted_checks": {
+    "open_boundary_and_raster_equivalence": "1 passed .226s",
+    "edge_cot_clamp_gaussian_constant": "RED old edge1.2 instead of.325; GREEN1 passed .009s",
+    "API_auth_resume_fixture": "1 passed .001s",
+    "reused_2d_contracts": "3 passed with boundary test,4 total .357s",
+    "legacy_zbuffer_mask": "2 passed .027s"
+  },
+  "test2_collision_median_before_after_px": [
+    {
+      "frame": 3,
+      "before_median_px": 7.0710678118654755,
+      "after_median_px": 1.0,
+      "skin_points": 310,
+      "ear_excluded_points": 2
+    },
+    {
+      "frame": 42,
+      "before_median_px": 7.0,
+      "after_median_px": 1.0,
+      "skin_points": 432,
+      "ear_excluded_points": 0
+    },
+    {
+      "frame": 264,
+      "before_median_px": 6.708203932499369,
+      "after_median_px": 0.6661667604447163,
+      "skin_points": 453,
+      "ear_excluded_points": 46
+    }
+  ],
+  "step1_curvature": {
+    "p50": 0.0029506339798047645,
+    "p95": 0.033214442956159815,
+    "p99": 0.08620935907936148,
+    "max": 0.6455335966120397,
+    "passed": false,
+    "excluded_vertices": 954,
+    "unit": "1/px",
+    "operator": "cotangent: sum per edge, then clamp"
+  },
+  "step2_status": "Recomputed with edge-wise cotangent clamp, lambda1000, mu.01.",
+  "T1_visibility_equivalence": {
+    "pixels_and_owners_identical": true,
+    "triangles": 1408616,
+    "full_seconds": 4.122211756068282,
+    "prefilter_seconds": 2.30833846796304
+  },
+  "T1_A_final_parameters": {
+    "rotation_offset_deg": [
+      -2.5642723379780037,
+      -3.847084132921153,
+      2.2056556292160283
+    ],
+    "scale_xyz": [
+      1.0207658795259933,
+      1.0183207042184304,
+      1.1393742192839489
+    ],
+    "translation_ict": [
+      0.21093636775879537,
+      -1.026001142857388,
+      0.06646555360215142
+    ],
+    "thickness_px": 14.0,
+    "elapsed_seconds": 811.4299753139494
+  },
+  "generated_models": 2,
+  "credits_consumed": 60.0,
+  "generation_create_attempts": 3,
+  "prior_2010_attempts": 1,
+  "api_key_changes": 0,
+  "T2": {
+    "status": "excluded by caller",
+    "repair_applied": false,
+    "alignment_executed": false
+  },
+  "independent_review": "정적 새 코드 검사에서 실행 전 차단 사항 없음. 최종 이미지 독립 열람에서 정면 feature 프레이밍 오류와 속눈썹 2키 크롭 누락 확인. ICT step2와 T1-B3 모두 곡률 최대 기준 미충족.",
+  "visual_findings": {
+    "B3-step2": "B3-w3의 관자·볼·귀 앞 잔요철이 줄었다. 전체 두상은 더 매끈하지만 국소 변화가 남고 곡률 최대 기준을 넘어서 통과가 아니다.",
+    "T1-A": "두개 표면은 매끈하지만 눈썹·속눈썹을 가는 3D 돌출로 만들었다. 목 절단 후 열린 하부 윤곽도 일부 각도에서 얼굴 안쪽으로 크게 지나간다.",
+    "T1-B3": "3·264번 턱선은 개선됐다. 192·219·240·270·303 등에서 하부 볼과 턱 오차가 남고, 전체 9키 개선이나 ICT보다 나은 출발 형상을 입증하지 못했다.",
+    "nose": "T1에는 작은 코 형상이 있으나 시트에서 코 라인의 원화 정합을 입증하지 못했다. 코·눈·입 손실은 쓰지 않았다."
+  },
+  "not_executed": [
+    "T2 repair/alignment",
+    "new Tripo generation",
+    "B130",
+    "2e",
+    "A refit",
+    "lambda/mu/weight/taper/gate search",
+    "PR",
+    "merge",
+    "deployment"
+  ],
+  "unrelated_warning": "pip reported existing pdfminer-six requires missing cryptography through host PYTHONPATH; no PDF functionality or unrelated package was modified.",
+  "protected_paths": "No existing 2d source, headmodel data/model, bundle or runtime modified.",
+  "additional_runners_approved": 3,
+  "T1_A_evaluation": "8px remesh; original global alignment and neck cut reused without refitting",
+  "remesh_test6_disposition": "Caller accepts p99 .716px; no test rerun, maximum location recorded.",
+  "final_runner_seconds": 130.88012797397096,
+  "models": {
+    "A": {
+      "curvature": null,
+      "frames": 9
+    },
+    "B3-w3": {
+      "curvature": {
+        "p50": 0.0037957175033000775,
+        "p95": 0.05299910825164944,
+        "p99": 0.13436433718639548,
+        "max": 0.6715928211269256,
+        "passed": false,
+        "excluded_vertices": 954,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      },
+      "frames": 9
+    },
+    "B3-step1": {
+      "curvature": {
+        "p50": 0.0029506339798047645,
+        "p95": 0.033214442956159815,
+        "p99": 0.08620935907936148,
+        "max": 0.6455335966120397,
+        "passed": false,
+        "excluded_vertices": 954,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      },
+      "frames": 9
+    },
+    "B3-step2": {
+      "curvature": {
+        "p50": 0.0008049920505854538,
+        "p95": 0.007428896544797541,
+        "p99": 0.013142774300785856,
+        "max": 0.058454189561999624,
+        "passed": false,
+        "excluded_vertices": 1031,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      },
+      "frames": 9
+    },
+    "T1-A": {
+      "curvature": null,
+      "frames": 9
+    },
+    "T1-B3": {
+      "curvature": {
+        "p50": 0.0010960395503722777,
+        "p95": 0.009620239051362224,
+        "p99": 0.027715358913575867,
+        "max": 0.1699866460318513,
+        "passed": false,
+        "excluded_vertices": 1186,
+        "unit": "1/px",
+        "operator": "cotangent: sum per edge, then clamp"
+      },
+      "frames": 9
+    }
+  },
+  "visual_limitations": {
+    "usable_for_eye_height": false,
+    "observed": "정면 음영 두상이 원화 몸통까지 크게 겹쳐져 눈 높이 판정에 무효.",
+    "cause": "head/face/ears 레이어의 전체 alpha>0 범위를 bbox로 쓰면서 머리 외 잔여 영역까지 포함한 프레이밍.",
+    "crop_720": [
+      [
+        118,
+        1
+      ],
+      [
+        596,
+        720
+      ]
+    ],
+    "action": "승인된 마지막 runner가 끝나 추가 렌더 없이 오류를 기록했다."
+  },
+  "eyelash_inspection": {
+    "visually_reviewed_keys": [
+      42,
+      192,
+      219,
+      240,
+      264,
+      270,
+      303
+    ],
+    "unverified_keys": [
+      3,
+      206
+    ],
+    "unverified_reason": "사용 피부 윤곽 bbox의 위쪽 65% 크롭이 3·206번에서는 입·턱만 포함해 눈을 보여주지 않는다.",
+    "silhouette_spikes": {
+      "image_left": [
+        42,
+        192,
+        303
+      ],
+      "image_right": [
+        219,
+        240,
+        264
+      ]
+    },
+    "position": "원화의 먼 쪽 눈 위 이마·관자 바깥 윤곽",
+    "dense_vs_remesh": "확인한 돌출은 주황(dense)과 빨강(remesh)에 겹쳐 남아 재메시 후에도 실루엣에 걸린다.",
+    "edited": false
+  },
+  "remesh_maximum_location": {
+    "original_vertex": 2165,
+    "point_ict": [
+      6.767804145812988,
+      0.6412473917007446,
+      1.3959378004074097
+    ],
+    "closest_remesh_point_ict": [
+      6.88187019868246,
+      0.5930797843175892,
+      1.4093446645651277
+    ],
+    "distance_px": 3.0878357047105056,
+    "ear_excluded": false,
+    "open_boundary_two_rings": false,
+    "nearest_open_vertex_px": 109.90972906626534,
+    "classification": "other; inspect marked views",
+    "test6_rerun": false,
+    "action": "location only, geometry and remeshing parameters unchanged",
+    "visual_location": "귀뿌리와 측면 두상 접합부. ear_mask에는 포함되지 않지만 얼굴·두개 전면이나 목 절단 경계는 아니다.",
+    "independent_location_confirmation": true
+  },
+  "reused_test_evidence": "Core unchanged after targeted RED/GREEN checks; six contracts 5 passed / remesh max-distance 1 failed and accepted by caller; no test rerun.",
+  "syntax_and_diff_check": "Three changed/new Python files py_compile passed; git diff --check passed."
+}

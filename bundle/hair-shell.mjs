@@ -1,8 +1,9 @@
 import {strandWorld,STRANDS} from './side-strands.mjs';
 import {hairLift,pitchHairDepth,domeSection,hairSurface,craniumPosition,sphereEase,pitchEase,hairPoseValue} from './hair-surface.mjs';
 import {earWorld,beadWorld,BEADS} from './stereo-attachments.mjs';
+import {headEarWorld} from './head-base.mjs';
 import {outlinePitchShift} from './face-outline.mjs';
-import {HEAD_CENTER,clamp,correction,artWorld} from './geometry.mjs';
+import {HEAD_CENTER,clamp,correction,artWorld,headBaseActive} from './geometry.mjs';
 import {DOME} from './dome-data.mjs';
 import {frameValue,FRAME_CACHE} from './pose-grid.mjs';
 export {hairLift,pitchHairDepth} from './hair-surface.mjs';
@@ -144,7 +145,7 @@ function templeWorld(point,side,p,surface) {
  }
  return shell;
 }
-export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}
+export function sideWorld(point,side,p,ear=false){return ear?(headBaseActive(p)?headEarWorld(point,side,p):earWorld(point,side,p)):canopyWorld(point,p);}
 export function backWorld(point,p) {
  const back=shellWorld(point,p,-4),upper=1-pitchEase((point[1]-380)/85,p);
  // Background is painted first, so the upper backing can share the dome

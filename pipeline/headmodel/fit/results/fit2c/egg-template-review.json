@@ -1,0 +1,26 @@
+{
+  "status": "stopped_at_template_gate",
+  "condition_1_featureless_surface": {
+    "passed": false,
+    "observations": [
+      "All three large eye/mouth openings are capped; no internal open loop remains.",
+      "Deep grooves/ridges remain at eye height on both temple-to-orbit transitions in front and yaw45 views.",
+      "Two small sharp protrusions remain at the original nostril locations in front and below30 views."
+    ]
+  },
+  "condition_2_front_inside_five_percent": {
+    "passed": true,
+    "maximum_inward_fraction": 0.00897913333028555
+  },
+  "condition_3_smooth_skull_connection": {
+    "passed": null,
+    "observation": "An abrupt temple-to-front ridge is visible; the gray sheet alone does not identify its exact position relative to the fixed skull/Face interface."
+  },
+  "direct_source_diagnostic": "The outer fixed ring is one connected component. The original nose vicinity is not in the fixed two rings; remaining nasal protrusions are on the computed surface.",
+  "independent_review": "Dirichlet biharmonic equations, fan orientation and shared neutral/100-mode factorization passed static review. Independent direct image inspection also found condition 1 unmet.",
+  "validation": "Two tiny cap/mode-average and two-ring/biharmonic-linearity contracts passed in 0.011s.",
+  "runner_calls_this_instruction": 1,
+  "retries": 0,
+  "fit_iterations": 0,
+  "not_run": ["ear relocation", "normal delta and its saturation statistics", "nose loss fitting", "fit2c overlay/jaw/shape sheets and residuals"]
+}

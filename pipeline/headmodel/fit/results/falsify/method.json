@@ -1,0 +1,51 @@
+{
+  "experiment": "ICT three-frame falsification, card 615",
+  "input_commit": "aab393cfc59566accae81dd334d0ec8121cc5d83",
+  "frames": [
+    3,
+    42,
+    264
+  ],
+  "python": ".local/tmp/ict-anime-face-detector-venv/bin/python",
+  "entrypoint": "pipeline/headmodel/fit/run_falsify.py",
+  "phases": [
+    "prepare",
+    "fit",
+    "sheets"
+  ],
+  "runner": "python3 $AGENT_COMMON_FILES_DIR/skills/heavy-work-verify/scripts/heavy_verify.py --timeout 3600 -- <python> <entrypoint> <phase>",
+  "head_target": "head.png eroded by shared t; OpenCV exact L2 DT, levels 3..14 linearly interpolated for autograd",
+  "skin_target": "raw/face skin minus raw/neck, largest component and hole filling; downward envelope below widest row",
+  "ear_target": "Only manifest visible=true sides, image-left/right labels",
+  "shape": "neutral + beta100 times identity-minus-neutral modes, then exp(logaxes); no per-vertex residual",
+  "camera": "Orthographic; flip ICT Y, local pitch then yaw then image roll, scale and translation. Key affine composed into camera. Neutral facial-plane datum [0,3,9] converts initial translation gauge without image landmarks.",
+  "visibility": "Numpy barycentric z-buffer at 720; camera-facing depth increases toward viewer. Contour samples attached to nearest edge of owning visible triangle. Frozen correspondence refreshed every 5 Adam steps.",
+  "ear_loss": "Projected isolated pinna contour for target visible sides; report both full-head-visible and isolated IoU so model occlusion is explicit.",
+  "face_lower_coloring": "The blue neutral y<=1.5 Face region is used by both L_skin and the reported skin residual. All triangle vertices must be in that region; then take its projected downward envelope.",
+  "thickness_prior": "Start at 7px, constrain 3..14px. No extra thickness loss; beta and logaxes regularizers use specified weights.",
+  "weights_changed": false,
+  "validation": {
+    "preparation_tests": "5 passed in 0.250 seconds",
+    "added_metric_violation_test": "1 passed in 0.018 seconds; exact match vs 30px contour shift and disjoint ears",
+    "independent_code_review": "pass, static source and existing projection comparison; no repeated tests or heavy execution",
+    "review_notes": [
+      "Each stage transition uses the pre-final-update pose; one last camera Adam update is dropped at each of the first two transitions. Retained as a small accuracy limitation; no refit.",
+      "26px flags screen-space contour displacement candidates. Skull-versus-jaw inconsistency and final shape judgement remain with the assignee.",
+      "No product UI connected; static scientific sheets only."
+    ],
+    "skin_correction_test": "Observed full-Face contamination: RED test includes upper Face; GREEN after lower triangle eligibility. 1 passed."
+  },
+  "excluded": [
+    "vertex residual delta",
+    "landmark loss",
+    "full video fit",
+    "rig connection",
+    "runtime changes",
+    "alternative base",
+    "weight search",
+    "PR",
+    "merge",
+    "deployment"
+  ],
+  "single_refit": "Full-Face lower-envelope contamination corrected once, preserving original first-pass diagnostics. Weights, optimizer steps and base unchanged. The last runner combines corrected fit and final sheets."
+}

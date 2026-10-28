@@ -1,0 +1,76 @@
+{
+  "review_method": "Root and independent reviewer opened generated sheets; no extra heavy execution.",
+  "quantitative_comparison": "All six models measured on the same nine keys; T1-A uses the approved 8px remesh.",
+  "shape_verdict": {
+    "B3-step2": "B3-w3의 관자·볼·귀 앞 잔요철이 줄었다. 전체 두상은 더 매끈하지만 국소 변화가 남고 곡률 최대 기준을 넘어서 통과가 아니다.",
+    "T1-A": "두개 표면은 매끈하지만 눈썹·속눈썹을 가는 3D 돌출로 만들었다. 목 절단 후 열린 하부 윤곽도 일부 각도에서 얼굴 안쪽으로 크게 지나간다.",
+    "T1-B3": "3·264번 턱선은 개선됐다. 192·219·240·270·303 등에서 하부 볼과 턱 오차가 남고, 전체 9키 개선이나 ICT보다 나은 출발 형상을 입증하지 못했다.",
+    "nose": "T1에는 작은 코 형상이 있으나 시트에서 코 라인의 원화 정합을 입증하지 못했다. 코·눈·입 손실은 쓰지 않았다."
+  },
+  "front_features": {
+    "usable_for_eye_height": false,
+    "observed": "정면 음영 두상이 원화 몸통까지 크게 겹쳐져 눈 높이 판정에 무효.",
+    "cause": "head/face/ears 레이어의 전체 alpha>0 범위를 bbox로 쓰면서 머리 외 잔여 영역까지 포함한 프레이밍.",
+    "crop_720": [
+      [
+        118,
+        1
+      ],
+      [
+        596,
+        720
+      ]
+    ],
+    "action": "승인된 마지막 runner가 끝나 추가 렌더 없이 오류를 기록했다."
+  },
+  "eyelashes": {
+    "visually_reviewed_keys": [
+      42,
+      192,
+      219,
+      240,
+      264,
+      270,
+      303
+    ],
+    "unverified_keys": [
+      3,
+      206
+    ],
+    "unverified_reason": "사용 피부 윤곽 bbox의 위쪽 65% 크롭이 3·206번에서는 입·턱만 포함해 눈을 보여주지 않는다.",
+    "silhouette_spikes": {
+      "image_left": [
+        42,
+        192,
+        303
+      ],
+      "image_right": [
+        219,
+        240,
+        264
+      ]
+    },
+    "position": "원화의 먼 쪽 눈 위 이마·관자 바깥 윤곽",
+    "dense_vs_remesh": "확인한 돌출은 주황(dense)과 빨강(remesh)에 겹쳐 남아 재메시 후에도 실루엣에 걸린다.",
+    "edited": false
+  },
+  "independent_review": "정적 새 코드 검사에서 실행 전 차단 사항 없음. 최종 이미지 독립 열람에서 정면 feature 프레이밍 오류와 속눈썹 2키 크롭 누락 확인. ICT step2와 T1-B3 모두 곡률 최대 기준 미충족.",
+  "execution_budget": {
+    "previous_calls": 9,
+    "additional_approved": 3,
+    "additional_executed": 3,
+    "unapproved_additional_calls": 0,
+    "further_execution": false
+  },
+  "not_executed": [
+    "T2 repair/alignment",
+    "new Tripo generation",
+    "B130",
+    "2e",
+    "A refit",
+    "lambda/mu/weight/taper/gate search",
+    "PR",
+    "merge",
+    "deployment"
+  ]
+}

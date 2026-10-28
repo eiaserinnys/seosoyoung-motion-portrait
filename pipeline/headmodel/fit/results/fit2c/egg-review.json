@@ -1,0 +1,16 @@
+{
+  "selected_lambda": null,
+  "status": "blocked_at_template_selection",
+  "reviewed_strengths": [100.0, 1000.0, 10000.0],
+  "observations": [
+    "At lambda 100 the eye and mouth openings remain; the large cheek and chin surfaces already contract.",
+    "At lambda 1000 and 10000 the facial surface retreats further inward while the openings remain.",
+    "The fixed triangle connectivity contains no new faces to fill the openings."
+  ],
+  "decision": "No displayed candidate satisfies removal of facial openings together with preservation of the large cheek/chin surface; report before fitting.",
+  "independent_review": "Preparation equations and boundary definition passed static review; the generated strength sheet was opened and the same observations confirmed.",
+  "validation": "Three tiny Dirichlet/linearity/boundary/nose-selection contracts passed; no repeated test suite.",
+  "runner_calls": 1,
+  "retries": 0,
+  "not_run": ["chosen smoothing of all 100 modes", "ear relocation", "normal delta", "nose loss fit", "fit residuals and final sheets"]
+}

@@ -1,0 +1,42 @@
+{
+  "main_sha": "6dd12cfe12b89a3b67b23938996a62c70e281173",
+  "current_headbase_default": 0,
+  "atlas_diff_inside_neck": 29324,
+  "atlas_diff_outside_neck": 0,
+  "total_pixels": 26188,
+  "neck_pixels": 26188,
+  "outside_neck_pixels": 0,
+  "main_vs_current_with_main_atlas_pixels": 0,
+  "neck_bbox_canvas": [
+    364,
+    591,
+    640,
+    771
+  ],
+  "outside_neck_bbox_canvas": null,
+  "main_atlas_residual_bbox_canvas": null,
+  "canvas_size": [
+    1100,
+    1600
+  ],
+  "state": {
+    "mode": "all",
+    "outfit": "sweater",
+    "hidden": [],
+    "before": false,
+    "bangs": false,
+    "auto": false,
+    "track": false
+  },
+  "controls": {
+    "on": 1,
+    "hidden": 15,
+    "restored": 0,
+    "baseHidden": true,
+    "headText": "두상 바탕",
+    "hairText": "머리카락 숨김",
+    "min": "0",
+    "max": "1",
+    "step": "1"
+  }
+}

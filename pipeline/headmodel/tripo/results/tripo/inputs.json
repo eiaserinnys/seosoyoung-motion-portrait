@@ -1,0 +1,26 @@
+{
+  "T1": {
+    "source_commit": "ded2be6e17efd911243222fa8d1f492dfcad7ff3",
+    "source": "experiments/see-through/still/still-hairoff.png",
+    "crop_box": [
+      410,
+      115,
+      860,
+      565
+    ],
+    "background": "white",
+    "selection": "union of original head, face, ears and neck layer alpha; no painting"
+  },
+  "T2": {
+    "source": "source/character/still.png",
+    "input_size": [
+      1024,
+      1536
+    ],
+    "preprocessing": "none; supplied original full front art"
+  },
+  "documentation": [
+    "https://developers.tripo3d.ai/en/docs/generation-image-to-model/standard",
+    "https://developers.tripo3d.ai/en/docs/models-and-versions"
+  ]
+}

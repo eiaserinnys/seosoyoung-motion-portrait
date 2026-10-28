@@ -15,7 +15,7 @@ import {smoothstep} from '../bundle/face-profile.mjs';
 const rig=JSON.parse(readFileSync(new URL('../bundle/assets/seosoyoung-rig.json',import.meta.url)));
 bindRig(rig);
 const skin=rig.meshes.find(m=>m.id==='face-skin');
-const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1};
+const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrTurn:1,CorrHeadBase:0};
 const at=(yaw,pitch=0)=>({...base,ParamAngleX:yaw,ParamAngleY:pitch,[FRAME_CACHE]:new Map()});
 const near=(a,b,tol=1)=>assert(Math.hypot(a[0]-b[0],a[1]-b[1])<=tol,`${a} vs ${b}`);
 const ids={browLeft:'eye-left-brow',browRight:'eye-right-brow',left:'eye-left-sclera',right:'eye-right-sclera',nose:'nose-detail',mouth:'mouth-detail'};
