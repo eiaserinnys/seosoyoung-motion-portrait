@@ -67,7 +67,7 @@ class NeckArtTest(unittest.TestCase):
         before = np.asarray(canvas.crop((x, y, x+w, y+h)))
         after = np.asarray(Image.open(ROOT / 'parts/neck-untrimmed.png').convert('RGBA'))
         for original, atlas, keep in [(after, 'texture_00.png', 'neck-keep.png'),
-                                      (before, 'texture_before_00.png', 'neck-keep-before.png')]:
+                                      (before, 'texture_before_00.png', 'neck-keep.png')]:
             with self.subTest(atlas=atlas):
                 expected, keep_expected, _ = apply_reference(original, *inputs, origin=(x, y))
                 current = np.asarray(Image.open(ROOT / 'bundle/assets' / atlas).convert('RGBA'))[ay:ay+h, ax:ax+w]

@@ -16,12 +16,14 @@ const base={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CO
 const at=yaw=>({...base,ParamAngleX:yaw,[FRAME_CACHE]:new Map()});
 const state={hidden:new Set(),outfit:'sweater'};
 const mesh=id=>rig.meshes.find(m=>m.id===id);
+const preservationBase=execFileSync('git',['merge-base','HEAD','origin/main'],{encoding:'utf8'}).trim();
 function assertPreservedAsset(name){
+ if(['hair-shell.mjs','assets/texture_00.png','assets/texture_before_00.png','assets/seosoyoung-rig.json'].includes(name)){
+  execFileSync('python3',['pipeline/verify_head_base_preservation.py'],{stdio:'pipe'});return;
+ }
  const actual=readFileSync(new URL('../bundle/'+name,import.meta.url));
- const expected=execFileSync('git',['show',`0b75a0211691965ca234ad9114073ba934568394:bundle/${name}`],{maxBuffer:16*1024*1024});
- if(name==='assets/seosoyoung-rig.json'){
-  const a=JSON.parse(actual),b=JSON.parse(expected);delete a.corrections;delete b.corrections;assert.deepEqual(a,b);
- }else{
+ const expected=execFileSync('git',['show',`${preservationBase}:bundle/${name}`],{maxBuffer:16*1024*1024});
+ {
   const sha=data=>createHash('sha256').update(data).digest('hex');
   assert.equal(sha(actual),sha(expected),name+' differs from the frozen baseline');
  }

@@ -13,6 +13,8 @@ from scipy.sparse.linalg import splu
 
 ROOT = Path(__file__).resolve().parents[2]
 FIT = ROOT / 'pipeline/headmodel/fit'
+CANVAS_SHIFT = np.array([152., 20.])
+EAR_TILT_DEGREES = 55.
 sys.path.insert(0, str(FIT))
 from fit_core import project
 from fit2f_core import geometric_operator, raster_silhouette
@@ -136,17 +138,22 @@ def ear_depth_biases():
     head_z = (.5 - window_z) * 2048
     present = depth[:, :, 3] > 127
     result = {}
+    # At rest the inclined ear keeps its x/y projection. Its depth varies
+    # linearly with x, so compare each visible ear pixel with the head depth.
+    x = np.arange(depth.shape[1], dtype=float)[None, :] - (depth.shape[1] - 1024) / 2 + .5
     for side in ('left', 'right'):
         ear = np.asarray(Image.open(baseline / f'rest_ear_{side}.png').convert('RGBA'))[:, :, 3] > 0
-        difference = head_z[ear & present] - geometry['earDepth'][side]
+        anchor = 369. if side == 'left' else 636.
+        direction = 1. if side == 'left' else -1.
+        ear_z = geometry['earDepth'][side] + direction * (x - anchor) * np.tan(np.deg2rad(EAR_TILT_DEGREES))
+        difference = (head_z - ear_z)[ear & present]
         result[side] = max(0., float(difference.max(initial=0.))) + 1.
     return result
 
 
 def neck_extension_spec(rig, top):
     mesh = next(item for item in rig['meshes'] if item['id'] == 'neck')
-    return {'bbox': mesh['bbox'], 'top_y': float(top), 'raw_top_y': float(top+16),
-            'sample_y': 640}
+    return {'bbox': mesh['bbox'], 'sample_y': 640}
 
 
 def ear_root_rings(vertices, triangles, ear):
@@ -209,7 +216,7 @@ def neck_sheet(vertices, triangles):
 def outside_sheet(points):
     image = image_for(3)
     for point in points:
-        pixel = np.rint(np.asarray(point) - [152, 20]).astype(int)
+        pixel = np.rint(np.asarray(point) - CANVAS_SHIFT).astype(int)
         cv2.circle(image, tuple(pixel), 3, (0, 0, 255), -1, cv2.LINE_AA)
     path = FIT / 'sheets/head-base-outside.png'
     if not cv2.imwrite(str(path), image):
@@ -301,7 +308,7 @@ def main():
     projected = project_np(rest_vertices, rest_pose)
     # The cap closes the neck opening; existing face attachments stay on the head surface.
     _, owner = raster_silhouette(projected, attachment_triangles)
-    projected[:, :2] += [152, 20]
+    projected[:, :2] += CANVAS_SHIFT
     projected[:, 2] *= np.exp(front[3])
     neck_extension = neck_extension_spec(rig, float(projected[open_ring, 1].min()))
     ear_roots = {}
@@ -355,11 +362,9 @@ def main():
                 's_ref': s_ref, 'sigma': sigma, 'theta_k': nodes.tolist(),
                 'keys': [{'frame': frame, 'yaw': yaw, 'pitch': pitch, 'model': refined[frame][:2]}
                          for frame, yaw, pitch in KEYS],
-                'logscale_front': front[3], 'rest_translation': [front[4]+152, front[5]+20],
-                'rest_eye': [501.9, 431.5], 'attachments': attachments,
-                'inset_px': 0, 'color': base_color, 'attachmentStatistics': statistics,
-                'open_boundary': open_ring.tolist(), 'ear_roots': ear_roots, 'ear_depth_bias_px': ear_biases, 'neck_extension': neck_extension,
-                'excluded_vertices': np.flatnonzero(excluded).tolist()}
+                'logscale_front': front[3], 'rest_translation': (front[4:6]+CANVAS_SHIFT).tolist(),
+                'attachments': attachments, 'color': base_color,
+                'open_boundary': open_ring.tolist(), 'ear_roots': ear_roots, 'ear_depth_bias_px': ear_biases, 'neck_extension': neck_extension}
     (ROOT / 'bundle/assets/head-base.json').write_text(json.dumps(metadata, ensure_ascii=False, separators=(',', ':')))
     indices = np.linspace(0, len(vertices)-1, 100, dtype=int)
     fixture_poses = [refined[frame] for frame, _, _ in KEYS]
@@ -373,7 +378,7 @@ def main():
         theta = refined[frame][:2]
         posed_vertices = vertices.astype(float) + np.einsum('k,kij->ij', phi(theta, nodes, sigma), fields.astype(float)) / s_ref
         q = project_np(posed_vertices, [theta[0], theta[1], 0., front[3], front[4], front[5]])
-        q[:, :2] += [152, 20]
+        q[:, :2] += CANVAS_SHIFT
         q[:, 2] *= np.exp(front[3])
         expected = {}
         for side, data in ear_roots.items():

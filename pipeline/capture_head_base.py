@@ -579,7 +579,7 @@ def main():
                   const restNew=yaw===0&&pitch===0?capture(isolated):null;
                   const restEars=yaw===0&&pitch===0?Object.fromEntries(['left','right'].map(side=>[side,capture(meshes.filter(m=>m.id!=='ear-'+side).map(m=>m.id),p,'ear-'+side)])):null;
                   const restBefore=captureBefore&&yaw===0&&pitch===0?capture(hidden,p,null,{before:true}):null;
-                  const q={...p,[poseModule.FRAME_CACHE]:new Map()},points=headModule.headBaseVertices(q).inset;
+                  const q={...p,[poseModule.FRAME_CACHE]:new Map()},points=headModule.headBaseVertices(q).surface;
                   let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
                   const include=(x,y)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x);bottom=Math.max(bottom,y);};
                   for(let j=0;j<points.length;j+=3)include(points[j],points[j+1]);

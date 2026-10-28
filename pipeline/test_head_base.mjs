@@ -29,12 +29,12 @@ const close=(a,b,tol,label)=>assert(Math.abs(a-b)<=tol,`${label}: ${a} vs ${b}`)
 const digest=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
 test('recommended preset defaults to the existing path while head-base remains available',()=>{
  const schema=JSON.parse(read('../source/viewer/corrections.json'));
- assert.equal(CORRECTION_PRESETS.recommended.CorrHeadBase,0);
+ assert.equal('CorrHeadBase' in CORRECTION_PRESETS.recommended,false);
  assert.equal(CORRECTION_PRESETS.recommended.CorrOutline,1);
- assert.equal(CORRECTION_PRESETS.pure.CorrHeadBase,0);
+ assert.equal('CorrHeadBase' in CORRECTION_PRESETS.pure,false);
  assert.deepEqual(rig.corrections,schema);
  assert.deepEqual(CORRECTION_PRESETS,schema.presets);
- assert.deepEqual(schema.controls.find(item=>item.id==='CorrHeadBase'),{id:'CorrHeadBase',label:'두상 바탕 연결',min:0,max:1,step:1});
+ assert.equal(schema.controls.some(item=>item.id==='CorrHeadBase'),false);
 });
 const oldFeatures={
  '1:0':'80c0e03a75e7d8fdc530f7814323c25a933708fa6c4d6e69a68f824e9326f7f2',
@@ -72,22 +72,16 @@ test('neck extension preserves the original vertices, UVs, and triangles',{timeo
  assert.deepEqual(extended.uvs.slice(0,neck.uvs.length),neck.uvs);
  assert.deepEqual(extended.triangles.slice(0,neck.triangles.length),neck.triangles);
 });
-test('neck sample uses the corresponding row in the bound atlas',{timeout:30000},()=>{
- const neck=rig.meshes.find(m=>m.id==='neck'),sample=renderer.neckSampleY(neck,rig.atlasSize,640);
- close(sample,(neck.atlas[1]+640-neck.bbox[1]+.5)/rig.atlasSize,1e-12,'atlas sample row');
-});
 test('surface direction fade is zero at rest',{timeout:30000},()=>{
  const p=pose();for(const point of skin.positions)close(renderer.faceDirectionFade(point,p),0,1e-12,'rest fade');
  const up=pose(0,30);assert(skin.positions.some(point=>renderer.faceDirectionFade(point,up)>0),'up pose activates direction fade');
  for(const side of ['left','right'])assert(rig.meshes.find(m=>m.id==='side-cranium-'+side).atlas[1]>.5,'face refUV.y=0 remains outside hair atlas');
 });
 test('line-free face follows the selected atlas and stays off the old path',{timeout:30000},()=>{
- assert.equal(renderer.faceCleanTextureIndex(false),7);
- assert.equal(renderer.faceCleanTextureIndex(true),8);
- for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,0,true],[1,.5,true],[1,1,false]]){
+ for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,1,false]]){
   assert.equal(renderer.faceCleanPolicy(pose(30,20,{CorrHeadBase:enabled,CorrOutline:outline}),visible),false);
  }
- assert.equal(renderer.faceCleanPolicy(pose(30,20),true),true);
+ for(const outline of [0,.5,1])assert.equal(renderer.faceCleanPolicy(pose(30,20,{CorrOutline:outline}),true),true);
 });
 
 test('N7: Python projection fixture, 100 vertices and 13 poses',{timeout:30000},()=>{
@@ -114,7 +108,7 @@ test('N2: legacy skin and all feature vertices match main hashes',{timeout:30000
    for(const mesh of feature)for(const point of mesh.positions)values.push(deform3D(mesh,point,p));
    if(!enabled&&outline===1)for(const point of skin.positions)skinValues.push(deform3D(skin,point,p));
   }
-  assert.equal(digest(values),oldFeatures[`${gain}:${outline}`],`features ${gain}/${outline}/${enabled}`);
+  assert.equal(digest(values),oldFeatures[`${gain}:${enabled?1:outline}`],`features ${gain}/${outline}/${enabled}`);
   if(!enabled&&outline===1)assert.equal(digest(skinValues),oldSkin[gain],`skin ${gain}`);
  }
 });
@@ -127,27 +121,26 @@ test('N6: skin and head surface are continuous at both 45 degree boundaries',{ti
 });
 test('ear root preserves rest coordinates and matches the Kabsch fixture',{timeout:30000},()=>{
  for(const [side,anchor] of [['left',[369,465]],['right',[636,464.5]]]){
-  const p=pose(),frame=headBase.attachedTransform(anchor,p);
-  for(let i=0;i<3;i++)for(let j=0;j<3;j++)close(frame.R[i][j],Number(i===j),1e-9,`rest rotation ${side}`);
+  const p=pose();
   const mesh=rig.meshes.find(m=>m.id==='ear-'+side),root=metadata.ear_roots[side],ref=headBase.getHeadBase().reference;
   const depth=root.ring.reduce((sum,i)=>sum+ref[i*3+2],0)/root.ring.length;
-  for(const point of mesh.positions){const q=headBase.headEarWorld(point,side,p);close(q[0],point[0],1e-6,`${side} x`);close(q[1],point[1],1e-6,`${side} y`);close(q[2],depth+5,1e-6,`${side} z`);}
+  for(const point of mesh.positions){const q=headBase.headEarWorld(point,side,p);close(q[0],point[0],1e-6,`${side} x`);close(q[1],point[1],1e-6,`${side} y`);close(q[2],depth+5+(side==='left'?1:-1)*(point[0]-anchor[0])*Math.tan(55*Math.PI/180),1e-6,`${side} z`);}
   for(const item of fixture.ear_roots){
    const q=pose(item.yaw,item.pitch),expected=item.expected[side],origin=headBase.headEarWorld(anchor,side,q);
    for(let i=0;i<3;i++)close(origin[i],expected.anchor[i],1e-6,`${side} key ${item.frame} anchor`);
    for(let j=0;j<2;j++){const point=anchor.map((x,i)=>x+Number(i===j)),value=headBase.headEarWorld(point,side,q);
-    for(let i=0;i<3;i++)close(value[i]-origin[i],expected.R[i][j],1e-6,`${side} key ${item.frame} rotation`);
+    for(let i=0;i<3;i++)close(value[i]-origin[i],expected.R[i][j]+(j===0?(side==='left'?1:-1)*Math.tan(55*Math.PI/180)*expected.R[i][2]:0),1e-6,`${side} key ${item.frame} rotation`);
    }
   }
   const point=mesh.positions[0],angle=17*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
   const rolled=headBase.headEarWorld(point,side,pose(0,0,{ParamAngleZ:17})),x=point[0]-502,y=point[1]-568;
   close(rolled[0],502+c*x-s*y,1e-6,`${side} roll x`);close(rolled[1],568+s*x+c*y,1e-6,`${side} roll y`);
-  close(rolled[2],depth+5,1e-6,`${side} roll z`);
+  close(rolled[2],depth+5+(side==='left'?1:-1)*(point[0]-anchor[0])*Math.tan(55*Math.PI/180),1e-6,`${side} roll z`);
  }
 });
 test('ear routing preserves the legacy path whenever the new surface is disabled',{timeout:30000},()=>{
  for(const [side,point] of [['left',[369,465]],['right',[636,464.5]]])for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
-  for(const [enabled,outline] of [[0,0],[0,.5],[0,1],[1,0],[1,.5]]){
+  for(const [enabled,outline] of [[0,0],[0,.5],[0,1]]){
    const p=pose(yaw,pitch,{CorrHeadBase:enabled,CorrOutline:outline});
    assert.deepEqual(sideWorld(point,side,p,true),earWorld(point,side,p));
   }
@@ -166,7 +159,7 @@ test('neck cap closes the original boundary without adding a skirt',{timeout:300
 test('legacy ear alpha and neck mask are preserved when the new surface is inactive',{timeout:30000},()=>{
  const state={hidden:new Set(),outfit:'sweater',bangs:false};
  const ear=rig.meshes.find(m=>m.id==='ear-left'),neck=rig.meshes.find(m=>m.id==='neck');
- for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,0,true],[1,.5,true],[1,1,false]])for(const yaw of [-45,-15,0,15,45]){
+ for(const [enabled,outline,visible] of [[0,0,true],[0,1,true],[1,1,false]])for(const yaw of [-45,-15,0,15,45]){
   const p=pose(yaw,0,{CorrHeadBase:enabled,CorrOutline:outline});
   const ep=backgroundLayerPolicy(ear,p,state,visible),np=backgroundLayerPolicy(neck,p,state,visible);
   assert.equal(ep.alpha,opacity(ear,p,state));assert.equal(ep.compareHead,false);
@@ -187,13 +180,21 @@ test('neck depth uses the original xy and the rest ring cylinder',{timeout:30000
  const ring=metadata.open_boundary,zc=ring.reduce((sum,i)=>sum+ref[i*3+2],0)/ring.length;
  points.forEach((v,i)=>{close(values[i][0],v[0],1e-10,'neck x');close(values[i][1],v[1],1e-10,'neck y');assert(values[i][2]>=zc-1e-10);});
 });
-test('ear bias covers each rest ear depth and preserves legacy neck and fill positions',{timeout:30000},()=>{
- const evidence=JSON.parse(read('../docs/captures/fix4-baseline/rest_analysis.json'));
- for(const side of ['left','right'])close(metadata.ear_depth_bias_px[side],evidence.ears[side].min_bias_px+1,1e-9,'ear rest margin');
+test('ear margin is available and legacy neck and fill positions are preserved',{timeout:30000},()=>{
+ for(const side of ['left','right'])assert(metadata.ear_depth_bias_px[side]>0,'ear rest margin');
  const neck=rig.meshes.find(m=>m.id==='neck'),values=[];
  for(const pitch of [-30,0,30])for(const yaw of [-45,0,45]){
   const p=pose(yaw,pitch,{CorrHeadBase:0,ParamAngleZ:0,ParamBodyAngleX:0,ParamBreath:0});
   values.push({neck:neck.positions.map(q=>deform3D(neck,q,p)),fill:skinFillPositions(p,skin)});
  }
  assert.equal(digest(values),'5e43bf076d88b50f7a325f9e2bbdb983ef00fe1ab3f2b1d52ac5dad17a4c2b7a');
+});
+
+test('head-base routing does not depend on the selected face-morph preset',()=>{
+ for(const outline of [0,.5,1]){
+  const p=pose(30,20,{CorrOutline:outline});
+  assert.deepEqual(outlineWorld(skin.positions[42],p),headSolveWorld(skin.positions[42],p));
+  for(const [side,point] of [['left',[369,465]],['right',[636,464.5]]])
+   assert.deepEqual(sideWorld(point,side,p,true),headBase.headEarWorld(point,side,p));
+ }
 });

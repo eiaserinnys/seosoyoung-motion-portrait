@@ -170,8 +170,9 @@ def build():
             result_before,keep_before,_=apply_reference(original,*inputs,origin=(x,y))
             im=Image.fromarray(result)
             original=Image.fromarray(result_before)
-            for name,mask in [('neck-keep.png',keep),('neck-keep-before.png',keep_before)]:
-                Image.fromarray(mask).save(assets/name)
+            if not np.array_equal(keep,keep_before):
+                raise ValueError('neck keep masks differ between restored and original atlases')
+            Image.fromarray(keep).save(assets/'neck-keep.png')
         if key=='upper-body-short-sleeve':
             alpha=original.getchannel('A')
             alpha.putdata([round(a*max(0,min(1,(y+i//w-680)/12))) for i,a in enumerate(alpha.tobytes())])

@@ -38,7 +38,9 @@ export const spherePoint=sphereWarp;
 export function sphereVertex(longitude,latitude,radius=HEAD_RADIUS) {
   return [radius*Math.cos(latitude)*Math.sin(longitude),radius*Math.sin(latitude),radius*Math.cos(latitude)*Math.cos(longitude)];
 }
-export const correction=(p,key)=>p[key]??CORRECTION_PRESETS.recommended[key];
+export const headBaseActive=p=>p.CorrHeadBase===1;
+// The 3D surface uses the complete face morph without changing the stored slider.
+export const correction=(p,key)=>key==='CorrOutline'&&headBaseActive(p)?1:(p[key]??CORRECTION_PRESETS.recommended[key]);
 // A tunable art surface; the diagnostic head sphere itself stays rigid and unchanged.
 export function correctedLift([x,y],relief,p,back=false) {
   const r=HEAD_RADIUS,ry=r*correction(p,'CorrVertical'),rz=r*correction(p,'CorrDepth');

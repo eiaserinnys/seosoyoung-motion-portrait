@@ -1,5 +1,13 @@
 import {gridValue,frameValue} from './pose-grid.mjs';
-import {correction} from './geometry.mjs';
+import {correction,NECK_PIVOT} from './geometry.mjs';
+
+export const HEAD_BASE = Object.freeze({
+ pitchWeight:1.4, earRelief:5, earTiltDegrees:55, neckAxisTolerance:5,
+ earFadeDegrees:20, earMinMargin:2, faceRimWidth:12, rimStep:6,
+ facingStart:.05, facingEnd:.20,
+ foreheadFadeYawStart:45, foreheadFadeYawEnd:60, foreheadRimWidth:48,
+ foreheadFadeTop:255, foreheadFadeBottom:330,
+});
 
 let model;
 const rad=x=>x*Math.PI/180;
@@ -9,9 +17,9 @@ export const getHeadBase=()=>model;
 export function configureHeadBase(metadata,buffer){
  const array=(name,Type)=>{const {offset,length}=metadata.offsets[name];return new Type(buffer,offset,length/Type.BYTES_PER_ELEMENT);};
  model={...metadata,vertices:array('vertices',Float32Array),normals:array('normals',Float32Array),
-  fields:array('fields',Float32Array),triangles:array('triangles',Uint32Array),queries:new Map(),restFrames:new Map()};
+  fields:array('fields',Float32Array),triangles:array('triangles',Uint32Array),queries:new Map()};
  model.thetaRest=model.keys.find(k=>k.yaw===0&&k.pitch===0).model;
- model.reference=projectedVertices(model.thetaRest,false);
+ model.reference=projectedVertices(model.thetaRest);
  for(let i=0;i<model.vertexCount;i++){
   model.reference[i*3]+=model.rest_translation[0];model.reference[i*3+1]+=model.rest_translation[1];
  }
@@ -45,7 +53,7 @@ export function modelAngles(p){
 }
 
 export function phi(theta){
- const logits=model.theta_k.map(k=>-((theta[0]-k[0])**2+(1.4*(theta[1]-k[1]))**2)/(2*model.sigma**2));
+ const logits=model.theta_k.map(k=>-((theta[0]-k[0])**2+(HEAD_BASE.pitchWeight*(theta[1]-k[1]))**2)/(2*model.sigma**2));
  const max=Math.max(...logits),values=logits.map(v=>Math.exp(v-max)),total=values.reduce((a,b)=>a+b,0);
  return values.map(v=>v/total);
 }
@@ -56,12 +64,12 @@ export function fieldAt(theta,index){
  return result;
 }
 
-function projectedVertices(theta,inset){
+function projectedVertices(theta){
  const weights=phi(theta),n=model.vertexCount,out=new Float64Array(n*3),scale=Math.exp(model.logscale_front);
- const pose=[theta[0],theta[1],0,model.logscale_front,0,0],shift=inset?model.inset_px/model.s_ref:0;
+ const pose=[theta[0],theta[1],0,model.logscale_front,0,0];
  for(let i=0;i<n;i++){
   const xyz=[0,1,2].map(c=>{
-   let v=model.vertices[i*3+c]-model.normals[i*3+c]*shift;
+   let v=model.vertices[i*3+c];
    for(let k=0;k<weights.length;k++)v+=weights[k]*model.fields[(k*n+i)*3+c]/model.s_ref;
    return v;
   });
@@ -76,15 +84,15 @@ const weighted=(coords,attachment)=>attachment.vertices.reduce((out,index,i)=>{
 
 export function headBaseVertices(p){
  return frameValue(p,'head-base',()=>{
-  const theta=modelAngles(p),surface=projectedVertices(theta,false),inset=projectedVertices(theta,true);
+  const theta=modelAngles(p),surface=projectedVertices(theta);
   const [dx,dy]=model.rest_translation;
   const angle=rad(p.ParamAngleZ),c=Math.cos(angle),s=Math.sin(angle);
-  for(const points of [surface,inset])for(let i=0;i<model.vertexCount;i++){
-   const j=i*3,x=points[j]+dx-502,y=points[j+1]+dy-568;
-   points[j]=502+c*x-s*y;points[j+1]=568+s*x+c*y;
+  for(let i=0;i<model.vertexCount;i++){
+   const j=i*3,x=surface[j]+dx-NECK_PIVOT[0],y=surface[j+1]+dy-NECK_PIVOT[1];
+   surface[j]=NECK_PIVOT[0]+c*x-s*y;surface[j+1]=NECK_PIVOT[1]+s*x+c*y;
   }
-  const distance2=(theta[0]-model.thetaRest[0])**2+(1.4*(theta[1]-model.thetaRest[1]))**2;
-  return {surface,inset,theta,offsetWeight:Math.exp(-distance2/(2*model.sigma**2))};
+  const distance2=(theta[0]-model.thetaRest[0])**2+(HEAD_BASE.pitchWeight*(theta[1]-model.thetaRest[1]))**2;
+  return {surface,theta,offsetWeight:Math.exp(-distance2/(2*model.sigma**2))};
  });
 }
 
@@ -139,14 +147,6 @@ export function headSurfaceFacingDelta(point,p){
  return triangleFrame(current,a.vertices)[2][2]-triangleFrame(model.reference,a.vertices)[2][2];
 }
 
-export function attachedTransform(point,p){
- const key=pointKey(point),a=attachment(point),current=headBaseVertices(p).surface;
- if(!model.restFrames.has(key))model.restFrames.set(key,triangleFrame(model.reference,a.vertices));
- const rest=model.restFrames.get(key),frame=triangleFrame(current,a.vertices);
- const R=[0,1,2].map(i=>[0,1,2].map(j=>frame.reduce((sum,v,k)=>sum+v[i]*rest[k][j],0)));
- return {A:headSolveWorld(point,p),R};
-}
-
 function ringCenter(coords,ring){
  const center=[0,0,0];for(const i of ring)for(let c=0;c<3;c++)center[c]+=coords[i*3+c];
  return center.map(x=>x/ring.length);
@@ -185,7 +185,10 @@ function earRootTransform(side,p){
 
 export function headEarWorld(point,side,p){
  const {center,R,root}=earRootTransform(side,p);
- const offset=[root.delta[0]+point[0]-root.anchor[0],root.delta[1]+point[1]-root.anchor[1],5];
+ const dx=point[0]-root.anchor[0];
+ // Scale the tilted plane by 1/cos(alpha): its rest x projection stays exact.
+ const depth=(side==='left'?dx:-dx)*Math.tan(rad(HEAD_BASE.earTiltDegrees));
+ const offset=[root.delta[0]+dx,root.delta[1]+point[1]-root.anchor[1],HEAD_BASE.earRelief+depth];
  return center.map((x,i)=>x+R[i].reduce((sum,v,j)=>sum+v*offset[j],0));
 }
 
