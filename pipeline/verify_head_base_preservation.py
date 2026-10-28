@@ -31,20 +31,42 @@ def verify():
         report['atlas_outside_neck'][name] = int(diff.sum())
         assert not diff.any(), f'{name} changed outside the neck atlas'
     current = (ROOT / 'bundle/hair-shell.mjs').read_text()
-    current = current.replace("import {headEarWorld} from './head-base.mjs';\n", '')
-    current = current.replace('HEAD_CENTER,clamp,correction,artWorld,headBaseActive}',
-                              'HEAD_CENTER,clamp,correction,artWorld}')
-    current = current.replace(
-        'export function sideWorld(point,side,p,ear=false){return ear?(headBaseActive(p)?headEarWorld(point,side,p):earWorld(point,side,p)):canopyWorld(point,p);}',
-        'export function sideWorld(point,side,p,ear=false){return ear?earWorld(point,side,p):canopyWorld(point,p);}')
-    assert current == previous('hair-shell.mjs').decode(), 'hair-shell changed outside ear routing'
+    assert current == previous('hair-shell.mjs').decode(), 'hair-shell differs from main'
     report['rig_except_corrections'] = 'identical'
-    report['hair_shell_except_ear_routing'] = 'identical'
+    report['hair_shell'] = 'identical'
     for name in ('hair-surface.mjs', 'dome-data.mjs'):
         assert (ROOT / 'bundle' / name).read_bytes() == previous(name), name
     report['other_assets'] = 'identical'
+    fit = ROOT / 'pipeline/headmodel/fit/results'
+    with np.load(fit/'fit2f/fit-state-n3.npz') as original, np.load(fit/'dome/fit-state-dome.npz') as dome:
+        assert all(np.array_equal(original[key], dome[key]) for key in original.files if key != 'vertices')
+        weights = dome['w'].copy()
+        assert np.array_equal(original['vertices'][original['vertices'][:, 1] < 2],
+                              dome['vertices'][original['vertices'][:, 1] < 2])
+    metadata = json.loads((ROOT/'bundle/assets/head-base.json').read_text())
+    binary = (ROOT/'bundle/assets/head-base.bin').read_bytes()
+    count = metadata['vertexCount']
+    def array(name):
+        region = metadata['offsets'][name]
+        return np.frombuffer(binary, dtype='<f4', count=region['length']//4, offset=region['offset'])
+    with np.load(fit/'fit2e/final-state.npz') as original:
+        expected = original['D_k'] * (1-weights)[None, :, None]
+    fields = array('fields').reshape(9, count, 3)[:, :-1]
+    selected = weights > 0
+    field_error = float(np.max(np.abs(fields[:, selected] - expected[:, selected])))
+    assert field_error < 1e-5, field_error
+    with np.load(ROOT/'pipeline/headmodel/cheek-field.npz') as original:
+        expected = original['displacement'] * (1-weights)[:, None]
+    cheek = array('cheek_field').reshape(count, 3)[:-1]
+    cheek_error = float(np.max(np.abs(cheek - expected)))
+    assert cheek_error < 1e-6, cheek_error
+    report['dome_weighted_fields'] = {'vertices': int(selected.sum()), 'max_error': field_error}
+    report['dome_weighted_cheek'] = {'max_error': cheek_error}
+    report['checks_passed'] = 10
     return report
 
 
 if __name__ == '__main__':
-    print(json.dumps(verify(), ensure_ascii=False))
+    result = verify()
+    print(json.dumps(result, ensure_ascii=False))
+    print(f"{result['checks_passed']} passed")

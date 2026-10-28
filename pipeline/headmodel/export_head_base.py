@@ -266,9 +266,10 @@ class Attachments:
 
 
 def main():
-    with np.load(FIT / 'results/fit2f/fit-state-n3.npz') as source:
+    with np.load(FIT / 'results/dome/fit-state-dome.npz') as source:
         vertices, triangles, s_ref = source['vertices'].copy(), source['triangles'].copy(), float(source['s_ref'])
         open_edges, excluded = source['open_edges'].copy(), source['excluded'].copy()
+        dome_weight = source['w'].copy()
     with np.load(FIT / 'results/fit2f/surface-a.npz') as source:
         ear = source['ear_excluded'].copy()
         ear_vertices = source['vertices'].copy()
@@ -276,6 +277,7 @@ def main():
             raise ValueError('STOP: ear root and fitted surface use different topology')
     with np.load(FIT / 'results/fit2e/final-state.npz') as source:
         fields, nodes, sigma = source['D_k'].copy(), source['theta_k'].copy(), float(source['sigma'])
+    fields *= (1 - dome_weight)[None, :, None]
     poses = json.loads((FIT / 'results/fit2e/poses-refined.json').read_text())
     refined = {row['frame']: row['refined_pose'] for row in poses['frames']}
     rig = json.loads((ROOT / 'bundle/assets/seosoyoung-rig.json').read_text())
@@ -284,6 +286,9 @@ def main():
     raw_solve = (ROOT / 'bundle/face-solve-data.mjs').read_text().split('=', 1)[1].strip().removesuffix(';')
     solve = json.loads(raw_solve)
 
+    with np.load(ROOT / 'pipeline/headmodel/cheek-field.npz') as source:
+        cheek = source['displacement'].copy()
+    cheek *= (1 - dome_weight)[:, None]
     root_rings = ear_root_rings(ear_vertices, triangles, ear)
     vertices, fields = flatten_ears(vertices, triangles, fields, ear)
     sheet = ear_sheet(vertices.astype('<f4'), triangles)
@@ -294,8 +299,6 @@ def main():
     excluded = np.r_[excluded, True]
     vertices = vertices.astype('<f4')
     fields = fields.astype('<f4')
-    with np.load(ROOT / 'pipeline/headmodel/cheek-field.npz') as source:
-        cheek = source['displacement'].copy()
     if cheek.shape != (len(vertices)-1, 3):
         raise ValueError('STOP: cheek field and head topology do not match')
     cheek = np.concatenate([cheek, cheek[open_ring].mean(axis=0, keepdims=True)]).astype('<f4')
