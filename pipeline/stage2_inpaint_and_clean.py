@@ -16,7 +16,7 @@ from typing import Any
 
 from part_preview import render_before_after_comparison
 from part_pixels import dilate_bool, erode_bool, blur_f32, fill_holes_2d, inpaint_horizontal_and_diffuse, despill_green_and_clean_alpha
-from neck_art import clear_background, load_removal_mask
+from neck_art import clear_background, crop_inputs, removal_mask
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
@@ -410,7 +410,10 @@ def main() -> int:
     rebuilt_map["face-skin"] = build_clean_face_skin(still_np, existing_map["face-skin"])
     rebuilt_map["ear-left"] = build_extended_ear(existing_map["ear-left"], "left")
     rebuilt_map["ear-right"] = build_extended_ear(existing_map["ear-right"], "right")
-    rebuilt_map["neck"] = clear_background(build_clean_neck(existing_map["neck"], existing_map["upper-body-short-sleeve"]), load_removal_mask(WORK_DIR))
+    neck_untrimmed = build_clean_neck(existing_map["neck"], existing_map["upper-body-short-sleeve"])
+    still_neck, sweater_neck = crop_inputs(WORK_DIR, (0, 0, 1024, 1536))
+    neck_remove, _ = removal_mask(neck_untrimmed, still_neck, sweater_neck)
+    rebuilt_map["neck"] = clear_background(neck_untrimmed, neck_remove)
 
     eye_rebuilt = build_hole_free_sclera_and_iris(existing_map)
     rebuilt_map.update(eye_rebuilt)
@@ -464,6 +467,8 @@ def main() -> int:
         crop_im = Image.fromarray(canvas_rgba[y0:y1, x0:x1], "RGBA")
         out_file = PARTS_DIR / f"{pid}.png"
         crop_im.save(out_file)
+        if pid == 'neck':
+            Image.fromarray(neck_untrimmed[y0:y1, x0:x1], 'RGBA').save(PARTS_DIR / 'neck-untrimmed.png')
         parts_index.append(
             {
                 "id": pid,

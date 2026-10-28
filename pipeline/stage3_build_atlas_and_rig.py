@@ -5,7 +5,7 @@ import math
 import shutil
 import numpy as np
 from silhouette_mesh import silhouette_mesh
-from neck_art import clear_background, load_removal_mask
+from neck_art import clear_background, crop_inputs, removal_mask
 from face_art import write_clean_assets
 from pathlib import Path
 from PIL import Image
@@ -140,7 +140,6 @@ def build():
     build_cranium()
     parts=json.loads((ROOT/'parts/parts_index.json').read_text())
     manifest=json.loads((SOURCE/'manifest.json').read_text()); clothing=json.loads((SOURCE/'clothing.json').read_text())
-    neck_remove=load_removal_mask(ROOT)
     old={p['id']:p for p in manifest['leaves']+manifest['expressions']+clothing['parts']}
     boxes=pack([(p['id'],*p['bbox'][2:]) for p in parts])
     assets=ROOT/'bundle/assets';assets.mkdir(parents=True,exist_ok=True)
@@ -165,10 +164,14 @@ def build():
             full.paste(raw,(bounds['x'],bounds['y']))
             original=full.crop((x,y,x+w,y+h))
         if key=='neck':
-            remove=neck_remove[y:y+h,x:x+w]
-            im=Image.fromarray(clear_background(im,remove))
-            original=Image.fromarray(clear_background(original,remove))
-            Image.fromarray(np.where(remove,0,255).astype('uint8')).save(assets/'neck-keep.png')
+            still,sweater=crop_inputs(ROOT,p['bbox'])
+            untrimmed=np.asarray(Image.open(ROOT/'parts/neck-untrimmed.png').convert('RGBA'))
+            remove,_=removal_mask(untrimmed,still,sweater,(x,y))
+            remove_before,_=removal_mask(original,still,sweater,(x,y))
+            im=Image.fromarray(clear_background(untrimmed,remove))
+            original=Image.fromarray(clear_background(original,remove_before))
+            for name,mask in [('neck-keep.png',remove),('neck-keep-before.png',remove_before)]:
+                Image.fromarray(np.where(mask,0,255).astype('uint8')).save(assets/name)
         if key=='upper-body-short-sleeve':
             alpha=original.getchannel('A')
             alpha.putdata([round(a*max(0,min(1,(y+i//w-680)/12))) for i,a in enumerate(alpha.tobytes())])

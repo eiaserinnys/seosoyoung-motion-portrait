@@ -1,30 +1,45 @@
 {
-  "neck_removed": {
-    "parts/neck.png": {
-      "removed_nonzero": 1161,
-      "removed_opaque": 1138,
-      "restored_previous_rule": 1
+  "neck": {
+    "after": {
+      "candidate_pixels": 1058,
+      "candidate_components": 73,
+      "removed_components": 9,
+      "removed_pixels": 790,
+      "retained_pixels": 268,
+      "restored_previous_rule": 467,
+      "center_removed_pixels": 0
     },
-    "bundle/assets/texture_00.png": {
-      "removed_nonzero": 1161,
-      "removed_opaque": 1138,
-      "restored_previous_rule": 1
-    },
-    "bundle/assets/texture_before_00.png": {
-      "removed_nonzero": 145,
-      "removed_opaque": 139,
-      "restored_previous_rule": 1
+    "before": {
+      "candidate_pixels": 267,
+      "candidate_components": 28,
+      "removed_components": 11,
+      "removed_pixels": 116,
+      "retained_pixels": 151,
+      "restored_previous_rule": 93,
+      "center_removed_pixels": 0
     }
   },
-  "face_strokes": {
-    "face-clean.png": 1171,
-    "face-clean-before.png": 1961
+  "skin_fraction": 0.7,
+  "still_fraction": 0.6,
+  "still_alpha_max_exclusive": 128,
+  "skin_reference": "per-column median of neck luma with alpha >= 128 above collar",
+  "candidate_connectivity": "8; keep candidates without outside-alpha-zero contact",
+  "face_extension": {
+    "after": {
+      "extended_pixels": 21595,
+      "changed_rgb_pixels": 17977,
+      "source_interior_pixels": 84189
+    },
+    "before": {
+      "extended_pixels": 21595,
+      "changed_rgb_pixels": 21505,
+      "source_interior_pixels": 84189
+    }
   },
-  "stroke_luma_delta_min": 30,
-  "skin_reference": "15px median of nearest interior skin",
-  "inpaint": "OpenCV Telea",
-  "inpaint_radius_px": 3,
-  "neck_dilation": "2px elliptical",
+  "face_distance_px": {
+    "replace_lte": 9,
+    "source_gt": 12
+  },
   "neck_bbox": [
     339,
     531,

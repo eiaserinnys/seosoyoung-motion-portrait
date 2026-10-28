@@ -5,8 +5,7 @@
   },
   "N2": {
     "passed": true,
-    "evidence": "pipeline/test_head_base.mjs: legacy and feature hashes",
-    "scope": "Geometry and feature vertex hashes only; neck texture alpha changes intentionally apply to old and new paths."
+    "evidence": "pipeline/test_head_base.mjs: legacy and feature hashes"
   },
   "N3c": {
     "changed_pixels": 0,
@@ -69,7 +68,7 @@
       {
         "yaw": -45,
         "pitch": 30,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 55,
         "opaque_band": {
@@ -77,12 +76,12 @@
           "left": 499,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 0,
         "pitch": 30,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 2,
         "opaque_band": {
@@ -90,12 +89,12 @@
           "left": 561,
           "right": 562
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 45,
         "pitch": 30,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 43,
         "opaque_band": {
@@ -103,12 +102,12 @@
           "left": 447,
           "right": 489
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -45,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 466,
         "measured_columns": 87,
         "opaque_band": {
@@ -121,7 +120,7 @@
       {
         "yaw": 0,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 2,
         "opaque_band": {
@@ -129,12 +128,12 @@
           "left": 441,
           "right": 442
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 45,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 452,
         "measured_columns": 92,
         "opaque_band": {
@@ -147,7 +146,7 @@
       {
         "yaw": -45,
         "pitch": -30,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 172,
         "measured_columns": 76,
         "opaque_band": {
@@ -160,7 +159,7 @@
       {
         "yaw": 0,
         "pitch": -30,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 25,
         "opaque_band": {
@@ -168,12 +167,12 @@
           "left": 447,
           "right": 471
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 45,
         "pitch": -30,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 59,
         "measured_columns": 37,
         "opaque_band": {
@@ -186,7 +185,7 @@
       {
         "yaw": -90,
         "pitch": -20,
-        "hole_pixels": 18,
+        "hole_pixels": 3,
         "neck_gap_pixels": 3643,
         "measured_columns": 107,
         "opaque_band": {
@@ -199,7 +198,7 @@
       {
         "yaw": -75,
         "pitch": -20,
-        "hole_pixels": 18,
+        "hole_pixels": 3,
         "neck_gap_pixels": 2019,
         "measured_columns": 107,
         "opaque_band": {
@@ -212,7 +211,7 @@
       {
         "yaw": -60,
         "pitch": -20,
-        "hole_pixels": 23,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1059,
         "measured_columns": 107,
         "opaque_band": {
@@ -225,7 +224,7 @@
       {
         "yaw": -45,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 273,
         "measured_columns": 64,
         "opaque_band": {
@@ -238,7 +237,7 @@
       {
         "yaw": -30,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 13,
         "opaque_band": {
@@ -246,12 +245,12 @@
           "left": 541,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -15,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 1,
         "opaque_band": {
@@ -259,12 +258,12 @@
           "left": 557,
           "right": 557
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 0,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 3,
         "opaque_band": {
@@ -272,12 +271,12 @@
           "left": 446,
           "right": 448
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 15,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 26,
         "measured_columns": 31,
         "opaque_band": {
@@ -290,7 +289,7 @@
       {
         "yaw": 30,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 126,
         "measured_columns": 47,
         "opaque_band": {
@@ -303,7 +302,7 @@
       {
         "yaw": 45,
         "pitch": -20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 196,
         "measured_columns": 50,
         "opaque_band": {
@@ -316,7 +315,7 @@
       {
         "yaw": 60,
         "pitch": -20,
-        "hole_pixels": 23,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1025,
         "measured_columns": 107,
         "opaque_band": {
@@ -329,7 +328,7 @@
       {
         "yaw": 75,
         "pitch": -20,
-        "hole_pixels": 18,
+        "hole_pixels": 3,
         "neck_gap_pixels": 2137,
         "measured_columns": 107,
         "opaque_band": {
@@ -342,7 +341,7 @@
       {
         "yaw": 90,
         "pitch": -20,
-        "hole_pixels": 23,
+        "hole_pixels": 3,
         "neck_gap_pixels": 3434,
         "measured_columns": 107,
         "opaque_band": {
@@ -355,7 +354,7 @@
       {
         "yaw": -90,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1452,
         "measured_columns": 107,
         "opaque_band": {
@@ -368,7 +367,7 @@
       {
         "yaw": -75,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1178,
         "measured_columns": 107,
         "opaque_band": {
@@ -381,7 +380,7 @@
       {
         "yaw": -60,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 656,
         "measured_columns": 107,
         "opaque_band": {
@@ -394,7 +393,7 @@
       {
         "yaw": -30,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 116,
         "measured_columns": 43,
         "opaque_band": {
@@ -407,7 +406,7 @@
       {
         "yaw": -15,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 3,
         "opaque_band": {
@@ -415,12 +414,12 @@
           "left": 552,
           "right": 554
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 15,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 4,
         "opaque_band": {
@@ -428,12 +427,12 @@
           "left": 447,
           "right": 450
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 30,
         "pitch": 0,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 168,
         "measured_columns": 47,
         "opaque_band": {
@@ -446,7 +445,7 @@
       {
         "yaw": 60,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 675,
         "measured_columns": 107,
         "opaque_band": {
@@ -459,7 +458,7 @@
       {
         "yaw": 75,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1300,
         "measured_columns": 107,
         "opaque_band": {
@@ -472,7 +471,7 @@
       {
         "yaw": 90,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1729,
         "measured_columns": 107,
         "opaque_band": {
@@ -485,7 +484,7 @@
       {
         "yaw": -90,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 107,
         "opaque_band": {
@@ -493,12 +492,12 @@
           "left": 447,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -75,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 107,
         "opaque_band": {
@@ -506,12 +505,12 @@
           "left": 447,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -60,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 106,
         "opaque_band": {
@@ -519,12 +518,12 @@
           "left": 448,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -45,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 56,
         "opaque_band": {
@@ -532,12 +531,12 @@
           "left": 498,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -30,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 25,
         "opaque_band": {
@@ -545,12 +544,12 @@
           "left": 529,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -15,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 3,
         "opaque_band": {
@@ -558,12 +557,12 @@
           "left": 554,
           "right": 556
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 0,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 2,
         "opaque_band": {
@@ -571,12 +570,12 @@
           "left": 562,
           "right": 563
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 15,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 1,
         "opaque_band": {
@@ -584,12 +583,12 @@
           "left": 442,
           "right": 442
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 30,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 17,
         "opaque_band": {
@@ -597,12 +596,12 @@
           "left": 447,
           "right": 463
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 45,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 58,
         "opaque_band": {
@@ -610,12 +609,12 @@
           "left": 447,
           "right": 504
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 60,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 107,
         "opaque_band": {
@@ -623,12 +622,12 @@
           "left": 447,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 75,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 107,
         "opaque_band": {
@@ -636,12 +635,12 @@
           "left": 447,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 90,
         "pitch": 20,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 107,
         "opaque_band": {
@@ -649,12 +648,12 @@
           "left": 447,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": -67.5,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 948,
         "measured_columns": 107,
         "opaque_band": {
@@ -667,7 +666,7 @@
       {
         "yaw": 67.5,
         "pitch": 0,
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1023,
         "measured_columns": 107,
         "opaque_band": {
@@ -680,7 +679,7 @@
       {
         "yaw": -22.5,
         "pitch": -15,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 1,
         "opaque_band": {
@@ -688,12 +687,12 @@
           "left": 554,
           "right": 554
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 22.5,
         "pitch": -15,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 48,
         "measured_columns": 32,
         "opaque_band": {
@@ -706,7 +705,7 @@
       {
         "yaw": -22.5,
         "pitch": 15,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 14,
         "opaque_band": {
@@ -714,12 +713,12 @@
           "left": 540,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       {
         "yaw": 22.5,
         "pitch": 15,
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 2,
         "opaque_band": {
@@ -727,16 +726,15 @@
           "left": 447,
           "right": 448
         },
-        "passed": true
+        "passed": false
       }
-    ],
-    "limitation": "Front and up use a two-pixel band after head occlusion, so zero does not prove the entire neck junction is gap-free."
+    ]
   },
   "rest_full_difference": {
-    "changed_pixels": 3454,
+    "changed_pixels": 3490,
     "ear_changed_pixels": 2770,
     "neck_opaque_changed_pixels": 2,
-    "other_changed_pixels": 682,
+    "other_changed_pixels": 718,
     "ear_changed_from_8330_pixels": 0,
     "bbox": [
       310,
@@ -766,17 +764,17 @@
     "sample_y": 640
   },
   "rest_extension_difference": {
-    "changed_pixels": 284,
+    "changed_pixels": 381,
     "on_opaque_original_neck_pixels": 2,
     "bbox": [
-      373,
+      371,
       600,
-      628,
+      631,
       772
     ]
   },
   "rest_views": {
-    "neck_opaque_changed_pixels": 2879
+    "neck_opaque_changed_pixels": 2941
   },
   "face_clean_checks": {
     "before_rest": 0,
@@ -784,7 +782,7 @@
     "after_rest": 0,
     "after_legacy": 0
   },
-  "rest_changed_pixels_vs_49ef685": 195,
+  "rest_changed_pixels_vs_90ce0a2": 217,
   "neck_axis": {
     "center_x": 500.421755073873,
     "rest_depth": 47.143816374334676,
@@ -2138,7 +2136,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 55,
         "opaque_band": {
@@ -2146,7 +2144,7 @@
           "left": 499,
           "right": 553
         },
-        "passed": true
+        "passed": false
       },
       "N11": {
         "iou": 0.3737206999009574,
@@ -2201,7 +2199,7 @@
         "passed": true
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 2,
         "opaque_band": {
@@ -2209,7 +2207,7 @@
           "left": 561,
           "right": 562
         },
-        "passed": true
+        "passed": false
       },
       "N11": {
         "iou": 0.5921610169491526,
@@ -2264,7 +2262,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 43,
         "opaque_band": {
@@ -2272,7 +2270,7 @@
           "left": 447,
           "right": 489
         },
-        "passed": true
+        "passed": false
       },
       "N11": {
         "iou": 0.4326194398682043,
@@ -2327,7 +2325,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 466,
         "measured_columns": 87,
         "opaque_band": {
@@ -2390,7 +2388,7 @@
         "passed": true
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 2,
         "opaque_band": {
@@ -2398,7 +2396,7 @@
           "left": 441,
           "right": 442
         },
-        "passed": true
+        "passed": false
       },
       "N11": {
         "iou": 0.7609899823217443,
@@ -2453,7 +2451,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 452,
         "measured_columns": 92,
         "opaque_band": {
@@ -2516,7 +2514,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 172,
         "measured_columns": 76,
         "opaque_band": {
@@ -2579,7 +2577,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 25,
         "opaque_band": {
@@ -2587,7 +2585,7 @@
           "left": 447,
           "right": 471
         },
-        "passed": true
+        "passed": false
       },
       "N11": {
         "iou": 0.4823906083244397,
@@ -2642,7 +2640,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 59,
         "measured_columns": 37,
         "opaque_band": {
@@ -2670,7 +2668,7 @@
         "passed": true
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 1,
         "opaque_band": {
@@ -2678,7 +2676,7 @@
           "left": 554,
           "right": 554
         },
-        "passed": true
+        "passed": false
       }
     },
     {
@@ -2692,7 +2690,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 48,
         "measured_columns": 32,
         "opaque_band": {
@@ -2714,7 +2712,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 14,
         "opaque_band": {
@@ -2722,7 +2720,7 @@
           "left": 540,
           "right": 553
         },
-        "passed": true
+        "passed": false
       }
     },
     {
@@ -2736,7 +2734,7 @@
         "passed": true
       },
       "N10": {
-        "hole_pixels": 0,
+        "hole_pixels": 3,
         "neck_gap_pixels": 0,
         "measured_columns": 2,
         "opaque_band": {
@@ -2744,7 +2742,7 @@
           "left": 447,
           "right": 448
         },
-        "passed": true
+        "passed": false
       }
     },
     {
@@ -2752,7 +2750,7 @@
       "yaw": -90,
       "pitch": 0,
       "N10": {
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1452,
         "measured_columns": 107,
         "opaque_band": {
@@ -2774,7 +2772,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 948,
         "measured_columns": 107,
         "opaque_band": {
@@ -2796,7 +2794,7 @@
         "passed": false
       },
       "N10": {
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1023,
         "measured_columns": 107,
         "opaque_band": {
@@ -2812,7 +2810,7 @@
       "yaw": 90,
       "pitch": 0,
       "N10": {
-        "hole_pixels": 24,
+        "hole_pixels": 3,
         "neck_gap_pixels": 1729,
         "measured_columns": 107,
         "opaque_band": {
@@ -2890,59 +2888,8 @@
       }
     },
     "portrait_changes": {
-      "sweater": 195,
-      "shirt": 3
+      "sweater": 217,
+      "shirt": 4
     }
-  },
-  "head_art_generation": "docs/head_art_generation.json",
-  "visual_review": {
-    "neck_shoulders": "Skin band remains where the dilated neck mask already contains it; small background gaps appear by the sweater shoulders.",
-    "neck_mask_example": {
-      "row": 670,
-      "opaque_neck_span": [
-        426,
-        574
-      ],
-      "neck_mask_span": [
-        426,
-        575
-      ],
-      "left_outline_x": 434
-    },
-    "neck_hole": {
-      "hole_poses": 14,
-      "max_hole_px": 24,
-      "removed_island_px": 21,
-      "island_canvas_bbox": [
-        499,
-        554,
-        509,
-        556
-      ],
-      "sample_canvas": [
-        504,
-        555
-      ],
-      "sample_masks": {
-        "neck": 0,
-        "face-skin": 0,
-        "sweater_top_y": 773
-      },
-      "deformed_sample_yaw_minus_or_plus_60": [
-        503.17857142857144,
-        546.2380952380952
-      ],
-      "render_dark_samples": [
-        499.6,
-        544.6,
-        502.4,
-        544.6
-      ],
-      "evidence": "docs/captures/head_base_neck_holes.png"
-    },
-    "shirt_rest": "No obvious shoulder hole in the front hair-hidden shirt comparison.",
-    "jaw": "The angular color patch at yaw ±60 was reduced; faint crossing traces are visible again in up, −30/+20 and +45/+20.",
-    "jaw_evidence": "docs/captures/head_base_faint_jaw.png",
-    "shoulder_evidence": "docs/captures/head_base_shoulder_detail.png"
   }
 }
