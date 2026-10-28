@@ -2,7 +2,7 @@ import {craniumFacing,craniumSeam,referenceHairSample} from './hair-surface.mjs'
 import {SKIN_FILL} from './skin-fill-data.mjs';
 import {FRAME_CACHE,frameValue} from './pose-grid.mjs';
 import {profileWeights,smoothstep} from './face-profile.mjs';
-import {skinFillMesh,skinFillPositions,skinFillClipMesh,skinFillClipPositions} from './skin-fill.mjs';
+import {skinFillMesh,skinFillPositions,skinFillClipMesh,skinFillClipPositions,templeFillMesh,templeFillPositions} from './skin-fill.mjs';
 import {deform3D,opacity,bindRig} from './rig.mjs';
 import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction,headBaseActive} from './geometry.mjs';
 import {getHeadBase,headBaseVertices,headPoseDistance,headSurfaceFacingDelta,HEAD_BASE} from './head-base.mjs';
@@ -132,7 +132,7 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceClean;unif
     const weights=profileWeights(p);
     this.gl.uniform3f(this.loc.profileMix,mesh.id==='face-skin'?weights.skin:0,weights.profile,weights.row);
     const gl=this.gl;gl.uniform1f(this.loc.backStart,mesh.id==='back-hair-center'?407:310);gl.uniform1f(this.loc.identify,this.identify?((Array.isArray(this.identify)?this.identify.includes(mesh.id):mesh.id===this.identify)?2:1):0);gl.uniform1f(this.loc.farBack,mesh.id.startsWith('back-hair')?Math.sign(p.ParamAngleX)*Math.min(1,correction(p,'CorrHairOcclusion')/.8)*Math.min(1,Math.abs(p.ParamAngleX)/25)**2*(3-2*Math.min(1,Math.abs(p.ParamAngleX)/25)):0);
-    let points=frameValue(p,'pos:'+mesh.id,()=>mesh.id==='exposed-skin-clip'?skinFillClipPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.id==='exposed-skin'?skinFillPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.positions.map(pt=>mesh.surface?headWorld(pt,p):deform3D(mesh,pt,p)));
+    let points=frameValue(p,'pos:'+mesh.id,()=>mesh.id==='exposed-skin-clip'?skinFillClipPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.id==='exposed-skin'?skinFillPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.id==='temple-fill'?templeFillPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.positions.map(pt=>mesh.surface?headWorld(pt,p):deform3D(mesh,pt,p)));
     if(mesh.id==='neck'&&compareHead)points=neckDepthPositions(mesh,points,this.headBase.reference,this.headBase.open_boundary);
     const ref=this.rig.meshes.find(m=>m.id==='side-cranium-'+(p.ParamAngleX<0?'right':'left'));
     const [ax,ay,bw,bh]=ref.atlas,size=this.rig.atlasSize;
@@ -221,6 +221,7 @@ precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceClean;unif
         this.drawHeadBase(p);gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);gl.depthMask(false);
       }
       texture(6);const fill=skinFillMesh();wire(fill,this.draw(fill,p,alpha,{clip}));
+      const temple=templeFillMesh(this.rig.meshes.find(m=>m.id==='face-skin'));wire(temple,this.draw(temple,p,alpha,{clip}));
       texture(0);gl.depthMask(true);
     };
     gl.disable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);
