@@ -1,0 +1,36 @@
+{
+  "상태": "중단",
+  "사유": "디렉터가 얼굴판 재적합을 보류하고 포스트모템을 다시 하기로 결정함",
+  "기준_커밋": "6a9e2069737b32d1979885cda030c5a0146b9766",
+  "이번_다섯_장_적합": "실행하지 않음",
+  "작성한_코드": [
+    "pipeline/face_video_head_fit.py",
+    "pipeline/test_face_video_head_fit.py",
+    "docs/diagnostics/face-video-head-fit-smoke.py",
+    "docs/diagnostics/face-video-head-fit-sheet.py",
+    "docs/diagnostics/face-video-head-gradient-probe.py"
+  ],
+  "기존_결과": {
+    "깊이": "docs/diagnostics/face-video-depth-feasible.json",
+    "보정": "docs/diagnostics/face-video-residual-five.json",
+    "보정_시트": [
+      "docs/diagnostics/face-video-residual-sheet-1.png",
+      "docs/diagnostics/face-video-residual-sheet-2.png",
+      "docs/diagnostics/face-video-residual-sheet-3.png"
+    ],
+    "관측_확인_시트": "docs/diagnostics/face-video-observation-audit.png"
+  },
+  "이번_단계의_작은_시험": {
+    "관측": "합성 도형만 사용",
+    "단위_검사": "8개 통과",
+    "합성_적합": "두 프레임과 네 정점에서 머리와 피부 보정의 오차 감소, 앞면 겹침 0",
+    "표본_보정_전": "한 정점에서 실제 오차의 기울기 -0.00681642, 고정 대응 기울기 +0.00803677",
+    "표본_보정_후": "같은 위치의 실제 기울기와 계산 기울기가 일치하는 검사 통과"
+  },
+  "주의": [
+    "기존 보정 1의 턱선이 계단처럼 깨져 실패 판정됨",
+    "새 머리 배치 코드는 다섯 장에서 평가하지 않은 중간 산출물임",
+    "기존 관측선은 1px 확정 라벨이 아닌 자동 생성 임시선임",
+    "제품 코드 연결, 전체 적합, PR과 발행은 하지 않음"
+  ]
+}
