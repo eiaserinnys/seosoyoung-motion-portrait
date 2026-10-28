@@ -266,10 +266,10 @@ class Attachments:
 
 
 def main():
-    with np.load(FIT / 'results/side-fix/fit-state-side.npz') as source:
+    with np.load(FIT / 'results/fixed-outline/fit-state-fixed.npz') as source:
         vertices, triangles, s_ref = source['vertices'].copy(), source['triangles'].copy(), float(source['s_ref'])
         open_edges, excluded = source['open_edges'].copy(), source['excluded'].copy()
-        side_weight = source['g'].copy()
+        fixed_weight = source['w'].copy()
     with np.load(FIT / 'results/fit2f/surface-a.npz') as source:
         ear = source['ear_excluded'].copy()
         ear_vertices = source['vertices'].copy()
@@ -280,7 +280,7 @@ def main():
     poses = json.loads((FIT / 'results/fit2e/poses-refined.json').read_text())
     refined = {row['frame']: row['refined_pose'] for row in poses['frames']}
     rest_field = np.einsum('k,kij->ij', phi(refined[3][:2], nodes, sigma), fields)
-    fields = fields*(1-side_weight)[None, :, None] + rest_field[None, :, :]*side_weight[None, :, None]
+    fields = fields*(1-fixed_weight)[None, :, None] + rest_field[None, :, :]*fixed_weight[None, :, None]
     rig = json.loads((ROOT / 'bundle/assets/seosoyoung-rig.json').read_text())
     ear_biases = ear_depth_biases()
     skin = next(mesh for mesh in rig['meshes'] if mesh['id'] == 'face-skin')
@@ -289,6 +289,7 @@ def main():
 
     with np.load(ROOT / 'pipeline/headmodel/cheek-field.npz') as source:
         cheek = source['displacement'].copy()
+    cheek *= (1-fixed_weight)[:, None]
     root_rings = ear_root_rings(ear_vertices, triangles, ear)
     vertices, fields = flatten_ears(vertices, triangles, fields, ear)
     sheet = ear_sheet(vertices.astype('<f4'), triangles)

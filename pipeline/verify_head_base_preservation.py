@@ -1,4 +1,4 @@
-"""Verify protected assets and the side-fix field against the merge base."""
+"""Verify protected assets and the fixed-outline fields against the merge base."""
 import io
 import json
 import subprocess
@@ -35,12 +35,15 @@ def verify():
         check((ROOT/'bundle'/name).read_bytes() == previous(name), name)
 
     fit = ROOT/'pipeline/headmodel/fit/results'
-    with np.load(fit/'fit2f/fit-state-n3.npz') as original, np.load(fit/'side-fix/fit-state-side.npz') as side:
-        check(all(np.array_equal(original[key], side[key]) for key in original.files if key != 'vertices'),
+    with np.load(fit/'fit2f/fit-state-n3.npz') as original, np.load(fit/'fixed-outline/fit-state-fixed.npz') as fixed_data:
+        check(all(np.array_equal(original[key], fixed_data[key]) for key in original.files if key != 'vertices'),
               'source topology and metadata')
-        original_vertices, fixed, g = original['vertices'].copy(), side['vertices'].copy(), side['g'].copy()
+        original_vertices, fixed, w = original['vertices'].copy(), fixed_data['vertices'].copy(), fixed_data['w'].copy()
         triangles = original['triangles'].copy()
-        check(np.array_equal(original_vertices[:, 1:], fixed[:, 1:]), 'only x coordinates changed')
+    with np.load(ROOT/'pipeline/headmodel/cheek-field.npz') as source:
+        original_cheek = source['displacement'].copy()
+    check(np.allclose(fixed[:, 1], original_vertices[:, 1]+w*original_cheek[:, 1], rtol=0, atol=1e-12),
+          'vertical coordinate changes only by the transferred cheek field')
     with np.load(fit/'fit2f/surface-a.npz') as source:
         ear = source['ear_excluded'].copy()
     a, b, c = triangles.T
@@ -66,16 +69,15 @@ def verify():
         logits = -np.sum(distance*distance, axis=1)/(2*sigma*sigma)
         weights = np.exp(logits-logits.max()); weights /= weights.sum()
         rest = np.einsum('k,kij->ij', weights, raw)
-        expected = raw*(1-g)[None, :, None] + rest[None, :, :]*g[None, :, None]
+        expected = raw*(1-w)[None, :, None] + rest[None, :, :]*w[None, :, None]
     fields = array('fields').reshape(9, count, 3)[:, :-1]
     selected = ~ear
     selected[metadata['open_boundary']] = False
     field_error = float(np.max(np.abs(fields[:, selected]-expected[:, selected])))
     check(field_error < 1e-5, 'rest-blended angle fields')
-    with np.load(ROOT/'pipeline/headmodel/cheek-field.npz') as source:
-        expected_cheek = source['displacement'].astype('<f4')
+    expected_cheek = (original_cheek*(1-w)[:, None]).astype('<f4')
     cheek = array('cheek_field').reshape(count, 3)[:-1]
-    check(np.array_equal(cheek, expected_cheek), 'unchanged cheek field')
+    check(np.array_equal(cheek, expected_cheek), 'fixed-outline cheek field')
     report['field_max_error'] = field_error
     report['field_checked_vertices'] = int(selected.sum())
     report['checks'] = checks
