@@ -1,4 +1,4 @@
-"""Compare the fixed dome with the merged r25 viewer in one capture run."""
+"""Compare the fixed head side with the r25 viewer in one capture run."""
 import base64
 import functools
 import http.server
@@ -21,10 +21,10 @@ BASE = '43d4eeaf1d3b5c5cfb9e22ab77cc5def8abc3ca5'
 BACKGROUND = (30, 36, 48, 255)
 FONT = ImageFont.truetype('/usr/share/fonts/truetype/nanum/NanumGothic.ttf', 17)
 POSES = [('정면', 0, 0, False), ('디렉터 X 25 · Y 18', 25, 18, False),
-         ('X -25 · Y 18', -25, 18, False), ('X 45 · Y 20', 45, 20, False),
-         ('유효 67.5°', 67.5, 0, True), ('유효 90°', 90, 0, True),
-         ('위 20°', 0, 20, False), ('아래 20°', 0, -20, False)]
-EAR_POSES = [POSES[1], ('X -45', -45, 0, False), ('X +45', 45, 0, False), POSES[4]]
+         ('X -25 · Y 18', -25, 18, False), ('X 35 · Y 18', 35, 18, False),
+         ('X -35 · Y 18', -35, 18, False), ('X 45 · Y 20', 45, 20, False),
+         ('X -45 · Y 20', -45, 20, False), ('유효 67.5°', 67.5, 0, True),
+         ('유효 90°', 90, 0, True), ('X 45', 45, 0, False)]
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -58,7 +58,7 @@ def sheet(name, poses, old, new, mode, box):
         label = pose[0]
         x, y = (i % 2)*(2*width+gap), (i//2)*(height+header)
         draw.text((x+8, y+6), label+'  |  r25', font=FONT, fill='white')
-        draw.text((x+width+8, y+6), '새 돔', font=FONT, fill='white')
+        draw.text((x+width+8, y+6), '새 옆선', font=FONT, fill='white')
         page.paste(panel(old[label][mode], box, width, height), (x, y+header))
         page.paste(panel(new[label][mode], box, width, height), (x+width, y+header))
     page.save(DEST / name, optimize=True)
@@ -69,7 +69,7 @@ def diff(a, b):
 
 
 def run():
-    with tempfile.TemporaryDirectory(prefix='head-base-dome-main-') as directory:
+    with tempfile.TemporaryDirectory(prefix='head-base-side-main-') as directory:
         archive = subprocess.check_output(['git', 'archive', BASE, 'bundle'], cwd=ROOT)
         with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
             tar.extractall(directory, filter='data')
@@ -97,10 +97,9 @@ def run():
                     }''')
                     pages.append(page)
                 results = []
-                all_poses = list(dict.fromkeys(POSES + EAR_POSES))
                 for page in pages:
                     captures = {}
-                    for label, x, y, effective in all_poses:
+                    for label, x, y, effective in POSES:
                         variants = page.evaluate('''([x,y,effective])=>{
                           const meshes=studio.rig.meshes;
                           const hair=meshes.filter(m=>m.id==='hair-top'||m.id==='hairpin'||/^(bangs-|side-hair-|back-hair-|side-cranium-|tail-)/.test(m.id)).map(m=>m.id);
@@ -123,16 +122,19 @@ def run():
             old, new = results
             DEST.mkdir(parents=True, exist_ok=True)
             box = (238+145, 32+70, 238+870, 32+795)
-            sheet('head_base_dome_hairless.png', POSES, old, new, 'hairless', box)
-            sheet('head_base_dome_hair.png', [POSES[i] for i in (0, 1, 3, 5)], old, new, 'full', box)
-            sheet('head_base_dome_ears.png', EAR_POSES, old, new, 'hairless', (238+180,32+220,238+840,32+720))
-            director = POSES[1][0]
-            overlay = np.asarray(rgb(new[director]['hairless'])).copy()
-            silhouette = np.asarray(old[director]['head'])[:, :, 3] > 127
-            contours, _ = cv2.findContours(silhouette.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-            cv2.drawContours(overlay, contours, -1, (255, 50, 50), 2)
-            annotated = panel(Image.fromarray(overlay).convert('RGBA'), box, 720, 720)
-            annotated.save(DEST/'head_base_dome_overlay.png', optimize=True)
+            sheet('head_base_side_hairless.png', POSES[1:9], old, new, 'hairless', box)
+            sheet('head_base_side_hair.png', [POSES[i] for i in (1, 9, 8)], old, new, 'full', box)
+            overlay_sheet = Image.new('RGB', (1440, 752), BACKGROUND[:3])
+            draw = ImageDraw.Draw(overlay_sheet)
+            for column, pose in enumerate((POSES[1], POSES[5])):
+                label = pose[0]
+                overlay = np.asarray(rgb(new[label]['hairless'])).copy()
+                silhouette = np.asarray(old[label]['head'])[:, :, 3] > 127
+                contours, _ = cv2.findContours(silhouette.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+                cv2.drawContours(overlay, contours, -1, (255, 50, 50), 2)
+                draw.text((column*720+8, 6), label+' · 빨강: r25', font=FONT, fill='white')
+                overlay_sheet.paste(panel(Image.fromarray(overlay).convert('RGBA'), box, 720, 720), (column*720, 32))
+            overlay_sheet.save(DEST/'head_base_side_overlay.png', optimize=True)
             rest_on = diff(old['정면']['full'], new['정면']['full'])
             rest_off = diff(old['정면']['legacy'], new['정면']['legacy'])
             old_head = np.asarray(old['정면']['head'])[:, :, 3] > 127
@@ -144,10 +146,10 @@ def run():
             if rest_on.any():
                 visualization = np.asarray(rgb(new['정면']['full'])).copy()
                 visualization[rest_on] = [255, 50, 50]
-                Image.fromarray(visualization).save(DEST/'head_base_dome_rest_diff.png')
+                Image.fromarray(visualization).save(DEST/'head_base_side_rest_diff.png')
                 y, x = np.where(rest_on)
                 result['rest_change_bbox'] = [int(x.min()), int(y.min()), int(x.max()+1), int(y.max()+1)]
-            (ROOT/'docs/head_base_dome_capture.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
+            (ROOT/'docs/head_base_side_capture.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
             print(json.dumps(result, ensure_ascii=False), flush=True)
         finally:
             for server, thread in servers:

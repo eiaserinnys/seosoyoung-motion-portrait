@@ -1,0 +1,104 @@
+{
+  "path": "/home/eias/workspace/.projects/seosoyoung-motion-portrait--feat-head-side-fix-b2641753/pipeline/headmodel/fit/results/side-fix/fit-state-side.npz",
+  "max_displacement_px": 158.15506722873687,
+  "widths_ict": {
+    "0.0": {
+      "all_before": 8.231486158443044,
+      "all_after": 7.788100613332118,
+      "rear_before": 4.798409857800965,
+      "rear_after": 1.7217619202616796
+    },
+    "2.5": {
+      "all_before": 8.828588276384652,
+      "all_after": 8.754770122483817,
+      "rear_before": 7.317822433128941,
+      "rear_after": 1.6786108842497072
+    },
+    "5.0": {
+      "all_before": 9.04037331540335,
+      "all_after": 9.04037331540335,
+      "rear_before": 8.029982546907094,
+      "rear_after": 3.6936732706179605
+    },
+    "7.5": {
+      "all_before": 8.732897343828899,
+      "all_after": 8.729579844660197,
+      "rear_before": 7.944868885099065,
+      "rear_after": 4.845125565162957
+    }
+  },
+  "temple_protrusion": [
+    {
+      "yaw": -35,
+      "pitch": 0,
+      "max_px": 11.532610593318177,
+      "bins": 54
+    },
+    {
+      "yaw": -35,
+      "pitch": 12,
+      "max_px": 6.69102660694235,
+      "bins": 54
+    },
+    {
+      "yaw": -25,
+      "pitch": 0,
+      "max_px": 0.0,
+      "bins": 54
+    },
+    {
+      "yaw": -25,
+      "pitch": 12,
+      "max_px": 2.132649972284842,
+      "bins": 54
+    },
+    {
+      "yaw": -16,
+      "pitch": 0,
+      "max_px": 0.0,
+      "bins": 54
+    },
+    {
+      "yaw": -16,
+      "pitch": 12,
+      "max_px": 0.5478052733738383,
+      "bins": 54
+    },
+    {
+      "yaw": 16,
+      "pitch": 0,
+      "max_px": 0.0,
+      "bins": 54
+    },
+    {
+      "yaw": 16,
+      "pitch": 12,
+      "max_px": 0.0,
+      "bins": 54
+    },
+    {
+      "yaw": 25,
+      "pitch": 0,
+      "max_px": 0.0,
+      "bins": 54
+    },
+    {
+      "yaw": 25,
+      "pitch": 12,
+      "max_px": 1.732213657322232,
+      "bins": 54
+    },
+    {
+      "yaw": 35,
+      "pitch": 0,
+      "max_px": 5.546003836784734,
+      "bins": 54
+    },
+    {
+      "yaw": 35,
+      "pitch": 12,
+      "max_px": 7.213218475176333,
+      "bins": 54
+    }
+  ]
+}
