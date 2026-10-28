@@ -27,6 +27,15 @@ const skin=rig.meshes.find(m=>m.id==='face-skin');
 const feature=rig.meshes.filter(m=>m.id.startsWith('eye-')||m.id==='closed-eyes-v1'||m.id==='nose-detail'||m.id.startsWith('mouth'));
 const close=(a,b,tol,label)=>assert(Math.abs(a-b)<=tol,`${label}: ${a} vs ${b}`);
 const digest=v=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
+test('recommended preset defaults to the existing path while head-base remains available',()=>{
+ const schema=JSON.parse(read('../source/viewer/corrections.json'));
+ assert.equal(CORRECTION_PRESETS.recommended.CorrHeadBase,0);
+ assert.equal(CORRECTION_PRESETS.recommended.CorrOutline,1);
+ assert.equal(CORRECTION_PRESETS.pure.CorrHeadBase,0);
+ assert.deepEqual(rig.corrections,schema);
+ assert.deepEqual(CORRECTION_PRESETS,schema.presets);
+ assert.deepEqual(schema.controls.find(item=>item.id==='CorrHeadBase'),{id:'CorrHeadBase',label:'두상 바탕 연결',min:0,max:1,step:1});
+});
 const oldFeatures={
  '1:0':'80c0e03a75e7d8fdc530f7814323c25a933708fa6c4d6e69a68f824e9326f7f2',
  '1:0.5':'bcdbe31ed6c048b067628dfb4fb7e936524a7f2045a4d782f3baa3543709cf88',

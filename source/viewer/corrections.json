@@ -121,7 +121,7 @@
       "CorrHairDepth": 1,
       "CorrHairOcclusion": 0.8,
       "CorrOutline": 1,
-      "CorrHeadBase": 1
+      "CorrHeadBase": 0
     }
   }
 }
