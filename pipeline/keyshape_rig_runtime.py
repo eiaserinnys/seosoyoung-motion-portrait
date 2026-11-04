@@ -34,7 +34,7 @@ class Rig:
             # 정면 변위를 나중에 더하면 먼 눈의 세로 배율이 닫힘에 안 걸려 메시가 뒤집혔다(세라피엘 2판 결함 1~3).
             side='left' if ('-left' in pid) else 'right'; yc=self.rig['eyeClosedY'][side]; op=p['openL'] if side=='left' else p['openR']; kind=pid.split('-')[-1]
             if not pid.startswith('closed'):
-                s=min(1.0,(1-op)/(1-0.22))                                              # 0.22에서 1이 되어 감은 눈 부품과 자리가 이어진다
+                s=min(1.0,(1-op)/(1-self.rig['blinkSquashEnd']))                        # 7판: 0.29에서 1이 되어 감은 눈 부품이 켜지기 전에 자리가 이어진다
                 bc=self.rig['blinkCurves'][side]; xi=np.clip(np.round(pos[:,0]).astype(int)-bc['x0'],0,len(bc['top'])-1)
                 C=lambda k:np.array(bc[k])[xi]; closed=C('closed')
                 if kind in ('lashes','line'):                                              # 5판: 열마다 파츠의 세로 범위[t0,b0]를 감은 눈 부품의 범위[ct,cb]로 옮긴다(s=1에서 두께·모양이 감은 부품과 같다 → 단차·눈꼬리 갈고리 없음)
@@ -57,8 +57,8 @@ class Rig:
         a,b=self.rig['blinkFade']
         if m['group']=='eye' and not pid.startswith('closed'):              # 5판: 0.30→0.22 교차 페이드(눈 파츠 1→0)
             op=p['openL'] if '-left-' in pid else p['openR']; return float(np.clip((op-a)/(b-a),0,1))
-        if pid.startswith('closed-eyes'):                                   # 6판: 닫힌 눈은 0.28 이하에서 즉시 켠다
-            op=p['openL'] if pid.endswith('left') else p['openR']; return float(op<=self.rig['blinkClosedOn'])
+        if pid.startswith('closed-eyes'):                                   # 7판: 감은 눈은 0.29→0.27에서 0→1로 페이드한다
+            op=p['openL'] if pid.endswith('left') else p['openR']; c0,c1=self.rig['blinkClosedFade']; return float(1-np.clip((op-c0)/(c1-c0),0,1))
         return 1.0
     def order(self,p):
         """(순서, 메시, 불투명도 배율). 먼 쪽 묶음머리·옆머리는 farEarFade 구간에서 앞(원래 순서)과 뒤(95)에 같이 그려 섞는다."""
@@ -86,11 +86,11 @@ class Rig:
         D=self.face_depth(p); F=self.rig['farWipeFeatherPx']; E0=self.rig['farWipeDepth'][side]; e=E0+(-F-E0)*t
         return np.clip((e+F-D)/F,0,1).astype(np.float32)
     def warp(self,m,pos):
-        """6판 화소 중심 +0.5 기준으로 역변환 표본을 만든다. 정점과 UV는 정수 좌표에 둔다."""
+        """화소 중심 +0.5 표본을 만들고 겹친 삼각형을 GPU와 같은 순서로 over 합성한다."""
         x,y,w,h=m['bbox']; src=m['pos']-[x,y]; tri=m['tri']
         x0=max(int(math.floor(pos[:,0].min()))-1,0); y0=max(int(math.floor(pos[:,1].min()))-1,0); x1=min(int(math.ceil(pos[:,0].max()))+2,1024); y1=min(int(math.ceil(pos[:,1].max()))+2,1536)
         if x1<=x0 or y1<=y0: return None
-        W,Hh=x1-x0,y1-y0; idx=np.full((Hh,W),-1,np.int32); A=np.zeros((len(tri),2,3),np.float64); yy,xx=np.mgrid[0:Hh,0:W]; cx=xx+0.5; cy=yy+0.5
+        W,Hh=x1-x0,y1-y0; idx=np.full((Hh,W),-1,np.int32); A=np.zeros((len(tri),2,3),np.float64); yy,xx=np.mgrid[0:Hh,0:W]; cx=xx+0.5; cy=yy+0.5; overlaps=[]
         for t,(a,b,c) in enumerate(tri):
             d=np.array([pos[a],pos[b],pos[c]],np.float64)-[x0,y0]; s=np.array([src[a],src[b],src[c]],np.float64)
             Mi=cv2.getAffineTransform(d.astype(np.float32),s.astype(np.float32))
@@ -98,13 +98,29 @@ class Rig:
             A[t]=Mi; bx0=max(int(math.floor(d[:,0].min())),0); bx1=min(int(math.ceil(d[:,0].max()))+1,W); by0=max(int(math.floor(d[:,1].min())),0); by1=min(int(math.ceil(d[:,1].max()))+1,Hh)
             if bx1<=bx0 or by1<=by0: continue
             px=cx[by0:by1,bx0:bx1]; py=cy[by0:by1,bx0:bx1]
+            if (d[1,0]-d[0,0])*(d[2,1]-d[0,1])-(d[1,1]-d[0,1])*(d[2,0]-d[0,0])<0: d=d[[0,2,1]]
             def edge(p,q): return (q[0]-p[0])*(py-p[1])-(q[1]-p[1])*(px-p[0])
-            w0,w1,w2=edge(d[1],d[2]),edge(d[2],d[0]),edge(d[0],d[1]); inside=((w0>=0)&(w1>=0)&(w2>=0))|((w0<=0)&(w1<=0)&(w2<=0))
-            sub=idx[by0:by1,bx0:bx1]; sub[inside&(sub<0)]=t
+            def top_left(p,q): return (q[1]-p[1])<0 or ((q[1]-p[1])==0 and (q[0]-p[0])>0)
+            edges=[(edge(d[i],d[(i+1)%3]),top_left(d[i],d[(i+1)%3])) for i in range(3)]
+            inside=np.ones(px.shape,bool)
+            for value,is_top_left in edges: inside&=(value>0)|((value==0)&is_top_left)
+            sub=idx[by0:by1,bx0:bx1]; again=inside&(sub>=0)
+            if again.any():
+                oy,ox=np.nonzero(again); overlaps.append((t,(oy+by0,ox+bx0)))
+            sub[inside&(sub<0)]=t
         ok=idx>=0; Tn=np.where(ok,idx,0)
         mapx=(A[Tn,0,0]*cx+A[Tn,0,1]*cy+A[Tn,0,2]-0.5).astype(np.float32); mapy=(A[Tn,1,0]*cx+A[Tn,1,1]*cy+A[Tn,1,2]-0.5).astype(np.float32)
         out=cv2.remap(m['pre'],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT,borderValue=(0,0,0,0))   # 미리 곱한 알파로 보간
-        out[~ok]=0; return out,(x0,y0)
+        out[~ok]=0
+        for t,(oy,ox) in overlaps:
+            px_=ox+0.5; py_=oy+0.5
+            mx=(A[t,0,0]*px_+A[t,0,1]*py_+A[t,0,2]-0.5).astype(np.float32)[None]
+            my=(A[t,1,0]*px_+A[t,1,1]*py_+A[t,1,2]-0.5).astype(np.float32)[None]
+            source=cv2.remap(m['pre'],mx,my,cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT,borderValue=(0,0,0,0))[0]
+            destination=out[oy,ox]
+            out[oy,ox]=source+destination*(1-source[:,3:4]/255)
+        m['overlap_px']=sum(len(indices[0]) for _,indices in overlaps)
+        return out,(x0,y0)
     def curve(self,name,p):
         """실루엣(name='silhouette') 또는 얼굴 다각형('facePolygon') 곡선의 현재 자리: 9방향 자리를 사분면 쌍선형으로 섞는다."""
         wu={-1:max(0,-p['u']),0:1-abs(p['u']),1:max(0,p['u'])}; wv={-1:max(0,-p['v']),0:1-abs(p['v']),1:max(0,p['v'])}; C=self.rig[name]; out=None

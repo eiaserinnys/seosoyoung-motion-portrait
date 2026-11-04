@@ -1,0 +1,695 @@
+{
+ "flips_dirs": {
+  "front": {
+   "1": {},
+   "0.7": {},
+   "0.5": {},
+   "0.45": {},
+   "0.4": {},
+   "0.3": {},
+   "0.23": {
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {}
+  },
+  "left": {
+   "1": {
+    "face-backing": 4,
+    "face-skin": 1
+   },
+   "0.7": {
+    "face-backing": 4,
+    "face-skin": 1
+   },
+   "0.5": {
+    "face-backing": 4,
+    "face-skin": 1
+   },
+   "0.45": {
+    "face-backing": 4,
+    "face-skin": 1
+   },
+   "0.4": {
+    "face-backing": 4,
+    "face-skin": 1
+   },
+   "0.3": {
+    "face-backing": 4,
+    "face-skin": 1
+   },
+   "0.23": {
+    "face-backing": 4,
+    "face-skin": 1,
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {
+    "face-backing": 4,
+    "face-skin": 1
+   }
+  },
+  "right": {
+   "1": {},
+   "0.7": {},
+   "0.5": {},
+   "0.45": {},
+   "0.4": {},
+   "0.3": {},
+   "0.23": {
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {}
+  },
+  "up": {
+   "1": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1
+   },
+   "0.7": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1
+   },
+   "0.5": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1
+   },
+   "0.45": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1
+   },
+   "0.4": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1
+   },
+   "0.3": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1
+   },
+   "0.23": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1,
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {
+    "face-backing": 1,
+    "ear-left": 2,
+    "ear-right": 1,
+    "face-skin": 1
+   }
+  },
+  "down": {
+   "1": {},
+   "0.7": {},
+   "0.5": {},
+   "0.45": {},
+   "0.4": {},
+   "0.3": {},
+   "0.23": {
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {}
+  },
+  "up-left": {
+   "1": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37
+   },
+   "0.7": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37
+   },
+   "0.5": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37
+   },
+   "0.45": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37
+   },
+   "0.4": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37
+   },
+   "0.3": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37
+   },
+   "0.23": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37,
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {
+    "still-fill-hair-004": 4,
+    "still-fill-hair-005": 10,
+    "still-fill-hair-007": 26,
+    "still-fill-hair-010": 28,
+    "still-fill-hair-011": 10,
+    "still-fill-hair-014": 3,
+    "still-fill-hair-015": 12,
+    "face-backing": 37,
+    "neck": 1,
+    "hair-top": 10,
+    "face-skin": 37
+   }
+  },
+  "up-right": {
+   "1": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "side-hair-left": 3
+   },
+   "0.7": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "side-hair-left": 3
+   },
+   "0.5": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "side-hair-left": 3
+   },
+   "0.45": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "side-hair-left": 3
+   },
+   "0.4": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "side-hair-left": 3
+   },
+   "0.3": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "side-hair-left": 3
+   },
+   "0.23": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12,
+    "side-hair-left": 3
+   },
+   "0": {
+    "still-fill-hair-010": 5,
+    "face-backing": 24,
+    "ear-left": 3,
+    "face-skin": 24,
+    "side-hair-left": 3
+   }
+  },
+  "down-left": {
+   "1": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8
+   },
+   "0.7": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8
+   },
+   "0.5": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8
+   },
+   "0.45": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8
+   },
+   "0.4": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8
+   },
+   "0.3": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8
+   },
+   "0.23": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8,
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {
+    "face-backing": 11,
+    "neck": 14,
+    "face-skin": 8
+   }
+  },
+  "down-right": {
+   "1": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3
+   },
+   "0.7": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3
+   },
+   "0.5": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3
+   },
+   "0.45": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3
+   },
+   "0.4": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3
+   },
+   "0.3": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3
+   },
+   "0.23": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3,
+    "eye-left-sclera": 64,
+    "eye-right-sclera": 64,
+    "eye-left-iris": 46,
+    "eye-right-iris": 44,
+    "eye-left-pupil": 12,
+    "eye-right-pupil": 12,
+    "eye-left-highlight": 12,
+    "eye-right-highlight": 12
+   },
+   "0": {
+    "face-backing": 4,
+    "neck": 2,
+    "face-skin": 3
+   }
+  }
+ },
+ "flips_visible": {
+  "front": {},
+  "left": {
+   "face-backing": 4,
+   "face-skin": 1
+  },
+  "right": {},
+  "up": {
+   "face-backing": 1,
+   "ear-left": 2,
+   "ear-right": 1,
+   "face-skin": 1
+  },
+  "down": {},
+  "up-left": {
+   "still-fill-hair-004": 4,
+   "still-fill-hair-005": 10,
+   "still-fill-hair-007": 26,
+   "still-fill-hair-010": 28,
+   "still-fill-hair-011": 10,
+   "still-fill-hair-014": 3,
+   "still-fill-hair-015": 12,
+   "face-backing": 31,
+   "neck": 1,
+   "hair-top": 10,
+   "face-skin": 36
+  },
+  "up-right": {
+   "still-fill-hair-010": 5,
+   "face-backing": 24,
+   "ear-left": 3,
+   "face-skin": 24,
+   "side-hair-left": 3
+  },
+  "down-left": {
+   "face-backing": 11,
+   "neck": 14,
+   "face-skin": 8
+  },
+  "down-right": {
+   "face-backing": 4,
+   "neck": 2,
+   "face-skin": 3
+  }
+ },
+ "flips_bands": {
+  "왼쪽": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   2,
+   3,
+   5
+  ],
+  "오른쪽": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "위": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   2,
+   3,
+   5
+  ],
+  "아래": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "왼쪽 위": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   24,
+   93,
+   178
+  ],
+  "오른쪽 위": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   2,
+   19,
+   59
+  ],
+  "왼쪽 아래": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   6,
+   33
+  ],
+  "오른쪽 아래": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   9
+  ]
+ },
+ "forehead": {
+  "front": {
+   "total": 0,
+   "pieces": []
+  },
+  "left": {
+   "total": 0,
+   "pieces": []
+  },
+  "right": {
+   "total": 0,
+   "pieces": []
+  },
+  "up": {
+   "total": 0,
+   "pieces": []
+  },
+  "down": {
+   "total": 0,
+   "pieces": []
+  },
+  "up-left": {
+   "total": 0,
+   "pieces": []
+  },
+  "up-right": {
+   "total": 0,
+   "pieces": []
+  },
+  "down-left": {
+   "total": 0,
+   "pieces": []
+  },
+  "down-right": {
+   "total": 0,
+   "pieces": []
+  }
+ },
+ "holes": {
+  "front": [
+   0,
+   0
+  ],
+  "left": [
+   0,
+   0
+  ],
+  "right": [
+   4,
+   1
+  ],
+  "up": [
+   0,
+   0
+  ],
+  "down": [
+   0,
+   0
+  ],
+  "up-left": [
+   0,
+   0
+  ],
+  "up-right": [
+   20,
+   6
+  ],
+  "down-left": [
+   0,
+   0
+  ],
+  "down-right": [
+   0,
+   0
+  ],
+  "band 왼쪽": [
+   0,
+   0,
+   0,
+   3,
+   0,
+   0
+  ],
+  "band 위": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "band 왼쪽 위": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "front_diff_px": 0,
+ "atlas_2048_fits": true,
+ "bbox_area_sum": 3571016
+}

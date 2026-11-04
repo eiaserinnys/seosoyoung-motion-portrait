@@ -143,8 +143,8 @@ def save_blink(state_dir, output_dir, data):
     opens = [1, .7, .4, .23, 0]
     cell = (560, 300)
     sheet, row_font = make_grid(5, 9, [f'눈 뜬 정도 {value}' for value in opens], cell, output_dir / 'blink.png')
-    transition_values = [.27, .25, .23, .21]
-    transition, transition_font = make_grid(4, 9, [f'{value:.2f}' for value in transition_values], cell,
+    transition_values = [.7, .4, .29, .28, .27, .25, .23, .21]
+    transition, transition_font = make_grid(8, 9, [f'{value:.2f}' for value in transition_values], cell,
                                            output_dir / 'blink_transition.png')
     for row, key in enumerate(KEYS):
         box = eye_crop(data['targets'], key)
@@ -156,6 +156,23 @@ def save_blink(state_dir, output_dir, data):
                        label=KOREAN[key] if column == 0 else None, row_font=transition_font)
     sheet.save(output_dir / 'blink.png')
     transition.save(output_dir / 'blink_transition.png')
+
+
+def save_ear_wedge(state_dir, output_dir):
+    crop = (500, 435, 615, 535)
+    scale = 4
+    tile = ((crop[2] - crop[0]) * scale, (crop[3] - crop[1]) * scale)
+    labels = [('dir_up-left.png', '왼쪽 위 끝 자세'),
+              ('band_upleft_0_8.png', '왼쪽 위 0.8')]
+    sheet = Image.new('RGB', (tile[0] * 2 + 24, tile[1] + 48), 'white')
+    draw = ImageDraw.Draw(sheet)
+    label_font = font(28)
+    for column, (name, label) in enumerate(labels):
+        x = column * (tile[0] + 24)
+        draw.text((x + 8, 6), label, fill='black', font=label_font)
+        image = open_rgb(state_dir / name).crop(crop).resize(tile, Image.Resampling.NEAREST)
+        sheet.paste(image, (x, 42))
+    sheet.save(output_dir / 'ear_wedge_check.png')
 
 
 def save_bands(state_dir, output_dir):
@@ -196,4 +213,5 @@ def build_figures(state_dir, output_dir, still_path):
     save_front_diff(state_dir, output_dir, still_path)
     save_nine(state_dir, output_dir, data)
     save_blink(state_dir, output_dir, data)
+    save_ear_wedge(state_dir, output_dir)
     save_bands(state_dir, output_dir)

@@ -21,7 +21,7 @@ The build extracts nine reference poses into the original artwork coordinate sys
 | 520, 530 | Nose, mouth | Translation / three-point similarity transform | Drawn |
 | 700–740 | Side hair, bangs, hairpin | Next-stage motion | Hidden |
 
-The pipeline builds all 84 meshes. The viewer hides hair-only meshes and the meshes listed in `bareOnlyParts` whenever hair is enabled.
+The pipeline builds all 84 meshes in schema `keyshape-2d/7`. Face deformation excludes ear control points; a separate field that includes ear points is used only to blend the visible ear's inner edge. The viewer draws folded triangles in mesh order with back-face culling disabled, so overlapping triangles layer through the standard over blend. It hides hair-only meshes and the meshes listed in `bareOnlyParts` whenever hair is enabled.
 
 ## Controls
 
@@ -30,7 +30,7 @@ The pipeline builds all 84 meshes. The viewer hides hair-only meshes and the mes
 | `u` | −1…1 | Left to right; reference frames 34 and 240 anchor the ends |
 | `v` | −1…1 | Down to up; reference frames 133 and 89 anchor the ends |
 | Roll | −30…30° | Rotation around `(502, 568)` |
-| Eye opening, left and right | 0…1 | Open-eye parts fade from 1 to 0 between 0.30 and 0.22; closed-eye artwork turns on at 0.28 |
+| Eye opening, left and right | 0…1 | Eye geometry reaches its closed shape at 0.29; closed-eye artwork fades from 0 to 1 between 0.29 and 0.27 |
 | Gaze X/Y | −1…1 | Moves iris, pupil and highlights by up to 11 pixels |
 | Breathing, body tilt | Existing control ranges | Small upper-body motion |
 
@@ -56,7 +56,7 @@ The far eye narrows to 0.59 of its front width at the left endpoint and 0.44 at 
 
 ## Eye clipping and blink
 
-Iris, pupil and highlights are clipped by the corresponding sclera alpha. Blink curves store per-column sclera bounds, closed-line centers, lash bounds, lower-line bounds and closed-line bounds. For each vertex column, the lashes and lower line move toward the measured closed-line range; sclera and iris elements compress vertically toward the closed-line center. The eye transform is applied after this motion. Visible eye parts and closed-eye artwork cross-fade from 0.30 to 0.22.
+Iris, pupil and highlights are clipped by the corresponding sclera alpha. Blink curves store per-column sclera bounds, closed-line centers, lash bounds, lower-line bounds and closed-line bounds. For each vertex column, the lashes and lower line move toward the measured closed-line range; sclera and iris elements compress vertically toward the closed-line center. The eye transform is applied after this motion. The lash squash reaches its final shape at `blinkSquashEnd=0.29`; closed-eye artwork fades in over `blinkClosedFade=[0.27,0.29]`. Open-eye artwork continues to fade out over `blinkFade=[0.22,0.30]`.
 
 The far ear is moved behind the cheek and uses no opacity fade. The viewer triangulates the interpolated 160-point silhouette and fills it with the configured skin color. Its outer one-pixel triangle band interpolates alpha from one to zero. Face skin, scalp cover and backing use the silhouette triangles plus the outer clip-margin band as a binary clipping mask.
 
@@ -66,7 +66,7 @@ The front reconstruction cuts each part by front ownership and solves its color 
 
 Rendering uses an antialias-disabled 1024 × 1536 target. When available, the main target is `RGBA32F` with `EXT_color_buffer_float` and `EXT_float_blend`; otherwise the viewer draws directly into the default 8-bit target. The blend function is `ONE, ONE_MINUS_SRC_ALPHA`, and fragment shaders do not discard. The face clipping mask is the silhouette triangulation plus an outer triangle band extending `clipMarginPx + maskRasterMarginPx` (0.5 px) from the edge. The front bake uses `clipMarginPx` without the raster margin.
 
-The hair-off silhouette backing uses `alpha = clip(1 + signedDistance)`. The interior is opaque; the outer one-pixel band fades linearly to zero. The 6판 viewer comparison checks the eight non-front directions against the CPU reference: value delta >2 is at most 0.6% of visible pixels, alpha delta >8 is at most 110 pixels, and value delta >2 outside the silhouette edge band is at most 4,000 pixels. Hole limits come from `source/keyshapes/v6-checks.json`.
+The hair-off silhouette backing uses `alpha = clip(1 + signedDistance)`. The interior is opaque; the outer one-pixel band fades linearly to zero. The v7 viewer comparison checks the eight non-front directions against the CPU reference: value delta >2 is at most 0.6% of visible pixels, alpha delta >8 is at most 110 pixels, and value delta >2 outside the silhouette edge band is at most 4,000 pixels. The first two counts include the silhouette edge band; only the third excludes it. Consecutive 0.01 blink steps from 0.36 to 0.20 may not exceed twice the median step. Hole limits come from `source/keyshapes/v7-checks.json`.
 
 ## Next stage: hair
 

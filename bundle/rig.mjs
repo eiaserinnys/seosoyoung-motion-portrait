@@ -45,7 +45,7 @@ export class Rig {
     if(mesh.group==='eye'){
       const side=mesh.id.includes('-left')?'left':'right',open=side==='left'?p.openL:p.openR,kind=mesh.id.split('-').at(-1);
       if(!mesh.id.startsWith('closed')){
-        const s=Math.min(1,(1-open)/(1-.22)),curve=this.data.blinkCurves[side],ix=point=>clamp(Math.round(point[0])-curve.x0,0,curve.top.length-1),at=(name,i)=>curve[name][i];
+        const s=Math.min(1,(1-open)/(1-this.data.blinkSquashEnd)),curve=this.data.blinkCurves[side],ix=point=>clamp(Math.round(point[0])-curve.x0,0,curve.top.length-1),at=(name,i)=>curve[name][i];
         pos=pos.map(point=>{
           const i=ix(point),closed=at('closed',i),next=point.slice();
           if(kind==='lashes'||kind==='line'){
@@ -90,8 +90,8 @@ export class Rig {
       return clamp((open-low)/(high-low),0,1);
     }
     if(id.startsWith('closed-eyes')){
-      const open=id.endsWith('left')?p.openL:p.openR;
-      return open<=this.data.blinkClosedOn?1:0;
+      const open=id.endsWith('left')?p.openL:p.openR,[closedLow,closedHigh]=this.data.blinkClosedFade;
+      return 1-clamp((open-closedLow)/(closedHigh-closedLow),0,1);
     }
     return 1;
   }

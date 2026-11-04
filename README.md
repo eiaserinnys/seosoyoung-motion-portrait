@@ -10,12 +10,13 @@ The direction controls blend the four neighboring keys. At `(u, v) = (0, 0)`, ev
 
 ## Rendering contract
 
-- `bundle/assets/seosoyoung-rig.json` has schema `keyshape-2d/6` and 84 meshes, including three hair-off cover meshes. `texture_00.png` packs them in a 2048 × 2048 atlas with four-pixel gutters.
+- `bundle/assets/seosoyoung-rig.json` has schema `keyshape-2d/7` and 84 meshes, including three hair-off cover meshes. `texture_00.png` packs them in a 2048 × 2048 atlas with four-pixel gutters.
 - Atlas pixels are straight 8-bit RGBA. The fragment shader fetches four texels, multiplies each RGB by its alpha, then bilinearly blends the premultiplied samples. Upload does not request browser alpha premultiplication.
 - Front vertices use integer artwork coordinates. Vertex and UV coordinates receive no half-pixel offset.
 - The main target uses `RGBA32F` when both `EXT_color_buffer_float` and `EXT_float_blend` are available. Other devices draw directly into the default 8-bit target.
 - Blending is `ONE, ONE_MINUS_SRC_ALPHA`; the shaders do not discard fragments. The face clip mask is the silhouette triangulation plus an outer triangle band of `clipMarginPx + 0.5` pixels; the front bake uses the measured margin only. The hair-off backing fills the triangulated silhouette and draws a one-pixel outer band with alpha fading from one to zero.
 - The viewer uses straight-RGBA texels with manual four-sample bilinear interpolation. Its positions and UVs use no half-pixel offset; only the offline warp samples at pixel centers.
+- Eye geometry reaches its closed position at `blinkSquashEnd=0.29`; closed-eye artwork fades in over `blinkClosedFade=[0.27,0.29]`.
 
 ## Inputs and rebuild
 

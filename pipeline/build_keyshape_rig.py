@@ -57,9 +57,11 @@ def build():
     bx,by,bw,bh=parts['face-scalp']['bbox']; im=parts['face-scalp']['img']; before=int((im[...,3]>0).sum()); im[...,3]=np.round(im[...,3]*(clip0[by:by+bh,bx:bx+bw]/255.0)).astype(np.uint8); print('clip bake face-scalp',before,'->',int((im[...,3]>0).sum()))
     os.makedirs(f'{P}/parts',exist_ok=True)
     anchors=[[x,690] for x in (300,400,502,600,700)]+[[x,780] for x in (350,502,650)]
-    fields={}
+    fields={}; fields_ear={}
     for key,tk in targets.items():
-        ks=[k for k in T['names'] if k in tk]; fields[key]=tps_fit([rest[k] for k in ks]+anchors,[tk[k] for k in ks]+anchors,lam=1.0)
+        ks=[k for k in T['names'] if k in tk and not k.startswith('ear_')]
+        fields[key]=tps_fit([rest[k] for k in ks]+anchors,[tk[k] for k in ks]+anchors,lam=1.0)
+        ka=[k for k in T['names'] if k in tk]; fields_ear[key]=tps_fit([rest[k] for k in ka]+anchors,[tk[k] for k in ka]+anchors,lam=1.0)
     meshes=[]
     order_list=[(k,80) for k in sorted(parts) if k.startswith('still-fill-') and not k.startswith('still-fill-hair-')]+[(k,81) for k in sorted(parts) if k.startswith('still-fill-hair-')]+list(ORDER)
     for pid,order in order_list:
@@ -78,7 +80,7 @@ def build():
                 far=KEYS[key][0]!=0 and ((side_of(pid)=='l')==(KEYS[key][0]<0)); wmax=1.0 if far else NEAR_SIDE_TEMPLE_W
                 t=np.clip((pos[:,1]-170)/160,0,1); w=t*t*(3-2*t)*wmax; d=d_sk+(d_t-d_sk)*w[:,None]; deltas[key]=np.round(d,3).tolist(); continue
             if group_of(pid)=='ear' and T['hidden'][key]!=side_of(pid):       # 귀(보이는 쪽): 얼굴에 붙은 안쪽 가장자리는 얼굴(변위장)을, 바깥쪽은 귀 모양(유사변환)을 따른다
-                d_sim=apply23(M,pos)-pos; d_f=tps_eval(fields[key],pos)-pos; x0,x1=part['bbox'][0],part['bbox'][0]+part['bbox'][2]
+                d_sim=apply23(M,pos)-pos; d_f=tps_eval(fields_ear[key],pos)-pos; x0,x1=part['bbox'][0],part['bbox'][0]+part['bbox'][2]
                 t=np.clip(((x1-pos[:,0]) if side_of(pid)=='l' else (pos[:,0]-x0))/part['bbox'][2],0,1); w=t*t*(3-2*t); d=d_f+(d_sim-d_f)*w[:,None]; deltas[key]=np.round(d,3).tolist(); continue
             if M is None:
                 d=tps_eval(fields[key],pos)-pos
@@ -117,7 +119,7 @@ def build():
         dict(id='breath',label='호흡',min=0,max=1,default=0),
         dict(id='bodyAngleX',label='몸 기울임',min=-10,max=10,default=0),
     ]
-    rig=dict(schema='keyshape-2d/6',silhouette=sil,facePolygon=fpoly,clipMarginPx=CLIP_MARGIN_PX,maskRasterMarginPx=MASK_RASTER_MARGIN_PX,clipParts=['face-skin','face-scalp','face-backing'],bareOnlyParts=['skull-plate']+list(BARE_COVER.values()),hairClipParts=list(HAIR_CLIP_PARTS),hairClipAlpha=HIDDEN_HAIR_ALPHA,farWipeFeatherPx=FAR_WIPE_FEATHER_PX,blinkCurves=blink,blinkFade=list(BLINK_FADE),blinkClosedOn=BLINK_CLOSED_ON,canvas=[1024,1536],atlasSize=SIZE,keys={k:list(v) for k,v in KEYS.items()},frames=T['frames'],eyeClosedY=EYE_CLOSED_Y,gazePx=GAZE_PX,farEarFade=FAR_EAR_FADE,neckPivot=NECK_PIVOT,neckRamp=list(NECK_RAMP),clips=CLIPS,hair=list(HAIR)+[k for k in parts if k.startswith('still-fill-hair-')],parts=parts_ui,parameters=parameters,
+    rig=dict(schema='keyshape-2d/7',silhouette=sil,facePolygon=fpoly,clipMarginPx=CLIP_MARGIN_PX,maskRasterMarginPx=MASK_RASTER_MARGIN_PX,clipParts=['face-skin','face-scalp','face-backing'],bareOnlyParts=['skull-plate']+list(BARE_COVER.values()),hairClipParts=list(HAIR_CLIP_PARTS),hairClipAlpha=HIDDEN_HAIR_ALPHA,farWipeFeatherPx=FAR_WIPE_FEATHER_PX,blinkCurves=blink,blinkFade=list(BLINK_FADE),blinkSquashEnd=BLINK_SQUASH_END,blinkClosedFade=list(BLINK_CLOSED_FADE),canvas=[1024,1536],atlasSize=SIZE,keys={k:list(v) for k,v in KEYS.items()},frames=T['frames'],eyeClosedY=EYE_CLOSED_Y,gazePx=GAZE_PX,farEarFade=FAR_EAR_FADE,neckPivot=NECK_PIVOT,neckRamp=list(NECK_RAMP),clips=CLIPS,hair=list(HAIR)+[k for k in parts if k.startswith('still-fill-hair-')],parts=parts_ui,parameters=parameters,
              skinColor=[float(v) for v in forehead_color(parts['face-skin'])],browTopY=float(min(parts['eye-left-brow']['bbox'][1],parts['eye-right-brow']['bbox'][1])),earCenterY=[float(rest['ear_l_c'][1]),float(rest['ear_r_c'][1])],
              eyeLashY={'left':float(rest['eye_l_up2'][1]),'right':float(rest['eye_r_up2'][1])},eyeLowerY={'left':float(rest['eye_l_lo2'][1]),'right':float(rest['eye_r_lo2'][1])},meshes=meshes)
     json.dump(rig,open(f'{P}/seosoyoung-rig.json','w'),separators=(',',':'))

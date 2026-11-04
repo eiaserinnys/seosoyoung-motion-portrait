@@ -45,115 +45,112 @@
       "outside_edge_band_value_over_2": 0
     },
     "left": {
-      "different_pixels": 12287,
+      "different_pixels": 12197,
       "max_channel_delta": 255,
-      "value_over_2": 702,
-      "value_over_2_percent_visible": 0.0731,
+      "value_over_2": 569,
+      "value_over_2_percent_visible": 0.0593,
       "alpha_over_8": 30,
-      "visible_pixels": 876523,
-      "outside_edge_band_value_over_2": 643
+      "visible_pixels": 876658,
+      "outside_edge_band_value_over_2": 534
     },
     "right": {
-      "different_pixels": 12193,
+      "different_pixels": 12438,
       "max_channel_delta": 255,
-      "value_over_2": 666,
-      "value_over_2_percent_visible": 0.0734,
-      "alpha_over_8": 27,
-      "visible_pixels": 887492,
-      "outside_edge_band_value_over_2": 639
+      "value_over_2": 633,
+      "value_over_2_percent_visible": 0.0699,
+      "alpha_over_8": 14,
+      "visible_pixels": 887616,
+      "outside_edge_band_value_over_2": 572
     },
     "up": {
-      "different_pixels": 14503,
+      "different_pixels": 13903,
       "max_channel_delta": 255,
-      "value_over_2": 1429,
-      "value_over_2_percent_visible": 0.1604,
-      "alpha_over_8": 53,
-      "visible_pixels": 849778,
-      "outside_edge_band_value_over_2": 1404
+      "value_over_2": 622,
+      "value_over_2_percent_visible": 0.0644,
+      "alpha_over_8": 34,
+      "visible_pixels": 850028,
+      "outside_edge_band_value_over_2": 594
     },
     "down": {
-      "different_pixels": 12614,
+      "different_pixels": 12339,
       "max_channel_delta": 255,
-      "value_over_2": 545,
-      "value_over_2_percent_visible": 0.0588,
-      "alpha_over_8": 4,
-      "visible_pixels": 880252,
-      "outside_edge_band_value_over_2": 479
+      "value_over_2": 502,
+      "value_over_2_percent_visible": 0.0545,
+      "alpha_over_8": 3,
+      "visible_pixels": 880277,
+      "outside_edge_band_value_over_2": 447
     },
     "up-left": {
-      "different_pixels": 11813,
+      "different_pixels": 10575,
       "max_channel_delta": 255,
-      "value_over_2": 1497,
-      "value_over_2_percent_visible": 0.1678,
-      "alpha_over_8": 37,
-      "visible_pixels": 846047,
-      "outside_edge_band_value_over_2": 1369
+      "value_over_2": 585,
+      "value_over_2_percent_visible": 0.0598,
+      "alpha_over_8": 16,
+      "visible_pixels": 846468,
+      "outside_edge_band_value_over_2": 544
     },
     "up-right": {
-      "different_pixels": 13082,
+      "different_pixels": 12080,
       "max_channel_delta": 255,
-      "value_over_2": 1374,
-      "value_over_2_percent_visible": 0.1593,
-      "alpha_over_8": 37,
-      "visible_pixels": 843573,
-      "outside_edge_band_value_over_2": 1308
+      "value_over_2": 664,
+      "value_over_2_percent_visible": 0.0739,
+      "alpha_over_8": 19,
+      "visible_pixels": 843863,
+      "outside_edge_band_value_over_2": 620
     },
     "down-left": {
-      "different_pixels": 10678,
+      "different_pixels": 11000,
       "max_channel_delta": 255,
-      "value_over_2": 694,
-      "value_over_2_percent_visible": 0.0757,
-      "alpha_over_8": 21,
-      "visible_pixels": 886917,
-      "outside_edge_band_value_over_2": 639
+      "value_over_2": 672,
+      "value_over_2_percent_visible": 0.0747,
+      "alpha_over_8": 22,
+      "visible_pixels": 886994,
+      "outside_edge_band_value_over_2": 623
     },
     "down-right": {
-      "different_pixels": 10810,
+      "different_pixels": 10486,
       "max_channel_delta": 255,
-      "value_over_2": 686,
-      "value_over_2_percent_visible": 0.0756,
-      "alpha_over_8": 18,
-      "visible_pixels": 878331,
-      "outside_edge_band_value_over_2": 621
+      "value_over_2": 586,
+      "value_over_2_percent_visible": 0.0639,
+      "alpha_over_8": 37,
+      "visible_pixels": 878278,
+      "outside_edge_band_value_over_2": 546
     }
   },
   "flips": {
     "visible_flips": {
       "front": {},
       "left": {
-        "face-backing": 13,
-        "face-skin": 8
+        "face-backing": 4,
+        "face-skin": 1
       },
-      "right": {
-        "face-backing": 3,
-        "face-skin": 4
-      },
+      "right": {},
       "up": {
         "ear-left": 2,
         "ear-right": 1,
-        "face-backing": 18,
-        "face-skin": 19
+        "face-backing": 1,
+        "face-skin": 1
       },
       "down": {},
       "up-left": {
         "neck": 1,
-        "face-backing": 45,
-        "face-skin": 49
+        "face-backing": 31,
+        "face-skin": 36
       },
       "up-right": {
         "ear-left": 3,
-        "face-backing": 44,
-        "face-skin": 35
+        "face-backing": 24,
+        "face-skin": 24
       },
       "down-left": {
-        "neck": 9,
-        "face-backing": 6,
-        "face-skin": 6
+        "neck": 14,
+        "face-backing": 11,
+        "face-skin": 8
       },
       "down-right": {
         "neck": 2,
-        "face-backing": 9,
-        "face-skin": 11
+        "face-backing": 4,
+        "face-skin": 3
       }
     },
     "eye_flips": [
@@ -169,17 +166,22 @@
       },
       {
         "key": "front",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "front",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "front",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "front",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "front",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
@@ -189,11 +191,6 @@
       },
       {
         "key": "front",
-        "open": 0.21,
-        "count": 0
-      },
-      {
-        "key": "front",
         "open": 0,
         "count": 0
       },
@@ -209,27 +206,27 @@
       },
       {
         "key": "left",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "left",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "left",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "left",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "left",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "left",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "left",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -249,27 +246,27 @@
       },
       {
         "key": "right",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "right",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "right",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "right",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "right",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "right",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "right",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -289,27 +286,27 @@
       },
       {
         "key": "up",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "up",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "up",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "up",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "up",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "up",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "up",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -329,27 +326,27 @@
       },
       {
         "key": "down",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "down",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "down",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "down",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "down",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "down",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "down",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -369,27 +366,27 @@
       },
       {
         "key": "up-left",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "up-left",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "up-left",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "up-left",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "up-left",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "up-left",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "up-left",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -409,27 +406,27 @@
       },
       {
         "key": "up-right",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "up-right",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "up-right",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "up-right",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "up-right",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "up-right",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "up-right",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -449,27 +446,27 @@
       },
       {
         "key": "down-left",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "down-left",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "down-left",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "down-left",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "down-left",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "down-left",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "down-left",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -489,27 +486,27 @@
       },
       {
         "key": "down-right",
+        "open": 0.5,
+        "count": 0
+      },
+      {
+        "key": "down-right",
+        "open": 0.45,
+        "count": 0
+      },
+      {
+        "key": "down-right",
         "open": 0.4,
         "count": 0
       },
       {
         "key": "down-right",
-        "open": 0.27,
-        "count": 0
-      },
-      {
-        "key": "down-right",
-        "open": 0.25,
+        "open": 0.3,
         "count": 0
       },
       {
         "key": "down-right",
         "open": 0.23,
-        "count": 0
-      },
-      {
-        "key": "down-right",
-        "open": 0.21,
         "count": 0
       },
       {
@@ -562,7 +559,7 @@
     "front": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limits": [
+      "v7_limits": [
         0,
         0
       ],
@@ -571,7 +568,7 @@
     "left": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limits": [
+      "v7_limits": [
         0,
         0
       ],
@@ -580,7 +577,7 @@
     "right": {
       "pixels": 4,
       "pieces": 1,
-      "v6_limits": [
+      "v7_limits": [
         4,
         1
       ],
@@ -589,7 +586,7 @@
     "up": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limits": [
+      "v7_limits": [
         0,
         0
       ],
@@ -598,7 +595,7 @@
     "down": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limits": [
+      "v7_limits": [
         0,
         0
       ],
@@ -607,17 +604,17 @@
     "up-left": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limits": [
+      "v7_limits": [
         0,
         0
       ],
       "pass": true
     },
     "up-right": {
-      "pixels": 24,
-      "pieces": 6,
-      "v6_limits": [
-        24,
+      "pixels": 18,
+      "pieces": 5,
+      "v7_limits": [
+        20,
         6
       ],
       "pass": true
@@ -625,7 +622,7 @@
     "down-left": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limits": [
+      "v7_limits": [
         0,
         0
       ],
@@ -634,7 +631,7 @@
     "down-right": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limits": [
+      "v7_limits": [
         0,
         0
       ],
@@ -643,109 +640,109 @@
     "band 왼쪽 t=0.0": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 t=0.2": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 t=0.4": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 t=0.6": {
-      "pixels": 0,
-      "pieces": 0,
-      "v6_limit_pixels": 0,
+      "pixels": 3,
+      "pieces": 1,
+      "v7_limit_pixels": 3,
       "pass": true
     },
     "band 왼쪽 t=0.8": {
-      "pixels": 3,
-      "pieces": 1,
-      "v6_limit_pixels": 3,
+      "pixels": 0,
+      "pieces": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 t=1.0": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 위 t=0.0": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 위 t=0.2": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 위 t=0.4": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 위 t=0.6": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 위 t=0.8": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 위 t=1.0": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 위 t=0.0": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 위 t=0.2": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 위 t=0.4": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 위 t=0.6": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 위 t=0.8": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     },
     "band 왼쪽 위 t=1.0": {
       "pixels": 0,
       "pieces": 0,
-      "v6_limit_pixels": 0,
+      "v7_limit_pixels": 0,
       "pass": true
     }
   },
@@ -756,6 +753,842 @@
     "pointer_tracking_u": 0.5,
     "reset_u": 0
   },
+  "blink_step_range": {
+    "from": 0.36,
+    "to": 0.2,
+    "step": 0.01,
+    "metric": "mean maximum RGB8 channel delta per eye ROI after white compositing"
+  },
+  "blink_step_transitions": {
+    "front": {
+      "median_mean_delta": 2.2797158663658825,
+      "max_mean_delta": 3.0962240842195725,
+      "max_over_median": 1.3581622735974084,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 3.0962240842195725
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 2.6945697711891716
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 2.646068320979697
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 2.588382210763777
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 2.4317327317649586
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 2.288537974003652
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 2.2708937587281124
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 2.48745837361693
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.9657857986894403
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 3.0962240842195725
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.40071436244494574
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.40554839402728543
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.411966913739392
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.41693522397679667
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.41994306585025243
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "left": {
+      "median_mean_delta": 1.8417877934973848,
+      "max_mean_delta": 2.538157161805309,
+      "max_over_median": 1.3780942466697443,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 2.538157161805309
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 2.1864524748075147
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 2.140632954941307
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 2.0187634173600144
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 1.9745834770421742
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 1.8891234769909038
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.794452110003866
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 2.0497463668121654
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.443120950144473
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 2.538157161805309
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.33846182752999304
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.3430942007267719
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.34889971372598205
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.3527862047398791
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.3594940952868414
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "right": {
+      "median_mean_delta": 1.850031055900621,
+      "max_mean_delta": 2.5967080745341615,
+      "max_over_median": 1.4036024239982543,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 2.5967080745341615
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 2.2480124223602482
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 2.174968944099379
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 2.06944099378882
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 2.001894409937888
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 1.841583850931677
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.8584782608695651
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 2.0083540372670807
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.499968944099379
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 2.5967080745341615
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.3446583850931677
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.3498447204968944
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.3541304347826087
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.35891304347826086
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.36332298136645963
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "up": {
+      "median_mean_delta": 1.947060309973046,
+      "max_mean_delta": 2.6427167565139262,
+      "max_over_median": 1.3572855154910484,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 2.6427167565139262
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 2.2529761904761907
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 2.2845911949685536
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 2.1848607367475292
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 2.062556154537287
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 1.9520159478885895
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.9421046720575021
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 2.081199460916442
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.540066262353998
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 2.6427167565139262
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.35500898472596587
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.36070867026055703
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.36511680143755615
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.37165880503144655
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.37609501347708896
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "down": {
+      "median_mean_delta": 1.968680026869682,
+      "max_mean_delta": 2.708631885356023,
+      "max_over_median": 1.3758619218903279,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 2.708631885356023
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 2.2765618002686967
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 2.3278940886699506
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 2.1937975817286164
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 2.062472010747873
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 2.0175492610837438
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.9198107926556203
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 2.219883564711151
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.603616211374832
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 2.708631885356023
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.3621529332736229
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.36716300940438873
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.3721730855351545
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.3777989252127183
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.3828649798477385
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "up-left": {
+      "median_mean_delta": 1.4389339030076358,
+      "max_mean_delta": 1.9851991365709225,
+      "max_over_median": 1.3796319152822045,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 1.9851991365709225
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 1.6896971245702535
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 1.681393666985074
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 1.6293532045910801
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 1.5208068673521122
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 1.4291307982001122
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.4487370078151591
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 1.5893107363996506
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 1.905518611820759
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 1.9851991365709225
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.27039112979074215
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.2745590461371836
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.27959033662121907
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.28309143981012636
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.28662791254286457
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "up-right": {
+      "median_mean_delta": 1.613563552078024,
+      "max_mean_delta": 2.2104646401522396,
+      "max_over_median": 1.36992722555334,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 2.2104646401522396
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 1.8436601296949
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 1.9104556799713086
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 1.7776674811681383
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 1.6988432291603874
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 1.6592150744874883
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.5679120296685598
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 1.7434857830081711
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.130096801372391
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 2.2104646401522396
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.30111959637928404
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.3052598662286409
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.3095811040820645
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.31341252062394126
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.3180657609939846
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "down-left": {
+      "median_mean_delta": 1.7001995169589414,
+      "max_mean_delta": 2.3135566523154467,
+      "max_over_median": 1.3607559755419678,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 2.3135566523154467
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 1.962441807553642
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 2.032202737232665
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 1.877979628268403
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 1.7677902621722847
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 1.7188210997934825
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.6815779341244006
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 1.89184080646855
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.2135181490426685
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 2.3135566523154467
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.3034407924673597
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.30718611081941966
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.3125765690083657
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.3167069200882075
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.3206272533165319
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    },
+    "down-right": {
+      "median_mean_delta": 1.6083625453801682,
+      "max_mean_delta": 2.237208620643339,
+      "max_over_median": 1.3909852769634912,
+      "largest_step": {
+        "from": 0.28,
+        "to": 0.27,
+        "mean_delta": 2.237208620643339
+      },
+      "steps": [
+        {
+          "from": 0.36,
+          "to": 0.35,
+          "mean_delta": 1.9119272842935096
+        },
+        {
+          "from": 0.35,
+          "to": 0.34,
+          "mean_delta": 1.828806087941733
+        },
+        {
+          "from": 0.34,
+          "to": 0.33,
+          "mean_delta": 1.852703216232608
+        },
+        {
+          "from": 0.33,
+          "to": 0.32,
+          "mean_delta": 1.6625537453
+        },
+        {
+          "from": 0.32,
+          "to": 0.31,
+          "mean_delta": 1.6577202738721566
+        },
+        {
+          "from": 0.31,
+          "to": 0.3,
+          "mean_delta": 1.5590048168881798
+        },
+        {
+          "from": 0.3,
+          "to": 0.29,
+          "mean_delta": 1.7699732608048062
+        },
+        {
+          "from": 0.29,
+          "to": 0.28,
+          "mean_delta": 2.140654384258429
+        },
+        {
+          "from": 0.28,
+          "to": 0.27,
+          "mean_delta": 2.237208620643339
+        },
+        {
+          "from": 0.27,
+          "to": 0.26,
+          "mean_delta": 0.3033844895453847
+        },
+        {
+          "from": 0.26,
+          "to": 0.25,
+          "mean_delta": 0.306559909734991
+        },
+        {
+          "from": 0.25,
+          "to": 0.24,
+          "mean_delta": 0.31077479406228464
+        },
+        {
+          "from": 0.24,
+          "to": 0.23,
+          "mean_delta": 0.31567008441320127
+        },
+        {
+          "from": 0.23,
+          "to": 0.22,
+          "mean_delta": 0.3199082733118538
+        },
+        {
+          "from": 0.22,
+          "to": 0.21,
+          "mean_delta": 0
+        },
+        {
+          "from": 0.21,
+          "to": 0.2,
+          "mean_delta": 0
+        }
+      ]
+    }
+  },
   "status": {
     "required_failures": [],
     "nonfront_thresholds": {
@@ -764,23 +1597,8 @@
       "outside_edge_band_value_over_2_max": 4000
     },
     "nonfront_failures": {},
-    "blink_visual_review": "passed: captured 0.27, 0.25, 0.23, 0.21 transitions show no upward arch, gray double line, or thickness step",
-    "known_nonblocking_observations": [
-      {
-        "pose": "up-left",
-        "region_px": {
-          "x": [
-            545,
-            574
-          ],
-          "y": [
-            468,
-            499
-          ]
-        },
-        "observation": "A small skin-colored triangle is visible below the near ear in the browser capture; this is caused by folded triangles in the rig data.",
-        "blocks_acceptance": false
-      }
-    ]
+    "blink_step_failures": {},
+    "blink_visual_review": "awaiting screenshot inspection",
+    "ear_wedge_visual_review": "awaiting screenshot inspection"
   }
 }

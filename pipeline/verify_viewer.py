@@ -24,7 +24,8 @@ KEYS = {
     'front': (0, 0), 'left': (-1, 0), 'right': (1, 0), 'up': (0, 1), 'down': (0, -1),
     'up-left': (-1, 1), 'up-right': (1, 1), 'down-left': (-1, -1), 'down-right': (1, -1),
 }
-OPENS = [1, .7, .4, .27, .25, .23, .21, 0]
+OPENS = [1, .7, .4, .29, .28, .27, .25, .23, .21, 0]
+BLINK_STEP_OPENS = [round(.36 - index * .01, 2) for index in range(17)]
 
 sys_path = str(ROOT / 'pipeline')
 if sys_path not in os.sys.path:
@@ -117,6 +118,71 @@ def holes_within_limits(pixels, pieces, limits):
     return pixels <= limits[0] and (len(limits) == 1 or pieces <= limits[1])
 
 
+def blink_step_report(page, targets):
+    cases = []
+    for key, (u, v) in KEYS.items():
+        points = targets[key]
+        eye_points = [point for name, point in points.items()
+                      if name.startswith(('eye_l_', 'eye_r_'))]
+        coords = np.asarray(eye_points, dtype=float)
+        x0, y0 = (coords.min(axis=0) - 25).astype(int)
+        x1, y1 = (coords.max(axis=0) + 25).astype(int)
+        cases.append({'key': key, 'u': u, 'v': v,
+                      'box': [max(0, int(x0)), max(0, int(y0)),
+                              min(1024, int(x1)), min(1536, int(y1))],
+                      'opens': BLINK_STEP_OPENS})
+    return page.evaluate("""cases => {
+      const result = {};
+      for (const item of cases) {
+        const [x0,y0,x1,y1] = item.box, width=x1-x0, height=y1-y0;
+        let previous=null, previousOpen=null;
+        const steps=[];
+        for (const open of item.opens) {
+          window.viewer.render({u:item.u,v:item.v,roll:0,openL:open,openR:open,
+            gazeX:0,gazeY:0,breath:0,bodyAngleX:0}, {hair:false});
+          const frame=window.viewer.readPixels();
+          if (!frame.float32) throw new Error('0.01 blink steps require the RGBA32F target');
+          const current=new Float32Array(width*height*3);
+          let output=0;
+          for (let y=y0; y<y1; y++) {
+            const glY=frame.height-1-y;
+            for (let x=x0; x<x1; x++) {
+              const input=(glY*frame.width+x)*4, rawAlpha=frame.data[input+3]*255;
+              const unpremultiplyAlpha=rawAlpha/255>=254.5/255?1:rawAlpha/255;
+              const alpha=Math.min(Math.floor(rawAlpha+0.5),255)/255;
+              for(let channel=0;channel<3;channel++){
+                const raw=frame.data[input+channel]*255;
+                const rgb=unpremultiplyAlpha>0?raw/unpremultiplyAlpha:0;
+                const color8=Math.max(0,Math.min(255,Math.floor(rgb+0.5)));
+                current[output++]=color8*alpha+255*(1-alpha);
+              }
+            }
+          }
+          if (previous) {
+            let sum=0;
+            for (let pixel=0; pixel<width*height; pixel++) {
+              const offset=pixel*3;
+              sum+=Math.max(Math.abs(current[offset]-previous[offset]),
+                Math.abs(current[offset+1]-previous[offset+1]),
+                Math.abs(current[offset+2]-previous[offset+2]));
+            }
+            steps.push({from:previousOpen,to:open,mean_delta:sum/(width*height)});
+          }
+          previous=current; previousOpen=open;
+        }
+        const values=steps.map(step=>step.mean_delta).sort((a,b)=>a-b);
+        const middle=Math.floor(values.length/2);
+        const median=values.length%2?values[middle]:(values[middle-1]+values[middle])/2;
+        const maximum=Math.max(...steps.map(step=>step.mean_delta));
+        const largest=steps.reduce((a,b)=>a.mean_delta>=b.mean_delta?a:b);
+        result[item.key]={median_mean_delta:median,max_mean_delta:maximum,
+          max_over_median:maximum/median,largest_step:{from:largest.from,to:largest.to,
+          mean_delta:largest.mean_delta},steps};
+      }
+      return result;
+    }""", cases)
+
+
 def geometry_report(page, reference):
     payload = page.evaluate("""() => {
       const rig = window.viewer.rig, result = [], keys = rig.data.keys;
@@ -143,18 +209,21 @@ def geometry_report(page, reference):
         result.push(row);
       }
       const eyes = [];
-      for (const [key, [u,v]] of Object.entries(keys)) for (const open of [1,.7,.4,.27,.25,.23,.21,0]) {
+      for (const [key, [u,v]] of Object.entries(keys)) for (const open of [1,.7,.5,.45,.4,.3,.23,0]) {
         const p = {u,v,roll:0,openL:open,openR:open,gazeX:0,gazeY:0,breath:0,bodyAngleX:0,hair:true};
         let count=0;
         for (const mesh of rig.meshes) if (mesh.group === 'eye' && rig.opacity(mesh,p) > 0) {
           const positions=rig.positions(mesh,p),signs=base.get(mesh.id);
-          for (let i=0;i<mesh.triangles.length;i++) { const value=area(positions,mesh.triangles[i]); if (Math.sign(value)!==signs[i]||Math.abs(value)<1e-6) count++; }
+          for (let i=0;i<mesh.triangles.length;i++) {
+            const value=area(positions,mesh.triangles[i]);
+            if (Math.abs(value)>1e-6 && Math.sign(value)!==signs[i]) count++;
+          }
         }
         eyes.push({key,open,count});
       }
       return {rows:result,eyes};
     }""")
-    old_checks = json.loads((ROOT / 'source/keyshapes/v6-checks.json').read_text())
+    old_checks = json.loads((ROOT / 'source/keyshapes/v7-checks.json').read_text())
     hair = set(reference.rig['hair'])
     all_counts, eye_counts, failures = {}, payload['eyes'], []
     for row in payload['rows']:
@@ -251,7 +320,7 @@ def verify_atlas(reference):
 def main():
     CAPTURES.mkdir(parents=True, exist_ok=True)
     reference = Rig()
-    baseline = json.loads((ROOT / 'source/keyshapes/v6-checks.json').read_text())
+    baseline = json.loads((ROOT / 'source/keyshapes/v7-checks.json').read_text())
     keyshapes = json.loads((ROOT / 'source/keyshapes/points_art_keyshapes.json').read_text())
     report = {'renderer': {}, 'atlas': {}, 'front': {}, 'nonfront_raw_comparison': {}, 'flips': {}, 'forehead': {}, 'holes': {}}
     with tempfile.TemporaryDirectory(prefix='615-viewer-') as temporary:
@@ -304,7 +373,7 @@ def main():
                     hole_px, hole_count = holes(rgba)
                     allowed_px, allowed_pieces = baseline['holes'][key]
                     report['holes'][key] = {'pixels': hole_px, 'pieces': hole_count,
-                                            'v6_limits': [allowed_px, allowed_pieces],
+                                            'v7_limits': [allowed_px, allowed_pieces],
                                             'pass': holes_within_limits(hole_px, hole_count, [allowed_px, allowed_pieces])}
                     if key != 'front':
                         continue
@@ -313,10 +382,13 @@ def main():
                 report['forehead'] = skin_spill(page, reference, keyshapes['targets'])
 
                 for key, (u, v) in KEYS.items():
-                    for open_value in [.7, .4, .27, .25, .23, .21, 0]:
+                    for open_value in OPENS[1:]:
                         state = full_state(u, v, open_value)
                         name = f'{open_value:.2f}'.replace('.', '_')
                         save_rgba(states / f'blink_{key}_{name}.png', capture_png(page, state, hair=False))
+                report['blink_step_range'] = {'from': .36, 'to': .20, 'step': .01,
+                                              'metric': 'mean maximum RGB8 channel delta per eye ROI after white compositing'}
+                report['blink_step_transitions'] = blink_step_report(page, keyshapes['targets'])
                 for axis, (du, dv) in {'left': (-1, 0), 'up': (0, 1), 'upleft': (-1, 1)}.items():
                     hole_key = f'band {"왼쪽" if axis == "left" else "위" if axis == "up" else "왼쪽 위"}'
                     allowed_values = baseline['holes'][hole_key]
@@ -337,7 +409,7 @@ def main():
                         hole_px, hole_count = holes(image)
                         allowed = allowed_values[index]
                         report['holes'][f'{hole_key} t={step:.1f}'] = {
-                            'pixels': hole_px, 'pieces': hole_count, 'v6_limit_pixels': allowed,
+                            'pixels': hole_px, 'pieces': hole_count, 'v7_limit_pixels': allowed,
                             'pass': holes_within_limits(hole_px, hole_count, [allowed])}
 
                 from figures import build_figures
@@ -360,9 +432,13 @@ def main():
     if forehead_failures:
         required_failures.append('skin appears outside the scalp above the brows')
     if hole_failures:
-        required_failures.append('head/neck holes exceed v6 checks values')
+        required_failures.append('head/neck holes exceed v7 checks values')
     if nonfront_failures:
-        required_failures.append('non-front comparison exceeds a v6 threshold')
+        required_failures.append('non-front comparison exceeds a v7 threshold')
+    blink_step_failures = {key: value for key, value in report.get('blink_step_transitions', {}).items()
+                           if value['max_over_median'] > 2}
+    if blink_step_failures:
+        required_failures.append('a 0.01 blink transition exceeds twice the median step')
     if report['atlas']['atlas_pixel_mismatches']:
         required_failures.append('atlas samples differ byte-for-byte from the source parts')
     if report['atlas']['uv_offset_errors'] or report['atlas']['front_vertex_fractional_max']:
@@ -374,13 +450,9 @@ def main():
         'nonfront_thresholds': {'value_over_2_percent_visible_max': .6, 'alpha_over_8_max': 110,
                                 'outside_edge_band_value_over_2_max': 4000},
         'nonfront_failures': nonfront_failures,
+        'blink_step_failures': blink_step_failures,
         'blink_visual_review': 'awaiting screenshot inspection',
-        'known_nonblocking_observations': [{
-            'pose': 'up-left',
-            'region_px': {'x': [545, 574], 'y': [468, 499]},
-            'observation': 'A small skin-colored triangle is visible below the near ear in the browser capture; this is caused by folded triangles in the rig data.',
-            'blocks_acceptance': False,
-        }],
+        'ear_wedge_visual_review': 'awaiting screenshot inspection',
     }
     (CAPTURES / 'verification.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
     lines = ['# Viewer verification', '',
@@ -393,9 +465,9 @@ def main():
     lines.extend(['', '- Eye triangle flips: ' + str(sum(row['count'] for row in report['flips']['eye_flips'])),
                   '- Skin spill above brows: ' + str({key: value['pixels'] for key, value in report['forehead'].items()}),
                   '- Holes: ' + str({key: value['pixels'] for key, value in report['holes'].items()}),
-                  '- Blink figure review: `blink.png`, `blink_transition.png` (visual review pending).',
-                  '- Known non-blocking observation: the up-left capture shows a skin-colored triangle below the near ear around x=545–574, y=468–499; it comes from folded rig triangles and is recorded without failing acceptance.',
-                  '- Captures: `front_diff.png`, `nine_nohair.png`, `band_left.png`, `band_up.png`, `band_upleft.png`, `ui-loading.png`, `ui-wide.png`, `ui-narrow.png`.',
+                  '- Blink figure review: `blink.png`, `blink_transition.png`; 0.36→0.20 at 0.01 steps, RGB8 mean maximum-channel deltas, max/median ratios: ' + str({key: round(value['max_over_median'], 3) for key, value in report['blink_step_transitions'].items()}),
+                  '- Ear wedge screenshots: `ear_wedge_check.png` compares the up-left endpoint and the up-left 0.8 interpolation around x=545–574, y=468–499.',
+                  '- Captures: `front_diff.png`, `nine_nohair.png`, `blink_transition.png`, `band_left.png`, `band_up.png`, `band_upleft.png`, `ear_wedge_check.png`, `ui-loading.png`, `ui-wide.png`, `ui-narrow.png`.',
                   '- Required numeric failures: ' + (', '.join(required_failures) if required_failures else 'none'), ''])
     (CAPTURES / 'verification.md').write_text('\n'.join(lines), encoding='utf-8')
     print(json.dumps(report, ensure_ascii=False, indent=2))

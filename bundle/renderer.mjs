@@ -18,6 +18,7 @@ uniform sampler2D u_mask;
 uniform vec2 u_size;
 uniform vec2 u_atlas_size;
 uniform vec4 u_color;
+uniform float u_opacity;
 uniform int u_solid;
 uniform int u_apply_mask;
 out vec4 out_color;
@@ -36,6 +37,7 @@ vec4 sample_atlas(vec2 uv){
 void main(){
   vec4 color=u_solid==1?u_color:(u_solid==2?vec4(u_color.rgb*v_uv.x,v_uv.x):sample_atlas(v_uv));
   if(u_apply_mask==1)color*=texture(u_mask,gl_FragCoord.xy/u_size).r;
+  color*=u_opacity;
   out_color=color;
 }`;
 const maskSource=`#version 300 es
@@ -150,7 +152,8 @@ export class Renderer{
         position:gl.getAttribLocation(p,'a_position'),uv:gl.getAttribLocation(p,'a_uv'),
         size:gl.getUniformLocation(p,'u_size'),atlasSize:gl.getUniformLocation(p,'u_atlas_size'),atlas:gl.getUniformLocation(p,'u_atlas'),mask:gl.getUniformLocation(p,'u_mask'),
         solid:gl.getUniformLocation(p,'u_solid'),applyMask:gl.getUniformLocation(p,'u_apply_mask'),color:gl.getUniformLocation(p,'u_color'),
-        textured:gl.getUniformLocation(p,'u_textured'),image:gl.getUniformLocation(p,'u_image')
+        textured:gl.getUniformLocation(p,'u_textured'),image:gl.getUniformLocation(p,'u_image'),
+        opacity:gl.getUniformLocation(p,'u_opacity')
       };
     }
   }
@@ -169,9 +172,9 @@ export class Renderer{
     gl.enableVertexAttribArray(programInfo.uv);gl.vertexAttribPointer(programInfo.uv,2,gl.FLOAT,false,16,8);
   }
 
-  drawMesh(mesh,points,applyMask=false){
+  drawMesh(mesh,points,applyMask=false,opacity=1){
     const gl=this.gl,info=this.uniforms.color;this.bindGeometry(points,mesh.uvs,mesh.triangles);gl.useProgram(this.glPrograms.color);this.attributes(info);
-    gl.uniform2f(info.size,WIDTH,HEIGHT);gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.atlas,0);gl.uniform1i(info.mask,1);gl.uniform1i(info.solid,0);gl.uniform1i(info.applyMask,applyMask?1:0);
+    gl.uniform2f(info.size,WIDTH,HEIGHT);gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.atlas,0);gl.uniform1i(info.mask,1);gl.uniform1i(info.solid,0);gl.uniform1i(info.applyMask,applyMask?1:0);gl.uniform1f(info.opacity,opacity);
     gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.atlas);gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);
     gl.drawElements(gl.TRIANGLES,mesh.triangles.length*3,gl.UNSIGNED_SHORT,0);
   }
@@ -186,7 +189,7 @@ export class Renderer{
     const gl=this.gl,count=this.bindGeometry(vertices,uvs,indices),info=maskOnly?this.uniforms.mask:this.uniforms.color;
     gl.useProgram(maskOnly?this.glPrograms.mask:this.glPrograms.color);this.attributes(info);gl.uniform2f(info.size,WIDTH,HEIGHT);
     if(maskOnly){gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.atlas,0);gl.uniform1i(info.textured,0);}
-    else{gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.solid,vertexAlpha?2:1);gl.uniform1i(info.applyMask,0);gl.uniform4f(info.color,color[0]/255,color[1]/255,color[2]/255,1);}
+    else{gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.solid,vertexAlpha?2:1);gl.uniform1i(info.applyMask,0);gl.uniform4f(info.color,color[0]/255,color[1]/255,color[2]/255,1);gl.uniform1f(info.opacity,1);}
     gl.drawElements(gl.TRIANGLES,count,gl.UNSIGNED_SHORT,0);
   }
 
@@ -221,15 +224,16 @@ export class Renderer{
         if(!hair&&!hidden.has(mesh.id))this.drawSilhouette(silhouette,this.rig.data.skinColor);
         continue;
       }
-      if(hidden.has(mesh.id)||this.rig.opacity(mesh,p)<=0)continue;
+      const opacity=this.rig.opacity(mesh,p);
+      if(hidden.has(mesh.id)||opacity<=0)continue;
       if(this.rig.data.clips[mesh.id]){
         const clipId=this.rig.data.clips[mesh.id];
         if(eyeMask!==clipId){this.renderEyeMask(this.meshes.get(clipId),p);eyeMask=clipId;}
-        this.drawMesh(mesh,this.rig.positions(mesh,p),true);
+        this.drawMesh(mesh,this.rig.positions(mesh,p),true,opacity);
         continue;
       }
       const clipped=this.rig.data.clipParts.includes(mesh.id);
-      this.drawMesh(mesh,this.rig.positions(mesh,p),clipped);
+      this.drawMesh(mesh,this.rig.positions(mesh,p),clipped,opacity);
     }
     if(this.floatTarget)this.copyFloatToCanvas();
     return this.canvas;
