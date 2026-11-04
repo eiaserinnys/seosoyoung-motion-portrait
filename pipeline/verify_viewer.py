@@ -1,283 +1,479 @@
-import functools
-import http.server
+#!/usr/bin/env python3
+"""Run headless WebGL checks and create review captures for the face viewer."""
+import base64
+import gzip
 import json
+import os
+import tempfile
 import threading
-import sys
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from io import BytesIO
 from pathlib import Path
+
+import cv2
+import numpy as np
+from PIL import Image
+from scipy import ndimage as ndi
 from playwright.sync_api import sync_playwright
-ROOT=Path(__file__).resolve().parents[1]
-(ROOT/'debug').mkdir(exist_ok=True)
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self,*args):pass
-server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Handler,directory=str(ROOT/'bundle')))
-threading.Thread(target=server.serve_forever,daemon=True).start()
-errors=[];failures=[];metrics={}
-try:
- with sync_playwright() as pw:
-  browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--use-angle=swiftshader'])
-  page=browser.new_page(viewport={'width':1440,'height':900},device_scale_factor=2)
-  page.on('pageerror',lambda e:errors.append(str(e)))
-  page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
-  page.on('response',lambda r:failures.append(r.url) if r.status>=400 else None)
-  page.on('requestfailed',lambda r:failures.append(r.url))
-  page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle');page.wait_for_function('window.studio?.ready',timeout=30000)
-  def pose(x,y,z=0,grid=False,outfit='sweater',bangs=False):
-   page.evaluate('([x,y,z,grid,outfit,bangs])=>{studio.setPose(x,y,z,"3D 구면");Object.assign(studio.state,{grid,outfit,bangs,wire:false,before:false});for(const id of ["grid","bangs","wire"])document.getElementById(id).setAttribute("aria-pressed",String(studio.state[id]));for(const id of ["shirt","sweater"])document.getElementById(id).setAttribute("aria-pressed",String(outfit===id));studio.renderer.render(studio.p,studio.state)}',[x,y,z,grid,outfit,bangs])
-  def snap(name):
-   page.screenshot(path=str(ROOT/'debug'/name),full_page=True)
-  metrics['canopyContinuity']=page.evaluate("""async()=>{
-   const {deform3D}=await import('./rig.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs'),{p,rig}=studio;
-   const ids=['hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right','hairpin'];
-   let maxError=0,cases=0;
-   for(const yaw of [-45,0,45])for(const pitch of [-30,0,30])for(const wind of [0,1]){
-    const pose={...p,CorrTurn:1,ParamAngleX:yaw,ParamAngleY:pitch,ParamHairFront:wind,ParamHairSide:-wind,[FRAME_CACHE]:new Map()};
-    for(const xy of [[490,80],[501,120],[512,180],[502,210],[502,245],[330,180],[674,220],[380,300],[625,400]]){
-     const points=ids.map(id=>deform3D(rig.meshes.find(m=>m.id===id),xy,pose));
-     for(const q of points){maxError=Math.max(maxError,Math.hypot(...q.map((v,i)=>v-points[0][i])));cases++;}
+
+ROOT = Path(__file__).resolve().parents[1]
+CAPTURES = ROOT / 'docs/captures'
+STILL = ROOT / 'source/character/still.png'
+KEYS = {
+    'front': (0, 0), 'left': (-1, 0), 'right': (1, 0), 'up': (0, 1), 'down': (0, -1),
+    'up-left': (-1, 1), 'up-right': (1, 1), 'down-left': (-1, -1), 'down-right': (1, -1),
+}
+OPENS = [1, .7, .4, .29, .28, .27, .25, .23, .21, 0]
+BLINK_STEP_OPENS = [round(.36 - index * .01, 2) for index in range(17)]
+
+sys_path = str(ROOT / 'pipeline')
+if sys_path not in os.sys.path:
+    os.sys.path.insert(0, sys_path)
+from keyshape_rig_runtime import Rig, holes, pose
+
+
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, *_args):
+        pass
+
+
+def to_rgba8(float_image):
+    color = (float_image * 255).astype(np.float32)
+    alpha = color[..., 3:4] / 255
+    alpha = np.where(alpha >= 254.5 / 255, 1.0, alpha).astype(np.float32)
+    rgb = np.where(alpha > 0, color[..., :3] / np.maximum(alpha, 1e-6), 0)
+    result = np.clip(np.concatenate([rgb, np.minimum(color[..., 3:4], 255)], -1) + .5, 0, 255).astype(np.uint8)
+    result[result[..., 3] == 0] = 0
+    return result
+
+
+def save_rgba(path, array):
+    Image.fromarray(array, 'RGBA').save(path)
+
+
+def capture_float(page, state, hair, hidden=None):
+    payload = page.evaluate("""async ({pose, hair, hidden}) => {
+      window.viewer.render(pose, {hair, hidden: hidden || []});
+      const result = window.viewer.readPixels();
+      const raw = new Uint8Array(result.data.buffer);
+      const compressed = await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer();
+      const bytes = new Uint8Array(compressed); let encoded = '';
+      for (let i = 0; i < bytes.length; i += 32768) encoded += String.fromCharCode(...bytes.subarray(i, i + 32768));
+      return {float32: result.float32, data: btoa(encoded), glError: window.viewer.renderer.gl.getError()};
+    }""", {'pose': state, 'hair': hair, 'hidden': hidden})
+    if not payload['float32']:
+        raise RuntimeError('검증 환경에서 RGBA32F 대상을 만들지 못했습니다')
+    raw = gzip.decompress(base64.b64decode(payload['data']))
+    image = np.frombuffer(raw, np.float32).reshape(1536, 1024, 4)[::-1].copy()
+    if payload['glError']:
+        raise RuntimeError(f"WebGL 오류: {payload['glError']}")
+    return to_rgba8(image)
+
+
+def capture_png(page, state, hair=False, hidden=None):
+    encoded = page.evaluate("""({pose, hair, hidden}) => {
+      window.viewer.render(pose, {hair, hidden: hidden || []});
+      return document.querySelector('#stage').toDataURL('image/png').split(',')[1];
+    }""", {'pose': state, 'hair': hair, 'hidden': hidden})
+    return np.asarray(Image.open(BytesIO(base64.b64decode(encoded))).convert('RGBA'))
+
+
+def full_state(u, v, open_value=1):
+    return {'u': u, 'v': v, 'roll': 0, 'openL': open_value, 'openR': open_value,
+            'gazeX': 0, 'gazeY': 0, 'breath': 0, 'bodyAngleX': 0}
+
+
+def difference(actual, reference, outside_band=None):
+    delta = np.abs(actual.astype(np.int16) - reference.astype(np.int16))
+    visible = (actual[..., 3] > 0) | (reference[..., 3] > 0)
+    alpha = delta[..., 3]
+    value = delta[..., :3].max(-1)
+    total_visible = max(1, int(visible.sum()))
+    result = {
+        'different_pixels': int((delta.max(-1) > 0).sum()),
+        'max_channel_delta': int(delta.max()),
+        'value_over_2': int((value > 2).sum()),
+        'value_over_2_percent_visible': round(float((value[visible] > 2).mean() * 100), 4),
+        'alpha_over_8': int((alpha > 8).sum()),
+        'visible_pixels': total_visible,
     }
-   }return {maxError,cases};
-  }""")
-  from PIL import Image,ImageDraw
-  import io
-  tiles=[]
-  for pitch in ([] if '--stereo-only' in sys.argv else [30,0,-30]):
-   for yaw in [-45,0,45]:
-    page.evaluate('studio.p.CorrTurn=1');pose(yaw,pitch)
-    raw=Image.open(io.BytesIO(page.locator('#stage').screenshot()))
-    v=page.evaluate('studio.renderer.view');s=v['scale'];ox=v['ox'];oy=v['oy']
-    tile=raw.crop((ox+152*s,oy+20*s,ox+872*s,oy+740*s)).convert('RGB').resize((480,480))
-    ImageDraw.Draw(tile).text((8,8),f'yaw {yaw} / pitch {pitch}',fill='white');tiles.append(tile)
-  if tiles:
-   sheet=Image.new('RGB',(1440,1440))
-   for i,tile in enumerate(tiles):sheet.paste(tile,((i%3)*480,(i//3)*480))
-   sheet.save(ROOT/'debug/viewer_9dir_grid.png')
-  interior=(ROOT/'pipeline/raster_interior.mjs').read_text().replace('../bundle/','./')
-  page.add_script_tag(type='module',content=interior+'\nwindow.rasterInterior={foreheadBoundary,foreheadIntrusion};')
-  page.wait_for_function('window.rasterInterior')
-  metrics['stereoRaster']=page.evaluate("""()=>{
-   const {p,state,renderer}=studio,gl=renderer.gl,out=[];
-   const read=extra=>{renderer.render(p,{...state,grid:false,wire:false,...extra});const a=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,a);return a;};
-   for(const gain of [.65,1])for(const yaw of [-1,1].map(s=>s*(gain===1?45:50))){
-    Object.assign(p,{CorrTurn:gain,ParamAngleX:yaw,ParamAngleY:0,ParamAngleZ:0});
-    const side=yaw<0?'right':'left',ear=read({identify:'ear-'+side}),hair=read({identify:'side-hair-'+side}),full=read({});
-    let earPixels=0,foreheadPixels=0;for(let i=0;i<ear.length;i+=4)if(ear[i]>200)earPixels++;
-    const {scale,ox,oy}=renderer.view,w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
-    for(let sy=Math.ceil(oy+280*scale);sy<oy+365*scale;sy++){
-     const boundary=window.rasterInterior.foreheadBoundary((sy-oy)/scale,p);
-     for(let sx=0;sx<w;sx++)if(window.rasterInterior.foreheadIntrusion((sx-ox)/scale,boundary,yaw)&&hair[((h-1-sy)*w+sx)*4]>200)foreheadPixels++;
-    }
-    const beads=['tail-left-tie','tail-right-tie'].map(id=>{const hidden=read({hidden:new Set([id])});let n=0;for(let i=0;i<full.length;i+=4)if(Math.abs(full[i]-hidden[i])+Math.abs(full[i+1]-hidden[i+1])+Math.abs(full[i+2]-hidden[i+2])>12)n++;return n;});
-    out.push({yaw,gain,earPixels,foreheadPixels,beads});
-   }return out;
-  }""")
-  for side,yaw in [('left',-45),('right',45)]:
-   page.evaluate('studio.p.CorrTurn=1');pose(yaw,0);snap('viewer_actual_45_'+side+'.png')
-  (ROOT/'debug/pose_metrics.json').write_text(json.dumps({k:metrics[k] for k in ['canopyContinuity','stereoRaster']},indent=2)+'\n')
-  print(json.dumps(metrics['stereoRaster']),flush=True)
-  assert all(r['earPixels']>=1500 and r['foreheadPixels']==0 and min(r['beads'])>0 for r in metrics['stereoRaster'])
-  if '--poses-only' in sys.argv or '--stereo-only' in sys.argv:
-   browser.close();raise SystemExit(0)
-  page.close()
-  page=browser.new_page(viewport={'width':1440,'height':900},device_scale_factor=1)
-  page.on('pageerror',lambda e:errors.append(str(e)))
-  page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
-  page.on('response',lambda r:failures.append(r.url) if r.status>=400 else None)
-  page.on('requestfailed',lambda r:failures.append(r.url))
-  page.goto(f'http://127.0.0.1:{server.server_port}',wait_until='networkidle');page.wait_for_function('window.studio?.ready',timeout=30000)
-  page.locator('#correction-recommended').click()
-  for name,x,y in [('front',0,0),('turn_left_25',-25,0),('turn_right_25',25,0),('turn_left_50',-50,0),('turn_right_50',50,0),('pitch_up_20',0,20),('pitch_down_20',0,-20)]:
-   for grid in [False,True]:
-    pose(x,y,grid=grid);snap('viewer_1440_'+name+('_grid' if grid else '')+'.png')
-  pose(0,0,15,grid=True);snap('viewer_1440_neck_pivot_roll.png')
-  pose(-25,0,grid=True);snap('viewer_1440_sphere_grid.png')
-  for name,x,y,z in [('left',-50,-28,-14),('right',50,28,14)]:
-   pose(x,y,z);snap('viewer_1440_range_'+name+'.png')
-   pose(x,y,z,outfit='shirt');snap('viewer_1440_shirt_'+name+'.png')
-  pose(0,0,bangs=True);page.locator('#wire').click();snap('viewer_1440_bangs_hidden_wireframe.png')
-  pose(0,0);page.evaluate('studio.p.ParamEyeLOpen=studio.p.ParamEyeROpen=.5;studio.sync();studio.renderer.render(studio.p,studio.state)');snap('viewer_1440_half_blink.png');page.locator('#reset').click()
-  metrics['sphereRaster']=page.evaluate("""() => {
-    const {renderer,p,state}=studio,gl=renderer.gl,results=[];
-    for(const angles of [[0,0,0],[-50,0,0],[50,0,0],[0,40,0],[0,-40,0],[50,28,14]]){
-      [p.ParamAngleX,p.ParamAngleY,p.ParamAngleZ]=angles;renderer.render(p,{...state,surfaceOnly:true,grid:false,wire:false});
-      const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight,data=new Uint8Array(w*h*4);gl.readPixels(0,0,w,h,gl.RGBA,gl.UNSIGNED_BYTE,data);
-      let left=w,right=-1,top=h,bottom=-1,count=0;for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(data[(y*w+x)*4+3]>127){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,h-1-y);bottom=Math.max(bottom,h-1-y);count++;}
-      results.push({angles,bounds:[left,top,right,bottom],center:[(left+right)/2,(top+bottom)/2],pixels:count});
-    }
-    return results;
-  }""")
-  metrics['surfaceComparison']=page.evaluate("""() => {
-    const {renderer,p,state}=studio,gl=renderer.gl,frames=[];
-    for(const before of [false,true]){
-      renderer.render(p,{...state,surfaceOnly:false,before});
-      const data=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);
-      gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,data);frames.push(data);
-    }
-    let changedPixels=0;for(let i=0;i<frames[0].length;i+=4)if(frames[0][i]!==frames[1][i]||frames[0][i+1]!==frames[1][i+1]||frames[0][i+2]!==frames[1][i+2])changedPixels++;
-    return {changedPixels};
-  }""")
-  metrics['geometry']=page.evaluate("""async () => {
-    const g=await import('./geometry.mjs'),{deform3D,opacity}=await import('./rig.mjs');
-    const base=Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),shell=g.makeSphereMesh(),neck=studio.rig.meshes.find(m=>m.id==='neck');
-    let radiusError=0,eyeRadiusError=0,neckYawError=0,eyeLocalHeadLeak=0,bodyHeadLeak=0;
-    for(const angles of [[0,0,0],[-50,0,0],[50,0,0],[0,40,0],[0,-40,0],[50,28,14],[-50,-28,-14]]){
-      const p={...base,ParamAngleX:angles[0],ParamAngleY:angles[1],ParamAngleZ:angles[2]};
-      for(const q of shell.positions){const w=g.headWorld(q,p);radiusError=Math.max(radiusError,Math.abs(Math.hypot(...w.map((v,i)=>v-g.headWorld([0,0,0],p)[i]))-262));}
-      for(const side of ['left','right']){
-        const c=g.eyeRootWorld(side,p),a=g.eyeballAngles(side,p);eyeLocalHeadLeak=Math.max(eyeLocalHeadLeak,Math.abs(a.lon1-a.lon0),Math.abs(a.lat1-a.lat0));
-        for(const q of g.makeSphereMesh(54,24,12).positions){const w=g.eyeWorld(q,side,{...p,ParamEyeBallX:.8,ParamEyeBallY:-.4});eyeRadiusError=Math.max(eyeRadiusError,Math.abs(Math.hypot(...w.map((v,i)=>v-c[i]))-54));}
+    if outside_band is not None:
+        result['outside_edge_band_value_over_2'] = int(((value > 2) & ~outside_band).sum())
+    return result
+
+
+def silhouette_edge_band(reference, state):
+    alpha = reference.silhouette_layer(state)[..., 3]
+    return ndi.binary_dilation((alpha > 0) & (alpha < 255), structure=np.ones((3, 3), bool))
+
+
+def nonfront_passes(metrics):
+    return (metrics['value_over_2_percent_visible'] <= .6
+            and metrics['alpha_over_8'] <= 110
+            and metrics['outside_edge_band_value_over_2'] <= 4000)
+
+
+def holes_within_limits(pixels, pieces, limits):
+    return pixels <= limits[0] and (len(limits) == 1 or pieces <= limits[1])
+
+
+def blink_step_report(page, targets):
+    cases = []
+    for key, (u, v) in KEYS.items():
+        points = targets[key]
+        eye_points = [point for name, point in points.items()
+                      if name.startswith(('eye_l_', 'eye_r_'))]
+        coords = np.asarray(eye_points, dtype=float)
+        x0, y0 = (coords.min(axis=0) - 25).astype(int)
+        x1, y1 = (coords.max(axis=0) + 25).astype(int)
+        cases.append({'key': key, 'u': u, 'v': v,
+                      'box': [max(0, int(x0)), max(0, int(y0)),
+                              min(1024, int(x1)), min(1536, int(y1))],
+                      'opens': BLINK_STEP_OPENS})
+    return page.evaluate("""cases => {
+      const result = {};
+      for (const item of cases) {
+        const [x0,y0,x1,y1] = item.box, width=x1-x0, height=y1-y0;
+        let previous=null, previousOpen=null;
+        const steps=[];
+        for (const open of item.opens) {
+          window.viewer.render({u:item.u,v:item.v,roll:0,openL:open,openR:open,
+            gazeX:0,gazeY:0,breath:0,bodyAngleX:0}, {hair:false});
+          const frame=window.viewer.readPixels();
+          if (!frame.float32) throw new Error('0.01 blink steps require the RGBA32F target');
+          const current=new Float32Array(width*height*3);
+          let output=0;
+          for (let y=y0; y<y1; y++) {
+            const glY=frame.height-1-y;
+            for (let x=x0; x<x1; x++) {
+              const input=(glY*frame.width+x)*4, rawAlpha=frame.data[input+3]*255;
+              const unpremultiplyAlpha=rawAlpha/255>=254.5/255?1:rawAlpha/255;
+              const alpha=Math.min(Math.floor(rawAlpha+0.5),255)/255;
+              for(let channel=0;channel<3;channel++){
+                const raw=frame.data[input+channel]*255;
+                const rgb=unpremultiplyAlpha>0?raw/unpremultiplyAlpha:0;
+                const color8=Math.max(0,Math.min(255,Math.floor(rgb+0.5)));
+                current[output++]=color8*alpha+255*(1-alpha);
+              }
+            }
+          }
+          if (previous) {
+            let sum=0;
+            for (let pixel=0; pixel<width*height; pixel++) {
+              const offset=pixel*3;
+              sum+=Math.max(Math.abs(current[offset]-previous[offset]),
+                Math.abs(current[offset+1]-previous[offset+1]),
+                Math.abs(current[offset+2]-previous[offset+2]));
+            }
+            steps.push({from:previousOpen,to:open,mean_delta:sum/(width*height)});
+          }
+          previous=current; previousOpen=open;
+        }
+        const values=steps.map(step=>step.mean_delta).sort((a,b)=>a-b);
+        const middle=Math.floor(values.length/2);
+        const median=values.length%2?values[middle]:(values[middle-1]+values[middle])/2;
+        const maximum=Math.max(...steps.map(step=>step.mean_delta));
+        const largest=steps.reduce((a,b)=>a.mean_delta>=b.mean_delta?a:b);
+        result[item.key]={median_mean_delta:median,max_mean_delta:maximum,
+          max_over_median:maximum/median,largest_step:{from:largest.from,to:largest.to,
+          mean_delta:largest.mean_delta},steps};
       }
-      if(!angles[1]&&!angles[2])for(const pt of neck.positions){const a=deform3D(neck,pt,p),b=deform3D(neck,pt,base);neckYawError=Math.max(neckYawError,Math.hypot(...a.map((v,i)=>v-b[i])));}
-      for(const m of studio.rig.meshes.filter(m=>m.deformerId==='WarpBody'))for(const pt of m.positions){const a=deform3D(m,pt,p),b=deform3D(m,pt,base);bodyHeadLeak=Math.max(bodyHeadLeak,Math.hypot(...a.map((v,i)=>v-b[i])));}
-    }
-    const shirt=studio.rig.meshes.find(m=>m.id==='upper-body-short-sleeve');
-    return {radiusError,eyeRadiusError,neckYawError,eyeLocalHeadLeak,bodyHeadLeak,sphereVertexCount:shell.positions.length,backHemisphere:shell.positions.some(q=>q[2]<-261),frontHemisphere:shell.positions.some(q=>q[2]>261),shirtOpacity:opacity(shirt,base,{...studio.state,outfit:'sweater'})};
-  }""")
-  metrics['attachment']=page.evaluate("""async()=>{
-    const {deform3D}=await import('./rig.mjs'),{CORRECTION_PRESETS}=await import('./geometry.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs');
-    const base={...Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended};
-    const area=([a,b,c])=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
-    const area3=([a,b,c])=>{const u=b.map((v,i)=>v-a[i]),v=c.map((w,i)=>w-a[i]);return Math.hypot(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]);};
-    const rows=[];
-    for(const gain of [.65,1])for(const [x,y]of [[-50,-28],[-50,28],[50,-28],[50,28],[-25,0],[25,0]]){
-      const p={...base,CorrTurn:gain,ParamAngleX:x,ParamAngleY:y,[FRAME_CACHE]:new Map()};
-      for(const id of ['face-skin','hair-top','bangs-left','bangs-right','side-hair-left','side-hair-right']){
-        const m=studio.rig.meshes.find(m=>m.id===id),q=m.positions.map(pt=>deform3D(m,pt,p));
-        const reversed=m.triangles.filter(t=>area(t.map(i=>q[i]))*area(t.map(i=>m.positions[i]))<0).length;
-        const culled=id==='hair-top'||id.startsWith('side-hair')||id.startsWith('bangs');
-        const minAreaRatio=id==='face-skin'?Math.min(...m.triangles.map(t=>area3(t.map(i=>q[i]))/Math.abs(area(t.map(i=>m.positions[i])))).filter(Number.isFinite)):null;
-        rows.push({gain,pose:[x,y],id,folded:culled||id==='face-skin'?0:reversed,backFacing:culled?reversed:0,projectedBackFaces:id==='face-skin'?reversed:0,minAreaRatio});
+      return result;
+    }""", cases)
+
+
+def geometry_report(page, reference):
+    payload = page.evaluate("""() => {
+      const rig = window.viewer.rig, result = [], keys = rig.data.keys;
+      const area = (p, t) => (p[t[1]][0]-p[t[0]][0])*(p[t[2]][1]-p[t[0]][1])-(p[t[1]][1]-p[t[0]][1])*(p[t[2]][0]-p[t[0]][0]);
+      const base = new Map(rig.meshes.map(m => [m.id, m.triangles.map(t => Math.sign(area(m.positions, t)))]));
+      for (const [key, [u,v]] of Object.entries(keys)) {
+        const row = {key, visible: {}, clipped: {}};
+        const p = {u,v,roll:0,openL:1,openR:1,gazeX:0,gazeY:0,breath:0,bodyAngleX:0,hair:true};
+        for (const mesh of rig.meshes) {
+          if (mesh.id === 'skull-plate' || rig.opacity(mesh,p) <= 0) continue;
+          const positions = rig.positions(mesh,p), signs = base.get(mesh.id), clipped = rig.data.clipParts.includes(mesh.id);
+          let count = 0; const centers = [];
+          for (let i=0; i<mesh.triangles.length; i++) {
+            const tri = mesh.triangles[i], value = area(positions,tri);
+            if (Math.sign(value) === signs[i] && Math.abs(value) >= 1e-6) continue;
+            count++;
+            if (clipped) centers.push([(positions[tri[0]][0]+positions[tri[1]][0]+positions[tri[2]][0])/3,
+                                       (positions[tri[0]][1]+positions[tri[1]][1]+positions[tri[2]][1])/3]);
+          }
+          if (!count) continue;
+          if (clipped) row.clipped[mesh.id] = centers;
+          else row.visible[mesh.id] = count;
+        }
+        result.push(row);
       }
-    }
-    return {maxFolded:Math.max(...rows.map(r=>r.folded)),maxCulledBackFaces:Math.max(...rows.map(r=>r.backFacing)),faceMaskProjectedBackFaces:rows.reduce((n,r)=>n+r.projectedBackFaces,0),faceMaskMinAreaRatio:Math.min(...rows.filter(r=>r.id==='face-skin').map(r=>r.minAreaRatio)),cases:rows.length,effectiveAutoAngles:[50*base.CorrTurn,28*base.CorrTurn,14]};
-  }""")
-  metrics['neckOcclusion']=page.evaluate("""async () => {
-    const {deform3D}=await import('./rig.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs'),{renderer,state}=studio,gl=renderer.gl;
-    const base=Object.fromEntries(studio.rig.parameters.map(p=>[p.id,p.default])),neck=studio.rig.meshes.find(m=>m.id==='neck');
-    return [[-50,0,0],[50,0,0],[0,28,0],[0,-28,0],[-50,-28,-14],[50,28,14]].map(angles=>{
-      const p={...base,ParamAngleX:angles[0],ParamAngleY:angles[1],ParamAngleZ:angles[2],[FRAME_CACHE]:new Map()};renderer.render(p,{...state,mode:'solo',selectedIds:new Set(['face-skin']),grid:false,wire:false});
-      const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight,data=new Uint8Array(w*h*4);gl.readPixels(0,0,w,h,gl.RGBA,gl.UNSIGNED_BYTE,data);const {scale,ox,oy}=renderer.view;
-      const points=[436,502,567].map(x=>{const q=deform3D(neck,[x,540],p),xx=Math.floor(ox+q[0]*scale),yy=Math.floor(oy+q[1]*scale);return {point:q,coverAlpha:data[((h-1-yy)*w+xx)*4+3]};});
-      return {angles,points};
-    });
-  }""")
-  pose(0,0)
-  metrics['neckCapClipping']=page.evaluate("""async()=>{
-    const {renderer,state,p}=studio,gl=renderer.gl,{deform3D}=await import('./rig.mjs'),{FRAME_CACHE}=await import('./pose-grid.mjs'),neck=studio.rig.meshes.find(m=>m.id==='neck'),out=[];
-    for(const angles of [[-50,0,0],[50,0,0],[0,28,0],[0,-28,0],[-50,-28,-14],[50,28,14]]){
-      [p.ParamAngleX,p.ParamAngleY,p.ParamAngleZ]=angles;
-      p[FRAME_CACHE]=new Map();
-      const read=id=>{renderer.render(p,{...state,mode:'solo',selectedIds:new Set([id]),wire:false,grid:false});const a=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,a);return a;};
-      const face=read('face-skin'),skin=read('neck'),{scale,ox,oy}=renderer.view,w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
-      let exposed=0;for(let x=436;x<=567;x++){const q=deform3D(neck,[x,540],p),xx=Math.floor(ox+q[0]*scale),yy=h-1-Math.floor(oy+q[1]*scale),i=(yy*w+xx)*4+3;if(face[i]===0&&skin[i]>4)exposed++;}
-      out.push({angles,exposed});
-    }delete p[FRAME_CACHE];return out;
-  }""")
-  metrics['clipping']=page.evaluate("""() => {
-    const {renderer,rig,p,state}=studio,gl=renderer.gl;
-    const read=id=>{renderer.render(p,{...state,mode:'solo',selectedIds:new Set([id]),wire:false,grid:false});const data=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,data);return data;};
-    const results=[];for(const open of [1,.45])for(const [x,y] of [[-25,0],[25,0],[-50,-28],[-50,28],[50,-28],[50,28]]){
-      Object.assign(p,{ParamEyeLOpen:open,ParamEyeROpen:open,ParamAngleX:x,ParamAngleY:y,ParamEyeBallX:0,ParamEyeBallY:0});
-      for(const side of ['left','right']){const mask=read('eye-'+side+'-sclera');for(const type of ['iris','pupil','highlight']){const draw=read('eye-'+side+'-'+type);let outside=0,visible=0;for(let i=3;i<draw.length;i+=4)if(draw[i]>4){visible++;if(mask[i]===0)outside++;}results.push({open,x,y,side,type,outside,visible});}}
-    }
-    return results;
-  }""")
-  metrics['featureVisibility']=page.evaluate("""() => {
-    const {renderer,state,p}=studio,gl=renderer.gl,results=[];
-    const read=hidden=>{renderer.render(p,{...state,mode:'all',grid:false,wire:false,hidden});const d=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);return d;};
-    p.ParamEyeLOpen=p.ParamEyeROpen=1;
-    for(const [x,y,z,gain=.65]of [[0,0,0],[-25,0,0],[25,0,0],[0,20,0],[0,-20,0],[-50,-28,-14],[50,28,14],[-50,0,0],[50,0,0]]){
-      Object.assign(p,{ParamAngleX:x,ParamAngleY:y,ParamAngleZ:z,CorrTurn:gain});const visible=read(new Set());
-      for(const id of ['ear-left','ear-right','mouth-detail','nose-detail','tail-left-tie','tail-right-tie',...['left','right'].flatMap(side=>['upper-lashes','lower-line','brow','sclera'].map(part=>'eye-'+side+'-'+part))]){
-        const hidden=read(new Set([id]));let pixels=0;for(let i=0;i<hidden.length;i+=4)if(Math.abs(hidden[i]-visible[i])+Math.abs(hidden[i+1]-visible[i+1])+Math.abs(hidden[i+2]-visible[i+2])>12)pixels++;
-        results.push({pose:[x,y,z],gain,id,pixels});
+      const eyes = [];
+      for (const [key, [u,v]] of Object.entries(keys)) for (const open of [1,.7,.5,.45,.4,.3,.23,0]) {
+        const p = {u,v,roll:0,openL:open,openR:open,gazeX:0,gazeY:0,breath:0,bodyAngleX:0,hair:true};
+        let count=0;
+        for (const mesh of rig.meshes) if (mesh.group === 'eye' && rig.opacity(mesh,p) > 0) {
+          const positions=rig.positions(mesh,p),signs=base.get(mesh.id);
+          for (let i=0;i<mesh.triangles.length;i++) {
+            const value=area(positions,mesh.triangles[i]);
+            if (Math.abs(value)>1e-6 && Math.sign(value)!==signs[i]) count++;
+          }
+        }
+        eyes.push({key,open,count});
       }
-    }return results;
-  }""")
-  metrics['eyeHairOcclusion']=page.evaluate("""() => {
-    const {renderer,state,p}=studio,gl=renderer.gl,rows=[];
-    const eyes=renderer.rig.meshes.filter(m=>m.id.startsWith('eye-')).map(m=>m.id);
-    const read=hidden=>{renderer.render(p,{...state,mode:'all',grid:false,wire:false,hidden,identify:eyes});const d=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);return d;};
-    for(const yaw of [-45,45]){
-      Object.assign(p,{ParamAngleX:yaw,ParamAngleY:0,ParamAngleZ:0,CorrTurn:1,ParamEyeLOpen:1,ParamEyeROpen:1});
-      const normal=read(new Set()),uncovered=read(new Set(['side-hair-left','side-hair-right']));let pixels=0;
-      for(let i=0;i<normal.length;i+=4)if(uncovered[i]>127&&normal[i]<64)pixels++;
-      const hair=renderer.rig.meshes.filter(m=>m.id.includes('hair')||m.id.startsWith('bangs')).map(m=>m.id);
-      const brow='eye-'+(yaw<0?'right':'left')+'-brow';
-      renderer.render(p,{...state,mode:'all',grid:false,wire:false,hidden:new Set(hair),identify:[brow]});
-      const d=new Uint8Array(normal.length);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);
-      let browWithoutHairPixels=0;for(let i=0;i<d.length;i+=4)if(d[i]>127)browWithoutHairPixels++;
-      rows.push({yaw,sideHairCoveredEyePixels:pixels,browWithoutHairPixels});
+      return {rows:result,eyes};
+    }""")
+    old_checks = json.loads((ROOT / 'source/keyshapes/v7-checks.json').read_text())
+    hair = set(reference.rig['hair'])
+    all_counts, eye_counts, failures = {}, payload['eyes'], []
+    for row in payload['rows']:
+        mask = reference.clip_mask(pose(*KEYS[row['key']], hair=False))
+        clipped_counts = {}
+        for mesh_id, centers in row['clipped'].items():
+            if not centers:
+                continue
+            xy = np.asarray(centers)
+            x = np.clip(np.round(xy[:, 0]).astype(int), 0, 1023)
+            y = np.clip(np.round(xy[:, 1]).astype(int), 0, 1535)
+            count = int((mask[y, x] >= .5).sum())
+            if count:
+                clipped_counts[mesh_id] = count
+        actual = {**row['visible'], **clipped_counts}
+        key = row['key']
+        expected = old_checks['flips_visible'].get(key, {})
+        filtered = {name: count for name, count in actual.items()
+                    if name not in hair and not name.startswith('still-fill-hair-')}
+        all_counts[key] = filtered
+        for name, count in filtered.items():
+            if count > expected.get(name, 0):
+                failures.append(f'{key}/{name}: {count}>{expected.get(name, 0)}')
+    for row in eye_counts:
+        if row['count']:
+            failures.append(f"{row['key']}/{row['open']}: eye flips {row['count']}")
+    return {'visible_flips': all_counts, 'eye_flips': eye_counts, 'failures': failures}
+
+
+def skin_spill(page, reference, targets):
+    ids = {mesh['id'] for mesh in reference.rig['meshes']}
+    keep = {'face-skin', 'face-scalp'}
+    hidden = sorted(ids - keep)
+    result = {}
+    for key, (u, v) in KEYS.items():
+        state = full_state(u, v)
+        image = capture_png(page, state, hair=False, hidden=hidden)
+        silhouette_alpha = reference.silhouette_layer(pose(u, v, hair=False))[..., 3]
+        target = targets[key]
+        brow_y = min(target['brow_l_arch'][1], target['brow_r_arch'][1])
+        outside = (image[..., 3] >= 128) & (silhouette_alpha < 128)
+        outside[int(brow_y):, :] = False
+        labels, count = ndi.label(outside)
+        pieces = [int((labels == i + 1).sum()) for i in range(count)]
+        result[key] = {'pixels': int(sum(size for size in pieces if size >= 20)),
+                       'pieces': sorted((size for size in pieces if size >= 20), reverse=True)[:3]}
+    return result
+
+
+def verify_ui(page, output_dir):
+    output_dir.mkdir(parents=True, exist_ok=True)
+    page.screenshot(path=output_dir / 'ui-wide.png', full_page=True)
+    page.set_viewport_size({'width': 390, 'height': 844})
+    page.screenshot(path=output_dir / 'ui-narrow.png', full_page=True)
+    narrow_width = page.evaluate('document.documentElement.scrollWidth')
+    auto = page.locator('#auto')
+    auto.click()
+    auto_active = auto.get_attribute('aria-pressed') == 'true'
+    auto.click()
+    track = page.locator('#track')
+    track.click()
+    box = page.locator('#viewport').bounding_box()
+    page.mouse.move(box['x'] + box['width'] * .75, box['y'] + box['height'] * .25)
+    tracked = page.evaluate('window.viewer.pose.u')
+    track.click()
+    page.locator('#reset').click()
+    return {'narrow_scroll_width': narrow_width, 'viewport_width': 390,
+            'auto_toggle': auto_active, 'pointer_tracking_u': round(tracked, 4),
+            'reset_u': page.evaluate('window.viewer.pose.u')}
+
+
+def verify_atlas(reference):
+    data = reference.rig
+    atlas = Image.open(ROOT / 'bundle/assets/texture_00.png').convert('RGBA')
+    atlas_array = np.asarray(atlas)
+    pixel_mismatches, uv_errors = 0, 0
+    for mesh in data['meshes']:
+        ax, ay, width, height = mesh['atlas']
+        source = np.asarray(Image.open(ROOT / 'bundle/assets' / mesh['file']).convert('RGBA'))
+        packed = atlas_array[ay:ay + height, ax:ax + width]
+        pixel_mismatches += int(np.any(source != packed, axis=-1).sum())
+        bx, by, bw, bh = mesh['bbox']
+        for (x, y), (u, v) in zip(mesh['positions'], mesh['uvs']):
+            expected = ((ax + max(0, min(width, x - bx))) / data['atlasSize'],
+                        (ay + max(0, min(height, y - by))) / data['atlasSize'])
+            if abs(u - expected[0]) > 1e-12 or abs(v - expected[1]) > 1e-12:
+                uv_errors += 1
+    front_fraction = max(abs(value - round(value)) for mesh in data['meshes'] for x, y in mesh['positions'] for value in (x, y))
+    return {'meshes': len(data['meshes']), 'atlas_pixel_mismatches': pixel_mismatches,
+            'uv_offset_errors': uv_errors, 'front_vertex_fractional_max': front_fraction,
+            'mask_raster_margin_px': data['maskRasterMarginPx']}
+
+
+def main():
+    CAPTURES.mkdir(parents=True, exist_ok=True)
+    reference = Rig()
+    baseline = json.loads((ROOT / 'source/keyshapes/v7-checks.json').read_text())
+    keyshapes = json.loads((ROOT / 'source/keyshapes/points_art_keyshapes.json').read_text())
+    report = {'renderer': {}, 'atlas': {}, 'front': {}, 'nonfront_raw_comparison': {}, 'flips': {}, 'forehead': {}, 'holes': {}}
+    with tempfile.TemporaryDirectory(prefix='615-viewer-') as temporary:
+        states = Path(temporary)
+        server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(ROOT)))
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        try:
+            with sync_playwright() as playwright:
+                browser = playwright.chromium.launch(headless=True,
+                    args=['--use-angle=swiftshader', '--enable-unsafe-swiftshader'])
+                loading_page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
+                loading_page.add_init_script("""(() => { const original = window.fetch.bind(window); window.fetch = (...args) => new Promise((resolve, reject) => setTimeout(() => original(...args).then(resolve, reject), 800)); })();""")
+                loading_page.goto(f'http://127.0.0.1:{server.server_port}/bundle/index.html', wait_until='domcontentloaded')
+                loading_page.wait_for_selector('#loading:not([hidden])', state='visible')
+                loading_page.screenshot(path=CAPTURES / 'ui-loading.png', full_page=True)
+                loading_page.close()
+                page = browser.new_page(viewport={'width': 1440, 'height': 1000}, device_scale_factor=1)
+                page.goto(f'http://127.0.0.1:{server.server_port}/bundle/index.html', wait_until='networkidle')
+                page.wait_for_function("window.viewer && document.querySelector('#status').textContent === '준비됨'", timeout=30000)
+                report['renderer'] = page.evaluate("({float32:window.viewer.renderer.float32, canvas:[document.querySelector('#stage').width,document.querySelector('#stage').height], unpackPremultiply:window.viewer.renderer.gl.getParameter(window.viewer.renderer.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL)})")
+                report['atlas'] = verify_atlas(reference)
+                report['ui'] = verify_ui(page, CAPTURES)
+                page.set_viewport_size({'width': 1440, 'height': 1000})
+
+                front_hair = capture_float(page, full_state(0, 0), True)
+                front_nohair = capture_float(page, full_state(0, 0), False)
+                save_rgba(states / 'front_hair.png', front_hair)
+                save_rgba(states / 'front_nohair.png', front_nohair)
+                still = np.asarray(Image.open(STILL).convert('RGBA'))
+                report['front']['hair_on'] = difference(front_hair, still)
+                front_pose = pose(0, 0, hair=False)
+                edge = silhouette_edge_band(reference, front_pose)
+                front_cpu = reference.render(front_pose)
+                report['front']['hair_off'] = difference(front_nohair, front_cpu, edge)
+                report['front']['hair_off']['outside_backing_edge_band'] = report['front']['hair_off']['outside_edge_band_value_over_2']
+                save_rgba(states / 'dir_front.png', front_nohair)
+
+                for key, (u, v) in KEYS.items():
+                    if key == 'front':
+                        image = front_nohair
+                    else:
+                        image = capture_float(page, full_state(u, v), False)
+                    save_rgba(states / f'dir_{key}.png', image)
+                    state = pose(u, v, hair=False)
+                    cpu = reference.render(state)
+                    result = difference(image, cpu, silhouette_edge_band(reference, state))
+                    report['nonfront_raw_comparison'][key] = result
+                    rgba = capture_png(page, full_state(u, v), hair=False)
+                    save_rgba(states / f'holes_{key}.png', rgba)
+                    hole_px, hole_count = holes(rgba)
+                    allowed_px, allowed_pieces = baseline['holes'][key]
+                    report['holes'][key] = {'pixels': hole_px, 'pieces': hole_count,
+                                            'v7_limits': [allowed_px, allowed_pieces],
+                                            'pass': holes_within_limits(hole_px, hole_count, [allowed_px, allowed_pieces])}
+                    if key != 'front':
+                        continue
+
+                report['flips'] = geometry_report(page, reference)
+                report['forehead'] = skin_spill(page, reference, keyshapes['targets'])
+
+                for key, (u, v) in KEYS.items():
+                    for open_value in OPENS[1:]:
+                        state = full_state(u, v, open_value)
+                        name = f'{open_value:.2f}'.replace('.', '_')
+                        save_rgba(states / f'blink_{key}_{name}.png', capture_png(page, state, hair=False))
+                report['blink_step_range'] = {'from': .36, 'to': .20, 'step': .01,
+                                              'metric': 'mean maximum RGB8 channel delta per eye ROI after white compositing'}
+                report['blink_step_transitions'] = blink_step_report(page, keyshapes['targets'])
+                for axis, (du, dv) in {'left': (-1, 0), 'up': (0, 1), 'upleft': (-1, 1)}.items():
+                    hole_key = f'band {"왼쪽" if axis == "left" else "위" if axis == "up" else "왼쪽 위"}'
+                    allowed_values = baseline['holes'][hole_key]
+                    endpoint = 'left' if axis == 'left' else 'up' if axis == 'up' else 'up-left'
+                    band_values = [0, .2, .4, .6, .8, 1]
+                    for step in [.2, .4, .6, .8]:
+                        value = f'{step:.1f}'.replace('.', '_')
+                        image = capture_png(page, full_state(du * step, dv * step), hair=False)
+                        save_rgba(states / f'band_{axis}_{value}.png', image)
+                    for index, step in enumerate(band_values):
+                        if step == 0:
+                            image = front_nohair
+                        elif step == 1:
+                            image = np.asarray(Image.open(states / f'dir_{endpoint}.png').convert('RGBA'))
+                        else:
+                            value = f'{step:.1f}'.replace('.', '_')
+                            image = np.asarray(Image.open(states / f'band_{axis}_{value}.png').convert('RGBA'))
+                        hole_px, hole_count = holes(image)
+                        allowed = allowed_values[index]
+                        report['holes'][f'{hole_key} t={step:.1f}'] = {
+                            'pixels': hole_px, 'pieces': hole_count, 'v7_limit_pixels': allowed,
+                            'pass': holes_within_limits(hole_px, hole_count, [allowed])}
+
+                from figures import build_figures
+                build_figures(states, CAPTURES, STILL)
+                browser.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+
+    forehead_failures = {key: value for key, value in report['forehead'].items() if value['pixels']}
+    hole_failures = {key: value for key, value in report['holes'].items() if not value['pass']}
+    nonfront_failures = {key: value for key, value in report['nonfront_raw_comparison'].items()
+                         if key != 'front' and not nonfront_passes(value)}
+    required_failures = []
+    if report['front']['hair_on']['different_pixels']:
+        required_failures.append('front hair-on is not pixel-identical')
+    if report['front']['hair_off']['outside_edge_band_value_over_2']:
+        required_failures.append('front hair-off differs by more than 2 outside the backing edge band')
+    required_failures.extend(report['flips']['failures'])
+    if forehead_failures:
+        required_failures.append('skin appears outside the scalp above the brows')
+    if hole_failures:
+        required_failures.append('head/neck holes exceed v7 checks values')
+    if nonfront_failures:
+        required_failures.append('non-front comparison exceeds a v7 threshold')
+    blink_step_failures = {key: value for key, value in report.get('blink_step_transitions', {}).items()
+                           if value['max_over_median'] > 2}
+    if blink_step_failures:
+        required_failures.append('a 0.01 blink transition exceeds twice the median step')
+    if report['atlas']['atlas_pixel_mismatches']:
+        required_failures.append('atlas samples differ byte-for-byte from the source parts')
+    if report['atlas']['uv_offset_errors'] or report['atlas']['front_vertex_fractional_max']:
+        required_failures.append('atlas UVs or front vertex coordinates have an offset')
+    if report['renderer']['unpackPremultiply']:
+        required_failures.append('browser premultiplied atlas pixels on upload')
+    report['status'] = {
+        'required_failures': required_failures,
+        'nonfront_thresholds': {'value_over_2_percent_visible_max': .6, 'alpha_over_8_max': 110,
+                                'outside_edge_band_value_over_2_max': 4000},
+        'nonfront_failures': nonfront_failures,
+        'blink_step_failures': blink_step_failures,
+        'blink_visual_review': 'awaiting screenshot inspection',
+        'ear_wedge_visual_review': 'awaiting screenshot inspection',
     }
-    return rows;
-  }""")
-  metrics['correctionPresets']={}
-  for preset in ['pure','recommended']:
-   page.locator('#correction-'+preset).click()
-   metrics['correctionPresets'][preset]=page.evaluate('Object.fromEntries(Object.entries(studio.p).filter(([k])=>k.startsWith("Corr")))')
-   for name,x,y,z in [('front',0,0,0),('left',-25,0,0),('right',25,0,0),('up',0,20,0),('down',0,-20,0),('diagonal',-35,-20,-10)]:
-    pose(x,y,z);snap('viewer_correction_'+preset+'_'+name+'.png')
-  metrics['correctionInput']=page.locator('#CorrDepth').evaluate('(e)=>{e.value=.73;e.dispatchEvent(new Event("input",{bubbles:true}));return studio.p.CorrDepth}')
-  metrics['hairControlInput']=page.locator('#CorrHairDepth').evaluate('(e)=>{e.value=.8;e.dispatchEvent(new Event("input",{bubbles:true}));return studio.p.CorrHairDepth}')
-  metrics['occlusionControlInput']=page.locator('#CorrHairOcclusion').evaluate('(e)=>{e.value=.5;e.dispatchEvent(new Event("input",{bubbles:true}));return studio.p.CorrHairOcclusion}')
-  page.locator('#correction-recommended').click()
-  for name,x in [('left',-50),('right',50)]:
-   page.evaluate('studio.p.CorrTurn=1;studio.sync()')
-   pose(x,-28);snap('viewer_hair_extreme_'+name+'.png')
-  page.locator('#correction-recommended').click()
-  metrics['hairShell']=page.evaluate("""() => {
-    const {renderer,state,p,rig}=studio,gl=renderer.gl,rows=[];
-    const read=(s)=>{renderer.render(p,s);const d=new Uint8Array(gl.drawingBufferWidth*gl.drawingBufferHeight*4);gl.readPixels(0,0,gl.drawingBufferWidth,gl.drawingBufferHeight,gl.RGBA,gl.UNSIGNED_BYTE,d);return d;};
-    const ids=new Set(rig.meshes.filter(m=>/^(back-hair|hair-top|side-hair|bangs)/.test(m.id)).map(m=>m.id));
-    for(const [x,y] of [[0,0],[-25,0],[25,0],[-50,0],[50,0],[0,-20],[0,20]]){
-      Object.assign(p,{ParamAngleX:x,ParamAngleY:y,ParamAngleZ:0});
-      const s={...state,mode:'all',wire:false,grid:false,hidden:new Set()},full=read(s);
-      const contribution=id=>{const hidden=read({...s,hidden:new Set([id])});let n=0;for(let i=0;i<full.length;i+=4)if(Math.abs(full[i]-hidden[i])+Math.abs(full[i+1]-hidden[i+1])+Math.abs(full[i+2]-hidden[i+2])>12)n++;return n;};
-      const crown=contribution('hair-top'),ears=['ear-left','ear-right'].map(contribution);
-      const hair=read({...s,mode:'solo',selectedIds:ids}),w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
-      let left=w,right=-1,top=h,bottom=-1;
-      for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(hair[(yy*w+xx)*4+3]>127){left=Math.min(left,xx);right=Math.max(right,xx);top=Math.min(top,h-1-yy);bottom=Math.max(bottom,h-1-yy);}
-      rows.push({pose:[x,y],crownPixels:crown,earPixels:ears,hairBounds:[left,top,right,bottom],hairWidth:right-left+1});
-    }return rows;
-  }""")
-  page.locator('#CorrHairDepth').scroll_into_view_if_needed();pose(0,0);snap('viewer_hair_controls.png')
-  # A continuous yaw strip exposes silhouette dents hidden by individual pose checks.
-  from PIL import Image,ImageDraw
-  frames=[]
-  for yaw in [-50,-35,-25,0,25,35,50]:
-   pose(yaw,0)
-   target=ROOT/'debug'/f'viewer_yaw_{yaw}.png'
-   page.screenshot(path=str(target),clip={'x':510,'y':260,'width':360,'height':300})
-   frame=Image.open(target).convert('RGB');ImageDraw.Draw(frame).text((8,8),f'input {yaw} / rotation {yaw*.65:.1f}',fill='white');frames.append(frame)
-  strip=Image.new('RGB',(360*len(frames),300))
-  for i,frame in enumerate(frames):strip.paste(frame,(360*i,0))
-  strip.save(ROOT/'debug/viewer_yaw_sweep.png')
-  page.locator('#reset').click();pose(0,0)
-  page.locator('#after-crop').click();page.wait_for_function('document.getElementById("lightbox-image").complete');metrics['lightbox']=page.locator('#lightbox').evaluate('(e)=>e.open');page.keyboard.press('Escape')
-  page.locator('#auto').click();before=page.evaluate('studio.p.ParamAngleX');page.wait_for_function('(v)=>Math.abs(studio.p.ParamAngleX-v)>.1',arg=before,timeout=5000);metrics['autoGaze']=page.evaluate('[studio.p.ParamEyeBallX,studio.p.ParamEyeBallY]');page.locator('#reset').click()
-  metrics.update(page.evaluate("""() => ({minFont:Math.min(...[...document.querySelectorAll('button,label,summary,output')].filter(e=>e.getClientRects().length).map(e=>parseFloat(getComputedStyle(e).fontSize))),imageFailures:[...document.images].filter(i=>i.src&&(!i.complete||!i.naturalWidth)).length,webglError:studio.renderer.gl.getError(),pageOverflow:document.documentElement.scrollWidth>innerWidth})"""))
-  page.set_viewport_size({'width':1024,'height':768});page.wait_for_timeout(150);snap('viewer_1024_narrow.png');metrics['narrowOverflow']=page.evaluate('document.documentElement.scrollWidth>innerWidth')
-  metrics.update(consoleErrors=errors,requestFailures=failures)
-  bounds=metrics['sphereRaster'][0]['bounds'];metrics['maxSphereRasterDrift']=max(abs(v-bounds[i]) for r in metrics['sphereRaster'] if r['angles'][2]==0 for i,v in enumerate(r['bounds']))
-  metrics['maxSphereRollSizeDrift']=max(abs((r['bounds'][i+2]-r['bounds'][i])-(bounds[i+2]-bounds[i])) for r in metrics['sphereRaster'] for i in [0,1])
-  (ROOT/'debug/viewer_metrics.json').write_text(json.dumps(metrics,ensure_ascii=False,indent=2)+'\n')
-  print(json.dumps({k:v for k,v in metrics.items() if k not in ['clipping','neckOcclusion','featureVisibility']},ensure_ascii=False))
-  assert metrics['surfaceComparison']['changedPixels']>0
-  assert metrics['canopyContinuity']['maxError']<1e-4
-  assert metrics['correctionInput']==.73
-  assert metrics['hairControlInput']==.8 and metrics['occlusionControlInput']==.5
-  assert metrics['attachment']['maxFolded']==0
-  assert metrics['attachment']['faceMaskMinAreaRatio']>1e-4
-  # Far ears are allowed to disappear behind the cheek in r10.
-  assert all(r['pixels']>0 for r in metrics['featureVisibility'] if not r['id'].startswith('ear-'))
-  assert all(r['sideHairCoveredEyePixels']>0 and r['browWithoutHairPixels']>0 for r in metrics['eyeHairOcclusion'])
-  assert metrics['maxSphereRasterDrift']<=1 and metrics['maxSphereRollSizeDrift']<=1
-  g=metrics['geometry'];assert g['radiusError']<1e-9 and g['eyeRadiusError']<1e-9 and g['neckYawError']==0 and g['eyeLocalHeadLeak']==0 and g['bodyHeadLeak']==0 and g['frontHemisphere'] and g['backHemisphere'] and g['shirtOpacity']==0
-  # Raw attachment points are diagnostic; neck pixels outside the face are clipped at the cap.
-  assert all(r['exposed']==0 for r in metrics['neckCapClipping'])
-  assert all(r['outside']==0 for r in metrics['clipping'])
-  assert all(r['visible']>0 for r in metrics['clipping'] if r['type']=='iris' and r['open']==1)
-  assert metrics['minFont']>=12
-  assert not errors and not failures and metrics['imageFailures']==0 and metrics['webglError']==0 and not metrics['pageOverflow'] and not metrics['narrowOverflow'] and metrics['lightbox'] and metrics['autoGaze']==[0,0]
-  print('PASS closed sphere raster, child sphere rigidity, yaw-stationary neck, clipping and UI')
-  browser.close()
-finally:server.shutdown();server.server_close()
+    (CAPTURES / 'verification.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+    lines = ['# Viewer verification', '',
+             f"- Renderer: RGBA32F={report['renderer']['float32']}, target={report['renderer']['canvas']}",
+             f"- Front with hair: {report['front']['hair_on']['different_pixels']} different pixels",
+             f"- Front without hair: {report['front']['hair_off']['outside_edge_band_value_over_2']} pixels differ by >2 outside the silhouette edge band",
+             '- Non-front limits: value >2 ≤0.6% visible, alpha >8 ≤110, and value >2 outside the edge band ≤4,000.', '']
+    for key, value in report['nonfront_raw_comparison'].items():
+        lines.append(f"- {key}: {value['different_pixels']} different, max {value['max_channel_delta']}, >2 {value['value_over_2']} ({value['value_over_2_percent_visible']}% visible), alpha >8 {value['alpha_over_8']}, outside band >2 {value.get('outside_edge_band_value_over_2', 0)}")
+    lines.extend(['', '- Eye triangle flips: ' + str(sum(row['count'] for row in report['flips']['eye_flips'])),
+                  '- Skin spill above brows: ' + str({key: value['pixels'] for key, value in report['forehead'].items()}),
+                  '- Holes: ' + str({key: value['pixels'] for key, value in report['holes'].items()}),
+                  '- Blink figure review: `blink.png`, `blink_transition.png`; 0.36→0.20 at 0.01 steps, RGB8 mean maximum-channel deltas, max/median ratios: ' + str({key: round(value['max_over_median'], 3) for key, value in report['blink_step_transitions'].items()}),
+                  '- Ear wedge screenshots: `ear_wedge_check.png` compares the up-left endpoint and the up-left 0.8 interpolation around x=545–574, y=468–499.',
+                  '- Captures: `front_diff.png`, `nine_nohair.png`, `blink_transition.png`, `band_left.png`, `band_up.png`, `band_upleft.png`, `ear_wedge_check.png`, `ui-loading.png`, `ui-wide.png`, `ui-narrow.png`.',
+                  '- Required numeric failures: ' + (', '.join(required_failures) if required_failures else 'none'), ''])
+    (CAPTURES / 'verification.md').write_text('\n'.join(lines), encoding='utf-8')
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    if required_failures:
+        raise SystemExit(1)
+
+
+if __name__ == '__main__':
+    main()
