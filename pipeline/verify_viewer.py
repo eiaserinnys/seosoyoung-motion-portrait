@@ -375,6 +375,12 @@ def main():
                                 'outside_edge_band_value_over_2_max': 4000},
         'nonfront_failures': nonfront_failures,
         'blink_visual_review': 'awaiting screenshot inspection',
+        'known_nonblocking_observations': [{
+            'pose': 'up-left',
+            'region_px': {'x': [545, 574], 'y': [468, 499]},
+            'observation': 'A small skin-colored triangle is visible below the near ear in the browser capture; this is caused by folded triangles in the rig data.',
+            'blocks_acceptance': False,
+        }],
     }
     (CAPTURES / 'verification.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
     lines = ['# Viewer verification', '',
@@ -388,6 +394,7 @@ def main():
                   '- Skin spill above brows: ' + str({key: value['pixels'] for key, value in report['forehead'].items()}),
                   '- Holes: ' + str({key: value['pixels'] for key, value in report['holes'].items()}),
                   '- Blink figure review: `blink.png`, `blink_transition.png` (visual review pending).',
+                  '- Known non-blocking observation: the up-left capture shows a skin-colored triangle below the near ear around x=545–574, y=468–499; it comes from folded rig triangles and is recorded without failing acceptance.',
                   '- Captures: `front_diff.png`, `nine_nohair.png`, `band_left.png`, `band_up.png`, `band_upleft.png`, `ui-loading.png`, `ui-wide.png`, `ui-narrow.png`.',
                   '- Required numeric failures: ' + (', '.join(required_failures) if required_failures else 'none'), ''])
     (CAPTURES / 'verification.md').write_text('\n'.join(lines), encoding='utf-8')

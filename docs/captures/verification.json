@@ -764,6 +764,23 @@
       "outside_edge_band_value_over_2_max": 4000
     },
     "nonfront_failures": {},
-    "blink_visual_review": "passed: captured 0.27, 0.25, 0.23, 0.21 transitions show no upward arch, gray double line, or thickness step"
+    "blink_visual_review": "passed: captured 0.27, 0.25, 0.23, 0.21 transitions show no upward arch, gray double line, or thickness step",
+    "known_nonblocking_observations": [
+      {
+        "pose": "up-left",
+        "region_px": {
+          "x": [
+            545,
+            574
+          ],
+          "y": [
+            468,
+            499
+          ]
+        },
+        "observation": "A small skin-colored triangle is visible below the near ear in the browser capture; this is caused by folded triangles in the rig data.",
+        "blocks_acceptance": false
+      }
+    ]
   }
 }

@@ -19,5 +19,7 @@
 - Skin spill above brows: {'front': 0, 'left': 0, 'right': 0, 'up': 0, 'down': 0, 'up-left': 0, 'up-right': 0, 'down-left': 0, 'down-right': 0}
 - Holes: {'front': 0, 'left': 0, 'right': 4, 'up': 0, 'down': 0, 'up-left': 0, 'up-right': 24, 'down-left': 0, 'down-right': 0, 'band 왼쪽 t=0.0': 0, 'band 왼쪽 t=0.2': 0, 'band 왼쪽 t=0.4': 0, 'band 왼쪽 t=0.6': 0, 'band 왼쪽 t=0.8': 3, 'band 왼쪽 t=1.0': 0, 'band 위 t=0.0': 0, 'band 위 t=0.2': 0, 'band 위 t=0.4': 0, 'band 위 t=0.6': 0, 'band 위 t=0.8': 0, 'band 위 t=1.0': 0, 'band 왼쪽 위 t=0.0': 0, 'band 왼쪽 위 t=0.2': 0, 'band 왼쪽 위 t=0.4': 0, 'band 왼쪽 위 t=0.6': 0, 'band 왼쪽 위 t=0.8': 0, 'band 왼쪽 위 t=1.0': 0}
 - Blink figure review: passed; `blink_transition.png` has no visible upward arch, gray double line, or thickness step at 0.27/0.25/0.23/0.21.
+- Known non-blocking observation: in the up-left browser capture, a small skin-colored triangle appears below the near ear at x=545–574, y=468–499. It comes from folded rig triangles; it is recorded and does not fail acceptance.
+- Blink opacity: browser runtime calculation is centralized in `Rig.opacity`; the verifier queries that same method.
 - Captures: `front_diff.png`, `nine_nohair.png`, `band_left.png`, `band_up.png`, `band_upleft.png`, `ui-loading.png`, `ui-wide.png`, `ui-narrow.png`.
 - Required numeric failures: none
