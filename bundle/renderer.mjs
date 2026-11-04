@@ -1,372 +1,249 @@
-import {craniumFacing,craniumSeam,referenceHairSample} from './hair-surface.mjs';
-import {SKIN_FILL} from './skin-fill-data.mjs';
-import {FRAME_CACHE,frameValue} from './pose-grid.mjs';
-import {profileWeights,smoothstep} from './face-profile.mjs';
-import {skinFillMesh,skinFillPositions,skinFillClipMesh,skinFillClipPositions,templeFillMesh,templeFillPositions} from './skin-fill.mjs';
-import {deform3D,opacity,bindRig} from './rig.mjs';
-import {headWorld,eyeWorld,eyeCenter,eyeRootWorld,makeSphereMesh,sphereVertex,projectWorld,HEAD_CENTER,HEAD_RADIUS,NECK_PIVOT,EYE_BALL_R,correction,headBaseActive} from './geometry.mjs';
-import {getHeadBase,headBaseVertices,headPoseDistance,headSurfaceFacingDelta,HEAD_BASE} from './head-base.mjs';
-import {CORRECTION_PRESETS} from './corrections.mjs';
+const WIDTH=1024,HEIGHT=1536;
+const EDGE_AA_PX=1.0;
 
-export function faceBoundaryDistances(mesh){
-  const edges=new Map();
-  for(const tri of mesh.triangles)for(const [a,b] of [[tri[0],tri[1]],[tri[1],tri[2]],[tri[2],tri[0]]]){
-    const key=[Math.min(a,b),Math.max(a,b)].join(','),edge=edges.get(key);
-    if(edge)edge.count++;else edges.set(key,{a,b,count:1});
-  }
-  const boundary=[...edges.values()].filter(edge=>edge.count===1);
-  return mesh.positions.map(([x,y])=>{
-    let distance=Infinity;
-    for(const {a,b} of boundary){
-      const p=mesh.positions[a],q=mesh.positions[b],dx=q[0]-p[0],dy=q[1]-p[1];
-      const t=Math.max(0,Math.min(1,((x-p[0])*dx+(y-p[1])*dy)/(dx*dx+dy*dy)));
-      distance=Math.min(distance,Math.hypot(x-p[0]-t*dx,y-p[1]-t*dy));
+const vertexSource=`#version 300 es
+in vec2 a_position;
+in vec2 a_uv;
+uniform vec2 u_size;
+out vec2 v_uv;
+void main(){
+  gl_Position=vec4(a_position.x*2.0/u_size.x-1.0,1.0-a_position.y*2.0/u_size.y,0.0,1.0);
+  v_uv=a_uv;
+}`;
+const colorSource=`#version 300 es
+precision highp float;
+in vec2 v_uv;
+uniform sampler2D u_atlas;
+uniform sampler2D u_mask;
+uniform vec2 u_size;
+uniform vec2 u_atlas_size;
+uniform vec4 u_color;
+uniform int u_solid;
+uniform int u_apply_mask;
+out vec4 out_color;
+vec4 sample_atlas(vec2 uv){
+  vec2 point=uv*u_atlas_size-vec2(0.5);
+  ivec2 p0=ivec2(floor(point)),p1=p0+ivec2(1);
+  vec2 f=fract(point);
+  ivec2 hi=ivec2(u_atlas_size)-ivec2(1);
+  vec4 c00=texelFetch(u_atlas,clamp(p0,ivec2(0),hi),0);
+  vec4 c10=texelFetch(u_atlas,clamp(ivec2(p1.x,p0.y),ivec2(0),hi),0);
+  vec4 c01=texelFetch(u_atlas,clamp(ivec2(p0.x,p1.y),ivec2(0),hi),0);
+  vec4 c11=texelFetch(u_atlas,clamp(p1,ivec2(0),hi),0);
+  c00.rgb*=c00.a;c10.rgb*=c10.a;c01.rgb*=c01.a;c11.rgb*=c11.a;
+  return mix(mix(c00,c10,f.x),mix(c01,c11,f.x),f.y);
+}
+void main(){
+  vec4 color=u_solid==1?u_color:(u_solid==2?vec4(u_color.rgb*v_uv.x,v_uv.x):sample_atlas(v_uv));
+  if(u_apply_mask==1)color*=texture(u_mask,gl_FragCoord.xy/u_size).r;
+  out_color=color;
+}`;
+const maskSource=`#version 300 es
+precision highp float;
+in vec2 v_uv;
+uniform sampler2D u_atlas;
+uniform int u_textured;
+uniform vec2 u_atlas_size;
+out vec4 out_color;
+float sample_alpha(vec2 uv){
+  vec2 point=uv*u_atlas_size-vec2(0.5);ivec2 p0=ivec2(floor(point)),p1=p0+ivec2(1);vec2 f=fract(point);ivec2 hi=ivec2(u_atlas_size)-ivec2(1);
+  float c00=texelFetch(u_atlas,clamp(p0,ivec2(0),hi),0).a;
+  float c10=texelFetch(u_atlas,clamp(ivec2(p1.x,p0.y),ivec2(0),hi),0).a;
+  float c01=texelFetch(u_atlas,clamp(ivec2(p0.x,p1.y),ivec2(0),hi),0).a;
+  float c11=texelFetch(u_atlas,clamp(p1,ivec2(0),hi),0).a;
+  return mix(mix(c00,c10,f.x),mix(c01,c11,f.x),f.y);
+}
+void main(){float a=u_textured==1?sample_alpha(v_uv):1.0;out_color=vec4(a,a,a,a);}`;
+const copyVertex=`#version 300 es
+in vec2 a_position;
+in vec2 a_uv;
+out vec2 v_uv;
+void main(){gl_Position=vec4(a_position,0.0,1.0);v_uv=a_uv;}`;
+const copyFragment=`#version 300 es
+precision highp float;
+in vec2 v_uv;
+uniform sampler2D u_image;
+out vec4 out_color;
+void main(){out_color=texture(u_image,v_uv);}`;
+
+function shader(gl,type,source){
+  const value=gl.createShader(type);gl.shaderSource(value,source);gl.compileShader(value);
+  if(!gl.getShaderParameter(value,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(value)||'셰이더 생성 실패');
+  return value;
+}
+function program(gl,vertex,fragment){
+  const value=gl.createProgram();gl.attachShader(value,shader(gl,gl.VERTEX_SHADER,vertex));gl.attachShader(value,shader(gl,gl.FRAGMENT_SHADER,fragment));gl.linkProgram(value);
+  if(!gl.getProgramParameter(value,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(value)||'화면 프로그램 생성 실패');
+  return value;
+}
+function texture(gl,internal,width,height,format,type,data=null){
+  const value=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,value);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  gl.texImage2D(gl.TEXTURE_2D,0,internal,width,height,0,format,type,data);return value;
+}
+function framebuffer(gl,image){
+  const value=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,value);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,image,0);
+  return gl.checkFramebufferStatus(gl.FRAMEBUFFER)===gl.FRAMEBUFFER_COMPLETE?value:null;
+}
+
+function earclip(points){
+  const p=points.map(([x,y])=>[x,y]),indices=p.map((_,i)=>i);
+  const area=p.reduce((sum,[x,y],i)=>{const [nx,ny]=p[(i+1)%p.length];return sum+x*ny-nx*y;},0);
+  if(area<0)indices.reverse();
+  const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
+  const inside=(a,b,c,q)=>cross(a,b,q)>=0&&cross(b,c,q)>=0&&cross(c,a,q)>=0;
+  const triangles=[];let guard=0;
+  while(indices.length>3&&guard<10000){
+    guard++;let removed=false;
+    for(let k=0;k<indices.length;k++){
+      const i0=indices[(k+indices.length-1)%indices.length],i1=indices[k],i2=indices[(k+1)%indices.length],a=p[i0],b=p[i1],c=p[i2];
+      if(cross(a,b,c)<=1e-9)continue;
+      if(indices.some(i=>![i0,i1,i2].includes(i)&&inside(a,b,c,p[i])))continue;
+      triangles.push([a,b,c]);indices.splice(k,1);removed=true;break;
     }
-    return distance;
-  });
-}
-
-export function faceIslandVertices(mesh){
-  const parent=mesh.positions.map((_,i)=>i);
-  const find=i=>parent[i]===i?i:(parent[i]=find(parent[i]));
-  for(const tri of mesh.triangles)for(const i of tri.slice(1))parent[find(i)]=find(tri[0]);
-  const groups=new Map();
-  for(const tri of mesh.triangles){const root=find(tri[0]);if(!groups.has(root))groups.set(root,[]);groups.get(root).push(tri);}
-  return new Set([...groups.values()].filter(group=>group.length<HEAD_BASE.islandTriangleLimit).flat(2));
-}
-
-export const faceIslandOpacity=p=>headBaseActive(p)
-  ?1-smoothstep(5,20,headPoseDistance(headBaseVertices(p).theta)):1;
-
-export function backgroundLayerPolicy(mesh,p,state,headVisible){
-  const ear=mesh.id.startsWith('ear-'),neck=mesh.id==='neck';
-  const compareHead=!!headVisible&&(ear||neck);
-  return {alpha:compareHead&&ear?(state.hidden.has(mesh.id)?0:1):opacity(mesh,p,state),compareHead,neckMask:neck&&!compareHead};
-}
-
-export function earDepthMargin(side,p,bias){
-  const far=p.ParamAngleX*(side==='left'?-1:1)*correction(p,'CorrTurn');
-  return Math.max(HEAD_BASE.earMinMargin,bias[side]*(1-smoothstep(0,HEAD_BASE.earFadeDegrees,far)));
-}
-
-export const neckSampleY=(neck,size,row)=>(neck.atlas[1]+row-neck.bbox[1]+.5)/size;
-export const faceDirectionFade=(point,p)=>smoothstep(HEAD_BASE.facingStart,HEAD_BASE.facingEnd,headSurfaceFacingDelta(point,p));
-export const faceCleanPolicy=headVisible=>!!headVisible;
-export const faceCleanTextureIndex=before=>before?8:7;
-
-export function createNeckExtension(neck,head,rest){
-  const spec=head.neck_extension,[x0,,width]=spec.bbox;
-  const firstY=Math.min(...neck.positions.map(point=>point[1]));
-  const top=Math.min(...head.open_boundary.map(i=>head.reference[i*3+1]));
-  const center=x0+width/2,delta=deform3D(neck,[center,firstY],rest)[1]-firstY;
-  const rawTop=top-delta,edge=neck.positions.map((p,i)=>({p,i})).filter(v=>v.p[1]===firstY).sort((a,b)=>a.p[0]-b.p[0]);
-  const positions=neck.positions.map(p=>p.slice()),uvs=neck.uvs.map(uv=>uv.slice()),triangles=neck.triangles.map(t=>t.slice()),start=positions.length;
-  for(const {p,i} of edge){positions.push([p[0],rawTop]);uvs.push(neck.uvs[i].slice());}
-  for(let i=0;i<edge.length-1;i++)triangles.push([start+i,start+i+1,edge[i].i],[start+i+1,edge[i+1].i,edge[i].i]);
-  return {...neck,positions,triangles,uvs};
-}
-
-export function neckDepthPositions(mesh,points,reference,ring){
-  const center=[0,2].map(c=>ring.reduce((sum,i)=>sum+reference[i*3+c],0)/ring.length),rows=new Map();
-  mesh.positions.forEach((point,i)=>{
-    const row=rows.get(point[1])||{min:Infinity,max:-Infinity};
-    row.min=Math.min(row.min,points[i][0]);row.max=Math.max(row.max,points[i][0]);rows.set(point[1],row);
-  });
-  return points.map((point,i)=>{
-    const {min,max}=rows.get(mesh.positions[i][1]),middle=(min+max)/2,r=(max-min)/2;
-    const axis=Math.abs(middle-center[0])>HEAD_BASE.neckAxisTolerance?middle:center[0];
-    return [point[0],point[1],center[1]+Math.sqrt(Math.max(0,r*r-(point[0]-axis)**2))];
-  });
-}
-
-export class Renderer {
-  constructor(canvas,overlay,rig,images) {
-    bindRig(rig);this.shell={...makeSphereMesh(rig.geometry.head.radius),id:'head-surface',surface:true,masks:[]};this.canvas=canvas;this.overlay=overlay;this.rig=rig;this.images=images;this.headBase=getHeadBase();
-    const rest={...Object.fromEntries(rig.parameters.map(p=>[p.id,p.default])),...CORRECTION_PRESETS.recommended,CorrHeadBase:1,CorrOutline:1};
-    this.neckExtension=this.headBase?createNeckExtension(rig.meshes.find(m=>m.id==='neck'),this.headBase,rest):null;
-    const face=rig.meshes.find(m=>m.id==='face-skin');
-    this.faceBoundary=faceBoundaryDistances(face);this.faceIslands=faceIslandVertices(face);
-    const gl=canvas.getContext('webgl',{alpha:true,antialias:true,preserveDrawingBuffer:true});
-    if(!gl)throw new Error('WebGL을 사용할 수 없습니다');this.gl=gl;
-    if(!gl.getExtension('OES_standard_derivatives'))throw new Error('WebGL 경계 보간을 사용할 수 없습니다');
-    const shader=(type,source)=>{const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;};
-    this.program=gl.createProgram();
-    // For face-skin, refUV.x carries facing fade and refMix carries rim weight; refUV.y=0 disables hair sampling.
-    gl.attachShader(this.program,shader(gl.VERTEX_SHADER,`attribute vec3 a_pos;attribute vec2 a_uv;attribute float a_rawX;attribute float a_rawY;attribute float a_facing;attribute float a_seam;attribute vec2 a_refUV;attribute float a_refMix;uniform vec4 u_view;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){gl_Position=vec4(a_pos.xy*u_view.xy+u_view.zw,-a_pos.z/1024.,1.);v_uv=a_uv;v_rawX=a_rawX;v_rawY=a_rawY;v_facing=a_facing;v_seam=a_seam;v_refUV=a_refUV;v_refMix=a_refMix;}`));
-    gl.attachShader(this.program,shader(gl.FRAGMENT_SHADER,`#extension GL_OES_standard_derivatives : enable
-precision highp float;uniform sampler2D u_tex;uniform sampler2D u_faceClean;uniform sampler2D u_neckKeep;uniform vec4 u_faceRect;uniform vec4 u_neckRect;uniform bool u_faceCleanEnabled;uniform sampler2D u_faceMask;uniform bool u_faceClip;uniform sampler2D u_rim;uniform bool u_repairRim;uniform bool u_upperClip;uniform float u_earHeight;uniform sampler2D u_profileTex;uniform vec3 u_profileMix;uniform vec2 u_lidAlpha;uniform sampler2D u_mask;uniform sampler2D u_headDepth;uniform bool u_depthEncode;uniform bool u_headCompare;uniform bool u_headSmooth;uniform float u_headBias;uniform bool u_neck;uniform bool u_neckFill;uniform float u_neckArtY;uniform float u_neckSampleY;uniform bool u_solid;uniform bool u_headBase;uniform vec4 u_baseColor;uniform bool u_clip;uniform bool u_rimFade;uniform float u_rimStep;uniform bool u_closed;uniform bool u_tint;uniform vec2 u_eye;uniform vec2 u_res;uniform float u_opacity;uniform float u_farBack;uniform float u_backStart;uniform float u_identify;uniform vec4 u_refRect;varying vec2 v_uv;varying float v_rawX;varying float v_rawY;varying float v_facing;varying float v_seam;varying vec2 v_refUV;varying float v_refMix;void main(){if(v_facing<=0.000001)discard;if(u_depthEncode){vec3 d=fract(gl_FragCoord.z*vec3(1.,255.,65025.));d-=d.yzz*vec3(1./255.,1./255.,0.);gl_FragColor=vec4(d,1.);return;}float headCoverage=1.;if(u_headCompare){vec4 d=texture2D(u_headDepth,gl_FragCoord.xy/u_res);if(d.a>.5){float gap=dot(d.rgb,vec3(1.,1./255.,1./65025.))+2./65535.+u_headBias-gl_FragCoord.z;if(u_headSmooth){float feather=max(fwidth(gap),1./2097152.);headCoverage=smoothstep(-feather,0.,gap);}else if(gap<0.)discard;}}vec4 c=u_headBase?u_baseColor:(u_solid?vec4(.28,.35,.42,1.):texture2D(u_tex,v_uv));if(u_rimFade&&u_faceCleanEnabled)c.rgb=mix(c.rgb,texture2D(u_faceClean,(v_uv-u_faceRect.xy)/u_faceRect.zw).rgb,smoothstep(0.,.25,v_refMix)*v_refUV.x);if(u_neckFill){vec4 art=v_rawY<u_neckArtY?vec4(0.):c;vec4 base=texture2D(u_tex,vec2(v_uv.x,u_neckSampleY));float a=art.a+base.a*(1.-art.a);c=a>0.?vec4((art.rgb*art.a+base.rgb*base.a*(1.-art.a))/a,a):vec4(0.);if(v_rawY>=u_neckArtY)c.a*=texture2D(u_neckKeep,(v_uv-u_neckRect.xy)/u_neckRect.zw).r;}c.a*=v_seam*headCoverage;if(!u_solid&&u_profileMix.x>0.){vec2 uv=vec2(v_rawX/2048.,v_rawY/2048.+u_profileMix.z);vec3 c67=texture2D(u_profileTex,uv).rgb;vec3 c90=texture2D(u_profileTex,uv+vec2(.5,0.)).rgb;c.rgb=mix(c.rgb,mix(c67,c90,u_profileMix.y),u_profileMix.x);}if(!u_solid&&v_refMix>0.&&all(greaterThanEqual(v_refUV,u_refRect.xy))&&all(lessThanEqual(v_refUV,u_refRect.zw)))c.rgb=mix(c.rgb,texture2D(u_tex,v_refUV).rgb,v_refMix);if(u_repairRim){vec4 rim=texture2D(u_rim,vec2(v_rawX,v_rawY)/1024.);c.rgb=mix(c.rgb,rim.rgb,rim.a);}if(u_closed)c.a*=v_rawX<502.?u_lidAlpha.x:u_lidAlpha.y;if(u_closed&&((v_rawX<502.&&u_eye.x>=.22)||(v_rawX>=502.&&u_eye.y>=.22)))discard;if(u_neck)c.a*=mix(texture2D(u_mask,gl_FragCoord.xy/u_res).a,1.,smoothstep(550.,590.,v_rawY));if(u_clip)c.a*=texture2D(u_mask,gl_FragCoord.xy/u_res).a;if(u_rimFade){vec2 q=gl_FragCoord.xy;float m=min(min(texture2D(u_mask,(q+vec2(u_rimStep,0.))/u_res).a,texture2D(u_mask,(q-vec2(u_rimStep,0.))/u_res).a),min(texture2D(u_mask,(q+vec2(0.,u_rimStep))/u_res).a,texture2D(u_mask,(q-vec2(0.,u_rimStep))/u_res).a));c.a*=1.-v_refMix*m;}if(u_farBack!=0.&&(v_rawX-502.)*u_farBack>0.&&v_rawY>u_backStart)c.a*=mix(1.,texture2D(u_mask,gl_FragCoord.xy/u_res).a,abs(u_farBack));if(u_upperClip&&v_rawY<u_earHeight&&texture2D(u_faceMask,gl_FragCoord.xy/u_res).a<.99)discard;if(u_faceClip&&texture2D(u_faceMask,gl_FragCoord.xy/u_res).a<.999)discard;if(c.a*u_opacity<.01)discard;if(u_identify>0.)c.rgb=vec3(u_identify>1.5?1.:0.);if(u_tint)c.rgb=mix(c.rgb,vec3(.1,1.,.8),.7);gl_FragColor=vec4(c.rgb,c.a*u_opacity);}`));
-    gl.linkProgram(this.program);if(!gl.getProgramParameter(this.program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(this.program));gl.useProgram(this.program);
-    this.loc={};for(const name of ['faceClean','faceCleanEnabled','faceRect','neckKeep','neckRect','neck','neckFill','neckArtY','neckSampleY','solid','headBase','baseColor','view','tex','mask','clip','rimFade','rimStep','closed','tint','eye','res','opacity','farBack','backStart','identify','refRect','profileTex','profileMix','headDepth','depthEncode','headCompare','headSmooth','headBias'])this.loc[name]=gl.getUniformLocation(this.program,'u_'+name);
-    this.buffer=gl.createBuffer();this.indices=gl.createBuffer();this.headIndices=gl.createBuffer();
-    if(this.headBase){gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.headIndices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(this.headBase.triangles),gl.STATIC_DRAW);}
-    gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);
-    for(const [name,size,offset] of [['pos',3,0],['uv',2,12],['rawX',1,20],['rawY',1,24],['facing',1,28],['seam',1,32],['refUV',2,36],['refMix',1,44]]){const loc=gl.getAttribLocation(this.program,'a_'+name);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,size,gl.FLOAT,false,48,offset);}
-    this.textures=images.map(im=>{const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);this.textureParams();gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);return tex;});
-    this.maskTexture=gl.createTexture();this.framebuffer=gl.createFramebuffer();this.width=0;
-    this.headDepthTexture=gl.createTexture();this.headDepthFramebuffer=gl.createFramebuffer();this.headDepthBuffer=gl.createRenderbuffer();
-    this.faceMaskTexture=gl.createTexture();this.faceFramebuffer=gl.createFramebuffer();
-    this.loc.faceMask=gl.getUniformLocation(this.program,'u_faceMask');this.loc.faceClip=gl.getUniformLocation(this.program,'u_faceClip');this.loc.upperClip=gl.getUniformLocation(this.program,'u_upperClip');this.loc.earHeight=gl.getUniformLocation(this.program,'u_earHeight');this.loc.rim=gl.getUniformLocation(this.program,'u_rim');this.loc.repairRim=gl.getUniformLocation(this.program,'u_repairRim');
-    gl.depthFunc(gl.LEQUAL);gl.frontFace(gl.CW);gl.enable(gl.BLEND);gl.blendFuncSeparate(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA,gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
-    this.loc.lidAlpha=gl.getUniformLocation(this.program,'u_lidAlpha');
-    gl.uniform1i(this.loc.tex,0);gl.uniform1i(this.loc.mask,1);gl.uniform1i(this.loc.profileTex,2);gl.uniform1i(this.loc.faceMask,3);gl.uniform1i(this.loc.rim,4);gl.uniform1i(this.loc.headDepth,5);gl.uniform1i(this.loc.faceClean,6);gl.uniform1i(this.loc.neckKeep,7);
-    for(const [id,name] of [['face-skin','faceRect'],['neck','neckRect']]){const [x,y,w,h]=rig.meshes.find(m=>m.id===id).atlas,s=rig.atlasSize;gl.uniform4f(this.loc[name],x/s,y/s,w/s,h/s);}
+    if(!removed)break;
   }
-  textureParams(){const gl=this.gl;gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);}
-  resize(){
-    const dpr=Math.min(devicePixelRatio,2),r=this.canvas.getBoundingClientRect();const w=Math.round(r.width*dpr),h=Math.round(r.height*dpr);
-    if(w===this.canvas.width&&h===this.canvas.height)return;
-    this.canvas.width=this.overlay.width=w;this.canvas.height=this.overlay.height=h;
-    const gl=this.gl;gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);this.textureParams();gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
-    gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,this.maskTexture,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-    gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,this.faceMaskTexture);this.textureParams();gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
-    gl.bindFramebuffer(gl.FRAMEBUFFER,this.faceFramebuffer);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,this.faceMaskTexture,0);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-    gl.activeTexture(gl.TEXTURE5);gl.bindTexture(gl.TEXTURE_2D,this.headDepthTexture);this.textureParams();
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
-    gl.bindRenderbuffer(gl.RENDERBUFFER,this.headDepthBuffer);gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16,w,h);
-    gl.bindFramebuffer(gl.FRAMEBUFFER,this.headDepthFramebuffer);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,this.headDepthTexture,0);
-    gl.framebufferRenderbuffer(gl.FRAMEBUFFER,gl.DEPTH_ATTACHMENT,gl.RENDERBUFFER,this.headDepthBuffer);gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+  if(indices.length===3)triangles.push(indices.map(i=>p[i]));
+  if(indices.length>3)throw new Error('실루엣 삼각화 실패');
+  return triangles;
+}
+
+function bandTriangles(points,outer){
+  const triangles=[];
+  for(let i=0;i<points.length;i++){
+    const j=(i+1)%points.length,a=points[i],b=points[j],c=outer[i],d=outer[j];
+    triangles.push([[a[0],a[1],1],[c[0],c[1],0],[d[0],d[1],0]],[[a[0],a[1],1],[d[0],d[1],0],[b[0],b[1],1]]);
   }
-  draw(mesh,p,alpha,{clip=false,tint=false,faceClip=false,compareHead=false}={}) {
-    this.gl.uniform1i(this.loc.faceClip,faceClip);this.gl.uniform1i(this.loc.upperClip,!!this.skinClip&&mesh.id==='face-skin');this.gl.uniform1f(this.loc.earHeight,SKIN_FILL.earHeight);this.gl.uniform1i(this.loc.repairRim,!!this.repairRim&&mesh.id==='face-skin');
-    const weights=profileWeights(p);
-    this.gl.uniform3f(this.loc.profileMix,mesh.id==='face-skin'?weights.skin:0,weights.profile,weights.row);
-    const gl=this.gl;gl.uniform1f(this.loc.backStart,mesh.id==='back-hair-center'?407:310);gl.uniform1f(this.loc.identify,this.identify?((Array.isArray(this.identify)?this.identify.includes(mesh.id):mesh.id===this.identify)?2:1):0);gl.uniform1f(this.loc.farBack,mesh.id.startsWith('back-hair')?Math.sign(p.ParamAngleX)*Math.min(1,correction(p,'CorrHairOcclusion')/.8)*Math.min(1,Math.abs(p.ParamAngleX)/25)**2*(3-2*Math.min(1,Math.abs(p.ParamAngleX)/25)):0);
-    let points=frameValue(p,'pos:'+mesh.id,()=>mesh.id==='exposed-skin-clip'?skinFillClipPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.id==='exposed-skin'?skinFillPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.id==='temple-fill'?templeFillPositions(p,this.rig.meshes.find(m=>m.id==='face-skin')):mesh.positions.map(pt=>mesh.surface?headWorld(pt,p):deform3D(mesh,pt,p)));
-    if(mesh.id==='neck'&&compareHead)points=neckDepthPositions(mesh,points,this.headBase.reference,this.headBase.open_boundary);
-    const ref=this.rig.meshes.find(m=>m.id==='side-cranium-'+(p.ParamAngleX<0?'right':'left'));
-    const [ax,ay,bw,bh]=ref.atlas,size=this.rig.atlasSize;
-    gl.uniform4f(this.loc.refRect,(ax+.5)/size,(ay+.5)/size,(ax+bw-.5)/size,(ay+bh-.5)/size);
-    const reference=xy=>{
-      if(!['hair-top','back-hair-center','side-hair-left','side-hair-right'].includes(mesh.id))return [0,0,0];
-      const sample=referenceHairSample(xy,p);
-      if(!sample.weight)return [0,0,0];
-      const [x,y]=sample.point,[bx,by]=ref.bbox,[ax,ay]=ref.atlas;
-      return [(ax+x-bx)/this.rig.atlasSize,(ay+y-by)/this.rig.atlasSize,sample.weight];
-    };
-    const faceDirection=mesh.id==='face-skin'&&this.headBase&&headBaseActive(p)
-      ?frameValue(p,'face-direction',()=>mesh.positions.map(point=>faceDirectionFade(point,p))):null;
-    const yaw=Math.abs(p.ParamAngleX*correction(p,'CorrTurn'));
-    const foreheadTurn=smoothstep(HEAD_BASE.foreheadFadeYawStart,HEAD_BASE.foreheadFadeYawEnd,yaw);
-    const rimWeight=i=>{
-      const y=mesh.positions[i][1],upper=1-smoothstep(HEAD_BASE.foreheadFadeTop,HEAD_BASE.foreheadFadeBottom,y);
-      const width=HEAD_BASE.faceRimWidth+(HEAD_BASE.foreheadRimWidth-HEAD_BASE.faceRimWidth)*upper*foreheadTurn;
-      return Math.max(0,Math.min(1,1-this.faceBoundary[i]/width));
-    };
-    const islandOpacity=mesh.id==='face-skin'&&this.headBase?faceIslandOpacity(p):1;
-    const data=new Float32Array(points.flatMap((pt,i)=>[...pt,...mesh.uvs[i],mesh.positions[i][0],mesh.positions[i][1],mesh.id.startsWith('side-cranium')?craniumFacing(mesh.positions[i],p):1,mesh.id.startsWith('side-cranium')?craniumSeam(mesh.positions[i]):mesh.id==='face-skin'&&this.faceIslands.has(i)?islandOpacity:1,...(mesh.id==='face-skin'?[faceDirection?.[i]||0,0,rimWeight(i)]:reference(mesh.positions[i]))]));
-    gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(mesh.triangles.flat()),gl.STATIC_DRAW);
-    const ear=compareHead&&mesh.id.startsWith('ear-'),side=mesh.id.endsWith('left')?'left':'right';
-    gl.uniform1i(this.loc.neck,mesh.id==='neck'&&!compareHead);gl.uniform1i(this.loc.headCompare,compareHead);
-    const neckFill=mesh.id==='neck'&&compareHead&&!this.neckArtOnly;
-    gl.uniform1i(this.loc.neckFill,neckFill);
-    if(neckFill){gl.uniform1f(this.loc.neckArtY,mesh.bbox[1]);gl.uniform1f(this.loc.neckSampleY,neckSampleY(mesh,this.rig.atlasSize,this.headBase.neck_extension.sample_y));}
-    gl.uniform1i(this.loc.headSmooth,ear);gl.uniform1f(this.loc.headBias,ear?earDepthMargin(side,p,this.headBase.ear_depth_bias_px)/2048:0);
-    gl.uniform1f(this.loc.opacity,alpha);gl.uniform1i(this.loc.clip,clip);gl.uniform1i(this.loc.tint,tint);gl.uniform1i(this.loc.closed,mesh.id==='closed-eyes-v1');gl.drawElements(gl.TRIANGLES,mesh.triangles.length*3,gl.UNSIGNED_SHORT,0);
-    return points;
+  return triangles;
+}
+
+export class Renderer{
+  constructor(canvas,rig,atlasImage){
+    this.canvas=canvas;this.rig=rig;this.gl=canvas.getContext('webgl2',{alpha:true,antialias:false,preserveDrawingBuffer:true,premultipliedAlpha:true});
+    if(!this.gl)throw new Error('WebGL 2를 사용할 수 없습니다');
+    this.meshes=new Map(rig.meshes.map(mesh=>[mesh.id,mesh]));
+    this.glPrograms={};this.setup(atlasImage);
   }
-  drawHeadBase(p,depthOnly=false){
-    const gl=this.gl,points=headBaseVertices(p).surface,n=this.headBase.vertexCount,data=new Float32Array(n*12);
-    for(let i=0;i<n;i++){data.set(points.subarray(i*3,i*3+3),i*12);data[i*12+7]=1;data[i*12+8]=1;}
-    gl.bindBuffer(gl.ARRAY_BUFFER,this.buffer);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.headIndices);
-    gl.uniform1i(this.loc.headBase,1);gl.uniform4f(this.loc.baseColor,...this.headBase.color,1);
-    for(const name of ['faceClip','upperClip','repairRim','neck','neckFill','clip','closed','tint'])gl.uniform1i(this.loc[name],0);
-    gl.uniform3f(this.loc.profileMix,0,0,0);gl.uniform1f(this.loc.farBack,0);gl.uniform1f(this.loc.opacity,1);
-    gl.uniform1f(this.loc.identify,this.identify?((Array.isArray(this.identify)?this.identify.includes('head-base'):this.identify==='head-base')?2:1):0);
-    gl.uniform1i(this.loc.headCompare,0);
-    if(depthOnly){gl.enable(gl.DEPTH_TEST);gl.depthMask(true);gl.enable(gl.POLYGON_OFFSET_FILL);gl.polygonOffset(1,2);}
-    else{gl.disable(gl.DEPTH_TEST);gl.depthMask(false);}
-    gl.frontFace(gl.CCW);gl.enable(gl.CULL_FACE);
-    const count=this.headBase.triangles.length-(this.hideHeadCap?this.headBase.open_boundary.length*3:0);
+
+  setup(atlasImage){
+    const gl=this.gl;
+    this.glPrograms.color=program(gl,vertexSource,colorSource);this.glPrograms.mask=program(gl,vertexSource,maskSource);this.glPrograms.copy=program(gl,copyVertex,copyFragment);
+    this.buffers={vertices:gl.createBuffer(),indices:gl.createBuffer(),copy:gl.createBuffer(),copyIndices:gl.createBuffer()};
+    gl.bindBuffer(gl.ARRAY_BUFFER,this.buffers.copy);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,0,0,1,-1,1,0,1,1,1,1,-1,1,0,1]),gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.buffers.copyIndices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array([0,1,2,0,2,3]),gl.STATIC_DRAW);
+    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL,gl.NONE);
+    this.atlas=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,this.atlas);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,atlasImage);
+    const maskImage=texture(gl,gl.R8,WIDTH,HEIGHT,gl.RED,gl.UNSIGNED_BYTE);this.maskFramebuffer=framebuffer(gl,maskImage);this.maskTexture=maskImage;
+    const colorFloat=gl.getExtension('EXT_color_buffer_float')&&gl.getExtension('EXT_float_blend');
+    this.floatTarget=null;
+    if(colorFloat){
+      const image=texture(gl,gl.RGBA32F,WIDTH,HEIGHT,gl.RGBA,gl.FLOAT);const fbo=framebuffer(gl,image);
+      if(fbo)this.floatTarget={image,framebuffer:fbo};else gl.deleteTexture(image);
+    }
+    this.float32=!!this.floatTarget;
+    gl.bindFramebuffer(gl.FRAMEBUFFER,null);this.canvas.width=WIDTH;this.canvas.height=HEIGHT;this.targetSize=[WIDTH,HEIGHT];
+    gl.disable(gl.DITHER);gl.disable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.disable(gl.SCISSOR_TEST);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+    this.uniforms={};
+    for(const name of ['color','mask','copy']){
+      const p=this.glPrograms[name];this.uniforms[name]={
+        position:gl.getAttribLocation(p,'a_position'),uv:gl.getAttribLocation(p,'a_uv'),
+        size:gl.getUniformLocation(p,'u_size'),atlasSize:gl.getUniformLocation(p,'u_atlas_size'),atlas:gl.getUniformLocation(p,'u_atlas'),mask:gl.getUniformLocation(p,'u_mask'),
+        solid:gl.getUniformLocation(p,'u_solid'),applyMask:gl.getUniformLocation(p,'u_apply_mask'),color:gl.getUniformLocation(p,'u_color'),
+        textured:gl.getUniformLocation(p,'u_textured'),image:gl.getUniformLocation(p,'u_image')
+      };
+    }
+  }
+
+  bindGeometry(points,uvs,triangles){
+    const gl=this.gl,data=new Float32Array(points.length*4);
+    for(let i=0;i<points.length;i++){data[i*4]=points[i][0];data[i*4+1]=points[i][1];data[i*4+2]=uvs?.[i]?.[0]||0;data[i*4+3]=uvs?.[i]?.[1]||0;}
+    gl.bindBuffer(gl.ARRAY_BUFFER,this.buffers.vertices);gl.bufferData(gl.ARRAY_BUFFER,data,gl.DYNAMIC_DRAW);
+    const indices=new Uint16Array(triangles.flat());gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.buffers.indices);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,indices,gl.DYNAMIC_DRAW);
+    return indices.length;
+  }
+
+  attributes(programInfo){
+    const gl=this.gl;gl.bindBuffer(gl.ARRAY_BUFFER,this.buffers.vertices);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.buffers.indices);
+    gl.enableVertexAttribArray(programInfo.position);gl.vertexAttribPointer(programInfo.position,2,gl.FLOAT,false,16,0);
+    gl.enableVertexAttribArray(programInfo.uv);gl.vertexAttribPointer(programInfo.uv,2,gl.FLOAT,false,16,8);
+  }
+
+  drawMesh(mesh,points,applyMask=false){
+    const gl=this.gl,info=this.uniforms.color;this.bindGeometry(points,mesh.uvs,mesh.triangles);gl.useProgram(this.glPrograms.color);this.attributes(info);
+    gl.uniform2f(info.size,WIDTH,HEIGHT);gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.atlas,0);gl.uniform1i(info.mask,1);gl.uniform1i(info.solid,0);gl.uniform1i(info.applyMask,applyMask?1:0);
+    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.atlas);gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);
+    gl.drawElements(gl.TRIANGLES,mesh.triangles.length*3,gl.UNSIGNED_SHORT,0);
+  }
+
+  drawTriangles(triangles,color,{maskOnly=false,vertexAlpha=false}={}){
+    const vertices=[],uvs=[],indices=[];
+    for(const triangle of triangles){
+      const start=vertices.length;
+      for(const point of triangle){vertices.push([point[0],point[1]]);uvs.push([vertexAlpha?point[2]:0,0]);}
+      indices.push([start,start+1,start+2]);
+    }
+    const gl=this.gl,count=this.bindGeometry(vertices,uvs,indices),info=maskOnly?this.uniforms.mask:this.uniforms.color;
+    gl.useProgram(maskOnly?this.glPrograms.mask:this.glPrograms.color);this.attributes(info);gl.uniform2f(info.size,WIDTH,HEIGHT);
+    if(maskOnly){gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.atlas,0);gl.uniform1i(info.textured,0);}
+    else{gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.solid,vertexAlpha?2:1);gl.uniform1i(info.applyMask,0);gl.uniform4f(info.color,color[0]/255,color[1]/255,color[2]/255,1);}
     gl.drawElements(gl.TRIANGLES,count,gl.UNSIGNED_SHORT,0);
-    if(depthOnly)gl.disable(gl.POLYGON_OFFSET_FILL);
-    gl.frontFace(gl.CW);gl.disable(gl.CULL_FACE);gl.disable(gl.DEPTH_TEST);gl.depthMask(true);gl.uniform1i(this.loc.headBase,0);
-    return points;
   }
-  render(parameters,state) {
-    const p={...parameters,[FRAME_CACHE]:new Map()};
-    this.identify=state.identify;this.hideHeadCap=!!state.hideHeadCap;this.neckArtOnly=!!state.neckArtOnly;this.skinClip=false;this.repairRim=!state.before&&!state.surfaceOnly;
-    this.overlay.hidden=!(state.wire||state.grid);
-    this.resize();const gl=this.gl,w=this.canvas.width,h=this.canvas.height;
-    const scale=Math.min(w/1100,h/1600),ox=(w-1024*scale)/2,oy=(h-1536*scale)/2;
-    this.view={scale,ox,oy};
-    gl.viewport(0,0,w,h);gl.uniform4f(this.loc.view,scale*2/w,-scale*2/h,ox*2/w-1,1-oy*2/h);gl.uniform2f(this.loc.res,w,h);gl.uniform2f(this.loc.eye,p.ParamEyeLOpen,p.ParamEyeROpen);
-    gl.uniform1i(this.loc.solid,!!state.surfaceOnly);gl.uniform1i(this.loc.rimFade,0);gl.uniform1i(this.loc.depthEncode,0);gl.uniform1i(this.loc.headCompare,0);
-    const yaw=p.ParamAngleX*correction(p,'CorrTurn'),farLid=1-smoothstep(50,66,Math.abs(yaw));
-    gl.uniform2f(this.loc.lidAlpha,yaw<0?farLid:1,yaw>0?farLid:1);
-    gl.activeTexture(gl.TEXTURE4);gl.bindTexture(gl.TEXTURE_2D,this.textures[5]);
-    gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,this.textures[4]);gl.activeTexture(gl.TEXTURE6);gl.bindTexture(gl.TEXTURE_2D,this.textures[faceCleanTextureIndex(state.before)]);gl.activeTexture(gl.TEXTURE7);gl.bindTexture(gl.TEXTURE_2D,this.textures[9]);gl.activeTexture(gl.TEXTURE0);
-    gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.clearColor(0,0,0,0);gl.clearDepth(1);gl.depthMask(true);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-    const ctx=this.overlay.getContext('2d');ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,w,h);ctx.setTransform(scale,0,0,scale,ox,oy);ctx.lineWidth=1/scale;
-    const texture=index=>{gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.textures[index]);};
-    texture(state.before?1:0);
-    const background=m=>m.deformerId==='WarpBody'||m.id==='neck'||m.id.startsWith('back-hair')||m.id.startsWith('side-cranium')||m.id.startsWith('ear-');
-    const visible=(m,alpha=opacity(m,p,state))=>alpha>0&&(!m.id.startsWith('side-cranium')||m.positions.some(q=>craniumFacing(q,p)>1e-6))&&(state.mode!=='solo'||state.selectedIds.has(m.id));
-    const wire=(mesh,points)=>{
-      if(!state.wire)return;ctx.strokeStyle=state.selectedIds.has(mesh.id)?'#5fffd7':'#64d8ff66';ctx.beginPath();
-      for(const tri of mesh.triangles){tri.forEach((n,i)=>{const q=projectWorld(points[n]);i?ctx.lineTo(...q):ctx.moveTo(...q);});ctx.closePath();}ctx.stroke();
-    };
-    let filled=false;
-    const drawFill=()=>{
-      if(filled)return;filled=true;
-      if(state.surfaceOnly||state.before||state.hidden.has('face-skin')||(state.mode==='solo'&&!state.selectedIds.has('face-skin')))return;
-      const alpha=(1-smoothstep(45,50,Math.abs(yaw)))*(state.mode==='dim'&&!state.selectedIds.has('face-skin')?.18:1);
-      if(!alpha)return;
-      gl.disable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.depthMask(false);
-      const clip=!!headVisible;
-      if(clip){
-        gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-        this.drawHeadBase(p);gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);gl.depthMask(false);
-      }
-      texture(6);const fill=skinFillMesh();wire(fill,this.draw(fill,p,alpha,{clip}));
-      const temple=templeFillMesh(this.rig.meshes.find(m=>m.id==='face-skin'));wire(temple,this.draw(temple,p,alpha,{clip}));
-      texture(0);gl.depthMask(true);
-    };
-    gl.disable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);
-    const profile=Math.abs(yaw)>45;
-    if(!profile&&!state.surfaceOnly&&!state.before){
-      gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,this.faceFramebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1i(this.loc.solid,1);gl.depthMask(false);texture(6);this.draw(skinFillClipMesh(),p,1);
-      gl.uniform1i(this.loc.solid,0);gl.depthMask(true);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,this.faceMaskTexture);
-      texture(0);this.skinClip=true;
-    }
-    if(profile&&!state.surfaceOnly){
-      // A separate immutable face mask preserves the existing child-eye mask.
-      // Sampling an attachment's own framebuffer would be a WebGL feedback loop.
-      gl.activeTexture(gl.TEXTURE3);gl.bindTexture(gl.TEXTURE_2D,null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,this.faceFramebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);gl.disable(gl.CULL_FACE);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.faceMaskTexture);gl.activeTexture(gl.TEXTURE0);
-    }
-    if(!state.surfaceOnly&&p.ParamAngleX!==0){
-      // Far back ribbons share the cheek/side-hair occlusion mask. Keep their
-      // physical contraction too; clipping only removes the exposed fringe.
-      gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-      const side=p.ParamAngleX<0?'left':'right';
-      for(const id of ['face-skin','side-hair-'+side]){gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id===id),p,1);gl.disable(gl.CULL_FACE);}
-      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);
-    }
-    const headVisible=this.headBase&&headBaseActive(p)&&!state.hidden.has('head-base')&&!state.surfaceOnly;
-    gl.uniform1i(this.loc.faceCleanEnabled,faceCleanPolicy(headVisible));
-    if(headVisible){
-      // Keep the main depth buffer intact: only ears and neck sample this surface.
-      gl.activeTexture(gl.TEXTURE5);gl.bindTexture(gl.TEXTURE_2D,null);gl.bindFramebuffer(gl.FRAMEBUFFER,this.headDepthFramebuffer);
-      gl.clearColor(0,0,0,0);gl.clearDepth(1);gl.depthMask(true);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-      gl.disable(gl.BLEND);gl.uniform1i(this.loc.depthEncode,1);this.drawHeadBase(p,true);gl.uniform1i(this.loc.depthEncode,0);gl.enable(gl.BLEND);
-      gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.headDepthTexture);gl.activeTexture(gl.TEXTURE0);
-    }
-    if(headVisible){
-      const points=this.drawHeadBase(p);
-      if(state.wire){ctx.strokeStyle=state.selectedIds.has('head-base')?'#5fffd7':'#64d8ff66';ctx.beginPath();
-        const tri=this.headBase.triangles;for(let i=0;i<tri.length;i+=3){for(let j=0;j<3;j++){const k=tri[i+j]*3;j?ctx.lineTo(points[k],points[k+1]):ctx.moveTo(points[k],points[k+1]);}ctx.closePath();}ctx.stroke();}
-    }
-    if(!state.surfaceOnly)for(const mesh of this.rig.meshes.filter(background).sort((a,b)=>Number(!a.id.startsWith('side-cranium'))-Number(!b.id.startsWith('side-cranium')))){
-      const policy=backgroundLayerPolicy(mesh,p,state,headVisible),alpha=policy.alpha*(state.mode==='dim'&&!state.selectedIds.has(mesh.id)?.18:1);
-      if(!visible(mesh,policy.alpha))continue;
-      if(mesh.id==='neck'){
-        gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.enable(gl.CULL_FACE);this.draw(this.rig.meshes.find(m=>m.id==='face-skin'),p,1);gl.disable(gl.CULL_FACE);
-        if(headVisible)this.drawHeadBase(p);
-        gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);
-      }
-      if(mesh.id.startsWith('ear-')){gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
-      if(mesh.id.startsWith('back-hair'))gl.enable(gl.CULL_FACE);
-      const neckExtension=mesh.id==='neck'&&policy.compareHead;
-      const drawn=neckExtension?this.neckExtension:mesh;
-      wire(drawn,this.draw(drawn,p,alpha,{compareHead:policy.compareHead}));
-      gl.disable(gl.CULL_FACE);gl.disable(gl.DEPTH_TEST);
-    }
-    drawFill();
-    gl.enable(gl.DEPTH_TEST);gl.enable(gl.CULL_FACE);
-    // The preserved illustration contour owns the corrected silhouette. The full
-    // sphere is an inspection/reference surface, not a second opaque hairstyle.
-    const shellAlpha=state.surfaceOnly?1:1-correction(p,'CorrJaw');
-    if((state.mode!=='solo'||state.surfaceOnly)&&shellAlpha>0){gl.depthMask(!!state.surfaceOnly);texture(state.before?3:2);this.draw(this.shell,p,shellAlpha*(state.mode==='dim'?.18:1));texture(state.before?1:0);gl.depthMask(true);}
-    // ArtMesh layers are two-sided illustration ribbons, unlike the closed backing sphere.
-    gl.disable(gl.CULL_FACE);
-    let currentMask=null;
-    // The face crop extends under the crown. Its unmodified r9 depth must not
-    // punch through the shallower north pole of the front hair artwork.
-    const hairOrder={'side-hair-left':1,'side-hair-right':2,'hair-top':3,'bangs-left':4,'bangs-right':5,'hairpin':6};
-    const frontHair=m=>hairOrder[m.id]>0;
-    const foreground=this.rig.meshes.filter(m=>!background(m)).sort((a,b)=>(hairOrder[a.id]||0)-(hairOrder[b.id]||0));
-    if(!state.surfaceOnly)for(const mesh of foreground) {
-      if(!visible(mesh))continue;
-      const alpha=opacity(mesh,p,state)*(state.mode==='dim'&&!state.selectedIds.has(mesh.id)?.18:1);
-      if(mesh.id==='face-skin'&&headVisible){
-        gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.clear(gl.COLOR_BUFFER_BIT);
-        this.drawHeadBase(p);
-        gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);
-        currentMask=null;gl.uniform1f(this.loc.rimStep,HEAD_BASE.rimStep*this.view.scale);gl.uniform1i(this.loc.rimFade,1);
-      }
-      const faceClip=profile&&(mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-'));
-      const maskId=mesh.masks[0]||(faceClip?'face-skin':null);
-      if(maskId){
-        if(currentMask!==maskId){
-          gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);
-          gl.bindFramebuffer(gl.FRAMEBUFFER,this.framebuffer);gl.disable(gl.DEPTH_TEST);gl.clear(gl.COLOR_BUFFER_BIT);
-          this.draw(this.rig.meshes.find(m=>m.id===maskId),p,1);
-          gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.bindTexture(gl.TEXTURE_2D,this.maskTexture);gl.activeTexture(gl.TEXTURE0);currentMask=maskId;
-        }
-        // An eye opening reveals the embedded child sphere through the skin surface.
-        gl.disable(gl.DEPTH_TEST);gl.depthMask(false);
-      // Measured feature anchors define motion, not a second skin surface.
-      // Paint facial details over the preserved face; hair still draws later.
-      }else if(mesh.id.startsWith('side-hair')){
-        const farSideHair=(mesh.id==='side-hair-left'&&p.ParamAngleX<0)||(mesh.id==='side-hair-right'&&p.ParamAngleX>0);
-        if(farSideHair)gl.enable(gl.DEPTH_TEST);else gl.disable(gl.DEPTH_TEST);
-        gl.depthMask(false);
-      }
-      else if(frontHair(mesh)||mesh.id.startsWith('eye-')||mesh.id==='closed-eyes-v1'||mesh.id==='nose-detail'||mesh.id.startsWith('mouth-')){gl.disable(gl.DEPTH_TEST);gl.depthMask(false);}
-      else{gl.enable(gl.DEPTH_TEST);gl.depthMask(true);}
-      if(frontHair(mesh)||mesh.id==='face-skin')gl.enable(gl.CULL_FACE);else gl.disable(gl.CULL_FACE);
-      wire(mesh,this.draw(mesh,p,alpha,{clip:!!maskId,faceClip,tint:state.masks&&mesh.id.endsWith('sclera')}));
-      if(mesh.id==='face-skin')gl.uniform1i(this.loc.rimFade,0);
-    }
-    gl.depthMask(true);gl.disable(gl.CULL_FACE);gl.disable(gl.DEPTH_TEST);
-    if(state.grid)this.drawGlobe(ctx,p,scale);
-    ctx.setTransform(1,0,0,1,0,0);
+
+  drawSilhouette(points,color){
+    this.drawTriangles(earclip(points),color);
+    const outer=this.rig.offsetOutward(points,EDGE_AA_PX);
+    this.drawTriangles(bandTriangles(points,outer),color,{vertexAlpha:true});
   }
-  drawGlobe(ctx,p,scale) {
-    const curve=(points,color,back=false)=>{
-      ctx.strokeStyle=color;ctx.setLineDash(back?[3/scale,4/scale]:[]);ctx.beginPath();let pen=false;
-      for(const pt of points){
-        if((pt[2]<0)!==back){pen=false;continue;}
-        const q=projectWorld(pt);pen?ctx.lineTo(...q):ctx.moveTo(...q);pen=true;
+
+  drawMaskMesh(mesh,pose){
+    const gl=this.gl,info=this.uniforms.mask,points=this.rig.positions(mesh,pose);this.bindGeometry(points,mesh.uvs,mesh.triangles);gl.useProgram(this.glPrograms.mask);this.attributes(info);
+    gl.uniform2f(info.size,WIDTH,HEIGHT);gl.uniform2f(info.atlasSize,this.rig.data.atlasSize,this.rig.data.atlasSize);gl.uniform1i(info.atlas,0);gl.uniform1i(info.textured,1);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.atlas);
+    gl.drawElements(gl.TRIANGLES,mesh.triangles.length*3,gl.UNSIGNED_SHORT,0);
+  }
+
+  renderMask(points,margin){
+    const gl=this.gl;gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.activeTexture(gl.TEXTURE0);gl.bindFramebuffer(gl.FRAMEBUFFER,this.maskFramebuffer);gl.viewport(0,0,WIDTH,HEIGHT);gl.disable(gl.BLEND);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+    const outer=this.rig.offsetOutward(points,margin);this.drawTriangles([...earclip(points),...bandTriangles(points,outer)],null,{maskOnly:true});gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.bindFramebuffer(gl.FRAMEBUFFER,this.floatTarget?.framebuffer||null);
+  }
+
+  renderEyeMask(mesh,pose){
+    const gl=this.gl;gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,null);gl.activeTexture(gl.TEXTURE0);gl.bindFramebuffer(gl.FRAMEBUFFER,this.maskFramebuffer);gl.viewport(0,0,WIDTH,HEIGHT);gl.disable(gl.BLEND);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+    this.drawMaskMesh(mesh,pose);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.bindFramebuffer(gl.FRAMEBUFFER,this.floatTarget?.framebuffer||null);
+  }
+
+  render(pose,{hidden=new Set(),hair=false}={}){
+    const gl=this.gl,p={...pose,hair};this.currentPose=p;this.currentHidden=new Set(hidden);gl.bindFramebuffer(gl.FRAMEBUFFER,this.floatTarget?.framebuffer||null);gl.viewport(0,0,WIDTH,HEIGHT);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+    const silhouette=this.rig.curve('silhouette',p);this.renderMask(silhouette,this.rig.data.clipMarginPx+this.rig.data.maskRasterMarginPx);
+    let eyeMask=null;
+    for(const mesh of this.rig.order(p)){
+      if(mesh.id==='skull-plate'){
+        if(!hair&&!hidden.has(mesh.id))this.drawSilhouette(silhouette,this.rig.data.skinColor);
+        continue;
       }
-      ctx.stroke();ctx.setLineDash([]);
-    };
-    const steps=160;
-    const drawSphere=(radius,world,color)=>{
-      for(const back of [true,false]){
-        for(let lat=-2;lat<=2;lat++)curve(Array.from({length:steps+1},(_,i)=>world(sphereVertex(-Math.PI+i/steps*Math.PI*2,lat*Math.PI/6,radius))),back?'#ffce6530':color,back);
-        for(let lon=0;lon<7;lon++)curve(Array.from({length:steps+1},(_,i)=>{
-          const t=i/steps*2*Math.PI;return world([radius*Math.cos(t)*Math.sin(lon*Math.PI/7),radius*Math.sin(t),radius*Math.cos(t)*Math.cos(lon*Math.PI/7)]);
-        }),back?'#5fffd730':'#5fffd7aa',back);
+      if(hidden.has(mesh.id)||this.rig.opacity(mesh,p)<=0)continue;
+      if(this.rig.data.clips[mesh.id]){
+        const clipId=this.rig.data.clips[mesh.id];
+        if(eyeMask!==clipId){this.renderEyeMask(this.meshes.get(clipId),p);eyeMask=clipId;}
+        this.drawMesh(mesh,this.rig.positions(mesh,p),true);
+        continue;
       }
-    };
-    drawSphere(HEAD_RADIUS,q=>headWorld(q,p),'#ffce65cc');
-    // A camera-facing great circle is the silhouette of a full sphere in any orientation.
-    const ring=(center,radius,color)=>curve(Array.from({length:steps+1},(_,i)=>{const a=i/steps*Math.PI*2;return [center[0]+radius*Math.cos(a),center[1]+radius*Math.sin(a),Math.max(0,center[2])];}),color);
-    ring(headWorld([0,0,0],p),HEAD_RADIUS,'#ffce65ee');
-    ctx.strokeStyle='#79dfcf';ctx.beginPath();ctx.arc(NECK_PIVOT[0],NECK_PIVOT[1],5/scale,0,Math.PI*2);ctx.moveTo(NECK_PIVOT[0]-8/scale,NECK_PIVOT[1]);ctx.lineTo(NECK_PIVOT[0]+8/scale,NECK_PIVOT[1]);ctx.stroke();
-    for(const side of ['left','right']){
-      const center=eyeRootWorld(side,p);
-      // Classify front and back relative to the child center, not the parent's origin.
-      const eyeCurve=(points,color)=>{ctx.strokeStyle=color;ctx.beginPath();points.forEach((q,i)=>i?ctx.lineTo(...projectWorld(q)):ctx.moveTo(...projectWorld(q)));ctx.stroke();};
-      ring(center,EYE_BALL_R,'#ffd84dee');
-      for(let j=-1;j<=1;j++){
-        eyeCurve(Array.from({length:steps+1},(_,i)=>eyeWorld(sphereVertex(-Math.PI+i/steps*2*Math.PI,j*Math.PI/6,EYE_BALL_R),side,p)),'#ffd84d88');
-        eyeCurve(Array.from({length:steps+1},(_,i)=>{const t=i/steps*Math.PI*2;return eyeWorld([EYE_BALL_R*Math.cos(t)*Math.sin(j*Math.PI/6),EYE_BALL_R*Math.sin(t),EYE_BALL_R*Math.cos(t)*Math.cos(j*Math.PI/6)],side,p);}),'#ffd84d88');
-      }
-      const iris=this.rig.meshes.find(m=>m.id==='eye-'+side+'-iris');
-      const cx=side==='left'?417:587,cy=side==='left'?438:437.5;
-      eyeCurve(Array.from({length:steps+1},(_,i)=>{const a=i/steps*Math.PI*2;return deform3D(iris,[cx+30*Math.cos(a),cy+30*Math.sin(a)],p);}),'#5fffd7ff');
+      const clipped=this.rig.data.clipParts.includes(mesh.id);
+      this.drawMesh(mesh,this.rig.positions(mesh,p),clipped);
     }
+    if(this.floatTarget)this.copyFloatToCanvas();
+    return this.canvas;
+  }
+
+  copyFloatToCanvas(){
+    const gl=this.gl,info=this.uniforms.copy;gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,this.canvas.width,this.canvas.height);gl.disable(gl.BLEND);
+    gl.useProgram(this.glPrograms.copy);gl.bindBuffer(gl.ARRAY_BUFFER,this.buffers.copy);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,this.buffers.copyIndices);
+    gl.enableVertexAttribArray(info.position);gl.vertexAttribPointer(info.position,2,gl.FLOAT,false,16,0);gl.enableVertexAttribArray(info.uv);gl.vertexAttribPointer(info.uv,2,gl.FLOAT,false,16,8);
+    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,this.floatTarget.image);gl.uniform1i(info.image,0);gl.drawElements(gl.TRIANGLES,6,gl.UNSIGNED_SHORT,0);gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
+  }
+
+  readPixels(){
+    const gl=this.gl;gl.bindFramebuffer(gl.FRAMEBUFFER,this.floatTarget?.framebuffer||null);const data=this.float32?new Float32Array(WIDTH*HEIGHT*4):new Uint8Array(WIDTH*HEIGHT*4);
+    gl.readPixels(0,0,WIDTH,HEIGHT,gl.RGBA,this.float32?gl.FLOAT:gl.UNSIGNED_BYTE,data);gl.bindFramebuffer(gl.FRAMEBUFFER,null);return {width:WIDTH,height:HEIGHT,float32:this.float32,data};
   }
 }

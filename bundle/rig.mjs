@@ -1,141 +1,125 @@
-import {featureWorld} from './face-features.mjs';
-import {BEADS,beadWorld} from './stereo-attachments.mjs';
-import {outlineWorld,applyOutline} from './face-outline.mjs';
-import {clamp,radians,eyeballVertex,correctedLift,artWorld,correction} from './geometry.mjs';
-import {canopyWorld,sideWorld,backWorld,craniumWeight,craniumWorld} from './hair-shell.mjs';
-import {frameValue,FRAME_CACHE} from './pose-grid.mjs';
-import {smoothstep} from './face-profile.mjs';
-import {applyHairSolve,applyTailSolve} from './hair-solve.mjs';
-export const HAIRPIN_ANCHOR=[598,290];
-export {HEAD_CENTER,HEAD_RADIUS,LEFT_EYE_BALL,RIGHT_EYE_BALL,EYE_BALL_R,spherePoint,sphereWarp,eyeballAngles,headWorld,liftHead,eyeWorld,eyeCenter,rotateXYZ} from './geometry.mjs';
-export function interpolate(keys,value) {
-  if(value<=keys[0].value)return keys[0].output;
-  for(let i=1;i<keys.length;i++)if(value<=keys[i].value){const a=keys[i-1],b=keys[i],t=(value-a.value)/(b.value-a.value);return a.output+(b.output-a.output)*t;}
-  return keys.at(-1).output;
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const mix=(a,b,t)=>a+(b-a)*t;
+
+function weights(u,v){
+  u=clamp(u,-1,1);v=clamp(v,-1,1);
+  return {left:Math.max(0,-u),center:1-Math.abs(u),right:Math.max(0,u),down:Math.max(0,-v),middle:1-Math.abs(v),up:Math.max(0,v)};
 }
-export function bindRig(rig) {
-  const byId=new Map(rig.deformers.map(d=>[d.id,d]));
-  for(const mesh of rig.meshes){
-    mesh.deformer=byId.get(mesh.deformerId);mesh.chain=[];let node=mesh.deformer;
-    while(node){mesh.chain.unshift(node);node=byId.get(node.parentId);}
+
+export class Rig {
+  constructor(data){
+    this.data=data;
+    this.meshes=[...data.meshes].sort((a,b)=>a.drawOrder-b.drawOrder);
+    this.inverse=new Map(Object.entries(data.keys).map(([key,value])=>[value.join(','),key]));
   }
-}
-export function deform3D(mesh,point,parameters) {
-  const p=frameValue(parameters,'params:'+mesh.id,()=>{
-    const p={...parameters};
-    if(parameters[FRAME_CACHE])p[FRAME_CACHE]=parameters[FRAME_CACHE];
-    for(const node of mesh.chain||[])for(const [channel,keys] of Object.entries(node.keyforms))if(channel.startsWith('Param'))p[channel]=interpolate(keys,parameters[channel]);
-    return p;
-  });
-  const world=deformLocal(mesh,point,p);
-  if(mesh.deformerId==='WarpBody'||mesh.id==='neck'||(!p.ParamBodyAngleX&&!p.ParamBreath))return world;
-  return [world[0]+(p.ParamBodyAngleX||0),world[1]-(p.ParamBreath||0)*4,world[2]];
-}
-function deformLocal(mesh,point,p) {
-  const id=mesh.id;let [x,y]=point;
-  if(id==='hairpin') {
-    // Keep the approved profile projection; sample only the pitch residual
-    // at one anchor so its nonuniform field cannot squash the accessory.
-    return applyHairSolve(canopyWorld(point,p),point,p,false,HAIRPIN_ANCHOR);
+
+  key(u,v){
+    const x=u<0?-1:u>0?1:0,y=v<0?-1:v>0?1:0;
+    return this.inverse.get(`${x},${y}`);
   }
-  if(id==='hair-top'||id.startsWith('bangs')||id.startsWith('side-hair'))return applyHairSolve(canopyWorld(point,p),point,p);
-  if(mesh.deformerId==='WarpBody') {
-    const upper=clamp((1536-y)/960,0,1);
-    return [x+p.ParamBodyAngleX*upper,y-p.ParamBreath*4*upper,-500];
-  }
-  if(id==='neck') {
-    const capT=clamp((578-y)/42,0,1);
-    const xIn=502+(x-502)*(1-.75*capT),yIn=y-16*capT,sampleY=Math.min(yIn,568);
-    // Yaw is a rotation about the neck's vertical axis, never a lateral shear input.
-    const head=artWorld(correctedLift([xIn,sampleY],-2,p),{...p,ParamAngleX:0,ParamAngleY:0});
-    const headDx=head[0]-x,headDy=head[1]-sampleY+yIn-y;
-    const u=clamp((680-y)/110,0,1),weight=u*u*(3-2*u),upper=clamp((1536-y)/960,0,1);
-    const result=[x+headDx*weight+p.ParamBodyAngleX*upper,y+headDy*weight-p.ParamBreath*4*upper,-20];
-    if(p.ParamAngleY){
-      const chinDy=outlineWorld([502,616],{...p,ParamAngleZ:0})[1]-616;
-      const t=1-clamp((y-585)/95,0,1),attach=t*t*(3-2*t),roll=radians(p.ParamAngleZ);
-      result[0]-=chinDy*attach*Math.sin(roll);result[1]+=chinDy*attach*Math.cos(roll);
+
+  delta(mesh,u,v){
+    const w=weights(u,v),out=mesh.positions.map(()=>[0,0]);
+    for(const [x,wx] of [[-1,w.left],[0,w.center],[1,w.right]])for(const [y,wy] of [[-1,w.down],[0,w.middle],[1,w.up]]){
+      const amount=wx*wy;if(amount<=0)continue;
+      const key=this.inverse.get(`${x},${y}`),values=mesh.deltas[key];
+      if(!values)continue;
+      for(let i=0;i<out.length;i++){out[i][0]+=values[i][0]*amount;out[i][1]+=values[i][1]*amount;}
     }
-    return result;
+    return out;
   }
-  const feature=id.startsWith('eye-')||id==='closed-eyes-v1'||id==='nose-detail'||id.startsWith('mouth');
-  if(feature&&correction(p,'CorrOutline')>0){
-    const weight=correction(p,'CorrOutline'),target=featureWorld(id,[x,y],p);
-    if(weight===1)return target;
-    const original=deformLocal(mesh,point,{...p,CorrOutline:0});
-    return original.map((v,i)=>v+(target[i]-v)*weight);
+
+  eyeMatrix(mesh,u,v){
+    const w=weights(u,v),out=[[0,0,0],[0,0,0]],identity=[[1,0,0],[0,1,0]];
+    for(const [x,wx] of [[-1,w.left],[0,w.center],[1,w.right]])for(const [y,wy] of [[-1,w.down],[0,w.middle],[1,w.up]]){
+      const amount=wx*wy;if(amount<=0)continue;
+      const key=this.inverse.get(`${x},${y}`),matrix=key==='front'?identity:mesh.transforms[key];
+      if(!matrix)continue;
+      for(let row=0;row<2;row++)for(let col=0;col<3;col++)out[row][col]+=matrix[row][col]*amount;
+    }
+    return out;
   }
-  if(id.startsWith('tail-')) {
-    const left=id.includes('-left-'),root=BEADS[left?'left':'right'].front;
-    const anchor=beadWorld(left?'left':'right',p),dx=x-root[0],dy=y-root[1];
-    const s=clamp((y-root[1])/635,0,1),sagW=s**.62;
-    const outward=clamp((left?root[0]-x:x-root[0])/95,0,1);
-    const weight=clamp(.42*outward*(1-.55*s)+sagW,0,1);
-    const a=radians(p.ParamHairSide*(4.2*weight+3.4*s*s)-p.ParamAngleZ*.35*weight);
-    const lift=Math.max(0,root[1]-anchor[1]);
-    const sag=(lift*.72+Math.max(0,p.ParamHairBack)*16+Math.abs(p.ParamHairSide)*10)*weight;
-    const inward=(left?1:-1)*(lift*.22+Math.abs(p.ParamHairSide)*6)*weight;
-    const world=[anchor[0]+dx*Math.cos(a)-dy*Math.sin(a)+inward,anchor[1]+dx*Math.sin(a)+dy*Math.cos(a)+sag,anchor[2]-s*35];
-    return applyTailSolve(world,point,left?'left':'right',p);
+
+  positions(mesh,p){
+    let pos=mesh.positions.map(point=>point.slice());
+    if(mesh.group==='eye'){
+      const side=mesh.id.includes('-left')?'left':'right',open=side==='left'?p.openL:p.openR,kind=mesh.id.split('-').at(-1);
+      if(!mesh.id.startsWith('closed')){
+        const s=Math.min(1,(1-open)/(1-.22)),curve=this.data.blinkCurves[side],ix=point=>clamp(Math.round(point[0])-curve.x0,0,curve.top.length-1),at=(name,i)=>curve[name][i];
+        pos=pos.map(point=>{
+          const i=ix(point),closed=at('closed',i),next=point.slice();
+          if(kind==='lashes'||kind==='line'){
+            const top=at(kind==='lashes'?'lashTop':'lowerTop',i),bottom=at(kind==='lashes'?'lashBot':'lowerBot',i),ct=at('closedTop',i),cb=at('closedBot',i);
+            const k=clamp((cb-ct)/Math.max(bottom-top,1),0,1),target=(ct+cb)/2+(point[1]-(top+bottom)/2)*k;
+            next[1]+=s*(target-point[1]);
+          }else{
+            next[1]=closed+(point[1]-closed)*(1-s);
+            if(['iris','pupil','highlight'].includes(kind)){next[0]+=(p.gazeX||0)*this.data.gazePx;next[1]+=(p.gazeY||0)*this.data.gazePx;}
+          }
+          return next;
+        });
+      }
+      const m=this.eyeMatrix(mesh,p.u,p.v);
+      pos=pos.map(([x,y])=>[m[0][0]*x+m[0][1]*y+m[0][2],m[1][0]*x+m[1][1]*y+m[1][2]]);
+    }else{
+      const delta=this.delta(mesh,p.u,p.v);
+      pos=pos.map(([x,y],i)=>[x+delta[i][0],y+delta[i][1]]);
+    }
+    if(p.roll&&mesh.group!=='body'){
+      const [cx,cy]=this.data.neckPivot,a=p.roll*Math.PI/180,c=Math.cos(a),s=Math.sin(a);
+      pos=pos.map(([x,y],i)=>{
+        const weight=['neck','fill'].includes(mesh.group)?clamp((this.data.neckRamp[1]-mesh.positions[i][1])/(this.data.neckRamp[1]-this.data.neckRamp[0]),0,1):1;
+        const rx=(x-cx)*c-(y-cy)*s+cx,ry=(x-cx)*s+(y-cy)*c+cy;
+        return [x+(rx-x)*weight,y+(ry-y)*weight];
+      });
+    }
+    if(mesh.group!=='body'&&(p.bodyAngleX||p.breath))pos=pos.map(([x,y])=>{
+      const upper=clamp((1536-y)/960,0,1);
+      return [x+(p.bodyAngleX||0)*upper,y-(p.breath||0)*4*upper];
+    });
+    return pos;
   }
-  if(id.startsWith('side-cranium'))return applyHairSolve(craniumWorld(point,id.endsWith('left')?'left':'right',p),point,p,true);
-  if(id.startsWith('back-hair')) {
-    x+=p.ParamHairBack*12*clamp((y-120)/500,0,1)**2;
-    return applyHairSolve(backWorld([x,y],p),[x,y],p);
+
+  opacity(mesh,p){
+    const id=mesh.id;
+    if((this.data.hair.includes(id)||id.startsWith('still-fill-hair-'))&&!p.hair)return 0;
+    if(this.data.bareOnlyParts.includes(id)&&p.hair)return 0;
+    const [low,high]=this.data.blinkFade;
+    if(mesh.group==='eye'&&!id.startsWith('closed')){
+      const open=id.includes('-left')?p.openL:p.openR;
+      return clamp((open-low)/(high-low),0,1);
+    }
+    if(id.startsWith('closed-eyes')){
+      const open=id.endsWith('left')?p.openL:p.openR;
+      return open<=this.data.blinkClosedOn?1:0;
+    }
+    return 1;
   }
-  let relief=0;
-  if(id.startsWith('ear-'))relief=5;
-  else if(id==='nose-detail')relief=correction(p,'CorrNose');
-  else if(id.startsWith('eye-'))relief=id.endsWith('brow')?5:3;
-  else if(id.startsWith('mouth'))relief=correction(p,'CorrMouth');
-  else if(id==='closed-eyes-v1')relief=3;
-  if(id.startsWith('eye-')||id==='closed-eyes-v1') {
-    const left=id==='closed-eyes-v1'?x<502:id.includes('-left-');
-    if(/-(iris|pupil|highlight)$/.test(id))return applyOutline([x,y],eyeballVertex([x,y],left?'left':'right',id.split('-').at(-1),p),p);
-    if(id.endsWith('brow'))y-=(left?p.ParamBrowLY:p.ParamBrowRY)*12;
-    else if(id!=='closed-eyes-v1')y=438+(y-438)*(left?p.ParamEyeLOpen:p.ParamEyeROpen);
-    const far=left?p.ParamAngleX<0:p.ParamAngleX>0;
-    if(far){const cx=left?406:597;x=cx+(x-cx)*(1-correction(p,'CorrFarEye')*Math.min(1,Math.abs(p.ParamAngleX)/50));}
+
+  order(){return this.meshes;}
+
+  curve(name,p){
+    const source=name==='silhouette'?this.data.silhouette:this.data.facePolygon,w=weights(p.u,p.v),out=source.front.map(()=>[0,0]);
+    for(const [x,wx] of [[-1,w.left],[0,w.center],[1,w.right]])for(const [y,wy] of [[-1,w.down],[0,w.middle],[1,w.up]]){
+      const amount=wx*wy;if(amount<=0)continue;
+      const key=this.inverse.get(`${x},${y}`),curve=source[key];
+      if(!curve)continue;
+      for(let i=0;i<out.length;i++){out[i][0]+=curve[i][0]*amount;out[i][1]+=curve[i][1]*amount;}
+    }
+    return out;
   }
-  if(id.startsWith('mouth')) {
-    x=502+(x-502)*(1+p.ParamMouthForm*.12);
-    if(id!=='mouth-detail')y=552+(y-552)*(1+.35*p.ParamMouthOpenY);
+
+  offsetOutward(points,amount){
+    const p=points,n=p.length,normals=p.map((_,i)=>{
+      const next=p[(i+1)%n],prev=p[(i+n-1)%n],dx=next[0]-prev[0],dy=next[1]-prev[1],length=Math.max(Math.hypot(dx,dy),1e-6);
+      return [dy/length,-dx/length];
+    });
+    const area=poly=>Math.abs(poly.reduce((sum,[x,y],i)=>{const [nx,ny]=poly[(i+1)%poly.length];return sum+x*ny-nx*y;},0)/2);
+    const a=p.map(([x,y],i)=>[x+normals[i][0]*amount,y+normals[i][1]*amount]);
+    const b=p.map(([x,y],i)=>[x-normals[i][0]*amount,y-normals[i][1]*amount]);
+    return ((area(a)>=area(b))===(amount>=0))?a:b;
   }
-  if(id.startsWith('ear-'))return sideWorld([x,y],id.endsWith('left')?'left':'right',p,true);
-  return outlineWorld([x,y],p,relief);
+
 }
-export const deform=(mesh,point,p)=>deform3D(mesh,point,p).slice(0,2);
-function baseOpacity(mesh,p,state) {
-  const id=mesh.id;
-  if(state.hidden.has(id))return 0;
-  if(id.startsWith('side-cranium'))return craniumWeight(id.endsWith('left')?'left':'right',p);
-  if(id.startsWith('ear-')){
-    const far=p.ParamAngleX*(id.endsWith('left')?-1:1)*correction(p,'CorrTurn');
-    const t=clamp(far/25,0,1);return 1-t*t*(3-2*t)*clamp(correction(p,'CorrHairOcclusion')/.8,0,1);
-  }
-  if(state.bangs&&id.startsWith('bangs'))return 0;
-  if(state.outfit==='shirt'&&id==='sweater')return 0;
-  if(state.outfit==='sweater'&&id==='upper-body-short-sleeve')return 0;
-  if(id.startsWith('eye-')&&!id.endsWith('brow')&&(id.includes('-left-')?p.ParamEyeLOpen:p.ParamEyeROpen)<.22)return 0;
-  if(id==='closed-eyes-v1'&&p.ParamEyeLOpen>=.22&&p.ParamEyeROpen>=.22)return 0;
-  if(id==='mouth-detail')return p.ParamMouthOpenY<.12?1:0;
-  if(id==='mouth-open-v1')return p.ParamMouthOpenY>=.12&&p.ParamMouthForm>=-.35?1:0;
-  if(id==='mouth-round-v1')return p.ParamMouthOpenY>=.12&&p.ParamMouthForm<-.35?1:0;
-  return 1;
-}
-export function opacity(mesh,p,state){
-  const alpha=baseOpacity(mesh,p,state),yaw=p.ParamAngleX*correction(p,'CorrTurn'),angle=Math.abs(yaw);
-  if(angle<=45)return alpha;
-  const far=yaw<0?'left':'right';
-  if(mesh.id.startsWith(`eye-${far}-`))return alpha*(1-smoothstep(50,66,angle));
-  if(mesh.id===`side-hair-${far}`)return alpha*(1-smoothstep(46,60,angle));
-  if(mesh.id.startsWith('back-hair-')||(mesh.id==='hairpin'&&yaw>0))return alpha*(1-smoothstep(46,60,angle));
-  if(mesh.id.startsWith(`tail-${far}-`))return alpha*(1-smoothstep(45,62,angle));
-  if(mesh.id==='nose-detail')return alpha*(1-smoothstep(50,65,angle));
-  if(mesh.id==='mouth-detail')return alpha*(1-smoothstep(50,65,angle));
-  return alpha;
-}
-export class Pendulum {
-  constructor(){this.value=0;this.velocity=0;}
-  step(target,dt){dt=Math.min(dt,.033);this.velocity+=(target-this.value)*28*dt;this.velocity*=Math.exp(-5*dt);this.value+=this.velocity*dt;return this.value;}
-}
+
+export const defaultPose=()=>({u:0,v:0,roll:0,openL:1,openR:1,gazeX:0,gazeY:0,breath:0,bodyAngleX:0,hair:false});
